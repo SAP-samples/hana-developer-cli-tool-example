@@ -4,6 +4,8 @@ HANA Developer Command Line Interface
 ## Description
 This sample is intended to shown how one could build a developer centric HANA command line tool, particularly  designed to be used when performing local HANA development in non-SAP tooling (like VSCode).  It utilizes the default-env.json that is often used in local development for connectivity to a remote HANA DB (although it can of course be used with a local HANA Express instance as well). There is no intention to replacing the hdbsql tool as a generic SQL console. Instead this sample will focus on simplifying and grouping common and complex commands that otherwise might a lot of separate scripts. 
 
+Introduction Video: [https://www.youtube.com/watch?v=FWOo_mm0sfQ](https://www.youtube.com/watch?v=FWOo_mm0sfQ)
+
 ## Requirements / Download and Installation
 * Install Node.js version 10.x or 12.x on your development machine [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
