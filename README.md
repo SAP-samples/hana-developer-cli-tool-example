@@ -7,6 +7,7 @@ This sample is intended to shown how one could build a developer centric HANA co
 Introduction Video: [https://www.youtube.com/watch?v=FWOo_mm0sfQ](https://www.youtube.com/watch?v=FWOo_mm0sfQ)
 
 ## Requirements / Download and Installation
+[![asciicast](https://asciinema.org/a/301560.svg)](https://asciinema.org/a/301560)
 * Install Node.js version 10.x or 12.x on your development machine [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
 * Add the SAP Registry to your NPM configuration
