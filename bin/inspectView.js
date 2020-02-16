@@ -4,7 +4,7 @@ const dbClass = require("../utils/dbPromises");
 const dbInspect = require("../utils/dbInspect");
 
 exports.command = 'inspectView [schema] [view]';
-exports.aliases = ['it', 'view', 'insTbl', 'inspecttable', 'inspectable'];
+exports.aliases = ['iv', 'view', 'insVew', 'inspectview'];
 exports.describe = bundle.getText("inspectView");
 
 

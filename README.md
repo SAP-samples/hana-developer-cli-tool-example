@@ -7,7 +7,6 @@ This sample is intended to shown how one could build a developer centric HANA co
 Introduction Video: [https://www.youtube.com/watch?v=FWOo_mm0sfQ](https://www.youtube.com/watch?v=FWOo_mm0sfQ)
 
 ## Requirements / Download and Installation
-[![asciicast](https://asciinema.org/a/301560.svg)](https://asciinema.org/a/301560)
 * Install Node.js version 10.x or 12.x on your development machine [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
 * Add the SAP Registry to your NPM configuration
@@ -26,6 +25,7 @@ npm install
 ```
 npm link
 ```
+[![asciicast](https://asciinema.org/a/301560.svg)](https://asciinema.org/a/301560)
 
 ## Security
 This appplication primarily uses the default-env.json that is often used in local development for connectivity to a remote HANA DB (although it can of course be used with a local HANA Express instance as well). For more details on how the default-env.json works, see the readme.md of the @sap/xsenv package or the @sap/hdi-deploy package.
@@ -124,12 +124,19 @@ This tool will even create a temporary OData V4 service for any existing table, 
 ### version
 ```
 hana-cli version
+[aliases: ver]
 Version details
+```
+![version example](images/version.gif)
+### help
+```
+hana-cli help
+List all Commands and their Aliases
 ```
 ### connect
 ```
 hana-cli connect [user] [password]
-
+[aliases: c, login]
 Connects to a HANA DB and writes connection information to a default-env-admin.json
 
 Options:
@@ -141,16 +148,18 @@ Options:
   --save, -s, --Save                  Save Credentials to default-env-admin.json
                                                        [boolean] [default: true]
 ```
+![connect example](images/connect.gif)
 ### status
 ```
 hana-cli status
-
+[aliases: s, whoami]
 Get Connection Status
 
 Options:
   --admin, -a, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
+![status example](images/status.gif)
 ### hdbsql
 ```
 hana-cli hdbsql
@@ -162,10 +171,11 @@ Options:
   --admin, -a, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
+![hdbsql example](images/hdbsql.gif)
 ### activateHDI
 ```
 hana-cli activateHDI [tenant]
-
+[aliases: ahdi, ah]
 Activate the HDI service in a particluar HANA Tenant (Must be ran in the
 SYSTEMDB)
 
@@ -177,7 +187,7 @@ Options:
 ### adminHDI
 ```
 hana-cli adminHDI [user] [password]
-
+[aliases: adHDI, adhdi]
 Create an Admin User for HDI
 
 Options:
@@ -186,10 +196,11 @@ Options:
   --user, -u, --User          User
   --password, -p, --Password  Password
 ```
+![adminHDI example](images/adminHDI.gif)
 ### adminHDIGroup
 ```
 hana-cli adminHDIGroup [user] [group]
-
+[aliases: adHDIG, adhdig]
 Add a User as an HDI Group Admin
 
 Options:
@@ -198,10 +209,11 @@ Options:
   --user, -u, --User    User
   --group, -g, --Group  HDI Group       [string] [default: "SYS_XS_HANA_BROKER"]
 ```
+![adminHDIGroup example](images/adminHDIGroup.gif)
 ### createXSAAdmin
 ```
 hana-cli createXSAAdmin [user] [password]
-
+[aliases: cXSAAdmin, cXSAA, cxsaadmin, cxsaa]
 Create a HANA DB User which is also an XSA Admin
 
 Options:
@@ -210,10 +222,11 @@ Options:
   --user, -u, --User          User
   --password, -p, --Password  Password
 ```
+![createXSAAdmin example](images/createXSAAdmin.gif)
 ### createContainer
 ```
 hana-cli createContainer [container]
-
+[aliases: cc, cCont]
 Create an HDI Container and populate connection details into default-env.json
 
 Options:
@@ -223,31 +236,34 @@ Options:
   --save, -s, --Save            Save Credentials to default-env.json
                                                        [boolean] [default: true]
 ```
+![createContainer example](images/createContainer.gif)
 ### dropContainer
 ```
 hana-cli dropContainer [container]
-
+[aliases: dc, dropC]
 Drop HDI container and clean up HDI Container users
 
 Options:
   --admin, -a, --Admin          Connect via admin (default-env-admin.json)
                                                        [boolean] [default: true]
   --container, -c, --Container  HDI Container Name                      [string]
-```    
+```   
+![dropContainer example](images/dropContainer.gif) 
 ### reclaim
 ```
 hana-cli reclaim
-
+[aliases: re]
 Reclaim LOB, Log, and Data Volume space
 
 Options:
   --admin, -a, --Admin  Connect via admin (default-env-admin.json)
                                                        [boolean] [default: true]
 ```
+![reclaim example](images/reclaim.gif) 
 ### massUsers
 ```
 hana-cli massUsers [user] [password]
-
+[aliases: massUser, mUsers, mUser, mu]
 Mass Create 50 Developer Users (for workshops)
 
 Options:
@@ -256,10 +272,11 @@ Options:
   --user, -u, --User          User
   --password, -p, --Password  Password
 ```
+![massUsers example](images/massUsers.gif) 
 ### inspectTable
 ```
 hana-cli inspectTable [schema] [table]
-
+[aliases: it, table, insTbl, inspecttable, inspectable]
 Return metadata about a DB table
 
 Options:
@@ -271,10 +288,11 @@ Options:
    [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "edm", "edmx",
                                                         "swgr"] [default: "tbl"]
 ```
+![inspectTable example](images/inspectTable.gif)
 ### inspectView
 ```
 hana-cli inspectView [schema] [view]
-
+[aliases: iv, view, insVew, inspectview]
 Return metadata about a DB view
 
 Options:
@@ -286,20 +304,28 @@ Options:
    [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "edm", "edmx",
                                                         "swgr"] [default: "tbl"]
 ```
+![inspectView example](images/inspectView.gif)
 ### systemInfo
 ```
 hana-cli systemInfo
-
+[aliases: sys, sysinfo, sysInfo, systeminfo]
 General System Details
 
 Options:
   --admin, -a, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-```                                                      
+```
+![systemInfo example](images/systemInfo.gif)  
+### ports
+```
+hana-cli ports
+
+Display port assignments for internal HANA services
+```                                                    
 ### schemas
 ```
 hana-cli schemas [schema]
-
+[aliases: sch, getSchemas, listSchemas]
 Get a list of all schemas
 
 Options:
@@ -309,10 +335,11 @@ Options:
   --limit, -l                Limit results               [number] [default: 200]
   --all, --al, --allSchemas  allSchemas               [boolean] [default: false]
 ```
+![schemas example](images/schemas.gif)    
 ### tables
 ```
 hana-cli tables [schema] [table]
-
+[aliases: t, listTables, listtables]
 Get a list of all tables
 
 Options:
@@ -322,10 +349,11 @@ Options:
   --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   --limit, -l             Limit results                  [number] [default: 200]
 ```
+![tables example](images/tables.gif)   
 ### views
 ```
 hana-cli views [schema] [view]
-
+[aliases: v, listViews, listviews]
 Get a list of all views
 
 Options:
@@ -335,10 +363,11 @@ Options:
   --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   --limit, -l             Limit results                  [number] [default: 200]
 ```
+![views example](images/views.gif)   
 ### objects
 ```
 hana-cli objects [schema] [object]
-
+[aliases: o, listObjects, listobjects]
 Search across all object types
 
 Options:
@@ -348,10 +377,12 @@ Options:
   --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   --limit, -l             Limit results                  [number] [default: 200]
 ```
+![objects example](images/objects.gif)
 ### procedures
 ```
 hana-cli procedures [schema] [procedure]
-
+[aliases: p, listProcs, ListProc, listprocs, Listproc, listProcedures,
+                                                                 listprocedures]
 Get a list of all stored procedures
 
 Options:
@@ -361,10 +392,11 @@ Options:
   --schema, -s, --Schema        schema  [string] [default: "**CURRENT_SCHEMA**"]
   --limit, -l                   Limit results            [number] [default: 200]
 ```
+![procedures example](images/procedures.gif)
 ### inspectProcedure
 ```
 hana-cli inspectProcedure [schema] [procedure]
-
+ [aliases: ip, procedure, insProc, inspectprocedure, inspectsp]
 Return metadata about a Stored Procedure
 
 Options:
@@ -376,10 +408,11 @@ Options:
   --output, -o, --Output              Output Format for inspection
                                [string] [choices: "tbl", "sql"] [default: "tbl"]
 ```
+![inspectProcedure example](images/inspectProcedure.gif)
 ### callProcedure
 ```
 hana-cli callProcedure [schema] [procedure]
-
+[aliases: cp, callprocedure, callProc, callproc, callSP, callsp]
 Call a stored procedure and display the results
 
 Options:
@@ -389,10 +422,12 @@ Options:
   --schema, -s, --Schema              schema
                                         [string] [default: "**CURRENT_SCHEMA**"]
 ```
+![callProcedure example](images/callProcedure.gif)
 ### functions
 ```
 hana-cli functions [schema] [function]
-
+[aliases: f, listFuncs, ListFunc, listfuncs, Listfunc, listFunctions,
+                                                                  listfunctions]
 Get a list of all functions
 
 Options:
@@ -402,10 +437,11 @@ Options:
   --schema, -s, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
   --limit, -l                 Limit results              [number] [default: 200]
 ```  
+![functions example](images/functions.gif)
 ### inspectFunction
 ```
 hana-cli inspectFunction [schema] [function]
-
+[aliases: if, function, insFunc, inspectfunction]
 Return metadata about a Function
 
 Options:
@@ -416,10 +452,12 @@ Options:
   --output, -o, --Output      Output Format for inspection
                                [string] [choices: "tbl", "sql"] [default: "tbl"]
 ``` 
+![inspectFunction example](images/inspectFunction.gif)
 ### libraries
 ```
 hana-cli libraries [schema] [library]
-
+[aliases: l, listLibs, ListLibs, listlibs, ListLib, listLibraries,
+                                                                  listlibraries]
 Get a list of all libraries
 
 Options:
@@ -429,10 +467,11 @@ Options:
   --schema, -s, --Schema       schema   [string] [default: "**CURRENT_SCHEMA**"]
   --limit, -l                  Limit results             [number] [default: 200]
 ```
+![libraries example](images/libraries.gif)
 ### inspectLibrary
 ```
 hana-cli inspectLibrary [schema] [library]
-
+[aliases: il, library, insLib, inspectlibrary]
 Return metadata about a Library
 
 Options:
@@ -443,10 +482,11 @@ Options:
   --output, -o, --Output       Output Format for inspection
                                [string] [choices: "tbl", "sql"] [default: "tbl"]
 ```
+![inspectLibrary example](images/inspectLibrary.gif)
 ### inspectLibMember
 ```
 hana-cli inspectLibMember [schema] [library] [libraryMem]
-
+[aliases: ilm, libraryMember, librarymember, insLibMem, inspectlibrarymember]
 Return metata about a Library Member
 
 Options:
@@ -460,11 +500,12 @@ Options:
                                         [string] [default: "**CURRENT_SCHEMA**"]
   --output, -o, --Output                    Output Format for inspection
                                [string] [choices: "tbl", "sql"] [default: "tbl"]
-```                                                                  
+```       
+![inspectLibMember example](images/inspectLibMember.gif)                                                           
 ### triggers
 ```
 hana-cli triggers [schema] [trigger] [target]
-
+[aliases: trig, listTriggers, ListTrigs, listtrigs, Listtrig, listrig]
 List of all triggers
 
 Options:
@@ -475,10 +516,11 @@ Options:
   --schema, -s, --Schema    schema      [string] [default: "**CURRENT_SCHEMA**"]
   --limit, -l               Limit results                [number] [default: 200]
 ```
+![triggers example](images/triggers.gif)
 ### inspectTrigger
 ```
 hana-cli inspectTrigger [schema] [trigger]
-
+[aliases: itrig, trigger, insTrig, inspecttrigger, inspectrigger]
 inspectTrigger
 
 Options:
@@ -488,11 +530,11 @@ Options:
   --schema, -s, --Schema    schema      [string] [default: "**CURRENT_SCHEMA**"]
   --output, -o, --Output    Output Format for inspection
                                [string] [choices: "tbl", "sql"] [default: "tbl"]
-```                                 
+```                      
 ### indexes
 ```
 hana-cli indexes [schema] [indexes]
-
+[aliases: ind, listIndexes, ListInd, listind, Listind, listfindexes]
 Get a list of indexes
 
 Options:
@@ -502,10 +544,11 @@ Options:
   --schema, -s, --Schema    schema      [string] [default: "**CURRENT_SCHEMA**"]
   --limit, -l               Limit results                [number] [default: 200]
 ```
+![indexes example](images/indexes.gif)   
 ### inspectIndex
 ```
 hana-cli inspectIndex [schema] [index]
-
+[aliases: ii, index, insIndex, inspectindex]
 Return metadata about an Index
 
 Options:
@@ -514,10 +557,11 @@ Options:
   --index, -i, --Index    DB Table Index                                [string]
   --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
 ```  
+![inspectIndex example](images/inspectIndex.gif) 
 ### synonyms
 ```
 hana-cli synonyms [schema] [synonym] [target]
-
+[aliases: syn, listSynonyms, listsynonyms]
 List of all synonyms
 
 Options:
@@ -528,11 +572,13 @@ Options:
                                                          [string] [default: "*"]
   --schema, -s, --Schema       schema   [string] [default: "**CURRENT_SCHEMA**"]
   --limit, -l                  Limit results             [number] [default: 200]
-```                                
+```      
+![synonyms example](images/synonyms.gif)                           
 ### privilegeError
 ```
 hana-cli privilegeError [guid]
-
+[aliases: pe, privilegeerror, privilegerror,
+                                          getInsuffficientPrivilegeErrorDetails]
 Get Insufficient Privilege Error Details
 
 Options:
@@ -540,30 +586,33 @@ Options:
                                                       [boolean] [default: false]
   --guid, -g, --error   GUID from original error message                [string]
 ```
+![privilegeError example](images/privilegeError.gif)  
 ### certificates
 ```
 hana-cli certificates
-
+[aliases: cert, certs]
 List System Certificates
 
 Options:
   --admin, -a, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
+![certificates example](images/certificates.gif)  
 ### dataTypes
 ```
 hana-cli dataTypes
-
+[aliases: dt, datatypes, dataType, datatype]
 List of HANA Data Types and their technical details
 
 Options:
   --admin, -a, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
+![dataTypes example](images/dataTypes.gif) 
 ### users
 ```
 hana-cli users [user]
-
+[aliases: u, listUsers, listusers]
 Get a list of all users
 
 Options:
@@ -572,10 +621,11 @@ Options:
   --user, -u, --User    User                             [string] [default: "*"]
   --limit, -l           Limit results                    [number] [default: 200]
 ```
+![users example](images/users.gif) 
 ### inspectUser
 ```
 hana-cli inspectUser [user]
-
+[aliases: iu, user, insUser, inspectuser]
 Return metadata about a User
 
 Options:
@@ -583,70 +633,77 @@ Options:
                                                       [boolean] [default: false]
   --user, -u, --User    User                                            [string]
 ```
+![inspectUser example](images/inspectUser.gif) 
 ### dataVolumes
 ```
 hana-cli dataVolumes
-
+[aliases: dv, datavolumes]
 Details about the HANA Data Volumes
 
 Options:
   --admin, -a, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
+![dataVolumes example](images/dataVolumes.gif) 
 ### disks
 ```
 hana-cli disks
-
+[aliases: di, Disks]
 Details about disk devices used by HANA
 
 Options:
   --admin, -a, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-```    
+```
+![disks example](images/disks.gif)     
 ### features
 ```
 hana-cli features
-
+[aliases: fe, Features]
 HANA Features and Version
 
 Options:
   --admin, -a, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ``` 
+![features example](images/features.gif)    
 ### featureUsage 
 ```
 hana-cli featureUsage
-
+[aliases: fu, FeaturesUsage]
 Usage Statistics by Feature
 
 Options:
   --admin, -a, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
+![featureUsage example](images/featureUsage.gif)  
 ### hostInformation
 ```
 hana-cli hostInformation
-
+[aliases: hi, HostInformation, hostInfo, hostinfo]
 Host technical details
 
 Options:
   --admin, -a, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
+![hostInformation example](images/hostInformation.gif)  
 ### iniFiles
 ```
 hana-cli iniFiles
-
+[aliases: if, inifiles, ini]
 iniFiles
 
 Options:
   --admin, -a, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
+![iniFiles example](images/iniFiles.gif)  
 ### iniContents
 ```
 hana-cli iniContents [file] [section]
-
+[aliases: if, inifiles, ini]
 Contents of INI Configuration (filtered by File Name)
 
 Options:
@@ -656,10 +713,11 @@ Options:
   --section, -s, --Section  Section                      [string] [default: "*"]
   --limit, -l               Limit results                [number] [default: 200]
 ```
+![iniContents example](images/iniContents.gif) 
 ### sequences
 ```
 hana-cli sequences [schema] [sequence]
-
+[aliases: seq, listSeqs, ListSeqs, listseqs, Listseq, listSequences]
 Get a list of all squences
 
 Options:
@@ -669,16 +727,18 @@ Options:
   --schema, -s, --Schema         schema [string] [default: "**CURRENT_SCHEMA**"]
   --limit, -l                    Limit results           [number] [default: 200]
 ```
+![sequences example](images/sequences.gif) 
 ### traces
 ```
 hana-cli traces
-
+[aliases: tf, Traces]
 List all trace files
 
 Options:
   --admin, -a, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-```     
+```    
+![traces example](images/traces.gif)  
 ### traceContents
 ```
 hana-cli traceContents [host] [file]
@@ -691,11 +751,12 @@ Options:
   --host, --ho, --Host  Hostname                                        [string]
   --file, -f, --File    File Name                                       [string]
   --limit, -l           Limit results                   [number] [default: 2000]
-```      
+```     
+![traceContents example](images/traceContents.gif)  
 ### roles
 ```
 hana-cli roles [schema] [role]
-
+[aliases: tc, traceContents, traceContent, tracecontent]
 Get a list of roles
 
 Options:
@@ -705,10 +766,11 @@ Options:
   --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   --limit, -l             Limit results                  [number] [default: 200]
 ```
+![roles example](images/roles.gif)  
 ### querySimple
 ```
 hana-cli querySimple
-
+[aliases: qs, querysimple]
 Execute single SQL command and output results
 
 Options:
@@ -716,10 +778,11 @@ Options:
                                                       [boolean] [default: false]
   --query, -q, --Query  SQL Statement                                   [string]
 ```
+![querySimple example](images/querySimple.gif)  
 ### cds
 ```
 hana-cli cds [schema] [table]
-
+[aliases: cdsPreview]
 Display a DB object via CDS
 
 Options:
@@ -729,6 +792,11 @@ Options:
   --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   --view, -v, --View      CDS processing for View instead of Table
                                                       [boolean] [default: false]
+``` 
+### completion
+```
+hana-cli completion
+generate completion script for bash shell
 ```  
 ## How to obtain support
 This project is provided "as-is": there is no guarantee that raised issues will be answered or addressed in future releases.
