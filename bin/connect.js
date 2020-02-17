@@ -107,6 +107,7 @@ async function dbConnect(input) {
         options.serverNode = input.userstorekey || input.connection;
         if (!input.userstorekey) { options.user = input.user }
         if (!input.userstorekey) { options.password = input.password }
+        options.sslValidateCertificate = false
         console.table(options);
 
         const db = new dbClass(await dbClass.createConnection(options));

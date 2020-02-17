@@ -159,7 +159,7 @@ async function cds(result) {
 
 async function cdsServerSetup(result, cdsSource) {
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 3010;
   const server = require("http").createServer();
   const express = require("express");
   var app = express();
