@@ -6,6 +6,11 @@ This sample is intended to shown how one could build a developer centric HANA co
 
 Introduction Video: [https://www.youtube.com/watch?v=FWOo_mm0sfQ](https://www.youtube.com/watch?v=FWOo_mm0sfQ)
 
+ However the tool isn't limited to only local development. It also works well when developing in the cloud. The hana-cli tool can also run well from a cloud shell in the SAP Business Application Studio, Google Cloud Shell, AWS Cloud9, etc. We can also run against a HANA As A Service instance on the SAP Cloud Platform. This demonstrates that the tool can run just about anywhere you can get a command line that has access to the Node.js Runtime.  We can also connect to a remote HANA instance even if it isn't running in the same cloud environment in which we are performing our development tasks.
+
+ Running in Cloud Shells Video: [https://www.youtube.com/watch?v=C_b-WUpRMKU](https://www.youtube.com/watch?v=C_b-WUpRMKU)
+
+
 ## Requirements / Download and Installation
 * Install Node.js version 10.x or 12.x on your development machine [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
