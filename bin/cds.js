@@ -174,7 +174,7 @@ async function cdsServerSetup(result, cdsSource) {
   let odataURL = "/odata/v4/opensap.hana.CatalogService/";
   let entity = result.table.replace(/\./g, "_");
   entity = entity.replace(/:/g, "");
-  cds.serve(await cds.parse(cdsSource), {
+  cds.serve('all').from(await cds.parse(cdsSource), {
     crashOnError: false
   })
     .at(odataURL)
