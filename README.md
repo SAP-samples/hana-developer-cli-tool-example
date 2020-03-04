@@ -156,7 +156,7 @@ hana-cli version
 Version details
 ```
 
-![version example](images/version.gif)
+![version example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/version.gif)
 
 ### help
 
