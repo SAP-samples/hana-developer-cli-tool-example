@@ -156,7 +156,7 @@ hana-cli version
 Version details
 ```
 
-![version example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/version.gif)
+![version example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/version.gif)
 
 ### help
 
@@ -182,7 +182,7 @@ Options:
                                                        [boolean] [default: true]
 ```
 
-![connect example](images/connect.gif)
+![connect example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/connect.gif)
 
 ### status
 
@@ -196,7 +196,7 @@ Options:
                                                       [boolean] [default: false]
 ```
 
-![status example](images/status.gif)
+![status example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/status.gif)
 
 ### hdbsql
 
@@ -211,7 +211,7 @@ Options:
                                                       [boolean] [default: false]
 ```
 
-![hdbsql example](images/hdbsql.gif)
+![hdbsql example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hdbsql.gif)
 
 ### activateHDI
 
@@ -241,7 +241,7 @@ Options:
   --password, -p, --Password  Password
 ```
 
-![adminHDI example](images/adminHDI.gif)
+![adminHDI example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/adminHDI.gif)
 
 ### adminHDIGroup
 
@@ -257,7 +257,7 @@ Options:
   --group, -g, --Group  HDI Group       [string] [default: "SYS_XS_HANA_BROKER"]
 ```
 
-![adminHDIGroup example](images/adminHDIGroup.gif)
+![adminHDIGroup example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/adminHDIGroup.gif)
 
 ### createXSAAdmin
 
@@ -273,7 +273,7 @@ Options:
   --password, -p, --Password  Password
 ```
 
-![createXSAAdmin example](images/createXSAAdmin.gif)
+![createXSAAdmin example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/createXSAAdmin.gif)
 
 ### createContainer
 
@@ -290,7 +290,7 @@ Options:
                                                        [boolean] [default: true]
 ```
 
-![createContainer example](images/createContainer.gif)
+![createContainer example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/createContainer.gif)
 
 ### dropContainer
 
@@ -305,7 +305,7 @@ Options:
   --container, -c, --Container  HDI Container Name                      [string]
 ```
 
-![dropContainer example](images/dropContainer.gif)
+![dropContainer example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/dropContainer.gif)
 
 ### reclaim
 
@@ -319,7 +319,7 @@ Options:
                                                        [boolean] [default: true]
 ```
 
-![reclaim example](images/reclaim.gif)
+![reclaim example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/reclaim.gif)
 
 ### massUsers
 
@@ -335,7 +335,7 @@ Options:
   --password, -p, --Password  Password
 ```
 
-![massUsers example](images/massUsers.gif)
+![massUsers example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/massUsers.gif)
 
 ### inspectTable
 
@@ -354,7 +354,7 @@ Options:
                                                         "swgr"] [default: "tbl"]
 ```
 
-![inspectTable example](images/inspectTable.gif)
+![inspectTable example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectTable.gif)
 
 ### inspectView
 
@@ -373,7 +373,7 @@ Options:
                                                         "swgr"] [default: "tbl"]
 ```
 
-![inspectView example](images/inspectView.gif)
+![inspectView example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectView.gif)
 
 ### systemInfo
 
@@ -387,7 +387,7 @@ Options:
                                                       [boolean] [default: false]
 ```
 
-![systemInfo example](images/systemInfo.gif)
+![systemInfo example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/systemInfo.gif)
 
 ### ports
 
@@ -412,7 +412,7 @@ Options:
   --all, --al, --allSchemas  allSchemas               [boolean] [default: false]
 ```
 
-![schemas example](images/schemas.gif)
+![schemas example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/schemas.gif)
 
 ### tables
 
@@ -429,7 +429,7 @@ Options:
   --limit, -l             Limit results                  [number] [default: 200]
 ```
 
-![tables example](images/tables.gif)
+![tables example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/tables.gif)
   
 ### views
 
@@ -446,7 +446,7 @@ Options:
   --limit, -l             Limit results                  [number] [default: 200]
 ```
 
-![views example](images/views.gif)
+![views example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/views.gif)
 
 ### objects
 
@@ -463,7 +463,7 @@ Options:
   --limit, -l             Limit results                  [number] [default: 200]
 ```
 
-![objects example](images/objects.gif)
+![objects example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/objects.gif)
 
 ### procedures
 
@@ -481,7 +481,7 @@ Options:
   --limit, -l                   Limit results            [number] [default: 200]
 ```
 
-![procedures example](images/procedures.gif)
+![procedures example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/procedures.gif)
 
 ### inspectProcedure
 
@@ -500,7 +500,7 @@ Options:
                                [string] [choices: "tbl", "sql"] [default: "tbl"]
 ```
 
-![inspectProcedure example](images/inspectProcedure.gif)
+![inspectProcedure example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectProcedure.gif)
 
 ### callProcedure
 
@@ -517,7 +517,7 @@ Options:
                                         [string] [default: "**CURRENT_SCHEMA**"]
 ```
 
-![callProcedure example](images/callProcedure.gif)
+![callProcedure example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/callProcedure.gif)
 
 ### functions
 
@@ -535,7 +535,7 @@ Options:
   --limit, -l                 Limit results              [number] [default: 200]
 ```
 
-![functions example](images/functions.gif)
+![functions example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/functions.gif)
 
 ### inspectFunction
 
@@ -553,7 +553,7 @@ Options:
                                [string] [choices: "tbl", "sql"] [default: "tbl"]
 ```
 
-![inspectFunction example](images/inspectFunction.gif)
+![inspectFunction example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectFunction.gif)
 
 ### libraries
 
@@ -571,7 +571,7 @@ Options:
   --limit, -l                  Limit results             [number] [default: 200]
 ```
 
-![libraries example](images/libraries.gif)
+![libraries example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/libraries.gif)
 
 ### inspectLibrary
 
@@ -589,7 +589,7 @@ Options:
                                [string] [choices: "tbl", "sql"] [default: "tbl"]
 ```
 
-![inspectLibrary example](images/inspectLibrary.gif)
+![inspectLibrary example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectLibrary.gif)
 
 ### inspectLibMember
 
@@ -611,7 +611,7 @@ Options:
                                [string] [choices: "tbl", "sql"] [default: "tbl"]
 ```
 
-![inspectLibMember example](images/inspectLibMember.gif)
+![inspectLibMember example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectLibMember.gif)
 
 ### triggers
 
@@ -629,7 +629,7 @@ Options:
   --limit, -l               Limit results                [number] [default: 200]
 ```
 
-![triggers example](images/triggers.gif)
+![triggers example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/triggers.gif)
 
 ### inspectTrigger
 
@@ -662,7 +662,7 @@ Options:
   --limit, -l               Limit results                [number] [default: 200]
 ```
 
-![indexes example](images/indexes.gif)
+![indexes example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/indexes.gif)
 
 ### inspectIndex
 
@@ -678,7 +678,7 @@ Options:
   --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
 ```
 
-![inspectIndex example](images/inspectIndex.gif)
+![inspectIndex example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectIndex.gif)
 
 ### synonyms
 
@@ -697,7 +697,7 @@ Options:
   --limit, -l                  Limit results             [number] [default: 200]
 ```
 
-![synonyms example](images/synonyms.gif)
+![synonyms example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/synonyms.gif)
 
 ### privilegeError
 
@@ -713,7 +713,7 @@ Options:
   --guid, -g, --error   GUID from original error message                [string]
 ```
 
-![privilegeError example](images/privilegeError.gif)
+![privilegeError example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/privilegeError.gif)
 
 ### certificates
 
@@ -727,7 +727,7 @@ Options:
                                                       [boolean] [default: false]
 ```
 
-![certificates example](images/certificates.gif)
+![certificates example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/certificates.gif)
 
 ### dataTypes
 
@@ -741,7 +741,7 @@ Options:
                                                       [boolean] [default: false]
 ```
 
-![dataTypes example](images/dataTypes.gif)
+![dataTypes example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/dataTypes.gif)
 
 ### users
 
@@ -757,7 +757,7 @@ Options:
   --limit, -l           Limit results                    [number] [default: 200]
 ```
 
-![users example](images/users.gif)
+![users example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/users.gif)
 
 ### inspectUser
 
@@ -772,7 +772,7 @@ Options:
   --user, -u, --User    User                                            [string]
 ```
 
-![inspectUser example](images/inspectUser.gif)
+![inspectUser example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectUser.gif)
 
 ### dataVolumes
 
@@ -786,7 +786,7 @@ Options:
                                                       [boolean] [default: false]
 ```
 
-![dataVolumes example](images/dataVolumes.gif)
+![dataVolumes example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/dataVolumes.gif)
 
 ### disks
 
@@ -800,7 +800,7 @@ Options:
                                                       [boolean] [default: false]
 ```
 
-![disks example](images/disks.gif)
+![disks example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/disks.gif)
 
 ### features
 
@@ -814,7 +814,7 @@ Options:
                                                       [boolean] [default: false]
 ```
 
-![features example](images/features.gif)
+![features example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/features.gif)
 
 ### featureUsage
 
@@ -828,7 +828,7 @@ Options:
                                                       [boolean] [default: false]
 ```
 
-![featureUsage example](images/featureUsage.gif)
+![featureUsage example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/featureUsage.gif)
 
 ### hostInformation
 
@@ -842,7 +842,7 @@ Options:
                                                       [boolean] [default: false]
 ```
 
-![hostInformation example](images/hostInformation.gif)
+![hostInformation example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hostInformation.gif)
 
 ### iniFiles
 
@@ -856,7 +856,7 @@ Options:
                                                       [boolean] [default: false]
 ```
 
-![iniFiles example](images/iniFiles.gif)
+![iniFiles example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/iniFiles.gif)
 
 ### iniContents
 
@@ -873,7 +873,7 @@ Options:
   --limit, -l               Limit results                [number] [default: 200]
 ```
 
-![iniContents example](images/iniContents.gif)
+![iniContents example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/iniContents.gif)
 
 ### sequences
 
@@ -890,7 +890,7 @@ Options:
   --limit, -l                    Limit results           [number] [default: 200]
 ```
 
-![sequences example](images/sequences.gif)
+![sequences example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/sequences.gif)
 
 ### traces
 
@@ -904,7 +904,7 @@ Options:
                                                       [boolean] [default: false]
 ```
 
-![traces example](images/traces.gif)
+![traces example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/traces.gif)
 
 ### traceContents
 
@@ -921,7 +921,7 @@ Options:
   --limit, -l           Limit results                   [number] [default: 2000]
 ```
 
-![traceContents example](images/traceContents.gif)
+![traceContents example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/traceContents.gif)
 
 ### roles
 
@@ -938,7 +938,7 @@ Options:
   --limit, -l             Limit results                  [number] [default: 200]
 ```
 
-![roles example](images/roles.gif)
+![roles example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/roles.gif)
 
 ### querySimple
 
@@ -953,7 +953,7 @@ Options:
   --query, -q, --Query  SQL Statement                                   [string]
 ```
 
-![querySimple example](images/querySimple.gif)
+![querySimple example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/querySimple.gif)
 
 ### cds
 
