@@ -1,6 +1,4 @@
-# hana-developer-cli-tool-example
-
-SAP HANA Developer Command Line Interface
+# SAP HANA Developer Command Line Interface
 
 ## Description
 
