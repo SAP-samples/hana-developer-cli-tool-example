@@ -22,7 +22,7 @@ Running in Cloud Shells Video: [https://www.youtube.com/watch?v=C_b-WUpRMKU](htt
 npm config set @sap:registry=https://npm.sap.com
 ```
 
-* Clone the repositry from [https://github.com/SAP-samples/hana-developer-cli-tool-example](https://github.com/SAP-samples/hana-developer-cli-tool-example)
+* Clone the repository from [https://github.com/SAP-samples/hana-developer-cli-tool-example](https://github.com/SAP-samples/hana-developer-cli-tool-example)
 
 ```shell
 git clone https://github.com/SAP-samples/hana-developer-cli-tool-example
@@ -42,13 +42,19 @@ npm link
 
 [![asciicast](https://asciinema.org/a/301560.svg)](https://asciinema.org/a/301560)
 
+Or if you would rather just access the tool directly, it is now available in npm directly. You can install via:
+
+```shell
+npm install -g hana-cli
+```
+
 ## Security
 
-This appplication primarily uses the default-env.json that is often used in local development for connectivity to a remote HANA DB (although it can of course be used with a local HANA Express instance as well). For more details on how the default-env.json works, see the readme.md of the @sap/xsenv package or the @sap/hdi-deploy package.
+This application primarily uses the default-env.json that is often used in local development for connectivity to a remote HANA DB (although it can of course be used with a local HANA Express instance as well). For more details on how the default-env.json works, see the readme.md of the @sap/xsenv package or the @sap/hdi-deploy package.
 
 ## Examples
 
-A lot of the functionaltiy of this tool revolves around typical tasks you face while doing HANA database development.
+A lot of the functionality of this tool revolves around typical tasks you face while doing HANA database development.
 For example you might want to get a list of all views in your current schema/container:
 
 ```shell
@@ -60,7 +66,7 @@ OPENSAP_HANA_USER  user.models::USER_DETAILS                    171133    USER_D
 OPENSAP_HANA_USER  user.models::USER_DETAILS/hier/USER_DETAILS  171139    null
 ```
 
-Then perhaps you want to insepect a view to see the columns and their data types:
+Then perhaps you want to inspect a view to see the columns and their data types:
 
 ```shell
 C:\github\hana-xsa-opensap-hana7\user_db>hana-cli view * user.models::USER_DETAILS
@@ -85,7 +91,7 @@ OPENSAP_HANA_USER  user.models::USER_DETAILS  171133    LASTNAME     3         N
 OPENSAP_HANA_USER  user.models::USER_DETAILS  171133    USERID       4         INTEGER         0       10      0      TRUE         null           INT                171138     UserId
 ```
 
-But there are multiple output options for inspection. Perhaps you are using Cloud Applciation Programming Model and need to create a proxy entity in CDS for a view. This tool will read the catalog metadata and convert it to CDS:
+But there are multiple output options for inspection. Perhaps you are using Cloud Application Programming Model and need to create a proxy entity in CDS for a view. This tool will read the catalog metadata and convert it to CDS:
 
 ```shell
 C:\github\hana-xsa-opensap-hana7\user_db>hana-cli view OPENSAP_HANA_USER user.models::USER_DETAILS -o cds
@@ -143,7 +149,7 @@ Schema: OPENSAP_HANA_USER, View: user.models::USER_DETAILS
 </edmx:Edmx>
 ```
 
-This tool will even create a temporary OData V4 service for any existing table, view or Calcuation View and launch a test Fiori Ui locally.
+This tool will even create a temporary OData V4 service for any existing table, view or Calculation View and launch a test Fiori Ui locally.
 ![Fioir Example](images/ex1.png)
 
 ## Commands
