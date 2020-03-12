@@ -28,7 +28,7 @@ exports.builder = {
   },
   output: {
     alias: ['o', 'Output'],
-    choices: ["tbl", "sql", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr"],
+    choices: ["tbl", "sql", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi"],
     default: "tbl",
     type: 'string',
     desc: bundle.getText("outputType")
@@ -135,6 +135,30 @@ async function tableInspect(result) {
       parse(metadata)
         .then(service => convert(service.entitySets, odataOptions, service.version))
         .then(swagger => console.log(JSON.stringify(swagger, null, 2)))
+        .catch(error => console.error(error))
+      break;
+    }
+    case 'openapi': {
+      let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
+      cdsSource = `service HanaCli { ${cdsSource} } `;
+      let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
+        version: 'v4',
+      })
+      const odataOptions = { basePath: '/odata/v4/opensap.hana.CatalogService/' }
+      const {
+        parse,
+        convert
+      } = require('odata2openapi')
+      const converter = require('swagger2openapi')
+      let convOptions = {}
+      parse(metadata)
+        .then(service => convert(service.entitySets, odataOptions, service.version))
+        .then(swagger => {
+          converter.convertObj(swagger, convOptions)
+            .then(output => {
+              console.log(JSON.stringify(output.openapi, null, 2))
+            })
+        })
         .catch(error => console.error(error))
       break;
     }

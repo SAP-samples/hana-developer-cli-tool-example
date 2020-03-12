@@ -259,14 +259,18 @@ async function cdsServerSetup(result, cdsSource) {
     parse,
     convert
   } = require('odata2openapi')
-
+  const converter = require('swagger2openapi')
+  let convOptions = {}
   parse(metadata)
     .then(service => convert(service.entitySets, odataOptions, service.version))
     .then(swagger => {
-      let options = {
-        explorer: true
-      }
-      app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(swagger, options))
+      converter.convertObj(swagger, convOptions)
+        .then(output => {
+          let serveOptions = {
+            explorer: true
+          }
+          app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(output.openapi, serveOptions))
+        })
     })
     .catch(error => console.error(error))
 
@@ -422,7 +426,7 @@ function _manifest(odataURL, entity, table) {
 
 function fiori(manifest) {
   let ui5Version //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
-  ui5Version = ui5Version ? ui5Version+'/' : ''  
+  ui5Version = ui5Version ? ui5Version + '/' : ''
   return `
 <!DOCTYPE html>
 <html>
