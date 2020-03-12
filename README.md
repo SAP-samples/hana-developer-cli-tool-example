@@ -355,7 +355,7 @@ Options:
   --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   --output, -o, --Output  Output Format for inspection
    [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "edm", "edmx",
-                                                        "swgr"] [default: "tbl"]
+                                             "swgr", "openapi"] [default: "tbl"]
 ```
 
 ![inspectTable example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectTable.gif)
@@ -374,7 +374,7 @@ Options:
   --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   --output, -o, --Output  Output Format for inspection
    [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "edm", "edmx",
-                                                        "swgr"] [default: "tbl"]
+                                             "swgr", "openapi"] [default: "tbl"]
 ```
 
 ![inspectView example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectView.gif)
