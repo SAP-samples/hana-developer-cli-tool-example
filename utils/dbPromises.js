@@ -6,6 +6,8 @@ module.exports = class {
 
 	static createConnectionFromEnv(envFile) {
 		return new Promise((resolve, reject) => {
+			require('dotenv').config()
+		//	console.log(process.env.VCAP_SERVICES)
 			const xsenv = require("@sap/xsenv");
 			xsenv.loadEnv(envFile);
 			let options = '';
