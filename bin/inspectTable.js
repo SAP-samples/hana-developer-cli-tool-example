@@ -51,11 +51,11 @@ exports.handler = function (argv) {
           return false;
         }
       },
-      table: {
+       table: {
         description: bundle.getText("table"),
         type: 'string',
         required: true
-      },
+      }, 
       schema: {
         description: bundle.getText("schema"),
         type: 'string',
