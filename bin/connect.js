@@ -34,7 +34,11 @@ exports.builder = {
     desc: bundle.getText("encrypt"),
     type: 'boolean',
     default: false
-  }       
+  },
+  trustStore: {
+    alias: ['t', 'Trust', 'trust', 'truststore'],
+    desc: bundle.getText("trustStore")
+  }  
 }
 
 exports.handler = function (argv) {
@@ -86,7 +90,14 @@ exports.handler = function (argv) {
         ask: () =>{
             return !argv.userstorekey && !argv.connection;
         }
-      }            
+      },
+      trustStore: {
+        description: bundle.getText("trustStore"),          
+        required: false,
+        ask: () =>{
+            return !argv.trustStore;
+        }
+      }                    
     }
   };
 
@@ -109,6 +120,11 @@ async function dbConnect(input) {
         if (!input.userstorekey) { options.password = input.password }
         options.sslValidateCertificate = false
         options.validate_certificate = false
+        if (input.trustStore) { 
+          options.sslTrustStore = input.trustStore
+          options.sslCryptoProvider = 'openssl'
+          options.sslValidateCertificate = true
+        }
         console.table(options);
 
         const db = new dbClass(await dbClass.createConnection(options));
@@ -153,7 +169,11 @@ async function saveEnv(options) {
                 host: parts[0],
                 user: options.user }
         }];
-
+        if (options.sslTrustStore) { 
+          defaultEnv.VCAP_SERVICES.hana[0].credentials.sslTrustStore = options.sslTrustStore
+          defaultEnv.VCAP_SERVICES.hana[0].credentials.sslCryptoProvider = 'openssl'
+          defaultEnv.VCAP_SERVICES.hana[0].credentials.sslValidateCertificate = true
+        }
         const fs = require('fs');
         fs.writeFile("default-env-admin.json", JSON.stringify(defaultEnv, null, '\t'), function (err) {
             if (err) {

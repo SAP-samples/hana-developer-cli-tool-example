@@ -184,6 +184,11 @@ Options:
                                       all other Connection Parameters
   --save, -s, --Save                  Save Credentials to default-env-admin.json
                                                        [boolean] [default: true]
+  --encrypt, -e, --Encrypt, --ssl           Encrypt connections (required for
+                                            HANA As A Service)
+                                                      [boolean] [default: false]
+  --trustStore, -t, --Trust, --trust,       SSL Trust Store
+  --truststore                                                       
 ```
 
 ![connect example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/connect.gif)
