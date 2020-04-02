@@ -205,7 +205,7 @@ async function formatCDS(object, fields, constraints, type) {
 		xref.after = field.COLUMN_NAME;
 		global.__xRef.push(xref);
 		cdstable += "\t";
-		cdstable += `"${field.COLUMN_NAME}"` + ": ";
+		cdstable += `![${field.COLUMN_NAME}]` + ": ";
 
 		switch (field.DATA_TYPE_NAME) {
 			case "NVARCHAR":
