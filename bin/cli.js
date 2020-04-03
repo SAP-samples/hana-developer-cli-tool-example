@@ -78,6 +78,7 @@ require('yargs')
     .command(require('./massUsers')) 
     .command(require('./querySimple'))    
     .command(require('./cds')) 
+    .command(require('./createModule')) 
     .option('h', {
         alias: 'help',
         description: bundle.getText("help")
