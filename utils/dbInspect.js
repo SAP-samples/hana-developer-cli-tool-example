@@ -39,7 +39,7 @@ module.exports.getDef = getDef;
 async function getViewFields(db, viewOid) {
 	//Select Fields
 	const statement = await db.preparePromisified(
-		`SELECT SCHEMA_NAME, VIEW_NAME, VIEW_OID, COLUMN_NAME, POSITION, DATA_TYPE_NAME, OFFSET, LENGTH, SCALE, IS_NULLABLE, DEFAULT_VALUE, CS_DATA_TYPE_NAME, COLUMN_ID, COMMENTS
+		`SELECT SCHEMA_NAME, VIEW_NAME, VIEW_OID, COLUMN_NAME, POSITION, DATA_TYPE_NAME, OFFSET, LENGTH, SCALE, IS_NULLABLE, DEFAULT_VALUE, COLUMN_ID, COMMENTS
          FROM VIEW_COLUMNS 
 				  WHERE VIEW_OID = ? ORDER BY POSITION`);
 	const fields = await db.statementExecPromisified(statement, [viewOid]);
@@ -65,7 +65,7 @@ module.exports.getTable = getTable;
 async function getTableFields(db, tableOid) {
 	//Select Fields
 	const statement = await db.preparePromisified(
-		`SELECT SCHEMA_NAME, TABLE_NAME, TABLE_OID, COLUMN_NAME, POSITION, DATA_TYPE_NAME, OFFSET, LENGTH, SCALE, IS_NULLABLE, DEFAULT_VALUE, CS_DATA_TYPE_NAME, COLUMN_ID, COMMENTS
+		`SELECT SCHEMA_NAME, TABLE_NAME, TABLE_OID, COLUMN_NAME, POSITION, DATA_TYPE_NAME, OFFSET, LENGTH, SCALE, IS_NULLABLE, DEFAULT_VALUE, COLUMN_ID, COMMENTS
           FROM TABLE_COLUMNS 
 				  WHERE TABLE_OID = ? ORDER BY POSITION`);
 	const fields = await db.statementExecPromisified(statement, [tableOid]);
