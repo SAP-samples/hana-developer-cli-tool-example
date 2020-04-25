@@ -80,7 +80,7 @@ async function activate(result) {
   let envFile = dbClass.resolveEnv(result);
   const db = new dbClass(await dbClass.createConnectionFromEnv(envFile));
 
-  const uuidv4 = require('uuid/v4');
+  const { v4: uuidv4 } = require('uuid');
   let passwordDT = uuidv4();
   passwordDT = passwordDT.replace(/-/g, "A");
   let passwordRT = uuidv4();
