@@ -316,6 +316,17 @@ Options:
 
 ![dropContainer example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/dropContainer.gif)
 
+### createModule
+
+```shell
+hana-cli createModule
+
+Create or adjust DB Module in your local project structure. If the folder already exists the files .build.js and package.json will be replaced with updated content designed to allow for local hdi-deploy run.
+
+Options:
+  --folder, -f, --Folder  DB Module Folder Name         [string] [default: "db"]
+```
+
 ### reclaim
 
 ```shell
@@ -978,6 +989,24 @@ Options:
   --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   --view, -v, --View      CDS processing for View instead of Table
                                                       [boolean] [default: false]
+```
+
+### massConvert
+
+```shell
+hana-cli massConvert [schema] [table]  
+
+Convert a group of tables to CDS or HDBTable format
+
+Options:
+  --admin, -a, --Admin    Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  --table, -t, --Table    Database Table                 [string] [default: "*"]
+  --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
+  --limit, -l             Limit results                  [number] [default: 200]
+  --folder, -f, --Folder  DB Module Folder Name         [string] [default: "./"]
+  --output, -o, --Output  Output Format for inspection
+                          [string] [choices: "hdbtable", "cds"] [default: "cds"]
 ```
 
 ### completion

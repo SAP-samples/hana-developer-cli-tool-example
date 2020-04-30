@@ -41,7 +41,8 @@
     "uuid": "^8.0",
     "yargonaut": "1.1.4",
     "yargs": "^15.3",
-    "dotenv": "^8.2"
+    "dotenv": "^8.2",
+    "node-zip": "^1.1.1"
   },
   "author": "SAP",
   "license": "SEE LICENSE IN LICENSE",
