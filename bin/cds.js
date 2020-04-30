@@ -1,7 +1,7 @@
 const colors = require("colors/safe");
 const bundle = global.__bundle;
 global.__xRef = [];
-const dbClass = require("../utils/dbPromises");
+const dbClass = require("sap-hdbext-promisfied");
 const dbInspect = require("../utils/dbInspect");
 
 exports.command = 'cds [schema] [table]';

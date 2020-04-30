@@ -45,7 +45,7 @@ exports.handler = function (argv) {
 
 
 async function launchHdbsql(result) {
-  const dbClass = require("../utils/dbPromises");
+  const dbClass = require("sap-hdbext-promisfied");
   let envFile = dbClass.resolveEnv(result);
   const xsenv = require("@sap/xsenv");
   xsenv.loadEnv(envFile);

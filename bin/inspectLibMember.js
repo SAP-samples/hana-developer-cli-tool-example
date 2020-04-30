@@ -1,6 +1,6 @@
 const colors = require("colors/safe");
 const bundle = global.__bundle;
-const dbClass = require("../utils/dbPromises");
+const dbClass = require("sap-hdbext-promisfied");
 
 exports.command = 'inspectLibMember [schema] [library] [libraryMem]';
 exports.aliases = ['ilm', 'libraryMember', 'librarymember', 'insLibMem', 'inspectlibrarymember'];

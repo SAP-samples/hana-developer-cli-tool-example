@@ -1,6 +1,6 @@
 const colors = require("colors/safe");
 const bundle = global.__bundle;
-const dbClass = require("../utils/dbPromises");
+const dbClass = require("sap-hdbext-promisfied");
 const dbInspect = require("../utils/dbInspect");
 
 exports.command = 'inspectTable [schema] [table]';
@@ -112,8 +112,9 @@ async function tableInspect(result) {
       let cdsSource = await dbInspect.formatCDS(object, fields, constraints, "table");
       cdsSource = `service HanaCli { ${cdsSource} } `;
       let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
-        version: 'v4',
+        version: 'v4', newCsn: true
       })
+      //let metadata = await cds.parse(cdsSource)
       console.log(JSON.stringify(metadata, null, 4));
       break;
     }

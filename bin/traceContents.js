@@ -1,6 +1,6 @@
 const colors = require("colors/safe");
 const bundle = global.__bundle;
-const dbClass = require("../utils/dbPromises");
+const dbClass = require("sap-hdbext-promisfied");
 
 exports.command = 'traceContents [host] [file]';
 exports.aliases = ['tc', 'traceContents', 'traceContent', 'tracecontent'];

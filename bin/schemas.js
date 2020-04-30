@@ -1,6 +1,6 @@
 const colors = require("colors/safe");
 const bundle = global.__bundle;
-const dbClass = require("../utils/dbPromises");
+const dbClass = require("sap-hdbext-promisfied");
 
 exports.command = 'schemas [schema]';
 exports.aliases = ['sch', 'getSchemas', 'listSchemas'];
