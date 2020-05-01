@@ -96,6 +96,8 @@ async function activate(result) {
     `CALL _SYS_DI.CREATE_CONTAINER('${result.container}', _SYS_DI.T_NO_PARAMETERS, ?, ?, ?);`);
   console.table(results);
 
+  //SCHEMA_PRIV = SELECT PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, (SELECT :userRT FROM DUMMY) AS PRINCIPAL_NAME FROM _SYS_DI.T_DEFAULT_CONTAINER_USER_PRIVILEGES;
+
   results = await db.execSQL(
     `DO
   BEGIN
@@ -122,10 +124,34 @@ async function activate(result) {
     CALL _SYS_DI.GRANT_CONTAINER_API_PRIVILEGES('${result.container}', :PRIVILEGES, :no_params, :return_code, :request_id, :MESSAGES); 
     select * from :MESSAGES;
   
-    SCHEMA_PRIV = SELECT 'SELECT' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;  
+    SCHEMA_PRIV = SELECT PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, (SELECT :userRT FROM DUMMY) AS PRINCIPAL_NAME FROM _SYS_DI.T_DEFAULT_CONTAINER_USER_PRIVILEGES;
+    CALL _SYS_DI.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${result.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
+    select * from :MESSAGES;
+
+    SCHEMA_PRIV = SELECT 'INSERT' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;  
     CALL _SYS_DI.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${result.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
     select * from :MESSAGES;
   
+    SCHEMA_PRIV = SELECT 'CREATE TEMPORARY TABLE' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;  
+    CALL _SYS_DI.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${result.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
+    select * from :MESSAGES;
+
+    SCHEMA_PRIV = SELECT 'DELETE' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;  
+    CALL _SYS_DI.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${result.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
+    select * from :MESSAGES;
+
+    SCHEMA_PRIV = SELECT 'EXECUTE' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;  
+    CALL _SYS_DI.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${result.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
+    select * from :MESSAGES;    
+
+    SCHEMA_PRIV = SELECT 'UPDATE' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;  
+    CALL _SYS_DI.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${result.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
+    select * from :MESSAGES; 
+
+    SCHEMA_PRIV = SELECT 'SELECT CDS METADATA' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;  
+    CALL _SYS_DI.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${result.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
+    select * from :MESSAGES;
+
     default = SELECT * FROM _SYS_DI.T_DEFAULT_LIBRARIES;
     CALL _SYS_DI.CONFIGURE_LIBRARIES('${result.container}', :default, :no_params, :return_code, :request_id, :MESSAGES);
     SELECT :userDT as "Object Owner", :userRT as "Application User" from DUMMY;
