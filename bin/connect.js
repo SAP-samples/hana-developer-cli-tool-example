@@ -125,7 +125,7 @@ async function dbConnect(input) {
           options.sslCryptoProvider = 'openssl'
           options.sslValidateCertificate = true
         }
-        console.table(options);
+      //  console.table(options);
 
         const db = new dbClass(await dbClass.createConnection(options));
         let results = await db.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`);

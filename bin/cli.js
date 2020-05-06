@@ -80,6 +80,7 @@ require('yargs')
     .command(require('./cds')) 
     .command(require('./createModule')) 
     .command(require('./massConvert')) 
+    .command(require('./connectViaServiceKey'))     
     .option('h', {
         alias: 'help',
         description: bundle.getText("help")

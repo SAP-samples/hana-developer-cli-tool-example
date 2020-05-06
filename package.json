@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "1.202005.1",
+  "version": "1.202005.2",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -42,7 +42,8 @@
     "yargonaut": "1.1.4",
     "yargs": "^15.3",
     "dotenv": "^8.2",
-    "node-zip": "^1.1.1"
+    "node-zip": "^1.1.1",
+    "latest-version": "^5.1.0"
   },
   "author": "SAP",
   "license": "SEE LICENSE IN LICENSE",

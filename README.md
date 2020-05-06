@@ -1009,6 +1009,27 @@ Options:
                           [string] [choices: "hdbtable", "cds"] [default: "cds"]
 ```
 
+### serviceKey
+
+```shell
+hana-cli serviceKey [instance] [key]
+
+Connect and write default-env.json via cf/xs service key
+
+Options:
+  --instance, -i, --Instance                CF/XS Service Instance Name
+  --encrypt, -e, --Encrypt, --ssl           Encrypt connections (required for
+                                            HANA As A Service)
+                                                      [boolean] [default: false]
+  --validate, -v, --Validate,               Validate Certificate
+  --validateCertificate                               [boolean] [default: false]
+  --cf, --cmd                               Cloud Foundry?
+                                                      [boolean] [default: false]
+  --save, -s, --Save                        Save Credentials to
+                                            default-env.json
+                                                       [boolean] [default: true]
+```
+
 ### completion
 
 ```shell
