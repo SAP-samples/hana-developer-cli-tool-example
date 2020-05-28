@@ -50,8 +50,7 @@ exports.handler = function (argv) {
   var schema = {
     properties: {
       instance: {
-        description: bundle.getText("connection"),
-        message: bundle.getText("instance"),
+        description: bundle.getText("instance"),
         required: true
       },
       key: {

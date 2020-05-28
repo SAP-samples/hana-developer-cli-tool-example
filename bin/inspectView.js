@@ -151,6 +151,7 @@ async function tableInspect(result) {
       } = require('odata2openapi')
       const converter = require('swagger2openapi')
       let convOptions = {}
+      convOptions.anchors = true      
       parse(metadata)
         .then(service => convert(service.entitySets, odataOptions, service.version))
         .then(swagger => {

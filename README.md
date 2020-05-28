@@ -301,6 +301,25 @@ Options:
 
 ![createContainer example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/createContainer.gif)
 
+### createContainerUsers
+
+```shell
+hana-cli createContainerUsers [container]
+
+Create new HDI Container technical users for an existing container and populates connection details into
+default-env.json
+
+Options:
+  --admin, -a, --Admin             Connect via admin (default-env-admin.json)
+                                                       [boolean] [default: true]
+  --container, -c, --Container     HDI Container Name                   [string]
+  --save, -s, --Save               Save Credentials to default-env.json
+                                                       [boolean] [default: true]
+  --encrypt, -e, --Encrypt, --ssl  Encrypt connections (required for HANA As A
+                                   Service or HANA Cloud)
+                                                      [boolean] [default: false]
+```
+
 ### dropContainer
 
 ```shell
@@ -394,6 +413,38 @@ Options:
 ```
 
 ![inspectView example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectView.gif)
+
+### inspectJWT
+
+```shell
+hana-cli inspectJWT
+
+Inspect JWT Token Configuration
+
+Options:
+  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+```
+
+### createJWT
+
+```shell
+hana-cli createJWT [name]
+
+Create JWT Token and Import Certificate (To obtain the certificate and issuer
+used in the SQL you need to use the xsuaa service key credentials.url element
+which should look like this:
+https://<subdomain>.authentication.<region>.hana.ondemand.com then add
+/sap/trust/jwt path to it in a browser)
+
+Options:
+  --admin, -a, --Admin              Connect via admin (default-env-admin.json)
+                                                       [boolean] [default: true]
+  --name, -c, --Name                JWT Provider Name (Any descriptive Value)
+                                                                        [string]
+  --certificate, -c, --Certificate  certificate                         [string]
+  --issuer, -i, --Issuer            Certificate Issuer [boolean] [default: true]
+```
 
 ### systemInfo
 
