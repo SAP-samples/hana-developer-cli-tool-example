@@ -320,6 +320,24 @@ Options:
                                                       [boolean] [default: false]
 ```
 
+### containers
+
+```shell
+hana-cli containers [containerGroup] [container]
+
+List all HDI Containers
+
+Options:
+  --admin, -a, --Admin                      Connect via admin
+                                            (default-env-admin.json)
+                                                       [boolean] [default: true]
+  --container, -c, --Container              Container Name
+                                                         [string] [default: "*"]
+  --containerGroup, -g, --Group, --group,   Container Group
+  --containergroup                                       [string] [default: "*"]
+  --limit, -l                               Limit results[number] [default: 200]
+```
+
 ### dropContainer
 
 ```shell

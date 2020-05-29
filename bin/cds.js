@@ -439,10 +439,10 @@ function fiori(manifest) {
     <script src="https://sapui5.hana.ondemand.com/${ui5Version}test-resources/sap/ushell/bootstrap/sandbox.js"></script>
     <script src="https://sapui5.hana.ondemand.com/${ui5Version}resources/sap-ui-core.js"
         data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration, sap.ui.layout" data-sap-ui-compatVersion="edge"
-        data-sap-ui-theme="sap_fiori_3" data-sap-ui-frameOptions="allow"></script>
+        data-sap-ui-theme="sap_fiori_3_dark" data-sap-ui-frameOptions="allow"></script>
     <script>
         sap.ui.getCore().attachInit(() => {
-            sap.ui.require(["sap/fe/AppComponent", "sap/m/Shell", "sap/ui/core/ComponentContainer"], function (AppComponent, Shell, ComponentContainer) {
+            sap.ui.require(["sap/fe/core/AppComponent", "sap/m/Shell", "sap/ui/core/ComponentContainer"], function (AppComponent, Shell, ComponentContainer) {
                 var GenericComponent = AppComponent.extend("preview.Component", {
                     metadata: { manifest: ${JSON.stringify(manifest, null, 2)} }
                 });

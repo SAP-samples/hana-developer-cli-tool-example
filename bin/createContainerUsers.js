@@ -92,6 +92,13 @@ async function activate(result) {
   let userRT = result.container + '_' + user + '_RT';
   userRT = userRT.toUpperCase();
 
+  let userGroup = await db.execSQL(
+    `SELECT * FROM SYS.USERGROUPS WHERE USERGROUP_NAME = 'DEFAULT'`);
+  let useGroup = false
+  if(userGroup.length > 0){
+    useGroup = true
+  }
+
   let results = await db.execSQL(
     `DO
   BEGIN
@@ -109,8 +116,8 @@ async function activate(result) {
     SELECT SYSUUID INTO userName FROM DUMMY; 
     SELECT '${userDT}' into userDT FROM DUMMY;
     SELECT '${userRT}' into userRT FROM DUMMY;  
-    EXEC 'CREATE USER ' || :userDT || ' PASSWORD "${passwordDT}" NO FORCE_FIRST_PASSWORD_CHANGE';
-    EXEC 'CREATE USER ' || :userRT || ' PASSWORD "${passwordRT}" NO FORCE_FIRST_PASSWORD_CHANGE';
+    EXEC 'CREATE USER ' || :userDT || ' PASSWORD "${passwordDT}" NO FORCE_FIRST_PASSWORD_CHANGE ${ useGroup ? ` SET USERGROUP DEFAULT ` : '' }';
+    EXEC 'CREATE USER ' || :userRT || ' PASSWORD "${passwordRT}" NO FORCE_FIRST_PASSWORD_CHANGE ${ useGroup ? ` SET USERGROUP DEFAULT ` : '' }';
   
     COMMIT;
 
@@ -156,7 +163,7 @@ async function activate(result) {
     xsenv.loadEnv(envFile);
     let options = xsenv.getServices({ hana: { tag: 'hana' }, });    
     await saveEnv(options, result.container, userDT, userRT, passwordDT, passwordRT, result.encrypt);
-  }
+  } 
   global.__spinner.stop()
   return;
 }

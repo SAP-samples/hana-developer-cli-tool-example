@@ -175,10 +175,10 @@ async function formatCDS(object, fields, constraints, type) {
 	if (type === "view") {
 		object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/\./g, "_");
 		object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/:/g, "");		
-		cdstable += `Entity ${object[0].VIEW_NAME} {\n `;
+		cdstable += `Entity ![${object[0].VIEW_NAME}] {\n `;
 	} else {
 		object[0].TABLE_NAME = object[0].TABLE_NAME.replace(/\./g, "_");
-		cdstable += `Entity "${object[0].TABLE_NAME}" {\n `;
+		cdstable += `Entity ![${object[0].TABLE_NAME}] {\n `;
 	}
 
 	var isKey = "FALSE";

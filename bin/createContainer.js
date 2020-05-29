@@ -98,6 +98,13 @@ async function activate(result) {
 
   //SCHEMA_PRIV = SELECT PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, (SELECT :userRT FROM DUMMY) AS PRINCIPAL_NAME FROM _SYS_DI.T_DEFAULT_CONTAINER_USER_PRIVILEGES;
 
+  let userGroup = await db.execSQL(
+    `SELECT * FROM SYS.USERGROUPS WHERE USERGROUP_NAME = 'DEFAULT'`);
+  let useGroup = false
+  if(userGroup.length > 0){
+    useGroup = true
+  }
+
   results = await db.execSQL(
     `DO
   BEGIN
@@ -115,8 +122,8 @@ async function activate(result) {
     SELECT SYSUUID INTO userName FROM DUMMY; 
     SELECT '${userDT}' into userDT FROM DUMMY;
     SELECT '${userRT}' into userRT FROM DUMMY;  
-    EXEC 'CREATE USER ' || :userDT || ' PASSWORD "${passwordDT}" NO FORCE_FIRST_PASSWORD_CHANGE';
-    EXEC 'CREATE USER ' || :userRT || ' PASSWORD "${passwordRT}" NO FORCE_FIRST_PASSWORD_CHANGE';
+    EXEC 'CREATE USER ' || :userDT || ' PASSWORD "${passwordDT}" NO FORCE_FIRST_PASSWORD_CHANGE ${ useGroup ? ` SET USERGROUP DEFAULT ` : '' }';
+    EXEC 'CREATE USER ' || :userRT || ' PASSWORD "${passwordRT}" NO FORCE_FIRST_PASSWORD_CHANGE ${ useGroup ? ` SET USERGROUP DEFAULT ` : '' }';
   
     COMMIT;
 
