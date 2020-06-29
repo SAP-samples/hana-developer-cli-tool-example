@@ -344,7 +344,7 @@ function _manifest(odataURL, entity, table) {
     'sap.ui5': {
       dependencies: {
         libs: {
-          'sap.fe': {}
+          'sap.fe.templates': {}
         }
       },
       models: {
@@ -422,6 +422,7 @@ function _manifest(odataURL, entity, table) {
       archeType: 'transactional'
     },
   }
+
   return manifest
 }
 
