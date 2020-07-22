@@ -1099,6 +1099,18 @@ Options:
                                                        [boolean] [default: true]
 ```
 
+### openDBX
+
+```shell
+hana-cli opendbx
+
+Open DB Explorer
+
+Options:
+  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+```
+
 ### completion
 
 ```shell

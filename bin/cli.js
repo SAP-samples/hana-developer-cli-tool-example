@@ -84,7 +84,8 @@ require('yargs')
     .command(require('./createModule')) 
     .command(require('./massConvert')) 
     .command(require('./connectViaServiceKey'))   
-    .command(require('./containers'))        
+    .command(require('./containers'))     
+    .command(require('./openDBExplorer'))   
     .option('h', {
         alias: 'help',
         description: bundle.getText("help")
