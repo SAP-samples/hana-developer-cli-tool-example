@@ -169,12 +169,12 @@ async function getFunctionPramCols(db, funcOid) {
 }
 module.exports.getFunctionPramCols = getFunctionPramCols;
 
-async function formatCDS(object, fields, constraints, type) {
+async function formatCDS(object, fields, constraints, type, parent) {
 	let cdstable = "";
 	cdstable += "@cds.persistence.exists \n";
 	if (type === "view") {
 		object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/\./g, "_");
-		object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/:/g, "");		
+		object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/:/g, "");
 		cdstable += `Entity ![${object[0].VIEW_NAME}] {\n `;
 	} else {
 		object[0].TABLE_NAME = object[0].TABLE_NAME.replace(/\./g, "_");
@@ -189,7 +189,7 @@ async function formatCDS(object, fields, constraints, type) {
 			if (object[0].HAS_PRIMARY_KEY === "TRUE") {
 				for (let constraint of constraints) {
 					if (field.COLUMN_NAME === constraint.COLUMN_NAME) {
-						constraint.COLUMN_NAME = constraint.COLUMN_NAME.replace(/\./g, "_");						
+						constraint.COLUMN_NAME = constraint.COLUMN_NAME.replace(/\./g, "_");
 						cdstable += "key ";
 						isKey = "TRUE";
 					}
@@ -203,7 +203,7 @@ async function formatCDS(object, fields, constraints, type) {
 		xref.before = field.COLUMN_NAME;
 		field.COLUMN_NAME = field.COLUMN_NAME.replace(/\./g, "_");
 		xref.after = field.COLUMN_NAME;
-		global.__xRef.push(xref);
+
 		cdstable += "\t";
 		cdstable += `![${field.COLUMN_NAME}]` + ": ";
 
@@ -242,10 +242,14 @@ async function formatCDS(object, fields, constraints, type) {
 				cdstable += "Time";
 				break;
 			case "SECONDDATE":
-				cdstable += "Timestamp";
+				cdstable += "String";
 				break;
 			case "TIMESTAMP":
-				cdstable += "Timestamp";
+				if (parent === 'preview') {
+					cdstable += "String";
+				} else {
+					cdstable += "Timestamp";
+				}
 				break;
 			case "BOOLEAN":
 				cdstable += "Boolean";
@@ -253,7 +257,8 @@ async function formatCDS(object, fields, constraints, type) {
 			default:
 				cdstable += `**UNSUPPORTED TYPE - ${field.DATA_TYPE_NAME}`;
 		}
-
+		xref.dataType = field.DATA_TYPE_NAME
+		global.__xRef.push(xref);
 		//	if (field.DEFAULT_VALUE) {
 		//		cdstable += ` default "${field.DEFAULT_VALUE}"`;
 		//	}
@@ -267,9 +272,9 @@ async function formatCDS(object, fields, constraints, type) {
 				cdstable += " null";
 			}
 		}
-		if(field.COMMENTS){
+		if (field.COMMENTS) {
 			cdstable += `  @title: '${field.COLUMN_NAME}: ${field.COMMENTS}' `
-		}else{
+		} else {
 			cdstable += `  @title: '${field.COLUMN_NAME}' `
 		}
 		cdstable += "; ";

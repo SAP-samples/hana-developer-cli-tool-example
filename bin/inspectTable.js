@@ -118,6 +118,16 @@ async function tableInspect(result) {
       console.log(JSON.stringify(metadata, null, 4));
       break;
     }
+    case 'annos': {
+      let cdsSource = await dbInspect.formatCDS(object, fields, constraints, "table");
+      cdsSource = `service HanaCli { ${cdsSource} } `;
+      let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
+        annos:'only'
+      })
+      //let metadata = await cds.parse(cdsSource)
+      console.log(JSON.stringify(metadata, null, 4));
+      break;
+    }    
     case 'edm': {
       let cdsSource = await dbInspect.formatCDS(object, fields, constraints, "table");
       cdsSource = `service HanaCli { ${cdsSource} } `;

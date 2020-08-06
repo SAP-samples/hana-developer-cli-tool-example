@@ -87,36 +87,24 @@ async function cds(result) {
   let schema = await dbClass.schemaCalc(result, db);
   let object, fields, constraints, cdsSource;
 
-
-
   if (!result.view) {
-    console.log(`Schema: ${schema}, Table: ${result.table}`);
     object = await dbInspect.getTable(db, schema, result.table);
     fields = await dbInspect.getTableFields(db, object[0].TABLE_OID);
     constraints = await dbInspect.getConstraints(db, object);
-    cdsSource = await dbInspect.formatCDS(object, fields, constraints, "table");
-    cdsSource =
-      `service HanaCli { ${cdsSource} } \n`;
-    cdsSource +=
-      `annotate HanaCli.${object[0].TABLE_NAME} with @(`
   } else {
-    console.log(`Schema: ${schema}, View: ${result.table}`);
     object = await dbInspect.getView(db, schema, result.table);
     fields = await dbInspect.getViewFields(db, object[0].VIEW_OID);
-    cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
-    cdsSource =
-      `service HanaCli { ${cdsSource} } \n`;
-    cdsSource +=
-      `annotate HanaCli.${object[0].VIEW_NAME}  with @(`
   }
 
+  cdsSource =
+    `service HanaCli { `
 
   let vcap = JSON.parse(process.env.VCAP_SERVICES);
   vcap.hana[0].credentials.schema = object[0].SCHEMA_NAME;
   vcap.hana.splice(1, 100);
   process.env.VCAP_SERVICES = JSON.stringify(vcap);
   cdsSource +=
-    `Capabilities: {
+    `@(Capabilities: {
 			InsertRestrictions: {Insertable: true},
 			UpdateRestrictions: {Updatable: true},
 			DeleteRestrictions: {Deletable: true}
@@ -128,7 +116,7 @@ async function cds(result) {
     UI: { 
       LineItem: [ \n`;
   for (let field of fields) {
-    cdsSource += `{$Type: 'UI.DataField', Value: ${field.COLUMN_NAME}, "@UI.Importance":#High}, \n`
+    cdsSource += `{$Type: 'UI.DataField', Value: ![${field.COLUMN_NAME}], "@UI.Importance":#High}, \n`
   }
   cdsSource +=
     `], \n`
@@ -150,7 +138,25 @@ async function cds(result) {
   }
   cdsSource +=
     `] \n`
-  cdsSource += `} );\n`;
+  cdsSource += `} )\n`;
+
+
+  if (!result.view) {
+    console.log(`Schema: ${schema}, Table: ${result.table}`);
+    object = await dbInspect.getTable(db, schema, result.table);
+    fields = await dbInspect.getTableFields(db, object[0].TABLE_OID);
+    constraints = await dbInspect.getConstraints(db, object);
+    let tableSource = await dbInspect.formatCDS(object, fields, constraints, "table", "preview");
+    cdsSource +=
+      `${tableSource} \n }`;
+  } else {
+    console.log(`Schema: ${schema}, View: ${result.table}`);
+    object = await dbInspect.getView(db, schema, result.table);
+    fields = await dbInspect.getViewFields(db, object[0].VIEW_OID);
+    let viewSource = await dbInspect.formatCDS(object, fields, null, "view", "preview");
+    cdsSource +=
+      `${viewSource} \n }`;
+  }
 
   // console.log(cdsSource);
   await cdsServerSetup(result, cdsSource);
@@ -194,7 +200,7 @@ async function cdsServerSetup(result, cdsSource) {
         for (let column of req.query.SELECT.columns) {
           for (let xref of global.__xRef) {
             if (column.ref[0] === xref.after) {
-              query += ` "${xref.before}" AS "${xref.after}", `;
+                  query += ` "${xref.before}" AS "${xref.after}", `;
             }
           }
         }
@@ -226,12 +232,13 @@ async function cdsServerSetup(result, cdsSource) {
           for (let orderBy of req.query.SELECT.orderBy) {
             for (let xref of global.__xRef) {
               if (orderBy.ref[0] === xref.after) {
-                query += ` "${xref.before}" ${orderBy.sort} `;
+                query += ` "${xref.before}" ${orderBy.sort}, `;
               }
             }
           }
         }
-
+        query = query.substring(0, query.length - 2)
+        query += ` `
         //Limit & Offset
         if (req.query.SELECT.limit) {
           if (req.query.SELECT.limit.rows) {
