@@ -165,7 +165,9 @@ async function tableInspect(result) {
       const converter = require('swagger2openapi')
       let convOptions = {}
       convOptions.anchors = true
-      parse(metadata)
+      convOptions.patch = true
+      convOptions.warnOnly = true
+       parse(metadata)
         .then(service => convert(service.entitySets, odataOptions, service.version))
         .then(swagger => {
           converter.convertObj(swagger, convOptions)
