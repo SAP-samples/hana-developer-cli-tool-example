@@ -109,7 +109,6 @@ async function getTables(result) {
     console.log(`Schema: ${schema}, Table: ${result.table}`);
 
     let results = await getTablesInt(schema, result.table, db, result.limit);
-
     const dbInspect = require("../utils/dbInspect")
 
     switch (result.output) {

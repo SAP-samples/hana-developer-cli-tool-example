@@ -20,8 +20,8 @@ module.exports.getView = getView;
 async function getDef(db, schema, Id) {
 	//Select View
 	var inputParams = {
-		SCHEMA: schema,
-		OBJECT: Id
+		SCHEMA: `"${schema}"`,
+		OBJECT: `"${Id}"`
 	};
 	let hdbext = require("@sap/hdbext");
 	let sp = await db.loadProcedurePromisified(hdbext, "SYS", "GET_OBJECT_DEFINITION");
