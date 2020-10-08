@@ -340,7 +340,7 @@ function _manifest(odataURL, entity, table) {
       description: 'Preview Application',
       dataSources: {
         mainService: {
-          uri: `${odataURL}/`,
+          uri: `${odataURL}`,
           type: 'OData',
           settings: {
             odataVersion: '4.0'
@@ -357,7 +357,7 @@ function _manifest(odataURL, entity, table) {
       models: {
         '': {
           dataSource: 'mainService',
-          preload: true,
+          //preload: true,
           settings: {
             synchronizationMode: 'None',
             operationMode: 'Server',
@@ -434,7 +434,7 @@ function _manifest(odataURL, entity, table) {
 }
 
 function fiori(manifest) {
-  let ui5Version //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
+  let ui5Version = '1.80.2' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
   ui5Version = ui5Version ? ui5Version + '/' : ''
   return `
 <!DOCTYPE html>

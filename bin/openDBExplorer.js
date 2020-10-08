@@ -40,7 +40,7 @@ exports.handler = function (argv) {
         if (err) {
             return console.log(err.message)
         }
-      //  global.startSpinner()
+        //  global.startSpinner()
         getDBX(result)
     })
 }
@@ -76,15 +76,26 @@ async function getDBX(result) {
     } else if (host.includes('ap21.hanacloud')) {
         dbxURL = 'https://hana-cockpit.cfapps.ap21.hana.ondemand.com/sap/hana/cst/catalog/index.html'
     } else {
-        await console.log(`Sorry unable to determine Database Explorer URL from your HANA hostname: ${host}`)
-      //  global.__spinner.stop()
-        return
+        const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)))
+        let query =
+            `SELECT *  from M_INIFILE_CONTENTS 
+                WHERE FILE_NAME LIKE 'xscontroller.ini'
+                  AND KEY = 'api_url'      
+                ORDER BY FILE_NAME, SECTION, KEY `
+        let results = await db.statementExecPromisified(await db.preparePromisified(query), [])
+        if (results[0]) {
+            let apiUrl = results[0].VALUE
+            dbxURL = `${apiUrl}/go/hrtt-core`
+        } else {
+            await console.log(`Sorry unable to determine Database Explorer URL from your HANA hostname: ${host}`)
+            return
+        }
     }
     console.log(dbxURL)
     const open = require('open')
     open(dbxURL)
 
-  //  global.__spinner.stop()
+    //  global.__spinner.stop()
     return
 }
 
