@@ -122,7 +122,7 @@ async function dbConnect(input) {
         options.validate_certificate = false
         if (input.trustStore) { 
           options.sslTrustStore = input.trustStore
-          options.sslCryptoProvider = 'openssl'
+        //  options.sslCryptoProvider = 'openssl'
           options.sslValidateCertificate = true
         }
       //  console.table(options);

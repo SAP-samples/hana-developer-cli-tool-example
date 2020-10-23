@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "1.202010.1",
+  "version": "1.202010.3",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -28,10 +28,11 @@
     "@sap/xssec": "^3.0",
     "@sap/hana-client": "^2.6",
     "@sap/audit-logging": "^3.2",
-    "sap-hdbext-promisfied": "^2.202008",
+    "sap-hdbext-promisfied": "^2.202010.3",
     "console.table": "~0.10",
     "express": "^4.17",
     "odata2openapi": "^1.3",
+    "openapi-types": "^7.0.1",
     "swagger2openapi": "^6.0",
     "open": "^7.0",
     "ora": "^4.0",

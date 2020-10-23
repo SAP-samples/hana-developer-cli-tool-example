@@ -144,7 +144,7 @@ async function saveEnv(options, input) {
   }];
 
   defaultEnv.VCAP_SERVICES.hana[0].credentials.encrypt = input.encrypt
-  defaultEnv.VCAP_SERVICES.hana[0].credentials.sslCryptoProvider = 'openssl'
+  //defaultEnv.VCAP_SERVICES.hana[0].credentials.sslCryptoProvider = 'openssl'
   if (input.validate) {
     defaultEnv.VCAP_SERVICES.hana[0].credentials.sslValidateCertificate = true
   } else {

@@ -86,7 +86,6 @@ async function getTables(result) {
 
   let results = await getTablesInt(schema, result.table, db, result.limit);
   console.table(results);
-
   global.__spinner.stop()
   return;
 }

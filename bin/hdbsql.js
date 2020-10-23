@@ -52,7 +52,8 @@ async function launchHdbsql(result) {
   let options = await xsenv.getServices({ hana: { tag: 'hana' }, });
   let encrypt = ''
   if (options.hana.encrypt == true) {
-    encrypt = '-attemptencrypt'
+    let str = options.hana.certificate.replace(/\r?\n|\r/g, " ")
+    encrypt = `-e -ssltruststore "${str}" `
   }
   let cmd = `hdbsql -u ${options.hana.user} -n ${options.hana.host + ":" + options.hana.port} -p ${options.hana.password} ${encrypt} -A -m -j`
 
