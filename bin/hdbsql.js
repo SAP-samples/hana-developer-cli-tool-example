@@ -72,7 +72,7 @@ async function launchHdbsql(result) {
     return;
   } catch (error) {
   //  global.__spinner.stop()
-    throw new Error(`Missing or badly formatted ${envFile}. No HANA configuration can be read or processed`);
+    console.error(`Missing or badly formatted ${envFile}. No HANA configuration can be read or processed`)
   }
 
 }
