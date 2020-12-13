@@ -97,7 +97,7 @@ async function tableInspect(result) {
       console.table(fields);
       break;
     case 'sql': {
-      let definition = await dbInspect.getDef(db, schema, result.table);
+      let definition = await dbInspect.getDef(db, schema, result.view);
       console.log(definition);
       break;
     }
@@ -106,6 +106,24 @@ async function tableInspect(result) {
       console.log(cdsSource);
       break;
     }
+    case 'json': {
+      let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
+      cdsSource = `service HanaCli { ${cdsSource} } `;
+      console.log(cds.compile.to.json(cds.parse(cdsSource)))
+      break
+    }
+    case 'yaml': {
+      let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
+      cdsSource = `service HanaCli { ${cdsSource} } `;
+      console.log(cds.compile.to.yaml(cds.parse(cdsSource)))
+      break
+    }    
+    case 'cdl': {
+      let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
+      cdsSource = `service HanaCli { ${cdsSource} } `;
+      console.log(cds.compile.to.cdl(cds.parse(cdsSource)))
+      break
+    }     
     case 'edmx': {
       let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
       cdsSource = `service HanaCli { ${cdsSource} } `;
@@ -127,7 +145,7 @@ async function tableInspect(result) {
     case 'edm': {
       let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
       cdsSource = `service HanaCli { ${cdsSource} } `;
-      console.log(JSON.stringify(cds.compile(cds.parse(cdsSource)).to(result.output), null, 4));
+      console.log(JSON.stringify(cds.compile.to.edm(cds.parse(cdsSource)), null, 4));
       break;
     }
     case 'swgr': {
@@ -173,10 +191,8 @@ async function tableInspect(result) {
       break;
     }
     default: {
-      let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
-      cdsSource = `service HanaCli { ${cdsSource} } `;
-      console.log(cds.compile(cds.parse(cdsSource)).to(result.output, { as: 'json' }));
-      break;
+      console.error(`Unsupported Format`)
+      break
     }
   }
   global.__spinner.stop()

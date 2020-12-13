@@ -187,10 +187,9 @@ async function cdsServerSetup(result, cdsSource) {
     .in(app)
     .to('fiori')
     .with(srv => {
-      srv.on('READ', entity, async (req) => {
-        //console.log(JSON.stringify(req.query.SELECT));
-        req.query.SELECT.from.ref = [result.table];
-        const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
+      srv.on(['READ'], entity, async (req) => {
+        req.query.SELECT.from.ref = [result.table]
+        const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)))
         let query = "SELECT ";
         if (req.query.SELECT.columns[0].func) {
           query += `COUNT(*) AS "counted" FROM "${result.table}"`;
@@ -200,28 +199,37 @@ async function cdsServerSetup(result, cdsSource) {
         for (let column of req.query.SELECT.columns) {
           for (let xref of global.__xRef) {
             if (column.ref[0] === xref.after) {
-                  query += ` "${xref.before}" AS "${xref.after}", `;
+              column.ref[0] = xref.after
             }
           }
         }
-        query = query.substring(0, query.length - 2);
-        query += ` FROM "${result.table}" `;
+
+        //Req Paramers for Single Record GET
+        if (req.params) {
+          if (req.params.length > 0) {
+            const { SELECT } = req.query
+            SELECT.where = []
+            for (let param of req.params) {
+              for (let property in param) {
+                SELECT.where.push({ "ref": [property] })
+                SELECT.where.push("=")
+                SELECT.where.push({ "val": param[property] })
+                SELECT.where.push("and")
+              }
+            }
+            SELECT.where.splice(-1, 1)
+          }
+        }
 
         //Where
         if (req.query.SELECT.where) {
-          query += ` WHERE `
           for (let where of req.query.SELECT.where) {
             if (where.ref) {
               for (let xref of global.__xRef) {
-
                 if (where.ref[0] === xref.after) {
-                  query += ` "${xref.before}" `;
+                  where.ref[0] = xref.after
                 }
               }
-            } else if (where.val) {
-              query += ` '${where.val}' `;
-            } else {
-              query += ` ${where} `;
             }
           }
         }
@@ -232,23 +240,12 @@ async function cdsServerSetup(result, cdsSource) {
           for (let orderBy of req.query.SELECT.orderBy) {
             for (let xref of global.__xRef) {
               if (orderBy.ref[0] === xref.after) {
-                query += ` "${xref.before}" ${orderBy.sort}, `;
+                orderBy.ref[0] = xref.after
               }
             }
           }
         }
-        query = query.substring(0, query.length - 2)
-        query += ` `
-        //Limit & Offset
-        if (req.query.SELECT.limit) {
-          if (req.query.SELECT.limit.rows) {
-            query += ` LIMIT ${req.query.SELECT.limit.rows.val} `;
-            if (req.query.SELECT.limit.offset) {
-              query += ` OFFSET ${req.query.SELECT.limit.offset.val} `;
-            }
-          }
-        }
-        return (await db.execSQL(query));
+        return (req.query)
       })
     })
     .catch((err) => {
@@ -286,8 +283,19 @@ async function cdsServerSetup(result, cdsSource) {
   app.get('/', (_, res) => res.send(getIndex(odataURL, entity)));
   app.get('/fiori.html', (_, res) => {
     const manifest = _manifest(odataURL, entity, result.table)
-    res.send(fiori(manifest))
+    res.send(fiori(manifest, odataURL, entity))
   });
+
+  app.get('/app/Component.js', (_, res) => {
+    const manifest = _manifest(odataURL, entity, result.table)
+    const content = `sap.ui.define(["sap/fe/core/AppComponent"], function(AppComponent) {
+      "use strict";
+      return AppComponent.extend("preview.Component", {
+        metadata: { manifest: ${JSON.stringify(manifest, null, 2)} }
+      });
+    });`
+    res.send(content)
+  })
 
   //Start the Server 
   server.on("request", app);
@@ -305,17 +313,69 @@ function getIndex(odataURL, entity) {
   return this._html = `
   <html>
       <head>
-          <style>
-              body { margin: 44px; font-family: Avenir Next, sans-serif }
-              h1 { }
-              .small { font-size: 10px }
-          </style>
+      <meta name="color-scheme" content="dark light">
+      <style>
+          body {
+              font-family: Avenir Next, sans-serif;
+              margin: 44px;
+              line-height: 1.5em;
+          }
+          h1 {
+              margin-bottom: 0
+          }
+          h1 + .subtitle {
+              margin: .2em;
+              font-weight: 300;
+          }
+          h1, h2, h3 {
+              font-weight: 400;
+          }
+          h1, a {
+              text-decoration: none;
+          }
+          a.preview {
+              font-size: 90%;
+          }
+          footer {
+              border-top: .5px solid;
+              margin-top: 44px;
+              padding-top: 22px;
+              width: 400px;
+              font-size: 90%;
+          }
+      @media (prefers-color-scheme: dark) {
+          body {
+              background:#001119;
+              color: #789;
+          }
+          h1 + .subtitle {
+              color:#fb0;
+          }
+          h1, a {
+              color:#fb0;
+          }
+          h2, h3 {
+              color:#89a;
+          }
+          a.preview {
+              color: #678;
+          }
+          footer {
+              border-top: .5px solid #456;
+              color: #567;
+          }
+      }
+      </style>
       </head>
       <body>
           <h1>${bundle.getText("cdsIndex")}</h1>
-          <p> These are the paths currently served ...
+          <p class="subtitle"> These are the paths currently served ...
+
+          <h2> Web Applications: </h2>
           <h3><a href="/fiori.html">Fiori Test UI</a></h3> 
           <h3><a href="/api/api-docs/">Swagger UI</a></h3> 
+
+          <h2> Service Endpoints: </h2>
               <h3>
                   <a href="${odataURL}">${odataURL}</a> /
                   <a href="${odataURL}$metadata">$metadata</a>
@@ -330,6 +390,8 @@ function getIndex(odataURL, entity) {
 }
 
 function _manifest(odataURL, entity, table) {
+  //const serviceProv = odataURL
+  const serviceInfo = entity
 
   const manifest = {
     _version: '1.8.0',
@@ -430,11 +492,40 @@ function _manifest(odataURL, entity, table) {
     },
   }
 
+  const { routing } = manifest['sap.ui5']
+  for (const { navProperty, targetEntity } of serviceInfo) {
+    // add a route for the navigation property
+    routing.routes.push(
+      {
+        name: `${navProperty}Route`,
+        target: `${navProperty}Target`,
+        pattern: `${entity}({key})/${navProperty}({key2}):?query:`,
+      }
+    )
+    // add a route target leading to the target entity
+    routing.targets[`${navProperty}Target`] = {
+      type: 'Component',
+      id: `${navProperty}Target`,
+      name: 'sap.fe.templates.ObjectPage',
+      options: {
+        settings: {
+          entitySet: targetEntity
+        }
+      }
+    }
+    // wire the new route from the source entity's navigation (see above)
+    routing.targets[`${entity}DetailsTarget`].options.settings.navigation[navProperty] = {
+      detail: {
+        route: `${navProperty}Route`
+      }
+    }
+  }
+
   return manifest
 }
 
-function fiori(manifest) {
-  let ui5Version = '1.80.2' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
+function fiori(manifest, odataURL, entity,) {
+  let ui5Version = '1.85.1' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
   ui5Version = ui5Version ? ui5Version + '/' : ''
   return `
 <!DOCTYPE html>
@@ -444,31 +535,61 @@ function fiori(manifest) {
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${manifest['sap.app'].title}</title>
+    <script>
+    window["sap-ushell-config"] = {
+      defaultRenderer: "fiori2",
+      applications: {
+        "hanacli-preview": {
+          title: "Browse ${entity}",
+          description: "from ${odataURL}",
+          additionalInformation: "SAPUI5.Component=app",
+          applicationType : "URL",
+          url: "./app",
+          navigationMode: "embedded"
+        }
+      }
+    }
+  </script>    
     <script src="https://sapui5.hana.ondemand.com/${ui5Version}test-resources/sap/ushell/bootstrap/sandbox.js"></script>
     <script src="https://sapui5.hana.ondemand.com/${ui5Version}resources/sap-ui-core.js"
         data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration, sap.ui.layout" data-sap-ui-compatVersion="edge"
         data-sap-ui-theme="sap_fiori_3_dark" data-sap-ui-frameOptions="allow"></script>
-    <script>
-        sap.ui.getCore().attachInit(() => {
-            sap.ui.require(["sap/fe/core/AppComponent", "sap/m/Shell", "sap/ui/core/ComponentContainer"], function (AppComponent, Shell, ComponentContainer) {
-                var GenericComponent = AppComponent.extend("preview.Component", {
-                    metadata: { manifest: ${JSON.stringify(manifest, null, 2)} }
-                });
-                new Shell({
-                    app: new ComponentContainer({
-                        height: "100%",
-                        component: new GenericComponent({
-                            id: "preview.Component"
-                        }),
-                        async: true
-                    }),
-                    appWidthLimited: false
-                }).placeAt("content");
-            })
-        })
+        <script src="https://sapui5.hana.ondemand.com/${ui5Version}test-resources/sap/ushell/bootstrap/standalone.js"></script>        
+
+        <script>
+        // load and register Fiori2 icon font
+        jQuery.sap.require("sap.ushell.iconfonts");
+        jQuery.sap.require("sap.ushell.services.AppConfiguration");
+        sap.ushell.iconfonts.registerFiori2IconFont();
+        sap.ui.getCore().attachInit(function() { sap.ushell.Container.createRenderer().placeAt("content") })
     </script>
-</head>
-<body class="sapUiBody" id="content"></body>
+    </head>
+<body class="sapUiBody sapUShellFullHeight" id="content"></body>
 </html>
 `
 }
+
+
+
+
+/*
+<script>
+sap.ui.getCore().attachInit(() => {
+    sap.ui.require(["sap/fe/core/AppComponent", "sap/m/Shell", "sap/ui/core/ComponentContainer"], function (AppComponent, Shell, ComponentContainer) {
+        var GenericComponent = AppComponent.extend("preview.Component", {
+            metadata: { manifest: ${JSON.stringify(manifest, null, 2)} }
+        });
+        new Shell({
+            app: new ComponentContainer({
+                height: "100%",
+                component: new GenericComponent({
+                    id: "preview.Component"
+                }),
+                async: true
+            }),
+            appWidthLimited: false
+        }).placeAt("content");
+    })
+})
+</script>
+</head> */
