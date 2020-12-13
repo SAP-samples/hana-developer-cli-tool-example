@@ -268,9 +268,9 @@ async function formatCDS(object, fields, constraints, type, parent) {
 				cdstable += " not null";
 			}
 		} else {
-			if (isKey === "TRUE") {
-				cdstable += " null";
-			}
+		//	if (isKey === "FALSE") {
+		//		cdstable += " null";
+		//	}
 		}
 		if (field.COMMENTS) {
 			cdstable += `  @title: '${field.COLUMN_NAME}: ${field.COMMENTS}' `
