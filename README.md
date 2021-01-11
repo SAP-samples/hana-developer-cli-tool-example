@@ -2,6 +2,8 @@
 
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/hana-developer-cli-tool-example)](https://api.reuse.software/info/github.com/SAP-samples/hana-developer-cli-tool-example)
 
+The [change log](CHANGELOG.md) describes notable changes in this package.
+
 ## Description
 
 This sample is intended to shown how one could build a developer-centric  HANA command line tool, particularly designed to be used when performing local HANA development in non-SAP tooling (like VSCode). It utilizes the default-env.json that is often used in local development for connectivity to a remote HANA DB (although it can of course be used with a local HANA Express instance as well). There is no intention to replacing the hdbsql tool as a generic SQL console. Instead this sample will focus on simplifying and grouping common and complex commands that otherwise might a lot of separate scripts.
@@ -1111,6 +1113,15 @@ Open DB Explorer
 Options:
   --admin, -a, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+```
+
+### copy2DefaultEnv
+
+```shell
+hana-cli copy2DefaultEnv                  Copy .env contents to
+                                          default-env.json and reformat
+     [aliases: copyDefaultEnv, copyDefault-Env, copy2defaultenv, copydefaultenv,
+                                                                copydefault-env]
 ```
 
 ### completion

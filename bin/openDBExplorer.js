@@ -53,11 +53,17 @@ async function getDBX(result) {
         const xsenv = require("@sap/xsenv")
         xsenv.loadEnv(dbClass.resolveEnv(result))
         let options = ''
+
         if (!process.env.TARGET_CONTAINER) {
-            options = xsenv.getServices({ hana: { tag: 'hana' } })
+            try {
+                options = xsenv.getServices({ hana: { tag: 'hana' } })
+            } catch (error) {
+                options = xsenv.getServices({ hana: { tag: 'hana', plan: "hdi-shared" } })
+            }
         } else {
             options = xsenv.getServices({ hana: { name: process.env.TARGET_CONTAINER } })
         }
+
 
         const host = options.hana.host
         let dbxURL = ''
