@@ -14,7 +14,7 @@ Running in Cloud Shells Video: [https://www.youtube.com/watch?v=C_b-WUpRMKU](htt
 
 ## Requirements / Download and Installation
 
-* Install Node.js version 10.x or 12.x on your development machine [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
+* Install Node.js version 10.x, 12.x, or 14.x on your development machine [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
 * @sap Node.js packages have moved from https://npm.sap.com to the default registry https://registry.npmjs.org. As future versions of @sap modules are going to be published only there, please make sure to adjust your registry with:
 
