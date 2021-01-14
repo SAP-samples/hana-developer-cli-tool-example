@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.202101.2
+
+### Changed
+
+- Default value on createModule command changed to HANA Cloud
+- Remove postinstall build script from HANA Cloud option - only needed in SAP Web IDE
+  
 ## 1.202101.1
 
 ### Fixed

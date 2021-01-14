@@ -16,7 +16,7 @@ exports.builder = {
     hanaCloud: {
         alias: ['hc', 'hana-cloud', 'hanacloud'],
         type: 'boolean',
-        default: false,
+        default: true,
         desc: bundle.getText("hanaCloud")
     }
 };
@@ -38,7 +38,7 @@ exports.handler = function (argv) {
                 description: bundle.getText("hanaCloud"),
                 type: 'boolean',
                 required: true,
-                default: false
+                default: true
             }
         }
     };
@@ -83,7 +83,9 @@ if (fs.existsSync('../package.json')) {
 
     const latestVersion = require('latest-version')
     let hdiVersion = await latestVersion('@sap/hdi-deploy')
-    let packageContent = `
+    var packageContent = ``
+    if (result.hanaCloud) {
+        packageContent = `
     {
         "name": "deploy",
         "dependencies": {
@@ -93,11 +95,28 @@ if (fs.existsSync('../package.json')) {
           "node": "^10"
         },
         "scripts": {
-          "postinstall": "node .build.js",
           "start": "node node_modules/@sap/hdi-deploy/deploy.js  --auto-undeploy"
         }
       }   
     `
+    } else {
+        packageContent = `
+        {
+            "name": "deploy",
+            "dependencies": {
+              "@sap/hdi-deploy": "^${hdiVersion}"
+            },
+            "engines": {
+              "node": "^10"
+            },
+            "scripts": {
+              "postinstall": "node .build.js",                
+              "start": "node node_modules/@sap/hdi-deploy/deploy.js  --auto-undeploy"
+            }
+          }   
+        `
+    }
+
     fs.writeFile(dir + '/package.json', packageContent, (err) => {
         if (err) throw err;
     });
