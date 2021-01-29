@@ -525,7 +525,7 @@ function _manifest(odataURL, entity, table) {
 }
 
 function fiori(manifest, odataURL, entity,) {
-  let ui5Version = '1.85.1' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
+  let ui5Version = '1.85.3' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
   ui5Version = ui5Version ? ui5Version + '/' : ''
   return `
 <!DOCTYPE html>

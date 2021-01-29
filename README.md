@@ -1092,7 +1092,7 @@ Connect and write default-env.json via cf/xs service key
 Options:
   --instance, -i, --Instance                CF/XS Service Instance Name
   --encrypt, -e, --Encrypt, --ssl           Encrypt connections (required for
-                                            HANA As A Service)
+                                            SAP HANA Cloud and SAP HANA service for SAP BTP)
                                                       [boolean] [default: false]
   --validate, -v, --Validate,               Validate Certificate
   --validateCertificate                               [boolean] [default: false]

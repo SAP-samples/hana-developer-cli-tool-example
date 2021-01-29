@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "1.202101.2",
+  "version": "1.202101.3",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -20,8 +20,8 @@
     "hana"
   ],
   "dependencies": {
-    "@sap/cds": "^4.4.7",
-    "@sap/hdbext": "^7.1",
+    "@sap/cds": "^4.4.10",
+    "@sap/hdbext": "^7.1.1",
     "@sap/textbundle": "^3.1",
     "@sap/xsenv": "^3.1",
     "@sap/xssec": "^3.0",
@@ -34,7 +34,7 @@
     "openapi-types": "^7.2",
     "swagger2openapi": "^7.0",
     "open": "^7.3",
-    "ora": "^5.2",
+    "ora": "^5.3",
     "prompt": "^1.1",
     "swagger-jsdoc": "^6.0",
     "swagger-ui-express": "^4.1",
@@ -52,6 +52,6 @@
   },
   "homepage": "https://github.com/SAP-samples/hana-developer-cli-tool-example#readme",
   "devDependencies": {
-    "eslint": "^7.17"
+    "eslint": "^7.18"
   }
 }
