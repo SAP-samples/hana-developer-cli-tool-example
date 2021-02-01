@@ -19,7 +19,7 @@ exports.builder = {
     alias: ['e', 'Encrypt', 'ssl'],
     desc: bundle.getText("encrypt"),
     type: 'boolean',
-    default: false
+    default: true
   },
   validate: {
     alias: ['v', 'Validate', 'validateCertificate'],
@@ -28,10 +28,10 @@ exports.builder = {
     default: false
   },
   cf: {
-    alias: ['cmd'],
+    alias: ['c', 'cmd'],
     desc: bundle.getText("cfxs"),
     type: 'boolean',
-    default: false
+    default: true
   },
   save: {
     alias: ['s', 'Save'],
@@ -96,6 +96,7 @@ async function setKeyDetails(input) {
   try {
     var child = require("child_process").exec
     var script = ''
+    console.table(input)
     if(input.cf){
       script = `cf service-key ${input.instance} ${input.key}`
     }else{
