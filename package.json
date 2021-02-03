@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "1.202102.1",
+  "version": "1.202102.2",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -20,7 +20,7 @@
     "hana"
   ],
   "dependencies": {
-    "@sap/cds": "^4.4.10",
+    "@sap/cds": "^4.5",
     "@sap/hdbext": "^7.1.1",
     "@sap/textbundle": "^3.1",
     "@sap/xsenv": "^3.1",

@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.202102.2
+
+### Added
+
+- Updated @sap/cds to 4.5.x
+- Support for HANA Cloud Instance Administration - requires cf cli to be installed and you must be logged into cf with a target org and space
+  - Added Command: hc to list all SAP HANA Cloud instances in your target space
+  - Added Command: hcStart to Start SAP HANA Cloud instance
+  - Added Command: hcStop to Stop SAP HANA Cloud instance
+
 ## 1.202102.1
 
 ### Fixed

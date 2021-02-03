@@ -86,7 +86,10 @@ require('yargs')
     .command(require('./connectViaServiceKey'))   
     .command(require('./containers'))     
     .command(require('./openDBExplorer'))
-    .command(require('./copy2DefaultEnv'))      
+    .command(require('./copy2DefaultEnv'))
+    .command(require('./hanaCloudInstances')) 
+    .command(require('./hanaCloudStart'))    
+    .command(require('./hanaCloudStop'))            
     .option('h', {
         alias: 'help',
         description: bundle.getText("help")

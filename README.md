@@ -1131,6 +1131,28 @@ hana-cli completion
 generate completion script for bash shell
 ```
 
+### hc
+
+```shell
+  hana-cli hc [name]                        List all SAP HANA Cloud instances in
+                                            your target Space
+                  [aliases: hcInstances, instances, listHC, listhc, hcinstances]
+```
+
+### hcStart
+
+```shell
+  hana-cli hcStart [name]                   Start SAP HANA Cloud instance
+                                             [aliases: hcstart, hc_start, start]
+```
+
+### hcStop
+
+```shell
+  hana-cli hcStop [name]                    Stop SAP HANA Cloud instance
+                                                [aliases: hcstop, hc_stop, stop]
+```
+
 ## How to obtain support
 
 This project is provided "as-is": there is no guarantee that raised issues will be answered or addressed in future releases.
