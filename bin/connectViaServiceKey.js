@@ -133,7 +133,8 @@ async function saveEnv(options, input) {
   let defaultEnv = {};
   defaultEnv.VCAP_SERVICES = {};
   defaultEnv.VCAP_SERVICES.hana = [{
-    name: "hana-cli",
+    name: input.instance,
+    instance_name: input.instance,
     label: "hana",
     tags: [
       "hana",

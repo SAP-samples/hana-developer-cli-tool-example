@@ -168,27 +168,14 @@ async function tableInspect(result) {
     case 'openapi': {
       let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
       cdsSource = `service HanaCli { ${cdsSource} } `;
-      let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
-        version: 'v4',
+      let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
+        service: 'HanaCli',
+        servicePath: '/odata/v4/opensap.hana.CatalogService/',
+        'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
+        'openapi:diagram': true
       })
-      const odataOptions = { basePath: '/odata/v4/opensap.hana.CatalogService/' }
-      const {
-        parse,
-        convert
-      } = require('odata2openapi')
-      const converter = require('swagger2openapi')
-      let convOptions = {}
-      convOptions.anchors = true      
-      parse(metadata)
-        .then(service => convert(service.entitySets, odataOptions, service.version))
-        .then(swagger => {
-          converter.convertObj(swagger, convOptions)
-            .then(output => {
-              console.log(JSON.stringify(output.openapi, null, 2))
-            })
-        })
-        .catch(error => console.error(error))
-      break;
+      console.log(JSON.stringify(metadata, null, 2))    
+      break
     }
     default: {
       console.error(`Unsupported Format`)

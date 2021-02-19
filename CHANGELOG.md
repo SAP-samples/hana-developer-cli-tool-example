@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.202102.3
+
+### Added
+
+- Updated @sap/textbundle
+- Add readme command that opens ReadMe Documentation in your browser
+- Add changelog command that opens Change Log in your browser
+- Formatting of output copy2DefaultEnv improved for compatibility to CAP cds run 
+- New command copy2Env - copy default-env.json to .env and reformat contents
+- Support for HANA Cloud Instance Administration - requires cf cli to be installed and you must be logged into cf with a target org and space
+  - Added Command: hdi to list all SAP HANA Cloud HDI container instances in your target space
+  - Added Command: ups to list all Cloud Foundry user provided service instances in your target space
+- Switch to the standard CAP Compile to openAPI in inspectTable, inspectView and cds commands. Now supports entity diagrams in the Swagger UI
+
 ## 1.202102.2
 
 ### Added

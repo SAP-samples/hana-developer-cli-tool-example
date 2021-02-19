@@ -38,7 +38,13 @@ async function copy() {
         throw new Error(`No .env content found`)
     }
     defaultEnv.VCAP_SERVICES = process.env.VCAP_SERVICES
+    let temp = JSON.parse(process.env.VCAP_SERVICES)
+    defaultEnv.VCAP_SERVICES = temp
 
+    defaultEnv.VCAP_SERVICES.hana[0].credentials.encrypt = true
+    defaultEnv.VCAP_SERVICES.hana[0].credentials.sslValidateCertificate = false
+    defaultEnv.VCAP_SERVICES.hana[0].credentials.pooling = true
+    
     const fs = require('fs')
     fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), async (err) => {
         if (err) {

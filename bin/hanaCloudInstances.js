@@ -49,7 +49,6 @@ async function listInstances(result) {
         } else {
             results = await cf.getHANAInstanceByName(result.name)
         }
-        //let output = []
         for (let item of results.resources) {
             let outputItem = {}
             outputItem.name = item.name
@@ -60,7 +59,6 @@ async function listInstances(result) {
             var url = new URL(outputItem.hana_cockpit)
             outputItem.hana_central = `${url.protocol}//${url.host}/hcs/sap/hana/cloud/index.html#/org/${await cf.getCFOrgGUID()}/space/${await cf.getCFSpaceGUID()}/databases`
             outputItem.db_explorer = `${url.protocol}//${url.host}/sap/hana/cst/catalog/index.html`
-            //output.push(outputItem)
             console.log(`Name: ${outputItem.name}`)
             console.log(`Created At: ${outputItem.created_at}`)
             console.log(`Last Operation: ${outputItem.last_operation}`)
@@ -69,7 +67,6 @@ async function listInstances(result) {
             console.log(`Database Explorer: ${outputItem.db_explorer}`)                      
             console.log(`\r\n`)
         }
-        //console.table(output)
         global.__spinner.stop()
         return
     } catch (error) {

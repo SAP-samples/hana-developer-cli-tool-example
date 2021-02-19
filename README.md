@@ -1115,6 +1115,22 @@ Options:
                                                       [boolean] [default: false]
 ```
 
+### readme
+
+```shell
+hana-cli readme
+
+Open Readme Documentation in browser
+```
+
+### changelog
+
+```shell
+hana-cli changelog
+
+Open Change Log in browser
+```
+
 ### copy2DefaultEnv
 
 ```shell
@@ -1122,6 +1138,18 @@ hana-cli copy2DefaultEnv                  Copy .env contents to
                                           default-env.json and reformat
      [aliases: copyDefaultEnv, copyDefault-Env, copy2defaultenv, copydefaultenv,
                                                                 copydefault-env]
+```
+
+### copy2Env
+
+```shell
+hana-cli copy2Env
+
+Copy default-env.json contents to .env and reformat
+
+Options:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
 ```
 
 ### completion
@@ -1137,6 +1165,22 @@ generate completion script for bash shell
   hana-cli hc [name]                        List all SAP HANA Cloud instances in
                                             your target Space
                   [aliases: hcInstances, instances, listHC, listhc, hcinstances]
+```
+
+### hdi
+
+```shell
+hana-cli hdi
+
+List all SAP HANA Cloud HDI service instances in your target Space
+```
+
+### ups
+
+```shell
+hana-cli ups
+
+List all Cloud Foundry user provided service instances in your target Space
 ```
 
 ### hcStart

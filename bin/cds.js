@@ -172,11 +172,14 @@ async function cdsServerSetup(result, cdsSource) {
 
   //CDS OData Service
   const cds = require("@sap/cds");
-  var options = {
+  let options = {
     kind: "hana",
-    logLevel: "error"
-  };
-  cds.connect(options);
+    logLevel: "error",
+  }
+  cds.connect(options)
+  cds.env.requires.db = {}
+  cds.env.requires.db.multiTenant = false
+
   let odataURL = "/odata/v4/opensap.hana.CatalogService/";
   let entity = result.table.replace(/\./g, "_");
   entity = entity.replace(/:/g, "");
@@ -255,30 +258,42 @@ async function cdsServerSetup(result, cdsSource) {
 
   //Swagger UI
   const swaggerUi = require('swagger-ui-express')
-  let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
-    version: 'v4',
+  Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => require('@sap/cds-dk/lib/compile/openapi') })
+  let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
+    service: 'HanaCli',
+    servicePath: '/odata/v4/opensap.hana.CatalogService/',
+    'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
+    'openapi:diagram': true
   })
-  const odataOptions = { basePath: '/odata/v4/opensap.hana.CatalogService/' }
-  const {
-    parse,
-    convert
-  } = require('odata2openapi')
-  const converter = require('swagger2openapi')
-  let convOptions = {}
-  convOptions.anchors = true
-  parse(metadata)
-    .then(service => convert(service.entitySets, odataOptions, service.version))
-    .then(swagger => {
-      converter.convertObj(swagger, convOptions)
-        .then(output => {
-          let serveOptions = {
-            explorer: true
-          }
-          app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(output.openapi, serveOptions))
-        })
-    })
-    .catch(error => console.error(error))
+  let serveOptions = {
+    explorer: true
+  }
+  app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(metadata, serveOptions))
 
+  /*  let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
+     version: 'v4',
+   })
+   const odataOptions = { basePath: '/odata/v4/opensap.hana.CatalogService/' }
+   const {
+     parse,
+     convert
+   } = require('odata2openapi')
+   const converter = require('swagger2openapi')
+   let convOptions = {}
+   convOptions.anchors = true
+   parse(metadata)
+     .then(service => convert(service.entitySets, odataOptions, service.version))
+     .then(swagger => {
+       converter.convertObj(swagger, convOptions)
+         .then(output => {
+           let serveOptions = {
+             explorer: true
+           }
+           app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(output.openapi, serveOptions))
+         })
+     })
+     .catch(error => console.error(error))
+  */
 
   app.get('/', (_, res) => res.send(getIndex(odataURL, entity)));
   app.get('/fiori.html', (_, res) => {
