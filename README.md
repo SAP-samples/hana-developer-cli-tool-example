@@ -1097,7 +1097,7 @@ Options:
   --validate, -v, --Validate,               Validate Certificate
   --validateCertificate                               [boolean] [default: false]
   --cf, --cmd                               Cloud Foundry?
-                                                      [boolean] [default: false]
+                                                      [boolean] [default: true]
   --save, -s, --Save                        Save Credentials to
                                             default-env.json
                                                        [boolean] [default: true]
