@@ -97,9 +97,9 @@ async function setKeyDetails(input) {
     var child = require("child_process").exec
     var script = ''
     console.table(input)
-    if(input.cf){
+    if (input.cf) {
       script = `cf service-key ${input.instance} ${input.key}`
-    }else{
+    } else {
       script = `xs service-key ${input.instance} ${input.key}`
     }
     child(script, (err, stdout) => {
@@ -112,18 +112,18 @@ async function setKeyDetails(input) {
         let lines = stdout.split('\n');
         console.log(lines[0])
         lines.splice(0, 2)
-        if(!input.cf){
+        if (!input.cf) {
           lines.splice(-3, 3);
         }
-        let newtext = lines.join('\n');        
+        let newtext = lines.join('\n');
         let returnContent = JSON.parse(newtext)
- 
+
         if (input.save) {
           saveEnv(returnContent, input)
         }
       }
     })
-    
+
   } catch (error) {
     throw new Error(`Connection Problem ${JSON.stringify(error)}`);
   }
@@ -153,13 +153,17 @@ async function saveEnv(options, input) {
     defaultEnv.VCAP_SERVICES.hana[0].credentials.sslValidateCertificate = false
     delete defaultEnv.VCAP_SERVICES.hana[0].credentials.certificate
   }
+  try {
+     const db = new dbClass(await dbClass.createConnection(options));
+    let results = await db.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`);
+    console.table(results);
 
-  const db = new dbClass(await dbClass.createConnection(options));
-  let results = await db.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`);
-  console.table(results);
+    let resultsSession = await db.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`);
+    console.table(resultsSession);
 
-  let resultsSession = await db.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`);
-  console.table(resultsSession);
+  } catch (error) {
+    throw new Error(`Connection Problem ${JSON.stringify(error)}`);
+  }
 
   if (input.save) {
     const fs = require('fs');
