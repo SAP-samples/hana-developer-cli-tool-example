@@ -1093,7 +1093,7 @@ Options:
   --instance, -i, --Instance                CF/XS Service Instance Name
   --encrypt, -e, --Encrypt, --ssl           Encrypt connections (required for
                                             SAP HANA Cloud and SAP HANA service for SAP BTP)
-                                                      [boolean] [default: false]
+                                                      [boolean] [default: true]
   --validate, -v, --Validate,               Validate Certificate
   --validateCertificate                               [boolean] [default: false]
   --cf, --cmd                               Cloud Foundry?
