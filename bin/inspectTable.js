@@ -74,7 +74,7 @@ exports.handler = function (argv) {
     if (err) {
       return console.log(err.message);
     }
-    global.startSpinner()
+   // global.startSpinner()
     tableInspect(result);
   });
 }
@@ -193,6 +193,6 @@ async function tableInspect(result) {
       break;
     }
   }
-  global.__spinner.stop()
+  //global.__spinner.stop()
   return;
 }

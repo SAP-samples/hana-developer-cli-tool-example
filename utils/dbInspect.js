@@ -2,13 +2,35 @@
 /*eslint-env node, es6 */
 "use strict";
 
+async function getHANAVersion(db) {
+	const statement = await db.preparePromisified(
+		`SELECT *
+                 FROM M_DATABASE`)
+	const object = await db.statementExecPromisified(statement, [])
+	if (object.length < 1) {
+		throw new Error("System Version Lookup Error: Can't Read from M_DATABASE")
+	}
+	object[0].versionMajor = object[0].VERSION.charAt(0)
+	return object[0]
+}
+module.exports.getHANAVersion = getHANAVersion
+
 async function getView(db, scheam, viewId) {
 	//Select View
-	const statement = await db.preparePromisified(
-		`SELECT SCHEMA_NAME, VIEW_NAME, VIEW_OID, COMMENTS, IS_COLUMN_VIEW, VIEW_TYPE, HAS_STRUCTURED_PRIVILEGE_CHECK, HAS_PARAMETERS, HAS_CACHE, CREATE_TIME
-                 FROM VIEWS 
-				  WHERE SCHEMA_NAME LIKE ?
-				    AND VIEW_NAME = ?`);
+	let statementString = ``
+	const vers = await await getHANAVersion(db)
+	if (vers.versionMajor < 2) {
+		statementString = `SELECT SCHEMA_NAME, VIEW_NAME, VIEW_OID, COMMENTS, IS_COLUMN_VIEW, VIEW_TYPE, HAS_STRUCTURED_PRIVILEGE_CHECK, HAS_CACHE
+		FROM VIEWS 
+		 WHERE SCHEMA_NAME LIKE ?
+		   AND VIEW_NAME = ?`
+	} else {
+		statementString = `SELECT SCHEMA_NAME, VIEW_NAME, VIEW_OID, COMMENTS, IS_COLUMN_VIEW, VIEW_TYPE, HAS_STRUCTURED_PRIVILEGE_CHECK, HAS_PARAMETERS, HAS_CACHE, CREATE_TIME
+		FROM VIEWS 
+		 WHERE SCHEMA_NAME LIKE ?
+		   AND VIEW_NAME = ?`
+	}
+	const statement = await db.preparePromisified(statementString)
 	const object = await db.statementExecPromisified(statement, [scheam, viewId]);
 	if (object.length < 1) {
 		throw new Error("Invalid Input View");
@@ -48,12 +70,21 @@ async function getViewFields(db, viewOid) {
 module.exports.getViewFields = getViewFields;
 
 async function getTable(db, schema, tableId) {
-	//Select View
-	const statement = await db.preparePromisified(
-		`SELECT SCHEMA_NAME, TABLE_NAME, TABLE_OID, TABLE_TYPE, HAS_PRIMARY_KEY, UNLOAD_PRIORITY, IS_PRELOAD, CREATE_TIME
-                  FROM TABLES 
-				  WHERE SCHEMA_NAME LIKE ?
-				    AND TABLE_NAME = ?`);
+	//Select Table
+	let statementString = ``
+	const vers = await await getHANAVersion(db)
+	if (vers.versionMajor < 2) {
+		statementString = `SELECT SCHEMA_NAME, TABLE_NAME, TABLE_OID, TABLE_TYPE, HAS_PRIMARY_KEY, UNLOAD_PRIORITY, IS_PRELOAD
+		FROM TABLES 
+		WHERE SCHEMA_NAME LIKE ?
+		  AND TABLE_NAME = ?`
+	} else {
+		statementString = `SELECT SCHEMA_NAME, TABLE_NAME, TABLE_OID, TABLE_TYPE, HAS_PRIMARY_KEY, UNLOAD_PRIORITY, IS_PRELOAD, CREATE_TIME
+		FROM TABLES 
+		WHERE SCHEMA_NAME LIKE ?
+		  AND TABLE_NAME = ?`
+	}
+	const statement = await db.preparePromisified(statementString)
 	const object = await db.statementExecPromisified(statement, [schema, tableId]);
 	if (object.length < 1) {
 		throw new Error("Invalid Input Table");
@@ -64,10 +95,20 @@ module.exports.getTable = getTable;
 
 async function getTableFields(db, tableOid) {
 	//Select Fields
-	const statement = await db.preparePromisified(
-		`SELECT SCHEMA_NAME, TABLE_NAME, TABLE_OID, COLUMN_NAME, POSITION, DATA_TYPE_NAME, OFFSET, LENGTH, SCALE, IS_NULLABLE, DEFAULT_VALUE, COLUMN_ID, COMMENTS
-          FROM TABLE_COLUMNS 
-				  WHERE TABLE_OID = ? ORDER BY POSITION`);
+	let statementString = ``
+	const vers = await await getHANAVersion(db)
+	if (vers.versionMajor < 2) {
+		statementString =
+			`SELECT SCHEMA_NAME, TABLE_NAME, TABLE_OID, COLUMN_NAME, POSITION, DATA_TYPE_NAME, OFFSET, LENGTH, SCALE, IS_NULLABLE, DEFAULT_VALUE, COLUMN_ID, COMMENTS
+		FROM TABLE_COLUMNS 
+				WHERE TABLE_OID = ? ORDER BY POSITION`
+	} else {
+		statementString =
+			`SELECT SCHEMA_NAME, TABLE_NAME, TABLE_OID, COLUMN_NAME, POSITION, DATA_TYPE_NAME, OFFSET, LENGTH, SCALE, IS_NULLABLE, DEFAULT_VALUE, COLUMN_ID, COMMENTS
+		FROM TABLE_COLUMNS 
+				WHERE TABLE_OID = ? ORDER BY POSITION`
+	}
+	const statement = await db.preparePromisified(statementString)
 	const fields = await db.statementExecPromisified(statement, [tableOid]);
 	return fields;
 }
@@ -89,13 +130,25 @@ module.exports.getConstraints = getConstraints;
 
 async function getProcedure(db, schema, procedure) {
 	//Select View
-	const statement = await db.preparePromisified(
-		`SELECT SCHEMA_NAME, PROCEDURE_NAME, PROCEDURE_OID, SQL_SECURITY, DEFAULT_SCHEMA_NAME,
-				  INPUT_PARAMETER_COUNT, OUTPUT_PARAMETER_COUNT, INOUT_PARAMETER_COUNT, RESULT_SET_COUNT,
-				  IS_ENCRYPTED, PROCEDURE_TYPE, READ_ONLY, IS_VALID, IS_HEADER_ONLY, OWNER_NAME, CREATE_TIME
-                  FROM PROCEDURES 
-				  WHERE SCHEMA_NAME LIKE ?
-				    AND PROCEDURE_NAME = ?`);
+	let statementString = ``
+	const vers = await await getHANAVersion(db)
+	if (vers.versionMajor < 2) {
+		statementString = `SELECT SCHEMA_NAME, PROCEDURE_NAME, PROCEDURE_OID, SQL_SECURITY, DEFAULT_SCHEMA_NAME,
+		INPUT_PARAMETER_COUNT, OUTPUT_PARAMETER_COUNT, INOUT_PARAMETER_COUNT, RESULT_SET_COUNT,
+		PROCEDURE_TYPE, READ_ONLY, IS_VALID, IS_HEADER_ONLY, OWNER_NAME
+		FROM PROCEDURES 
+		WHERE SCHEMA_NAME LIKE ?
+		  AND PROCEDURE_NAME = ?`
+	} else {
+		statementString = `SELECT SCHEMA_NAME, PROCEDURE_NAME, PROCEDURE_OID, SQL_SECURITY, DEFAULT_SCHEMA_NAME,
+		INPUT_PARAMETER_COUNT, OUTPUT_PARAMETER_COUNT, INOUT_PARAMETER_COUNT, RESULT_SET_COUNT,
+		IS_ENCRYPTED, PROCEDURE_TYPE, READ_ONLY, IS_VALID, IS_HEADER_ONLY, OWNER_NAME, CREATE_TIME
+		FROM PROCEDURES 
+		WHERE SCHEMA_NAME LIKE ?
+		  AND PROCEDURE_NAME = ?`
+	}
+
+	const statement = await db.preparePromisified(statementString)
 	const object = await db.statementExecPromisified(statement, [schema, procedure]);
 	if (object.length < 1) {
 		throw new Error("Invalid Input Procedure");
@@ -129,14 +182,26 @@ async function getProcedurePramCols(db, procOid) {
 module.exports.getProcedurePramCols = getProcedurePramCols;
 
 async function getFunction(db, schema, functionName) {
-	//Select View
-	const statement = await db.preparePromisified(
-		`SELECT SCHEMA_NAME, FUNCTION_NAME, FUNCTION_OID, SQL_SECURITY, DEFAULT_SCHEMA_NAME,
-				  INPUT_PARAMETER_COUNT, RETURN_VALUE_COUNT,
-				  IS_ENCRYPTED, FUNCTION_TYPE, FUNCTION_USAGE_TYPE, IS_VALID, IS_HEADER_ONLY, OWNER_NAME, CREATE_TIME
-                  FROM FUNCTIONS 
-				  WHERE SCHEMA_NAME LIKE ?
-				    AND FUNCTION_NAME = ?`);
+	//Select Functions
+	let statementString = ``
+    const vers = await await getHANAVersion(db)
+    if (vers.versionMajor < 2) {
+        statementString = `SELECT SCHEMA_NAME, FUNCTION_NAME, FUNCTION_OID, SQL_SECURITY, DEFAULT_SCHEMA_NAME,
+		INPUT_PARAMETER_COUNT, RETURN_VALUE_COUNT,
+		FUNCTION_TYPE, FUNCTION_USAGE_TYPE, IS_VALID, IS_HEADER_ONLY, OWNER_NAME
+		FROM FUNCTIONS 
+		WHERE SCHEMA_NAME LIKE ?
+		  AND FUNCTION_NAME = ?`
+	} else {
+		statementString	= `SELECT SCHEMA_NAME, FUNCTION_NAME, FUNCTION_OID, SQL_SECURITY, DEFAULT_SCHEMA_NAME,
+		INPUT_PARAMETER_COUNT, RETURN_VALUE_COUNT,
+		IS_ENCRYPTED, FUNCTION_TYPE, FUNCTION_USAGE_TYPE, IS_VALID, IS_HEADER_ONLY, OWNER_NAME, CREATE_TIME
+		FROM FUNCTIONS 
+		WHERE SCHEMA_NAME LIKE ?
+		  AND FUNCTION_NAME = ?`
+	}
+
+	const statement = await db.preparePromisified(statementString)
 	const object = await db.statementExecPromisified(statement, [schema, functionName]);
 	if (object.length < 1) {
 		throw new Error("Invalid Input Function");
@@ -268,9 +333,9 @@ async function formatCDS(object, fields, constraints, type, parent) {
 				cdstable += " not null";
 			}
 		} else {
-		//	if (isKey === "FALSE") {
-		//		cdstable += " null";
-		//	}
+			//	if (isKey === "FALSE") {
+			//		cdstable += " null";
+			//	}
 		}
 		if (field.COMMENTS) {
 			cdstable += `  @title: '${field.COLUMN_NAME}: ${field.COMMENTS}' `

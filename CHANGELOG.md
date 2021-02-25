@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.202102.4
+
+### Added
+- HANA 1.0 Support - Issue #22 https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/22
+  
 ## 1.202102.3
 
 ### Added

@@ -47,7 +47,9 @@ exports.handler = function (argv) {
 
 async function dbStatus(result) {
   const dbStatus = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
-
+  const dbInspect = require("../utils/dbInspect")
+  console.table(await dbInspect.getHANAVersion(dbStatus))
+  
   let results = await dbStatus.execSQL(`SELECT TOP 100 * FROM "M_SYSTEM_OVERVIEW"`);
 
   console.table(results);
