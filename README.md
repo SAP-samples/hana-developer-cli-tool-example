@@ -8,11 +8,11 @@ The [change log](CHANGELOG.md) describes notable changes in this package.
 
 This sample is intended to shown how one could build a developer-centric SAP HANA command line tool, particularly designed to be used when performing local SAP HANA development in non-SAP tooling (like VSCode). It utilizes the default-env.json that is often used in local development for connectivity to a remote SAP HANA DB (although it can of course be used with a local SAP HANA, express edition instance as well). There is no intention to replacing the hdbsql tool as a generic SQL console. Instead this sample will focus on simplifying and grouping common and complex commands that otherwise might a lot of separate scripts.
 
-Introduction Video: [https://www.youtube.com/watch?v=FWOo_mm0sfQ](https://www.youtube.com/watch?v=FWOo_mm0sfQ)
+Introduction Video: [https://youtu.be/dvVQfi9Qgog](https://youtu.be/dvVQfi9Qgog)
 
 However the tool isn't limited to only local development. It also works well when developing in the cloud. The hana-cli tool can also run well from a cloud shell in the SAP Business Application Studio, Google Cloud Shell, AWS Cloud9, etc. We can also run against a SAP HANA service for SAP BTP or SAP HANA Cloud instance. This demonstrates that the tool can run just about anywhere you can get a command line that has access to the Node.js Runtime.  We can also connect to a remote HANA instance even if it isn't running in the same cloud environment in which we are performing our development tasks.
 
-Running in Cloud Shells Video: [https://www.youtube.com/watch?v=C_b-WUpRMKU](https://www.youtube.com/watch?v=C_b-WUpRMKU)
+Running in Cloud Shells Video: [https://youtu.be/L7QyVLvAIIQ](https://youtu.be/L7QyVLvAIIQ)
 
 ## Requirements / Download and Installation
 
