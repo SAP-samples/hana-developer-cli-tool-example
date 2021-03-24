@@ -54,5 +54,8 @@
   "homepage": "https://github.com/SAP-samples/hana-developer-cli-tool-example#readme",
   "devDependencies": {
     "eslint": "^7.18"
+  },
+  "prettier": {
+    "singleQuote": true
   }
 }
