@@ -38,6 +38,11 @@ exports.builder = {
         default: './',
         desc: bundle.getText("folder")
     },
+    filename: {
+        alias: ['n', 'Filename'],
+        type: 'string',
+        desc: bundle.getText("filename")
+    },
     output: {
         alias: ['o', 'Output'],
         choices: ["hdbtable", "cds"],
@@ -83,6 +88,10 @@ exports.handler = function (argv) {
                 type: 'string',
                 required: true
             },
+            filename: {
+                description: bundle.getText("filename"),
+                type: 'string'
+            },
             output: {
                 description: bundle.getText("outputType"),
                 type: 'string',
@@ -100,8 +109,6 @@ exports.handler = function (argv) {
         getTables(result);
     });
 }
-
-
 async function getTables(result) {
     const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
 
@@ -109,7 +116,7 @@ async function getTables(result) {
     console.log(`Schema: ${schema}, Table: ${result.table}`);
 
     let results = await getTablesInt(schema, result.table, db, result.limit);
-    const dbInspect = require("../utils/dbInspect")
+    const dbInspect = require("../utils/dbInspect")    
 
     switch (result.output) {
         case 'hdbtable': {
@@ -126,10 +133,13 @@ async function getTables(result) {
                 base64: false,
                 compression: "DEFLATE"
             });
-            fs.writeFile(dir + 'export.zip', data, 'binary', (err) => {
+            
+            let filename = result.filename || dir + 'export.zip';
+
+            fs.writeFile(filename, data, 'binary', (err) => {
                 if (err) throw err;
             });
-            console.log(`Content written to: ${dir}export.zip`);
+            console.log(`Content written to: ${filename}`);
             break
         }
         default: {
@@ -143,10 +153,11 @@ async function getTables(result) {
             let fs = require('fs');
             let dir = result.folder;
             !fs.existsSync(dir) && fs.mkdirSync(dir);
-            fs.writeFile(dir + 'export.cds', cdsSource, (err) => {
+            let filename = result.filename || dir + 'export.cds';
+            fs.writeFile(filename, cdsSource, (err) => {
                 if (err) throw err;
             });
-            console.log(`Content written to: ${dir}export.cds`);
+            console.log(`Content written to: ${filename}`);
             break
         }
     }
