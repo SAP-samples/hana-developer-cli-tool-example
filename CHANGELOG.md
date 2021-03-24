@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.202103.1
+
+### Added
+- New commands: changes & readme - output the CHANGELOG.md and README.md to the CLI
+- Issue #25 - Add filename option to massConvertion Operation - thanks to @ThePlenkov
+  
+### Changed
+- Updated several dependent modules including hana-client
+- Put hana-cli on a diet and removed some old module dependencies no longer used. Especially the openAPI related ones which had functionality now offered by CAP directly
+
 ## 1.202102.4
 
 ### Added
