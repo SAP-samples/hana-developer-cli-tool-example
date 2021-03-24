@@ -1067,18 +1067,19 @@ Options:
 ### massConvert
 
 ```shell
-hana-cli massConvert [schema] [table]  
+hana-cli massConvert [schema] [table]
 
 Convert a group of tables to CDS or HDBTable format
 
 Options:
-  --admin, -a, --Admin    Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-  --table, -t, --Table    Database Table                 [string] [default: "*"]
-  --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
-  --limit, -l             Limit results                  [number] [default: 200]
-  --folder, -f, --Folder  DB Module Folder Name         [string] [default: "./"]
-  --output, -o, --Output  Output Format for inspection
+  -t, --table, --Table        Database Table             [string] [default: "*"]
+  -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit                 Limit results              [number] [default: 200]
+  -f, --folder, --Folder      DB Module Folder Name     [string] [default: "./"]
+  -n, --filename, --Filename  File name                                 [string]
+  -o, --output, --Output      Output Format for inspection
                           [string] [choices: "hdbtable", "cds"] [default: "cds"]
 ```
 
