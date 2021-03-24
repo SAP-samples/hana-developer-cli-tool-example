@@ -68,3 +68,4 @@ default-*.json
 
 # Visual Studio Code
 .vscode
+*.jar
