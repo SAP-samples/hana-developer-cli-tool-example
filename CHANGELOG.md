@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Changed
 - Updated several dependent modules including hana-client
 - Put hana-cli on a diet and removed some old module dependencies no longer used. Especially the openAPI related ones which had functionality now offered by CAP directly
+- help command now lists all commands in alphabetical order
 
 ## 1.202102.4
 
