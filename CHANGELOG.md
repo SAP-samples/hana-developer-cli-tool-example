@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 - New commands: changes & readme - output the CHANGELOG.md and README.md to the CLI
-- Issue #25 - Add filename option to massConvertion Operation - thanks to @ThePlenkov
+- Issue [#25](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/25) - Add filename option to massConvertion Operation - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
   
 ### Changed
 - Updated several dependent modules including hana-client
@@ -17,7 +17,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## 1.202102.4
 
 ### Added
-- HANA 1.0 Support - Issue #22 https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/22
+- HANA 1.0 Support - Issue [#22](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/22)
   
 ## 1.202102.3
 
