@@ -68,3 +68,6 @@ default-*.json
 
 # Visual Studio Code
 .vscode
+
+#prevent potential private schemas publishing 
+*.cds
