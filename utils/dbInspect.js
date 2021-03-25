@@ -300,7 +300,7 @@ async function formatCDS(object, fields, constraints, type, parent) {
 				cdstable += "Integer64";
 				break;		
 			case "DECIMAL":
-				cdstable += `Decimal(${field.LENGTH}, ${field.SCALE})`;
+				cdstable += field.SCALE ? `Decimal(${field.LENGTH}, ${field.SCALE})` : `Decimal(${field.LENGTH})` ;
 				break;
 			case "DOUBLE":
 				cdstable += "Double";
