@@ -276,9 +276,10 @@ async function formatCDS(object, fields, constraints, type, parent) {
 			case "NVARCHAR":
 				cdstable += `String(${field.LENGTH})`;
 				break;
-			case "VARCHAR":
-				cdstable += `String(${field.LENGTH})`;
-				break;
+			// belongs to HANA
+			// case "VARCHAR":
+			// 	cdstable += `String(${field.LENGTH})`;
+			// 	break;
 			case "NCLOB":
 				cdstable += "LargeString";
 				break;
@@ -293,7 +294,7 @@ async function formatCDS(object, fields, constraints, type, parent) {
 				break;
 			case "BIGINT":
 				cdstable += "Integer64";
-				break;
+				break;		
 			case "DECIMAL":
 				cdstable += `Decimal(${field.LENGTH}, ${field.SCALE})`;
 				break;
@@ -319,7 +320,24 @@ async function formatCDS(object, fields, constraints, type, parent) {
 			case "BOOLEAN":
 				cdstable += "Boolean";
 				break;
+			// hana types
+			case "SMALLINT" :
+			case "TINYINT" :
+			case "SMALLDECIMAL" :
+			case "REAL":
+			case "CLOB" :			
+				cdstable += `hana.${field.DATA_TYPE_NAME}`;
+				break;
+			case "CHAR":
+			case "NCHAR":
+			case "VARCHAR":
+			case "BINARY":
+				cdstable += `hana.${field.DATA_TYPE_NAME}(${field.LENGTH})`;
+				break;
 			default:
+				// still to do				
+				// hana.ST_POINT	( srid ) (1)	ST_POINT	Edm.GeometryPoint
+				// hana.ST_GEOMETRY	( srid ) (1)	ST_GEOMETRY	Edm.Geometry
 				cdstable += `**UNSUPPORTED TYPE - ${field.DATA_TYPE_NAME}`;
 		}
 		xref.dataType = field.DATA_TYPE_NAME
