@@ -32,6 +32,12 @@ exports.builder = {
     default: "tbl",
     type: 'string',
     desc: bundle.getText("outputType")
+  },
+  useHanaTypes: {    
+    alias: ['hana'],
+    type: 'boolean',
+    default: false,
+    desc: bundle.getText("useHanaTypes")
   }
 };
 
@@ -66,7 +72,11 @@ exports.handler = function (argv) {
         type: 'string',
         //       validator: /t[bl]*|s[ql]*|c[ds]?/,
         required: true
-      }
+      },
+      useHanaTypes: {
+        description: bundle.getText("useHanaTypes"),
+        type: 'boolean'        
+      },
     }
   };
 
@@ -85,6 +95,8 @@ async function tableInspect(result) {
 
   let schema = await dbClass.schemaCalc(result, db);
   console.log(`Schema: ${schema}, Table: ${result.table}`);
+
+  dbInspect.options.useHanaTypes = result.useHanaTypes;
 
   let object = await dbInspect.getTable(db, schema, result.table);
   let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID);

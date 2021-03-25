@@ -402,17 +402,18 @@ Options:
 
 ```shell
 hana-cli inspectTable [schema] [table]
-[aliases: it, table, insTbl, inspecttable, inspectable]
+
 Return metadata about a DB table
 
 Options:
-  --admin, -a, --Admin    Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-  --table, -t, --Table    Database Table                                [string]
-  --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
-  --output, -o, --Output  Output Format for inspection
-   [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "edm", "edmx",
-                                             "swgr", "openapi"] [default: "tbl"]
+  -t, --table, --Table        Database Table                            [string]
+  -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
+  -o, --output, --Output      Output Format for inspection
+  [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "annos", "edm",
+                                     "edmx", "swgr", "openapi"] [default: "tbl"]
+      --useHanaTypes, --hana  Use Hana CDS types      [boolean] [default: false]
 ```
 
 ![inspectTable example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectTable.gif)
@@ -1081,6 +1082,7 @@ Options:
   -n, --filename, --Filename  File name                                 [string]
   -o, --output, --Output      Output Format for inspection
                           [string] [choices: "hdbtable", "cds"] [default: "cds"]
+      --useHanaTypes, --hana  Use Hana CDS types      [boolean] [default: false]
 ```
 
 ### serviceKey

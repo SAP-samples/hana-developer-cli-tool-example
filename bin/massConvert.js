@@ -49,7 +49,13 @@ exports.builder = {
         default: "cds",
         type: 'string',
         desc: bundle.getText("outputType")
-    }
+    },
+    useHanaTypes: {    
+        alias: ['hana'],
+        type: 'boolean',
+        default: false,
+        desc: bundle.getText("useHanaTypes")
+      }
 };
 
 exports.handler = function (argv) {
@@ -97,6 +103,10 @@ exports.handler = function (argv) {
                 type: 'string',
                 //       validator: /t[bl]*|s[ql]*|c[ds]?/,
                 required: true
+            },
+            useHanaTypes: {
+                description: bundle.getText("useHanaTypes"),
+                type: 'boolean'        
             }
         }
     };
@@ -116,7 +126,9 @@ async function getTables(result) {
     console.log(`Schema: ${schema}, Table: ${result.table}`);
 
     let results = await getTablesInt(schema, result.table, db, result.limit);
-    const dbInspect = require("../utils/dbInspect")    
+    const dbInspect = require("../utils/dbInspect");
+    
+    dbInspect.options.useHanaTypes = result.useHanaTypes;
 
     switch (result.output) {
         case 'hdbtable': {

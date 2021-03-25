@@ -234,6 +234,10 @@ async function getFunctionPramCols(db, funcOid) {
 }
 module.exports.getFunctionPramCols = getFunctionPramCols;
 
+let useHanaTypes = false;
+
+module.exports.options = { set useHanaTypes(use) {useHanaTypes = use} }
+
 async function formatCDS(object, fields, constraints, type, parent) {
 	let cdstable = "";
 	cdstable += "@cds.persistence.exists \n";
@@ -325,15 +329,29 @@ async function formatCDS(object, fields, constraints, type, parent) {
 			case "TINYINT" :
 			case "SMALLDECIMAL" :
 			case "REAL":
-			case "CLOB" :			
-				cdstable += `hana.${field.DATA_TYPE_NAME}`;
-				break;
+			case "CLOB" :		
+				if (useHanaTypes) {
+					cdstable += `hana.${field.DATA_TYPE_NAME}`;
+					break;
+				}
+			// eslint-disable-next-line no-fallthrough
 			case "CHAR":
-			case "NCHAR":
-			case "VARCHAR":
+			case "NCHAR":			
 			case "BINARY":
-				cdstable += `hana.${field.DATA_TYPE_NAME}(${field.LENGTH})`;
-				break;
+				if (useHanaTypes) {
+					cdstable += `hana.${field.DATA_TYPE_NAME}(${field.LENGTH})`;
+					break;
+				}
+			
+			// eslint-disable-next-line no-fallthrough			
+			case "VARCHAR":
+				if (useHanaTypes) {
+					cdstable += `hana.${field.DATA_TYPE_NAME}(${field.LENGTH})`;					
+				} else {
+					// backward compatible change
+					cdstable += `String(${field.LENGTH})`;					
+				}
+				break;			
 			default:
 				// still to do				
 				// hana.ST_POINT	( srid ) (1)	ST_POINT	Edm.GeometryPoint
@@ -368,3 +386,4 @@ async function formatCDS(object, fields, constraints, type, parent) {
 	return cdstable;
 }
 module.exports.formatCDS = formatCDS;
+
