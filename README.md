@@ -413,7 +413,9 @@ Options:
   -o, --output, --Output      Output Format for inspection
   [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "annos", "edm",
                                      "edmx", "swgr", "openapi"] [default: "tbl"]
-      --useHanaTypes, --hana  Use Hana CDS types      [boolean] [default: false]
+      --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
+                              cloud.sap/docs/cds/cdl#predefined-types)
+                                                      [boolean] [default: false]
 ```
 
 ![inspectTable example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectTable.gif)
@@ -422,17 +424,20 @@ Options:
 
 ```shell
 hana-cli inspectView [schema] [view]
-[aliases: iv, view, insVew, inspectview]
+
 Return metadata about a DB view
 
 Options:
-  --admin, -a, --Admin    Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-  --view, -v, --View      Database View                                 [string]
-  --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
-  --output, -o, --Output  Output Format for inspection
-   [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "edm", "edmx",
-                                             "swgr", "openapi"] [default: "tbl"]
+  -v, --view, --View          Database View                             [string]
+  -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
+  -o, --output, --Output      Output Format for inspection
+  [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "annos", "edm",
+                                     "edmx", "swgr", "openapi"] [default: "tbl"]
+      --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
+                              cloud.sap/docs/cds/cdl#predefined-types)
+                                                      [boolean] [default: false]
 ```
 
 ![inspectView example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectView.gif)
@@ -1053,15 +1058,18 @@ Options:
 
 ```shell
 hana-cli cds [schema] [table]
-[aliases: cdsPreview]
+
 Display a DB object via CDS
 
 Options:
-  --admin, -a, --Admin    Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-  --table, -t, --Table    Database Table                                [string]
-  --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
-  --view, -v, --View      CDS processing for View instead of Table
+  -t, --table, --Table        Database Table                            [string]
+  -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
+  -v, --view, --View          CDS processing for View instead of Table
+                                                      [boolean] [default: false]
+      --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
+                              cloud.sap/docs/cds/cdl#predefined-types)
                                                       [boolean] [default: false]
 ```
 
@@ -1082,7 +1090,9 @@ Options:
   -n, --filename, --Filename  File name                                 [string]
   -o, --output, --Output      Output Format for inspection
                           [string] [choices: "hdbtable", "cds"] [default: "cds"]
-      --useHanaTypes, --hana  Use Hana CDS types      [boolean] [default: false]
+      --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
+                              cloud.sap/docs/cds/cdl#predefined-types)
+                                                      [boolean] [default: false]
 ```
 
 ### serviceKey

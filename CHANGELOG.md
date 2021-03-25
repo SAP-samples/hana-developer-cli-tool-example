@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.202103.2
+
+### Added
+- Option to massConvert, inspectTable, inspectView, and cds to use HANA native data types if no CAP CDS direct conversion can be made. Issue [#27](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/27) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
+
+### Fixed 
+- Decimal types without decismals generates CDS Error. Issue [#29](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/29) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
+
 ## 1.202103.1
 
 ### Added

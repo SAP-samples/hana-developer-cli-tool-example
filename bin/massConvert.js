@@ -164,7 +164,7 @@ async function getTables(result) {
                 let object = await dbInspect.getTable(db, schema, table.TABLE_NAME);
                 let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID);
                 let constraints = await dbInspect.getConstraints(db, object);
-                cdsSource += await dbInspect.formatCDS(object, fields, constraints, "table") + '\n';
+                cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table") + '\n';
             }
             let fs = require('fs');
             let dir = result.folder;

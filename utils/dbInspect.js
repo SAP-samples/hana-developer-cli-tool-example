@@ -184,16 +184,16 @@ module.exports.getProcedurePramCols = getProcedurePramCols;
 async function getFunction(db, schema, functionName) {
 	//Select Functions
 	let statementString = ``
-    const vers = await await getHANAVersion(db)
-    if (vers.versionMajor < 2) {
-        statementString = `SELECT SCHEMA_NAME, FUNCTION_NAME, FUNCTION_OID, SQL_SECURITY, DEFAULT_SCHEMA_NAME,
+	const vers = await await getHANAVersion(db)
+	if (vers.versionMajor < 2) {
+		statementString = `SELECT SCHEMA_NAME, FUNCTION_NAME, FUNCTION_OID, SQL_SECURITY, DEFAULT_SCHEMA_NAME,
 		INPUT_PARAMETER_COUNT, RETURN_VALUE_COUNT,
 		FUNCTION_TYPE, FUNCTION_USAGE_TYPE, IS_VALID, IS_HEADER_ONLY, OWNER_NAME
 		FROM FUNCTIONS 
 		WHERE SCHEMA_NAME LIKE ?
 		  AND FUNCTION_NAME = ?`
 	} else {
-		statementString	= `SELECT SCHEMA_NAME, FUNCTION_NAME, FUNCTION_OID, SQL_SECURITY, DEFAULT_SCHEMA_NAME,
+		statementString = `SELECT SCHEMA_NAME, FUNCTION_NAME, FUNCTION_OID, SQL_SECURITY, DEFAULT_SCHEMA_NAME,
 		INPUT_PARAMETER_COUNT, RETURN_VALUE_COUNT,
 		IS_ENCRYPTED, FUNCTION_TYPE, FUNCTION_USAGE_TYPE, IS_VALID, IS_HEADER_ONLY, OWNER_NAME, CREATE_TIME
 		FROM FUNCTIONS 
@@ -236,9 +236,9 @@ module.exports.getFunctionPramCols = getFunctionPramCols;
 
 let useHanaTypes = false;
 
-module.exports.options = { set useHanaTypes(use) {useHanaTypes = use} }
+module.exports.options = { set useHanaTypes(use) { useHanaTypes = use } }
 
-async function formatCDS(object, fields, constraints, type, parent) {
+async function formatCDS(db, object, fields, constraints, type, parent) {
 	let cdstable = "";
 	cdstable += "@cds.persistence.exists \n";
 	if (type === "view") {
@@ -275,89 +275,128 @@ async function formatCDS(object, fields, constraints, type, parent) {
 
 		cdstable += "\t";
 		cdstable += `![${field.COLUMN_NAME}]` + ": ";
-
-		switch (field.DATA_TYPE_NAME) {
-			case "NVARCHAR":
-				cdstable += `String(${field.LENGTH})`;
-				break;
-			// belongs to HANA
-			// case "VARCHAR":
-			// 	cdstable += `String(${field.LENGTH})`;
-			// 	break;
-			case "NCLOB":
-				cdstable += "LargeString";
-				break;
-			case "VARBINARY":
-				cdstable += `Binary(${field.LENGTH})`;
-				break;
-			case "BLOB":
-				cdstable += "LargeBinary";
-				break;
-			case "INTEGER":
-				cdstable += "Integer";
-				break;
-			case "BIGINT":
-				cdstable += "Integer64";
-				break;		
-			case "DECIMAL":
-				cdstable += field.SCALE ? `Decimal(${field.LENGTH}, ${field.SCALE})` : `Decimal(${field.LENGTH})` ;
-				break;
-			case "DOUBLE":
-				cdstable += "Double";
-				break;
-			case "DATE":
-				cdstable += "Date";
-				break;
-			case "TIME":
-				cdstable += "Time";
-				break;
-			case "SECONDDATE":
-				cdstable += "String";
-				break;
-			case "TIMESTAMP":
-				if (parent === 'preview') {
+		if (useHanaTypes) {
+			switch (field.DATA_TYPE_NAME) {
+				case "NVARCHAR":
+					cdstable += `String(${field.LENGTH})`;
+					break;
+				case "NCLOB":
+					cdstable += "LargeString";
+					break;
+				case "VARBINARY":
+					cdstable += `Binary(${field.LENGTH})`;
+					break;
+				case "BLOB":
+					cdstable += "LargeBinary";
+					break;
+				case "INTEGER":
+					cdstable += "Integer";
+					break;
+				case "BIGINT":
+					cdstable += "Integer64";
+					break;
+				case "DECIMAL":
+					cdstable += field.SCALE ? `Decimal(${field.LENGTH}, ${field.SCALE})` : `Decimal(${field.LENGTH})`;
+					break;
+				case "DOUBLE":
+					cdstable += "Double";
+					break;
+				case "DATE":
+					cdstable += "Date";
+					break;
+				case "TIME":
+					cdstable += "Time";
+					break;
+				case "SECONDDATE":
 					cdstable += "String";
-				} else {
-					cdstable += "Timestamp";
-				}
-				break;
-			case "BOOLEAN":
-				cdstable += "Boolean";
-				break;
-			// hana types
-			case "SMALLINT" :
-			case "TINYINT" :
-			case "SMALLDECIMAL" :
-			case "REAL":
-			case "CLOB" :		
-				if (useHanaTypes) {
+					break;
+				case "TIMESTAMP":
+					if (parent === 'preview') {
+						cdstable += "String";
+					} else {
+						cdstable += "Timestamp";
+					}
+					break;
+				case "BOOLEAN":
+					cdstable += "Boolean";
+					break;
+				// hana types
+				case "SMALLINT":
+				case "TINYINT":
+				case "SMALLDECIMAL":
+				case "REAL":
+				case "CLOB":
 					cdstable += `hana.${field.DATA_TYPE_NAME}`;
 					break;
-				}
-			// eslint-disable-next-line no-fallthrough
-			case "CHAR":
-			case "NCHAR":			
-			case "BINARY":
-				if (useHanaTypes) {
+				case "CHAR":
+				case "NCHAR":
+				case "BINARY":
 					cdstable += `hana.${field.DATA_TYPE_NAME}(${field.LENGTH})`;
 					break;
-				}
-			
-			// eslint-disable-next-line no-fallthrough			
-			case "VARCHAR":
-				if (useHanaTypes) {
-					cdstable += `hana.${field.DATA_TYPE_NAME}(${field.LENGTH})`;					
-				} else {
+				case "VARCHAR":
+					cdstable += `hana.${field.DATA_TYPE_NAME}(${field.LENGTH})`;
+					break;
+				case "ST_POINT":
+				case "ST_GEOMETRY":
+					cdstable += `hana.${field.DATA_TYPE_NAME}(${await getGeoColumns(db,object[0], field, type)})`
+					break
+				default:
+					cdstable += `**UNSUPPORTED TYPE - ${field.DATA_TYPE_NAME}`;
+			}
+		} else {
+			switch (field.DATA_TYPE_NAME) {
+				case "NVARCHAR":
+					cdstable += `String(${field.LENGTH})`;
+					break;
+				case "NCLOB":
+					cdstable += "LargeString";
+					break;
+				case "VARBINARY":
+					cdstable += `Binary(${field.LENGTH})`;
+					break;
+				case "BLOB":
+					cdstable += "LargeBinary";
+					break;
+				case "INTEGER":
+					cdstable += "Integer";
+					break;
+				case "BIGINT":
+					cdstable += "Integer64";
+					break;
+				case "DECIMAL":
+					cdstable += field.SCALE ? `Decimal(${field.LENGTH}, ${field.SCALE})` : `Decimal(${field.LENGTH})`;
+					break;
+				case "DOUBLE":
+					cdstable += "Double";
+					break;
+				case "DATE":
+					cdstable += "Date";
+					break;
+				case "TIME":
+					cdstable += "Time";
+					break;
+				case "SECONDDATE":
+					cdstable += "String";
+					break;
+				case "TIMESTAMP":
+					if (parent === 'preview') {
+						cdstable += "String";
+					} else {
+						cdstable += "Timestamp";
+					}
+					break;
+				case "BOOLEAN":
+					cdstable += "Boolean";
+					break;
+				case "VARCHAR":
 					// backward compatible change
-					cdstable += `String(${field.LENGTH})`;					
-				}
-				break;			
-			default:
-				// still to do				
-				// hana.ST_POINT	( srid ) (1)	ST_POINT	Edm.GeometryPoint
-				// hana.ST_GEOMETRY	( srid ) (1)	ST_GEOMETRY	Edm.Geometry
-				cdstable += `**UNSUPPORTED TYPE - ${field.DATA_TYPE_NAME}`;
+					cdstable += `String(${field.LENGTH})`;
+					break;
+				default:
+					cdstable += `**UNSUPPORTED TYPE - ${field.DATA_TYPE_NAME}`;
+			}
 		}
+
 		xref.dataType = field.DATA_TYPE_NAME
 		global.__xRef.push(xref);
 		//	if (field.DEFAULT_VALUE) {
@@ -387,3 +426,18 @@ async function formatCDS(object, fields, constraints, type, parent) {
 }
 module.exports.formatCDS = formatCDS;
 
+
+async function getGeoColumns(db, object, field, type) {
+	const statementString = `SELECT SRS_ID FROM ST_GEOMETRY_COLUMNS WHERE SCHEMA_NAME = ? AND TABLE_NAME = ? AND COLUMN_NAME = ?`
+	const statement = await db.preparePromisified(statementString)
+	let name = ''
+	if (type === "view") {
+		name = object.VIEW_NAME
+	} else {
+		name = object.TABLE_NAME
+	}
+
+	const geoColumns = await db.statementExecPromisified(statement, [object.SCHEMA_NAME, name, field.COLUMN_NAME])
+	return geoColumns[0].SRS_ID
+}
+module.exports.getGeoColumns = getGeoColumns

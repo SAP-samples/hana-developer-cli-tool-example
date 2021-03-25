@@ -33,6 +33,12 @@ exports.builder = {
     default: false,
     desc: bundle.getText("viewOpt")
   },
+  useHanaTypes: {    
+    alias: ['hana'],
+    type: 'boolean',
+    default: false,
+    desc: bundle.getText("useHanaTypes")
+  }
 };
 
 exports.handler = function (argv) {
@@ -69,6 +75,10 @@ exports.handler = function (argv) {
           return false;
         }
       },
+      useHanaTypes: {
+        description: bundle.getText("useHanaTypes"),
+        type: 'boolean'        
+      }
     }
   };
 
@@ -86,7 +96,8 @@ async function cds(result) {
   const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
   let schema = await dbClass.schemaCalc(result, db);
   let object, fields, constraints, cdsSource;
-
+  dbInspect.options.useHanaTypes = result.useHanaTypes;
+  
   if (!result.view) {
     object = await dbInspect.getTable(db, schema, result.table);
     fields = await dbInspect.getTableFields(db, object[0].TABLE_OID);
@@ -146,14 +157,14 @@ async function cds(result) {
     object = await dbInspect.getTable(db, schema, result.table);
     fields = await dbInspect.getTableFields(db, object[0].TABLE_OID);
     constraints = await dbInspect.getConstraints(db, object);
-    let tableSource = await dbInspect.formatCDS(object, fields, constraints, "table", "preview");
+    let tableSource = await dbInspect.formatCDS(db, object, fields, constraints, "table", "preview");
     cdsSource +=
       `${tableSource} \n }`;
   } else {
     console.log(`Schema: ${schema}, View: ${result.table}`);
     object = await dbInspect.getView(db, schema, result.table);
     fields = await dbInspect.getViewFields(db, object[0].VIEW_OID);
-    let viewSource = await dbInspect.formatCDS(object, fields, null, "view", "preview");
+    let viewSource = await dbInspect.formatCDS(db, object, fields, null, "view", "preview");
     cdsSource +=
       `${viewSource} \n }`;
   }

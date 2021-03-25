@@ -32,6 +32,12 @@ exports.builder = {
     default: "tbl",
     type: 'string',
     desc: bundle.getText("outputType")
+  },
+  useHanaTypes: {    
+    alias: ['hana'],
+    type: 'boolean',
+    default: false,
+    desc: bundle.getText("useHanaTypes")
   }
 };
 
@@ -66,6 +72,10 @@ exports.handler = function (argv) {
         type: 'string',
         //  validator: /t[bl]*|s[ql]*|c[ds]?/,
         required: true
+      },
+      useHanaTypes: {
+        description: bundle.getText("useHanaTypes"),
+        type: 'boolean'        
       }
     }
   };
@@ -86,6 +96,8 @@ async function tableInspect(result) {
   let schema = await dbClass.schemaCalc(result, db);
   console.log(`Schema: ${schema}, View: ${result.view}`);
 
+  dbInspect.options.useHanaTypes = result.useHanaTypes;
+  
   let object = await dbInspect.getView(db, schema, result.view);
   let fields = await dbInspect.getViewFields(db, object[0].VIEW_OID);
   const cds = require("@sap/cds");
@@ -102,30 +114,30 @@ async function tableInspect(result) {
       break;
     }
     case 'cds': {
-      let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
+      let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view");
       console.log(cdsSource);
       break;
     }
     case 'json': {
-      let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
+      let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view");
       cdsSource = `service HanaCli { ${cdsSource} } `;
       console.log(cds.compile.to.json(cds.parse(cdsSource)))
       break
     }
     case 'yaml': {
-      let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
+      let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view");
       cdsSource = `service HanaCli { ${cdsSource} } `;
       console.log(cds.compile.to.yaml(cds.parse(cdsSource)))
       break
     }    
     case 'cdl': {
-      let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
+      let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view");
       cdsSource = `service HanaCli { ${cdsSource} } `;
       console.log(cds.compile.to.cdl(cds.parse(cdsSource)))
       break
     }     
     case 'edmx': {
-      let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
+      let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view");
       cdsSource = `service HanaCli { ${cdsSource} } `;
       let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
 				version: 'v4',
@@ -134,7 +146,7 @@ async function tableInspect(result) {
       break;
     }
     case 'annos': {
-      let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
+      let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view");
       cdsSource = `service HanaCli { ${cdsSource} } `;
       let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
 				annos: 'only'
@@ -143,13 +155,13 @@ async function tableInspect(result) {
       break;
     }    
     case 'edm': {
-      let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
+      let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view");
       cdsSource = `service HanaCli { ${cdsSource} } `;
       console.log(JSON.stringify(cds.compile.to.edm(cds.parse(cdsSource)), null, 4));
       break;
     }
     case 'swgr': {
-      let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
+      let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view");
       cdsSource = `service HanaCli { ${cdsSource} } `;
       let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
 				version: 'v4',
@@ -166,7 +178,7 @@ async function tableInspect(result) {
       break;
     }
     case 'openapi': {
-      let cdsSource = await dbInspect.formatCDS(object, fields, null, "view");
+      let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view");
       cdsSource = `service HanaCli { ${cdsSource} } `;
       let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
         service: 'HanaCli',
