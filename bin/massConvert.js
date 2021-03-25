@@ -96,7 +96,11 @@ exports.handler = function (argv) {
             },
             filename: {
                 description: bundle.getText("filename"),
-                type: 'string'
+                type: 'string',
+                required: true,
+                ask: () => {
+                    return false
+                }
             },
             output: {
                 description: bundle.getText("outputType"),
