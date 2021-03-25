@@ -234,6 +234,10 @@ async function getFunctionPramCols(db, funcOid) {
 }
 module.exports.getFunctionPramCols = getFunctionPramCols;
 
+let useHanaTypes = false;
+
+module.exports.options = { set useHanaTypes(use) {useHanaTypes = use} }
+
 async function formatCDS(object, fields, constraints, type, parent) {
 	let cdstable = "";
 	cdstable += "@cds.persistence.exists \n";
@@ -276,9 +280,10 @@ async function formatCDS(object, fields, constraints, type, parent) {
 			case "NVARCHAR":
 				cdstable += `String(${field.LENGTH})`;
 				break;
-			case "VARCHAR":
-				cdstable += `String(${field.LENGTH})`;
-				break;
+			// belongs to HANA
+			// case "VARCHAR":
+			// 	cdstable += `String(${field.LENGTH})`;
+			// 	break;
 			case "NCLOB":
 				cdstable += "LargeString";
 				break;
@@ -293,9 +298,9 @@ async function formatCDS(object, fields, constraints, type, parent) {
 				break;
 			case "BIGINT":
 				cdstable += "Integer64";
-				break;
+				break;		
 			case "DECIMAL":
-				cdstable += `Decimal(${field.LENGTH}, ${field.SCALE})`;
+				cdstable += field.SCALE ? `Decimal(${field.LENGTH}, ${field.SCALE})` : `Decimal(${field.LENGTH})` ;
 				break;
 			case "DOUBLE":
 				cdstable += "Double";
@@ -319,7 +324,38 @@ async function formatCDS(object, fields, constraints, type, parent) {
 			case "BOOLEAN":
 				cdstable += "Boolean";
 				break;
+			// hana types
+			case "SMALLINT" :
+			case "TINYINT" :
+			case "SMALLDECIMAL" :
+			case "REAL":
+			case "CLOB" :		
+				if (useHanaTypes) {
+					cdstable += `hana.${field.DATA_TYPE_NAME}`;
+					break;
+				}
+			// eslint-disable-next-line no-fallthrough
+			case "CHAR":
+			case "NCHAR":			
+			case "BINARY":
+				if (useHanaTypes) {
+					cdstable += `hana.${field.DATA_TYPE_NAME}(${field.LENGTH})`;
+					break;
+				}
+			
+			// eslint-disable-next-line no-fallthrough			
+			case "VARCHAR":
+				if (useHanaTypes) {
+					cdstable += `hana.${field.DATA_TYPE_NAME}(${field.LENGTH})`;					
+				} else {
+					// backward compatible change
+					cdstable += `String(${field.LENGTH})`;					
+				}
+				break;			
 			default:
+				// still to do				
+				// hana.ST_POINT	( srid ) (1)	ST_POINT	Edm.GeometryPoint
+				// hana.ST_GEOMETRY	( srid ) (1)	ST_GEOMETRY	Edm.Geometry
 				cdstable += `**UNSUPPORTED TYPE - ${field.DATA_TYPE_NAME}`;
 		}
 		xref.dataType = field.DATA_TYPE_NAME
@@ -350,3 +386,4 @@ async function formatCDS(object, fields, constraints, type, parent) {
 	return cdstable;
 }
 module.exports.formatCDS = formatCDS;
+
