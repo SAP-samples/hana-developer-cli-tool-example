@@ -4,10 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.202103.1
+
+### Added
+- New commands: changes & readme - output the CHANGELOG.md and README.md to the CLI
+- Issue [#25](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/25) - Add filename option to massConvertion Operation - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
+  
+### Changed
+- Updated several dependent modules including hana-client
+- Put hana-cli on a diet and removed some old module dependencies no longer used. Especially the openAPI related ones which had functionality now offered by CAP directly
+- help command now lists all commands in alphabetical order
+
 ## 1.202102.4
 
 ### Added
-- HANA 1.0 Support - Issue #22 https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/22
+- HANA 1.0 Support - Issue [#22](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/22)
   
 ## 1.202102.3
 
