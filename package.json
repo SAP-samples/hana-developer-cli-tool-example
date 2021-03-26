@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "1.202103.2",
+  "version": "1.202103.3",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -44,7 +44,9 @@
     "latest-version": "^5.1",
     "marked": "^2.0.1",
     "marked-terminal": "^4.1.1",
-    "terminaltools": "^2.0.0"
+    "terminaltools": "^2.0.0",
+    "easy-table": "1.1.1",
+    "node-xlsx": "^0.16.1"
   },
   "author": "SAP",
   "license": "SEE LICENSE IN LICENSE",
@@ -53,6 +55,6 @@
   },
   "homepage": "https://github.com/SAP-samples/hana-developer-cli-tool-example#readme",
   "devDependencies": {
-    "eslint": "^7.18"
+    "eslint": "^7.22"
   }
 }

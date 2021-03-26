@@ -1043,13 +1043,17 @@ Options:
 
 ```shell
 hana-cli querySimple
-[aliases: qs, querysimple]
+
 Execute single SQL command and output results
 
 Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-  --query, -q, --Query  SQL Statement                                   [string]
+  -q, --query, --Query        SQL Statement                             [string]
+  -f, --folder, --Folder      DB Module Folder Name     [string] [default: "./"]
+  -n, --filename, --Filename  File name                                 [string]
+  -o, --output, --Output      Output Type for Query Results
+                 [string] [choices: "table", "json", "excel"] [default: "table"]
 ```
 
 ![querySimple example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/querySimple.gif)
