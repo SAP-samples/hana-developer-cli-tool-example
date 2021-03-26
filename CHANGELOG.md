@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Added
 - querySimple now allows output to a file and supports table, json, and Excel output formats Issue [#30](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/30)
 
+### Changed
+- README.md was reorganized to list all commands alphabetical Issue [#31](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/31)
+
 
 ## 1.202103.2
 
