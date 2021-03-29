@@ -1,7 +1,7 @@
 const bundle = global.__bundle;
 
-exports.command = 'readme';
-exports.describe = bundle.getText("readme");
+exports.command = 'readMe';
+exports.describe = bundle.getText("readMe");
 
 exports.builder = {
 }

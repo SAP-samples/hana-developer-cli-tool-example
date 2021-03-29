@@ -156,88 +156,18 @@ This tool will even create a temporary OData V4 service for any existing table, 
 
 ## Commands
 
-### version
-
-```shell
-hana-cli version
-[aliases: ver]
-Version details
-```
-
-![version example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/version.gif)
-
-### help
-
-```shell
-hana-cli help
-List all Commands and their Aliases
-```
-
-### connect
-
-```shell
-hana-cli connect [user] [password]
-[aliases: c, login]
-Connects to a HANA DB and writes connection information to a default-env-admin.json
-
-Options:
-  --connection, -n                    Connection String  <host>[:<port>]
-  --user, -u, --User                  User
-  --password, -p, --Password          Password
-  --userstorekey, -U, --UserStoreKey  Optional: HDB User Store Key - Overrides
-                                      all other Connection Parameters
-  --save, -s, --Save                  Save Credentials to default-env-admin.json
-                                                       [boolean] [default: true]
-  --encrypt, -e, --Encrypt, --ssl           Encrypt connections (required for
-                                            HANA As A Service)
-                                                      [boolean] [default: false]
-  --trustStore, -t, --Trust, --trust,       SSL Trust Store
-  --truststore                                                       
-```
-
-![connect example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/connect.gif)
-
-### status
-
-```shell
-hana-cli status
-[aliases: s, whoami]
-Get Connection Status
-
-Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-```
-
-![status example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/status.gif)
-
-### hdbsql
-
-```shell
-hana-cli hdbsql
-
-Launch the hdbsql tool (if installed separately) using the locally persisted
-credentials default-env*.json
-
-Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-```
-
-![hdbsql example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hdbsql.gif)
-
 ### activateHDI
 
 ```shell
 hana-cli activateHDI [tenant]
 [aliases: ahdi, ah]
-Activate the HDI service in a particluar HANA Tenant (Must be ran in the
+Activate the HDI service in a particluar SAP HANA Tenant (Must be ran in the
 SYSTEMDB)
 
 Options:
-  --admin, -a, --Admin    Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin    Connect via admin (default-env-admin.json)
                                                        [boolean] [default: true]
-  --tenant, -t, --Tenant  HANA Tenant                                   [string]
+  -t, --tenant, --Tenant  SAP HANA Tenant                               [string]
 ```
 
 ### adminHDI
@@ -248,10 +178,10 @@ hana-cli adminHDI [user] [password]
 Create an Admin User for HDI
 
 Options:
-  --admin, -a, --Admin        Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
                                                        [boolean] [default: true]
-  --user, -u, --User          User
-  --password, -p, --Password  Password
+  -u, --user, --User          User
+  -p, --password, --Password  Password
 ```
 
 ![adminHDI example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/adminHDI.gif)
@@ -264,336 +194,13 @@ hana-cli adminHDIGroup [user] [group]
 Add a User as an HDI Group Admin
 
 Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                        [boolean] [default: true]
-  --user, -u, --User    User
-  --group, -g, --Group  HDI Group       [string] [default: "SYS_XS_HANA_BROKER"]
+  -u, --user, --User    User
+  -g, --group, --Group  HDI Group       [string] [default: "SYS_XS_HANA_BROKER"]
 ```
 
 ![adminHDIGroup example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/adminHDIGroup.gif)
-
-### createXSAAdmin
-
-```shell
-hana-cli createXSAAdmin [user] [password]
-[aliases: cXSAAdmin, cXSAA, cxsaadmin, cxsaa]
-Create a HANA DB User which is also an XSA Admin
-
-Options:
-  --admin, -a, --Admin        Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
-  --user, -u, --User          User
-  --password, -p, --Password  Password
-```
-
-![createXSAAdmin example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/createXSAAdmin.gif)
-
-### createContainer
-
-```shell
-hana-cli createContainer [container]
-[aliases: cc, cCont]
-Create an HDI Container and populate connection details into default-env.json
-
-Options:
-  --admin, -a, --Admin          Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
-  --container, -c, --Container  HDI Container Name                      [string]
-  --save, -s, --Save            Save Credentials to default-env.json
-                                                       [boolean] [default: true]
-```
-
-![createContainer example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/createContainer.gif)
-
-### createContainerUsers
-
-```shell
-hana-cli createContainerUsers [container]
-
-Create new HDI Container technical users for an existing container and populates connection details into
-default-env.json
-
-Options:
-  --admin, -a, --Admin             Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
-  --container, -c, --Container     HDI Container Name                   [string]
-  --save, -s, --Save               Save Credentials to default-env.json
-                                                       [boolean] [default: true]
-  --encrypt, -e, --Encrypt, --ssl  Encrypt connections (required for HANA As A
-                                   Service or HANA Cloud)
-                                                      [boolean] [default: false]
-```
-
-### containers
-
-```shell
-hana-cli containers [containerGroup] [container]
-
-List all HDI Containers
-
-Options:
-  --admin, -a, --Admin                      Connect via admin
-                                            (default-env-admin.json)
-                                                       [boolean] [default: true]
-  --container, -c, --Container              Container Name
-                                                         [string] [default: "*"]
-  --containerGroup, -g, --Group, --group,   Container Group
-  --containergroup                                       [string] [default: "*"]
-  --limit, -l                               Limit results[number] [default: 200]
-```
-
-### dropContainer
-
-```shell
-hana-cli dropContainer [container]
-[aliases: dc, dropC]
-Drop HDI container and clean up HDI Container users
-
-Options:
-  --admin, -a, --Admin          Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
-  --container, -c, --Container  HDI Container Name                      [string]
-```
-
-![dropContainer example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/dropContainer.gif)
-
-### createModule
-
-```shell
-hana-cli createModule
-
-Create or adjust DB Module in your local project structure. If the folder already exists the files .build.js and package.json will be replaced with updated content designed to allow for local hdi-deploy run.
-
-Options:
-  --folder, -f, --Folder  DB Module Folder Name         [string] [default: "db"]
-```
-
-### reclaim
-
-```shell
-hana-cli reclaim
-[aliases: re]
-Reclaim LOB, Log, and Data Volume space
-
-Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
-```
-
-![reclaim example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/reclaim.gif)
-
-### massUsers
-
-```shell
-hana-cli massUsers [user] [password]
-[aliases: massUser, mUsers, mUser, mu]
-Mass Create 50 Developer Users (for workshops)
-
-Options:
-  --admin, -a, --Admin        Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
-  --user, -u, --User          User
-  --password, -p, --Password  Password
-```
-
-![massUsers example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/massUsers.gif)
-
-### inspectTable
-
-```shell
-hana-cli inspectTable [schema] [table]
-[aliases: it, table, insTbl, inspecttable, inspectable]
-Return metadata about a DB table
-
-Options:
-  --admin, -a, --Admin    Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --table, -t, --Table    Database Table                                [string]
-  --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
-  --output, -o, --Output  Output Format for inspection
-   [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "edm", "edmx",
-                                             "swgr", "openapi"] [default: "tbl"]
-```
-
-![inspectTable example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectTable.gif)
-
-### inspectView
-
-```shell
-hana-cli inspectView [schema] [view]
-[aliases: iv, view, insVew, inspectview]
-Return metadata about a DB view
-
-Options:
-  --admin, -a, --Admin    Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --view, -v, --View      Database View                                 [string]
-  --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
-  --output, -o, --Output  Output Format for inspection
-   [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "edm", "edmx",
-                                             "swgr", "openapi"] [default: "tbl"]
-```
-
-![inspectView example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectView.gif)
-
-### inspectJWT
-
-```shell
-hana-cli inspectJWT
-
-Inspect JWT Token Configuration
-
-Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-```
-
-### createJWT
-
-```shell
-hana-cli createJWT [name]
-
-Create JWT Token and Import Certificate (To obtain the certificate and issuer
-used in the SQL you need to use the xsuaa service key credentials.url element
-which should look like this:
-https://<subdomain>.authentication.<region>.hana.ondemand.com then add
-/sap/trust/jwt path to it in a browser)
-
-Options:
-  --admin, -a, --Admin              Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
-  --name, -c, --Name                JWT Provider Name (Any descriptive Value)
-                                                                        [string]
-  --certificate, -c, --Certificate  certificate                         [string]
-  --issuer, -i, --Issuer            Certificate Issuer [boolean] [default: true]
-```
-
-### systemInfo
-
-```shell
-hana-cli systemInfo
-[aliases: sys, sysinfo, sysInfo, systeminfo]
-General System Details
-
-Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-```
-
-![systemInfo example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/systemInfo.gif)
-
-### ports
-
-```shell
-hana-cli ports
-
-Display port assignments for internal HANA services
-```
-
-### schemas
-
-```shell
-hana-cli schemas [schema]
-[aliases: sch, getSchemas, listSchemas]
-Get a list of all schemas
-
-Options:
-  --admin, -a, --Admin       Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --schema, -s, --schemas    schema                      [string] [default: "*"]
-  --limit, -l                Limit results               [number] [default: 200]
-  --all, --al, --allSchemas  allSchemas               [boolean] [default: false]
-```
-
-![schemas example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/schemas.gif)
-
-### tables
-
-```shell
-hana-cli tables [schema] [table]
-[aliases: t, listTables, listtables]
-Get a list of all tables
-
-Options:
-  --admin, -a, --Admin    Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --table, -t, --Table    Database Table                 [string] [default: "*"]
-  --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
-  --limit, -l             Limit results                  [number] [default: 200]
-```
-
-![tables example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/tables.gif)
-  
-### views
-
-```shell
-hana-cli views [schema] [view]
-[aliases: v, listViews, listviews]
-Get a list of all views
-
-Options:
-  --admin, -a, --Admin    Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --view, -v, --View      Database View                  [string] [default: "*"]
-  --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
-  --limit, -l             Limit results                  [number] [default: 200]
-```
-
-![views example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/views.gif)
-
-### objects
-
-```shell
-hana-cli objects [schema] [object]
-[aliases: o, listObjects, listobjects]
-Search across all object types
-
-Options:
-  --admin, -a, --Admin    Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --object, -o, --Object  DB Object                      [string] [default: "*"]
-  --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
-  --limit, -l             Limit results                  [number] [default: 200]
-```
-
-![objects example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/objects.gif)
-
-### procedures
-
-```shell
-hana-cli procedures [schema] [procedure]
-[aliases: p, listProcs, ListProc, listprocs, Listproc, listProcedures,
-                                                                 listprocedures]
-Get a list of all stored procedures
-
-Options:
-  --admin, -a, --Admin          Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --procedure, -p, --Procedure  Stored Procedure         [string] [default: "*"]
-  --schema, -s, --Schema        schema  [string] [default: "**CURRENT_SCHEMA**"]
-  --limit, -l                   Limit results            [number] [default: 200]
-```
-
-![procedures example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/procedures.gif)
-
-### inspectProcedure
-
-```shell
-hana-cli inspectProcedure [schema] [procedure]
- [aliases: ip, procedure, insProc, inspectprocedure, inspectsp]
-Return metadata about a Stored Procedure
-
-Options:
-  --admin, -a, --Admin                Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --procedure, -p, --Procedure, --sp  Stored Procedure                  [string]
-  --schema, -s, --Schema              schema
-                                        [string] [default: "**CURRENT_SCHEMA**"]
-  --output, -o, --Output              Output Format for inspection
-                               [string] [choices: "tbl", "sql"] [default: "tbl"]
-```
-
-![inspectProcedure example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectProcedure.gif)
 
 ### callProcedure
 
@@ -603,210 +210,14 @@ hana-cli callProcedure [schema] [procedure]
 Call a stored procedure and display the results
 
 Options:
-  --admin, -a, --Admin                Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin                Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-  --procedure, -p, --Procedure, --sp  Stored Procedure                  [string]
-  --schema, -s, --Schema              schema
+  -p, --procedure, --Procedure, --sp  Stored Procedure                  [string]
+  -s, --schema, --Schema              schema
                                         [string] [default: "**CURRENT_SCHEMA**"]
 ```
 
 ![callProcedure example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/callProcedure.gif)
-
-### functions
-
-```shell
-hana-cli functions [schema] [function]
-[aliases: f, listFuncs, ListFunc, listfuncs, Listfunc, listFunctions,
-                                                                  listfunctions]
-Get a list of all functions
-
-Options:
-  --admin, -a, --Admin        Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --function, -f, --Function  Function                   [string] [default: "*"]
-  --schema, -s, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
-  --limit, -l                 Limit results              [number] [default: 200]
-```
-
-![functions example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/functions.gif)
-
-### inspectFunction
-
-```shell
-hana-cli inspectFunction [schema] [function]
-[aliases: if, function, insFunc, inspectfunction]
-Return metadata about a Function
-
-Options:
-  --admin, -a, --Admin        Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --function, -f, --Function  Function                                  [string]
-  --schema, -s, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
-  --output, -o, --Output      Output Format for inspection
-                               [string] [choices: "tbl", "sql"] [default: "tbl"]
-```
-
-![inspectFunction example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectFunction.gif)
-
-### libraries
-
-```shell
-hana-cli libraries [schema] [library]
-[aliases: l, listLibs, ListLibs, listlibs, ListLib, listLibraries,
-                                                                  listlibraries]
-Get a list of all libraries
-
-Options:
-  --admin, -a, --Admin         Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --library, --lib, --Library  Library                   [string] [default: "*"]
-  --schema, -s, --Schema       schema   [string] [default: "**CURRENT_SCHEMA**"]
-  --limit, -l                  Limit results             [number] [default: 200]
-```
-
-![libraries example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/libraries.gif)
-
-### inspectLibrary
-
-```shell
-hana-cli inspectLibrary [schema] [library]
-[aliases: il, library, insLib, inspectlibrary]
-Return metadata about a Library
-
-Options:
-  --admin, -a, --Admin         Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --library, --lib, --Library  Library                                  [string]
-  --schema, -s, --Schema       schema   [string] [default: "**CURRENT_SCHEMA**"]
-  --output, -o, --Output       Output Format for inspection
-                               [string] [choices: "tbl", "sql"] [default: "tbl"]
-```
-
-![inspectLibrary example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectLibrary.gif)
-
-### inspectLibMember
-
-```shell
-hana-cli inspectLibMember [schema] [library] [libraryMem]
-[aliases: ilm, libraryMember, librarymember, insLibMem, inspectlibrarymember]
-Return metata about a Library Member
-
-Options:
-  --admin, -a, --Admin                      Connect via admin
-                                            (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --library, --lib, --Library               Library                     [string]
-  --libraryMem, -m, --libMem,               Library Member
-  --LibraryMember                                                       [string]
-  --schema, -s, --Schema                    schema
-                                        [string] [default: "**CURRENT_SCHEMA**"]
-  --output, -o, --Output                    Output Format for inspection
-                               [string] [choices: "tbl", "sql"] [default: "tbl"]
-```
-
-![inspectLibMember example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectLibMember.gif)
-
-### triggers
-
-```shell
-hana-cli triggers [schema] [trigger] [target]
-[aliases: trig, listTriggers, ListTrigs, listtrigs, Listtrig, listrig]
-List of all triggers
-
-Options:
-  --admin, -a, --Admin      Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --trigger, -t, --Trigger  Sequence                     [string] [default: "*"]
-  --target, --to, --Target  Target object                [string] [default: "*"]
-  --schema, -s, --Schema    schema      [string] [default: "**CURRENT_SCHEMA**"]
-  --limit, -l               Limit results                [number] [default: 200]
-```
-
-![triggers example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/triggers.gif)
-
-### inspectTrigger
-
-```shell
-hana-cli inspectTrigger [schema] [trigger]
-[aliases: itrig, trigger, insTrig, inspecttrigger, inspectrigger]
-inspectTrigger
-
-Options:
-  --admin, -a, --Admin      Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --trigger, -t, --Trigger  Sequence                     [string] [default: "*"]
-  --schema, -s, --Schema    schema      [string] [default: "**CURRENT_SCHEMA**"]
-  --output, -o, --Output    Output Format for inspection
-                               [string] [choices: "tbl", "sql"] [default: "tbl"]
-```
-
-### indexes
-
-```shell
-hana-cli indexes [schema] [indexes]
-[aliases: ind, listIndexes, ListInd, listind, Listind, listfindexes]
-Get a list of indexes
-
-Options:
-  --admin, -a, --Admin      Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --indexes, -i, --Indexes  Function                     [string] [default: "*"]
-  --schema, -s, --Schema    schema      [string] [default: "**CURRENT_SCHEMA**"]
-  --limit, -l               Limit results                [number] [default: 200]
-```
-
-![indexes example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/indexes.gif)
-
-### inspectIndex
-
-```shell
-hana-cli inspectIndex [schema] [index]
-[aliases: ii, index, insIndex, inspectindex]
-Return metadata about an Index
-
-Options:
-  --admin, -a, --Admin    Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --index, -i, --Index    DB Table Index                                [string]
-  --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
-```
-
-![inspectIndex example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectIndex.gif)
-
-### synonyms
-
-```shell
-hana-cli synonyms [schema] [synonym] [target]
-[aliases: syn, listSynonyms, listsynonyms]
-List of all synonyms
-
-Options:
-  --admin, -a, --Admin         Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --synonym, --syn, --Synonym  Database Synonym          [string] [default: "*"]
-  --target, -t, --Target       Target object of the Synonym
-                                                         [string] [default: "*"]
-  --schema, -s, --Schema       schema   [string] [default: "**CURRENT_SCHEMA**"]
-  --limit, -l                  Limit results             [number] [default: 200]
-```
-
-![synonyms example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/synonyms.gif)
-
-### privilegeError
-
-```shell
-hana-cli privilegeError [guid]
-[aliases: pe, privilegeerror, privilegerror,
-                                          getInsuffficientPrivilegeErrorDetails]
-Get Insufficient Privilege Error Details
-
-Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --guid, -g, --error   GUID from original error message                [string]
-```
-
-![privilegeError example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/privilegeError.gif)
 
 ### certificates
 
@@ -816,11 +227,209 @@ hana-cli certificates
 List System Certificates
 
 Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
 
 ![certificates example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/certificates.gif)
+
+### cds
+
+```shell
+hana-cli cds [schema] [table]
+[aliases: cdsPreview]
+Display a DB object via CDS
+
+Options:
+  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -t, --table, --Table        Database Table                            [string]
+  -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
+  -v, --view, --View          CDS processing for View instead of Table
+                                                      [boolean] [default: false]
+      --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
+                              cloud.sap/docs/cds/cdl#predefined-types)
+                                                      [boolean] [default: false]
+```
+
+### changelog
+
+```shell
+hana-cli changelog
+[aliases: chg]
+Open Change Log in browser
+```
+
+### changes
+
+```shell
+hana-cli changes
+[aliases: chg]
+Display Change Log in CLI
+```
+
+### completion
+
+```shell
+hana-cli completion
+generate completion script for bash shell
+```
+
+### connect
+
+```shell
+hana-cli connect [user] [password]
+[aliases: c, login]
+Connects to an SAP HANA DB and writes connection information to a
+default-env-admin.json
+
+Options:
+  -n, --connection                          Connection String  <host>[:<port>]
+  -u, --user, --User                        User
+  -p, --password, --Password                Password
+  -U, --userstorekey, --UserStoreKey        Optional: HDB User Store Key -
+                                            Overrides all other Connection
+                                            Parameters
+  -s, --save, --Save                        Save Credentials to
+                                            default-env-admin.json
+                                                       [boolean] [default: true]
+  -e, --encrypt, --Encrypt, --ssl           Encrypt connections (required for
+                                            SAP HANA service for SAP BTP or SAP
+                                            HANA Cloud)
+                                                      [boolean] [default: false]
+  -t, --trustStore, --Trust, --trust,       SSL Trust Store
+  --truststore                                                     
+```
+
+![connect example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/connect.gif)
+
+### containers
+
+```shell
+hana-cli containers [containerGroup] [container]
+[aliases: cont, listContainers, listcontainers]
+List all HDI Containers
+
+Options:
+  -a, --admin, --Admin                      Connect via admin
+                                            (default-env-admin.json)
+                                                       [boolean] [default: true]
+  -c, --container, --Container              Container Name
+                                                         [string] [default: "*"]
+  -g, --containerGroup, --Group, --group,   Container Group
+  --containergroup                                       [string] [default: "*"]
+  -l, --limit                               Limit results[number] [default: 200]
+```
+
+### copy2DefaultEnv
+
+```shell
+hana-cli copy2DefaultEnv
+[aliases: copyDefaultEnv, copyDefault-Env, copy2defaultenv, copydefaultenv,
+                                                                copydefault-env]
+Copy .env contents to default-env.json and reformat
+```
+
+### copy2Env
+
+```shell
+hana-cli copy2Env
+[aliases: copyEnv, copyenv, copy2env]
+Copy default-env.json contents to .env and reformat
+
+Options:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+```
+
+### createContainer
+
+```shell
+hana-cli createContainer [container]
+[aliases: cc, cCont]
+Create an HDI Container and populate connection details into default-env.json
+
+Options:
+  -a, --admin, --Admin             Connect via admin (default-env-admin.json)
+                                                       [boolean] [default: true]
+  -c, --container, --Container     Container Name                       [string]
+  -s, --save, --Save               Save Credentials to default-env.json
+                                                       [boolean] [default: true]
+  -e, --encrypt, --Encrypt, --ssl  Encrypt connections (required for SAP HANA
+                                   service for SAP BTP or SAP HANA Cloud)
+                                                      [boolean] [default: false]
+```
+
+![createContainer example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/createContainer.gif)
+
+### createContainerUsers
+
+```shell
+hana-cli createContainerUsers [container]
+[aliases: ccu, cContU]
+Create new HDI Container technical users for an existing container and populates
+connection details into default-env.json
+
+Options:
+  -a, --admin, --Admin             Connect via admin (default-env-admin.json)
+                                                       [boolean] [default: true]
+  -c, --container, --Container     Container Name                       [string]
+  -s, --save, --Save               Save Credentials to default-env.json
+                                                       [boolean] [default: true]
+  -e, --encrypt, --Encrypt, --ssl  Encrypt connections (required for SAP HANA
+                                   service for SAP BTP or SAP HANA Cloud)
+                                                      [boolean] [default: false]
+```
+
+### createJWT
+
+```shell
+hana-cli createJWT [name]
+[aliases: cJWT, cjwt, cJwt]
+Create JWT Token and Import Certificate (To obtain the certificate and issuer
+used in the SQL you need to use the xsuaa service key credentials.url element
+which should look like this:
+https://<subdomain>.authentication.<region>.hana.ondemand.com then add
+/sap/trust/jwt path to it in a browser)
+
+Options:
+  -a, --admin, --Admin              Connect via admin (default-env-admin.json)
+                                                       [boolean] [default: true]
+  -c, --name, --Name                JWT Provider Name (Any descriptive Value)
+                                                                        [string]
+  -c, --certificate, --Certificate  certificate                         [string]
+  -i, --issuer, --Issuer            Certificate Issuer                  [string]
+```
+
+### createModule
+
+```shell
+hana-cli createModule
+[aliases: createDB, createDBModule]
+Create DB Module
+
+Options:
+  -f, --folder, --Folder                    DB Module Folder Name
+                                                        [string] [default: "db"]
+      --hanaCloud, --hc, --hana-cloud,      Build Module for SAP HANA Cloud?
+      --hanacloud                                      [boolean] [default: true]
+```
+
+### createXSAAdmin
+
+```shell
+hana-cli createXSAAdmin [user] [password]
+[aliases: cXSAAdmin, cXSAA, cxsaadmin, cxsaa]
+Create an SAP HANA DB User which is also an XSA Admin
+
+Options:
+  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
+                                                       [boolean] [default: true]
+  -u, --user, --User          User
+  -p, --password, --Password  Password
+```
+
+![createXSAAdmin example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/createXSAAdmin.gif)
 
 ### dataTypes
 
@@ -830,42 +439,11 @@ hana-cli dataTypes
 List of HANA Data Types and their technical details
 
 Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
 
 ![dataTypes example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/dataTypes.gif)
-
-### users
-
-```shell
-hana-cli users [user]
-[aliases: u, listUsers, listusers]
-Get a list of all users
-
-Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --user, -u, --User    User                             [string] [default: "*"]
-  --limit, -l           Limit results                    [number] [default: 200]
-```
-
-![users example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/users.gif)
-
-### inspectUser
-
-```shell
-hana-cli inspectUser [user]
-[aliases: iu, user, insUser, inspectuser]
-Return metadata about a User
-
-Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --user, -u, --User    User                                            [string]
-```
-
-![inspectUser example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectUser.gif)
 
 ### dataVolumes
 
@@ -875,7 +453,7 @@ hana-cli dataVolumes
 Details about the HANA Data Volumes
 
 Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
 
@@ -889,21 +467,36 @@ hana-cli disks
 Details about disk devices used by HANA
 
 Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
 
 ![disks example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/disks.gif)
+
+### dropContainer
+
+```shell
+hana-cli dropContainer [container]
+[aliases: dc, dropC]
+Drop HDI container and clean up HDI Container users
+
+Options:
+  -a, --admin, --Admin          Connect via admin (default-env-admin.json)
+                                                       [boolean] [default: true]
+  -c, --container, --Container  Container Name                          [string]
+```
+
+![dropContainer example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/dropContainer.gif)
 
 ### features
 
 ```shell
 hana-cli features
 [aliases: fe, Features]
-HANA Features and Version
+SAP HANA Features and Version
 
 Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
 
@@ -917,11 +510,92 @@ hana-cli featureUsage
 Usage Statistics by Feature
 
 Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
 
 ![featureUsage example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/featureUsage.gif)
+
+### functions
+
+```shell
+hana-cli functions [schema] [function]
+[aliases: f, listFuncs, ListFunc, listfuncs, Listfunc, listFunctions,
+                                                                  listfunctions]
+Get a list of all functions
+
+Options:
+  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -f, --function, --Function  Function                   [string] [default: "*"]
+  -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit                 Limit results              [number] [default: 200]
+```
+
+![functions example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/functions.gif)
+
+### hdi
+
+```shell
+hana-cli hdi
+[aliases: hdiInstances, hdiinstances, hdiServices, listhdi, hdiservices, hdis]
+List all SAP HANA Cloud HDI service instances in your target Space
+```
+
+### hc
+
+```shell
+hana-cli hc [name]
+[aliases: hcInstances, instances, listHC, listhc, hcinstances]
+List all SAP HANA Cloud instances in your target Space
+
+Options:
+  -n, --name  SAP HANA Cloud Instance name     [string] [default: "**default**"]
+```
+
+### hcStart
+
+```shell
+hana-cli hcStart [name]
+[aliases: hcstart, hc_start, start]
+Start SAP HANA Cloud instance
+
+Options:
+  -n, --name  SAP HANA Cloud Instance name     [string] [default: "**default**"]
+```
+
+### hcStop
+
+```shell
+hana-cli hcStop [name]
+[aliases: hcstop, hc_stop, stop]
+Stop SAP HANA Cloud instance
+
+Options:
+  -n, --name  SAP HANA Cloud Instance name     [string] [default: "**default**"]
+```
+
+### hdbsql
+
+```shell
+hana-cli hdbsql
+
+Launch the hdbsql tool (if installed separately) using the locally persisted
+credentials default-env*.json
+
+Options:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+```
+
+![hdbsql example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hdbsql.gif)
+
+### help
+
+```shell
+hana-cli help
+List all Commands and their Aliases
+```
 
 ### hostInformation
 
@@ -931,25 +605,28 @@ hana-cli hostInformation
 Host technical details
 
 Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
 
 ![hostInformation example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hostInformation.gif)
 
-### iniFiles
+### indexes
 
 ```shell
-hana-cli iniFiles
-[aliases: if, inifiles, ini]
-iniFiles
+hana-cli indexes [schema] [indexes]
+[aliases: ind, listIndexes, ListInd, listind, Listind, listfindexes]
+Get a list of indexes
 
 Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin      Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+  -i, --indexes, --Indexes  Function                     [string] [default: "*"]
+  -s, --schema, --Schema    schema      [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit               Limit results                [number] [default: 200]
 ```
 
-![iniFiles example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/iniFiles.gif)
+![indexes example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/indexes.gif)
 
 ### iniContents
 
@@ -959,116 +636,234 @@ hana-cli iniContents [file] [section]
 Contents of INI Configuration (filtered by File Name)
 
 Options:
-  --admin, -a, --Admin      Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin      Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-  --file, -f, --File        File Name                    [string] [default: "*"]
-  --section, -s, --Section  Section                      [string] [default: "*"]
-  --limit, -l               Limit results                [number] [default: 200]
+  -f, --file, --File        File Name                    [string] [default: "*"]
+  -s, --section, --Section  Section                      [string] [default: "*"]
+  -l, --limit               Limit results                [number] [default: 200]
 ```
 
 ![iniContents example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/iniContents.gif)
 
-### sequences
+### iniFiles
 
 ```shell
-hana-cli sequences [schema] [sequence]
-[aliases: seq, listSeqs, ListSeqs, listseqs, Listseq, listSequences]
-Get a list of all squences
+hana-cli iniFiles
+[aliases: if, inifiles, ini]
+List of INI Configuration Files for SAP HANA
 
 Options:
-  --admin, -a, --Admin           Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --sequence, --seq, --Sequence  Sequence                [string] [default: "*"]
-  --schema, -s, --Schema         schema [string] [default: "**CURRENT_SCHEMA**"]
-  --limit, -l                    Limit results           [number] [default: 200]
-```
-
-![sequences example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/sequences.gif)
-
-### traces
-
-```shell
-hana-cli traces
-[aliases: tf, Traces]
-List all trace files
-
-Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
 
-![traces example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/traces.gif)
+![iniFiles example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/iniFiles.gif)
 
-### traceContents
-
-```shell
-hana-cli traceContents [host] [file]
-
-Contents of a selected trace file - Reading from the end of the file backwards
-
-Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-  --host, --ho, --Host  Hostname                                        [string]
-  --file, -f, --File    File Name                                       [string]
-  --limit, -l           Limit results                   [number] [default: 2000]
-```
-
-![traceContents example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/traceContents.gif)
-
-### roles
+### inspectFunction
 
 ```shell
-hana-cli roles [schema] [role]
-[aliases: tc, traceContents, traceContent, tracecontent]
-Get a list of roles
+hana-cli inspectFunction [schema] [function]
+[aliases: if, function, insFunc, inspectfunction]
+Return metadata about a Function
 
 Options:
-  --admin, -a, --Admin    Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-  --role, -r, --Role      Database Role                  [string] [default: "*"]
-  --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
-  --limit, -l             Limit results                  [number] [default: 200]
+  -f, --function, --Function  Function                                  [string]
+  -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
+  -o, --output, --Output      Output Format for inspection
+                               [string] [choices: "tbl", "sql"] [default: "tbl"]
 ```
 
-![roles example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/roles.gif)
+![inspectFunction example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectFunction.gif)
 
-### querySimple
+### inspectIndex
 
 ```shell
-hana-cli querySimple
-[aliases: qs, querysimple]
-Execute single SQL command and output results
+hana-cli inspectIndex [schema] [index]
+[aliases: ii, index, insIndex, inspectindex]
+Return metadata about an Index
 
 Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin    Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-  --query, -q, --Query  SQL Statement                                   [string]
+  -i, --index, --Index    DB Table Index                                [string]
+  -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
 ```
 
-![querySimple example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/querySimple.gif)
+![inspectIndex example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectIndex.gif)
 
-### cds
+### inspectJWT
 
 ```shell
-hana-cli cds [schema] [table]
-[aliases: cdsPreview]
-Display a DB object via CDS
+hana-cli inspectJWT
+[aliases: jwt, ijwt, iJWT, iJwt]
+Inspect JWT Token Configuration
 
 Options:
-  --admin, -a, --Admin    Connect via admin (default-env-admin.json)
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false
+```
+
+### inspectLibMember
+
+```shell
+hana-cli inspectLibMember [schema] [library] [libraryMem]
+[aliases: ilm, libraryMember, librarymember, insLibMem, inspectlibrarymember]
+Return metata about a Library Member
+
+Options:
+  -a, --admin, --Admin                      Connect via admin
+                                            (default-env-admin.json)
                                                       [boolean] [default: false]
-  --table, -t, --Table    Database Table                                [string]
-  --schema, -s, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
-  --view, -v, --View      CDS processing for View instead of Table
+      --library, --lib, --Library           Library                     [string]
+  -m, --libraryMem, --libMem,               Library Member
+  --LibraryMember                                                       [string]
+  -s, --schema, --Schema                    schema
+                                        [string] [default: "**CURRENT_SCHEMA**"]
+  -o, --output, --Output                    Output Format for inspection
+                               [string] [choices: "tbl", "sql"] [default: "tbl"]
+```
+
+![inspectLibMember example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectLibMember.gif)
+
+### inspectLibrary
+
+```shell
+hana-cli inspectLibrary [schema] [library]
+[aliases: il, library, insLib, inspectlibrary]
+Return metadata about a Library
+
+Options:
+  -a, --admin, --Admin             Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --library, --lib, --Library  Library                              [string]
+  -s, --schema, --Schema           schema
+                                        [string] [default: "**CURRENT_SCHEMA**"]
+  -o, --output, --Output           Output Format for inspection
+                               [string] [choices: "tbl", "sql"] [default: "tbl"]
+```
+
+![inspectLibrary example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectLibrary.gif)
+
+### inspectProcedure
+
+```shell
+hana-cli inspectProcedure [schema] [procedure]
+ [aliases: ip, procedure, insProc, inspectprocedure, inspectsp]
+Return metadata about a Stored Procedure
+
+Options:
+  -a, --admin, --Admin                Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -p, --procedure, --Procedure, --sp  Stored Procedure                  [string]
+  -s, --schema, --Schema              schema
+                                        [string] [default: "**CURRENT_SCHEMA**"]
+  -o, --output, --Output              Output Format for inspection
+                               [string] [choices: "tbl", "sql"] [default: "tbl"]
+```
+
+![inspectProcedure example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectProcedure.gif)
+
+### inspectTable
+
+```shell
+hana-cli inspectTable [schema] [table]
+[aliases: it, table, insTbl, inspecttable, inspectable]
+Return metadata about a DB table
+
+Options:
+  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -t, --table, --Table        Database Table                            [string]
+  -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
+  -o, --output, --Output      Output Format for inspection
+  [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "annos", "edm",
+                                     "edmx", "swgr", "openapi"] [default: "tbl"]
+      --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
+                              cloud.sap/docs/cds/cdl#predefined-types)
                                                       [boolean] [default: false]
 ```
+
+![inspectTable example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectTable.gif)
+
+### inspectTrigger
+
+```shell
+hana-cli inspectTrigger [schema] [trigger]
+[aliases: itrig, trigger, insTrig, inspecttrigger, inspectrigger]
+Return metadata about a Trigger
+
+Options:
+  -a, --admin, --Admin      Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -t, --trigger, --Trigger  Sequence                     [string] [default: "*"]
+  -s, --schema, --Schema    schema      [string] [default: "**CURRENT_SCHEMA**"]
+  -o, --output, --Output    Output Format for inspection
+                               [string] [choices: "tbl", "sql"] [default: "tbl"]
+```
+
+### inspectUser
+
+```shell
+hana-cli inspectUser [user]
+[aliases: iu, user, insUser, inspectuser]
+Return metadata about a User
+
+Options:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -u, --user, --User    User                                            [string]
+```
+
+![inspectUser example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectUser.gif)
+
+### inspectView
+
+```shell
+hana-cli inspectView [schema] [view]
+[aliases: iv, view, insVew, inspectview]
+Return metadata about a DB view
+
+Options:
+  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -v, --view, --View          Database View                             [string]
+  -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
+  -o, --output, --Output      Output Format for inspection
+  [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "annos", "edm",
+                                     "edmx", "swgr", "openapi"] [default: "tbl"]
+      --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
+                              cloud.sap/docs/cds/cdl#predefined-types)
+                                                      [boolean] [default: false]
+```
+
+![inspectView example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectView.gif)
+
+### libraries
+
+```shell
+hana-cli libraries [schema] [library]
+[aliases: l, listLibs, ListLibs, listlibs, ListLib, listLibraries,
+                                                                  listlibraries]
+Get a list of all libraries
+
+Options:
+  -a, --admin, --Admin             Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --library, --lib, --Library  Library               [string] [default: "*"]
+  -s, --schema, --Schema           schema
+                                        [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit                      Limit results         [number] [default: 200]
+```
+
+![libraries example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/libraries.gif)
 
 ### massConvert
 
 ```shell
 hana-cli massConvert [schema] [table]
-
+[aliases: mc, massconvert, massConv, massconv]
 Convert a group of tables to CDS or HDBTable format
 
 Options:
@@ -1081,122 +876,404 @@ Options:
   -n, --filename, --Filename  File name                                 [string]
   -o, --output, --Output      Output Format for inspection
                           [string] [choices: "hdbtable", "cds"] [default: "cds"]
+      --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
+                              cloud.sap/docs/cds/cdl#predefined-types)
+                                                      [boolean] [default: false]
 ```
 
-### serviceKey
+### massUsers
 
 ```shell
-hana-cli serviceKey [instance] [key]
-
-Connect and write default-env.json via cf/xs service key
+hana-cli massUsers [user] [password]
+[aliases: massUser, mUsers, mUser, mu]
+Mass Create 50 Developer Users (for workshops)
 
 Options:
-  --instance, -i, --Instance                CF/XS Service Instance Name
-  --encrypt, -e, --Encrypt, --ssl           Encrypt connections (required for
-                                            SAP HANA Cloud and SAP HANA service for SAP BTP)
-                                                      [boolean] [default: true]
-  --validate, -v, --Validate,               Validate Certificate
-  --validateCertificate                               [boolean] [default: false]
-  --cf, --cmd                               Cloud Foundry?
-                                                      [boolean] [default: true]
-  --save, -s, --Save                        Save Credentials to
-                                            default-env.json
+  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
                                                        [boolean] [default: true]
+  -u, --user, --User          User
+  -p, --password, --Password  Password
 ```
+
+![massUsers example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/massUsers.gif)
+
+### matrix
+
+```shell
+hana-cli matrix
+
+Blue or Red Pill?
+```
+
+### objects
+
+```shell
+hana-cli objects [schema] [object]
+[aliases: o, listObjects, listobjects]
+Search across all object types
+
+Options:
+  -a, --admin, --Admin    Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -o, --object, --Object  DB Object                      [string] [default: "*"]
+  -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit             Limit results                  [number] [default: 200]
+```
+
+![objects example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/objects.gif)
 
 ### openDBX
 
 ```shell
 hana-cli opendbx
-
+[aliases: open, openDBX, opendb, openDBExplorer, opendbexplorer]
 Open DB Explorer
-
-Options:
-  --admin, -a, --Admin  Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false]
-```
-
-### readme
-
-```shell
-hana-cli readme
-
-Open Readme Documentation in browser
-```
-
-### changelog
-
-```shell
-hana-cli changelog
-
-Open Change Log in browser
-```
-
-### copy2DefaultEnv
-
-```shell
-hana-cli copy2DefaultEnv                  Copy .env contents to
-                                          default-env.json and reformat
-     [aliases: copyDefaultEnv, copyDefault-Env, copy2defaultenv, copydefaultenv,
-                                                                copydefault-env]
-```
-
-### copy2Env
-
-```shell
-hana-cli copy2Env
-
-Copy default-env.json contents to .env and reformat
 
 Options:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
 ```
 
-### completion
+### ports
 
 ```shell
-hana-cli completion
-generate completion script for bash shell
+hana-cli ports
+
+Display port assignments for internal SAP HANA services
+
+Options:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
 ```
 
-### hc
+### privilegeError
 
 ```shell
-  hana-cli hc [name]                        List all SAP HANA Cloud instances in
-                                            your target Space
-                  [aliases: hcInstances, instances, listHC, listhc, hcinstances]
+hana-cli privilegeError [guid]
+[aliases: pe, privilegeerror, privilegerror,
+                                          getInsuffficientPrivilegeErrorDetails]
+Get Insufficient Privilege Error Details
+
+Options:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -g, --guid, --error   GUID from original error message                [string]
 ```
 
-### hdi
+![privilegeError example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/privilegeError.gif)
+
+### procedures
 
 ```shell
-hana-cli hdi
+hana-cli procedures [schema] [procedure]
+[aliases: p, listProcs, ListProc, listprocs, Listproc, listProcedures,
+                                                                 listprocedures]
+Get a list of all stored procedures
 
-List all SAP HANA Cloud HDI service instances in your target Space
+Options:
+  -a, --admin, --Admin          Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -p, --procedure, --Procedure  Stored Procedure         [string] [default: "*"]
+  -s, --schema, --Schema        schema  [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit                   Limit results            [number] [default: 200]
 ```
+
+![procedures example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/procedures.gif)
+
+### querySimple
+
+```shell
+hana-cli querySimple
+[aliases: qs, querysimple]
+Execute single SQL command and output results
+
+Options:
+  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -q, --query, --Query        SQL Statement                             [string]
+  -f, --folder, --Folder      DB Module Folder Name     [string] [default: "./"]
+  -n, --filename, --Filename  File name                                 [string]
+  -o, --output, --Output      Output Type for Query Results
+                 [string] [choices: "table", "json", "excel"] [default: "table"]
+```
+
+![querySimple example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/querySimple.gif)
+
+
+### readMe
+
+```shell
+hana-cli readMe
+Display Read Me in CLI
+```
+
+### readme
+
+```shell
+hana-cli readme
+[aliases: openreadme, openReadme, openReadMe, openHelp, openhelp]
+Open Readme Documentation in browser
+```
+
+
+### reclaim
+
+```shell
+hana-cli reclaim
+[aliases: re]
+Reclaim LOB, Log, and Data Volume space
+
+Options:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                       [boolean] [default: true]
+```
+
+![reclaim example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/reclaim.gif)
+
+### rick
+
+```shell
+hana-cli rick
+
+For expert users only
+```
+
+### roles
+
+```shell
+hana-cli roles [schema] [role]
+[aliases: tc, traceContents, traceContent, tracecontent]
+Get a list of roles
+
+Options:
+  -a, --admin, --Admin    Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -r, --role, --Role      Database Role                  [string] [default: "*"]
+  -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit             Limit results                  [number] [default: 200]
+```
+
+![roles example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/roles.gif)
+
+### schemas
+
+```shell
+hana-cli schemas [schema]
+[aliases: sch, getSchemas, listSchemas]
+Get a list of all schemas
+
+Options:
+  -a, --admin, --Admin           Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -s, --schema, --schemas        schema                  [string] [default: "*"]
+  -l, --limit                    Limit results           [number] [default: 200]
+      --all, --al, --allSchemas  Show all schemas regardless of permissions
+                                                      [boolean] [default: false]
+```
+
+![schemas example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/schemas.gif)
+
+### serviceKey
+
+```shell
+hana-cli serviceKey [instance] [key]
+[aliases: key, servicekey, service-key]
+Connect and write default-env.json via service key
+
+Options:
+  -i, --instance, --Instance                CF/XS Service Instance Name
+  -e, --encrypt, --Encrypt, --ssl           Encrypt connections (required for
+                                            SAP HANA service for SAP BTP or SAP
+                                            HANA Cloud)[boolean] [default: true]
+  -v, --validate, --Validate,               Validate Certificate
+  --validateCertificate                               [boolean] [default: false]
+  -c, --cf, --cmd                           Cloud Foundry?
+                                                       [boolean] [default: true]
+  -s, --save, --Save                        Save Credentials to default-env.json
+                                                       [boolean] [default: true]
+```
+
+### sequences
+
+```shell
+hana-cli sequences [schema] [sequence]
+[aliases: seq, listSeqs, ListSeqs, listseqs, Listseq, listSequences]
+Get a list of all squences
+
+Options:
+  -a, --admin, --Admin               Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --sequence, --seq, --Sequence  Sequence            [string] [default: "*"]
+  -s, --schema, --Schema             schema
+                                        [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit                        Limit results       [number] [default: 200]
+```
+
+![sequences example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/sequences.gif)
+
+### status
+
+```shell
+hana-cli status
+[aliases: s, whoami]
+Get Connection Status
+
+Options:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+```
+
+![status example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/status.gif)
+
+### synonyms
+
+```shell
+hana-cli synonyms [schema] [synonym] [target]
+[aliases: syn, listSynonyms, listsynonyms]
+List of all synonyms
+
+Options:
+  -a, --admin, --Admin             Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --synonym, --syn, --Synonym  Database Synonym      [string] [default: "*"]
+  -t, --target, --Target           Target object         [string] [default: "*"]
+  -s, --schema, --Schema           schema
+                                        [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit                      Limit results         [number] [default: 200]
+```
+
+![synonyms example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/synonyms.gif)
+
+### systemInfo
+
+```shell
+hana-cli systemInfo
+[aliases: sys, sysinfo, sysInfo, systeminfo]
+General System Details
+
+Options:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+```
+
+![systemInfo example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/systemInfo.gif)
+
+### tables
+
+```shell
+hana-cli tables [schema] [table]
+[aliases: t, listTables, listtables]
+Get a list of all tables
+
+Options:
+  -a, --admin, --Admin    Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -t, --table, --Table    Database Table                 [string] [default: "*"]
+  -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit             Limit results                  [number] [default: 200]
+```
+
+![tables example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/tables.gif)
+
+### traces
+
+```shell
+hana-cli traces
+[aliases: tf, Traces]
+List all trace files
+
+Options:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+```
+
+![traces example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/traces.gif)
+
+### traceContents
+
+```shell
+hana-cli traceContents [host] [file]
+[aliases: tc, traceContents, traceContent, tracecontent]
+Contents of a selected trace file - Reading from the end of the file backwards
+
+Options:
+  -a, --admin, --Admin      Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --host, --ho, --Host  Hostname                                    [string]
+  -f, --file, --File        File Name                                   [string]
+  -l, --limit               Limit results               [number] [default: 2000]
+```
+
+![traceContents example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/traceContents.gif)
+
+### triggers
+
+```shell
+hana-cli triggers [schema] [trigger] [target]
+[aliases: trig, listTriggers, ListTrigs, listtrigs, Listtrig, listrig]
+List of all triggers
+
+Options:
+  -a, --admin, --Admin          Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -t, --trigger, --Trigger      Sequence                 [string] [default: "*"]
+      --target, --to, --Target  Target object            [string] [default: "*"]
+  -s, --schema, --Schema        schema  [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit                   Limit results            [number] [default: 200]
+```
+
+![triggers example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/triggers.gif)
 
 ### ups
 
 ```shell
 hana-cli ups
-
+[aliases: upsInstances, upsinstances, upServices, listups, upsservices]
 List all Cloud Foundry user provided service instances in your target Space
 ```
 
-### hcStart
+### users
 
 ```shell
-  hana-cli hcStart [name]                   Start SAP HANA Cloud instance
-                                             [aliases: hcstart, hc_start, start]
+hana-cli users [user]
+[aliases: u, listUsers, listusers]
+Get a list of all users
+
+Options:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -u, --user, --User    User                             [string] [default: "*"]
+  -l, --limit           Limit results                    [number] [default: 200]
 ```
 
-### hcStop
+![users example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/users.gif)
+
+### version
 
 ```shell
-  hana-cli hcStop [name]                    Stop SAP HANA Cloud instance
-                                                [aliases: hcstop, hc_stop, stop]
+hana-cli version
+[aliases: ver]
+Version details
 ```
+
+![version example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/version.gif)
+
+### views
+
+```shell
+hana-cli views [schema] [view]
+[aliases: v, listViews, listviews]
+Get a list of all views
+
+Options:
+  -a, --admin, --Admin    Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+  -v, --view, --View      Database View                  [string] [default: "*"]
+  -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit             Limit results                  [number] [default: 200]
+```
+
+![views example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/views.gif)
 
 ## How to obtain support
 
