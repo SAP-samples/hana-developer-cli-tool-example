@@ -23,7 +23,7 @@ exports.builder = {
     },
     filter: {
         type: 'string',
-        desc: bundle.getText("secretsFitlter")
+        desc: bundle.getText("secretsFilter")
     }
 }
 
