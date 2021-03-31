@@ -71,3 +71,5 @@ default-*.json
 
 #prevent potential private schemas publishing 
 *.cds
+
+/secrets
