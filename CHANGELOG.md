@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.202103.4
+
+### Added
+- New command copy2Secrets to rewrite default-env.json as K8S Secrets format expected by @sap/xsenv - Pull Request [35](https://github.com/SAP-samples/hana-developer-cli-tool-example/pull/35) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
+  
 ## 1.202103.3
 
 ### Added

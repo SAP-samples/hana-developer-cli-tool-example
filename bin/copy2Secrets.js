@@ -49,6 +49,9 @@ async function makeSecrets ({envFile,secretsFolder, filter}) {
             const credsPath = path.join(secretsFolder, service, instanceName);
             fs.mkdirSync(credsPath, {recursive: true});
             for (const key in instance.credentials) {
+                if(key==="encrypt"){
+                    continue
+                }
                 const value = instance.credentials[key]
                 const keyPath = path.join(secretsFolder, service, instanceName, key);
                 fs.writeFileSync(

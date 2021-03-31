@@ -342,6 +342,22 @@ Options:
                                                       [boolean] [default: false]
 ```
 
+### copy2Secrets
+
+```shell
+hana-cli copy2Secrets
+[aliases: secrets, make:secrets]
+make secrets for Kubernetes deployment
+(https://www.npmjs.com/package/@sap/xsenv#usage-in-kubernetes)
+
+Options:
+  --envJson, --from-file        JSON file containing VCAP_SERVICES variable
+                                          [string] [default: "default-env.json"]
+  --secretsFolder, --to-folder  Folder name for storing secrets
+                                                   [string] [default: "secrets"]
+  --filter                      List of service instances to process    [string]
+```
+
 ### createContainer
 
 ```shell
