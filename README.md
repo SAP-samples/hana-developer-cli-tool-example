@@ -794,8 +794,9 @@ Options:
   -t, --table, --Table        Database Table                            [string]
   -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
   -o, --output, --Output      Output Format for inspection
-  [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "annos", "edm",
-                                     "edmx", "swgr", "openapi"] [default: "tbl"]
+        [string] [choices: "tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl",
+      "annos", "edm", "edmx", "swgr", "openapi", "hdbtable", "hdbcds"] [default:
+                                                                          "tbl"]
       --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
                               cloud.sap/docs/cds/cdl#predefined-types)
                                                       [boolean] [default: false]
@@ -847,8 +848,9 @@ Options:
   -v, --view, --View          Database View                             [string]
   -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
   -o, --output, --Output      Output Format for inspection
-  [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "annos", "edm",
-                                     "edmx", "swgr", "openapi"] [default: "tbl"]
+        [string] [choices: "tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl",
+       "annos", "edm", "edmx", "swgr", "openapi", "hdbview", "hdbcds"] [default:
+                                                                          "tbl"]
       --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
                               cloud.sap/docs/cds/cdl#predefined-types)
                                                       [boolean] [default: false]
