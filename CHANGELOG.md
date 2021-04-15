@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.202104.1
+
+### Added
+- New Inspect* output options for sqlite, hdbtable, hdbview and hdbcds
+  
+### Changed
+- Upgrade to @sap/cds 5.x
+- Drop support for Node.js version 10
+- cds preview updated to SAPUI5 1.88.1
+  
+### Fixed
+- connect command now prompts for Encyrypt setting
+  
 ## 1.202103.4
 
 ### Added

@@ -127,18 +127,18 @@ async function cds(result) {
     UI: { 
       LineItem: [ \n`;
   for (let field of fields) {
-    cdsSource += `{$Type: 'UI.DataField', Value: ![${field.COLUMN_NAME}], "@UI.Importance":#High}, \n`
+    cdsSource += `{$Type: 'UI.DataField', Value: ![${field.COLUMN_NAME}], ![@UI.Importance]:#High}, \n`
   }
   cdsSource +=
     `], \n`
   cdsSource +=
     ` Facets: [
-    {$Type: 'UI.ReferenceFacet', Target: '@UI.FieldGroup#Main', "@UI.Importance": #High}			
+    {$Type: 'UI.ReferenceFacet', Target: '@UI.FieldGroup#Main', ![@UI.Importance]: #High}			
   ],
   FieldGroup#Main: { \n 
     Data: [ \n`
   for (let field of fields) {
-    cdsSource += `{$Type: 'UI.DataField', Value: ${field.COLUMN_NAME}, "@UI.Importance":#High}, \n`
+    cdsSource += `{$Type: 'UI.DataField', Value: ${field.COLUMN_NAME}, ![@UI.Importance]:#High}, \n`
   }
   cdsSource +=
     `] },\n`
@@ -551,7 +551,7 @@ function _manifest(odataURL, entity, table) {
 }
 
 function fiori(manifest, odataURL, entity,) {
-  let ui5Version = '1.85.3' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
+  let ui5Version = '1.88.1' //'1.85.3' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
   ui5Version = ui5Version ? ui5Version + '/' : ''
   return `
 <!DOCTYPE html>

@@ -46,25 +46,33 @@ exports.builder = {
   
 
   async function dbStatus(result) {
-    const dbStatus = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
 
-    let results = await dbStatus.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`);
-    console.table(results);
- 
-    let resultsSession = await dbStatus.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`);
-    console.table(resultsSession);
+    try {
+      const dbStatus = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)))
 
-    console.log(bundle.getText("grantedRoles"));
-    let resultsRoles = await dbStatus.execSQL(`SELECT ROLE_SCHEMA_NAME, ROLE_NAME, GRANTOR, IS_GRANTABLE
-                                                FROM  GRANTED_ROLES
-                                                WHERE GRANTEE = (SELECT CURRENT_USER FROM "DUMMY")`);
-    console.table(resultsRoles);
+      let results = await dbStatus.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`)
+      console.table(results)
+   
+      let resultsSession = await dbStatus.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`)
+      console.table(resultsSession)
+  
+      console.log(bundle.getText("grantedRoles"))
+      let resultsRoles = await dbStatus.execSQL(`SELECT ROLE_SCHEMA_NAME, ROLE_NAME, GRANTOR, IS_GRANTABLE
+                                                  FROM  GRANTED_ROLES
+                                                  WHERE GRANTEE = (SELECT CURRENT_USER FROM "DUMMY")`)
+      console.table(resultsRoles)
+  
+      console.log(bundle.getText("grantedPrivs"))
+      let resultsPrivs = await dbStatus.execSQL(`SELECT PRIVILEGE, OBJECT_TYPE, GRANTOR, IS_GRANTABLE
+                                                  FROM  GRANTED_PRIVILEGES
+                                                  WHERE GRANTEE = (SELECT CURRENT_USER FROM "DUMMY")`)
+      console.table(resultsPrivs)
+      global.__spinner.stop()
+      return
+    } catch (error) {
+      global.__spinner.stop()
+      console.error(`Connection Problem ${error}`)
+      
+    }
 
-    console.log(bundle.getText("grantedPrivs"));
-    let resultsPrivs = await dbStatus.execSQL(`SELECT PRIVILEGE, OBJECT_TYPE, GRANTOR, IS_GRANTABLE
-                                                FROM  GRANTED_PRIVILEGES
-                                                WHERE GRANTEE = (SELECT CURRENT_USER FROM "DUMMY")`);
-    console.table(resultsPrivs);
-    global.__spinner.stop()
-    return;
 }

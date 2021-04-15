@@ -32,8 +32,7 @@ exports.builder = {
   encrypt: {
     alias: ['e', 'Encrypt', 'ssl'],
     desc: bundle.getText("encrypt"),
-    type: 'boolean',
-    default: false
+    type: 'boolean'
   },
   trustStore: {
     alias: ['t', 'Trust', 'trust', 'truststore'],
@@ -82,7 +81,8 @@ exports.handler = function (argv) {
       encrypt: {
         description: bundle.getText("encrypt"),   
         type: 'boolean',       
-        required: true
+        required: true,
+        default: true
       },      
       userstorekey: {
         description: bundle.getText("userstorekey"),          

@@ -240,8 +240,10 @@ module.exports.options = { set useHanaTypes(use) { useHanaTypes = use } }
 
 async function formatCDS(db, object, fields, constraints, type, parent) {
 	let cdstable = "";
-	cdstable += "@cds.persistence.exists \n";
-	if (type === "view") {
+	if (type === "view" || type === "table") {
+		cdstable += "@cds.persistence.exists \n"
+	}
+	if (type === "view" || type === "hdbview") {
 		object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/\./g, "_");
 		object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/:/g, "");
 		cdstable += `Entity ![${object[0].VIEW_NAME}] {\n `;
@@ -254,7 +256,7 @@ async function formatCDS(db, object, fields, constraints, type, parent) {
 	for (let field of fields) {
 
 		isKey = "FALSE";
-		if (type === "table") {
+		if (type === "table" || type === "hdbtable") {
 			if (object[0].HAS_PRIMARY_KEY === "TRUE") {
 				for (let constraint of constraints) {
 					if (field.COLUMN_NAME === constraint.COLUMN_NAME) {
@@ -338,7 +340,7 @@ async function formatCDS(db, object, fields, constraints, type, parent) {
 					break;
 				case "ST_POINT":
 				case "ST_GEOMETRY":
-					cdstable += `hana.${field.DATA_TYPE_NAME}(${await getGeoColumns(db,object[0], field, type)})`
+					cdstable += `hana.${field.DATA_TYPE_NAME}(${await getGeoColumns(db, object[0], field, type)})`
 					break
 				default:
 					cdstable += `**UNSUPPORTED TYPE - ${field.DATA_TYPE_NAME}`;

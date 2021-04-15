@@ -28,7 +28,7 @@ exports.builder = {
   },
   output: {
     alias: ['o', 'Output'],
-    choices: ["tbl", "sql", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi"],
+    choices: ["tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi", "hdbtable", "hdbcds"],
     default: "tbl",
     type: 'string',
     desc: bundle.getText("outputType")
@@ -116,6 +116,12 @@ async function tableInspect(result) {
       console.log(definition)
       break
     }
+    case 'sqlite': {
+      let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable");
+      cdsSource = `service HanaCli { ${cdsSource} } `;
+      console.log(cds.compile.to.sql(cds.parse(cdsSource), {as: 'str', names: 'quoted', dialect: 'sqlite'}))
+      break
+    } 
     case 'cds': {
       let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "table")
       console.log(cdsSource)
@@ -127,6 +133,24 @@ async function tableInspect(result) {
       console.log(cds.compile.to.json(cds.parse(cdsSource)))
       break
     }
+    case 'hdbcds': {
+      let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable");
+      let all = cds.compile.to.hdbcds(cds.parse(cdsSource))
+
+      for (let [src] of all) 
+        console.log (src)
+        console.log (`\n`)
+      break
+    }        
+    case 'hdbtable': {
+      let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable");
+      let all = cds.compile.to.hdbtable(cds.parse(cdsSource))
+
+      for (let [src] of all) 
+        console.log (src)
+        console.log (`\n`)
+      break
+    }    
     case 'yaml': {
       let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "table");
       cdsSource = `service HanaCli { ${cdsSource} } `;
