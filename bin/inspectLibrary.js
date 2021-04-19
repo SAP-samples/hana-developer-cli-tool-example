@@ -112,7 +112,8 @@ async function libraryInspect(result) {
     let definition = await db.statementExecPromisified(await db.preparePromisified(query), [schema, result.library]);
     let output = definition[0].DEFINITION.toString();
     output = output.replace(new RegExp(" ,", "g"), ",\n");	    
-    console.log(output);     
+    const highlight = require('cli-highlight').highlight 
+    console.log(highlight(output))     
   }
   global.__spinner.stop()
   return;

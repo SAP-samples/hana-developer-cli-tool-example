@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "1.202104.1",
+  "version": "1.202104.2",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -29,6 +29,7 @@
     "@sap/xsenv": "^3.1",
     "@sap/xssec": "^3.1.2",
     "axios": "^0.21.1",
+    "cli-highlight": "^2.1.11",
     "console.table": "~0.10",
     "dotenv": "^8.2",
     "easy-table": "1.1.1",

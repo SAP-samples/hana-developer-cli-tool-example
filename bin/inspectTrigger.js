@@ -102,8 +102,9 @@ async function triggerInspect(result) {
       AND TRIGGER_NAME = ? `;
     let definition = await db.statementExecPromisified(await db.preparePromisified(query), [schema, result.trigger]);
     let output = definition[0].DEFINITION.toString();
-    output = output.replace(new RegExp(" ,", "g"), ",\n");	    
-    console.log(output);     
+    output = output.replace(new RegExp(" ,", "g"), ",\n");	  
+    const highlight = require('cli-highlight').highlight   
+    console.log(highlight(output))     
   }
   global.__spinner.stop()
   return;

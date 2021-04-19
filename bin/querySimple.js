@@ -137,7 +137,8 @@ async function dbQuery(result) {
           await toFile(result.folder, result.filename, 'json', JSON.stringify(results, null, 2))
         } else {
           global.__spinner.stop()
-          console.log(JSON.stringify(results, null, 2))
+          const highlight = require('cli-highlight').highlight 
+          console.log(highlight(JSON.stringify(results, null, 2)))
         }
         break
       default:

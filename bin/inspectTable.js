@@ -103,6 +103,7 @@ async function tableInspect(result) {
   let constraints = await dbInspect.getConstraints(db, object);
   const cds = require('@sap/cds')
   Object.defineProperty(cds.compile.to, 'openapi', { configurable:true, get: ()=>require('@sap/cds-dk/lib/compile/openapi') })
+  const highlight = require('cli-highlight').highlight 
 
   switch (result.output) {
     case 'tbl':
@@ -113,24 +114,24 @@ async function tableInspect(result) {
       break
     case 'sql': {
       let definition = await dbInspect.getDef(db, schema, result.table)
-      console.log(definition)
+      console.log(highlight(definition))
       break
     }
     case 'sqlite': {
       let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable");
       cdsSource = `service HanaCli { ${cdsSource} } `;
-      console.log(cds.compile.to.sql(cds.parse(cdsSource), {as: 'str', names: 'quoted', dialect: 'sqlite'}))
+      console.log(highlight(cds.compile.to.sql(cds.parse(cdsSource), {as: 'str', names: 'quoted', dialect: 'sqlite'})))
       break
     } 
     case 'cds': {
       let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "table")
-      console.log(cdsSource)
+      console.log(highlight(cdsSource))
       break
     }
     case 'json': {
       let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "table");
       cdsSource = `service HanaCli { ${cdsSource} } `;
-      console.log(cds.compile.to.json(cds.parse(cdsSource)))
+      console.log(highlight(cds.compile.to.json(cds.parse(cdsSource))))
       break
     }
     case 'hdbcds': {
@@ -138,7 +139,7 @@ async function tableInspect(result) {
       let all = cds.compile.to.hdbcds(cds.parse(cdsSource))
 
       for (let [src] of all) 
-        console.log (src)
+        console.log (highlight(src))
         console.log (`\n`)
       break
     }        
@@ -147,20 +148,20 @@ async function tableInspect(result) {
       let all = cds.compile.to.hdbtable(cds.parse(cdsSource))
 
       for (let [src] of all) 
-        console.log (src)
+        console.log (highlight(src))
         console.log (`\n`)
       break
     }    
     case 'yaml': {
       let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "table");
       cdsSource = `service HanaCli { ${cdsSource} } `;
-      console.log(cds.compile.to.yaml(cds.parse(cdsSource)))
+      console.log(highlight(cds.compile.to.yaml(cds.parse(cdsSource))))
       break
     }    
     case 'cdl': {
       let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "table");
       cdsSource = `service HanaCli { ${cdsSource} } `;
-      console.log(cds.compile.to.cdl(cds.parse(cdsSource)))
+      console.log(highlight(cds.compile.to.cdl(cds.parse(cdsSource))))
       break
     }          
 /*     case 'openapiv2': {
@@ -175,8 +176,7 @@ async function tableInspect(result) {
       let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
         version: 'v4', newCsn: true
       })
-      //let metadata = await cds.parse(cdsSource)
-      console.log(JSON.stringify(metadata, null, 4));
+      console.log(highlight(metadata))
       break;
     }
     case 'annos': {
@@ -185,14 +185,14 @@ async function tableInspect(result) {
       let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
         annos: 'only'
       })
-      //let metadata = await cds.parse(cdsSource)
-      console.log(JSON.stringify(metadata, null, 4));
+      console.log(highlight(metadata))
       break;
     }
     case 'edm': {
       let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "table");
       cdsSource = `service HanaCli { ${cdsSource} } `;
-      console.log(JSON.stringify(cds.compile.to.edm(cds.parse(cdsSource)), null, 4));
+
+      console.log(highlight(JSON.stringify(cds.compile.to.edm(cds.parse(cdsSource)), null, 4)))
       break;
     }
     case 'swgr': {
@@ -208,7 +208,7 @@ async function tableInspect(result) {
       } = require('odata2openapi')
       parse(metadata)
         .then(service => convert(service.entitySets, odataOptions, service.version))
-        .then(swagger => console.log(JSON.stringify(swagger, null, 2)))
+        .then(swagger => console.log(highlight(JSON.stringify(swagger, null, 2))))
         .catch(error => console.error(error))
       break;
     }
@@ -221,7 +221,7 @@ async function tableInspect(result) {
         'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
         'openapi:diagram': true
       })
-      console.log(JSON.stringify(metadata, null, 2))    
+      console.log(highlight(JSON.stringify(metadata, null, 2)))
       break
     }
     default: {

@@ -117,8 +117,9 @@ async function callProc(result) {
   let hdbext = require("@sap/hdbext");
   let sp = await db.loadProcedurePromisified(hdbext, proc[0].SCHEMA_NAME, result.procedure);
   
-  let output = await db.callProcedurePromisified(sp, inputParams);
-  console.log(output.outputScalar);
+  let output = await db.callProcedurePromisified(sp, inputParams)
+  const highlight = require('cli-highlight').highlight 
+  console.log(highlight(output.outputScalar))
   switch(Object.keys(output).length){
     case 0:
     case 1:

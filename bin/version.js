@@ -8,9 +8,10 @@ exports.builder = {
 }
 
 exports.handler = function () {
-    const log = console.log;
-    const info = version ();
-    Object.keys(info).forEach(key => log(`${key}: ${info[key]}`));
+    const log = console.log
+    const highlight = require('cli-highlight').highlight 
+    const info = version ()
+    Object.keys(info).forEach(key => log(highlight(`${key}: ${info[key]}`)))
     console.log(`https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/CHANGELOG.md`)
 
     function version() {

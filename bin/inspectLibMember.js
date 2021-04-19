@@ -118,13 +118,14 @@ async function libraryMemInspect(result) {
     let query =
     `SELECT DEFINITION from LIBRARY_MEMBERS
     WHERE SCHEMA_NAME LIKE ? 
-      AND LIBRARY_NAME = ? 
-      AND MEMBER_NAME = ?      
+    AND LIBRARY_NAME = ? 
+    AND MEMBER_NAME = ?     
     ORDER BY LIBRARY_NAME `;
     let definition = await db.statementExecPromisified(await db.preparePromisified(query), [schema, result.library, result.libraryMem]);
     let output = definition[0].DEFINITION.toString();
     output = output.replace(new RegExp(" ,", "g"), ",\n");	    
-    console.log(output);     
+    const highlight = require('cli-highlight').highlight 
+    console.log(highlight(output)) 
   }
   global.__spinner.stop()
   return;

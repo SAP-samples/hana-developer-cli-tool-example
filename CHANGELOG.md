@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.202104.2
+### Added
+- Add Syntax Highlighting to various command outputs
+  
 ## 1.202104.1
 
 ### Added

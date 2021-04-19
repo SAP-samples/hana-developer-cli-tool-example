@@ -97,8 +97,9 @@ async function procedureInspect(result) {
     console.table(parameters);
     console.table(columns);
   }else if(result.output === 'sql'){
-    let definition = await dbInspect.getDef(db, schema, result.procedure);    
-    console.log(definition);     
+    let definition = await dbInspect.getDef(db, schema, result.procedure);   
+    const highlight = require('cli-highlight').highlight  
+    console.log(highlight(definition))     
   }
   global.__spinner.stop()
   return;
