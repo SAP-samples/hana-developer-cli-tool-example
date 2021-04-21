@@ -1,5 +1,4 @@
 const base = require("../utils/base")
-const dbClass = require("sap-hdbext-promisfied")
 
 exports.command = 'status'
 exports.aliases = ['s', 'whoami']
@@ -28,6 +27,7 @@ exports.handler = (argv) => {
 async function dbStatus(prompts) {
 
   try {
+    const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const dbStatus = new dbClass(await conn.createConnection(prompts))
 

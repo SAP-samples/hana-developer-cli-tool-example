@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202104.2
+
+### Changed
+- Match the @sap/hdbext and @sap/hana-client versions exactly to remove duplicate copies of the HANA Client in node_modules removing about 135Mb from the footprint of this tool overall
+- 
 ## 1.202104.2
 ### Added
 - Add Syntax Highlighting to various command outputs

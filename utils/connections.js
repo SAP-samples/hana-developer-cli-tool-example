@@ -1,5 +1,6 @@
 /*eslint-env node, es6 */
 "use strict"
+const base = require("./base")
 
 function getFileCheckParents(filename) {
 
@@ -97,8 +98,6 @@ async function createConnection(prompts) {
                     const homedir = require('os').homedir()
                     envFile = getFileCheckParents(`${homedir}/.hana-cli/${prompts.conn}`)
                 }
-
-
             }
 
             //No specific configuration file requested go back to default-env.json
@@ -111,11 +110,11 @@ async function createConnection(prompts) {
                     envFile = getFileCheckParents(`${homedir}/.hana-cli/default.json`)
                 }
             }
-            if (envFile) { console.log(`Using Connection Configuration loaded via ${envFile} \n`) }
+            if (envFile && base.verboseOutput(prompts)) { console.log(`Using Connection Configuration loaded via ${envFile} \n`) }
 
         } else {
-            if (!envFile) { console.log(`Using Connection Configuration from Environment loaded via ${getEnv()} \n`) }
-            else { console.log(`Using Admin Configuration loaded via ${envFile} \n`) }
+            if (!envFile && base.verboseOutput(prompts)) { console.log(`Using Connection Configuration from Environment loaded via ${getEnv()} \n`) }
+            else if (base.verboseOutput(prompts)) { console.log(`Using Admin Configuration loaded via ${envFile} \n`) }
         }
 
 
@@ -123,6 +122,9 @@ async function createConnection(prompts) {
         //Load Environment 
         const xsenv = require("@sap/xsenv")
         xsenv.loadEnv(envFile)
+
+        base.debug(`Connection File`)
+        base.debug(envFile)
 
         let options = ''
         try {
@@ -135,11 +137,13 @@ async function createConnection(prompts) {
             try {
                 options = xsenv.getServices({ hana: { tag: 'hana', plan: "hdi-shared" } })
             } catch (error) {
-                if (envFile) { throw new Error(`Badly formatted configuration file ${envFile}.  Full Details: ${error}`) } 
+                if (envFile) { throw new Error(`Badly formatted configuration file ${envFile}.  Full Details: ${error}`) }
                 else { throw new Error(`Missing configuration file. No default-env.json or substitute found. Full Details: ${error}`) }
 
             }
         }
+        base.debug(options)
+
         let hdbext = require("@sap/hdbext")
         options.hana.pooling = true
 

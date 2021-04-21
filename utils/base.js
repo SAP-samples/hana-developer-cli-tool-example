@@ -1,20 +1,37 @@
 const bundle = global.__bundle
 module.exports.bundle = bundle
 const colors = require("colors/safe")
+let debug = require('debug')('hana-cli')
+module.exports.debug = debug
 
 function getBuilder(input) {
     let builder = {
+        ...input,
         admin: {
             alias: ['a', 'Admin'],
             type: 'boolean',
             default: false,
+            group: bundle.getText("grpConn"),
             desc: bundle.getText("admin")
         },
         conn: {
-            alias: ['connFile', 'connectionFile', 'connfile'],
+            group: bundle.getText("grpConn"),
             desc: bundle.getText("connFile")
         },
-        ...input
+        disableVerbose: {
+            alias: ['quiet'],
+            group: bundle.getText("grpDebug"),
+            type: 'boolean',
+            default: false,
+            desc: bundle.getText("disableVerbose")
+        },
+        debug: {
+            alias: ['Debug'],
+            group: bundle.getText("grpDebug"),
+            type: 'boolean',
+            default: false,
+            desc: bundle.getText("debug")
+        },
 
     }
 
@@ -34,6 +51,7 @@ module.exports.getPrompt = getPrompt
 function getPromptSchema(input) {
     let schema = {
         properties: {
+            ...input,
             admin: {
                 description: bundle.getText("admin"),
                 type: 'boolean',
@@ -46,7 +64,19 @@ function getPromptSchema(input) {
                 required: false,
                 ask: askFalse
             },
-            ...input
+            disableVerbose: {
+                description: bundle.getText("disableVerbose"),
+                type: 'boolean',
+                required: true,
+                ask: askFalse
+            },
+            debug: {
+                description: bundle.getText("debug"),
+                type: 'boolean',
+                required: true,
+                ask: askFalse
+            }
+
         }
     }
     return schema
@@ -66,7 +96,18 @@ function promptHandler(argv, processingFunction, input) {
         if (err) {
             return console.log(err.message)
         }
-        global.startSpinner()
+
+        if (isDebug(result)) {
+            const setDebug = require('debug')
+            setDebug.enable('hana-cli, *')
+        }
+
+        debug(`Yargs values`)
+        debug(argv)
+        debug(`Prompt values`)
+        debug(result)
+
+        startSpinner(result)
         processingFunction(result)
     })
 }
@@ -86,3 +127,24 @@ function end() {
     }
 }
 module.exports.end = end
+
+function startSpinner(prompts) {
+    if (verboseOutput(prompts)) { global.startSpinner() }
+}
+module.exports.startSpinner = startSpinner
+
+function verboseOutput(prompts) {
+    if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'disableVerbose') && prompts.disableVerbose) {
+        return false
+    }
+    else { return true }
+}
+module.exports.verboseOutput = verboseOutput
+
+function isDebug(prompts) {
+    if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'debug') && prompts.debug) {
+        return true
+    }
+    else { return false }
+}
+module.exports.isDebug = isDebug

@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "1.202104.2",
+  "version": "2.202104.3",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -20,10 +20,10 @@
     "hana"
   ],
   "dependencies": {
-    "@sap/hana-client": "2.7.26",
     "@sap/audit-logging": "^5.0",
     "@sap/cds": "^5.0",
     "@sap/cds-dk": "^4.0",
+    "@sap/hana-client": "2.7.26",
     "@sap/hdbext": "7.1.4",
     "@sap/textbundle": "^4.0",
     "@sap/xsenv": "^3.1",
@@ -31,6 +31,7 @@
     "axios": "^0.21.1",
     "cli-highlight": "^2.1.11",
     "console.table": "~0.10",
+    "debug": "^4.3.1",
     "dotenv": "^8.2",
     "easy-table": "1.1.1",
     "express": "^4.17",
@@ -44,7 +45,8 @@
     "open": "^8.0.5",
     "ora": "^5.4",
     "prompt": "^1.1",
-    "sap-hdbext-promisfied": "^2.202103",
+    "sap-hdbext-promisfied": "2.202104.1",
+    "supports-color": "^9.0.0",
     "swagger-ui-express": "^4.1",
     "terminaltools": "^2.0.0",
     "uuid": "^8.3",
