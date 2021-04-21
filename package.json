@@ -20,11 +20,11 @@
     "hana"
   ],
   "dependencies": {
+    "@sap/hana-client": "2.7.26",
     "@sap/audit-logging": "^5.0",
     "@sap/cds": "^5.0",
     "@sap/cds-dk": "^4.0",
-    "@sap/hana-client": "^2.7",
-    "@sap/hdbext": "^7.1.4",
+    "@sap/hdbext": "7.1.4",
     "@sap/textbundle": "^4.0",
     "@sap/xsenv": "^3.1",
     "@sap/xssec": "^3.1.2",
