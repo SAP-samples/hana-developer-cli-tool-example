@@ -4,35 +4,49 @@ const colors = require("colors/safe")
 let debug = require('debug')('hana-cli')
 module.exports.debug = debug
 
-function getBuilder(input) {
+function getBuilder(input, iConn = true, iDebug = true) {
+
+    let grpConn = {}
+    let grpDebug = {}
+
+    if (iConn) {
+        grpConn = {
+            admin: {
+                alias: ['a', 'Admin'],
+                type: 'boolean',
+                default: false,
+                group: bundle.getText("grpConn"),
+                desc: bundle.getText("admin")
+            },
+            conn: {
+                group: bundle.getText("grpConn"),
+                desc: bundle.getText("connFile")
+            },
+        }
+    }
+
+    if (iDebug) {
+        grpDebug = {
+            disableVerbose: {
+                alias: ['quiet'],
+                group: bundle.getText("grpDebug"),
+                type: 'boolean',
+                default: false,
+                desc: bundle.getText("disableVerbose")
+            },
+            debug: {
+                alias: ['Debug'],
+                group: bundle.getText("grpDebug"),
+                type: 'boolean',
+                default: false,
+                desc: bundle.getText("debug")
+            }
+        }
+    }
     let builder = {
         ...input,
-        admin: {
-            alias: ['a', 'Admin'],
-            type: 'boolean',
-            default: false,
-            group: bundle.getText("grpConn"),
-            desc: bundle.getText("admin")
-        },
-        conn: {
-            group: bundle.getText("grpConn"),
-            desc: bundle.getText("connFile")
-        },
-        disableVerbose: {
-            alias: ['quiet'],
-            group: bundle.getText("grpDebug"),
-            type: 'boolean',
-            default: false,
-            desc: bundle.getText("disableVerbose")
-        },
-        debug: {
-            alias: ['Debug'],
-            group: bundle.getText("grpDebug"),
-            type: 'boolean',
-            default: false,
-            desc: bundle.getText("debug")
-        },
-
+        ...grpConn,
+        ...grpDebug
     }
 
     return builder
@@ -48,10 +62,14 @@ function getPrompt(argv) {
 }
 module.exports.getPrompt = getPrompt
 
-function getPromptSchema(input) {
-    let schema = {
-        properties: {
-            ...input,
+function getPromptSchema(input, iConn = true, iDebug = true) {
+
+
+    let grpConn = {}
+    let grpDebug = {}
+
+    if (iConn) {
+        grpConn = {
             admin: {
                 description: bundle.getText("admin"),
                 type: 'boolean',
@@ -64,6 +82,11 @@ function getPromptSchema(input) {
                 required: false,
                 ask: askFalse
             },
+        }
+    }
+
+    if (iDebug) {
+        grpDebug = {
             disableVerbose: {
                 description: bundle.getText("disableVerbose"),
                 type: 'boolean',
@@ -76,7 +99,14 @@ function getPromptSchema(input) {
                 required: true,
                 ask: askFalse
             }
+        }
+    }
 
+    let schema = {
+        properties: {
+            ...input,
+            ...grpConn,
+            ...grpDebug
         }
     }
     return schema
@@ -88,9 +118,9 @@ function askFalse() {
 }
 module.exports.askFalse = askFalse
 
-function promptHandler(argv, processingFunction, input) {
+function promptHandler(argv, processingFunction, input, iConn = true, iDebug = true) {
     const prompt = getPrompt(argv)
-    let schema = getPromptSchema(input)
+    let schema = getPromptSchema(input, iConn, iDebug)
 
     prompt.get(schema, (err, result) => {
         if (err) {
@@ -102,12 +132,12 @@ function promptHandler(argv, processingFunction, input) {
             setDebug.enable('hana-cli, *')
         }
 
-        debug(`Yargs values`)
+        debug(bundle.getText("yargs"))
         debug(argv)
-        debug(`Prompt values`)
+        debug(bundle.getText("prompts"))
         debug(result)
 
-        startSpinner(result)
+        //startSpinner(result)
         processingFunction(result)
     })
 }
@@ -117,7 +147,7 @@ function error(error) {
     if (global.__spinner) {
         global.__spinner.stop()
     }
-    console.error(`Connection Problem ${error}`)
+    console.error(`${bundle.getText("errConn")} ${error}`)
 }
 module.exports.error = error
 

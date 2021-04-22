@@ -1,107 +1,77 @@
-const colors = require("colors/safe");
-const bundle = global.__bundle;
-const dbClass = require("sap-hdbext-promisfied");
+const base = require("../utils/base")
 
-exports.command = 'sequences [schema] [sequence]';
-exports.aliases = ['seq', 'listSeqs', 'ListSeqs', 'listseqs', 'Listseq', "listSequences"];
-exports.describe = bundle.getText("sequences");
+exports.command = 'sequences [schema] [sequence]'
+exports.aliases = ['seq', 'listSeqs', 'ListSeqs', 'listseqs', 'Listseq', "listSequences"]
+exports.describe = base.bundle.getText("sequences")
 
-
-exports.builder = {
-  admin: {
-    alias: ['a', 'Admin'],
-    type: 'boolean',
-    default: false,
-    desc: bundle.getText("admin")
-  },
+exports.builder = base.getBuilder({
   sequence: {
     alias: ['seq', 'Sequence'],
     type: 'string',
-    default: "*",    
-    desc: bundle.getText("sequence")
+    default: "*",
+    desc: base.bundle.getText("sequence")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: bundle.getText("schema")
+    desc: base.bundle.getText("schema")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: bundle.getText("limit")
+    desc: base.bundle.getText("limit")
   }
-};
+})
 
-exports.handler = function (argv) {
-  const prompt = require('prompt');
-  prompt.override = argv;
-  prompt.message = colors.green(bundle.getText("input"));
-  prompt.start();
-
-  var schema = {
-    properties: {
-      admin: {
-        description: bundle.getText("admin"),
-        type: 'boolean',
-        required: true,
-        ask: () => {
-          return false;
-        }
-      },
-      sequence: {
-        description: bundle.getText("sequence"),
-        type: 'string',
-        required: true
-      },
-      schema: {
-        description: bundle.getText("schema"),
-        type: 'string',
-        required: true
-      },
-      limit: {
-        description: bundle.getText("limit"),
-        type: 'number',
-        required: true
-      }      
+exports.handler = (argv) => {
+  base.promptHandler(argv, getSequences, {
+    sequence: {
+      description: base.bundle.getText("sequence"),
+      type: 'string',
+      required: true
+    },
+    schema: {
+      description: base.bundle.getText("schema"),
+      type: 'string',
+      required: true
+    },
+    limit: {
+      description: base.bundle.getText("limit"),
+      type: 'number',
+      required: true
     }
-  };
-
-  prompt.get(schema, (err, result) => {
-    if (err) {
-      return console.log(err.message);
-    }
-    global.startSpinner()
-    getSequences(result);
-  });
+  })
 }
 
+async function getSequences(prompts) {
+  try {
+    const dbClass = require("sap-hdbext-promisfied")
+    const conn = require("../utils/connections")
+    const db = new dbClass(await conn.createConnection(prompts))
 
-async function getSequences(result) {
-  const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
+    let schema = await dbClass.schemaCalc(prompts, db)
+    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("sequence")}: ${prompts.sequence}`)
 
-  let schema = await dbClass.schemaCalc(result, db);
-  console.log(`Schema: ${schema}, Sequence: ${result.sequence}`);
-
-  let results = await getSequencesInt(schema, result.sequence, db, result.limit);
-  console.table(results);
-
-  global.__spinner.stop()  
-  return;
+    let results = await getSequencesInt(schema, prompts.sequence, db, prompts.limit)
+    console.table(results)
+    return base.end()
+  } catch (error) {
+    base.error(error)
+  }
 }
-
 
 async function getSequencesInt(schema, sequence, client, limit) {
-  sequence = dbClass.objectName(sequence);
-
-  var query =
-  `SELECT SCHEMA_NAME, SEQUENCE_NAME, CACHE_SIZE, START_VALUE, END_VALUE, CURRENT_VALUE from M_SEQUENCES 
+  const dbClass = require("sap-hdbext-promisfied")
+  sequence = dbClass.objectName(sequence)
+  let query =
+    `SELECT SCHEMA_NAME, SEQUENCE_NAME, CACHE_SIZE, START_VALUE, END_VALUE, CURRENT_VALUE from M_SEQUENCES 
   WHERE SCHEMA_NAME LIKE ? 
     AND SEQUENCE_NAME LIKE ? 
-  ORDER BY SCHEMA_NAME, SEQUENCE_NAME `;
+  ORDER BY SCHEMA_NAME, SEQUENCE_NAME `
   if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
-    query += `LIMIT ${limit.toString()}`;
+    query += `LIMIT ${limit.toString()}`
   }
-  return await client.statementExecPromisified(await client.preparePromisified(query), [schema, sequence]);
+  return await client.statementExecPromisified(await client.preparePromisified(query), [schema, sequence])
 }

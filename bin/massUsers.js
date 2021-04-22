@@ -1,78 +1,50 @@
-const colors = require("colors/safe");
-const bundle = global.__bundle;
-const dbClass = require("sap-hdbext-promisfied");
+const base = require("../utils/base")
 
-exports.command = 'massUsers [user] [password]';
-exports.aliases = ['massUser', 'mUsers', 'mUser', 'mu'];
-exports.describe = bundle.getText("massUsers");
+exports.command = 'massUsers [user] [password]'
+exports.aliases = ['massUser', 'mUsers', 'mUser', 'mu']
+exports.describe = base.bundle.getText("massUsers")
 
-
-exports.builder = {
-  admin: {
-    alias: ['a', 'Admin'],
-    type: 'boolean',
-    default: true,
-    desc: bundle.getText("admin")
-  },
+exports.builder = base.getBuilder({
   user: {
     alias: ['u', 'User'],
-    desc: bundle.getText("user")
+    desc: base.bundle.getText("user")
   },
   password: {
     alias: ['p', 'Password'],
-    desc: bundle.getText("password")
-  },
-};
+    desc: base.bundle.getText("password")
+  }
+})
 
-exports.handler = function (argv) {
-  const prompt = require('prompt');
-  prompt.override = argv;
-  prompt.message = colors.green(bundle.getText("input"));
-  prompt.start();
-
-  var schema = {
-    properties: {
-      admin: {
-        description: bundle.getText("admin"),
-        type: 'boolean',
-        required: true,
-        ask: () => {
-          return false;
-        }
-      },
-      user: {
-        description: bundle.getText("user"),
-        required: true
-      },
-      password: {
-        description: bundle.getText("password"),
-        hidden: true,
-        replace: '*',
-        required: true
-      }
+exports.handler = (argv) => {
+  base.promptHandler(argv, massUsers, {
+    user: {
+      description: base.bundle.getText("user"),
+      required: true
+    },
+    password: {
+      description: base.bundle.getText("password"),
+      hidden: true,
+      replace: '*',
+      required: true
     }
-  };
-
-  prompt.get(schema, (err, result) => {
-    if (err) {
-      return console.log(err.message);
-    }
-    global.startSpinner()
-    activate(result);
-  });
+  })
 }
 
 
-async function activate(result) {
-  const dbStatus = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
+async function massUsers(prompts) {
 
-  let results = await dbStatus.execSQL(
-    `DO
+  try {
+    const dbClass = require("sap-hdbext-promisfied")
+    const conn = require("../utils/connections")
+    const dbStatus = new dbClass(await conn.createConnection(prompts))
+
+    let results = await dbStatus.execSQL(
+      `DO
     begin
       declare lv_counter integer := 0; 
       declare lv_user varchar(30) := null;
-      declare IM_PREFIX varchar(30) := '${result.user}_';
-      declare IM_PASSWORD VARCHAR(30) := '${result.password}'; 
+      declare IM_PREFIX varchar(30) := '${prompts.user}_';
+      declare IM_PASSWORD VARCHAR(30) := '${prompts.password}'; 
     WHILE :lv_counter < 50 DO 
     
        lv_counter := :lv_counter + 1;
@@ -89,8 +61,10 @@ async function activate(result) {
       
       END WHILE;
       end;    
-    `);
-  console.table(results);
-  global.__spinner.stop()
-  return;
+    `)
+    console.table(results)
+    return base.end()
+  } catch (error) {
+    base.error(error)
+  }
 }

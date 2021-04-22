@@ -29,7 +29,7 @@ function getFileCheckParents(filename) {
 
     }
     catch (error) {
-        throw new Error(`Error: ${error}`)
+        throw new Error(`${base.bundle.getText("error")} ${error}`)
     }
 }
 module.exports.getFileCheckParents = getFileCheckParents
@@ -71,82 +71,85 @@ function resolveEnv(options) {
 }
 module.exports.resolveEnv = resolveEnv
 
+function getConnOptions(prompts) {
+    let envFile
+
+    //Look for Admin option - it overrides everything
+    if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'admin') && prompts.admin) {
+        envFile = getDefaultEnvAdmin()
+    }
+
+    //No Admin option or no default-env-admin.json file found - try for .env 
+    if (!envFile) {
+        let dotEnvFile = getEnv()
+        require('dotenv').config({ path: dotEnvFile })
+    }
+
+    //No .env File found or it doesn't contain a VCAP_SERVICES - try other options
+    if (!process.env.VCAP_SERVICES && !envFile) {
+
+        //Check for specific configuration file by special parameter 
+        if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'conn') && prompts.conn) {
+            envFile = getFileCheckParents(prompts.conn)
+
+            //Conn parameters can also refer to a central configuration file in the user profile
+            if (!envFile) {
+                const homedir = require('os').homedir()
+                envFile = getFileCheckParents(`${homedir}/.hana-cli/${prompts.conn}`)
+            }
+        }
+
+        //No specific configuration file requested go back to default-env.json
+        if (!envFile) {
+            envFile = getDefaultEnv()
+
+            //Last resort - default.json in user profile location
+            if (!envFile) {
+                const homedir = require('os').homedir()
+                envFile = getFileCheckParents(`${homedir}/.hana-cli/default.json`)
+            }
+        }
+        if (envFile && base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile")} ${envFile} \n`) }
+
+    } else {
+        if (!envFile && base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile")} ${getEnv()} \n`) }
+        else if (base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile")} ${envFile} \n`) }
+    }
+
+    //Load Environment 
+    const xsenv = require("@sap/xsenv")
+    xsenv.loadEnv(envFile)
+
+    base.debug(base.bundle.getText("connectionFile"))
+    base.debug(envFile)
+
+    let options = ''
+    try {
+        if (!process.env.TARGET_CONTAINER) {
+            options = xsenv.getServices({ hana: { tag: 'hana' } })
+        } else {
+            options = xsenv.getServices({ hana: { name: process.env.TARGET_CONTAINER } })
+        }
+    } catch (error) {
+        try {
+            options = xsenv.getServices({ hana: { tag: 'hana', plan: "hdi-shared" } })
+        } catch (error) {
+            if (envFile) { throw new Error(`${base.bundle.getText("badConfig")} ${envFile}.  ${base.bundle.getText("fullDetails")} ${error}`) }
+            else { throw new Error(`${base.bundle.getText("missingConfig")} ${error}`) }
+
+        }
+    }
+    options.hana.pooling = true
+    base.debug(options)
+    return (options)
+}
+module.exports.getConnOptions = getConnOptions
+
 async function createConnection(prompts) {
     return new Promise((resolve, reject) => {
-        let envFile
-
-        //Look for Admin option - it overrides everything
-        if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'admin') && prompts.admin) {
-            envFile = getDefaultEnvAdmin()
-        }
-
-        //No Admin option or no default-env-admin.json file found - try for .env 
-        if (!envFile) {
-            let dotEnvFile = getEnv()
-            require('dotenv').config({ path: dotEnvFile })
-        }
-
-        //No .env File found or it doesn't contain a VCAP_SERVICES - try other options
-        if (!process.env.VCAP_SERVICES && !envFile) {
-
-            //Check for specific configuration file by special parameter 
-            if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'conn') && prompts.conn) {
-                envFile = getFileCheckParents(prompts.conn)
-
-                //Conn parameters can also refer to a central configuration file in the user profile
-                if (!envFile) {
-                    const homedir = require('os').homedir()
-                    envFile = getFileCheckParents(`${homedir}/.hana-cli/${prompts.conn}`)
-                }
-            }
-
-            //No specific configuration file requested go back to default-env.json
-            if (!envFile) {
-                envFile = getDefaultEnv()
-
-                //Last resort - default.json in user profile location
-                if (!envFile) {
-                    const homedir = require('os').homedir()
-                    envFile = getFileCheckParents(`${homedir}/.hana-cli/default.json`)
-                }
-            }
-            if (envFile && base.verboseOutput(prompts)) { console.log(`Using Connection Configuration loaded via ${envFile} \n`) }
-
-        } else {
-            if (!envFile && base.verboseOutput(prompts)) { console.log(`Using Connection Configuration from Environment loaded via ${getEnv()} \n`) }
-            else if (base.verboseOutput(prompts)) { console.log(`Using Admin Configuration loaded via ${envFile} \n`) }
-        }
-
-
-
-        //Load Environment 
-        const xsenv = require("@sap/xsenv")
-        xsenv.loadEnv(envFile)
-
-        base.debug(`Connection File`)
-        base.debug(envFile)
-
-        let options = ''
-        try {
-            if (!process.env.TARGET_CONTAINER) {
-                options = xsenv.getServices({ hana: { tag: 'hana' } })
-            } else {
-                options = xsenv.getServices({ hana: { name: process.env.TARGET_CONTAINER } })
-            }
-        } catch (error) {
-            try {
-                options = xsenv.getServices({ hana: { tag: 'hana', plan: "hdi-shared" } })
-            } catch (error) {
-                if (envFile) { throw new Error(`Badly formatted configuration file ${envFile}.  Full Details: ${error}`) }
-                else { throw new Error(`Missing configuration file. No default-env.json or substitute found. Full Details: ${error}`) }
-
-            }
-        }
-        base.debug(options)
-
+        let options = getConnOptions(prompts)
+        base.debug(`In Create Connection`)
         let hdbext = require("@sap/hdbext")
-        options.hana.pooling = true
-
         hdbext.createConnection(options.hana, (error, client) => {
             if (error) {
                 reject(error)
@@ -154,6 +157,7 @@ async function createConnection(prompts) {
                 resolve(client)
             }
         })
-    })
+    }
+    )
 }
 module.exports.createConnection = createConnection
