@@ -1,70 +1,19 @@
-const colors = require("colors/safe")
-const bundle = global.__bundle;
-const dbClass = require("sap-hdbext-promisfied")
+const base = require("../utils/base")
 
 exports.command = 'opendbx'
 exports.aliases = ['open', 'openDBX', 'opendb', 'openDBExplorer', 'opendbexplorer']
-exports.describe = bundle.getText("opendbx")
-
-
-exports.builder = {
-    admin: {
-        alias: ['a', 'Admin'],
-        type: 'boolean',
-        default: false,
-        desc: bundle.getText("admin")
-    }
+exports.describe = base.bundle.getText("opendbx")
+exports.builder = base.getBuilder({})
+exports.handler = (argv) => {
+    base.promptHandler(argv, getDBX, {})
 }
 
-
-exports.handler = function (argv) {
-    const prompt = require('prompt')
-    prompt.override = argv
-    prompt.message = colors.green(bundle.getText("input"))
-    prompt.start()
-
-    var schema = {
-        properties: {
-            admin: {
-                description: bundle.getText("admin"),
-                type: 'boolean',
-                required: true,
-                ask: () => {
-                    return false;
-                }
-            }
-        }
-    }
-
-    prompt.get(schema, (err, result) => {
-        if (err) {
-            return console.log(err.message)
-        }
-        //  global.startSpinner()
-        getDBX(result)
-    })
-}
-
-
-async function getDBX(result) {
-    //const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)))
+async function getDBX(prompts) {
     try {
-        require('dotenv').config()
-        const xsenv = require("@sap/xsenv")
-        xsenv.loadEnv(dbClass.resolveEnv(result))
-        let options = ''
-
-        if (!process.env.TARGET_CONTAINER) {
-            try {
-                options = xsenv.getServices({ hana: { tag: 'hana' } })
-            } catch (error) {
-                options = xsenv.getServices({ hana: { tag: 'hana', plan: "hdi-shared" } })
-            }
-        } else {
-            options = xsenv.getServices({ hana: { name: process.env.TARGET_CONTAINER } })
-        }
-
-
+        const dbClass = require("sap-hdbext-promisfied")
+        const conn = require("../utils/connections")
+        let options = conn.getConnOptions(prompts)
+        
         const host = options.hana.host
         let dbxURL = ''
         if (host.includes('us10.hanacloud')) {
@@ -82,7 +31,7 @@ async function getDBX(result) {
         } else if (host.includes('ap21.hanacloud')) {
             dbxURL = 'https://hana-cockpit.cfapps.ap21.hana.ondemand.com/sap/hana/cst/catalog/index.html'
         } else {
-            const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)))
+            const db = new dbClass(await conn.createConnection(prompts))
             let query =
                 `SELECT *  from M_INIFILE_CONTENTS 
                 WHERE FILE_NAME LIKE 'xscontroller.ini'
@@ -93,19 +42,16 @@ async function getDBX(result) {
                 let apiUrl = results[0].VALUE
                 dbxURL = `${apiUrl}/go/hrtt-core`
             } else {
-                await console.log(`Sorry unable to determine Database Explorer URL from your HANA hostname: ${host}`)
+                await console.log(`${base.bundle.getText("errDBX")}: ${host}`)
                 return
             }
         }
         console.log(dbxURL)
         const open = require('open')
         open(dbxURL)
-
-        //  global.__spinner.stop()
-        return
+        return base.end()
     } catch (error) {
-        console.error(`Missing or badly formatted ${dbClass.resolveEnv(result)}. No HANA configuration can be read or processed`)
-        //throw new Error();
+        base.error(error)
     }
 }
 

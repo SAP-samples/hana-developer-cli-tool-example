@@ -1,10 +1,8 @@
-const bundle = global.__bundle;
+const base = require("../utils/base")
 
-exports.command = 'readMe';
-exports.describe = bundle.getText("readMe");
-
-exports.builder = {
-}
+exports.command = 'readMe'
+exports.describe = base.bundle.getText("readMe")
+exports.builder = base.getBuilder({}, false)
 
 exports.handler = async function () {
   const fs = require('fs')

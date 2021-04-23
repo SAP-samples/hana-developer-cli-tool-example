@@ -1,15 +1,9 @@
-const bundle = global.__bundle;
+const base = require("../utils/base")
 
-exports.command = 'rick';
-exports.describe = bundle.getText("rick");
-
-exports.builder = {
-}
-
+exports.command = 'rick'
+exports.describe = base.bundle.getText("rick")
+exports.builder = base.getBuilder({}, false, false)
 exports.handler = async function () {
-
-
-
   const prompt = require('prompt')
   prompt.start()
   var property = {
@@ -19,10 +13,6 @@ exports.handler = async function () {
     warning: 'Must respond yes or no',
     default: 'no'
   }
-
-  //
-  // Get the simple yes or no property
-  //
   prompt.get(property, function (err, result) {
 
     if (result.yesno === `yes`) {

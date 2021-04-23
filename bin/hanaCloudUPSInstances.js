@@ -1,33 +1,13 @@
-const colors = require("colors/safe")
-const bundle = global.__bundle
+const base = require("../utils/base")
 
 exports.command = 'ups'
 exports.aliases = ['upsInstances', 'upsinstances', 'upServices', 'listups', 'upsservices']
-exports.describe = bundle.getText("upsInstances")
-
-
-exports.builder = {
+exports.describe = base.bundle.getText("upsInstances")
+exports.builder = base.getBuilder({}, false)
+exports.handler = (argv) => {
+    base.promptHandler(argv, listInstances, {}, false)
 }
 
-exports.handler = function (argv) {
-    const prompt = require('prompt')
-    prompt.override = argv
-    prompt.message = colors.green(bundle.getText("input"))
-    prompt.start()
-
-    var schema = {
-        properties: {
-        }
-    }
-
-    prompt.get(schema, (err, result) => {
-        if (err) {
-            return console.log(err.message)
-        }
-        global.startSpinner()
-        listInstances(result)
-    })
-}
 
 async function listInstances() {
     try {
@@ -40,12 +20,10 @@ async function listInstances() {
             outputItem.name = item.name
             outputItem.created_at = item.created_at
             output.push(outputItem)
-        } 
+        }
         console.table(output)
-        global.__spinner.stop()
-        return
+        return base.end()
     } catch (error) {
-        global.__spinner.stop()
-        return console.log(error.message)
+        base.error(error)
     }
 }

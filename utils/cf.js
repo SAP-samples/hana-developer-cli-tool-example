@@ -1,5 +1,6 @@
 /*eslint-env node, es6 */
 "use strict";
+const bundle = global.__bundle
 
 async function getCFConfig() {
 
@@ -12,7 +13,7 @@ async function getCFConfig() {
         return object
     }
     catch (error) {
-        throw new Error("CF configuration missing. Please use 'cf login' first")
+        throw new Error(bundle.getText("errCFConfig"))
     }
 }
 module.exports.getCFConfig = getCFConfig
@@ -76,14 +77,14 @@ async function getHANAInstances() {
 
         if (stderr) {
             console.log(stdout)
-            throw new Error(`ERROR: ${stderr.toString()}`)
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
         } else {
             return JSON.parse(stdout)
         }
 
 
     } catch (error) {
-        throw new Error(`Connection Problem ${JSON.stringify(error)}`);
+        throw new Error(`${bundle.getText("errConn")} ${JSON.stringify(error)}`);
     }
 }
 module.exports.getHANAInstances = getHANAInstances
@@ -105,14 +106,14 @@ async function getHANAInstanceByName(name) {
 
         if (stderr) {
             console.log(stdout)
-            throw new Error(`ERROR: ${stderr.toString()}`)
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
         } else {
             return JSON.parse(stdout)
         }
 
 
     } catch (error) {
-        throw new Error(`Connection Problem ${JSON.stringify(error)}`);
+        throw new Error(`${bundle.getText("errConn")} ${JSON.stringify(error)}`);
     }
 }
 module.exports.getHANAInstanceByName = getHANAInstanceByName
@@ -134,14 +135,14 @@ async function getHDIInstances() {
 
         if (stderr) {
             console.log(stdout)
-            throw new Error(`ERROR: ${stderr.toString()}`)
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
         } else {
             return JSON.parse(stdout)
         }
 
 
     } catch (error) {
-        throw new Error(`Connection Problem ${JSON.stringify(error)}`);
+        throw new Error(`${bundle.getText("errConn")} ${JSON.stringify(error)}`);
     }
 }
 module.exports.getHDIInstances = getHDIInstances
@@ -163,14 +164,14 @@ async function getUpsInstances() {
 
         if (stderr) {
             console.log(stdout)
-            throw new Error(`ERROR: ${stderr.toString()}`)
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
         } else {
             return JSON.parse(stdout)
         }
 
 
     } catch (error) {
-        throw new Error(`Connection Problem ${JSON.stringify(error)}`);
+        throw new Error(`${bundle.getText("errConn")} ${JSON.stringify(error)}`);
     }
 }
 module.exports.getUpsInstances = getUpsInstances
@@ -191,7 +192,7 @@ async function startHana(name) {
         const { stdout, stderr } = await exec(script)
 
         if (stderr) {
-            throw new Error(`ERROR: ${stderr.toString()}`)
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
         } else {
             fs.unlinkSync(fileName)
             return stdout
@@ -199,7 +200,7 @@ async function startHana(name) {
 
 
     } catch (error) {
-        throw new Error(`Connection Problem ${JSON.stringify(error)}`);
+        throw new Error(`${bundle.getText("errConn")} ${JSON.stringify(error)}`);
     }
 }
 module.exports.startHana = startHana
@@ -220,7 +221,7 @@ async function stopHana(name) {
         const { stdout, stderr } = await exec(script)
 
         if (stderr) {
-            throw new Error(`ERROR: ${stderr.toString()}`)
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
         } else {
             fs.unlinkSync(fileName)            
             return stdout
@@ -228,7 +229,7 @@ async function stopHana(name) {
 
 
     } catch (error) {
-        throw new Error(`Connection Problem ${JSON.stringify(error)}`);
+        throw new Error(`${bundle.getText("errConn")} ${JSON.stringify(error)}`);
     }
 }
 module.exports.stopHana = stopHana

@@ -1,61 +1,42 @@
-const colors = require("colors/safe")
-const bundle = global.__bundle
+const base = require("../utils/base")
 
 exports.command = 'hcStart [name]'
 exports.aliases = ['hcstart', 'hc_start', 'start']
-exports.describe = bundle.getText("hcStart")
+exports.describe = base.bundle.getText("hcStart")
 
-
-exports.builder = {
+exports.builder = base.getBuilder({
     name: {
         alias: ['n'],
         type: 'string',
         default: `**default**`,
-        desc: bundle.getText("hc_instance_name")
+        desc: base.bundle.getText("hc_instance_name")
     }
-}
+}, false)
 
-exports.handler = function (argv) {
-    const prompt = require('prompt')
-    prompt.override = argv
-    prompt.message = colors.green(bundle.getText("input"))
-    prompt.start()
-
-    var schema = {
-        properties: {
-            name: {
-                description: bundle.getText("hc_instance_name"),
-                type: 'string',
-                required: true
-            }
-        } 
-    }
-
-    prompt.get(schema, (err, result) => {
-        if (err) {
-            return console.log(err.message)
+exports.handler = (argv) => {
+    base.promptHandler(argv, hcStart, {
+        name: {
+            description: base.bundle.getText("hc_instance_name"),
+            type: 'string',
+            required: true
         }
-        global.startSpinner()
-        listInstances(result)
-    })
+    }, false)
 }
 
-async function listInstances(result) {
+async function hcStart(prompts) {
     try {
         const cf = require("../utils/cf")
         let results = ''
-        if (result.name ===  '**default**') {
+        if (prompts.name === '**default**') {
             results = await cf.getHANAInstances()
         } else {
-            results = await cf.getHANAInstanceByName(result.name)
+            results = await cf.getHANAInstanceByName(prompts.name)
         }
         for (let item of results.resources) {
             console.log(await cf.startHana(item.name))
         }
-        global.__spinner.stop()
-        return
+        return base.end()
     } catch (error) {
-        global.__spinner.stop()
-        return console.log(error.message)
+        base.error(error)
     }
 }

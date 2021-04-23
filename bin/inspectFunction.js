@@ -1,106 +1,78 @@
-const colors = require("colors/safe");
-const bundle = global.__bundle;
-const dbClass = require("sap-hdbext-promisfied");
-const dbInspect = require("../utils/dbInspect");
+const base = require("../utils/base")
 
-exports.command = 'inspectFunction [schema] [function]';
-exports.aliases = ['if', 'function', 'insFunc', 'inspectfunction'];
-exports.describe = bundle.getText("inspectFunction");
+exports.command = 'inspectFunction [schema] [function]'
+exports.aliases = ['if', 'function', 'insFunc', 'inspectfunction']
+exports.describe = base.bundle.getText("inspectFunction")
 
-
-exports.builder = {
-  admin: {
-    alias: ['a', 'Admin'],
-    type: 'boolean',
-    default: false,
-    desc: bundle.getText("admin")
-  },
+exports.builder = base.getBuilder({
   function: {
     alias: ['f', 'Function'],
     type: 'string',
-    desc: bundle.getText("function")
+    desc: base.bundle.getText("function")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: bundle.getText("schema")
+    desc: base.bundle.getText("schema")
   },
   output: {
     alias: ['o', 'Output'],
     choices: ["tbl", "sql"],
     default: "tbl",
     type: 'string',
-    desc: bundle.getText("outputType")
+    desc: base.bundle.getText("outputType")
   }
-};
+})
 
-exports.handler = function (argv) {
-  const prompt = require('prompt');
-  prompt.override = argv;
-  prompt.message = colors.green(bundle.getText("input"));
-  prompt.start();
-
-  var schema = {
-    properties: {
-      admin: {
-        description: bundle.getText("admin"),
-        type: 'boolean',
-        required: true,
-        ask: () => {
-          return false;
-        }
-      },
-      function: {
-        description: bundle.getText("function"),
-        type: 'string',
-        required: true
-      },
-      schema: {
-        description: bundle.getText("schema"),
-        type: 'string',
-        required: true
-      },
-      output: {
-        description: bundle.getText("outputType"),
-        type: 'string',
-        validator: /t[bl]*|s[ql]?/,
-        required: true
-      }
+exports.handler = (argv) => {
+  base.promptHandler(argv, functionInspect, {
+    function: {
+      description: base.bundle.getText("function"),
+      type: 'string',
+      required: true
+    },
+    schema: {
+      description: base.bundle.getText("schema"),
+      type: 'string',
+      required: true
+    },
+    output: {
+      description: base.bundle.getText("outputType"),
+      type: 'string',
+      validator: /t[bl]*|s[ql]?/,
+      required: true
     }
-  };
-
-  prompt.get(schema, (err, result) => {
-    if (err) {
-      return console.log(err.message);
-    }
-    global.startSpinner()
-    functionInspect(result);
-  });
+  })
 }
 
+async function functionInspect(prompts) {
+  try {
+    const dbClass = require("sap-hdbext-promisfied")
+    const conn = require("../utils/connections")
+    const db = new dbClass(await conn.createConnection(prompts))
+    const dbInspect = require("../utils/dbInspect")
 
-async function functionInspect(result) {
-  const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
+    let schema = await dbClass.schemaCalc(prompts, db)
+    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("function")}: ${prompts.function}`);
 
-  let schema = await dbClass.schemaCalc(result, db);
-  console.log(`Schema: ${schema}, Function: ${result.function}`);
-
-  let proc = await dbInspect.getFunction(db, schema, result.function);
-  let parameters = await dbInspect.getFunctionPrams(db, proc[0].FUNCTION_OID);
-  let columns = await dbInspect.getFunctionPramCols(db, proc[0].FUNCTION_OID);
+    let proc = await dbInspect.getFunction(db, schema, prompts.function);
+    let parameters = await dbInspect.getFunctionPrams(db, proc[0].FUNCTION_OID)
+    let columns = await dbInspect.getFunctionPramCols(db, proc[0].FUNCTION_OID)
 
 
-  if(result.output === 'tbl'){
-    console.log(proc[0]);
-    console.log("\n")
-    console.table(parameters);
-    console.table(columns);
-  }else if(result.output === 'sql'){
-    let definition = await dbInspect.getDef(db, schema, result.function);   
-    const highlight = require('cli-highlight').highlight 
-    console.log(highlight(definition))     
+    if (prompts.output === 'tbl') {
+      console.log(proc[0]);
+      console.log("\n")
+      console.table(parameters);
+      console.table(columns);
+    } else if (prompts.output === 'sql') {
+      let definition = await dbInspect.getDef(db, schema, prompts.function);
+      const highlight = require('cli-highlight').highlight
+      console.log(highlight(definition))
+    }
+    return base.end()
+  } catch (error) {
+    base.error(error)
   }
-  global.__spinner.stop()
-  return;
 }

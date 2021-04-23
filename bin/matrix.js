@@ -1,18 +1,13 @@
-const bundle = global.__bundle;
+const base = require("../utils/base")
 
-exports.command = 'matrix';
-exports.describe = bundle.getText("matrix");
-
-exports.builder = {
-}
-
-exports.handler = async function () {
- 
+exports.command = 'matrix'
+exports.describe = base.bundle.getText("matrix")
+exports.builder = base.getBuilder({}, false, false)
+exports.handler = async function () { 
   try {
     const tools = require("terminaltools")
     tools.fun.matrix()
-
   } catch (err) {
-    console.error(err)
+    return console.error(err)
   }
 }

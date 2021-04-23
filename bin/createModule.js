@@ -1,63 +1,45 @@
-const colors = require("colors/safe");
-const bundle = global.__bundle;
+const base = require("../utils/base")
 
-exports.command = 'createModule';
-exports.aliases = ['createDB', 'createDBModule'];
-exports.describe = bundle.getText("createModule");
+exports.command = 'createModule'
+exports.aliases = ['createDB', 'createDBModule']
+exports.describe = base.bundle.getText("createModule")
 
-
-exports.builder = {
+exports.builder = base.getBuilder({
     folder: {
         alias: ['f', 'Folder'],
         type: 'string',
         default: 'db',
-        desc: bundle.getText("folder")
+        desc: base.bundle.getText("folder")
     },
     hanaCloud: {
         alias: ['hc', 'hana-cloud', 'hanacloud'],
         type: 'boolean',
         default: true,
-        desc: bundle.getText("hanaCloud")
+        desc: base.bundle.getText("hanaCloud")
     }
-};
+}, false)
 
-exports.handler = function (argv) {
-    const prompt = require('prompt');
-    prompt.override = argv;
-    prompt.message = colors.green(bundle.getText("input"));
-    prompt.start();
-
-    var schema = {
-        properties: {
-            folder: {
-                description: bundle.getText("folder"),
-                type: 'string',
-                required: true
-            },
-            hanaCloud: {
-                description: bundle.getText("hanaCloud"),
-                type: 'boolean',
-                required: true,
-                default: true
-            }
+exports.handler = (argv) => {
+    base.promptHandler(argv, save, {
+        folder: {
+            description: base.bundle.getText("folder"),
+            type: 'string',
+            required: true
+        },
+        hanaCloud: {
+            description: base.bundle.getText("hanaCloud"),
+            type: 'boolean',
+            required: true,
+            default: true
         }
-    };
-
-    prompt.get(schema, (err, result) => {
-        if (err) {
-            return console.log(err.message);
-        }
-        global.startSpinner()
-        dbStatus(result);
-    });
+    }, false)
 }
 
+async function save(prompts) {
+    let fs = require('fs')
+    let dir = './' + prompts.folder
 
-async function dbStatus(result) {
-    let fs = require('fs');
-    let dir = './' + result.folder;
-
-    !fs.existsSync(dir) && fs.mkdirSync(dir);
+    !fs.existsSync(dir) && fs.mkdirSync(dir)
 
     let build = `
 // Executes the CDS build depending on whether we have a top-level package.json.
@@ -78,13 +60,13 @@ if (fs.existsSync('../package.json')) {
 }
     `
     fs.writeFile(dir + '/.build.js', build, (err) => {
-        if (err) throw err;
-    });
+        if (err) throw err
+    })
 
     const latestVersion = require('latest-version')
     let hdiVersion = await latestVersion('@sap/hdi-deploy')
     var packageContent = ``
-    if (result.hanaCloud) {
+    if (prompts.hanaCloud) {
         packageContent = `
     {
         "name": "deploy",
@@ -118,12 +100,12 @@ if (fs.existsSync('../package.json')) {
     }
 
     fs.writeFile(dir + '/package.json', packageContent, (err) => {
-        if (err) throw err;
-    });
+        if (err) throw err
+    })
 
-    !fs.existsSync(dir + '/src') && fs.mkdirSync(dir + '/src');
+    !fs.existsSync(dir + '/src') && fs.mkdirSync(dir + '/src')
     let hdiconfig = ""
-    if (result.hanaCloud) {
+    if (prompts.hanaCloud) {
         hdiconfig = `
         {
             "minimum_feature_version": "1000",
@@ -425,9 +407,7 @@ if (fs.existsSync('../package.json')) {
     `
     }
     fs.writeFile(dir + '/src/.hdiconfig', hdiconfig, (err) => {
-        if (err) throw err;
-    });
-
-    global.__spinner.stop()
-    return;
+        if (err) throw err
+    })
+    return base.end()
 }
