@@ -252,9 +252,21 @@ hana-cli callProcedure [schema] [procedure]
 [aliases: cp, callprocedure, callProc, callproc, callSP, callsp]
 Call a stored procedure and display the results
 
-Options:
-  -a, --admin, --Admin                Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -p, --procedure, --Procedure, --sp  Stored Procedure                  [string]
   -s, --schema, --Schema              schema
                                         [string] [default: "**CURRENT_SCHEMA**"]
