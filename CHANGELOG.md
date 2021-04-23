@@ -8,7 +8,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 - Match the @sap/hdbext and @sap/hana-client versions exactly to remove duplicate copies of the HANA Client in node_modules removing about 135Mb from the footprint of this tool overall
-- 
+- Major internal refactoring to streamline the code and reduce duplication. Reusable base code for basic handling of Yargs and Prompts. Consistent error handling and other general stability improvments
+- The default-env*.json file no longer needs to be in the same directory in which you are running the command.  If not found in the current directory, the tool will search in up to 5 parent directories to find it
+- New parameter --conn added to most commands that allow you specify any filename you want to override the default-env.json. conn can specify a file in the current directory, up to 5 parent directories or in your ${homedir}/.hana-cli/ folder
+- New parameter --quiet that disables extra output and human readable formatting for when you want to script commands and get pure results output
+- New parameter --debug - for troubleshooting of the hana-cli tool itself. It will produce a LOT of detailed output. Nice if you are curious what queries are being sent to SAP to fullfill a command
+- Options in the help are now grouped by Conneciton Parameters, Troubleshooting, and Options
+- New order of processing for making connections.
+  - First we look for the Admin option and use a default-env-admin.json - this overrides all other parameters
+  - If no admin option or if there was an admin option but no default-env-admin.json could be found in this directory or 5 parent directories then look for a .env file in this directory or up to 5 parent directories
+  - No .env file found or it doesn't contain a VCAP_SERVICES section, then check to see if the --conn parameter was specified. If so check for that file in the current directory or up to 5 parent directories
+  - If the file specified via the --conn parameter wasn't found locally then check for it in the ${homedir}/.hana-cli/ folder
+  - If no specific configuration file was was found then look for a file named default-env.json in the current directory or up to 5 parent directories
+  - Last resort if nothing has been found up to this point - look for a file named default.json in the ${homedir}/.hana-cli/ folder
 ## 1.202104.2
 ### Added
 - Add Syntax Highlighting to various command outputs

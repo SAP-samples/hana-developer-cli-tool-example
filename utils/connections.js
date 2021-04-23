@@ -109,11 +109,11 @@ function getConnOptions(prompts) {
                 envFile = getFileCheckParents(`${homedir}/.hana-cli/default.json`)
             }
         }
-        if (envFile && base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile")} ${envFile} \n`) }
+        if (envFile && base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile2")} ${envFile} \n`) }
 
     } else {
-        if (!envFile && base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile")} ${getEnv()} \n`) }
-        else if (base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile")} ${envFile} \n`) }
+        if (!envFile && base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile2")} ${getEnv()} \n`) }
+        else if (base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile2")} ${envFile} \n`) }
     }
 
     //Load Environment 
