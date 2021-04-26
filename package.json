@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "2.202104.3",
+  "version": "2.202104.4",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -35,7 +35,6 @@
     "dotenv": "^8.2",
     "easy-table": "1.1.1",
     "express": "^4.17",
-    "glob-fs": "^0.1.7",
     "latest-version": "^5.1",
     "marked": "^2.0.3",
     "marked-terminal": "^4.1.1",
