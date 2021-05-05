@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202105.1
+
+### Fixed
+- copy2DefaultEnv fix to support hanatrial (old HaaS offering) but produce a warning that people should consider using SAP HANA Cloud trial instead
+- Fix not a function error in inspectView with output option of openapi
+  
+### Added
+- swagger-jsdoc output format, which is actually commented YAML version of openAPI, added to inspectTable and inspectView
+
 ## 2.202104.2
 
 ### Changed

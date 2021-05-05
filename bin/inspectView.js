@@ -18,7 +18,7 @@ exports.builder = base.getBuilder({
   },
   output: {
     alias: ['o', 'Output'],
-    choices: ["tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi", "hdbview", "hdbcds"],
+    choices: ["tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi", "hdbview", "hdbcds", "jsdoc"],
     default: "tbl",
     type: 'string',
     desc: base.bundle.getText("outputType")
@@ -70,6 +70,7 @@ async function viewInspect(prompts) {
     let object = await dbInspect.getView(db, schema, prompts.view)
     let fields = await dbInspect.getViewFields(db, object[0].VIEW_OID)
     const cds = require("@sap/cds")
+    Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => require('@sap/cds-dk/lib/compile/openapi') })
     const highlight = require('cli-highlight').highlight
 
     switch (prompts.output) {
@@ -179,6 +180,29 @@ async function viewInspect(prompts) {
           'openapi:diagram': true
         })
         console.log(highlight(JSON.stringify(metadata, null, 2)))
+        break
+      }
+      case 'jsdoc': {
+        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view")
+        cdsSource = `service HanaCli { ${cdsSource} } `
+        let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
+          service: 'HanaCli',
+          servicePath: '/odata/v4/opensap.hana.CatalogService/',
+          'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
+          'openapi:diagram': true
+        })
+        const YAML = require('json-to-pretty-yaml')
+        let data = YAML.stringify(metadata)
+        var lines = data.split('\n')
+        let output =
+          '/**\n' +
+          ' * @swagger\n' +
+          ' * \n'
+        for (let line of lines) {
+          output += ' * ' + line + '\n'
+        }
+        output += ' */ \n'
+        console.log(highlight(output))
         break
       }
       default: {

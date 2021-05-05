@@ -21,9 +21,20 @@ async function copy() {
     let temp = JSON.parse(process.env.VCAP_SERVICES)
     defaultEnv.VCAP_SERVICES = temp
 
-    defaultEnv.VCAP_SERVICES.hana[0].credentials.encrypt = true
-    defaultEnv.VCAP_SERVICES.hana[0].credentials.sslValidateCertificate = false
-    defaultEnv.VCAP_SERVICES.hana[0].credentials.pooling = true
+    if(Object.prototype.hasOwnProperty.call(defaultEnv.VCAP_SERVICES, "hana")){
+        defaultEnv.VCAP_SERVICES.hana[0].credentials.encrypt = true
+        defaultEnv.VCAP_SERVICES.hana[0].credentials.sslValidateCertificate = false
+        defaultEnv.VCAP_SERVICES.hana[0].credentials.pooling = true
+    }else if (Object.prototype.hasOwnProperty.call(defaultEnv.VCAP_SERVICES, "hanatrial")){
+        console.log(base.bundle.getText("warningHAAS")+"\n")
+        
+        defaultEnv.VCAP_SERVICES.hanatrial[0].credentials.encrypt = true
+        defaultEnv.VCAP_SERVICES.hanatrial[0].credentials.sslValidateCertificate = false
+        defaultEnv.VCAP_SERVICES.hanatrial[0].credentials.pooling = true
+    }else {
+        return base.error(base.bundle.getText("errNoHANAConfig"))
+    }
+
 
     base.debug(defaultEnv)
     const fs = require('fs')

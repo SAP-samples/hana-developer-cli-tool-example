@@ -18,7 +18,7 @@ exports.builder = base.getBuilder({
   },
   output: {
     alias: ['o', 'Output'],
-    choices: ["tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi", "hdbtable", "hdbcds"],
+    choices: ["tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi", "hdbtable", "hdbcds", "jsdoc"],
     default: "tbl",
     type: 'string',
     desc: base.bundle.getText("outputType")
@@ -185,6 +185,29 @@ async function tableInspect(prompts) {
         console.log(highlight(JSON.stringify(metadata, null, 2)))
         break
       }
+      case 'jsdoc': {
+        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "table")
+        cdsSource = `service HanaCli { ${cdsSource} } `
+        let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
+          service: 'HanaCli',
+          servicePath: '/odata/v4/opensap.hana.CatalogService/',
+          'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
+          'openapi:diagram': true
+        })
+        const YAML = require('json-to-pretty-yaml')
+        let data = YAML.stringify(metadata)
+        var lines = data.split('\n')
+        let output =
+          '/**\n' +
+          ' * @swagger\n' +
+          ' * \n'
+        for (let line of lines) {
+          output += ' * ' + line + '\n'
+        }
+        output += ' */ \n'
+        console.log(highlight(output))
+        break
+      }      
       default: {
         console.error(base.bundle.getText("unsupportedFormat"))
         break
