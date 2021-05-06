@@ -47,6 +47,7 @@ exports.handler = (argv) => {
 
 async function getTables(prompts) {
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const db = new dbClass(await conn.createConnection(prompts))
@@ -55,7 +56,7 @@ async function getTables(prompts) {
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("table")}: ${prompts.table}`)
 
     let results = await getTablesInt(schema, prompts.table, db, prompts.limit)
-    console.table(results)
+    base.outputTable(results)
     return base.end()
   } catch (error) {
     base.error(error)

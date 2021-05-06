@@ -10,17 +10,18 @@ exports.handler = (argv) => {
 
 async function sysInfo(prompts) {
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const dbStatus = new dbClass(await conn.createConnection(prompts))
     const dbInspect = require("../utils/dbInspect")
-    console.table(await dbInspect.getHANAVersion(dbStatus))
+    base.outputTable(await dbInspect.getHANAVersion(dbStatus))
 
     let results = await dbStatus.execSQL(`SELECT TOP 100 * FROM "M_SYSTEM_OVERVIEW"`)
-    console.table(results)
+    base.outputTable(results)
 
     results = await dbStatus.execSQL(`SELECT TOP 100 * FROM "M_SERVICES"`)
-    console.table(results)
+    base.outputTable(results)
     return base.end()
   } catch (error) {
     base.error(error)

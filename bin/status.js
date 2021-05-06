@@ -27,28 +27,29 @@ exports.handler = (argv) => {
 async function dbStatus(prompts) {
 
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const dbStatus = new dbClass(await conn.createConnection(prompts))
 
     let results = await dbStatus.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`)
-    console.table(results)
+    base.outputTable(results)
 
     let resultsSession = await dbStatus.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`)
-    console.table(resultsSession)
+    base.outputTable(resultsSession)
 
-    console.log(base.bundle.getText("grantedRoles"))
+    base.output(base.bundle.getText("grantedRoles"))
     let resultsRoles = await dbStatus.execSQL(`SELECT ROLE_SCHEMA_NAME, ROLE_NAME, GRANTOR, IS_GRANTABLE
                                                   FROM  GRANTED_ROLES
                                                   WHERE GRANTEE = (SELECT CURRENT_USER FROM "DUMMY")`)
-    console.table(resultsRoles)
+    base.outputTable(resultsRoles)
 
     if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'priv') && prompts.priv) {
-      console.log(base.bundle.getText("grantedPrivs"))
+      base.output(base.bundle.getText("grantedPrivs"))
       let resultsPrivs = await dbStatus.execSQL(`SELECT PRIVILEGE, OBJECT_TYPE, GRANTOR, IS_GRANTABLE
                                                     FROM  GRANTED_PRIVILEGES
                                                     WHERE GRANTEE = (SELECT CURRENT_USER FROM "DUMMY")`)
-      console.table(resultsPrivs)
+      base.outputTable(resultsPrivs)
     }
 
     return base.end()    

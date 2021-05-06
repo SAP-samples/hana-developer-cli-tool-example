@@ -12,12 +12,13 @@ exports.handler = (argv) => {
 
 async function certs(prompts) {
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const db = new dbClass(await conn.createConnection(prompts))
 
     let results = await db.execSQL(`SELECT TOP 100 * FROM "CERTIFICATES"`)
-    console.log(results)
+    base.outputTable(results)
     return base.end()
   } catch (error) {
     base.error(error)

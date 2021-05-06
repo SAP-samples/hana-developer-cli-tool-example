@@ -48,6 +48,7 @@ exports.handler = (argv) => {
 async function getContainers(prompts) {
 
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const db = new dbClass(await conn.createConnection(prompts))
@@ -55,7 +56,7 @@ async function getContainers(prompts) {
     base.debug(`${base.bundle.getText("containerGroup")}: ${prompts.containerGroup}, ${base.bundle.getText("container")}: ${prompts.container}`)
 
     let results = await getContainersInt(prompts.containerGroup, prompts.container, db, prompts.limit)
-    console.table(results)
+    base.outputTable(results)
 
     return base.end()
   } catch (error) {

@@ -24,6 +24,7 @@ exports.handler = (argv) => {
 
 async function dbCall(prompts) {
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const db = new dbClass(await conn.createConnection(prompts))
@@ -36,7 +37,7 @@ async function dbCall(prompts) {
     if (object.results < 1) {
       throw new Error(base.bundle.getText("errGUID"))
     }
-    console.log(object.results[0])
+    base.outputTable(object.results[0])
     return base.end()
   } catch (error) {
     base.error(error)

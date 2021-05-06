@@ -11,17 +11,18 @@ exports.handler = (argv) => {
 
 async function dbStatus(prompts) {
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const dbStatus = new dbClass(await conn.createConnection(prompts))
 
     let results = await dbStatus.execSQL(
       `SELECT * FROM M_DISKS`)
-    console.table(results)
+    base.outputTable(results)
 
     results = await dbStatus.execSQL(
       `SELECT * FROM M_DISK_USAGE`)
-    console.table(results)
+    base.outputTable(results)
     return base.end()
   } catch (error) {
     base.error(error)

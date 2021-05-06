@@ -11,21 +11,22 @@ exports.handler = (argv) => {
 async function inspectJWT(prompts) {
 
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const dbStatus = new dbClass(await conn.createConnection(prompts))
 
     let results = await dbStatus.execSQL(`SELECT TOP 100 * FROM "PSES" WHERE PURPOSE = 'JWT'`)
-    console.table(results)
+    base.outputTable(results)
 
     results = await dbStatus.execSQL(`SELECT TOP 100 * FROM "CERTIFICATES"`)
-    console.table(results)
+    base.outputTable(results)
 
     results = await dbStatus.execSQL(`SELECT TOP 100 * FROM "PSE_CERTIFICATES"`)
-    console.table(results)
+    base.outputTable(results)
 
     results = await dbStatus.execSQL(`SELECT TOP 100 * FROM "JWT_PROVIDERS"`)
-    console.table(results)
+    base.outputTable(results)
 
     return base.end()
   } catch (error) {

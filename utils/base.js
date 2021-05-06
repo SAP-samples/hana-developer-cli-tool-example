@@ -3,6 +3,12 @@ module.exports.bundle = bundle
 const colors = require("colors/safe")
 let debug = require('debug')('hana-cli')
 module.exports.debug = debug
+let prompts = []
+
+function setPrompts(newPrompts){
+  prompts = newPrompts
+}
+module.exports.setPrompts = setPrompts
 
 function getBuilder(input, iConn = true, iDebug = true) {
 
@@ -178,3 +184,22 @@ function isDebug(prompts) {
     else { return false }
 }
 module.exports.isDebug = isDebug
+
+function outputTable(content) {
+    if (verboseOutput(prompts)) {
+        return console.table(content)
+    } else {
+        const util = require('util')
+        return console.log(util.inspect(content, { maxArrayLength: null }))
+    }
+}
+module.exports.outputTable = outputTable
+
+function output(content) {
+    if (verboseOutput(prompts)) {
+        return console.log(content)
+    } else {
+        return
+    }
+}
+module.exports.output = output

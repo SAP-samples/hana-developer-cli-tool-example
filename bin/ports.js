@@ -8,6 +8,7 @@ exports.handler = (argv) => {
 }
 async function getPorts(prompts) {
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const dbStatus = new dbClass(await conn.createConnection(prompts))
@@ -16,7 +17,7 @@ async function getPorts(prompts) {
               PORT, 
               SQL_PORT
               FROM SYS.M_SERVICES`)
-    console.table(results)
+    base.outputTable(results)
     return base.end()
   } catch (error) {
     base.error(error)

@@ -47,6 +47,7 @@ exports.handler = (argv) => {
 
 async function iniContents(prompts) {
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const db = new dbClass(await conn.createConnection(prompts))
@@ -63,7 +64,7 @@ async function iniContents(prompts) {
       query += `LIMIT ${prompts.limit.toString()}`
     }
     let results = await db.statementExecPromisified(await db.preparePromisified(query), [iniFile, section])
-    console.table(results)
+    base.outputTable(results)
     return base.end()
   } catch (error) {
     base.error(error)

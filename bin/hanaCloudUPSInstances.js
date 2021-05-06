@@ -5,6 +5,7 @@ exports.aliases = ['upsInstances', 'upsinstances', 'upServices', 'listups', 'ups
 exports.describe = base.bundle.getText("upsInstances")
 exports.builder = base.getBuilder({}, false)
 exports.handler = (argv) => {
+    base.setPrompts(argv)
     base.promptHandler(argv, listInstances, {}, false)
 }
 
@@ -21,7 +22,7 @@ async function listInstances() {
             outputItem.created_at = item.created_at
             output.push(outputItem)
         }
-        console.table(output)
+        base.outputTable(output)
         return base.end()
     } catch (error) {
         base.error(error)

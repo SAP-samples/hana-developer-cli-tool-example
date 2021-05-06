@@ -47,6 +47,7 @@ exports.handler = (argv) => {
 
 async function getRoles(prompts) {
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const db = new dbClass(await conn.createConnection(prompts))
@@ -55,7 +56,7 @@ async function getRoles(prompts) {
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("role")}: ${prompts.role}`)
 
     let results = await getRolesInt(schema, prompts.role, db, prompts.limit)
-    console.table(results)
+    base.outputTable(results)
     return base.end()
   } catch (error) {
     base.error(error)

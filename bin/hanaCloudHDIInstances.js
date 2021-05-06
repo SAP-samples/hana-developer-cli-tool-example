@@ -5,11 +5,13 @@ exports.aliases = ['hdiInstances', 'hdiinstances', 'hdiServices', 'listhdi', 'hd
 exports.describe = base.bundle.getText("hdiInstances")
 exports.builder = base.getBuilder({}, false)
 exports.handler = (argv) => {
+    base.setPrompts(argv)
     base.promptHandler(argv, listInstances, {}, false)
 }
 
 async function listInstances() {
     try {
+
         const cf = require("../utils/cf")
         let results = ''
         results = await cf.getHDIInstances()
@@ -22,7 +24,7 @@ async function listInstances() {
             outputItem.last_operation = `${item.last_operation.type} ${item.last_operation.state} @ ${item.last_operation.updated_at}`
             output.push(outputItem)
         }
-        console.table(output)
+        base.outputTable(output)
         return base.end()
     } catch (error) {
         base.error(error)

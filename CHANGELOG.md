@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202105.2
+
+### Added
+- quiet output added to most commands allowing for a wide range of scripted usage of the tool overall
+  
 ## 2.202105.1
 
 ### Fixed

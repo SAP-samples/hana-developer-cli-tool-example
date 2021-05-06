@@ -36,11 +36,12 @@ exports.handler = (argv) => {
 async function indexInspect(prompts) {
 
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const db = new dbClass(await conn.createConnection(prompts))
     let schema = await dbClass.schemaCalc(prompts, db)
-    console.log(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("index")}: ${prompts.index}`)
+    base.output(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("index")}: ${prompts.index}`)
 
     let query =
       `SELECT *  
@@ -48,16 +49,16 @@ async function indexInspect(prompts) {
   WHERE SCHEMA_NAME = ? 
     AND INDEX_NAME = ?`
     let indexDetails = (await db.statementExecPromisified(await db.preparePromisified(query), [schema, prompts.index]))
-    console.log(indexDetails)
+    base.outputTable(indexDetails)
 
-    console.log(base.bundle.getText("indexColumns"))
+    base.output(base.bundle.getText("indexColumns"))
     query =
       `SELECT *
   FROM  INDEX_COLUMNS
   WHERE SCHEMA_NAME = ? 
   AND INDEX_NAME = ?`
     let resultsColumns = await db.statementExecPromisified(await db.preparePromisified(query), [schema, prompts.index])
-    console.table(resultsColumns)
+    base.outputTable(resultsColumns)
 
     return base.end()
   } catch (error) {

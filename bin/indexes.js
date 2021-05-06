@@ -47,15 +47,16 @@ exports.handler = (argv) => {
 
 async function getIndexes(prompts) {
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const db = new dbClass(await conn.createConnection(prompts))
 
     let schema = await dbClass.schemaCalc(prompts, db)
-    console.log(`Schema: ${schema}, Index: ${prompts.indexes}`)
+    base.output(`Schema: ${schema}, Index: ${prompts.indexes}`)
 
     let results = await getIndexesInt(schema, prompts.indexes, db, prompts.limit)
-    console.table(results)
+    base.outputTable(results)
     return base.end()
   } catch (error) {
     base.error(error)

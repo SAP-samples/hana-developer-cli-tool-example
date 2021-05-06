@@ -10,13 +10,14 @@ exports.handler = (argv) => {
 
 async function traces(prompts) {
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const dbStatus = new dbClass(await conn.createConnection(prompts))
 
     let results = await dbStatus.execSQL(
       `SELECT * FROM M_TRACEFILES`)
-    console.table(results)
+    base.outputTable(results)
     return base.end()
   } catch (error) {
     base.error(error)

@@ -48,15 +48,16 @@ exports.handler = (argv) => {
 async function getFunctions(prompts) {
 
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const db = new dbClass(await conn.createConnection(prompts))
 
     let schema = await dbClass.schemaCalc(prompts, db)
-    console.log(`Schema: ${schema}, Function: ${prompts.function}`)
+    base.output(`Schema: ${schema}, Function: ${prompts.function}`)
 
     let results = await getFunctionsInt(schema, prompts.function, db, prompts.limit)
-    console.table(results)
+    base.outputTable(results)
     return base.end()
   } catch (error) {
     base.error(error)

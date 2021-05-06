@@ -96,6 +96,7 @@ exports.handler = (argv) => {
 
 async function dbConnect(input) {
   try {
+    base.setPrompts(input)
     let options = {};
     options.pooling = true;
     options.encrypt = input.encrypt;
@@ -115,10 +116,10 @@ async function dbConnect(input) {
     const db = new dbClass(await dbClass.createConnection(options))
 
     let results = await db.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`)
-    console.table(results)
+    base.outputTable(results)
 
     let resultsSession = await db.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`)
-    console.table(resultsSession)
+    base.outputTable(resultsSession)
 
     if (input.save) {
       await saveEnv(options)

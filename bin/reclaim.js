@@ -10,18 +10,19 @@ exports.handler = (argv) => {
 
 async function reclaim(prompts) {
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const dbStatus = new dbClass(await conn.createConnection(prompts))
 
     let results = await dbStatus.execSQL(`ALTER SYSTEM RECLAIM LOB SPACE;`)
-    console.table(results)
+    base.outputTable(results)
 
     results = await dbStatus.execSQL(`ALTER SYSTEM RECLAIM LOG;`)
-    console.table(results)
+    base.outputTable(results)
 
     results = await dbStatus.execSQL(`ALTER SYSTEM RECLAIM DATAVOLUME 105 DEFRAGMENT;`)
-    console.table(results)
+    base.outputTable(results)
     return base.end()
   } catch (error) {
     base.error(error)

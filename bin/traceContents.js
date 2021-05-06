@@ -45,6 +45,7 @@ exports.handler = (argv) => {
 
 async function traceContents(prompts) {
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const db = new dbClass(await conn.createConnection(prompts))
@@ -54,7 +55,7 @@ async function traceContents(prompts) {
       AND FILE_NAME = ?`
     let max = await db.statementExecPromisified(await db.preparePromisified(query), [prompts.host, prompts.file])
     let maxOffset = max[0].OFFSET - prompts.limit * 10
-    console.log(maxOffset)
+    base.output(maxOffset)
 
     query =
       `SELECT CONTENT FROM  M_TRACEFILE_CONTENTS WHERE HOST = ?
@@ -62,7 +63,7 @@ async function traceContents(prompts) {
       AND OFFSET >= ?
     ORDER BY OFFSET `
     let results = await db.statementExecPromisified(await db.preparePromisified(query), [prompts.host, prompts.file, maxOffset])
-    console.table(results)
+    base.outputTable(results)
     return base.end()
   } catch (error) {
     base.error(error)

@@ -10,6 +10,7 @@ exports.handler = (argv) => {
 
 async function hostInfo(prompts) {
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const dbStatus = new dbClass(await conn.createConnection(prompts))
@@ -17,12 +18,12 @@ async function hostInfo(prompts) {
     let results = await dbStatus.execSQL(
       `SELECT * FROM M_HOST_INFORMATION
       ORDER BY HOST, KEY`)
-    console.table(results)
+    base.outputTable(results)
 
     results = await dbStatus.execSQL(
       `SELECT * FROM M_HOST_RESOURCE_UTILIZATION
       ORDER BY HOST`)
-    console.log(results)
+    base.outputTable(results)
     return base.end()
   } catch (error) {
     base.error(error)

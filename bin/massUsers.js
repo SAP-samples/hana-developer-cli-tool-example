@@ -34,6 +34,7 @@ exports.handler = (argv) => {
 async function massUsers(prompts) {
 
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const dbStatus = new dbClass(await conn.createConnection(prompts))
@@ -62,7 +63,7 @@ async function massUsers(prompts) {
       END WHILE;
       end;    
     `)
-    console.table(results)
+    base.outputTable(results)
     return base.end()
   } catch (error) {
     base.error(error)

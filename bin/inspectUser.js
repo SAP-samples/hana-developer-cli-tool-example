@@ -24,42 +24,43 @@ exports.handler = (argv) => {
 
 async function userInspect(prompts) {
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
     const db = new dbClass(await conn.createConnection(prompts))
 
-    console.log(`${base.bundle.getText("user")}: ${prompts.user}`)
+    base.output(`${base.bundle.getText("user")}: ${prompts.user}`)
 
     let query =
       `SELECT *  
   FROM USERS 
   WHERE USER_NAME = ? `;
     let userDetails = (await db.statementExecPromisified(await db.preparePromisified(query), [prompts.user]))
-    console.log(userDetails)
+    base.outputTable(userDetails)
 
-    console.log(base.bundle.getText("userParams"))
+    base.output(base.bundle.getText("userParams"))
     query =
       `SELECT *
   FROM  USER_PARAMETERS
   WHERE USER_NAME = ?`
     let resultsParams = await db.statementExecPromisified(await db.preparePromisified(query), [prompts.user])
-    console.table(resultsParams)
+   base.outputTable(resultsParams)
 
-    console.log(base.bundle.getText("grantedRoles"))
+    base.output(base.bundle.getText("grantedRoles"))
     query =
       `SELECT ROLE_SCHEMA_NAME, ROLE_NAME, GRANTOR, IS_GRANTABLE
   FROM  GRANTED_ROLES
   WHERE GRANTEE = ?`
     let resultsRoles = await db.statementExecPromisified(await db.preparePromisified(query), [prompts.user])
-    console.table(resultsRoles)
+    base.outputTable(resultsRoles)
 
-    console.log(base.bundle.getText("grantedPrivs"))
+    base.output(base.bundle.getText("grantedPrivs"))
     query =
       `SELECT PRIVILEGE, OBJECT_TYPE, GRANTOR, IS_GRANTABLE
   FROM  GRANTED_PRIVILEGES
   WHERE GRANTEE = ?`
     let resultsPrivs = await db.statementExecPromisified(await db.preparePromisified(query), [prompts.user])
-    console.table(resultsPrivs)
+    base.outputTable(resultsPrivs)
     return base.end()
   } catch (error) {
     base.error(error)
