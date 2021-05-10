@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202105.3
+
+### Changed
+- Upgraded dependencies @sap/cds to 5.1, @sap/hana-client to 2.8.20, and @sap/hdbext to 7.2.0
+- Add User Admin and Role Admin grants to the adminHDI and adminHDIGroup commands for XSA
+  
 ## 2.202105.2
 
 ### Added

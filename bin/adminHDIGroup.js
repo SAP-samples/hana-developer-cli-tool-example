@@ -53,6 +53,14 @@ async function activate(prompts) {
       `DROP TABLE #PRIVILEGES;`)
     console.table(resultsGrant)
 
+    resultsGrant = await dbStatus.execSQL(
+      `GRANT USER ADMIN TO ${prompts.user}`)
+    console.table(resultsGrant)
+
+    resultsGrant = await dbStatus.execSQL(
+      `GRANT ROLE ADMIN TO ${prompts.user}`)
+    console.table(resultsGrant)
+        
     return base.end()
   } catch (error) {
     base.error(error)
