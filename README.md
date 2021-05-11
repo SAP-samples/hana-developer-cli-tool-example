@@ -823,6 +823,8 @@ Troubleshooting:
                                                       [boolean] [default: false]
   --debug, --Debug           Debug hana-cli itself by adding output of LOTS of
                              intermediate details     [boolean] [default: false]
+Options:
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]                             
 ```
 ![hdi example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hdi.gif)
 
@@ -1226,8 +1228,8 @@ Options:
   -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
   -o, --output, --Output      Output Format for inspection
         [string] [choices: "tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl",
-      "annos", "edm", "edmx", "swgr", "openapi", "hdbtable", "hdbcds"] [default:
-                                                                          "tbl"]
+     "annos", "edm", "edmx", "swgr", "openapi", "hdbtable", "hdbmigrationtable",
+                                             "hdbcds", "jsdoc"] [default: "tbl"]
       --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
                               cloud.sap/docs/cds/cdl#predefined-types)
                                                       [boolean] [default: false]
@@ -1381,11 +1383,18 @@ Options:
   -l, --limit                 Limit results              [number] [default: 200]
   -f, --folder, --Folder      DB Module Folder Name     [string] [default: "./"]
   -n, --filename, --Filename  File name                                 [string]
-  -o, --output, --Output      Output Format for inspection
-                          [string] [choices: "hdbtable", "cds"] [default: "cds"]
+  -o, --output, --Output                   Output Format for inspection
+     [string] [choices: "hdbtable", "cds", "hdbmigrationtable"] [default: "cds"]
       --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
                               cloud.sap/docs/cds/cdl#predefined-types)
                                                       [boolean] [default: false]
+      --useCatalogPure, --catalog, --pure  Use "Pure" catalog definitions in a
+                                           massConvert. Will include additional
+                                           metadata such as Associations and
+                                           Merge settings but will also include
+                                           some references that are
+                                           incompatible with HDI
+                                                      [boolean] [default: false]                                                      
 ```
 
 ### massUsers
@@ -1950,6 +1959,8 @@ Troubleshooting:
                                                       [boolean] [default: false]
   --debug, --Debug           Debug hana-cli itself by adding output of LOTS of
                              intermediate details     [boolean] [default: false]
+Options:
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]                             
 ```
 
 ### users

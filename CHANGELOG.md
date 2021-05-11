@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202105.4
+
+### Added
+- [Issue #39 - Add support for HANA XSA in the UPS and HDI commands](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/39)
+- [Issue #38 - Add support for hdbmigrationtable in massConvert and inspectTable](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/38)
+- Add option useCatalogPure to massConvert command. Defaults to false and uses the cds.compile api to produce its hdbtable or hdbmigrationtable output. When set to true it will instead use the HANA SYS.GET_OBJECT_DEFINITION which includes more metadata but might produce results which are incompatible with HDI
+- Remove the Schema from output of massConvert commands
+
 ## 2.202105.3
 
 ### Changed

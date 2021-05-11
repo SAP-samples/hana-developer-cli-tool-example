@@ -18,7 +18,7 @@ exports.builder = base.getBuilder({
   },
   output: {
     alias: ['o', 'Output'],
-    choices: ["tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi", "hdbtable", "hdbcds", "jsdoc"],
+    choices: ["tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi", "hdbtable", "hdbmigrationtable", "hdbcds", "jsdoc"],
     default: "tbl",
     type: 'string',
     desc: base.bundle.getText("outputType")
@@ -120,6 +120,16 @@ async function tableInspect(prompts) {
         console.log(`\n`)
         break
       }
+      case 'hdbmigrationtable': {
+        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable")
+        let all = cds.compile.to.hdbtable(cds.parse(cdsSource))
+        for (let [src] of all) {
+          let srcOut = `== version = 1 \n` + src
+          console.log(highlight(srcOut))
+        }
+        console.log(`\n`)
+        break
+      }
       case 'yaml': {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "table")
         cdsSource = `service HanaCli { ${cdsSource} } `
@@ -207,7 +217,7 @@ async function tableInspect(prompts) {
         output += ' */ \n'
         console.log(highlight(output))
         break
-      }      
+      }
       default: {
         console.error(base.bundle.getText("unsupportedFormat"))
         break

@@ -1,5 +1,6 @@
 const base = require("../utils/base")
 
+
 exports.command = 'massConvert [schema] [table]'
 exports.aliases = ['mc', 'massconvert', 'massConv', 'massconv']
 exports.describe = base.bundle.getText("massConvert")
@@ -36,7 +37,7 @@ exports.builder = base.getBuilder({
     },
     output: {
         alias: ['o', 'Output'],
-        choices: ["hdbtable", "cds"],
+        choices: ["hdbtable", "cds", "hdbmigrationtable"],
         default: "cds",
         type: 'string',
         desc: base.bundle.getText("outputType")
@@ -46,6 +47,12 @@ exports.builder = base.getBuilder({
         type: 'boolean',
         default: false,
         desc: base.bundle.getText("useHanaTypes")
+    },
+    useCatalogPure: {
+        alias: ['catalog', 'pure'],
+        type: 'boolean',
+        default: false,
+        desc: base.bundle.getText("useCatalogPure")
     }
 })
 
@@ -88,14 +95,23 @@ exports.handler = (argv) => {
         useHanaTypes: {
             description: base.bundle.getText("useHanaTypes"),
             type: 'boolean'
+        },
+        useCatalogPure: {
+            description: base.bundle.getText("useCatalogPure"),
+            type: 'boolean'
         }
     })
 }
+
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+  }
 
 async function getTables(prompts) {
     try {
         const dbClass = require("sap-hdbext-promisfied")
         const conn = require("../utils/connections")
+        const cds = require('@sap/cds')
         const db = new dbClass(await conn.createConnection(prompts))
 
         let schema = await dbClass.schemaCalc(prompts, db)
@@ -105,14 +121,72 @@ async function getTables(prompts) {
         const dbInspect = require("../utils/dbInspect")
         dbInspect.options.useHanaTypes = prompts.useHanaTypes
 
+        const search = `"${schema}".`  
+        const replacer = new RegExp(escapeRegExp(search), 'g')
+
         switch (prompts.output) {
             case 'hdbtable': {
                 let zip = new require("node-zip")()
+                if (prompts.useCatalogPure) {
                 for (let table of results) {
                     let output = await dbInspect.getDef(db, schema, table.TABLE_NAME)
                     output = output.slice(7)
+                    output = output.replace(replacer, '')
                     await zip.file(table.TABLE_NAME.toString() + ".hdbtable", output + "\n\n")
+                }} else {
+                    for (let table of results) {
+                        let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
+                        let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
+                        let constraints = await dbInspect.getConstraints(db, object)
+                        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable")
+                        let all = cds.compile.to.hdbtable(cds.parse(cdsSource))
+                        let output
+                        for (let [src] of all) {
+                            output = src
+                        }
+                        await zip.file(table.TABLE_NAME.toString() + ".hdbtable", output + "\n\n")
+                    }
                 }
+                let fs = require('fs')
+                let dir = prompts.folder
+                !fs.existsSync(dir) && fs.mkdirSync(dir)
+                let data = await zip.generate({
+                    base64: false,
+                    compression: "DEFLATE"
+                })
+                let filename = prompts.filename || dir + 'export.zip'
+                fs.writeFile(filename, data, 'binary', (err) => {
+                    if (err) throw err
+                })
+                console.log(`${base.bundle.getText("contentWritten")}: ${filename}`)
+                break
+            }
+            case 'hdbmigrationtable': {
+                let zip = new require("node-zip")()
+
+                if (prompts.useCatalogPure) {
+                    for (let table of results) {
+                        let output = await dbInspect.getDef(db, schema, table.TABLE_NAME)
+                        output = output.slice(7)
+                        output = `== version = 1 \n` + output
+                        output = output.replace(replacer, '')
+                        await zip.file(table.TABLE_NAME.toString() + ".hdbmigrationtable", output + "\n\n")
+                    }
+                } else {
+                    for (let table of results) {
+                        let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
+                        let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
+                        let constraints = await dbInspect.getConstraints(db, object)
+                        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable")
+                        let all = cds.compile.to.hdbtable(cds.parse(cdsSource))
+                        let output
+                        for (let [src] of all) {
+                            output = `== version = 1 \n` + src
+                        }
+                        await zip.file(table.TABLE_NAME.toString() + ".hdbmigrationtable", output + "\n\n")
+                    }
+                }
+
                 let fs = require('fs')
                 let dir = prompts.folder
                 !fs.existsSync(dir) && fs.mkdirSync(dir)
