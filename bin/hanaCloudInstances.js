@@ -1,53 +1,37 @@
-const colors = require("colors/safe")
-const bundle = global.__bundle
+const base = require("../utils/base")
 
 exports.command = 'hc [name]'
 exports.aliases = ['hcInstances', 'instances', 'listHC', 'listhc', 'hcinstances']
-exports.describe = bundle.getText("hcInstances")
+exports.describe = base.bundle.getText("hcInstances")
 
-
-exports.builder = {
+exports.builder = base.getBuilder({
     name: {
         alias: ['n'],
         type: 'string',
         default: `**default**`,
-        desc: bundle.getText("hc_instance_name")
+        desc: base.bundle.getText("hc_instance_name")
     }
-}
+}, false)
 
-exports.handler = function (argv) {
-    const prompt = require('prompt')
-    prompt.override = argv
-    prompt.message = colors.green(bundle.getText("input"))
-    prompt.start()
-
-    var schema = {
-        properties: {
-            name: {
-                description: bundle.getText("hc_instance_name"),
-                type: 'string',
-                required: true
-            }
-        } 
-    }
-
-    prompt.get(schema, (err, result) => {
-        if (err) {
-            return console.log(err.message)
+exports.handler = (argv) => {
+    base.promptHandler(argv, listInstances, {
+        name: {
+            description: base.bundle.getText("hc_instance_name"),
+            type: 'string',
+            required: true
         }
-        global.startSpinner()
-        listInstances(result)
-    })
+    }, false)
 }
 
-async function listInstances(result) {
+
+async function listInstances(prompts) {
     try {
         const cf = require("../utils/cf")
         let results = ''
-        if (result.name ===  '**default**') {
+        if (prompts.name === '**default**') {
             results = await cf.getHANAInstances()
         } else {
-            results = await cf.getHANAInstanceByName(result.name)
+            results = await cf.getHANAInstanceByName(prompts.name)
         }
         for (let item of results.resources) {
             let outputItem = {}
@@ -63,14 +47,12 @@ async function listInstances(result) {
             console.log(`Created At: ${outputItem.created_at}`)
             console.log(`Last Operation: ${outputItem.last_operation}`)
             console.log(`SAP HANA Cockpit: ${outputItem.hana_cockpit}`)
-            console.log(`SAP HANA Cloud Central: ${outputItem.hana_central}`)     
-            console.log(`Database Explorer: ${outputItem.db_explorer}`)                      
+            console.log(`SAP HANA Cloud Central: ${outputItem.hana_central}`)
+            console.log(`Database Explorer: ${outputItem.db_explorer}`)
             console.log(`\r\n`)
         }
-        global.__spinner.stop()
-        return
+        return base.end()
     } catch (error) {
-        global.__spinner.stop()
-        return console.log(error.message)
+        base.error(error)
     }
 }

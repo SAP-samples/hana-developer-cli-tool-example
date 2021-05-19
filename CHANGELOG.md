@@ -4,6 +4,73 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202105.4
+
+### Added
+- [Issue #39 - Add support for HANA XSA in the UPS and HDI commands](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/39)
+- [Issue #38 - Add support for hdbmigrationtable in massConvert and inspectTable](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/38)
+- Add option useCatalogPure to massConvert command. Defaults to false and uses the cds.compile api to produce its hdbtable or hdbmigrationtable output. When set to true it will instead use the HANA SYS.GET_OBJECT_DEFINITION which includes more metadata but might produce results which are incompatible with HDI
+- Remove the Schema from output of massConvert commands
+
+## 2.202105.3
+
+### Changed
+- Upgraded dependencies @sap/cds to 5.1, @sap/hana-client to 2.8.20, and @sap/hdbext to 7.2.0
+- Add User Admin and Role Admin grants to the adminHDI and adminHDIGroup commands for XSA
+  
+## 2.202105.2
+
+### Added
+- quiet output added to most commands allowing for a wide range of scripted usage of the tool overall
+  
+## 2.202105.1
+
+### Fixed
+- copy2DefaultEnv fix to support hanatrial (old HaaS offering) but produce a warning that people should consider using SAP HANA Cloud trial instead
+- Fix not a function error in inspectView with output option of openapi
+  
+### Added
+- swagger-jsdoc output format, which is actually commented YAML version of openAPI, added to inspectTable and inspectView
+
+## 2.202104.2
+
+### Changed
+- Match the @sap/hdbext and @sap/hana-client versions exactly to remove duplicate copies of the HANA Client in node_modules removing about 135Mb from the footprint of this tool overall
+- Major internal refactoring to streamline the code and reduce duplication. Reusable base code for basic handling of Yargs and Prompts. Consistent error handling and other general stability improvments
+- The default-env*.json file no longer needs to be in the same directory in which you are running the command.  If not found in the current directory, the tool will search in up to 5 parent directories to find it
+- New parameter --conn added to most commands that allow you specify any filename you want to override the default-env.json. conn can specify a file in the current directory, up to 5 parent directories or in your ${homedir}/.hana-cli/ folder
+- New parameter --quiet that disables extra output and human readable formatting for when you want to script commands and get pure results output
+- New parameter --debug - for troubleshooting of the hana-cli tool itself. It will produce a LOT of detailed output. Nice if you are curious what queries are being sent to SAP to fullfill a command
+- Options in the help are now grouped by Conneciton Parameters, Troubleshooting, and Options
+- New order of processing for making connections.
+  - First we look for the Admin option and use a default-env-admin.json - this overrides all other parameters
+  - If no admin option or if there was an admin option but no default-env-admin.json could be found in this directory or 5 parent directories then look for a .env file in this directory or up to 5 parent directories
+  - No .env file found or it doesn't contain a VCAP_SERVICES section, then check to see if the --conn parameter was specified. If so check for that file in the current directory or up to 5 parent directories
+  - If the file specified via the --conn parameter wasn't found locally then check for it in the ${homedir}/.hana-cli/ folder
+  - If no specific configuration file was was found then look for a file named default-env.json in the current directory or up to 5 parent directories
+  - Last resort if nothing has been found up to this point - look for a file named default.json in the ${homedir}/.hana-cli/ folder
+## 1.202104.2
+### Added
+- Add Syntax Highlighting to various command outputs
+  
+## 1.202104.1
+
+### Added
+- New Inspect* output options for sqlite, hdbtable, hdbview and hdbcds
+  
+### Changed
+- Upgrade to @sap/cds 5.x
+- Drop support for Node.js version 10
+- cds preview updated to SAPUI5 1.88.1
+  
+### Fixed
+- connect command now prompts for Encyrypt setting
+  
+## 1.202103.4
+
+### Added
+- New command copy2Secrets to rewrite default-env.json as K8S Secrets format expected by @sap/xsenv - Pull Request [35](https://github.com/SAP-samples/hana-developer-cli-tool-example/pull/35) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
+  
 ## 1.202103.3
 
 ### Added

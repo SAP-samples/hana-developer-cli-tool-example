@@ -1,102 +1,85 @@
-const colors = require("colors/safe");
-const bundle = global.__bundle;
-const dbClass = require("sap-hdbext-promisfied");
+const base = require("../utils/base")
 
-exports.command = 'serviceKey [instance] [key]';
-exports.aliases = ['key', 'servicekey', 'service-key'];
-exports.describe = bundle.getText("serviceKey");
+exports.command = 'serviceKey [instance] [key]'
+exports.aliases = ['key', 'servicekey', 'service-key']
+exports.describe = base.bundle.getText("serviceKey")
 
-exports.builder = {
+exports.builder = base.getBuilder({
   instance: {
     alias: ['i', 'Instance'],
-    desc: bundle.getText("instance")
+    desc: base.bundle.getText("instance")
   },
   key: {
     alias: ['k', 'key'],
-    desc: bundle.getText("key")
+    desc: base.bundle.getText("key")
   },
   encrypt: {
     alias: ['e', 'Encrypt', 'ssl'],
-    desc: bundle.getText("encrypt"),
+    desc: base.bundle.getText("encrypt"),
     type: 'boolean',
     default: true
   },
   validate: {
     alias: ['v', 'Validate', 'validateCertificate'],
-    desc: bundle.getText("validate"),
+    desc: base.bundle.getText("validate"),
     type: 'boolean',
     default: false
   },
   cf: {
     alias: ['c', 'cmd'],
-    desc: bundle.getText("cfxs"),
+    desc: base.bundle.getText("cfxs"),
     type: 'boolean',
     default: true
   },
   save: {
     alias: ['s', 'Save'],
-    desc: bundle.getText("save2"),
+    desc: base.bundle.getText("save2"),
     type: 'boolean',
     default: true
   }
-}
+}, false)
 
-exports.handler = function (argv) {
-  const prompt = require('prompt');
-  prompt.override = argv;
-  prompt.message = colors.green(bundle.getText("input"));
-  prompt.start();
-
-  var schema = {
-    properties: {
-      instance: {
-        description: bundle.getText("instance"),
-        required: true
-      },
-      key: {
-        description: bundle.getText("key"),
-        required: true
-      },
-      encrypt: {
-        description: bundle.getText("encrypt"),
-        type: 'boolean',
-        default: true,
-        required: false
-      },
-      validate: {
-        description: bundle.getText("validate"),
-        type: 'boolean',
-        default: false,
-        required: false
-      },
-      cf: {
-        description: bundle.getText("cfxs"),
-        type: 'boolean',
-        default: true,
-        required: false
-      },
-      save: {
-        description: bundle.getText("save2"),
-        type: 'boolean',
-        required: true
-      }
+exports.handler = (argv) => {
+  base.promptHandler(argv, setKeyDetails, {
+    instance: {
+      description: base.bundle.getText("instance"),
+      required: true
+    },
+    key: {
+      description: base.bundle.getText("key"),
+      required: true
+    },
+    encrypt: {
+      description: base.bundle.getText("encrypt"),
+      type: 'boolean',
+      default: true,
+      required: false
+    },
+    validate: {
+      description: base.bundle.getText("validate"),
+      type: 'boolean',
+      default: false,
+      required: false
+    },
+    cf: {
+      description: base.bundle.getText("cfxs"),
+      type: 'boolean',
+      default: true,
+      required: false
+    },
+    save: {
+      description: base.bundle.getText("save2"),
+      type: 'boolean',
+      required: true
     }
-  };
-
-  prompt.get(schema, (err, result) => {
-    if (err) {
-      return console.log(err.message);
-    }
-    global.startSpinner()
-    setKeyDetails(result);
-  });
+  }, false)
 }
 
 async function setKeyDetails(input) {
   try {
     var child = require("child_process").exec
     var script = ''
-    console.table(input)
+    base.debug(input)
     if (input.cf) {
       script = `cf service-key ${input.instance} ${input.key}`
     } else {
@@ -104,18 +87,15 @@ async function setKeyDetails(input) {
     }
     child(script, (err, stdout) => {
       if (err) {
-        console.error(`ERROR: ${err.toString()}`)
-        console.log(stdout)
-        global.__spinner.stop()
-        return
+        return base.error(err)
       } else {
-        let lines = stdout.split('\n');
+        let lines = stdout.split('\n')
         console.log(lines[0])
         lines.splice(0, 2)
         if (!input.cf) {
-          lines.splice(-3, 3);
+          lines.splice(-3, 3)
         }
-        let newtext = lines.join('\n');
+        let newtext = lines.join('\n')
         let returnContent = JSON.parse(newtext)
 
         if (input.save) {
@@ -123,15 +103,15 @@ async function setKeyDetails(input) {
         }
       }
     })
-
+    return base.end()
   } catch (error) {
-    throw new Error(`Connection Problem ${JSON.stringify(error)}`);
+    base.error(error)
   }
 }
 
 async function saveEnv(options, input) {
-  let defaultEnv = {};
-  defaultEnv.VCAP_SERVICES = {};
+  let defaultEnv = {}
+  defaultEnv.VCAP_SERVICES = {}
   defaultEnv.VCAP_SERVICES.hana = [{
     name: input.instance,
     instance_name: input.instance,
@@ -143,7 +123,7 @@ async function saveEnv(options, input) {
     ],
     plan: "hdi-shared",
     credentials: options
-  }];
+  }]
 
   defaultEnv.VCAP_SERVICES.hana[0].credentials.encrypt = input.encrypt
   //defaultEnv.VCAP_SERVICES.hana[0].credentials.sslCryptoProvider = 'openssl'
@@ -153,27 +133,28 @@ async function saveEnv(options, input) {
     defaultEnv.VCAP_SERVICES.hana[0].credentials.sslValidateCertificate = false
     delete defaultEnv.VCAP_SERVICES.hana[0].credentials.certificate
   }
+  base.debug(defaultEnv.VCAP_SERVICES)
   try {
-     const db = new dbClass(await dbClass.createConnection(options));
+    const dbClass = require("sap-hdbext-promisfied")
+    const db = new dbClass(await dbClass.createConnection(options))
     let results = await db.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`);
-    console.table(results);
+    console.table(results)
 
     let resultsSession = await db.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`);
-    console.table(resultsSession);
+    console.table(resultsSession)
 
   } catch (error) {
-    throw new Error(`Connection Problem ${JSON.stringify(error)}`);
+    base.error(error)
   }
 
   if (input.save) {
-    const fs = require('fs');
-    fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), function (err) {
+    const fs = require('fs')
+    fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), (err) => {
       if (err) {
-        throw new Error(`Connection Problem ${JSON.stringify(err)}`);
+        throw new Error(`${base.bundle.getText("errConn")} ${JSON.stringify(err)}`)
       }
-      console.log(bundle.getText("saved"));
+      console.log(base.bundle.getText("saved"));
 
-    });
+    })
   }
-  global.__spinner.stop()
 }

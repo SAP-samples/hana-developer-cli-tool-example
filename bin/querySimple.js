@@ -1,112 +1,79 @@
-const colors = require("colors/safe")
-const bundle = global.__bundle
-const dbClass = require("sap-hdbext-promisfied")
+const base = require("../utils/base")
 
 exports.command = 'querySimple'
 exports.aliases = ['qs', "querysimple"]
-exports.describe = bundle.getText("querySimple")
+exports.describe = base.bundle.getText("querySimple")
 
-
-exports.builder = {
-  admin: {
-    alias: ['a', 'Admin'],
-    type: 'boolean',
-    default: false,
-    desc: bundle.getText("admin")
-  },
+exports.builder = base.getBuilder({
   query: {
     alias: ['q', 'Query'],
     type: 'string',
-    desc: bundle.getText("query")
+    desc: base.bundle.getText("query")
   },
   folder: {
     alias: ['f', 'Folder'],
     type: 'string',
     default: './',
-    desc: bundle.getText("folder")
+    desc: base.bundle.getText("folder")
   },
   filename: {
     alias: ['n', 'Filename'],
     type: 'string',
-    desc: bundle.getText("filename")
+    desc: base.bundle.getText("filename")
   },
   output: {
     alias: ['o', 'Output'],
     choices: ["table", "json", "excel"],
     default: "table",
     type: 'string',
-    desc: bundle.getText("outputTypeQuery")
+    desc: base.bundle.getText("outputTypeQuery")
   }
-}
+})
 
-exports.handler = function (argv) {
-  const prompt = require('prompt')
-  prompt.override = argv
-  prompt.message = colors.green(bundle.getText("input"))
-  prompt.start()
-
-  let schema = {
-    properties: {
-      admin: {
-        description: bundle.getText("admin"),
-        type: 'boolean',
-        required: true,
-        ask: () => {
-          return false
-        }
-      },
-      query: {
-        description: bundle.getText("query"),
-        type: 'string',
-        required: true
-      },
-      folder: {
-        description: bundle.getText("folder"),
-        type: 'string',
-        required: true
-      },
-      filename: {
-        description: bundle.getText("filename"),
-        type: 'string',
-        required: true,
-        ask: () => {
-          return false
-        }
-      },
-      output: {
-        description: bundle.getText("outputTypeQuery"),
-        type: 'string',
-        required: true
+exports.handler = (argv) => {
+  base.promptHandler(argv, dbQuery, {
+    query: {
+      description: base.bundle.getText("query"),
+      type: 'string',
+      required: true
+    },
+    folder: {
+      description: base.bundle.getText("folder"),
+      type: 'string',
+      required: true
+    },
+    filename: {
+      description: base.bundle.getText("filename"),
+      type: 'string',
+      required: true,
+      ask: () => {
+        return false
       }
+    },
+    output: {
+      description: base.bundle.getText("outputTypeQuery"),
+      type: 'string',
+      required: true
     }
-  }
-
-  prompt.get(schema, (err, result) => {
-    if (err) {
-      return console.log(err.message)
-    }
-    global.startSpinner()
-    dbQuery(result)
   })
 }
 
-async function dbQuery(result) {
+async function dbQuery(prompts) {
   try {
-    const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)))
-    let results = await db.execSQL(result.query)
+      const dbClass = require("sap-hdbext-promisfied")
+      const conn = require("../utils/connections")
+      const db = new dbClass(await conn.createConnection(prompts))
+
+    let results = await db.execSQL(prompts.query)
     if(!results[0]){
-      global.__spinner.stop()
-      console.log(`No Query Results`)
-      return      
+      return base.error(base.bundle.getText("errNoResults"))
     }
 
-    switch (result.output) {
-
+    switch (prompts.output) {
       case 'excel':
-        if (result.filename) {
+        if (prompts.filename) {
           const excel = require("node-xlsx")
           let out = []
-
           
           //Column Headers
           let header = []
@@ -126,39 +93,31 @@ async function dbQuery(result) {
             name: "Query Results",
             data: out
           }])
-          await toFile(result.folder, result.filename, 'xlsx', excelOutput)
+          await toFile(prompts.folder, prompts.filename, 'xlsx', excelOutput)
         } else {
-          global.__spinner.stop()
-          console.error(`Excel output only supported when sending content to a file directly`)
+          return base.error(base.bundle.getText("errExcel"))
         }
         break
       case 'json':
-        if (result.filename) {
-          await toFile(result.folder, result.filename, 'json', JSON.stringify(results, null, 2))
+        if (prompts.filename) {
+          await toFile(prompts.folder, prompts.filename, 'json', JSON.stringify(results, null, 2))
         } else {
-          global.__spinner.stop()
-          console.log(JSON.stringify(results, null, 2))
+          const highlight = require('cli-highlight').highlight 
+          console.log(highlight(JSON.stringify(results, null, 2)))
         }
         break
       default:
-        if (result.filename) {
+        if (prompts.filename) {
           const Table = require('easy-table')
-          await toFile(result.folder, result.filename, 'txt', Table.print(results))
+          await toFile(prompts.folder, prompts.filename, 'txt', Table.print(results))
         } else {
-          global.__spinner.stop()
           console.table(results)
         }
         break
     }
-
-
-
-    return
+    return base.end()    
   } catch (error) {
-    global.__spinner.stop()
-    console.error(error.toString())
-    return
-
+    base.error(error)
   }
 }
 
@@ -170,6 +129,5 @@ async function toFile(folder, file, ext, content) {
   file = `${file}.${ext}`
   let fileLocal = path.join(dir, file)
   fs.writeFileSync(fileLocal, content)
-  global.__spinner.stop()
-  console.log(`\n Content written to: ${fileLocal}`)
+  console.log(`${base.bundle.getText("contentWritten")}: ${fileLocal}`)
 }

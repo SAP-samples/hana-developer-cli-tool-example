@@ -1,107 +1,79 @@
-const colors = require("colors/safe");
-const bundle = global.__bundle;
-const dbClass = require("sap-hdbext-promisfied");
+const base = require("../utils/base")
 
-exports.command = 'objects [schema] [object]';
-exports.aliases = ['o', 'listObjects', 'listobjects'];
-exports.describe = bundle.getText("objects");
+exports.command = 'objects [schema] [object]'
+exports.aliases = ['o', 'listObjects', 'listobjects']
+exports.describe = base.bundle.getText("objects")
 
-
-exports.builder = {
-  admin: {
-    alias: ['a', 'Admin'],
-    type: 'boolean',
-    default: false,
-    desc: bundle.getText("admin")
-  },
+exports.builder = base.getBuilder({
   object: {
     alias: ['o', 'Object'],
     type: 'string',
-    default: "*",    
-    desc: bundle.getText("object")
+    default: "*",
+    desc: base.bundle.getText("object")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: bundle.getText("schema")
+    desc: base.bundle.getText("schema")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: bundle.getText("limit")
+    desc: base.bundle.getText("limit")
   }
-};
+})
 
-exports.handler = function (argv) {
-  const prompt = require('prompt');
-  prompt.override = argv;
-  prompt.message = colors.green(bundle.getText("input"));
-  prompt.start();
-
-  var schema = {
-    properties: {
-      admin: {
-        description: bundle.getText("admin"),
-        type: 'boolean',
-        required: true,
-        ask: () => {
-          return false;
-        }
-      },
-      object: {
-        description: bundle.getText("object"),
-        type: 'string',
-        required: true
-      },
-      schema: {
-        description: bundle.getText("schema"),
-        type: 'string',
-        required: true
-      },
-      limit: {
-        description: bundle.getText("limit"),
-        type: 'number',
-        required: true
-      }      
+exports.handler = (argv) => {
+  base.promptHandler(argv, getObjects, {
+    object: {
+      description: base.bundle.getText("object"),
+      type: 'string',
+      required: true
+    },
+    schema: {
+      description: base.bundle.getText("schema"),
+      type: 'string',
+      required: true
+    },
+    limit: {
+      description: base.bundle.getText("limit"),
+      type: 'number',
+      required: true
     }
-  };
-
-  prompt.get(schema, (err, result) => {
-    if (err) {
-      return console.log(err.message);
-    }
-    global.startSpinner()
-    getObjects(result);
-  });
+  })
 }
 
+async function getObjects(prompts) {
+  try {
+    base.setPrompts(prompts)
+    const dbClass = require("sap-hdbext-promisfied")
+    const conn = require("../utils/connections")
+    const db = new dbClass(await conn.createConnection(prompts))
 
-async function getObjects(result) {
-  const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
+    let schema = await dbClass.schemaCalc(prompts, db)
+    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("object")}: ${prompts.object}`)
 
-  let schema = await dbClass.schemaCalc(result, db);
-  console.log(`Schema: ${schema}, Object: ${result.object}`);
-
-  let results = await getObjectsInt(schema, result.object, db, result.limit);
-  console.table(results);
-
-  global.__spinner.stop()
-  return;
+    let results = await getObjectsInt(schema, prompts.object, db, prompts.limit)
+    base.outputTable(results)
+    return base.end()
+  } catch (error) {
+    base.error(error)
+  }
 }
-
 
 async function getObjectsInt(schema, object, client, limit) {
-  object = dbClass.objectName(object);
+  const dbClass = require("sap-hdbext-promisfied")
+  object = dbClass.objectName(object)
 
   var query =
-  `SELECT OBJECT_CATEGORY, SCHEMA_NAME, OBJECT_NAME, OBJECT_TYPE, TO_NVARCHAR(OBJECT_OID) AS OBJECT_OID  from OBJECTS 
+    `SELECT OBJECT_CATEGORY, SCHEMA_NAME, OBJECT_NAME, OBJECT_TYPE, TO_NVARCHAR(OBJECT_OID) AS OBJECT_OID  from OBJECTS 
   WHERE SCHEMA_NAME LIKE ? 
     AND OBJECT_NAME LIKE ? 
-  ORDER BY OBJECT_TYPE, OBJECT_NAME `;
+  ORDER BY OBJECT_TYPE, OBJECT_NAME `
   if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
-    query += `LIMIT ${limit.toString()}`;
+    query += `LIMIT ${limit.toString()}`
   }
-  return await client.statementExecPromisified(await client.preparePromisified(query), [schema, object]);
+  return await client.statementExecPromisified(await client.preparePromisified(query), [schema, object])
 }

@@ -1,53 +1,60 @@
-const colors = require("colors/safe")
-const bundle = global.__bundle
+const base = require("../utils/base")
 
 exports.command = 'hdi'
 exports.aliases = ['hdiInstances', 'hdiinstances', 'hdiServices', 'listhdi', 'hdiservices', 'hdis']
-exports.describe = bundle.getText("hdiInstances")
+exports.describe = base.bundle.getText("hdiInstances")
 
-
-exports.builder = {
-}
-
-exports.handler = function (argv) {
-    const prompt = require('prompt')
-    prompt.override = argv
-    prompt.message = colors.green(bundle.getText("input"))
-    prompt.start()
-
-    var schema = {
-        properties: {
-        }
+exports.builder = base.getBuilder({
+    cf: {
+        alias: ['c', 'cmd'],
+        desc: base.bundle.getText("cfxs"),
+        type: 'boolean',
+        default: true
     }
+}, false)
 
-    prompt.get(schema, (err, result) => {
-        if (err) {
-            return console.log(err.message)
+exports.handler = (argv) => {
+    base.promptHandler(argv, listInstances, {
+        cf: {
+            description: base.bundle.getText("cfxs"),
+            type: 'boolean',
+            default: true,
+            required: false
         }
-        global.startSpinner()
-        listInstances(result)
-    })
+    }, false)
 }
 
-async function listInstances() {
+async function listInstances(prompts) {
     try {
-        const cf = require("../utils/cf")
+        let cf = null
+        if (prompts.cf) {
+            cf = require("../utils/cf")
+        } else {
+            cf = require("../utils/xs")
+        }
+
         let results = ''
         results = await cf.getHDIInstances()
-
         let output = []
-        for (let item of results.resources) {
-            let outputItem = {}
-            outputItem.name = item.name
-            outputItem.created_at = item.created_at
-            outputItem.last_operation = `${item.last_operation.type} ${item.last_operation.state} @ ${item.last_operation.updated_at}`
-            output.push(outputItem)
-        } 
-        console.table(output)
-        global.__spinner.stop()
-        return
+        if (prompts.cf) {
+            for (let item of results.resources) {
+                let outputItem = {}
+                outputItem.name = item.name
+                outputItem.created_at = item.created_at
+                outputItem.last_operation = `${item.last_operation.type} ${item.last_operation.state} @ ${item.last_operation.updated_at}`
+                output.push(outputItem)
+            }
+        } else {
+          for (let item of results){
+              let outputItem = {}
+              outputItem.name = item.serviceInstanceEntity.name
+              outputItem.last_operation = `${item.serviceInstanceEntity.last_operation.type} ${item.serviceInstanceEntity.last_operation.state} `
+              output.push(outputItem)
+          }
+        }
+        base.outputTable(output)
+        return base.end()
     } catch (error) {
-        global.__spinner.stop()
-        return console.log(error.message)
+        base.error(error)
     }
 }

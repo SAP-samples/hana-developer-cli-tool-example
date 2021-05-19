@@ -1,97 +1,71 @@
-const colors = require("colors/safe");
-const bundle = global.__bundle;
-const dbClass = require("sap-hdbext-promisfied");
+const base = require("../utils/base")
 
-exports.command = 'containers [containerGroup] [container]';
-exports.aliases = ['cont', 'listContainers', 'listcontainers'];
-exports.describe = bundle.getText("containers");
+exports.command = 'containers [containerGroup] [container]'
+exports.aliases = ['cont', 'listContainers', 'listcontainers']
+exports.describe = base.bundle.getText("containers")
 
-
-exports.builder = {
-  admin: {
-    alias: ['a', 'Admin'],
-    type: 'boolean',
-    default: true,
-    desc: bundle.getText("admin")
-  },
+exports.builder = base.getBuilder({
   container: {
     alias: ['c', 'Container'],
     type: 'string',
     default: "*",
-    desc: bundle.getText("container")
+    desc: base.bundle.getText("container")
   },
   containerGroup: {
     alias: ['g', 'Group', 'group', 'containergroup'],
     type: 'string',
     default: '*',
-    desc: bundle.getText("containerGroup")
+    desc: base.bundle.getText("containerGroup")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: bundle.getText("limit")
+    desc: base.bundle.getText("limit")
   }
-};
+})
 
-exports.handler = function (argv) {
-  const prompt = require('prompt');
-  prompt.override = argv;
-  prompt.message = colors.green(bundle.getText("input"));
-  prompt.start();
-
-  var schema = {
-    properties: {
-      admin: {
-        description: bundle.getText("admin"),
-        type: 'boolean',
-        required: true,
-        ask: () => {
-          return false;
-        }
-      },
-      container: {
-        description: bundle.getText("container"),
-        type: 'string',
-        required: true
-      },
-      containerGroup: {
-        description: bundle.getText("containerGroup"),
-        type: 'string',
-        required: true
-      },
-      limit: {
-        description: bundle.getText("limit"),
-        type: 'number',
-        required: true
-      }
+exports.handler = (argv) => {
+  base.promptHandler(argv, getContainers, {
+    container: {
+      description: base.bundle.getText("container"),
+      type: 'string',
+      required: true
+    },
+    containerGroup: {
+      description: base.bundle.getText("containerGroup"),
+      type: 'string',
+      required: true
+    },
+    limit: {
+      description: base.bundle.getText("limit"),
+      type: 'number',
+      required: true
     }
-  };
-
-  prompt.get(schema, (err, result) => {
-    if (err) {
-      return console.log(err.message);
-    }
-    global.startSpinner()
-    getContainers(result);
-  });
+  })
 }
 
+async function getContainers(prompts) {
 
-async function getContainers(result) {
-  const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
+  try {
+    base.setPrompts(prompts)
+    const dbClass = require("sap-hdbext-promisfied")
+    const conn = require("../utils/connections")
+    const db = new dbClass(await conn.createConnection(prompts))
 
-  console.log(`Group: ${result.containerGroup}, Container: ${result.container}`);
+    base.debug(`${base.bundle.getText("containerGroup")}: ${prompts.containerGroup}, ${base.bundle.getText("container")}: ${prompts.container}`)
 
-  let results = await getContainersInt(result.containerGroup, result.container, db, result.limit);
-  console.table(results);
+    let results = await getContainersInt(prompts.containerGroup, prompts.container, db, prompts.limit)
+    base.outputTable(results)
 
-  await global.__spinner.stop()
-  return;
+    return base.end()
+  } catch (error) {
+    base.error(error)
+  }
 }
 
-async function getContainersInt(containerGroup, container, client, limit){
-
+async function getContainersInt(containerGroup, container, client, limit) {
+  const dbClass = require("sap-hdbext-promisfied")
   let query =
     `SELECT A.CONTAINER_NAME, A.CONTAINER_GROUP_NAME, B.SCHEMA_NAME, A.CREATE_USER_NAME, A.CREATE_TIMESTAMP_UTC
         FROM ( _SYS_DI.M_ALL_CONTAINERS AS A
@@ -100,10 +74,10 @@ async function getContainersInt(containerGroup, container, client, limit){
                AND  B.SCHEMA_TYPE = 'com.sap.hana.runtime.db.target/*' ) )
          WHERE A.CONTAINER_NAME LIKE ? 
            AND A.CONTAINER_GROUP_NAME LIKE ?
-         ORDER BY A.CONTAINER_NAME `;
+         ORDER BY A.CONTAINER_NAME `
   if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
-    query += `LIMIT ${limit.toString()}`;
+    query += `LIMIT ${limit.toString()}`
   }
-  return await client.statementExecPromisified(await client.preparePromisified(query), [dbClass.objectName(container), dbClass.objectName(containerGroup)]);
+  return await client.statementExecPromisified(await client.preparePromisified(query), [dbClass.objectName(container), dbClass.objectName(containerGroup)])
 }
 

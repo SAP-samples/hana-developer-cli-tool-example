@@ -1,13 +1,13 @@
 {
   "name": "hana-cli",
-  "version": "1.202103.3",
+  "version": "2.202105.4",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
     "hana-cli": "./bin/cli.js"
   },
   "engines": {
-    "node": "^10.0.0 || ^12.0.0 || ^14.0.0"
+    "node": "^12.0.0 || ^14.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -20,33 +20,39 @@
     "hana"
   ],
   "dependencies": {
-    "@sap/cds-dk": "^3.5",
-    "@sap/cds": "^4.6",
-    "@sap/hdbext": "^7.1.4",
+    "@sap/audit-logging": "^5.0",
+    "@sap/cds": "^5.1",
+    "@sap/cds-dk": "^4.1",
+    "@sap/hana-client": "2.8.20",
+    "@sap/hdbext": "7.2.0",
     "@sap/textbundle": "^4.0",
     "@sap/xsenv": "^3.1",
     "@sap/xssec": "^3.1.2",
-    "@sap/hana-client": "^2.7",
-    "@sap/audit-logging": "^5.0",
-    "sap-hdbext-promisfied": "^2.202103",
+    "axios": "^0.21.1",
+    "cli-highlight": "^2.1.11",
     "console.table": "~0.10",
+    "debug": "^4.3.1",
+    "dotenv": "^9.0.2",
+    "easy-table": "1.1.1",
     "express": "^4.17",
+    "json-to-pretty-yaml": "^1.2.2",
+    "latest-version": "^5.1",
+    "marked": "^2.0.3",
+    "marked-terminal": "^4.1.1",
+    "node-xlsx": "^0.16.1",
+    "node-zip": "^1.1",
     "odata2openapi": "^1.3",
-    "open": "^8.0",
+    "open": "^8.0.8",
     "ora": "^5.4",
     "prompt": "^1.1",
+    "properties-to-json": "^0.2.1",
+    "sap-hdbext-promisfied": "2.202105.1",
+    "supports-color": "^9.0.0",
     "swagger-ui-express": "^4.1",
+    "terminaltools": "^2.0.1",
     "uuid": "^8.3",
     "yargonaut": "1.1",
-    "yargs": "^16.2",
-    "dotenv": "^8.2",
-    "node-zip": "^1.1",
-    "latest-version": "^5.1",
-    "marked": "^2.0.1",
-    "marked-terminal": "^4.1.1",
-    "terminaltools": "^2.0.0",
-    "easy-table": "1.1.1",
-    "node-xlsx": "^0.16.1"
+    "yargs": "^17.0"
   },
   "author": "SAP",
   "license": "SEE LICENSE IN LICENSE",
@@ -55,6 +61,6 @@
   },
   "homepage": "https://github.com/SAP-samples/hana-developer-cli-tool-example#readme",
   "devDependencies": {
-    "eslint": "^7.22"
+    "eslint": "^7.26.0"
   }
 }

@@ -1,123 +1,95 @@
-const colors = require("colors/safe");
-const bundle = global.__bundle;
-const dbClass = require("sap-hdbext-promisfied");
+const base = require("../utils/base")
 
-exports.command = 'roles [schema] [role]';
-exports.aliases = ['r', 'listRoles', 'listroles'];
-exports.describe = bundle.getText("roles");
+exports.command = 'roles [schema] [role]'
+exports.aliases = ['r', 'listRoles', 'listroles']
+exports.describe = base.bundle.getText("roles")
 
-
-exports.builder = {
-  admin: {
-    alias: ['a', 'Admin'],
-    type: 'boolean',
-    default: false,
-    desc: bundle.getText("admin")
-  },
+exports.builder = base.getBuilder({
   role: {
     alias: ['r', 'Role'],
     type: 'string',
     default: "*",
-    desc: bundle.getText("role")
+    desc: base.bundle.getText("role")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: bundle.getText("schema")
+    desc: base.bundle.getText("schema")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: bundle.getText("limit")
+    desc: base.bundle.getText("limit")
   }
-};
+})
 
-exports.handler = function (argv) {
-  const prompt = require('prompt');
-  prompt.override = argv;
-  prompt.message = colors.green(bundle.getText("input"));
-  prompt.start();
-
-  var schema = {
-    properties: {
-      admin: {
-        description: bundle.getText("admin"),
-        type: 'boolean',
-        required: true,
-        ask: () => {
-          return false;
-        }
-      },
-      role: {
-        description: bundle.getText("role"),
-        type: 'string',
-        required: true
-      },
-      schema: {
-        description: bundle.getText("schema"),
-        type: 'string',
-        required: true
-      },
-      limit: {
-        description: bundle.getText("limit"),
-        type: 'number',
-        required: true
-      }
+exports.handler = (argv) => {
+  base.promptHandler(argv, getRoles, {
+    role: {
+      description: base.bundle.getText("role"),
+      type: 'string',
+      required: true
+    },
+    schema: {
+      description: base.bundle.getText("schema"),
+      type: 'string',
+      required: true
+    },
+    limit: {
+      description: base.bundle.getText("limit"),
+      type: 'number',
+      required: true
     }
-  };
-
-  prompt.get(schema, (err, result) => {
-    if (err) {
-      return console.log(err.message);
-    }
-    global.startSpinner()
-    getRoles(result);
-  });
+  })
 }
 
+async function getRoles(prompts) {
+  try {
+    base.setPrompts(prompts)
+    const dbClass = require("sap-hdbext-promisfied")
+    const conn = require("../utils/connections")
+    const db = new dbClass(await conn.createConnection(prompts))
 
-async function getRoles(result) {
-  const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
+    let schema = await dbClass.schemaCalc(prompts, db)
+    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("role")}: ${prompts.role}`)
 
-  let schema = await dbClass.schemaCalc(result, db);
-  console.log(`Schema: ${schema}, Role: ${result.role}`);
-
-  let results = await getRolesInt(schema, result.role, db, result.limit);
-  console.table(results);
-
-  global.__spinner.stop()
-  return;
+    let results = await getRolesInt(schema, prompts.role, db, prompts.limit)
+    base.outputTable(results)
+    return base.end()
+  } catch (error) {
+    base.error(error)
+  }
 }
 
 
 async function getRolesInt(schema, role, client, limit) {
-  role = dbClass.objectName(role);
-
-  let query = '';
+  const dbClass = require("sap-hdbext-promisfied")  
+  role = dbClass.objectName(role)
+  let query = ''
   if (schema === '%') {
     query =
       `SELECT ROLE_SCHEMA_NAME, ROLE_NAME, CREATOR, CREATE_TIME  from ROLES 
     WHERE (ROLE_SCHEMA_NAME LIKE ? OR ROLE_SCHEMA_NAME IS NULL)
       AND ROLE_NAME LIKE ? 
-    ORDER BY ROLE_SCHEMA_NAME, ROLE_NAME `;
+    ORDER BY ROLE_SCHEMA_NAME, ROLE_NAME `
   } else if (schema === 'null') {
     query =
       `SELECT ROLE_SCHEMA_NAME, ROLE_NAME, CREATOR, CREATE_TIME  from ROLES 
   WHERE (ROLE_SCHEMA_NAME IS NULL or ROLE_SCHEMA_NAME = ?)
     AND ROLE_NAME LIKE ? 
-  ORDER BY ROLE_SCHEMA_NAME, ROLE_NAME `;
+  ORDER BY ROLE_SCHEMA_NAME, ROLE_NAME `
   } else {
     query =
       `SELECT ROLE_SCHEMA_NAME, ROLE_NAME, CREATOR, CREATE_TIME  from ROLES 
     WHERE ROLE_SCHEMA_NAME LIKE ? 
       AND ROLE_NAME LIKE ? 
-    ORDER BY ROLE_SCHEMA_NAME, ROLE_NAME `;
+    ORDER BY ROLE_SCHEMA_NAME, ROLE_NAME `
   }
 
   if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
-    query += `LIMIT ${limit.toString()}`;
+    query += `LIMIT ${limit.toString()}`
   }
-  return await client.statementExecPromisified(await client.preparePromisified(query), [schema, role]);
+  return await client.statementExecPromisified(await client.preparePromisified(query), [schema, role])
 }

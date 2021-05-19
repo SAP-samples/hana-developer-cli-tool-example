@@ -1,62 +1,27 @@
-const colors = require("colors/safe");
-const bundle = global.__bundle;
+const base = require("../utils/base")
 
-exports.command = 'hdbsql';
-
-exports.describe = bundle.getText("hdbsql");
-
-
-exports.builder = {
-  admin: {
-    alias: ['a', 'Admin'],
-    type: 'boolean',
-    default: false,
-    desc: bundle.getText("admin")
-  }
-};
-
-exports.handler = function (argv) {
-  const prompt = require('prompt');
-  prompt.override = argv;
-  prompt.message = colors.green(bundle.getText("input"));
-  prompt.start();
-
-  var schema = {
-    properties: {
-      admin: {
-        description: bundle.getText("admin"),
-        type: 'boolean',
-        required: true,
-        ask: () => {
-          return false;
-        }
-      }
-    }
-  };
-
-  prompt.get(schema, (err, result) => {
-    if (err) {
-      return console.log(err.message);
-    }
-//    global.startSpinner()
-    launchHdbsql(result);
-  });
+exports.command = 'hdbsql'
+exports.describe = base.bundle.getText("hdbsql")
+exports.builder = base.getBuilder({})
+exports.handler = (argv) => {
+  base.promptHandler(argv, launchHdbsql, {})
 }
 
-
-async function launchHdbsql(result) {
-  const dbClass = require("sap-hdbext-promisfied");
-  let envFile = dbClass.resolveEnv(result);
-  const xsenv = require("@sap/xsenv");
-  xsenv.loadEnv(envFile);
+async function launchHdbsql(prompts) {
   try {
+    const conn = require("../utils/connections")
+
+    let envFile = conn.resolveEnv(prompts)
+    const xsenv = require("@sap/xsenv")
+    xsenv.loadEnv(envFile)
+
     let options = await xsenv.getServices({ hana: { tag: 'hana' }, })
     let encrypt = ''
     if (options.hana.encrypt == true) {
       if (options.hana.sslValidateCertificate == true) {
         if (options.hana.sslTrustStore) {
           encrypt = `-e -ssltruststore ${options.hana.sslTrustStore} `
-          if (options.hana.sslCryptoProvider){
+          if (options.hana.sslCryptoProvider) {
             encrypt += `-sslprovider ${options.hana.sslCryptoProvider}`
           }
         } else {
@@ -65,14 +30,13 @@ async function launchHdbsql(result) {
         }
       }
     }
+    base.debug(options)
     let cmd = `hdbsql -u ${options.hana.user} -n ${options.hana.host + ":" + options.hana.port} -p ${options.hana.password} ${encrypt} -A -m -j`
-    const { spawn } = require('child_process');
-    await spawn(cmd, [], { shell: true, stdio: 'inherit' });
-   // global.__spinner.stop()
-    return;
+    const { spawn } = require('child_process')
+    await spawn(cmd, [], { shell: true, stdio: 'inherit' })
+    return base.end()
   } catch (error) {
-  //  global.__spinner.stop()
-    console.error(`Missing or badly formatted ${envFile}. No HANA configuration can be read or processed`)
+    base.error(error)
   }
 
 }

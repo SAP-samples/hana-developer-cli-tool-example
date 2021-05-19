@@ -1,62 +1,30 @@
-const colors = require("colors/safe");   
-const bundle = global.__bundle;
-const dbClass = require("sap-hdbext-promisfied");
+const base = require("../utils/base")
 
-exports.command = 'reclaim';
-exports.aliases = 're';
-exports.describe = bundle.getText("reclaim");
+exports.command = 'reclaim'
+exports.aliases = 're'
+exports.describe = base.bundle.getText("reclaim")
+exports.builder = base.getBuilder({})
+exports.handler = (argv) => {
+  base.promptHandler(argv, reclaim, {})
+}
 
+async function reclaim(prompts) {
+  try {
+    base.setPrompts(prompts)
+    const dbClass = require("sap-hdbext-promisfied")
+    const conn = require("../utils/connections")
+    const dbStatus = new dbClass(await conn.createConnection(prompts))
 
-exports.builder = {
-    admin: {
-      alias:  ['a', 'Admin'],
-      type: 'boolean',
-      default: true,
-      desc: bundle.getText("admin")
-    }
-  };
- 
-  exports.handler = function (argv) {
-    const prompt = require('prompt');
-    prompt.override = argv;
-    prompt.message = colors.green(bundle.getText("input"));
-    prompt.start();
-  
-    var schema = {
-      properties: {
-        admin: {
-          description: bundle.getText("admin"),   
-          type: 'boolean',       
-          required: true,
-          ask: () =>{
-            return false;
-        }
-        }      
-      }
-    };
-  
-     prompt.get(schema, (err, result) => {
-         if(err){
-             return console.log(err.message);
-         }
-         global.startSpinner()
-         dbStatus(result);
-    });
+    let results = await dbStatus.execSQL(`ALTER SYSTEM RECLAIM LOB SPACE;`)
+    base.outputTable(results)
+
+    results = await dbStatus.execSQL(`ALTER SYSTEM RECLAIM LOG;`)
+    base.outputTable(results)
+
+    results = await dbStatus.execSQL(`ALTER SYSTEM RECLAIM DATAVOLUME 105 DEFRAGMENT;`)
+    base.outputTable(results)
+    return base.end()
+  } catch (error) {
+    base.error(error)
   }
-  
-
-  async function dbStatus(result) {
-    const dbStatus = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
-
-    let results = await dbStatus.execSQL(`ALTER SYSTEM RECLAIM LOB SPACE;`);
-    console.table(results);
-
-    results = await dbStatus.execSQL(`ALTER SYSTEM RECLAIM LOG;`);
-    console.table(results);
-
-    results = await dbStatus.execSQL(`ALTER SYSTEM RECLAIM DATAVOLUME 105 DEFRAGMENT;`);
-    console.table(results);
-
-    global.__spinner.stop()
-    return;
 }

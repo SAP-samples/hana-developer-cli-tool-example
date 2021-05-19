@@ -16,7 +16,15 @@ Running in Cloud Shells Video: [https://youtu.be/L7QyVLvAIIQ](https://youtu.be/L
 
 ## Requirements / Download and Installation
 
-* Install Node.js version 10.x, 12.x, or 14.x on your development machine [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
+If you would rather just access the tool directly, it is now available in npm as well. You can install via:
+
+```shell
+npm install -g hana-cli
+```
+
+Otherwise you can also run it from the sources as described here:
+
+* Install Node.js version 12.x or 14.x on your development machine [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
 * @sap Node.js packages have moved from https://npm.sap.com to the default registry https://registry.npmjs.org. As future versions of @sap modules are going to be published only there, please make sure to adjust your registry with:
 
@@ -44,15 +52,18 @@ npm link
 
 [![asciicast](https://asciinema.org/a/301560.svg)](https://asciinema.org/a/301560)
 
-Or if you would rather just access the tool directly, it is now available in npm directly. You can install via:
-
-```shell
-npm install -g hana-cli
-```
-
 ## Security
 
 This application primarily uses the default-env.json that is often used in local development for connectivity to a remote HANA DB (although it can of course be used with a local SAP HANA, express edition instance as well). For more details on how the default-env.json works, see the readme.md of the @sap/xsenv package or the @sap/hdi-deploy package.
+
+The tool doesn't simply look for a default-env.json file in the current directory however. There are numerous options and places it will look for the connection parameters. Here is the order in which it checks:
+
+  - First we look for the Admin option and use a default-env-admin.json - this overrides all other parameters
+  - If no admin option or if there was an admin option but no default-env-admin.json could be found in this directory or 5 parent directories then look for a .env file in this directory or up to 5 parent directories
+  - No .env file found or it doesn't contain a VCAP_SERVICES section, then check to see if the --conn parameter was specified. If so check for that file in the current directory or up to 5 parent directories
+  - If the file specified via the --conn parameter wasn't found locally then check for it in the ${homedir}/.hana-cli/ folder
+  - If no specific configuration file was was found then look for a file named default-env.json in the current directory or up to 5 parent directories
+  - Last resort if nothing has been found up to this point - look for a file named default.json in the ${homedir}/.hana-cli/ folder
 
 ## Examples
 
@@ -164,9 +175,21 @@ hana-cli activateHDI [tenant]
 Activate the HDI service in a particluar SAP HANA Tenant (Must be ran in the
 SYSTEMDB)
 
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
 Options:
-  -a, --admin, --Admin    Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
   -t, --tenant, --Tenant  SAP HANA Tenant                               [string]
 ```
 
@@ -177,14 +200,24 @@ hana-cli adminHDI [user] [password]
 [aliases: adHDI, adhdi]
 Create an Admin User for HDI
 
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
 Options:
-  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
   -u, --user, --User          User
   -p, --password, --Password  Password
 ```
-
-![adminHDI example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/adminHDI.gif)
 
 ### adminHDIGroup
 
@@ -193,14 +226,24 @@ hana-cli adminHDIGroup [user] [group]
 [aliases: adHDIG, adhdig]
 Add a User as an HDI Group Admin
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -u, --user, --User    User
   -g, --group, --Group  HDI Group       [string] [default: "SYS_XS_HANA_BROKER"]
 ```
-
-![adminHDIGroup example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/adminHDIGroup.gif)
 
 ### callProcedure
 
@@ -209,9 +252,21 @@ hana-cli callProcedure [schema] [procedure]
 [aliases: cp, callprocedure, callProc, callproc, callSP, callsp]
 Call a stored procedure and display the results
 
-Options:
-  -a, --admin, --Admin                Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -p, --procedure, --Procedure, --sp  Stored Procedure                  [string]
   -s, --schema, --Schema              schema
                                         [string] [default: "**CURRENT_SCHEMA**"]
@@ -226,8 +281,18 @@ hana-cli certificates
 [aliases: cert, certs]
 List System Certificates
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
                                                       [boolean] [default: false]
 ```
 
@@ -240,9 +305,21 @@ hana-cli cds [schema] [table]
 [aliases: cdsPreview]
 Display a DB object via CDS
 
-Options:
-  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -t, --table, --Table        Database Table                            [string]
   -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
   -v, --view, --View          CDS processing for View instead of Table
@@ -258,6 +335,14 @@ Options:
 hana-cli changelog
 [aliases: chg]
 Open Change Log in browser
+
+Troubleshooting:
+  --disableVerbose, --quiet  Disable Verbose output - removes all extra output
+                             that is only helpful to human readable interface.
+                             Useful for scripting commands.
+                                                      [boolean] [default: false]
+  --debug, --Debug           Debug hana-cli itself by adding output of LOTS of
+                             intermediate details     [boolean] [default: false]
 ```
 
 ### changes
@@ -283,6 +368,15 @@ hana-cli connect [user] [password]
 Connects to an SAP HANA DB and writes connection information to a
 default-env-admin.json
 
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
 Options:
   -n, --connection                          Connection String  <host>[:<port>]
   -u, --user, --User                        User
@@ -295,8 +389,7 @@ Options:
                                                        [boolean] [default: true]
   -e, --encrypt, --Encrypt, --ssl           Encrypt connections (required for
                                             SAP HANA service for SAP BTP or SAP
-                                            HANA Cloud)
-                                                      [boolean] [default: false]
+                                            HANA Cloud)                [boolean]
   -t, --trustStore, --Trust, --trust,       SSL Trust Store
   --truststore                                                     
 ```
@@ -310,10 +403,21 @@ hana-cli containers [containerGroup] [container]
 [aliases: cont, listContainers, listcontainers]
 List all HDI Containers
 
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
 Options:
-  -a, --admin, --Admin                      Connect via admin
-                                            (default-env-admin.json)
-                                                       [boolean] [default: true]
   -c, --container, --Container              Container Name
                                                          [string] [default: "*"]
   -g, --containerGroup, --Group, --group,   Container Group
@@ -328,6 +432,14 @@ hana-cli copy2DefaultEnv
 [aliases: copyDefaultEnv, copyDefault-Env, copy2defaultenv, copydefaultenv,
                                                                 copydefault-env]
 Copy .env contents to default-env.json and reformat
+
+Troubleshooting:
+  --disableVerbose, --quiet  Disable Verbose output - removes all extra output
+                             that is only helpful to human readable interface.
+                             Useful for scripting commands.
+                                                      [boolean] [default: false]
+  --debug, --Debug           Debug hana-cli itself by adding output of LOTS of
+                             intermediate details     [boolean] [default: false]
 ```
 
 ### copy2Env
@@ -337,9 +449,43 @@ hana-cli copy2Env
 [aliases: copyEnv, copyenv, copy2env]
 Copy default-env.json contents to .env and reformat
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+```
+
+### copy2Secrets
+
+```shell
+hana-cli copy2Secrets
+[aliases: secrets, make:secrets]
+make secrets for Kubernetes deployment
+(https://www.npmjs.com/package/@sap/xsenv#usage-in-kubernetes)
+
+Troubleshooting:
+  --disableVerbose, --quiet  Disable Verbose output - removes all extra output
+                             that is only helpful to human readable interface.
+                             Useful for scripting commands.
+                                                      [boolean] [default: false]
+  --debug, --Debug           Debug hana-cli itself by adding output of LOTS of
+                             intermediate details     [boolean] [default: false]
+
+Options:
+  --envJson, --from-file        JSON file containing VCAP_SERVICES variable
+                                          [string] [default: "default-env.json"]
+  --secretsFolder, --to-folder  Folder name for storing secrets
+                                                   [string] [default: "secrets"]
+  --filter                      List of service instances to process    [string]
 ```
 
 ### createContainer
@@ -349,9 +495,21 @@ hana-cli createContainer [container]
 [aliases: cc, cCont]
 Create an HDI Container and populate connection details into default-env.json
 
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
 Options:
-  -a, --admin, --Admin             Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
   -c, --container, --Container     Container Name                       [string]
   -s, --save, --Save               Save Credentials to default-env.json
                                                        [boolean] [default: true]
@@ -370,9 +528,21 @@ hana-cli createContainerUsers [container]
 Create new HDI Container technical users for an existing container and populates
 connection details into default-env.json
 
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
 Options:
-  -a, --admin, --Admin             Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
   -c, --container, --Container     Container Name                       [string]
   -s, --save, --Save               Save Credentials to default-env.json
                                                        [boolean] [default: true]
@@ -392,9 +562,21 @@ which should look like this:
 https://<subdomain>.authentication.<region>.hana.ondemand.com then add
 /sap/trust/jwt path to it in a browser)
 
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
 Options:
-  -a, --admin, --Admin              Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
   -c, --name, --Name                JWT Provider Name (Any descriptive Value)
                                                                         [string]
   -c, --certificate, --Certificate  certificate                         [string]
@@ -407,6 +589,15 @@ Options:
 hana-cli createModule
 [aliases: createDB, createDBModule]
 Create DB Module
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
 
 Options:
   -f, --folder, --Folder                    DB Module Folder Name
@@ -422,11 +613,23 @@ hana-cli createXSAAdmin [user] [password]
 [aliases: cXSAAdmin, cXSAA, cxsaadmin, cxsaa]
 Create an SAP HANA DB User which is also an XSA Admin
 
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
 Options:
-  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
   -u, --user, --User          User
-  -p, --password, --Password  Password
+  -p, --password, --Password  Passwordd
 ```
 
 ![createXSAAdmin example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/createXSAAdmin.gif)
@@ -438,8 +641,18 @@ hana-cli dataTypes
 [aliases: dt, datatypes, dataType, datatype]
 List of HANA Data Types and their technical details
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
                                                       [boolean] [default: false]
 ```
 
@@ -452,8 +665,18 @@ hana-cli dataVolumes
 [aliases: dv, datavolumes]
 Details about the HANA Data Volumes
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
                                                       [boolean] [default: false]
 ```
 
@@ -466,8 +689,18 @@ hana-cli disks
 [aliases: di, Disks]
 Details about disk devices used by HANA
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
                                                       [boolean] [default: false]
 ```
 
@@ -480,13 +713,23 @@ hana-cli dropContainer [container]
 [aliases: dc, dropC]
 Drop HDI container and clean up HDI Container users
 
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
 Options:
-  -a, --admin, --Admin          Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
   -c, --container, --Container  Container Name                          [string]
 ```
-
-![dropContainer example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/dropContainer.gif)
 
 ### features
 
@@ -495,8 +738,18 @@ hana-cli features
 [aliases: fe, Features]
 SAP HANA Features and Version
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
                                                       [boolean] [default: false]
 ```
 
@@ -509,8 +762,18 @@ hana-cli featureUsage
 [aliases: fu, FeaturesUsage]
 Usage Statistics by Feature
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
                                                       [boolean] [default: false]
 ```
 
@@ -524,9 +787,21 @@ hana-cli functions [schema] [function]
                                                                   listfunctions]
 Get a list of all functions
 
-Options:
-  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -f, --function, --Function  Function                   [string] [default: "*"]
   -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit                 Limit results              [number] [default: 200]
@@ -540,7 +815,18 @@ Options:
 hana-cli hdi
 [aliases: hdiInstances, hdiinstances, hdiServices, listhdi, hdiservices, hdis]
 List all SAP HANA Cloud HDI service instances in your target Space
+
+Troubleshooting:
+  --disableVerbose, --quiet  Disable Verbose output - removes all extra output
+                             that is only helpful to human readable interface.
+                             Useful for scripting commands.
+                                                      [boolean] [default: false]
+  --debug, --Debug           Debug hana-cli itself by adding output of LOTS of
+                             intermediate details     [boolean] [default: false]
+Options:
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]                             
 ```
+![hdi example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hdi.gif)
 
 ### hc
 
@@ -549,9 +835,19 @@ hana-cli hc [name]
 [aliases: hcInstances, instances, listHC, listhc, hcinstances]
 List all SAP HANA Cloud instances in your target Space
 
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
 Options:
   -n, --name  SAP HANA Cloud Instance name     [string] [default: "**default**"]
 ```
+![hc example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hc.gif)
 
 ### hcStart
 
@@ -559,6 +855,15 @@ Options:
 hana-cli hcStart [name]
 [aliases: hcstart, hc_start, start]
 Start SAP HANA Cloud instance
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
 
 Options:
   -n, --name  SAP HANA Cloud Instance name     [string] [default: "**default**"]
@@ -570,6 +875,15 @@ Options:
 hana-cli hcStop [name]
 [aliases: hcstop, hc_stop, stop]
 Stop SAP HANA Cloud instance
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
 
 Options:
   -n, --name  SAP HANA Cloud Instance name     [string] [default: "**default**"]
@@ -583,8 +897,18 @@ hana-cli hdbsql
 Launch the hdbsql tool (if installed separately) using the locally persisted
 credentials default-env*.json
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
                                                       [boolean] [default: false]
 ```
 
@@ -604,8 +928,18 @@ hana-cli hostInformation
 [aliases: hi, HostInformation, hostInfo, hostinfo]
 Host technical details
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
                                                       [boolean] [default: false]
 ```
 
@@ -618,9 +952,21 @@ hana-cli indexes [schema] [indexes]
 [aliases: ind, listIndexes, ListInd, listind, Listind, listfindexes]
 Get a list of indexes
 
-Options:
-  -a, --admin, --Admin      Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -i, --indexes, --Indexes  Function                     [string] [default: "*"]
   -s, --schema, --Schema    schema      [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit               Limit results                [number] [default: 200]
@@ -635,9 +981,21 @@ hana-cli iniContents [file] [section]
 [aliases: if, inifiles, ini]
 Contents of INI Configuration (filtered by File Name)
 
-Options:
-  -a, --admin, --Admin      Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -f, --file, --File        File Name                    [string] [default: "*"]
   -s, --section, --Section  Section                      [string] [default: "*"]
   -l, --limit               Limit results                [number] [default: 200]
@@ -652,8 +1010,18 @@ hana-cli iniFiles
 [aliases: if, inifiles, ini]
 List of INI Configuration Files for SAP HANA
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
                                                       [boolean] [default: false]
 ```
 
@@ -666,9 +1034,21 @@ hana-cli inspectFunction [schema] [function]
 [aliases: if, function, insFunc, inspectfunction]
 Return metadata about a Function
 
-Options:
-  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -f, --function, --Function  Function                                  [string]
   -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
   -o, --output, --Output      Output Format for inspection
@@ -684,9 +1064,21 @@ hana-cli inspectIndex [schema] [index]
 [aliases: ii, index, insIndex, inspectindex]
 Return metadata about an Index
 
-Options:
-  -a, --admin, --Admin    Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -i, --index, --Index    DB Table Index                                [string]
   -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
 ```
@@ -700,9 +1092,19 @@ hana-cli inspectJWT
 [aliases: jwt, ijwt, iJWT, iJwt]
 Inspect JWT Token Configuration
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
-                                                      [boolean] [default: false
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
 ```
 
 ### inspectLibMember
@@ -712,10 +1114,21 @@ hana-cli inspectLibMember [schema] [library] [libraryMem]
 [aliases: ilm, libraryMember, librarymember, insLibMem, inspectlibrarymember]
 Return metata about a Library Member
 
-Options:
-  -a, --admin, --Admin                      Connect via admin
-                                            (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
       --library, --lib, --Library           Library                     [string]
   -m, --libraryMem, --libMem,               Library Member
   --LibraryMember                                                       [string]
@@ -734,9 +1147,21 @@ hana-cli inspectLibrary [schema] [library]
 [aliases: il, library, insLib, inspectlibrary]
 Return metadata about a Library
 
-Options:
-  -a, --admin, --Admin             Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
       --library, --lib, --Library  Library                              [string]
   -s, --schema, --Schema           schema
                                         [string] [default: "**CURRENT_SCHEMA**"]
@@ -753,9 +1178,21 @@ hana-cli inspectProcedure [schema] [procedure]
  [aliases: ip, procedure, insProc, inspectprocedure, inspectsp]
 Return metadata about a Stored Procedure
 
-Options:
-  -a, --admin, --Admin                Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -p, --procedure, --Procedure, --sp  Stored Procedure                  [string]
   -s, --schema, --Schema              schema
                                         [string] [default: "**CURRENT_SCHEMA**"]
@@ -772,14 +1209,27 @@ hana-cli inspectTable [schema] [table]
 [aliases: it, table, insTbl, inspecttable, inspectable]
 Return metadata about a DB table
 
-Options:
-  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -t, --table, --Table        Database Table                            [string]
   -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
   -o, --output, --Output      Output Format for inspection
-  [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "annos", "edm",
-                                     "edmx", "swgr", "openapi"] [default: "tbl"]
+        [string] [choices: "tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl",
+     "annos", "edm", "edmx", "swgr", "openapi", "hdbtable", "hdbmigrationtable",
+                                             "hdbcds", "jsdoc"] [default: "tbl"]
       --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
                               cloud.sap/docs/cds/cdl#predefined-types)
                                                       [boolean] [default: false]
@@ -794,9 +1244,21 @@ hana-cli inspectTrigger [schema] [trigger]
 [aliases: itrig, trigger, insTrig, inspecttrigger, inspectrigger]
 Return metadata about a Trigger
 
-Options:
-  -a, --admin, --Admin      Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -t, --trigger, --Trigger  Sequence                     [string] [default: "*"]
   -s, --schema, --Schema    schema      [string] [default: "**CURRENT_SCHEMA**"]
   -o, --output, --Output    Output Format for inspection
@@ -810,10 +1272,22 @@ hana-cli inspectUser [user]
 [aliases: iu, user, insUser, inspectuser]
 Return metadata about a User
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-  -u, --user, --User    User                                            [string]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -u, --user, --User  User                                              [string]
 ```
 
 ![inspectUser example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectUser.gif)
@@ -825,20 +1299,31 @@ hana-cli inspectView [schema] [view]
 [aliases: iv, view, insVew, inspectview]
 Return metadata about a DB view
 
-Options:
-  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -v, --view, --View          Database View                             [string]
   -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
   -o, --output, --Output      Output Format for inspection
-  [string] [choices: "tbl", "sql", "cds", "json", "yaml", "cdl", "annos", "edm",
-                                     "edmx", "swgr", "openapi"] [default: "tbl"]
+        [string] [choices: "tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl",
+       "annos", "edm", "edmx", "swgr", "openapi", "hdbview", "hdbcds"] [default:
+                                                                          "tbl"]
       --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
                               cloud.sap/docs/cds/cdl#predefined-types)
                                                       [boolean] [default: false]
 ```
-
-![inspectView example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectView.gif)
 
 ### libraries
 
@@ -848,9 +1333,21 @@ hana-cli libraries [schema] [library]
                                                                   listlibraries]
 Get a list of all libraries
 
-Options:
-  -a, --admin, --Admin             Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
       --library, --lib, --Library  Library               [string] [default: "*"]
   -s, --schema, --Schema           schema
                                         [string] [default: "**CURRENT_SCHEMA**"]
@@ -866,19 +1363,38 @@ hana-cli massConvert [schema] [table]
 [aliases: mc, massconvert, massConv, massconv]
 Convert a group of tables to CDS or HDBTable format
 
-Options:
-  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -t, --table, --Table        Database Table             [string] [default: "*"]
   -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit                 Limit results              [number] [default: 200]
   -f, --folder, --Folder      DB Module Folder Name     [string] [default: "./"]
   -n, --filename, --Filename  File name                                 [string]
-  -o, --output, --Output      Output Format for inspection
-                          [string] [choices: "hdbtable", "cds"] [default: "cds"]
+  -o, --output, --Output                   Output Format for inspection
+     [string] [choices: "hdbtable", "cds", "hdbmigrationtable"] [default: "cds"]
       --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
                               cloud.sap/docs/cds/cdl#predefined-types)
                                                       [boolean] [default: false]
+      --useCatalogPure, --catalog, --pure  Use "Pure" catalog definitions in a
+                                           massConvert. Will include additional
+                                           metadata such as Associations and
+                                           Merge settings but will also include
+                                           some references that are
+                                           incompatible with HDI
+                                                      [boolean] [default: false]                                                      
 ```
 
 ### massUsers
@@ -888,14 +1404,24 @@ hana-cli massUsers [user] [password]
 [aliases: massUser, mUsers, mUser, mu]
 Mass Create 50 Developer Users (for workshops)
 
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
 Options:
-  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
   -u, --user, --User          User
   -p, --password, --Password  Password
 ```
-
-![massUsers example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/massUsers.gif)
 
 ### matrix
 
@@ -912,9 +1438,21 @@ hana-cli objects [schema] [object]
 [aliases: o, listObjects, listobjects]
 Search across all object types
 
-Options:
-  -a, --admin, --Admin    Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -o, --object, --Object  DB Object                      [string] [default: "*"]
   -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit             Limit results                  [number] [default: 200]
@@ -929,8 +1467,18 @@ hana-cli opendbx
 [aliases: open, openDBX, opendb, openDBExplorer, opendbexplorer]
 Open DB Explorer
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
                                                       [boolean] [default: false]
 ```
 
@@ -941,8 +1489,18 @@ hana-cli ports
 
 Display port assignments for internal SAP HANA services
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
                                                       [boolean] [default: false]
 ```
 
@@ -954,10 +1512,22 @@ hana-cli privilegeError [guid]
                                           getInsuffficientPrivilegeErrorDetails]
 Get Insufficient Privilege Error Details
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-  -g, --guid, --error   GUID from original error message                [string]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -g, --guid, --error  GUID from original error message                 [string]
 ```
 
 ![privilegeError example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/privilegeError.gif)
@@ -970,9 +1540,21 @@ hana-cli procedures [schema] [procedure]
                                                                  listprocedures]
 Get a list of all stored procedures
 
-Options:
-  -a, --admin, --Admin          Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -p, --procedure, --Procedure  Stored Procedure         [string] [default: "*"]
   -s, --schema, --Schema        schema  [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit                   Limit results            [number] [default: 200]
@@ -987,9 +1569,21 @@ hana-cli querySimple
 [aliases: qs, querysimple]
 Execute single SQL command and output results
 
-Options:
-  -a, --admin, --Admin        Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -q, --query, --Query        SQL Statement                             [string]
   -f, --folder, --Folder      DB Module Folder Name     [string] [default: "./"]
   -n, --filename, --Filename  File name                                 [string]
@@ -1023,12 +1617,20 @@ hana-cli reclaim
 [aliases: re]
 Reclaim LOB, Log, and Data Volume space
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
-                                                       [boolean] [default: true]
-```
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
 
-![reclaim example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/reclaim.gif)
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+```
 
 ### rick
 
@@ -1045,9 +1647,21 @@ hana-cli roles [schema] [role]
 [aliases: tc, traceContents, traceContent, tracecontent]
 Get a list of roles
 
-Options:
-  -a, --admin, --Admin    Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -r, --role, --Role      Database Role                  [string] [default: "*"]
   -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit             Limit results                  [number] [default: 200]
@@ -1062,9 +1676,21 @@ hana-cli schemas [schema]
 [aliases: sch, getSchemas, listSchemas]
 Get a list of all schemas
 
-Options:
-  -a, --admin, --Admin           Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -s, --schema, --schemas        schema                  [string] [default: "*"]
   -l, --limit                    Limit results           [number] [default: 200]
       --all, --al, --allSchemas  Show all schemas regardless of permissions
@@ -1079,6 +1705,15 @@ Options:
 hana-cli serviceKey [instance] [key]
 [aliases: key, servicekey, service-key]
 Connect and write default-env.json via service key
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
 
 Options:
   -i, --instance, --Instance                CF/XS Service Instance Name
@@ -1100,16 +1735,26 @@ hana-cli sequences [schema] [sequence]
 [aliases: seq, listSeqs, ListSeqs, listseqs, Listseq, listSequences]
 Get a list of all squences
 
-Options:
-  -a, --admin, --Admin               Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
       --sequence, --seq, --Sequence  Sequence            [string] [default: "*"]
   -s, --schema, --Schema             schema
                                         [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit                        Limit results       [number] [default: 200]
 ```
-
-![sequences example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/sequences.gif)
 
 ### status
 
@@ -1118,8 +1763,22 @@ hana-cli status
 [aliases: s, whoami]
 Get Connection Status
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -p, --priv, --privileges  Includes Privileges in Output (will be long)
                                                       [boolean] [default: false]
 ```
 
@@ -1132,17 +1791,27 @@ hana-cli synonyms [schema] [synonym] [target]
 [aliases: syn, listSynonyms, listsynonyms]
 List of all synonyms
 
-Options:
-  -a, --admin, --Admin             Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
       --synonym, --syn, --Synonym  Database Synonym      [string] [default: "*"]
   -t, --target, --Target           Target object         [string] [default: "*"]
   -s, --schema, --Schema           schema
                                         [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit                      Limit results         [number] [default: 200]
 ```
-
-![synonyms example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/synonyms.gif)
 
 ### systemInfo
 
@@ -1151,8 +1820,18 @@ hana-cli systemInfo
 [aliases: sys, sysinfo, sysInfo, systeminfo]
 General System Details
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
                                                       [boolean] [default: false]
 ```
 
@@ -1165,9 +1844,21 @@ hana-cli tables [schema] [table]
 [aliases: t, listTables, listtables]
 Get a list of all tables
 
-Options:
-  -a, --admin, --Admin    Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -t, --table, --Table    Database Table                 [string] [default: "*"]
   -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit             Limit results                  [number] [default: 200]
@@ -1182,12 +1873,20 @@ hana-cli traces
 [aliases: tf, Traces]
 List all trace files
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-```
+      --conn            Connection Filename to override default-env.json
 
-![traces example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/traces.gif)
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+```
 
 ### traceContents
 
@@ -1196,9 +1895,21 @@ hana-cli traceContents [host] [file]
 [aliases: tc, traceContents, traceContent, tracecontent]
 Contents of a selected trace file - Reading from the end of the file backwards
 
-Options:
-  -a, --admin, --Admin      Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
       --host, --ho, --Host  Hostname                                    [string]
   -f, --file, --File        File Name                                   [string]
   -l, --limit               Limit results               [number] [default: 2000]
@@ -1213,16 +1924,26 @@ hana-cli triggers [schema] [trigger] [target]
 [aliases: trig, listTriggers, ListTrigs, listtrigs, Listtrig, listrig]
 List of all triggers
 
-Options:
-  -a, --admin, --Admin          Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -t, --trigger, --Trigger      Sequence                 [string] [default: "*"]
       --target, --to, --Target  Target object            [string] [default: "*"]
   -s, --schema, --Schema        schema  [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit                   Limit results            [number] [default: 200]
 ```
-
-![triggers example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/triggers.gif)
 
 ### ups
 
@@ -1230,6 +1951,16 @@ Options:
 hana-cli ups
 [aliases: upsInstances, upsinstances, upServices, listups, upsservices]
 List all Cloud Foundry user provided service instances in your target Space
+
+Troubleshooting:
+  --disableVerbose, --quiet  Disable Verbose output - removes all extra output
+                             that is only helpful to human readable interface.
+                             Useful for scripting commands.
+                                                      [boolean] [default: false]
+  --debug, --Debug           Debug hana-cli itself by adding output of LOTS of
+                             intermediate details     [boolean] [default: false]
+Options:
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]                             
 ```
 
 ### users
@@ -1239,11 +1970,23 @@ hana-cli users [user]
 [aliases: u, listUsers, listusers]
 Get a list of all users
 
-Options:
+Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
-  -u, --user, --User    User                             [string] [default: "*"]
-  -l, --limit           Limit results                    [number] [default: 200]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -u, --user, --User  User                               [string] [default: "*"]
+  -l, --limit         Limit results                      [number] [default: 200]
 ```
 
 ![users example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/users.gif)
@@ -1254,6 +1997,14 @@ Options:
 hana-cli version
 [aliases: ver]
 Version details
+
+Troubleshooting:
+  --disableVerbose, --quiet  Disable Verbose output - removes all extra output
+                             that is only helpful to human readable interface.
+                             Useful for scripting commands.
+                                                      [boolean] [default: false]
+  --debug, --Debug           Debug hana-cli itself by adding output of LOTS of
+                             intermediate details     [boolean] [default: false]
 ```
 
 ![version example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/version.gif)
@@ -1265,15 +2016,25 @@ hana-cli views [schema] [view]
 [aliases: v, listViews, listviews]
 Get a list of all views
 
-Options:
-  -a, --admin, --Admin    Connect via admin (default-env-admin.json)
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
                                                       [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
   -v, --view, --View      Database View                  [string] [default: "*"]
   -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit             Limit results                  [number] [default: 200]
 ```
-
-![views example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/views.gif)
 
 ## How to obtain support
 

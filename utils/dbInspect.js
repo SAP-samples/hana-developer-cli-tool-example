@@ -1,6 +1,7 @@
 /*eslint no-console: 0, no-unused-vars: 0, no-shadow: 0, new-cap: 0*/
 /*eslint-env node, es6 */
 "use strict";
+const bundle = global.__bundle
 
 async function getHANAVersion(db) {
 	const statement = await db.preparePromisified(
@@ -8,7 +9,7 @@ async function getHANAVersion(db) {
                  FROM M_DATABASE`)
 	const object = await db.statementExecPromisified(statement, [])
 	if (object.length < 1) {
-		throw new Error("System Version Lookup Error: Can't Read from M_DATABASE")
+		throw new Error(bundle.getText("errMDB"))
 	}
 	object[0].versionMajor = object[0].VERSION.charAt(0)
 	return object[0]
@@ -33,7 +34,7 @@ async function getView(db, scheam, viewId) {
 	const statement = await db.preparePromisified(statementString)
 	const object = await db.statementExecPromisified(statement, [scheam, viewId]);
 	if (object.length < 1) {
-		throw new Error("Invalid Input View");
+		throw new Error(bundle.getText("errInput"));
 	}
 	return object;
 }
@@ -49,7 +50,7 @@ async function getDef(db, schema, Id) {
 	let sp = await db.loadProcedurePromisified(hdbext, "SYS", "GET_OBJECT_DEFINITION");
 	let object = await db.callProcedurePromisified(sp, inputParams);
 	if (object.length < 1) {
-		throw new Error("Invalid Input Object");
+		throw new Error(bundle.getText("errObj"));
 	}
 	let output = object.results[0].OBJECT_CREATION_STATEMENT;
 	output = output.toString();
@@ -87,7 +88,7 @@ async function getTable(db, schema, tableId) {
 	const statement = await db.preparePromisified(statementString)
 	const object = await db.statementExecPromisified(statement, [schema, tableId]);
 	if (object.length < 1) {
-		throw new Error("Invalid Input Table");
+		throw new Error(bundle.getText("errTable"));
 	}
 	return object;
 }
@@ -151,7 +152,7 @@ async function getProcedure(db, schema, procedure) {
 	const statement = await db.preparePromisified(statementString)
 	const object = await db.statementExecPromisified(statement, [schema, procedure]);
 	if (object.length < 1) {
-		throw new Error("Invalid Input Procedure");
+		throw new Error(bundle.getText("errProc"));
 	}
 	return object;
 }
@@ -204,7 +205,7 @@ async function getFunction(db, schema, functionName) {
 	const statement = await db.preparePromisified(statementString)
 	const object = await db.statementExecPromisified(statement, [schema, functionName]);
 	if (object.length < 1) {
-		throw new Error("Invalid Input Function");
+		throw new Error(bundle.getText("errFunc"));
 	}
 	return object;
 }
@@ -240,8 +241,10 @@ module.exports.options = { set useHanaTypes(use) { useHanaTypes = use } }
 
 async function formatCDS(db, object, fields, constraints, type, parent) {
 	let cdstable = "";
-	cdstable += "@cds.persistence.exists \n";
-	if (type === "view") {
+	if (type === "view" || type === "table") {
+		cdstable += "@cds.persistence.exists \n"
+	}
+	if (type === "view" || type === "hdbview") {
 		object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/\./g, "_");
 		object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/:/g, "");
 		cdstable += `Entity ![${object[0].VIEW_NAME}] {\n `;
@@ -254,7 +257,7 @@ async function formatCDS(db, object, fields, constraints, type, parent) {
 	for (let field of fields) {
 
 		isKey = "FALSE";
-		if (type === "table") {
+		if (type === "table" || type === "hdbtable") {
 			if (object[0].HAS_PRIMARY_KEY === "TRUE") {
 				for (let constraint of constraints) {
 					if (field.COLUMN_NAME === constraint.COLUMN_NAME) {
@@ -338,7 +341,7 @@ async function formatCDS(db, object, fields, constraints, type, parent) {
 					break;
 				case "ST_POINT":
 				case "ST_GEOMETRY":
-					cdstable += `hana.${field.DATA_TYPE_NAME}(${await getGeoColumns(db,object[0], field, type)})`
+					cdstable += `hana.${field.DATA_TYPE_NAME}(${await getGeoColumns(db, object[0], field, type)})`
 					break
 				default:
 					cdstable += `**UNSUPPORTED TYPE - ${field.DATA_TYPE_NAME}`;

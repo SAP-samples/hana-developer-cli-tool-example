@@ -7,71 +7,68 @@ async function getCFConfig() {
     try {
         const fs = require('fs')
         const homedir = require('os').homedir()
-        const data = fs.readFileSync(`${homedir}/.cf/config.json`,
+        const propertiesToJSON = require("properties-to-json")
+        const data = fs.readFileSync(`${homedir}/.xsconfig`,
             { encoding: 'utf8', flag: 'r' })
-        const object = JSON.parse(data)
+        const object = propertiesToJSON(data)
         return object
     }
     catch (error) {
-        throw new Error(bundle.getText("errCFConfig"))
+        throw new Error(bundle.getText("errXSConfig"))
     }
 }
 module.exports.getCFConfig = getCFConfig
 
 async function getCFOrg() {
     const config = await getCFConfig()
-    return config.OrganizationFields
+    return config
 }
 module.exports.getCFOrg = getCFOrg
 
 async function getCFOrgName() {
     const org = await getCFOrg()
-    return org.Name
+    return org.org
 }
 module.exports.getCFOrgName = getCFOrgName
 
 async function getCFOrgGUID() {
     const org = await getCFOrg()
-    return org.GUID
+    return org.orgGuid
 }
 module.exports.getCFOrgGUID = getCFOrgGUID
 
 async function getCFSpace() {
     const config = await getCFConfig()
-    return config.SpaceFields
+    return config
 }
 module.exports.getCFSpace = getCFSpace
 
 async function getCFSpaceName() {
     const space = await getCFSpace()
-    return space.Name
+    return space.space
 }
 module.exports.getCFSpaceName = getCFSpaceName
 
 async function getCFSpaceGUID() {
     const space = await getCFSpace()
-    return space.GUID
+    return space.spaceGuid
 }
 module.exports.getCFSpaceGUID = getCFSpaceGUID
 
 async function getCFTarget() {
     const config = await getCFConfig()
-    return config.Target
+    return config.api.replace(/\\:/g,':')
 }
 module.exports.getCFTarget = getCFTarget
 
 async function getHANAInstances() {
-    const space = await getCFSpace()
-    const org = await getCFOrg()
 
-    const spaceGUID = space.GUID
-    const orgGUID = org.GUID
-
+    const spaceGUID = await getCFSpaceGUID()
 
     try {
         const util = require('util')
         const exec = util.promisify(require('child_process').exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hana"`
+        let script = `xs curl "/v2/service_instances?q=space_guid:${spaceGUID}"`
 
         const { stdout, stderr } = await exec(script)
 
@@ -79,7 +76,7 @@ async function getHANAInstances() {
             console.log(stdout)
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
         } else {
-            return JSON.parse(stdout)
+            return JSON.parse(stdout).serviceInstances
         }
 
 
@@ -90,17 +87,12 @@ async function getHANAInstances() {
 module.exports.getHANAInstances = getHANAInstances
 
 async function getHANAInstanceByName(name) {
-    const space = await getCFSpace()
-    const org = await getCFOrg()
-
-    const spaceGUID = space.GUID
-    const orgGUID = org.GUID
-
+    const spaceGUID = await getCFSpaceGUID()
 
     try {
         const util = require('util')
         const exec = util.promisify(require('child_process').exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hana&names=${name}"`
+        let script = `xs curl "/v2/service_instances?q=space_guid:${spaceGUID}%3Bname:${name}"`
 
         const { stdout, stderr } = await exec(script)
 
@@ -108,7 +100,7 @@ async function getHANAInstanceByName(name) {
             console.log(stdout)
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
         } else {
-            return JSON.parse(stdout)
+            return JSON.parse(stdout).serviceInstances
         }
 
 
@@ -118,26 +110,89 @@ async function getHANAInstanceByName(name) {
 }
 module.exports.getHANAInstanceByName = getHANAInstanceByName
 
-async function getHDIInstances() {
-    const space = await getCFSpace()
-    const org = await getCFOrg()
 
-    const spaceGUID = space.GUID
-    const orgGUID = org.GUID
-
-
+async function getServicePlans(serviceGUID){
     try {
         const util = require('util')
         const exec = util.promisify(require('child_process').exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hdi-shared"`
+        let script = `xs curl "/v2/services/${serviceGUID}/service_plans"`
 
         const { stdout, stderr } = await exec(script)
+
+        if (stderr) {
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
+        } else {
+           return JSON.parse(stdout).servicePlans
+        }
+
+
+    } catch (error) {
+        throw new Error(`${bundle.getText("errConn")} ${JSON.stringify(error)}`);
+    }
+}
+module.exports.getServicePlans = getServicePlans
+
+
+async function getServices(){
+    try {
+        const util = require('util')
+        const exec = util.promisify(require('child_process').exec)
+        let script = `xs curl "/v2/services"`
+
+        const { stdout, stderr } = await exec(script)
+
+        if (stderr) {
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
+        } else {
+           return JSON.parse(stdout).services
+        }
+
+
+    } catch (error) {
+        throw new Error(`${bundle.getText("errConn")} ${JSON.stringify(error)}`);
+    }
+}
+module.exports.getServices = getServices
+
+async function getServicePlanGUID(serviceGUID, servicePlan){
+    try {
+        const servicePlans = await getServicePlans(serviceGUID)
+        let item = servicePlans.find(x => x.servicePlanEntity.name == servicePlan)
+        return item.metadata.guid
+
+    } catch (error) {
+        throw new Error(`${bundle.getText("errConn")} ${JSON.stringify(error)}`);
+    }
+}
+module.exports.getServicePlanGUID = getServicePlanGUID
+
+async function getServiceGUID(service){
+    try {
+        const services = await getServices()
+        let item = services.find(x => x.serviceEntity.label == service)
+        return item.metadata.guid
+
+    } catch (error) {
+        throw new Error(`${bundle.getText("errConn")} ${JSON.stringify(error)}`);
+    }
+}
+module.exports.getServiceGUID = getServiceGUID
+
+async function getHDIInstances() {
+    const spaceGUID = await getCFSpaceGUID()
+    const serviceGUID = await getServiceGUID('hana')
+    const planGUID = await getServicePlanGUID(serviceGUID, `hdi-shared`)
+    try {
+        const util = require('util')
+        const exec = util.promisify(require('child_process').exec)
+        let script = `xs curl "/v2/service_instances/?q=space_guid:${spaceGUID}%3Bservice_plan_guid:${planGUID}`
+         const { stdout, stderr } = await exec(script)
 
         if (stderr) {
             console.log(stdout)
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
         } else {
-            return JSON.parse(stdout)
+            return JSON.parse(stdout).serviceInstances
         }
 
 
@@ -148,17 +203,11 @@ async function getHDIInstances() {
 module.exports.getHDIInstances = getHDIInstances
 
 async function getUpsInstances() {
-    const space = await getCFSpace()
-    const org = await getCFOrg()
-
-    const spaceGUID = space.GUID
-    const orgGUID = org.GUID
-
 
     try {
         const util = require('util')
         const exec = util.promisify(require('child_process').exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&type=user-provided"`
+        let script = `xs curl "/v2/user_provided_service_instances"`
 
         const { stdout, stderr } = await exec(script)
 
@@ -166,7 +215,7 @@ async function getUpsInstances() {
             console.log(stdout)
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
         } else {
-            return JSON.parse(stdout)
+            return JSON.parse(stdout).userProvidedServiceInstances
         }
 
 
@@ -175,61 +224,3 @@ async function getUpsInstances() {
     }
 }
 module.exports.getUpsInstances = getUpsInstances
-
-async function startHana(name) {
-    await getCFSpace()
-    try {
-        const util = require('util')
-        const exec = util.promisify(require('child_process').exec)
-        const homedir = require('os').homedir()
-        const fs = require('fs')
-        const data = { "data": { "serviceStopped": false } }
-        const fileName = `${homedir}/hana_start.json`
-        fs.writeFileSync(fileName, JSON.stringify(data))
-
-        let script = `cf update-service ${name} -c ${homedir}/hana_start.json`
-
-        const { stdout, stderr } = await exec(script)
-
-        if (stderr) {
-            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            fs.unlinkSync(fileName)
-            return stdout
-        }
-
-
-    } catch (error) {
-        throw new Error(`${bundle.getText("errConn")} ${JSON.stringify(error)}`);
-    }
-}
-module.exports.startHana = startHana
-
-async function stopHana(name) {
-    await getCFSpace()
-    try {
-        const util = require('util')
-        const exec = util.promisify(require('child_process').exec)
-        const homedir = require('os').homedir()
-        const fs = require('fs')
-        const data = { "data": { "serviceStopped": true } }
-        const fileName = `${homedir}/hana_stop.json`        
-        fs.writeFileSync(fileName, JSON.stringify(data))
-
-        let script = `cf update-service ${name} -c ${homedir}/hana_stop.json`
-
-        const { stdout, stderr } = await exec(script)
-
-        if (stderr) {
-            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            fs.unlinkSync(fileName)            
-            return stdout
-        }
-
-
-    } catch (error) {
-        throw new Error(`${bundle.getText("errConn")} ${JSON.stringify(error)}`);
-    }
-}
-module.exports.stopHana = stopHana

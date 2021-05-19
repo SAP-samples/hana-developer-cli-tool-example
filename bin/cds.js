@@ -1,188 +1,165 @@
-const colors = require("colors/safe");
-const bundle = global.__bundle;
-global.__xRef = [];
-const dbClass = require("sap-hdbext-promisfied");
-const dbInspect = require("../utils/dbInspect");
+const base = require("../utils/base")
+global.__xRef = []
 
-exports.command = 'cds [schema] [table]';
-exports.aliases = ['cdsPreview'];
-exports.describe = bundle.getText("cds");
+exports.command = 'cds [schema] [table]'
+exports.aliases = ['cdsPreview']
+exports.describe = base.bundle.getText("cds")
 
-
-exports.builder = {
-  admin: {
-    alias: ['a', 'Admin'],
-    type: 'boolean',
-    default: false,
-    desc: bundle.getText("admin")
-  },
+exports.builder = base.getBuilder({
   table: {
     alias: ['t', 'Table'],
     type: 'string',
-    desc: bundle.getText("table")
+    desc: base.bundle.getText("table")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: bundle.getText("schema")
+    desc: base.bundle.getText("schema")
   },
   view: {
     alias: ['v', 'View'],
     type: 'boolean',
     default: false,
-    desc: bundle.getText("viewOpt")
+    desc: base.bundle.getText("viewOpt")
   },
-  useHanaTypes: {    
+  useHanaTypes: {
     alias: ['hana'],
     type: 'boolean',
     default: false,
-    desc: bundle.getText("useHanaTypes")
+    desc: base.bundle.getText("useHanaTypes")
   }
-};
+})
 
-exports.handler = function (argv) {
-  const prompt = require('prompt');
-  prompt.override = argv;
-  prompt.message = colors.green(bundle.getText("input"));
-  prompt.start();
-
-  var schema = {
-    properties: {
-      admin: {
-        description: bundle.getText("admin"),
-        type: 'boolean',
-        required: true,
-        ask: () => {
-          return false;
-        }
-      },
-      table: {
-        description: bundle.getText("table"),
-        type: 'string',
-        required: true
-      },
-      schema: {
-        description: bundle.getText("schema"),
-        type: 'string',
-        required: true
-      },
-      view: {
-        description: bundle.getText("viewOpt"),
-        type: 'boolean',
-        required: true,
-        ask: () => {
-          return false;
-        }
-      },
-      useHanaTypes: {
-        description: bundle.getText("useHanaTypes"),
-        type: 'boolean'        
+exports.handler = (argv) => {
+  base.promptHandler(argv, cds, {
+    table: {
+      description: base.bundle.getText("table"),
+      type: 'string',
+      required: true
+    },
+    schema: {
+      description: base.bundle.getText("schema"),
+      type: 'string',
+      required: true
+    },
+    view: {
+      description: base.bundle.getText("viewOpt"),
+      type: 'boolean',
+      required: true,
+      ask: () => {
+        return false
       }
+    },
+    useHanaTypes: {
+      description: base.bundle.getText("useHanaTypes"),
+      type: 'boolean'
     }
-  };
-
-  prompt.get(schema, (err, result) => {
-    if (err) {
-      return console.log(err.message);
-    }
-    global.startSpinner()
-    cds(result);
-  });
+  })
 }
 
 
-async function cds(result) {
-  const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
-  let schema = await dbClass.schemaCalc(result, db);
-  let object, fields, constraints, cdsSource;
-  dbInspect.options.useHanaTypes = result.useHanaTypes;
-  
-  if (!result.view) {
-    object = await dbInspect.getTable(db, schema, result.table);
-    fields = await dbInspect.getTableFields(db, object[0].TABLE_OID);
-    constraints = await dbInspect.getConstraints(db, object);
-  } else {
-    object = await dbInspect.getView(db, schema, result.table);
-    fields = await dbInspect.getViewFields(db, object[0].VIEW_OID);
-  }
+async function cds(prompts) {
 
-  cdsSource =
-    `service HanaCli { `
+  try {
+    const dbClass = require("sap-hdbext-promisfied")
+    const conn = require("../utils/connections")
+    const dbInspect = require("../utils/dbInspect")
+    const db = new dbClass(await conn.createConnection(prompts))
 
-  let vcap = JSON.parse(process.env.VCAP_SERVICES);
-  vcap.hana[0].credentials.schema = object[0].SCHEMA_NAME;
-  vcap.hana.splice(1, 100);
-  process.env.VCAP_SERVICES = JSON.stringify(vcap);
-  cdsSource +=
-    `@(Capabilities: {
+    let schema = await dbClass.schemaCalc(prompts, db)
+    let object, fields, constraints, cdsSource
+    dbInspect.options.useHanaTypes = prompts.useHanaTypes
+
+    if (!prompts.view) {
+      object = await dbInspect.getTable(db, schema, prompts.table)
+      fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
+      constraints = await dbInspect.getConstraints(db, object)
+    } else {
+      object = await dbInspect.getView(db, schema, prompts.table)
+      fields = await dbInspect.getViewFields(db, object[0].VIEW_OID)
+    }
+
+    cdsSource =
+      `service HanaCli { `
+
+    let vcap = JSON.parse(process.env.VCAP_SERVICES)
+    vcap.hana[0].credentials.schema = object[0].SCHEMA_NAME
+    vcap.hana.splice(1, 100)
+    process.env.VCAP_SERVICES = JSON.stringify(vcap)
+    cdsSource +=
+      `@(Capabilities: {
 			InsertRestrictions: {Insertable: true},
 			UpdateRestrictions: {Updatable: true},
 			DeleteRestrictions: {Deletable: true}
     },
     HeaderInfo: {
-      TypeName: '${result.table}',
-      Title:'${result.table}'
+      TypeName: '${prompts.table}',
+      Title:'${prompts.table}'
     },
     UI: { 
       LineItem: [ \n`;
-  for (let field of fields) {
-    cdsSource += `{$Type: 'UI.DataField', Value: ![${field.COLUMN_NAME}], "@UI.Importance":#High}, \n`
-  }
-  cdsSource +=
-    `], \n`
-  cdsSource +=
-    ` Facets: [
-    {$Type: 'UI.ReferenceFacet', Target: '@UI.FieldGroup#Main', "@UI.Importance": #High}			
+    for (let field of fields) {
+      cdsSource += `{$Type: 'UI.DataField', Value: ![${field.COLUMN_NAME}], ![@UI.Importance]:#High}, \n`
+    }
+    cdsSource +=
+      `], \n`
+    cdsSource +=
+      ` Facets: [
+    {$Type: 'UI.ReferenceFacet', Target: '@UI.FieldGroup#Main', ![@UI.Importance]: #High}			
   ],
   FieldGroup#Main: { \n 
     Data: [ \n`
-  for (let field of fields) {
-    cdsSource += `{$Type: 'UI.DataField', Value: ${field.COLUMN_NAME}, "@UI.Importance":#High}, \n`
-  }
-  cdsSource +=
-    `] },\n`
-
-  cdsSource += ` SelectionFields: [ `;
-  for (let field of fields) {
-    cdsSource += `${field.COLUMN_NAME}, \n`
-  }
-  cdsSource +=
-    `] \n`
-  cdsSource += `} )\n`;
-
-
-  if (!result.view) {
-    console.log(`Schema: ${schema}, Table: ${result.table}`);
-    object = await dbInspect.getTable(db, schema, result.table);
-    fields = await dbInspect.getTableFields(db, object[0].TABLE_OID);
-    constraints = await dbInspect.getConstraints(db, object);
-    let tableSource = await dbInspect.formatCDS(db, object, fields, constraints, "table", "preview");
+    for (let field of fields) {
+      cdsSource += `{$Type: 'UI.DataField', Value: ${field.COLUMN_NAME}, ![@UI.Importance]:#High}, \n`
+    }
     cdsSource +=
-      `${tableSource} \n }`;
-  } else {
-    console.log(`Schema: ${schema}, View: ${result.table}`);
-    object = await dbInspect.getView(db, schema, result.table);
-    fields = await dbInspect.getViewFields(db, object[0].VIEW_OID);
-    let viewSource = await dbInspect.formatCDS(db, object, fields, null, "view", "preview");
+      `] },\n`
+
+    cdsSource += ` SelectionFields: [ `;
+    for (let field of fields) {
+      cdsSource += `${field.COLUMN_NAME}, \n`
+    }
     cdsSource +=
-      `${viewSource} \n }`;
+      `] \n`
+    cdsSource += `} )\n`
+
+
+    if (!prompts.view) {
+      console.log(`Schema: ${schema}, Table: ${prompts.table}`)
+      object = await dbInspect.getTable(db, schema, prompts.table)
+      fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
+      constraints = await dbInspect.getConstraints(db, object)
+      let tableSource = await dbInspect.formatCDS(db, object, fields, constraints, "table", "preview")
+      cdsSource +=
+        `${tableSource} \n }`
+    } else {
+      console.log(`Schema: ${schema}, View: ${prompts.table}`)
+      object = await dbInspect.getView(db, schema, prompts.table)
+      fields = await dbInspect.getViewFields(db, object[0].VIEW_OID)
+      let viewSource = await dbInspect.formatCDS(db, object, fields, null, "view", "preview")
+      cdsSource +=
+        `${viewSource} \n }`
+    }
+
+    // console.log(cdsSource);
+    await cdsServerSetup(prompts, cdsSource)
+    return base.end()
+  } catch (error) {
+    base.error(error)
   }
 
-  // console.log(cdsSource);
-  await cdsServerSetup(result, cdsSource);
-  return;
 }
 
-async function cdsServerSetup(result, cdsSource) {
+async function cdsServerSetup(prompts, cdsSource) {
 
-  const port = process.env.PORT || 3010;
-  const server = require("http").createServer();
-  const express = require("express");
-  var app = express();
+  const port = process.env.PORT || 3010
+  const server = require("http").createServer()
+  const express = require("express")
+  var app = express()
 
   //CDS OData Service
-  const cds = require("@sap/cds");
+  const cds = require("@sap/cds")
   let options = {
     kind: "hana",
     logLevel: "error",
@@ -191,9 +168,12 @@ async function cdsServerSetup(result, cdsSource) {
   cds.env.requires.db = {}
   cds.env.requires.db.multiTenant = false
 
-  let odataURL = "/odata/v4/opensap.hana.CatalogService/";
-  let entity = result.table.replace(/\./g, "_");
-  entity = entity.replace(/:/g, "");
+  const dbClass = require("sap-hdbext-promisfied")
+  const conn = require("../utils/connections")
+
+  let odataURL = "/odata/v4/opensap.hana.CatalogService/"
+  let entity = prompts.table.replace(/\./g, "_")
+  entity = entity.replace(/:/g, "")
   cds.serve('all').from(await cds.parse(cdsSource), {
     crashOnError: false
   })
@@ -202,12 +182,12 @@ async function cdsServerSetup(result, cdsSource) {
     .to('fiori')
     .with(srv => {
       srv.on(['READ'], entity, async (req) => {
-        req.query.SELECT.from.ref = [result.table]
-        const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)))
-        let query = "SELECT ";
+        req.query.SELECT.from.ref = [prompts.table]
+        const db = new dbClass(await conn.createConnection(prompts))
+        let query = "SELECT "
         if (req.query.SELECT.columns[0].func) {
-          query += `COUNT(*) AS "counted" FROM "${result.table}"`;
-          return (await db.execSQL(query));
+          query += `COUNT(*) AS "counted" FROM "${prompts.table}"`
+          return (await db.execSQL(query))
         }
 
         for (let column of req.query.SELECT.columns) {
@@ -250,7 +230,7 @@ async function cdsServerSetup(result, cdsSource) {
 
         //Order By
         if (req.query.SELECT.orderBy) {
-          query += ` ORDER BY `;
+          query += ` ORDER BY `
           for (let orderBy of req.query.SELECT.orderBy) {
             for (let xref of global.__xRef) {
               if (orderBy.ref[0] === xref.after) {
@@ -263,9 +243,9 @@ async function cdsServerSetup(result, cdsSource) {
       })
     })
     .catch((err) => {
-      console.log(err);
-      process.exit(1);
-    });
+      console.log(err)
+      process.exit(1)
+    })
 
   //Swagger UI
   const swaggerUi = require('swagger-ui-express')
@@ -281,39 +261,14 @@ async function cdsServerSetup(result, cdsSource) {
   }
   app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(metadata, serveOptions))
 
-  /*  let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
-     version: 'v4',
-   })
-   const odataOptions = { basePath: '/odata/v4/opensap.hana.CatalogService/' }
-   const {
-     parse,
-     convert
-   } = require('odata2openapi')
-   const converter = require('swagger2openapi')
-   let convOptions = {}
-   convOptions.anchors = true
-   parse(metadata)
-     .then(service => convert(service.entitySets, odataOptions, service.version))
-     .then(swagger => {
-       converter.convertObj(swagger, convOptions)
-         .then(output => {
-           let serveOptions = {
-             explorer: true
-           }
-           app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(output.openapi, serveOptions))
-         })
-     })
-     .catch(error => console.error(error))
-  */
-
-  app.get('/', (_, res) => res.send(getIndex(odataURL, entity)));
+  app.get('/', (_, res) => res.send(getIndex(odataURL, entity)))
   app.get('/fiori.html', (_, res) => {
-    const manifest = _manifest(odataURL, entity, result.table)
+    const manifest = _manifest(odataURL, entity, prompts.table)
     res.send(fiori(manifest, odataURL, entity))
-  });
+  })
 
   app.get('/app/Component.js', (_, res) => {
-    const manifest = _manifest(odataURL, entity, result.table)
+    const manifest = _manifest(odataURL, entity, prompts.table)
     const content = `sap.ui.define(["sap/fe/core/AppComponent"], function(AppComponent) {
       "use strict";
       return AppComponent.extend("preview.Component", {
@@ -324,15 +279,15 @@ async function cdsServerSetup(result, cdsSource) {
   })
 
   //Start the Server 
-  server.on("request", app);
+  server.on("request", app)
   server.listen(port, function () {
     let serverAddr = `http://localhost:${server.address().port}`
-    console.info(`HTTP Server: ${serverAddr}`);
-    const open = require('open');
-    open(serverAddr);
-  });
+    console.info(`HTTP Server: ${serverAddr}`)
+    const open = require('open')
+    open(serverAddr)
+  })
 
-  return;
+  return
 }
 
 function getIndex(odataURL, entity) {
@@ -394,7 +349,7 @@ function getIndex(odataURL, entity) {
       </style>
       </head>
       <body>
-          <h1>${bundle.getText("cdsIndex")}</h1>
+          <h1>${base.bundle.getText("cdsIndex")}</h1>
           <p class="subtitle"> These are the paths currently served ...
 
           <h2> Web Applications: </h2>
@@ -551,7 +506,7 @@ function _manifest(odataURL, entity, table) {
 }
 
 function fiori(manifest, odataURL, entity,) {
-  let ui5Version = '1.85.3' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
+  let ui5Version = '1.88.1' //'1.85.3' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
   ui5Version = ui5Version ? ui5Version + '/' : ''
   return `
 <!DOCTYPE html>
@@ -594,28 +549,3 @@ function fiori(manifest, odataURL, entity,) {
 </html>
 `
 }
-
-
-
-
-/*
-<script>
-sap.ui.getCore().attachInit(() => {
-    sap.ui.require(["sap/fe/core/AppComponent", "sap/m/Shell", "sap/ui/core/ComponentContainer"], function (AppComponent, Shell, ComponentContainer) {
-        var GenericComponent = AppComponent.extend("preview.Component", {
-            metadata: { manifest: ${JSON.stringify(manifest, null, 2)} }
-        });
-        new Shell({
-            app: new ComponentContainer({
-                height: "100%",
-                component: new GenericComponent({
-                    id: "preview.Component"
-                }),
-                async: true
-            }),
-            appWidthLimited: false
-        }).placeAt("content");
-    })
-})
-</script>
-</head> */

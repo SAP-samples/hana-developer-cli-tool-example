@@ -1,106 +1,81 @@
-const colors = require("colors/safe");
-const bundle = global.__bundle;
-const dbClass = require("sap-hdbext-promisfied");
+const base = require("../utils/base")
 
-exports.command = 'functions [schema] [function]';
-exports.aliases = ['f', 'listFuncs', 'ListFunc', 'listfuncs', 'Listfunc', "listFunctions", "listfunctions"];
-exports.describe = bundle.getText("functions");
+exports.command = 'functions [schema] [function]'
+exports.aliases = ['f', 'listFuncs', 'ListFunc', 'listfuncs', 'Listfunc', "listFunctions", "listfunctions"]
+exports.describe = base.bundle.getText("functions")
 
-
-exports.builder = {
-  admin: {
-    alias: ['a', 'Admin'],
-    type: 'boolean',
-    default: false,
-    desc: bundle.getText("admin")
-  },
+exports.builder = base.getBuilder({
   function: {
     alias: ['f', 'Function'],
     type: 'string',
-    default: "*",    
-    desc: bundle.getText("function")
+    default: "*",
+    desc: base.bundle.getText("function")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: bundle.getText("schema")
+    desc: base.bundle.getText("schema")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: bundle.getText("limit")
+    desc: base.bundle.getText("limit")
   }
-};
+})
 
-exports.handler = function (argv) {
-  const prompt = require('prompt');
-  prompt.override = argv;
-  prompt.message = colors.green(bundle.getText("input"));
-  prompt.start();
-
-  var schema = {
-    properties: {
-      admin: {
-        description: bundle.getText("admin"),
-        type: 'boolean',
-        required: true,
-        ask: () => {
-          return false;
-        }
-      },
-      function: {
-        description: bundle.getText("function"),
-        type: 'string',
-        required: true
-      },
-      schema: {
-        description: bundle.getText("schema"),
-        type: 'string',
-        required: true
-      },
-      limit: {
-        description: bundle.getText("limit"),
-        type: 'number',
-        required: true
-      }      
+exports.handler = (argv) => {
+  base.promptHandler(argv, getFunctions, {
+    function: {
+      description: base.bundle.getText("function"),
+      type: 'string',
+      required: true
+    },
+    schema: {
+      description: base.bundle.getText("schema"),
+      type: 'string',
+      required: true
+    },
+    limit: {
+      description: base.bundle.getText("limit"),
+      type: 'number',
+      required: true
     }
-  };
-
-  prompt.get(schema, (err, result) => {
-    if (err) {
-      return console.log(err.message);
-    }
-    global.startSpinner()
-    getFunctions(result);
-  });
+  })
 }
 
+async function getFunctions(prompts) {
 
-async function getFunctions(result) {
-  const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
+  try {
+    base.setPrompts(prompts)
+    const dbClass = require("sap-hdbext-promisfied")
+    const conn = require("../utils/connections")
+    const db = new dbClass(await conn.createConnection(prompts))
 
-  let schema = await dbClass.schemaCalc(result, db);
-  console.log(`Schema: ${schema}, Function: ${result.function}`);
+    let schema = await dbClass.schemaCalc(prompts, db)
+    base.output(`Schema: ${schema}, Function: ${prompts.function}`)
 
-  let results = await getFunctionsInt(schema, result.function, db, result.limit);
-  console.table(results);
-  global.__spinner.stop()
-  return;
+    let results = await getFunctionsInt(schema, prompts.function, db, prompts.limit)
+    base.outputTable(results)
+    return base.end()
+  } catch (error) {
+    base.error(error)
+  }
 }
 
 
 async function getFunctionsInt(schema, functionName, client, limit) {
-  functionName = dbClass.objectName(functionName);
+  const dbClass = require("sap-hdbext-promisfied")
+  functionName = dbClass.objectName(functionName)
 
   var query =
-  `SELECT SCHEMA_NAME, FUNCTION_NAME, SQL_SECURITY, CREATE_TIME from FUNCTIONS 
+    `SELECT SCHEMA_NAME, FUNCTION_NAME, SQL_SECURITY, CREATE_TIME from FUNCTIONS 
   WHERE SCHEMA_NAME LIKE ? 
     AND FUNCTION_NAME LIKE ? 
-  ORDER BY FUNCTION_NAME `;
+  ORDER BY FUNCTION_NAME `
   if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
-    query += `LIMIT ${limit.toString()}`;
+    query += `LIMIT ${limit.toString()}`
   }
-  return await client.statementExecPromisified(await client.preparePromisified(query), [schema, functionName]);
+  return await client.statementExecPromisified(await client.preparePromisified(query), [schema, functionName])
 }

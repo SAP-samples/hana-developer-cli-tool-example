@@ -1,11 +1,10 @@
-const bundle = global.__bundle;
+const base = require("../utils/base")
 
-exports.command = 'changes';
-exports.aliases = 'chg';
-exports.describe = bundle.getText("changes");
+exports.command = 'changes'
+exports.aliases = 'chg'
+exports.describe = base.bundle.getText("changes");
 
-exports.builder = {
-}
+exports.builder = {}
 
 exports.handler = function () {
   const fs = require('fs')

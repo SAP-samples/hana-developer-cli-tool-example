@@ -1,99 +1,72 @@
-const colors = require("colors/safe");   
-const bundle = global.__bundle;
-const dbClass = require("sap-hdbext-promisfied");
+const base = require("../utils/base")
 
-exports.command = 'iniContents [file] [section]';
-exports.aliases = ['if', 'inifiles', 'ini'];
-exports.describe = bundle.getText("iniContents");
+exports.command = 'iniContents [file] [section]'
+exports.aliases = ['if', 'inifiles', 'ini']
+exports.describe = base.bundle.getText("iniContents")
 
-
-exports.builder = {
-    admin: {
-      alias:  ['a', 'Admin'],
-      type: 'boolean',
-      default: false,
-      desc: bundle.getText("admin")
-    },
-    file: {
-      alias: ['f', 'File'],
-      type: 'string',
-      default: "*",    
-      desc: bundle.getText("file")
-    }, 
-    section: {
-      alias: ['s', 'Section'],
-      type: 'string',
-      default: "*",    
-      desc: bundle.getText("section")
-    },     
-    limit: {
-      alias: ['l'],
-      type: 'number',
-      default: 200,
-      desc: bundle.getText("limit")
-    }       
-  };
- 
-  exports.handler = function (argv) {
-    const prompt = require('prompt');
-    prompt.override = argv;
-    prompt.message = colors.green(bundle.getText("input"));
-    prompt.start();
-  
-    var schema = {
-      properties: {
-        admin: {
-          description: bundle.getText("admin"),   
-          type: 'boolean',       
-          required: true,
-          ask: () =>{
-            return false;
-        }
-        },
-        file: {
-          description: bundle.getText("file"),
-          type: 'string',
-          required: true
-        },
-        section: {
-          description: bundle.getText("section"),
-          type: 'string',
-          required: true
-        },        
-        limit: {
-          description: bundle.getText("limit"),
-          type: 'number',
-          required: true
-        }                       
-      }
-    };
-  
-     prompt.get(schema, (err, result) => {
-         if(err){
-             return console.log(err.message);
-         }
-         global.startSpinner()
-         dbStatus(result);
-    });
+exports.builder = base.getBuilder({
+  file: {
+    alias: ['f', 'File'],
+    type: 'string',
+    default: "*",
+    desc: base.bundle.getText("file")
+  },
+  section: {
+    alias: ['s', 'Section'],
+    type: 'string',
+    default: "*",
+    desc: base.bundle.getText("section")
+  },
+  limit: {
+    alias: ['l'],
+    type: 'number',
+    default: 200,
+    desc: base.bundle.getText("limit")
   }
-  
+})
 
-  async function dbStatus(result) {
-    const db = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
+exports.handler = (argv) => {
+  base.promptHandler(argv, iniContents, {
+    file: {
+      description: base.bundle.getText("file"),
+      type: 'string',
+      required: true
+    },
+    section: {
+      description: base.bundle.getText("section"),
+      type: 'string',
+      required: true
+    },
+    limit: {
+      description: base.bundle.getText("limit"),
+      type: 'number',
+      required: true
+    }
+  })
+}
 
-    let iniFile = dbClass.objectName(result.file);
-    let section = dbClass.objectName(result.section);
+async function iniContents(prompts) {
+  try {
+    base.setPrompts(prompts)
+    const dbClass = require("sap-hdbext-promisfied")
+    const conn = require("../utils/connections")
+    const db = new dbClass(await conn.createConnection(prompts))
+
+    let iniFile = dbClass.objectName(prompts.file)
+    let section = dbClass.objectName(prompts.section)
 
     var query =
-    `SELECT *  from M_INIFILE_CONTENTS 
+      `SELECT *  from M_INIFILE_CONTENTS 
     WHERE FILE_NAME LIKE ? 
       AND SECTION LIKE ?
-    ORDER BY FILE_NAME, SECTION, KEY `;
-    if (result.limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(result.limit)) {
-      query += `LIMIT ${result.limit.toString()}`;
+    ORDER BY FILE_NAME, SECTION, KEY `
+    if (prompts.limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(prompts.limit)) {
+      query += `LIMIT ${prompts.limit.toString()}`
     }
-    let results =  await db.statementExecPromisified(await db.preparePromisified(query), [iniFile, section]);
-    console.table(results);
-    global.__spinner.stop()
-    return;
+    let results = await db.statementExecPromisified(await db.preparePromisified(query), [iniFile, section])
+    base.outputTable(results)
+    return base.end()
+  } catch (error) {
+    base.error(error)
+  }
 }

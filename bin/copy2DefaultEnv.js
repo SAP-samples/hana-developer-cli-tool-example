@@ -1,59 +1,50 @@
-const colors = require("colors/safe")
-const bundle = global.__bundle
+const base = require("../utils/base")
 
 exports.command = 'copy2DefaultEnv'
 exports.aliases = ['copyDefaultEnv', 'copyDefault-Env', 'copy2defaultenv', 'copydefaultenv', 'copydefault-env']
-exports.describe = bundle.getText("copy2DefaultEnv")
+exports.describe = base.bundle.getText("copy2DefaultEnv")
 
+exports.builder = base.getBuilder({}, false)
 
-exports.builder = {
+exports.handler = (argv) => {
+    base.promptHandler(argv, copy, {}, false)
 }
-
-exports.handler = function (argv) {
-    const prompt = require('prompt')
-    prompt.override = argv
-    prompt.message = colors.green(bundle.getText("input"))
-    prompt.start()
-
-    var schema = {
-        properties: {
-        }
-    };
-
-    prompt.get(schema, (err, result) => {
-        if (err) {
-            return console.log(err.message)
-        }
-        global.startSpinner()
-        copy(result)
-    })
-}
-
 
 async function copy() {
     require('dotenv').config()
 
     let defaultEnv = {}
-    if (process.env.VCAP_SERVICES == null){
-        throw new Error(`No .env content found`)
+    if (process.env.VCAP_SERVICES == null) {
+        return base.error(base.bundle.getText("errNoEnv"))
     }
     defaultEnv.VCAP_SERVICES = process.env.VCAP_SERVICES
     let temp = JSON.parse(process.env.VCAP_SERVICES)
     defaultEnv.VCAP_SERVICES = temp
 
-    defaultEnv.VCAP_SERVICES.hana[0].credentials.encrypt = true
-    defaultEnv.VCAP_SERVICES.hana[0].credentials.sslValidateCertificate = false
-    defaultEnv.VCAP_SERVICES.hana[0].credentials.pooling = true
-    
+    if(Object.prototype.hasOwnProperty.call(defaultEnv.VCAP_SERVICES, "hana")){
+        defaultEnv.VCAP_SERVICES.hana[0].credentials.encrypt = true
+        defaultEnv.VCAP_SERVICES.hana[0].credentials.sslValidateCertificate = false
+        defaultEnv.VCAP_SERVICES.hana[0].credentials.pooling = true
+    }else if (Object.prototype.hasOwnProperty.call(defaultEnv.VCAP_SERVICES, "hanatrial")){
+        console.log(base.bundle.getText("warningHAAS")+"\n")
+        
+        defaultEnv.VCAP_SERVICES.hanatrial[0].credentials.encrypt = true
+        defaultEnv.VCAP_SERVICES.hanatrial[0].credentials.sslValidateCertificate = false
+        defaultEnv.VCAP_SERVICES.hanatrial[0].credentials.pooling = true
+    }else {
+        return base.error(base.bundle.getText("errNoHANAConfig"))
+    }
+
+
+    base.debug(defaultEnv)
     const fs = require('fs')
     fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), async (err) => {
         if (err) {
-            throw new Error(`Connection Problem ${JSON.stringify(err)}`)
+            return base.error(err)
         }
-        console.log(bundle.getText("saved"))
-        global.__spinner.stop()
+        console.log(base.bundle.getText("saved"))
+        return base.end() 
     })
 
-    global.__spinner.stop()
-    return
+   return base.end()
 }

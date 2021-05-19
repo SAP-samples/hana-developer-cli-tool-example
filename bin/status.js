@@ -1,70 +1,60 @@
-const colors = require("colors/safe");   
-const bundle = global.__bundle;
-const dbClass = require("sap-hdbext-promisfied");
+const base = require("../utils/base")
 
-exports.command = 'status';
-exports.aliases = ['s', 'whoami'];
-exports.describe = bundle.getText("status");
+exports.command = 'status'
+exports.aliases = ['s', 'whoami']
+exports.describe = base.bundle.getText("status")
 
-
-exports.builder = {
-    admin: {
-      alias:  ['a', 'Admin'],
-      type: 'boolean',
-      default: false,
-      desc: bundle.getText("admin")
-    }
-  };
- 
-  exports.handler = function (argv) {
-    const prompt = require('prompt');
-    prompt.override = argv;
-    prompt.message = colors.green(bundle.getText("input"));
-    prompt.start();
-  
-    var schema = {
-      properties: {
-        admin: {
-          description: bundle.getText("admin"),   
-          type: 'boolean',       
-          required: true,
-          ask: () =>{
-            return false;
-        }
-        }      
-      }
-    };
-  
-     prompt.get(schema, (err, result) => {
-         if(err){
-             return console.log(err.message);
-         }
-         global.startSpinner()
-         dbStatus(result);
-    });
+exports.builder = base.getBuilder({
+  priv: {
+    alias: ['p', 'privileges'],
+    type: 'boolean',
+    default: false,
+    desc: base.bundle.getText("privileges")
   }
-  
+})
 
-  async function dbStatus(result) {
-    const dbStatus = new dbClass(await dbClass.createConnectionFromEnv(dbClass.resolveEnv(result)));
+exports.handler = (argv) => {
+  base.promptHandler(argv, dbStatus, {
+    priv: {
+      description: base.bundle.getText("privileges"),
+      type: 'boolean',
+      required: true,
+      ask: base.askFalse
+    }
+  })
+}
 
-    let results = await dbStatus.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`);
-    console.table(results);
- 
-    let resultsSession = await dbStatus.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`);
-    console.table(resultsSession);
+async function dbStatus(prompts) {
 
-    console.log(bundle.getText("grantedRoles"));
+  try {
+    base.setPrompts(prompts)
+    const dbClass = require("sap-hdbext-promisfied")
+    const conn = require("../utils/connections")
+    const dbStatus = new dbClass(await conn.createConnection(prompts))
+
+    let results = await dbStatus.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`)
+    base.outputTable(results)
+
+    let resultsSession = await dbStatus.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`)
+    base.outputTable(resultsSession)
+
+    base.output(base.bundle.getText("grantedRoles"))
     let resultsRoles = await dbStatus.execSQL(`SELECT ROLE_SCHEMA_NAME, ROLE_NAME, GRANTOR, IS_GRANTABLE
-                                                FROM  GRANTED_ROLES
-                                                WHERE GRANTEE = (SELECT CURRENT_USER FROM "DUMMY")`);
-    console.table(resultsRoles);
+                                                  FROM  GRANTED_ROLES
+                                                  WHERE GRANTEE = (SELECT CURRENT_USER FROM "DUMMY")`)
+    base.outputTable(resultsRoles)
 
-    console.log(bundle.getText("grantedPrivs"));
-    let resultsPrivs = await dbStatus.execSQL(`SELECT PRIVILEGE, OBJECT_TYPE, GRANTOR, IS_GRANTABLE
-                                                FROM  GRANTED_PRIVILEGES
-                                                WHERE GRANTEE = (SELECT CURRENT_USER FROM "DUMMY")`);
-    console.table(resultsPrivs);
-    global.__spinner.stop()
-    return;
+    if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'priv') && prompts.priv) {
+      base.output(base.bundle.getText("grantedPrivs"))
+      let resultsPrivs = await dbStatus.execSQL(`SELECT PRIVILEGE, OBJECT_TYPE, GRANTOR, IS_GRANTABLE
+                                                    FROM  GRANTED_PRIVILEGES
+                                                    WHERE GRANTEE = (SELECT CURRENT_USER FROM "DUMMY")`)
+      base.outputTable(resultsPrivs)
+    }
+
+    return base.end()    
+  } catch (error) {
+    base.error(error)
+  }
+
 }
