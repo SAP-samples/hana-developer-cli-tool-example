@@ -53,6 +53,12 @@ exports.builder = base.getBuilder({
         type: 'boolean',
         default: false,
         desc: base.bundle.getText("useCatalogPure")
+    },
+    namespace: {
+        alias: ['ns'],
+        type: 'string',        
+        desc: base.bundle.getText("namespace"),
+        default: ''
     }
 })
 
@@ -99,6 +105,11 @@ exports.handler = (argv) => {
         useCatalogPure: {
             description: base.bundle.getText("useCatalogPure"),
             type: 'boolean'
+        },
+        namespace:{
+            description: base.bundle.getText("namespace"),
+            type: 'string',
+            required: false
         }
     })
 }
@@ -202,7 +213,7 @@ async function getTables(prompts) {
                 break
             }
             default: {
-                var cdsSource = ""
+                var cdsSource = prompts.namespace && `namespace ${prompts.namespace};\n` || ""
                 for (let table of results) {
                     let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
                     let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
