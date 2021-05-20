@@ -327,6 +327,8 @@ Options:
       --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
                               cloud.sap/docs/cds/cdl#predefined-types)
                                                       [boolean] [default: false]
+  -p, --port                  Port to run HTTP server for CDS preview
+                                                                [default: false]                                                      
 ```
 
 ### changelog
@@ -1360,7 +1362,7 @@ Options:
 
 ```shell
 hana-cli massConvert [schema] [table]
-
+[aliases: mc, massconvert, massConv, massconv]
 Convert a group of tables to CDS or HDBTable format
 
 Connection Parameters:

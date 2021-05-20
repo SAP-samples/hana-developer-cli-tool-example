@@ -3,22 +3,24 @@
 /*eslint-env node, es6, module */
 
 global.__hana_bin = __dirname;
-
+const TextBundle = require("@sap/textbundle").TextBundle;
+global.__bundle = new TextBundle("../_i18n/messages", require("../utils/locale").getLocale());
+const bundle = global.__bundle;
+const base = require("../utils/base")
 require('console.table');
 require('yargonaut')
     .style('blue')
     .helpStyle('green')
     .errorsStyle('red');
 const errorHandler = err => { 
-    console.error(err)
-    global.__spinner.stop()
+    base.error(err)
+    //console.error(err)
+    //global.__spinner.stop()
     process.exit(1) 
 }
 process.on('uncaughtException', errorHandler);
 process.on('unhandledRejection', errorHandler);
-const TextBundle = require("@sap/textbundle").TextBundle;
-global.__bundle = new TextBundle("../_i18n/messages", require("../utils/locale").getLocale());
-const bundle = global.__bundle;
+
 const ora = require('ora');
 // eslint-disable-next-line no-unused-vars
 global.startSpinner = argv => global.__spinner = ora({type:'clock', text: '\n'}).start()

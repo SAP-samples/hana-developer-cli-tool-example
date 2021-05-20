@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202105.5
+
+### Added
+- [Issue #42 Optional namespace for generated cds](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/42) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
+- @cds dependency updated to May 2021 release 5.1.4
+- Update cds preview to UI5 1.89.0
+- cds preview new parameter to allow use to choose HTTP port (and validate that input)
+
+
 ## 2.202105.4
 
 ### Added
