@@ -76,34 +76,51 @@ exports.handler = (argv) => {
 }
 
 async function setKeyDetails(input) {
+  base.debug(input)
+
+  //create serviceKey
   try {
-    var child = require("child_process").exec
-    var script = ''
-    base.debug(input)
+    let child = require("child_process").exec
+    let script = ''
+
     if (input.cf) {
-      script = `cf service-key ${input.instance} ${input.key}`
+      script = `cf create-service-key ${input.instance} ${input.key}`
     } else {
-      script = `xs service-key ${input.instance} ${input.key}`
+      script = `xs create-service-key ${input.instance} ${input.key}`
     }
-    child(script, (err, stdout) => {
+    child(script, (err) => {
       if (err) {
         return base.error(err)
-      } else {
-        let lines = stdout.split('\n')
-        console.log(lines[0])
-        lines.splice(0, 2)
-        if (!input.cf) {
-          lines.splice(-3, 3)
-        }
-        let newtext = lines.join('\n')
-        let returnContent = JSON.parse(newtext)
+      } 
+      console.log(`Service Key ${input.key} created`)
 
-        if (input.save) {
-          saveEnv(returnContent, input)
-        }
+      let child = require("child_process").exec
+      let script = ''
+      if (input.cf) {
+        script = `cf service-key ${input.instance} ${input.key}`
+      } else {
+        script = `xs service-key ${input.instance} ${input.key}`
       }
+      child(script, (err, stdout) => {
+        if (err) {
+          return base.error(err)
+        } else {
+          let lines = stdout.split('\n')
+          console.log(lines[0])
+          lines.splice(0, 2)
+          if (!input.cf) {
+            lines.splice(-3, 3)
+          }
+          let newtext = lines.join('\n')
+          let returnContent = JSON.parse(newtext)
+  
+          if (input.save) {
+            saveEnv(returnContent, input)
+          }
+        }
+      })
+      return base.end()
     })
-    return base.end()
   } catch (error) {
     base.error(error)
   }

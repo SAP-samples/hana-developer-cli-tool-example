@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - @cds dependency updated to May 2021 release 5.1.4
 - Update cds preview to UI5 1.89.0
 - cds preview new parameter to allow use to choose HTTP port (and validate that input)
+- serviceKey command no longer requires to pre-create the service key. If the key you specify doesn't exist it will call cf/xs create-service-key for you automatically [Issue #41](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/41)
 
 
 ## 2.202105.4
