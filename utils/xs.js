@@ -68,7 +68,7 @@ async function getHANAInstances() {
     try {
         const util = require('util')
         const exec = util.promisify(require('child_process').exec)
-        let script = `xs curl "/v2/service_instances?q=space_guid:${spaceGUID}"`
+        let script = `xs curl "/v2/service_instances?q=space_guid:${spaceGUID}&results-per-page=5000"`
 
         const { stdout, stderr } = await exec(script)
 
@@ -92,7 +92,7 @@ async function getHANAInstanceByName(name) {
     try {
         const util = require('util')
         const exec = util.promisify(require('child_process').exec)
-        let script = `xs curl "/v2/service_instances?q=space_guid:${spaceGUID}%3Bname:${name}"`
+        let script = `xs curl "/v2/service_instances?q=space_guid:${spaceGUID}%3Bname:${name}&results-per-page=5000"`
 
         const { stdout, stderr } = await exec(script)
 
@@ -185,7 +185,7 @@ async function getHDIInstances() {
     try {
         const util = require('util')
         const exec = util.promisify(require('child_process').exec)
-        let script = `xs curl "/v2/service_instances/?q=space_guid:${spaceGUID}%3Bservice_plan_guid:${planGUID}`
+        let script = `xs curl "/v2/service_instances/?q=space_guid:${spaceGUID}%3Bservice_plan_guid:${planGUID}&results-per-page=5000`
          const { stdout, stderr } = await exec(script)
 
         if (stderr) {
@@ -207,7 +207,7 @@ async function getUpsInstances() {
     try {
         const util = require('util')
         const exec = util.promisify(require('child_process').exec)
-        let script = `xs curl "/v2/user_provided_service_instances"`
+        let script = `xs curl "/v2/user_provided_service_instances/?results-per-page=5000"`
 
         const { stdout, stderr } = await exec(script)
 

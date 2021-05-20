@@ -71,7 +71,7 @@ async function getHANAInstances() {
     try {
         const util = require('util')
         const exec = util.promisify(require('child_process').exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hana"`
+        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hana&per_page=5000"`
 
         const { stdout, stderr } = await exec(script)
 
@@ -100,7 +100,7 @@ async function getHANAInstanceByName(name) {
     try {
         const util = require('util')
         const exec = util.promisify(require('child_process').exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hana&names=${name}"`
+        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hana&names=${name}&per_page=5000"`
 
         const { stdout, stderr } = await exec(script)
 
@@ -129,7 +129,7 @@ async function getHDIInstances() {
     try {
         const util = require('util')
         const exec = util.promisify(require('child_process').exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hdi-shared"`
+        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hdi-shared&per_page=5000"`
 
         const { stdout, stderr } = await exec(script)
 
@@ -158,7 +158,7 @@ async function getUpsInstances() {
     try {
         const util = require('util')
         const exec = util.promisify(require('child_process').exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&type=user-provided"`
+        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&type=user-provided&per_page=5000"`
 
         const { stdout, stderr } = await exec(script)
 
