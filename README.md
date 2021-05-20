@@ -1360,7 +1360,7 @@ Options:
 
 ```shell
 hana-cli massConvert [schema] [table]
-[aliases: mc, massconvert, massConv, massconv]
+
 Convert a group of tables to CDS or HDBTable format
 
 Connection Parameters:
@@ -1378,23 +1378,27 @@ Troubleshooting:
                                                       [boolean] [default: false]
 
 Options:
-  -t, --table, --Table        Database Table             [string] [default: "*"]
-  -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
-  -l, --limit                 Limit results              [number] [default: 200]
-  -f, --folder, --Folder      DB Module Folder Name     [string] [default: "./"]
-  -n, --filename, --Filename  File name                                 [string]
+  -t, --table, --Table                     Database Table[string] [default: "*"]
+  -s, --schema, --Schema                   schema
+                                        [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit                              Limit results [number] [default: 200]
+  -f, --folder, --Folder                   DB Module Folder Name
+                                                        [string] [default: "./"]
+  -n, --filename, --Filename               File name                    [string]
   -o, --output, --Output                   Output Format for inspection
      [string] [choices: "hdbtable", "cds", "hdbmigrationtable"] [default: "cds"]
-      --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
-                              cloud.sap/docs/cds/cdl#predefined-types)
+      --useHanaTypes, --hana               Use SAP HANA-Specific Data Types See
+                                           (https://cap.cloud.sap/docs/cds/cdl#p
+                                           redefined-types)
                                                       [boolean] [default: false]
       --useCatalogPure, --catalog, --pure  Use "Pure" catalog definitions in a
                                            massConvert. Will include additional
                                            metadata such as Associations and
                                            Merge settings but will also include
-                                           some references that are
-                                           incompatible with HDI
-                                                      [boolean] [default: false]                                                      
+                                           some references that are incompatible
+                                           with HDI   [boolean] [default: false]
+      --namespace, --ns                    CDS namespace
+                                                       [string] [default: false]
 ```
 
 ### massUsers
