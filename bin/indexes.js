@@ -46,6 +46,7 @@ exports.handler = (argv) => {
 }
 
 async function getIndexes(prompts) {
+  base.debug('getIndexes')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
@@ -65,6 +66,7 @@ async function getIndexes(prompts) {
 
 
 async function getIndexesInt(schema, indexes, client, limit) {
+  base.debug(`getIndexesInt ${schema} ${indexes} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")
   indexes = dbClass.objectName(indexes)
 

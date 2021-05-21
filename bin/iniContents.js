@@ -46,6 +46,7 @@ exports.handler = (argv) => {
 }
 
 async function iniContents(prompts) {
+  base.debug('iniContents')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")

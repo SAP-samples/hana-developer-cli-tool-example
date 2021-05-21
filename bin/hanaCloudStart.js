@@ -24,6 +24,7 @@ exports.handler = (argv) => {
 }
 
 async function hcStart(prompts) {
+    base.debug(`hcStart`)
     try {
         const cf = require("../utils/cf")
         let results = ''

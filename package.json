@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "2.202105.5",
+  "version": "2.202105.6",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {

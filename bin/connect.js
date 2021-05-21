@@ -95,6 +95,7 @@ exports.handler = (argv) => {
 }
 
 async function dbConnect(input) {
+  base.debug(`dbConnect`)
   try {
     base.setPrompts(input)
     let options = {};
@@ -131,6 +132,7 @@ async function dbConnect(input) {
 }
 
 async function saveEnv(options) {
+  base.debug('saveEnv')
   let parts = options.serverNode.split(':')
   let defaultEnv = {}
   defaultEnv.VCAP_SERVICES = {}

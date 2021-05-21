@@ -46,6 +46,7 @@ exports.handler = (argv) => {
 }
 
 async function getRoles(prompts) {
+  base.debug('getRoles')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
@@ -65,6 +66,7 @@ async function getRoles(prompts) {
 
 
 async function getRolesInt(schema, role, client, limit) {
+  base.debug(`getRolesInt ${schema} ${role} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")  
   role = dbClass.objectName(role)
   let query = ''

@@ -49,6 +49,7 @@ exports.handler = (argv) => {
 }
 
 async function getSchemas(prompts) {
+  base.debug('getSchemas')
   try {
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
@@ -63,6 +64,7 @@ async function getSchemas(prompts) {
 }
 
 async function getSchemasInt(schema, client, limit, all) {
+  base.debug(`getSchemasInt ${schema} ${limit} ${all}`)
   const dbClass = require("sap-hdbext-promisfied")  
   schema = dbClass.objectName(schema)
   let hasPrivileges = 'FALSE'

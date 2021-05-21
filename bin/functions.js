@@ -46,7 +46,7 @@ exports.handler = (argv) => {
 }
 
 async function getFunctions(prompts) {
-
+  base.debug('getFunctions')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
@@ -66,6 +66,7 @@ async function getFunctions(prompts) {
 
 
 async function getFunctionsInt(schema, functionName, client, limit) {
+  base.debug(`getFunctionsInt ${schema} ${functionName} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")
   functionName = dbClass.objectName(functionName)
 

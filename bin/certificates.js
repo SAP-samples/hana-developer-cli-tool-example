@@ -11,6 +11,7 @@ exports.handler = (argv) => {
 }
 
 async function certs(prompts) {
+  base.debug('certs')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")

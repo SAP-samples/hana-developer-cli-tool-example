@@ -22,7 +22,7 @@ exports.handler = (argv) => {
 }
 
 async function drop(prompts) {
-
+  base.debug('drop')
   try {
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")

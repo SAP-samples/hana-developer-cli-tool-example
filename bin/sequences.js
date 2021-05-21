@@ -46,6 +46,7 @@ exports.handler = (argv) => {
 }
 
 async function getSequences(prompts) {
+  base.debug('getSequences')
   try {
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
@@ -63,6 +64,7 @@ async function getSequences(prompts) {
 }
 
 async function getSequencesInt(schema, sequence, client, limit) {
+  base.debug(`getSequencesInt ${schema} ${sequence} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")
   sequence = dbClass.objectName(sequence)
   let query =

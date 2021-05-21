@@ -25,14 +25,17 @@ exports.handler = (argv) => {
 
 
 async function listInstances(prompts) {
+    base.debug(`listInstances`)
     try {
         const cf = require("../utils/cf")
+        const colors = require("colors/safe")
         let results = ''
         if (prompts.name === '**default**') {
             results = await cf.getHANAInstances()
         } else {
             results = await cf.getHANAInstanceByName(prompts.name)
         }
+        base.debug(results)
         for (let item of results.resources) {
             let outputItem = {}
             outputItem.name = item.name
@@ -43,12 +46,12 @@ async function listInstances(prompts) {
             var url = new URL(outputItem.hana_cockpit)
             outputItem.hana_central = `${url.protocol}//${url.host}/hcs/sap/hana/cloud/index.html#/org/${await cf.getCFOrgGUID()}/space/${await cf.getCFSpaceGUID()}/databases`
             outputItem.db_explorer = `${url.protocol}//${url.host}/sap/hana/cst/catalog/index.html`
-            console.log(`Name: ${outputItem.name}`)
-            console.log(`Created At: ${outputItem.created_at}`)
-            console.log(`Last Operation: ${outputItem.last_operation}`)
-            console.log(`SAP HANA Cockpit: ${outputItem.hana_cockpit}`)
-            console.log(`SAP HANA Cloud Central: ${outputItem.hana_central}`)
-            console.log(`Database Explorer: ${outputItem.db_explorer}`)
+            console.log(`Name: ${colors.green(outputItem.name)}`)
+            console.log(`Created At: ${colors.green(outputItem.created_at)}`)
+            console.log(`Last Operation: ${colors.green(outputItem.last_operation)}`)
+            console.log(`SAP HANA Cockpit: ${colors.blue(outputItem.hana_cockpit)}`)
+            console.log(`SAP HANA Cloud Central: ${colors.blue(outputItem.hana_central)}`)
+            console.log(`Database Explorer: ${colors.blue(outputItem.db_explorer)}`)
             console.log(`\r\n`)
         }
         return base.end()

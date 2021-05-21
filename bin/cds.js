@@ -73,7 +73,7 @@ exports.handler = (argv) => {
 
 
 async function cds(prompts) {
-
+  base.debug('cds')
   try {
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
@@ -166,6 +166,7 @@ async function cds(prompts) {
 
 async function cdsServerSetup(prompts, cdsSource) {
 
+  base.debug('cdsServerSetup')
   const port = process.env.PORT || prompts.port || 3010
 
   if (!(/^[1-9]\d*$/.test(port) && 1 <= 1 * port && 1 * port <= 65535)){
@@ -309,6 +310,7 @@ async function cdsServerSetup(prompts, cdsSource) {
 }
 
 function getIndex(odataURL, entity) {
+  base.debug('getIndex')
   return this._html = `
   <html>
       <head>
@@ -389,6 +391,7 @@ function getIndex(odataURL, entity) {
 }
 
 function _manifest(odataURL, entity, table) {
+  base.debug(`_manifest ${odataURL} ${entity} ${table}`)
   //const serviceProv = odataURL
   const serviceInfo = entity
 
@@ -525,8 +528,10 @@ function _manifest(odataURL, entity, table) {
 }
 
 function fiori(manifest, odataURL, entity,) {
+  base.debug(`fiori ${odataURL} ${entity}`)
   let ui5Version = '1.89.0' //'1.85.3' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
   ui5Version = ui5Version ? ui5Version + '/' : ''
+  base.debug(`SAPUI5 Version ${ui5Version}`)
   return `
 <!DOCTYPE html>
 <html>

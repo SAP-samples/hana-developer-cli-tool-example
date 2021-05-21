@@ -9,6 +9,7 @@ exports.handler = (argv) => {
 }
 
 async function reclaim(prompts) {
+  base.debug('reclaim')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")

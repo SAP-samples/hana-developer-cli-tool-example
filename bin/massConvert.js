@@ -119,6 +119,7 @@ function escapeRegExp(string) {
   }
 
 async function getTables(prompts) {
+    base.debug('getTables')
     try {
         const dbClass = require("sap-hdbext-promisfied")
         const conn = require("../utils/connections")
@@ -239,6 +240,7 @@ async function getTables(prompts) {
 
 
 async function getTablesInt(schema, table, client, limit) {
+    base.debug(`getTablesInt ${schema} ${table} ${limit}`)
     const dbClass = require("sap-hdbext-promisfied")
     table = dbClass.objectName(table)
     var query =

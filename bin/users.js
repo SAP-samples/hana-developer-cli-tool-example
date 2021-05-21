@@ -35,6 +35,7 @@ exports.handler = (argv) => {
 }
 
 async function getUsers(prompts) {
+  base.debug('getUsers')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
@@ -52,6 +53,7 @@ async function getUsers(prompts) {
 }
 
 async function getUsersInt(user, client, limit) {
+  base.debug(`getUsersInt ${user} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")  
   user = dbClass.objectName(user)
   let query =

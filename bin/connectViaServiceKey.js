@@ -76,6 +76,7 @@ exports.handler = (argv) => {
 }
 
 async function setKeyDetails(input) {
+  base.debug('setKeyDetails')
   base.debug(input)
 
   //create serviceKey
@@ -127,6 +128,7 @@ async function setKeyDetails(input) {
 }
 
 async function saveEnv(options, input) {
+  base.env('saveEnv')
   let defaultEnv = {}
   defaultEnv.VCAP_SERVICES = {}
   defaultEnv.VCAP_SERVICES.hana = [{

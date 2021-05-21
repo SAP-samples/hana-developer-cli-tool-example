@@ -2,24 +2,24 @@
 /*eslint no-console: 0, no-process-exit:0*/
 /*eslint-env node, es6, module */
 
-global.__hana_bin = __dirname;
-const TextBundle = require("@sap/textbundle").TextBundle;
-global.__bundle = new TextBundle("../_i18n/messages", require("../utils/locale").getLocale());
-const bundle = global.__bundle;
+global.__hana_bin = __dirname
+const TextBundle = require("@sap/textbundle").TextBundle
+global.__bundle = new TextBundle("../_i18n/messages", require("../utils/locale").getLocale())
+const bundle = global.__bundle
 const base = require("../utils/base")
-require('console.table');
+require('console.table')
 require('yargonaut')
     .style('blue')
     .helpStyle('green')
-    .errorsStyle('red');
+    .errorsStyle('red')
 const errorHandler = err => { 
     base.error(err)
-    //console.error(err)
-    //global.__spinner.stop()
+  //  console.error(err)
+  //  global.__spinner.stop()
     process.exit(1) 
 }
-process.on('uncaughtException', errorHandler);
-process.on('unhandledRejection', errorHandler);
+process.on('uncaughtException', errorHandler)
+process.on('unhandledRejection', errorHandler)
 
 const ora = require('ora');
 // eslint-disable-next-line no-unused-vars

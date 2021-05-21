@@ -46,6 +46,7 @@ exports.handler = (argv) => {
 }
 
 async function getObjects(prompts) {
+  base.debug('getObjects')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
@@ -64,6 +65,7 @@ async function getObjects(prompts) {
 }
 
 async function getObjectsInt(schema, object, client, limit) {
+  base.debug(`getObjectsInt ${schema} ${object} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")
   object = dbClass.objectName(object)
 

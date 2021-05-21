@@ -57,6 +57,7 @@ exports.handler = (argv) => {
 }
 
 async function viewInspect(prompts) {
+  base.debug('viewInspect')
   try {
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")

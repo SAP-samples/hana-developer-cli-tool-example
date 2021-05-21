@@ -3,7 +3,7 @@
 const base = require("./base")
 
 function getFileCheckParents(filename) {
-
+    base.debug(`getFileCheckParents ${filename}`)
     try {
         const fs = require('fs')
         const path = require('path')
@@ -35,32 +35,38 @@ function getFileCheckParents(filename) {
 module.exports.getFileCheckParents = getFileCheckParents
 
 function getPackageJSON() {
+    base.debug('getPackageJSON')
     return getFileCheckParents(`package.json`)
 }
 module.exports.getPackageJSON = getPackageJSON
 
 function getMTA() {
+    base.debug('getMTA')
     return getFileCheckParents(`mta.yaml`)
 }
 module.exports.getMTA = getMTA
 
 function getDefaultEnv() {
+    base.debug('getDefaultEnv')
     return getFileCheckParents(`default-env.json`)
 }
 module.exports.getDefaultEnv = getDefaultEnv
 
 function getDefaultEnvAdmin() {
+    base.debug('getDefaultEnvAdmin')
     return getFileCheckParents(`default-env-admin.json`)
 }
 module.exports.getDefaultEnvAdmin = getDefaultEnvAdmin
 
 function getEnv() {
+    base.debug('getEnv')
     return getFileCheckParents(`.env`)
 }
 module.exports.getEnv = getEnv
 
 
 function resolveEnv(options) {
+    base.debug(`resolveEnv ${options}`)
     let path = require("path")
     let file = 'default-env.json'
     if (options && Object.prototype.hasOwnProperty.call(options, 'admin') && options.admin) {
@@ -72,6 +78,7 @@ function resolveEnv(options) {
 module.exports.resolveEnv = resolveEnv
 
 function getConnOptions(prompts) {
+    base.debug('getConnOptions')
     let envFile
 
     //Look for Admin option - it overrides everything
@@ -146,6 +153,7 @@ function getConnOptions(prompts) {
 module.exports.getConnOptions = getConnOptions
 
 async function createConnection(prompts) {
+    base.debug('createConnection')
     return new Promise((resolve, reject) => {
         let options = getConnOptions(prompts)
         base.debug(`In Create Connection`)

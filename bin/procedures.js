@@ -46,6 +46,7 @@ exports.handler = (argv) => {
 }
 
 async function getProcedures(prompts) {
+  base.debug('getProcedures')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
@@ -64,6 +65,7 @@ async function getProcedures(prompts) {
 }
 
 async function getProceduresInt(schema, procedure, client, limit) {
+  base.debug(`getProceduresInt ${schema} ${procedure} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")
   procedure = dbClass.objectName(procedure)
   let query =

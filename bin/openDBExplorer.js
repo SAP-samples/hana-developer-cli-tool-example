@@ -9,6 +9,7 @@ exports.handler = (argv) => {
 }
 
 async function getDBX(prompts) {
+    base.debug('getDBX')
     try {
         const dbClass = require("sap-hdbext-promisfied")
         const conn = require("../utils/connections")

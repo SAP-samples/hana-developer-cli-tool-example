@@ -84,6 +84,7 @@ exports.handler = async (argv) => {
 
 
 async function callProc(prompts) {
+  base.debug('callProc')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")

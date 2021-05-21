@@ -46,6 +46,7 @@ exports.handler = (argv) => {
 }
 
 async function getViews(prompts) {
+  base.debug('getViews')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
@@ -64,6 +65,7 @@ async function getViews(prompts) {
 }
 
 async function getViewsInt(schema, view, client, limit) {
+  base.debug(`getViewsInt ${schema} ${view} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")  
   view = dbClass.objectName(view)
   let query =

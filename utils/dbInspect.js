@@ -2,8 +2,10 @@
 /*eslint-env node, es6 */
 "use strict";
 const bundle = global.__bundle
+const base = require("./base")
 
 async function getHANAVersion(db) {
+	base.debug(`getHANAVersion`)
 	const statement = await db.preparePromisified(
 		`SELECT *
                  FROM M_DATABASE`)
@@ -12,11 +14,13 @@ async function getHANAVersion(db) {
 		throw new Error(bundle.getText("errMDB"))
 	}
 	object[0].versionMajor = object[0].VERSION.charAt(0)
+	base.debug(`HANA Version ${JSON.stringify(object)}`)
 	return object[0]
 }
 module.exports.getHANAVersion = getHANAVersion
 
 async function getView(db, scheam, viewId) {
+	base.debug(`getView ${scheam} ${viewId}`)
 	//Select View
 	let statementString = ``
 	const vers = await await getHANAVersion(db)
@@ -41,6 +45,7 @@ async function getView(db, scheam, viewId) {
 module.exports.getView = getView;
 
 async function getDef(db, schema, Id) {
+	base.debug(`getDef ${schema} ${Id}`)
 	//Select View
 	var inputParams = {
 		SCHEMA: `"${schema}"`,
@@ -60,6 +65,7 @@ async function getDef(db, schema, Id) {
 module.exports.getDef = getDef;
 
 async function getViewFields(db, viewOid) {
+	base.debug(`getViewFields ${viewOid}`)
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT SCHEMA_NAME, VIEW_NAME, VIEW_OID, COLUMN_NAME, POSITION, DATA_TYPE_NAME, OFFSET, LENGTH, SCALE, IS_NULLABLE, DEFAULT_VALUE, COLUMN_ID, COMMENTS
@@ -71,6 +77,7 @@ async function getViewFields(db, viewOid) {
 module.exports.getViewFields = getViewFields;
 
 async function getTable(db, schema, tableId) {
+	base.debug(`getTable ${schema} ${tableId}`)
 	//Select Table
 	let statementString = ``
 	const vers = await await getHANAVersion(db)
@@ -95,6 +102,7 @@ async function getTable(db, schema, tableId) {
 module.exports.getTable = getTable;
 
 async function getTableFields(db, tableOid) {
+	base.debug(`getTableFields ${tableOid}`)
 	//Select Fields
 	let statementString = ``
 	const vers = await await getHANAVersion(db)
@@ -116,6 +124,7 @@ async function getTableFields(db, tableOid) {
 module.exports.getTableFields = getTableFields;
 
 async function getConstraints(db, object) {
+	base.debug(`getConstraints ${JSON.stringify(object)}`)
 	//Select Constraints
 	const statement = await db.preparePromisified(
 		`SELECT * from CONSTRAINTS 
@@ -130,6 +139,7 @@ async function getConstraints(db, object) {
 module.exports.getConstraints = getConstraints;
 
 async function getProcedure(db, schema, procedure) {
+	base.debug(`getProcedure ${schema} ${procedure}`)
 	//Select View
 	let statementString = ``
 	const vers = await await getHANAVersion(db)
@@ -159,6 +169,7 @@ async function getProcedure(db, schema, procedure) {
 module.exports.getProcedure = getProcedure;
 
 async function getProcedurePrams(db, procOid) {
+	base.debug(`getProcedurePrams ${procOid}`)
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT PARAMETER_NAME, DATA_TYPE_NAME, LENGTH, SCALE, POSITION, TABLE_TYPE_NAME, PARAMETER_TYPE, HAS_DEFAULT_VALUE, IS_NULLABLE
@@ -171,6 +182,7 @@ async function getProcedurePrams(db, procOid) {
 module.exports.getProcedurePrams = getProcedurePrams;
 
 async function getProcedurePramCols(db, procOid) {
+	base.debug(`getProcedurePramCols ${procOid}`)
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT PARAMETER_NAME, PARAMETER_POSITION, COLUMN_NAME, POSITION, DATA_TYPE_NAME, LENGTH, SCALE, IS_NULLABLE 
@@ -183,6 +195,7 @@ async function getProcedurePramCols(db, procOid) {
 module.exports.getProcedurePramCols = getProcedurePramCols;
 
 async function getFunction(db, schema, functionName) {
+	base.debug(`getFunction ${schema} ${functionName}`)
 	//Select Functions
 	let statementString = ``
 	const vers = await await getHANAVersion(db)
@@ -212,6 +225,7 @@ async function getFunction(db, schema, functionName) {
 module.exports.getFunction = getFunction;
 
 async function getFunctionPrams(db, funcOid) {
+	base.debug(`getFunctionPrams ${funcOid}`)
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT PARAMETER_NAME, DATA_TYPE_NAME, LENGTH, SCALE, POSITION, TABLE_TYPE_NAME, PARAMETER_TYPE, HAS_DEFAULT_VALUE, IS_NULLABLE
@@ -224,6 +238,7 @@ async function getFunctionPrams(db, funcOid) {
 module.exports.getFunctionPrams = getFunctionPrams;
 
 async function getFunctionPramCols(db, funcOid) {
+	base.debug(`getFunctionPramCols ${funcOid}`)
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT PARAMETER_NAME, PARAMETER_POSITION, COLUMN_NAME, POSITION, DATA_TYPE_NAME, LENGTH, SCALE, IS_NULLABLE 
@@ -240,6 +255,7 @@ let useHanaTypes = false;
 module.exports.options = { set useHanaTypes(use) { useHanaTypes = use } }
 
 async function formatCDS(db, object, fields, constraints, type, parent) {
+	base.debug(`formatCDS ${type}`)
 	let cdstable = "";
 	if (type === "view" || type === "table") {
 		cdstable += "@cds.persistence.exists \n"
@@ -431,6 +447,7 @@ module.exports.formatCDS = formatCDS;
 
 
 async function getGeoColumns(db, object, field, type) {
+	base.debug(`getGeoColumns`)
 	const statementString = `SELECT SRS_ID FROM ST_GEOMETRY_COLUMNS WHERE SCHEMA_NAME = ? AND TABLE_NAME = ? AND COLUMN_NAME = ?`
 	const statement = await db.preparePromisified(statementString)
 	let name = ''

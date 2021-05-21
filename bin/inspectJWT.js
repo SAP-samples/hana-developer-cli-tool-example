@@ -9,7 +9,7 @@ exports.handler = (argv) => {
 }
 
 async function inspectJWT(prompts) {
-
+  base.debug('inspectJWT')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")

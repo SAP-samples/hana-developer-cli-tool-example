@@ -32,7 +32,7 @@ exports.handler = (argv) => {
 
 
 async function massUsers(prompts) {
-
+  base.debug('massUsers')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")

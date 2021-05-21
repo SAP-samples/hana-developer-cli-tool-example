@@ -46,6 +46,7 @@ exports.handler = (argv) => {
 }
 
 async function getLibraries(prompts) {
+  base.debug('getLibraries')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
@@ -64,6 +65,7 @@ async function getLibraries(prompts) {
 }
 
 async function getLibrariesInt(schema, library, client, limit) {
+  base.debug(`getLibrariesInt ${schema} ${library} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")
   library = dbClass.objectName(library)
   let query =

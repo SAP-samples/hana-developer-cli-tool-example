@@ -57,7 +57,7 @@ exports.handler = (argv) => {
 }
 
 async function libraryMemInspect(prompts) {
-
+  base.debug('libraryMemInspect')
   try {
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")

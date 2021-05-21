@@ -59,6 +59,7 @@ exports.handler = (argv) => {
 }
 
 async function dbQuery(prompts) {
+  base.debug('dbQuery')
   try {
       const dbClass = require("sap-hdbext-promisfied")
       const conn = require("../utils/connections")
@@ -122,6 +123,7 @@ async function dbQuery(prompts) {
 }
 
 async function toFile(folder, file, ext, content) {
+  base.debug('toFile')
   let fs = require('fs')
   let path = require('path')
   let dir = folder

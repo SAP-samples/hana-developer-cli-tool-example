@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202105.6
+
+### Changed
+ - Missing npm shrinkwrap in last release
+ - Improved details in thrown errors and added debug info from util/cf and util/xs
+ - hana-cli version now reports latest avaialble version on npm and propmpts users to upgrade if they are outdated
+ - Add debugging output to all commands
+
 ## 2.202105.5
 
 ### Added
@@ -13,7 +21,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - cds preview new parameter to allow use to choose HTTP port (and validate that input)
 - serviceKey command no longer requires to pre-create the service key. If the key you specify doesn't exist it will call cf/xs create-service-key for you automatically [Issue #41](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/41)
 - Increase the page size for the xs/cf services commands (ups and hdi) [Issue #40](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/40)
-
 
 ## 2.202105.4
 

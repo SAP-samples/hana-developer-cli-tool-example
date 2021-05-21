@@ -57,6 +57,7 @@ exports.handler = (argv) => {
 }
 
 async function getTriggers(prompts) {
+  base.debug('getTriggers')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
@@ -75,6 +76,7 @@ async function getTriggers(prompts) {
 }
 
 async function getTriggersInt(schema, trigger, target, client, limit) {
+  base.debug(`getTriggersInt ${schema} ${trigger} ${target} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")  
   trigger = dbClass.objectName(trigger)
   target = dbClass.objectName(target)

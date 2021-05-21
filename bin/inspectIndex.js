@@ -34,7 +34,7 @@ exports.handler = (argv) => {
 }
 
 async function indexInspect(prompts) {
-
+  base.debug('indexInspect')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")

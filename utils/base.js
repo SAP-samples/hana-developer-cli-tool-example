@@ -5,8 +5,8 @@ let debug = require('debug')('hana-cli')
 module.exports.debug = debug
 let prompts = []
 
-function setPrompts(newPrompts){
-  prompts = newPrompts
+function setPrompts(newPrompts) {
+    prompts = newPrompts
 }
 module.exports.setPrompts = setPrompts
 
@@ -150,14 +150,16 @@ function promptHandler(argv, processingFunction, input, iConn = true, iDebug = t
 module.exports.promptHandler = promptHandler
 
 function error(error) {
+    debug(`Error`)
     if (global.__spinner) {
         global.__spinner.stop()
     }
-    console.error(`${bundle.getText("errConn")} ${error}`)
+    console.error(`${error}`)
 }
 module.exports.error = error
 
 function end() {
+    debug(`Natural End`)
     if (global.__spinner) {
         global.__spinner.stop()
     }
@@ -186,11 +188,16 @@ function isDebug(prompts) {
 module.exports.isDebug = isDebug
 
 function outputTable(content) {
-    if (verboseOutput(prompts)) {
-        return console.table(content)
+
+    if (content.length < 1) {
+        console.log(bundle.getText('noData'))
     } else {
-        const util = require('util')
-        return console.log(util.inspect(content, { maxArrayLength: null }))
+        if (verboseOutput(prompts)) {
+            return console.table(content)
+        } else {
+            const util = require('util')
+            return console.log(util.inspect(content, { maxArrayLength: null }))
+        }
     }
 }
 module.exports.outputTable = outputTable

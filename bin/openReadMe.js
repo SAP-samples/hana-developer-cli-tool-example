@@ -9,6 +9,7 @@ exports.handler = (argv) => {
 }
 
 async function getReadMe() {
+    base.debug('getReadMe')
     let dbxReadmeURL = 'https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/README.md'
     console.log(dbxReadmeURL)
     const open = require('open')

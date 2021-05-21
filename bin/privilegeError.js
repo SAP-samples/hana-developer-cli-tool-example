@@ -23,6 +23,7 @@ exports.handler = (argv) => {
 }
 
 async function dbCall(prompts) {
+  base.debug('dbCall')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")

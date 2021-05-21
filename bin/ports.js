@@ -7,6 +7,7 @@ exports.handler = (argv) => {
   base.promptHandler(argv, getPorts, {})
 }
 async function getPorts(prompts) {
+  base.debug('getPorts')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")

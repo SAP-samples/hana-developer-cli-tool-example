@@ -57,6 +57,7 @@ exports.handler = (argv) => {
 }
 
 async function getSynonyms(prompts) {
+  base.debug('getSynonyms')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
@@ -75,6 +76,7 @@ async function getSynonyms(prompts) {
 }
 
 async function getSynonymsInt(schema, synonym, target, client, limit) {
+  base.debug(`getSynonymsInt ${schema} ${synonym} ${target} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")  
   synonym = dbClass.objectName(synonym)
   target = dbClass.objectName(target)

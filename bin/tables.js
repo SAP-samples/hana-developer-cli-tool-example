@@ -46,6 +46,7 @@ exports.handler = (argv) => {
 }
 
 async function getTables(prompts) {
+  base.debug('getTables')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
@@ -64,6 +65,7 @@ async function getTables(prompts) {
 }
 
 async function getTablesInt(schema, table, client, limit) {
+  base.debug(`getTablesInt ${schema} ${table} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")  
   table = dbClass.objectName(table)
 
