@@ -128,7 +128,7 @@ async function setKeyDetails(input) {
 }
 
 async function saveEnv(options, input) {
-  base.env('saveEnv')
+  base.debug('saveEnv')
   let defaultEnv = {}
   defaultEnv.VCAP_SERVICES = {}
   defaultEnv.VCAP_SERVICES.hana = [{
