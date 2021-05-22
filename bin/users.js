@@ -40,12 +40,14 @@ async function getUsers(prompts) {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
+    const clientConnection = await conn.createConnection(prompts)
+    const db = new dbClass(clientConnection)
 
     base.debug(`${base.bundle.getText("user")}: ${prompts.user}`)
 
     let results = await getUsersInt(prompts.user, db, prompts.limit)
     base.outputTable(results)
+    clientConnection.disconnect()
     return base.end()
   } catch (error) {
     base.error(error)

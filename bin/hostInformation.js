@@ -14,7 +14,8 @@ async function hostInfo(prompts) {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const conn = require("../utils/connections")
-    const dbStatus = new dbClass(await conn.createConnection(prompts))
+    const clientConnection = await conn.createConnection(prompts)
+    const dbStatus = new dbClass(clientConnection)
 
     let results = await dbStatus.execSQL(
       `SELECT * FROM M_HOST_INFORMATION
@@ -25,6 +26,7 @@ async function hostInfo(prompts) {
       `SELECT * FROM M_HOST_RESOURCE_UTILIZATION
       ORDER BY HOST`)
     base.outputTable(results)
+    clientConnection.disconnect()
     return base.end()
   } catch (error) {
     base.error(error)
