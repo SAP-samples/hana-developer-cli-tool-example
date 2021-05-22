@@ -10,7 +10,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  - Missing npm shrinkwrap in last release
  - Improved details in thrown errors and added debug info from util/cf and util/xs
  - hana-cli version now reports latest avaialble version on npm and propmpts users to upgrade if they are outdated
- - Add debugging output to all commands
 
 ## 2.202105.5
 
