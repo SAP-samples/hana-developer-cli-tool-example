@@ -152,6 +152,11 @@ function getConnOptions(prompts) {
 }
 module.exports.getConnOptions = getConnOptions
 
+/**
+ * 
+ * @param {*} prompts 
+ * @returns Promise<Object>
+ */
 async function createConnection(prompts) {
     base.debug('createConnection')
     return new Promise((resolve, reject) => {

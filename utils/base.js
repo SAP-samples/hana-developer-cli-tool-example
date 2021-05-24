@@ -1,14 +1,87 @@
-const bundle = global.__bundle
-module.exports.bundle = bundle
+// @ts-check
+
+/**
+ * @module base
+ */
+/** @typedef {typeof import("sap-hdbext-promisfied").default} hdbextPromise - sap-hdbext-promisified module */
+
+const dbClass = require("sap-hdbext-promisfied")
+const conn = require("../utils/connections")
+
+/** @type Object - HANA Client DB Connection */
+let dbConnection = null
+/** @type hdbextPromise */
+let dbClassInstance = null
+
+/** @type {typeof import("colors/safe")} */
 const colors = require("colors/safe")
+module.exports.colors = colors
+
+
+/** @type {typeof import("debug") } */
 let debug = require('debug')('hana-cli')
 module.exports.debug = debug
-let prompts = []
 
+/** @type string */
+let hanaBin = __dirname
+module.exports.hanaBin = hanaBin
+
+/** @type boolean */
+let inDebug = false
+
+
+/** @typedef {typeof import("@sap/textbundle").TextBundle} TextBundle - sap/textbundle */
+/** @type TextBundle */
+const TextBundle = require("@sap/textbundle").TextBundle
+/** @typeof TextBundle - instance of sap/textbundle */
+const bundle = new TextBundle("../_i18n/messages", require("../utils/locale").getLocale())
+/** @type {typeof import("../utils/base")} */
+module.exports.bundle = bundle
+
+/** @typedef {typeof import("ora")} Ora*/
+/** @type Ora - Elegant terminal spinner */
+const ora = require('ora')
+/** @typeof Ora.Options - Terminal spinner options */
+let oraOptions = { type: 'clock', text: '\n' }
+/** @typeof Ora.spinner | Void - elgant termianl spinner instance*/
+let spinner = null
+/**
+ * Start the Terminal Spinner
+ */
+function startSpinnerInt() {
+    spinner = ora(oraOptions).start()
+}
+
+/** type {object} - processed input prompts*/
+let prompts = []
+/**
+ * 
+ * @param {object} newPrompts - processed input prompts
+ */
 function setPrompts(newPrompts) {
+    debug('Set Prompts')
     prompts = newPrompts
 }
 module.exports.setPrompts = setPrompts
+
+/**
+ * @param {object} [options] - override the already set parameters with new connection options
+ * @returns {Promise<hdbextPromise>} - hdbext instanced promisfied
+ */
+async function createDBConnection(options) {
+    if (!dbConnection) {
+        if (options) {
+            dbConnection = await conn.createConnection(options)
+        } else {
+            dbConnection = await conn.createConnection(prompts)
+        }
+    }
+
+    // @ts-ignore
+    dbClassInstance = new dbClass(dbConnection)
+    return dbClassInstance
+}
+module.exports.createDBConnection = createDBConnection
 
 function getBuilder(input, iConn = true, iDebug = true) {
 
@@ -151,23 +224,46 @@ module.exports.promptHandler = promptHandler
 
 function error(error) {
     debug(`Error`)
-    if (global.__spinner) {
-        global.__spinner.stop()
+    if (dbConnection) {
+        debug(`HANA Disconnect Started`)
+        dbConnection.disconnect((err) => {
+            if (err) {
+                debug(`Disconnect Error: ${err}`)
+            }
+            debug(`HANA Disconnect Completed`)
+        })
     }
-    console.error(`${error}`)
+    if (spinner) {
+        spinner.stop()
+    }
+    if (inDebug) {
+        throw error
+    } else {
+        return console.error(`${error}`)
+    }
 }
 module.exports.error = error
 
-function end() {
+async function end() {
     debug(`Natural End`)
-    if (global.__spinner) {
-        global.__spinner.stop()
+    if (dbConnection) {
+        debug(`HANA Disconnect Started`)
+        dbConnection.disconnect((err) => {
+            if (err) {
+                dbConnection = null
+                throw err
+            }
+            debug(`HANA Disconnect Completed`)
+        })
+    }
+    if (spinner) {
+        spinner.stop()
     }
 }
 module.exports.end = end
 
 function startSpinner(prompts) {
-    if (verboseOutput(prompts)) { global.startSpinner() }
+    if (verboseOutput(prompts)) { startSpinnerInt() }
 }
 module.exports.startSpinner = startSpinner
 
@@ -181,9 +277,13 @@ module.exports.verboseOutput = verboseOutput
 
 function isDebug(prompts) {
     if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'debug') && prompts.debug) {
+        inDebug = true
         return true
     }
-    else { return false }
+    else {
+        inDebug = false
+        return false
+    }
 }
 module.exports.isDebug = isDebug
 

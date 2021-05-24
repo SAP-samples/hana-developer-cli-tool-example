@@ -76,9 +76,8 @@ async function cds(prompts) {
   base.debug('cds')
   try {
     const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
     const dbInspect = require("../utils/dbInspect")
-    const db = new dbClass(await conn.createConnection(prompts))
+    const db = await base.createDBConnection()
 
     let schema = await dbClass.schemaCalc(prompts, db)
     let object, fields, constraints, cdsSource

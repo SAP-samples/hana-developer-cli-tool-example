@@ -14,9 +14,7 @@ async function certs(prompts) {
   base.debug('certs')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
+    const db = await base.createDBConnection()
 
     let results = await db.execSQL(`SELECT TOP 100 * FROM "CERTIFICATES"`)
     base.outputTable(results)

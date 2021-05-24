@@ -1,7 +1,7 @@
 /*eslint-env node, es6 */
 "use strict";
 const base = require("./base")
-const bundle = global.__bundle
+const bundle = base.bundle
 
 async function getCFConfig() {
     base.debug('getCFConfig')

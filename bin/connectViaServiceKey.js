@@ -154,8 +154,7 @@ async function saveEnv(options, input) {
   }
   base.debug(defaultEnv.VCAP_SERVICES)
   try {
-    const dbClass = require("sap-hdbext-promisfied")
-    const db = new dbClass(await dbClass.createConnection(options))
+    const db = await base.createDBConnection(options)
     let results = await db.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`);
     console.table(results)
 

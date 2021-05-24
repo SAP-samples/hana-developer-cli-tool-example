@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202105.8
+
+### Added
+- Added hana client disconnect at error and normal end conditions to avoid segmentation fault in WSL and slightly older versions of Node.js
+- First round of TypeScript types inclusion - more to come. Will mostly help project maintainers
+  
 ## 2.202105.6
 
 ### Changed

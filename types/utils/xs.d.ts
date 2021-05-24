@@ -1,0 +1,16 @@
+export function getCFConfig(): Promise<any>;
+export function getCFOrg(): Promise<any>;
+export function getCFOrgName(): Promise<any>;
+export function getCFOrgGUID(): Promise<any>;
+export function getCFSpace(): Promise<any>;
+export function getCFSpaceName(): Promise<any>;
+export function getCFSpaceGUID(): Promise<any>;
+export function getCFTarget(): Promise<any>;
+export function getHANAInstances(): Promise<any>;
+export function getHANAInstanceByName(name: any): Promise<any>;
+export function getServicePlans(serviceGUID: any): Promise<any>;
+export function getServices(): Promise<any>;
+export function getServicePlanGUID(serviceGUID: any, servicePlan: any): Promise<any>;
+export function getServiceGUID(service: any): Promise<any>;
+export function getHDIInstances(): Promise<any>;
+export function getUpsInstances(): Promise<any>;

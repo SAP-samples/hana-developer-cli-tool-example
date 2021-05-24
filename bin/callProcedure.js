@@ -38,13 +38,14 @@ exports.handler = async (argv) => {
   try {
 
     const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(argv))
+    const dbConn = await conn.createConnection(argv)
+    const db = new dbClass(dbConn)
     let procSchema = await dbClass.schemaCalc(argv, db)
     base.debug(`${base.bundle.getText("schema")}: ${procSchema}, ${base.bundle.getText("procedure")}: ${argv.procedure}`)
 
     let proc = await dbInspect.getProcedure(db, procSchema, argv.procedure)
     let parameters = await dbInspect.getProcedurePrams(db, proc[0].PROCEDURE_OID)
-
+    dbConn.disconnect()
 
     base.debug(parameters)
     for (let parameter of parameters) {
@@ -87,9 +88,7 @@ async function callProc(prompts) {
   base.debug('callProc')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
+    const db = await base.createDBConnection()
 
     let schema = await dbClass.schemaCalc(prompts, db)
     let proc = await dbInspect.getProcedure(db, schema, prompts.procedure)
@@ -112,7 +111,9 @@ async function callProc(prompts) {
       case 1:
         break
       case 2:
-        base.outputTable(output.results)
+        if(output.results){
+          base.outputTable(output.results)
+        }
         break
       default:
         for (let i = 1; i < Object.keys(output).length; i++) {

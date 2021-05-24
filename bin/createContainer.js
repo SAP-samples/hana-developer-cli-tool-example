@@ -46,10 +46,11 @@ exports.handler = (argv) => {
 async function activate(prompts) {
   base.debug('activate')
   try {
-    const dbClass = require("sap-hdbext-promisfied")
+    base.setPrompts(prompts)
+    const db = await base.createDBConnection()
     const conn = require("../utils/connections")
     let envFile = conn.resolveEnv()
-    const db = new dbClass(await conn.createConnection(prompts))
+
 
     const { v4: uuidv4 } = require('uuid')
     let passwordDT = uuidv4()
