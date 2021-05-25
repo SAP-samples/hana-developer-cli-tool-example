@@ -1,7 +1,17 @@
 /*eslint-env node, es6 */
+// @ts-check
+
+/**
+ * @module connections - helper utility for making connections to HANA DB and determine connection settings
+ */
 "use strict"
 const base = require("./base")
 
+/**
+ * Check parameter folders to see if the input file exists there
+ * @param {string} filename 
+ * @returns {string} - the file path if found 
+ */
 function getFileCheckParents(filename) {
     base.debug(`getFileCheckParents ${filename}`)
     try {
@@ -25,8 +35,7 @@ function getFileCheckParents(filename) {
         root = path.join('..', root)
         if (fs.existsSync(root)) return root
 
-        return false
-
+        return 
     }
     catch (error) {
         throw new Error(`${base.bundle.getText("error")} ${error}`)
@@ -34,37 +43,61 @@ function getFileCheckParents(filename) {
 }
 module.exports.getFileCheckParents = getFileCheckParents
 
+/**
+ * Check current and parent directories for a package.json
+ * @returns {string} - the file path if found 
+ */
 function getPackageJSON() {
     base.debug('getPackageJSON')
     return getFileCheckParents(`package.json`)
 }
 module.exports.getPackageJSON = getPackageJSON
 
+/**
+ * Check current and parent directories for a mta.yaml
+ * @returns {string} - the file path if found 
+ */
 function getMTA() {
     base.debug('getMTA')
     return getFileCheckParents(`mta.yaml`)
 }
 module.exports.getMTA = getMTA
 
+/**
+ * Check current and parent directories for a default-env.json
+ * @returns {string} - the file path if found 
+ */
 function getDefaultEnv() {
     base.debug('getDefaultEnv')
     return getFileCheckParents(`default-env.json`)
 }
 module.exports.getDefaultEnv = getDefaultEnv
 
+/**
+ * Check current and parent directories for a default-env-admin.json
+ * @returns {string} - the file path if found 
+ */
 function getDefaultEnvAdmin() {
     base.debug('getDefaultEnvAdmin')
     return getFileCheckParents(`default-env-admin.json`)
 }
 module.exports.getDefaultEnvAdmin = getDefaultEnvAdmin
 
+/**
+ * Check current and parent directories for a .env
+ * @returns {string} - the file path if found 
+ */
 function getEnv() {
     base.debug('getEnv')
     return getFileCheckParents(`.env`)
 }
 module.exports.getEnv = getEnv
 
-
+/**
+ * Resolve Environment by deciding which option between default-env and default-env-admin we should take
+ * @param {*} options 
+ * @returns {string} - the file path if found 
+ */
 function resolveEnv(options) {
     base.debug(`resolveEnv ${options}`)
     let path = require("path")
@@ -77,6 +110,11 @@ function resolveEnv(options) {
 }
 module.exports.resolveEnv = resolveEnv
 
+/**
+ * Get Connection Options from input prompts
+ * @param {object} prompts - input prompts
+ * @returns {object} connection options
+ */
 function getConnOptions(prompts) {
     base.debug('getConnOptions')
     let envFile
@@ -130,6 +168,7 @@ function getConnOptions(prompts) {
     base.debug(base.bundle.getText("connectionFile"))
     base.debug(envFile)
 
+    /** @type object */
     let options = ''
     try {
         if (!process.env.TARGET_CONTAINER) {
@@ -153,9 +192,9 @@ function getConnOptions(prompts) {
 module.exports.getConnOptions = getConnOptions
 
 /**
- * 
- * @param {*} prompts 
- * @returns Promise<Object>
+ * Create Databse Connection 
+ * @param {object} prompts - input prompt values
+ * @returns {Promise<object>} HANA DB conneciton of type sap/hdbext
  */
 async function createConnection(prompts) {
     base.debug('createConnection')

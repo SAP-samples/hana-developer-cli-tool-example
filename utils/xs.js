@@ -1,8 +1,17 @@
 /*eslint-env node, es6 */
+// @ts-check
+
+/**
+ * @module xs - library for calling XSA APIs via CLI
+ */
 "use strict";
 const base = require("./base")
 const bundle = base.bundle
 
+/**
+ * Read central configuration file for XSA CLI
+ * @returns {Promise<object>}
+ */
 async function getCFConfig() {
     base.debug('getCFConfig')
     try {
@@ -20,6 +29,10 @@ async function getCFConfig() {
 }
 module.exports.getCFConfig = getCFConfig
 
+/**
+ * Get target organziation
+ * @returns {Promise<object>}
+ */
 async function getCFOrg() {
     base.debug('getCFOrg')
     const config = await getCFConfig()
@@ -28,6 +41,10 @@ async function getCFOrg() {
 }
 module.exports.getCFOrg = getCFOrg
 
+/**
+ * Get target orgnaization name
+ * @returns {Promise<string>}
+ */
 async function getCFOrgName() {
     base.debug('getCFOrgName')
     const org = await getCFOrg()
@@ -36,6 +53,10 @@ async function getCFOrgName() {
 }
 module.exports.getCFOrgName = getCFOrgName
 
+/**
+ * Get target orgnaization GUID
+ * @returns {Promise<string>}
+ */
 async function getCFOrgGUID() {
     base.debug('getCFOrgGUID')
     const org = await getCFOrg()
@@ -44,6 +65,10 @@ async function getCFOrgGUID() {
 }
 module.exports.getCFOrgGUID = getCFOrgGUID
 
+/**
+ * Get target space details
+ * @returns {Promise<object>}
+ */
 async function getCFSpace() {
     base.debug('getCFSpace')
     const config = await getCFConfig()
@@ -52,6 +77,10 @@ async function getCFSpace() {
 }
 module.exports.getCFSpace = getCFSpace
 
+/**
+ * Get target space name
+ * @returns {Promise<string>}
+ */
 async function getCFSpaceName() {
     base.debug('getCFSpaceName')
     const space = await getCFSpace()
@@ -60,6 +89,10 @@ async function getCFSpaceName() {
 }
 module.exports.getCFSpaceName = getCFSpaceName
 
+/**
+ * Get target space GUID
+ * @returns {Promise<string>}
+ */
 async function getCFSpaceGUID() {
     base.debug('getCFSpaceGUID')
     const space = await getCFSpace()
@@ -68,6 +101,10 @@ async function getCFSpaceGUID() {
 }
 module.exports.getCFSpaceGUID = getCFSpaceGUID
 
+/**
+ * Get currrent targets
+ * @returns {Promise<object>}
+ */
 async function getCFTarget() {
     base.debug('getCFTarget')
     const config = await getCFConfig()
@@ -76,6 +113,10 @@ async function getCFTarget() {
 }
 module.exports.getCFTarget = getCFTarget
 
+/**
+ * Get all instances of service plan hana
+ * @returns {Promise<object>}
+ */
 async function getHANAInstances() {
     base.debug('getHANAInstances')
 
@@ -102,6 +143,11 @@ async function getHANAInstances() {
 }
 module.exports.getHANAInstances = getHANAInstances
 
+/**
+ * Get instances of service plan hana that match input name
+ * @param {string} name - service instance name
+ * @returns {Promise<object>}
+ */
 async function getHANAInstanceByName(name) {
     base.debug(`getHANAInstanceByName ${name}`)
 
@@ -128,7 +174,11 @@ async function getHANAInstanceByName(name) {
 }
 module.exports.getHANAInstanceByName = getHANAInstanceByName
 
-
+/**
+ * Get all service plans
+ * @param {string} serviceGUID - service GUID
+ * @returns {Promise<object>}
+ */
 async function getServicePlans(serviceGUID) {
     base.debug(`getServicePlans ${serviceGUID}`)
     try {
@@ -151,7 +201,10 @@ async function getServicePlans(serviceGUID) {
 }
 module.exports.getServicePlans = getServicePlans
 
-
+/**
+ * Get all services 
+ * @returns {Promise<object>}
+ */
 async function getServices() {
     base.debug('getServices')
     try {
@@ -176,6 +229,12 @@ async function getServices() {
 }
 module.exports.getServices = getServices
 
+/**
+ * Get Service Plan GUID
+ * @param {string} serviceGUID  - Service GUID
+ * @param {string} servicePlan  - Service Plan Name
+ * @returns {Promise<string>}
+ */
 async function getServicePlanGUID(serviceGUID, servicePlan) {
     base.debug(`getServicePlanGUID ${serviceGUID} ${servicePlan}`)
     try {
@@ -190,6 +249,11 @@ async function getServicePlanGUID(serviceGUID, servicePlan) {
 }
 module.exports.getServicePlanGUID = getServicePlanGUID
 
+/**
+ * Get Service GUID 
+ * @param {string} service - Service name
+ * @returns {Promise<string>}
+ */
 async function getServiceGUID(service) {
     base.debug(`getServiceGUID ${service}`)
     try {
@@ -205,6 +269,10 @@ async function getServiceGUID(service) {
 }
 module.exports.getServiceGUID = getServiceGUID
 
+/**
+ * Get all HDI service instances 
+ * @returns {Promise<object>}
+ */
 async function getHDIInstances() {
     base.debug(`getHDIInstances`)
     try {
@@ -231,6 +299,10 @@ async function getHDIInstances() {
 }
 module.exports.getHDIInstances = getHDIInstances
 
+/**
+ * Get all User Provided Service Instances
+ * @returns {Promise<object>}
+ */
 async function getUpsInstances() {
     base.debug(`getUpsInstances`)
     try {
