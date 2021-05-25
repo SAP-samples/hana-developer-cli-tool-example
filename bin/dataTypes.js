@@ -13,9 +13,8 @@ async function dbStatus(prompts) {
   base.debug('dbStatus')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const dbStatus = new dbClass(await conn.createConnection(prompts))
+    const dbStatus = await base.createDBConnection()
+    
     let results = await dbStatus.execSQL(`SELECT TYPE_NAME, COLUMN_SIZE, CREATE_PARAMS FROM DATA_TYPES `)
     base.outputTable(results)
     return base.end()

@@ -61,12 +61,11 @@ exports.handler = (argv) => {
 async function dbQuery(prompts) {
   base.debug('dbQuery')
   try {
-      const dbClass = require("sap-hdbext-promisfied")
-      const conn = require("../utils/connections")
-      const db = new dbClass(await conn.createConnection(prompts))
+    base.setPrompts(prompts)
+    const db = await base.createDBConnection()
 
     let results = await db.execSQL(prompts.query)
-    if(!results[0]){
+    if (!results[0]) {
       return base.error(base.bundle.getText("errNoResults"))
     }
 
@@ -75,7 +74,7 @@ async function dbQuery(prompts) {
         if (prompts.filename) {
           const excel = require("node-xlsx")
           let out = []
-          
+
           //Column Headers
           let header = []
           for (const [key] of Object.entries(results[0])) {
@@ -103,7 +102,7 @@ async function dbQuery(prompts) {
         if (prompts.filename) {
           await toFile(prompts.folder, prompts.filename, 'json', JSON.stringify(results, null, 2))
         } else {
-          const highlight = require('cli-highlight').highlight 
+          const highlight = require('cli-highlight').highlight
           console.log(highlight(JSON.stringify(results, null, 2)))
         }
         break
@@ -116,7 +115,7 @@ async function dbQuery(prompts) {
         }
         break
     }
-    return base.end()    
+    return base.end()
   } catch (error) {
     base.error(error)
   }

@@ -35,9 +35,7 @@ async function massUsers(prompts) {
   base.debug('massUsers')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const dbStatus = new dbClass(await conn.createConnection(prompts))
+    const dbStatus = await base.createDBConnection()
 
     let results = await dbStatus.execSQL(
       `DO

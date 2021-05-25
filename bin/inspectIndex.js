@@ -37,9 +37,9 @@ async function indexInspect(prompts) {
   base.debug('indexInspect')
   try {
     base.setPrompts(prompts)
+    const db = await base.createDBConnection()
     const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
+
     let schema = await dbClass.schemaCalc(prompts, db)
     base.output(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("index")}: ${prompts.index}`)
 

@@ -26,9 +26,8 @@ async function dbCall(prompts) {
   base.debug('dbCall')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
+    const db = await base.createDBConnection()
+
     let inputParams = {
       GUID: prompts.guid
     }

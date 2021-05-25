@@ -12,9 +12,7 @@ async function inspectJWT(prompts) {
   base.debug('inspectJWT')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const dbStatus = new dbClass(await conn.createConnection(prompts))
+    const dbStatus = await base.createDBConnection()
 
     let results = await dbStatus.execSQL(`SELECT TOP 100 * FROM "PSES" WHERE PURPOSE = 'JWT'`)
     base.outputTable(results)

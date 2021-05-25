@@ -42,9 +42,8 @@ exports.handler = (argv) => {
 async function activate(prompts) {
   base.debug('activate')
   try {
-    const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
+    base.setPrompts(prompts)
+    const db = await base.createDBConnection()
 
     let results = await db.execSQL(
       `CREATE certificate from '${prompts.certificate}';`)

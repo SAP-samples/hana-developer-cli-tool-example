@@ -38,9 +38,7 @@ async function getUsers(prompts) {
   base.debug('getUsers')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
+    const db = await base.createDBConnection()
 
     base.debug(`${base.bundle.getText("user")}: ${prompts.user}`)
 

@@ -113,8 +113,7 @@ async function dbConnect(input) {
     }
     base.debug(options)
 
-    const dbClass = require("sap-hdbext-promisfied")
-    const db = new dbClass(await dbClass.createConnection(options))
+    const db = await base.createDBConnection(options)
 
     let results = await db.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`)
     base.outputTable(results)
