@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## 2.202105.8
 
 ### Added
-- Added hana client disconnect at error and normal end conditions to avoid segmentation fault in WSL and slightly older versions of Node.js
+- Added hana client disconnect at error and normal end conditions to avoid segmentation fault in WSL and slightly older versions of Node.js - thanks to [sbarzaghialteaup](https://github.com/sbarzaghialteaup)
 - First round of TypeScript types inclusion - more to come. Will mostly help project maintainers
   
 ## 2.202105.6
