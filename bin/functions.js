@@ -46,12 +46,11 @@ exports.handler = (argv) => {
 }
 
 async function getFunctions(prompts) {
-
+  base.debug('getFunctions')
   try {
     base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
+    const db = await base.createDBConnection()
 
     let schema = await dbClass.schemaCalc(prompts, db)
     base.output(`Schema: ${schema}, Function: ${prompts.function}`)
@@ -66,6 +65,7 @@ async function getFunctions(prompts) {
 
 
 async function getFunctionsInt(schema, functionName, client, limit) {
+  base.debug(`getFunctionsInt ${schema} ${functionName} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")
   functionName = dbClass.objectName(functionName)
 

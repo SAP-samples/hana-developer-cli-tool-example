@@ -11,6 +11,7 @@ exports.handler = (argv) => {
 }
 
 async function copy() {
+    base.debug('copy')
     require('dotenv').config()
 
     let defaultEnv = {}
@@ -34,8 +35,7 @@ async function copy() {
     }else {
         return base.error(base.bundle.getText("errNoHANAConfig"))
     }
-
-
+    
     base.debug(defaultEnv)
     const fs = require('fs')
     fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), async (err) => {

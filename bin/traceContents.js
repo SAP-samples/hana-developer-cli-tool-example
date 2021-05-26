@@ -44,11 +44,10 @@ exports.handler = (argv) => {
 }
 
 async function traceContents(prompts) {
+  base.debug('traceContents')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
+    const db = await base.createDBConnection()
 
     let query =
       `SELECT MAX(OFFSET) AS OFFSET FROM  M_TRACEFILE_CONTENTS WHERE HOST = ?

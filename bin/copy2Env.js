@@ -11,6 +11,7 @@ exports.handler = (argv) => {
 }
 
 async function copy(prompts) {
+    base.debug('copy')
     const conn = require("../utils/connections")
     let envFile = conn.resolveEnv(prompts)
     const xsenv = require("@sap/xsenv")

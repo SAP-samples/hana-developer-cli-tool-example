@@ -25,6 +25,7 @@ exports.handler = (argv) => {
 }
 
 async function listInstances(prompts) {
+    base.debug('listInstances')
     try {
         let cf = null
         if (prompts.cf) {

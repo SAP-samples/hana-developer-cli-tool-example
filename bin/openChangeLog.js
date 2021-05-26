@@ -9,6 +9,7 @@ exports.handler = (argv) => {
 }
 
 async function getChangeLog() {
+    base.debug1('getChangeLog')
     let dbxReadmeURL = 'https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/CHANGELOG.md'
     console.log(dbxReadmeURL)
     const open = require('open')

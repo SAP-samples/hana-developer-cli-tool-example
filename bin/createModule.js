@@ -36,6 +36,7 @@ exports.handler = (argv) => {
 }
 
 async function save(prompts) {
+    base.debug('save')
     let fs = require('fs')
     let dir = './' + prompts.folder
 
@@ -65,6 +66,7 @@ if (fs.existsSync('../package.json')) {
 
     const latestVersion = require('latest-version')
     let hdiVersion = await latestVersion('@sap/hdi-deploy')
+    base.debug(`HDI Version ${hdiVersion}`)
     var packageContent = ``
     if (prompts.hanaCloud) {
         packageContent = `

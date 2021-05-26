@@ -11,6 +11,7 @@ exports.handler = (argv) => {
 }
 
 async function test(result) {
+  base.debug('test')
   try {
     const conn = require("../utils/connections")
     console.log( await conn.createConnection(result))

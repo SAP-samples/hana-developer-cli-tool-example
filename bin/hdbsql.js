@@ -8,6 +8,7 @@ exports.handler = (argv) => {
 }
 
 async function launchHdbsql(prompts) {
+  base.debug('launchHdbsql')
   try {
     const conn = require("../utils/connections")
 

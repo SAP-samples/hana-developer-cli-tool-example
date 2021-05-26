@@ -8,11 +8,10 @@ exports.handler = (argv) => {
   base.promptHandler(argv, iniFiles, {})
 }
 async function iniFiles(prompts) {
+  base.debug('iniFiles')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const dbStatus = new dbClass(await conn.createConnection(prompts))
+    const dbStatus = await base.createDBConnection()
 
     let results = await dbStatus.execSQL(
       `SELECT * FROM M_INIFILES`)

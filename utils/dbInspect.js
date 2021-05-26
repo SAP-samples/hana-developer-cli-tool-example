@@ -1,9 +1,21 @@
 /*eslint no-console: 0, no-unused-vars: 0, no-shadow: 0, new-cap: 0*/
 /*eslint-env node, es6 */
-"use strict";
-const bundle = global.__bundle
+// @ts-check
 
+/**
+ * @module dbInspect - Database Object Dynamic Inspection and Metadata processing
+ */
+ "use strict"
+const base = require("./base")
+const bundle = base.bundle
+
+/**
+ * Return the HANA DB Version
+ * @param {object} db - Database Connection
+ * @returns {Promise<object>}
+ */
 async function getHANAVersion(db) {
+	base.debug(`getHANAVersion`)
 	const statement = await db.preparePromisified(
 		`SELECT *
                  FROM M_DATABASE`)
@@ -12,11 +24,20 @@ async function getHANAVersion(db) {
 		throw new Error(bundle.getText("errMDB"))
 	}
 	object[0].versionMajor = object[0].VERSION.charAt(0)
+	base.debug(`HANA Version ${JSON.stringify(object)}`)
 	return object[0]
 }
 module.exports.getHANAVersion = getHANAVersion
 
+/**
+ * Get DB View details
+ * @param {object} db - Database Connection
+ * @param {string} scheam - Schema
+ * @param {string} viewId - View Unique ID
+ * @returns {Promise<object>}
+ */
 async function getView(db, scheam, viewId) {
+	base.debug(`getView ${scheam} ${viewId}`)
 	//Select View
 	let statementString = ``
 	const vers = await await getHANAVersion(db)
@@ -40,7 +61,15 @@ async function getView(db, scheam, viewId) {
 }
 module.exports.getView = getView;
 
+/**
+ * Get DB Object Definition
+ * @param {object} db - Database Connection
+ * @param {string} schema - Schema
+ * @param {*} Id - Object ID
+ * @returns {Promise<string>}
+ */
 async function getDef(db, schema, Id) {
+	base.debug(`getDef ${schema} ${Id}`)
 	//Select View
 	var inputParams = {
 		SCHEMA: `"${schema}"`,
@@ -59,7 +88,14 @@ async function getDef(db, schema, Id) {
 }
 module.exports.getDef = getDef;
 
+/**
+ * Get View Fields and Metadata
+ * @param {object} db - Database Connection
+ * @param {string} viewOid - View Unique ID
+ * @returns {Promise<object>}
+ */
 async function getViewFields(db, viewOid) {
+	base.debug(`getViewFields ${viewOid}`)
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT SCHEMA_NAME, VIEW_NAME, VIEW_OID, COLUMN_NAME, POSITION, DATA_TYPE_NAME, OFFSET, LENGTH, SCALE, IS_NULLABLE, DEFAULT_VALUE, COLUMN_ID, COMMENTS
@@ -70,7 +106,15 @@ async function getViewFields(db, viewOid) {
 }
 module.exports.getViewFields = getViewFields;
 
+/**
+ * Get DB Table Details
+ * @param {object} db - Database Connection
+ * @param {string} schema - Schema
+ * @param {string} tableId - Table Unqiue ID
+ * @returns {Promise<object>}
+ */
 async function getTable(db, schema, tableId) {
+	base.debug(`getTable ${schema} ${tableId}`)
 	//Select Table
 	let statementString = ``
 	const vers = await await getHANAVersion(db)
@@ -94,7 +138,14 @@ async function getTable(db, schema, tableId) {
 }
 module.exports.getTable = getTable;
 
+/**
+ * Get Table Fields and Metadata
+ * @param {object} db - Database Connection
+ * @param {string} tableOid - Table Unique ID
+ * @returns {Promise<object>}
+ */
 async function getTableFields(db, tableOid) {
+	base.debug(`getTableFields ${tableOid}`)
 	//Select Fields
 	let statementString = ``
 	const vers = await await getHANAVersion(db)
@@ -115,7 +166,15 @@ async function getTableFields(db, tableOid) {
 }
 module.exports.getTableFields = getTableFields;
 
+/**
+ * Get Table Constraints 
+ * @typedef {{SCHEMA_NAME: string, TABLE_NAME: string}} objType
+ * @param {object} db - Database Connection 
+ * @param {Array<objType>} object 
+ * @returns 
+ */
 async function getConstraints(db, object) {
+	base.debug(`getConstraints ${JSON.stringify(object)}`)
 	//Select Constraints
 	const statement = await db.preparePromisified(
 		`SELECT * from CONSTRAINTS 
@@ -129,7 +188,15 @@ async function getConstraints(db, object) {
 }
 module.exports.getConstraints = getConstraints;
 
+/**
+ * Get Stored Procedure Details
+ * @param {object} db - Database Connection
+ * @param {string} schema - Schema
+ * @param {string} procedure - Procedure name
+ * @returns {Promise<object>}
+ */
 async function getProcedure(db, schema, procedure) {
+	base.debug(`getProcedure ${schema} ${procedure}`)
 	//Select View
 	let statementString = ``
 	const vers = await await getHANAVersion(db)
@@ -158,7 +225,14 @@ async function getProcedure(db, schema, procedure) {
 }
 module.exports.getProcedure = getProcedure;
 
+/**
+ * Get Procedure Parameters
+ * @param {object} db - Database Connection
+ * @param {string} procOid - Procedure unique ID
+ * @returns {Promise<object>}
+ */
 async function getProcedurePrams(db, procOid) {
+	base.debug(`getProcedurePrams ${procOid}`)
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT PARAMETER_NAME, DATA_TYPE_NAME, LENGTH, SCALE, POSITION, TABLE_TYPE_NAME, PARAMETER_TYPE, HAS_DEFAULT_VALUE, IS_NULLABLE
@@ -171,6 +245,7 @@ async function getProcedurePrams(db, procOid) {
 module.exports.getProcedurePrams = getProcedurePrams;
 
 async function getProcedurePramCols(db, procOid) {
+	base.debug(`getProcedurePramCols ${procOid}`)
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT PARAMETER_NAME, PARAMETER_POSITION, COLUMN_NAME, POSITION, DATA_TYPE_NAME, LENGTH, SCALE, IS_NULLABLE 
@@ -182,7 +257,15 @@ async function getProcedurePramCols(db, procOid) {
 }
 module.exports.getProcedurePramCols = getProcedurePramCols;
 
+/**
+ * Get Function details
+ * @param {object} db - Database Connection
+ * @param {string} schema - Schema
+ * @param {string} functionName - Function Name
+ * @returns {Promise<object>}
+ */
 async function getFunction(db, schema, functionName) {
+	base.debug(`getFunction ${schema} ${functionName}`)
 	//Select Functions
 	let statementString = ``
 	const vers = await await getHANAVersion(db)
@@ -211,7 +294,14 @@ async function getFunction(db, schema, functionName) {
 }
 module.exports.getFunction = getFunction;
 
+/**
+ * Get Function Parameters
+ * @param {object} db - Database Connection
+ * @param {string} funcOid - Function Unique ID
+ * @returns {Promise<object>}
+ */
 async function getFunctionPrams(db, funcOid) {
+	base.debug(`getFunctionPrams ${funcOid}`)
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT PARAMETER_NAME, DATA_TYPE_NAME, LENGTH, SCALE, POSITION, TABLE_TYPE_NAME, PARAMETER_TYPE, HAS_DEFAULT_VALUE, IS_NULLABLE
@@ -223,7 +313,14 @@ async function getFunctionPrams(db, funcOid) {
 }
 module.exports.getFunctionPrams = getFunctionPrams;
 
+/**
+ * Get Function Parameter Columns
+ * @param {object} db - Database Connection 
+ * @param {string} funcOid - Function Unique ID
+ * @returns {Promise<object>}
+ */
 async function getFunctionPramCols(db, funcOid) {
+	base.debug(`getFunctionPramCols ${funcOid}`)
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT PARAMETER_NAME, PARAMETER_POSITION, COLUMN_NAME, POSITION, DATA_TYPE_NAME, LENGTH, SCALE, IS_NULLABLE 
@@ -235,11 +332,24 @@ async function getFunctionPramCols(db, funcOid) {
 }
 module.exports.getFunctionPramCols = getFunctionPramCols;
 
+/**@type boolean */
 let useHanaTypes = false;
 
+// @ts-ignore
 module.exports.options = { set useHanaTypes(use) { useHanaTypes = use } }
 
+/**
+ * Convert DB Object Metadata to CDS 
+ * @param {object} db - Database Connection 
+ * @param {object} object - DB Object Details
+ * @param {object} fields - Object Fields
+ * @param {object} constraints - Object Contstraints
+ * @param {string} type - DB Object type 
+ * @param {string} parent - Calling context which impacts formatting
+ * @returns {Promise<string>}
+ */
 async function formatCDS(db, object, fields, constraints, type, parent) {
+	base.debug(`formatCDS ${type}`)
 	let cdstable = "";
 	if (type === "view" || type === "table") {
 		cdstable += "@cds.persistence.exists \n"
@@ -401,6 +511,7 @@ async function formatCDS(db, object, fields, constraints, type, parent) {
 		}
 
 		xref.dataType = field.DATA_TYPE_NAME
+		// @ts-ignore
 		global.__xRef.push(xref);
 		//	if (field.DEFAULT_VALUE) {
 		//		cdstable += ` default "${field.DEFAULT_VALUE}"`;
@@ -429,8 +540,16 @@ async function formatCDS(db, object, fields, constraints, type, parent) {
 }
 module.exports.formatCDS = formatCDS;
 
-
+/**
+ * Get Geo Columns requires special lookup and details
+ * @param {object} db - Database Connection 
+ * @param {object} object - DB Object Details
+ * @param {object} field - Object Field
+ * @param {string} type - View or table
+ * @returns {Promise<string>} GEO SRS ID
+ */
 async function getGeoColumns(db, object, field, type) {
+	base.debug(`getGeoColumns`)
 	const statementString = `SELECT SRS_ID FROM ST_GEOMETRY_COLUMNS WHERE SCHEMA_NAME = ? AND TABLE_NAME = ? AND COLUMN_NAME = ?`
 	const statement = await db.preparePromisified(statementString)
 	let name = ''

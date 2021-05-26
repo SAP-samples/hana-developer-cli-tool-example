@@ -28,6 +28,12 @@ exports.builder = base.getBuilder({
     type: 'boolean',
     default: false,
     desc: base.bundle.getText("useHanaTypes")
+  },
+  port: {
+    alias: ['p'],
+    type: 'integer',
+    default: false,
+    desc: base.bundle.getText("port")
   }
 })
 
@@ -54,18 +60,24 @@ exports.handler = (argv) => {
     useHanaTypes: {
       description: base.bundle.getText("useHanaTypes"),
       type: 'boolean'
-    }
+    },
+    port: {
+      description: base.bundle.getText("port"),
+      required: false,
+      ask: () => {
+        return false
+      }
+    },
   })
 }
 
 
 async function cds(prompts) {
-
+  base.debug('cds')
   try {
     const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
     const dbInspect = require("../utils/dbInspect")
-    const db = new dbClass(await conn.createConnection(prompts))
+    const db = await base.createDBConnection()
 
     let schema = await dbClass.schemaCalc(prompts, db)
     let object, fields, constraints, cdsSource
@@ -153,7 +165,13 @@ async function cds(prompts) {
 
 async function cdsServerSetup(prompts, cdsSource) {
 
-  const port = process.env.PORT || 3010
+  base.debug('cdsServerSetup')
+  const port = process.env.PORT || prompts.port || 3010
+
+  if (!(/^[1-9]\d*$/.test(port) && 1 <= 1 * port && 1 * port <= 65535)){
+    return base.error(`${port} ${base.bundle.getText("errPort")}`)
+   }
+
   const server = require("http").createServer()
   const express = require("express")
   var app = express()
@@ -291,6 +309,7 @@ async function cdsServerSetup(prompts, cdsSource) {
 }
 
 function getIndex(odataURL, entity) {
+  base.debug('getIndex')
   return this._html = `
   <html>
       <head>
@@ -371,6 +390,7 @@ function getIndex(odataURL, entity) {
 }
 
 function _manifest(odataURL, entity, table) {
+  base.debug(`_manifest ${odataURL} ${entity} ${table}`)
   //const serviceProv = odataURL
   const serviceInfo = entity
 
@@ -435,6 +455,7 @@ function _manifest(odataURL, entity, table) {
             options: {
               settings: {
                 entitySet: `${entity}`,
+                initialLoad: true,
                 navigation: {
                   [`${entity}`]: {
                     detail: {
@@ -506,8 +527,10 @@ function _manifest(odataURL, entity, table) {
 }
 
 function fiori(manifest, odataURL, entity,) {
-  let ui5Version = '1.88.1' //'1.85.3' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
+  base.debug(`fiori ${odataURL} ${entity}`)
+  let ui5Version = '1.89.0' //'1.85.3' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
   ui5Version = ui5Version ? ui5Version + '/' : ''
+  base.debug(`SAPUI5 Version ${ui5Version}`)
   return `
 <!DOCTYPE html>
 <html>
@@ -531,8 +554,8 @@ function fiori(manifest, odataURL, entity,) {
       }
     }
   </script>    
-    <script src="https://sapui5.hana.ondemand.com/${ui5Version}test-resources/sap/ushell/bootstrap/sandbox.js"></script>
-    <script src="https://sapui5.hana.ondemand.com/${ui5Version}resources/sap-ui-core.js"
+    <script id="sap-ushell-bootstrap" src="https://sapui5.hana.ondemand.com/${ui5Version}test-resources/sap/ushell/bootstrap/sandbox.js"></script>
+    <script id="sap-ui-bootstrap" src="https://sapui5.hana.ondemand.com/${ui5Version}resources/sap-ui-core.js"
         data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration, sap.ui.layout" data-sap-ui-compatVersion="edge"
         data-sap-ui-theme="sap_fiori_3_dark" data-sap-ui-frameOptions="allow"></script>
         <script src="https://sapui5.hana.ondemand.com/${ui5Version}test-resources/sap/ushell/bootstrap/standalone.js"></script>        

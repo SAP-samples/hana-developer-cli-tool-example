@@ -31,11 +31,10 @@ exports.handler = (argv) => {
 }
 
 async function activate(prompts) {
-
+  base.debug('activate')
   try {
-    const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const dbStatus = new dbClass(await conn.createConnection(prompts))
+    base.setPrompts(prompts)
+    const dbStatus = await base.createDBConnection()
 
     let resultsGrant = await dbStatus.execSQL(
       `CREATE LOCAL TEMPORARY COLUMN TABLE #PRIVILEGES LIKE _SYS_DI.TT_API_PRIVILEGES;`)

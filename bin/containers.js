@@ -46,12 +46,10 @@ exports.handler = (argv) => {
 }
 
 async function getContainers(prompts) {
-
+  base.debug('getContainers')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
+    const db = await base.createDBConnection()
 
     base.debug(`${base.bundle.getText("containerGroup")}: ${prompts.containerGroup}, ${base.bundle.getText("container")}: ${prompts.container}`)
 
@@ -65,6 +63,7 @@ async function getContainers(prompts) {
 }
 
 async function getContainersInt(containerGroup, container, client, limit) {
+  base.debug('getContainersInt')
   const dbClass = require("sap-hdbext-promisfied")
   let query =
     `SELECT A.CONTAINER_NAME, A.CONTAINER_GROUP_NAME, B.SCHEMA_NAME, A.CREATE_USER_NAME, A.CREATE_TIMESTAMP_UTC

@@ -25,12 +25,10 @@ exports.handler = (argv) => {
 }
 
 async function dbStatus(prompts) {
-
+  base.debug('dbStatus')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const dbStatus = new dbClass(await conn.createConnection(prompts))
+    const dbStatus = await base.createDBConnection()
 
     let results = await dbStatus.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`)
     base.outputTable(results)
@@ -52,7 +50,7 @@ async function dbStatus(prompts) {
       base.outputTable(resultsPrivs)
     }
 
-    return base.end()    
+    return base.end()
   } catch (error) {
     base.error(error)
   }

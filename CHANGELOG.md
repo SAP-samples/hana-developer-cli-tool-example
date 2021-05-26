@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202105.8
+
+### Added
+- Added hana client disconnect at error and normal end conditions to avoid segmentation fault in WSL and slightly older versions of Node.js - thanks to [sbarzaghialteaup](https://github.com/sbarzaghialteaup)
+- First round of TypeScript types inclusion - more to come. Will mostly help project maintainers
+  
+## 2.202105.6
+
+### Changed
+ - Missing npm shrinkwrap in last release
+ - Improved details in thrown errors and added debug info from util/cf and util/xs
+ - hana-cli version now reports latest avaialble version on npm and propmpts users to upgrade if they are outdated
+
+## 2.202105.5
+
+### Added
+- [Issue #42 Optional namespace for generated cds](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/42) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
+- @cds dependency updated to May 2021 release 5.1.4
+- Update cds preview to UI5 1.89.0
+- cds preview new parameter to allow use to choose HTTP port (and validate that input)
+- serviceKey command no longer requires to pre-create the service key. If the key you specify doesn't exist it will call cf/xs create-service-key for you automatically [Issue #41](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/41)
+- Increase the page size for the xs/cf services commands (ups and hdi) [Issue #40](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/40)
+
 ## 2.202105.4
 
 ### Added

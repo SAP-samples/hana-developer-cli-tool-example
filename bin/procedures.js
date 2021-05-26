@@ -46,11 +46,11 @@ exports.handler = (argv) => {
 }
 
 async function getProcedures(prompts) {
+  base.debug('getProcedures')
   try {
     base.setPrompts(prompts)
+    const db = await base.createDBConnection()
     const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
 
     let schema = await dbClass.schemaCalc(prompts, db);
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("procedure")}: ${prompts.procedure}`);
@@ -64,6 +64,7 @@ async function getProcedures(prompts) {
 }
 
 async function getProceduresInt(schema, procedure, client, limit) {
+  base.debug(`getProceduresInt ${schema} ${procedure} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")
   procedure = dbClass.objectName(procedure)
   let query =

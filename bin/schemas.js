@@ -49,10 +49,10 @@ exports.handler = (argv) => {
 }
 
 async function getSchemas(prompts) {
+  base.debug('getSchemas')
   try {
-    const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
+    base.setPrompts(prompts)
+    const db = await base.createDBConnection()
 
     let results = await getSchemasInt(prompts.schema, db, prompts.limit, prompts.all);
     console.table(results)
@@ -63,6 +63,7 @@ async function getSchemas(prompts) {
 }
 
 async function getSchemasInt(schema, client, limit, all) {
+  base.debug(`getSchemasInt ${schema} ${limit} ${all}`)
   const dbClass = require("sap-hdbext-promisfied")  
   schema = dbClass.objectName(schema)
   let hasPrivileges = 'FALSE'

@@ -33,6 +33,7 @@ exports.handler = function (argv) {
 
 async function makeSecrets({ envFile, secretsFolder, filter }) {
 
+    base.debug(`makeSecrets ${envFile} ${secretsFolder} ${filter}`)
     const xsenv = require("@sap/xsenv")
     xsenv.loadEnv(envFile)
 

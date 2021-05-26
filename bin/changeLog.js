@@ -4,9 +4,11 @@ exports.command = 'changes'
 exports.aliases = 'chg'
 exports.describe = base.bundle.getText("changes");
 
-exports.builder = {}
+exports.handler = () => {
+  getChangeLog()
+}
 
-exports.handler = function () {
+function getChangeLog() {
   const fs = require('fs')
   const path = require('path')
 

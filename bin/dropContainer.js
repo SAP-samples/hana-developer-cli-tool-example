@@ -22,11 +22,10 @@ exports.handler = (argv) => {
 }
 
 async function drop(prompts) {
-
+  base.debug('drop')
   try {
-    const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
+    base.setPrompts(prompts)
+    const db = await base.createDBConnection()
 
     let results = await db.execSQL(
       `CREATE LOCAL TEMPORARY COLUMN TABLE #PARAMETERS LIKE _SYS_DI.TT_PARAMETERS;`)

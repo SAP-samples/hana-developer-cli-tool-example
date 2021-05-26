@@ -47,10 +47,11 @@ exports.handler = (argv) => {
 }
 
 async function functionInspect(prompts) {
+  base.debug('functionInspect')
   try {
+    base.setPrompts(prompts)
+    const db = await base.createDBConnection()
     const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
     const dbInspect = require("../utils/dbInspect")
 
     let schema = await dbClass.schemaCalc(prompts, db)

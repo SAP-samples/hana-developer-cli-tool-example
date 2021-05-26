@@ -44,12 +44,13 @@ exports.handler = (argv) => {
 }
 
 async function activate(prompts) {
-
+  base.debug('activate')
   try {
-    const dbClass = require("sap-hdbext-promisfied")
+    base.setPrompts(prompts)
+    const db = await base.createDBConnection()
     const conn = require("../utils/connections")
     let envFile = conn.resolveEnv()
-    const db = new dbClass(await conn.createConnection(prompts))
+
 
     const { v4: uuidv4 } = require('uuid')
     let passwordDT = uuidv4()
@@ -157,6 +158,7 @@ async function activate(prompts) {
 
 
 async function saveEnv(options, container, userDT, userRT, passwordDT, passwordRT, encrypt) {
+  base.debug('saveEnv')
   //  let parts = options.serverNode.split(':');
   let defaultEnv = {}
   defaultEnv.TARGET_CONTAINER = container

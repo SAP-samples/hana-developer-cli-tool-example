@@ -46,11 +46,11 @@ exports.handler = (argv) => {
 }
 
 async function getObjects(prompts) {
+  base.debug('getObjects')
   try {
     base.setPrompts(prompts)
+    const db = await base.createDBConnection()
     const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
 
     let schema = await dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("object")}: ${prompts.object}`)
@@ -64,6 +64,7 @@ async function getObjects(prompts) {
 }
 
 async function getObjectsInt(schema, object, client, limit) {
+  base.debug(`getObjectsInt ${schema} ${object} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")
   object = dbClass.objectName(object)
 

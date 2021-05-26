@@ -57,11 +57,11 @@ exports.handler = (argv) => {
 }
 
 async function getSynonyms(prompts) {
+  base.debug('getSynonyms')
   try {
     base.setPrompts(prompts)
+    const db = await base.createDBConnection()
     const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
 
     let schema = await dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("synonym")}: ${prompts.synonym}, ${base.bundle.getText("target")}: ${prompts.target}`)
@@ -75,6 +75,7 @@ async function getSynonyms(prompts) {
 }
 
 async function getSynonymsInt(schema, synonym, target, client, limit) {
+  base.debug(`getSynonymsInt ${schema} ${synonym} ${target} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")  
   synonym = dbClass.objectName(synonym)
   target = dbClass.objectName(target)

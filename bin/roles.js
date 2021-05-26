@@ -46,11 +46,11 @@ exports.handler = (argv) => {
 }
 
 async function getRoles(prompts) {
+  base.debug('getRoles')
   try {
     base.setPrompts(prompts)
+    const db = await base.createDBConnection()
     const dbClass = require("sap-hdbext-promisfied")
-    const conn = require("../utils/connections")
-    const db = new dbClass(await conn.createConnection(prompts))
 
     let schema = await dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("role")}: ${prompts.role}`)
@@ -65,6 +65,7 @@ async function getRoles(prompts) {
 
 
 async function getRolesInt(schema, role, client, limit) {
+  base.debug(`getRolesInt ${schema} ${role} ${limit}`)
   const dbClass = require("sap-hdbext-promisfied")  
   role = dbClass.objectName(role)
   let query = ''
