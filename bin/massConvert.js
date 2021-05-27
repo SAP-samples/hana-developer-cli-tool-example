@@ -67,7 +67,17 @@ exports.builder = base.getBuilder({
         type: 'string',        
         desc: base.bundle.getText("synonyms"),
         default: ''
-    }
+    },
+    keepPath: {        
+        type: 'boolean',
+        default: false,
+        desc: base.bundle.getText("keepPath")
+    },
+    noColons: {        
+        type: 'boolean',
+        default: false,
+        desc: base.bundle.getText("noColons")
+    },
 })
 
 exports.handler = (argv) => {
@@ -124,7 +134,14 @@ exports.handler = (argv) => {
             type: 'string',
             required: false
         },
-
+        keepPath: {        
+            type: 'boolean',            
+            description: base.bundle.getText("keepPath")
+        },
+        noColons: {        
+            type: 'boolean',            
+            description: base.bundle.getText("noColons")
+        }
     })
 }
 
@@ -146,9 +163,12 @@ async function getTables(prompts) {
         let results = await getTablesInt(schema, prompts.table, db, prompts.limit)
         const dbInspect = require("../utils/dbInspect")
         dbInspect.options.useHanaTypes = prompts.useHanaTypes
+        dbInspect.options.keepPath = prompts.keepPath
+        dbInspect.options.noColons = prompts.noColons
 
         const search = `"${schema}".`  
-        const replacer = new RegExp(escapeRegExp(search), 'g')
+        const replacer = 
+        new RegExp(escapeRegExp(search), 'g')
 
         switch (prompts.output) {
             case 'hdbtable': {

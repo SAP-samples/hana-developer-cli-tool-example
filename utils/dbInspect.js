@@ -332,14 +332,21 @@ async function getFunctionPramCols(db, funcOid) {
 }
 module.exports.getFunctionPramCols = getFunctionPramCols;
 
-/**@type boolean */
-let useHanaTypes = false;
+let options = {
+	useHanaTypes: false,
+	noColons: false,
+	keepPath: false
+}
+
 let synonyms = new Map();
 
 // @ts-ignore
 module.exports.options = {
-	set useHanaTypes(use) { useHanaTypes = use }
+	set useHanaTypes(useHanaTypes) { options.useHanaTypes = useHanaTypes },
+	set noColons(noColons){ options.noColons = noColons },
+	set keepPath(keepPath){ options.keepPath = keepPath },
 }
+
 module.exports.results = {
 	get synonyms() { return Object.fromEntries(synonyms) }
 }
@@ -361,25 +368,33 @@ async function formatCDS(db, object, fields, constraints, type, parent) {
 		cdstable += "@cds.persistence.exists \n"
 	}
 
-	let originalName, newName;
-//   synonyms.clear();
-  if (type === "view" || type === "hdbview") {
-    originalName = object[0].VIEW_NAME;
-    object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/\./g, "_");
-    object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/:/g, "");
-    newName = object[0].VIEW_NAME;
-    cdstable += `Entity ![${object[0].VIEW_NAME}] {\n `;
-  } else {
-    originalName = object[0].TABLE_NAME;
-    object[0].TABLE_NAME = object[0].TABLE_NAME.replace(/\./g, "_");
-    newName = object[0].TABLE_NAME;
-    cdstable += `Entity ![${object[0].TABLE_NAME}] {\n `;
-  }
+	let originalName;
 
-  newName !== originalName &&
-    synonyms.set(newName, {
-      target: {object: originalName, schema: object[0].SCHEMA_NAME},
-    });
+	switch (type) {
+		case "view":
+		case "hdbview":
+			originalName = object[0].VIEW_NAME;						
+			break;	
+		default:
+			originalName = object[0].TABLE_NAME;			
+			break;
+	}
+  
+	let newName = originalName;
+	// if noColons option is used a.b.c::d.e will become a.b.c.d.e  
+	options.noColons && ( newName = newName.replace(/::/g, ".") )
+	// if we keep path a.b.c::d.e will stay as is
+	// otherwise it will become a_b_c::d_e
+	options.keepPath || ( newName = newName.replace(/\./g, "_"));
+	
+	
+	newName && ( cdstable += `Entity ![${newName}] {\n` );
+	
+	// if modified real table names will be stored in synonyms
+	newName !== originalName &&
+		synonyms.set(newName, {
+		target: {object: originalName, schema: object[0].SCHEMA_NAME},
+		});
 
 	var isKey = "FALSE";
 	for (let field of fields) {
@@ -406,7 +421,7 @@ async function formatCDS(db, object, fields, constraints, type, parent) {
 
 		cdstable += "\t";
 		cdstable += `![${field.COLUMN_NAME}]` + ": ";
-		if (useHanaTypes) {
+		if (options.useHanaTypes) {
 			switch (field.DATA_TYPE_NAME) {
 				case "NVARCHAR":
 					cdstable += `String(${field.LENGTH})`;
