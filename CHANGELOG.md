@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202105.10
+- Merge [mass rename](https://gist.github.com/ThePlenkov/2fc31e05a43a4ec395c9a4d8f6c8276a#gistcomment-3759807) from [@ThePlenkov](https://github.com/ThePlenkov) 
+  
 ## 2.202105.9
 
 ### Added

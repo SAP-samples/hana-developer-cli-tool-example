@@ -1,7 +1,7 @@
 const base = require("../utils/base")
 
-const fsp = require('fs/promises');
-const path = require("path");
+const fsp = require('fs/promises')
+const path = require("path")
 
 
 exports.command = 'massConvert [schema] [table]'
