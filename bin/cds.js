@@ -42,7 +42,10 @@ exports.handler = (argv) => {
     table: {
       description: base.bundle.getText("table"),
       type: 'string',
-      required: true
+      required: true,
+      ask: () => {
+        return false
+      }
     },
     schema: {
       description: base.bundle.getText("schema"),
@@ -75,6 +78,7 @@ exports.handler = (argv) => {
 async function cds(prompts) {
   base.debug('cds')
   try {
+    base.setPrompts(prompts)
     const dbClass = require("sap-hdbext-promisfied")
     const dbInspect = require("../utils/dbInspect")
     const db = await base.createDBConnection()
@@ -82,6 +86,7 @@ async function cds(prompts) {
     let schema = await dbClass.schemaCalc(prompts, db)
     let object, fields, constraints, cdsSource
     dbInspect.options.useHanaTypes = prompts.useHanaTypes
+    dbInspect.options.noColons = true
 
     if (!prompts.view) {
       object = await dbInspect.getTable(db, schema, prompts.table)
@@ -190,8 +195,10 @@ async function cdsServerSetup(prompts, cdsSource) {
   const conn = require("../utils/connections")
 
   let odataURL = "/odata/v4/opensap.hana.CatalogService/"
-  let entity = prompts.table.replace(/\./g, "_")
-  entity = entity.replace(/:/g, "")
+  let entity = prompts.table
+  entity = entity.replace(/\./g, "_")
+  entity = entity.replace(/::/g, "_")
+ // entity = entity.replace(/:/g, "")
   cds.serve('all').from(await cds.parse(cdsSource), {
     crashOnError: false
   })
@@ -200,7 +207,7 @@ async function cdsServerSetup(prompts, cdsSource) {
     .to('fiori')
     .with(srv => {
       srv.on(['READ'], entity, async (req) => {
-        req.query.SELECT.from.ref = [prompts.table]
+        req.query.SELECT.from.ref = [`"${prompts.table}"`]
         const db = new dbClass(await conn.createConnection(prompts))
         let query = "SELECT "
         if (req.query.SELECT.columns[0].func) {

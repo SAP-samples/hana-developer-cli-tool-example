@@ -130,7 +130,7 @@ async function getTable(db, schema, tableId) {
 		  AND TABLE_NAME = ?`
 	}
 	const statement = await db.preparePromisified(statementString)
-	const object = await db.statementExecPromisified(statement, [schema, tableId]);
+	const object = await db.statementExecPromisified(statement, [schema, tableId])
 	if (object.length < 1) {
 		throw new Error(bundle.getText("errTable"));
 	}
@@ -343,8 +343,8 @@ let synonyms = new Map();
 // @ts-ignore
 module.exports.options = {
 	set useHanaTypes(useHanaTypes) { options.useHanaTypes = useHanaTypes },
-	set noColons(noColons){ options.noColons = noColons },
-	set keepPath(keepPath){ options.keepPath = keepPath },
+	set noColons(noColons) { options.noColons = noColons },
+	set keepPath(keepPath) { options.keepPath = keepPath },
 }
 
 module.exports.results = {
@@ -373,29 +373,37 @@ async function formatCDS(db, object, fields, constraints, type, parent) {
 	switch (type) {
 		case "view":
 		case "hdbview":
-			originalName = object[0].VIEW_NAME;						
-			break;	
+			originalName = object[0].VIEW_NAME;
+			break;
 		default:
-			originalName = object[0].TABLE_NAME;			
+			originalName = object[0].TABLE_NAME;
 			break;
 	}
-  
+
 	let newName = originalName;
 	// if noColons option is used a.b.c::d.e will become a.b.c.d.e  
-	options.noColons && ( newName = newName.replace(/::/g, ".") )
+	if (parent === 'preview') {
+		options.noColons && (newName = newName.replace(/::/g, "_"))
+	} else {
+		options.noColons && (newName = newName.replace(/::/g, "."))
+	}
 	// if we keep path a.b.c::d.e will stay as is
 	// otherwise it will become a_b_c::d_e
-	options.keepPath || ( newName = newName.replace(/\./g, "_"));
-	
-	
-	newName && ( cdstable += `Entity ![${newName}] {\n` );
-	
-	// if modified real table names will be stored in synonyms
-	newName !== originalName &&
-		synonyms.set(newName, {
-		target: {object: originalName, schema: object[0].SCHEMA_NAME},
-		});
+	options.keepPath || (newName = newName.replace(/\./g, "_"))
 
+
+	newName && (cdstable += `Entity ![${newName}] {\n`);
+
+	// if modified real table names will be stored in synonyms
+	if(newName !== originalName) {
+		synonyms.set(newName, {
+			target: { object: originalName, schema: object[0].SCHEMA_NAME },
+		})
+	}else{
+		synonyms.set(originalName, {
+			target: { object: originalName, schema: object[0].SCHEMA_NAME },
+		})
+	}
 	var isKey = "FALSE";
 	for (let field of fields) {
 

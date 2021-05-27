@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202105.9
+
+### Added
+- New functionality for massConvert command to also generate hdbsynonyms. [Generate hdbsynonyms along with CDS for massConvert operation #48](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/48) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
+- Add "no colons" mode for massConvert. This is an option to remove :: from namespaces which would complicate usage from CAP CDS. :: will be replaced by dot. [no colons mode for massConvert #50](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/50) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
+- [Exclude user defined types from generated CDS](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/51) in massConvert - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
+- cds command wasn't using the new connection information lookup logic
+  
 ## 2.202105.8
 
 ### Added
