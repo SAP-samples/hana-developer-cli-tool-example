@@ -1,5 +1,8 @@
 const base = require("../utils/base")
 
+const fsp = require('fs/promises');
+const path = require("path");
+
 
 exports.command = 'massConvert [schema] [table]'
 exports.aliases = ['mc', 'massconvert', 'massConv', 'massconv']
@@ -59,6 +62,11 @@ exports.builder = base.getBuilder({
         type: 'string',        
         desc: base.bundle.getText("namespace"),
         default: ''
+    },
+    synonyms: {
+        type: 'string',        
+        desc: base.bundle.getText("synonyms"),
+        default: ''
     }
 })
 
@@ -110,7 +118,13 @@ exports.handler = (argv) => {
             description: base.bundle.getText("namespace"),
             type: 'string',
             required: false
-        }
+        },
+        synonyms:{
+            description: base.bundle.getText("synonyms"),
+            type: 'string',
+            required: false
+        },
+
     })
 }
 
@@ -218,7 +232,7 @@ async function getTables(prompts) {
                 for (let table of results) {
                     let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
                     let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
-                    let constraints = await dbInspect.getConstraints(db, object)
+                    let constraints = await dbInspect.getConstraints(db, object)                    
                     cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table") + '\n'
                 }
                 let fs = require('fs')
@@ -228,8 +242,20 @@ async function getTables(prompts) {
                 fs.writeFile(filename, cdsSource, (err) => {
                     if (err) throw err
                 })
-                console.log(`${base.bundle.getText("contentWritten")}: ${filename}`);
+                console.log(`${base.bundle.getText("contentWritten")}: ${filename}`);             
+                
+                // store synonyms if filename is provided
+                if (prompts.synonyms) {                    
+                    await fsp.mkdir(path.dirname(prompts.synonyms), {recursive:true})
+                    await fsp.writeFile(
+                        prompts.synonyms,
+                        JSON.stringify(dbInspect.results.synonyms, null, '\t')
+                        )
+                    console.log(`Synonyms are written to ${prompts.synonyms} file`)
+                }
+
                 break
+
             }
         }
         return base.end()

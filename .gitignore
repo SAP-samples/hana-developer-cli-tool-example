@@ -73,3 +73,4 @@ default-*.json
 *.cds
 
 /secrets
+yarn.lock

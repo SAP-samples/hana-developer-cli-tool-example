@@ -5,7 +5,7 @@
 /**
  * @module dbInspect - Database Object Dynamic Inspection and Metadata processing
  */
- "use strict"
+"use strict"
 const base = require("./base")
 const bundle = base.bundle
 
@@ -334,9 +334,15 @@ module.exports.getFunctionPramCols = getFunctionPramCols;
 
 /**@type boolean */
 let useHanaTypes = false;
+let synonyms = new Map();
 
 // @ts-ignore
-module.exports.options = { set useHanaTypes(use) { useHanaTypes = use } }
+module.exports.options = {
+	set useHanaTypes(use) { useHanaTypes = use }
+}
+module.exports.results = {
+	get synonyms() { return Object.fromEntries(synonyms) }
+}
 
 /**
  * Convert DB Object Metadata to CDS 
@@ -354,14 +360,26 @@ async function formatCDS(db, object, fields, constraints, type, parent) {
 	if (type === "view" || type === "table") {
 		cdstable += "@cds.persistence.exists \n"
 	}
-	if (type === "view" || type === "hdbview") {
-		object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/\./g, "_");
-		object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/:/g, "");
-		cdstable += `Entity ![${object[0].VIEW_NAME}] {\n `;
-	} else {
-		object[0].TABLE_NAME = object[0].TABLE_NAME.replace(/\./g, "_");
-		cdstable += `Entity ![${object[0].TABLE_NAME}] {\n `;
-	}
+
+	let originalName, newName;
+  synonyms.clear();
+  if (type === "view" || type === "hdbview") {
+    originalName = object[0].VIEW_NAME;
+    object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/\./g, "_");
+    object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/:/g, "");
+    newName = object[0].VIEW_NAME;
+    cdstable += `Entity ![${object[0].VIEW_NAME}] {\n `;
+  } else {
+    originalName = object[0].TABLE_NAME;
+    object[0].TABLE_NAME = object[0].TABLE_NAME.replace(/\./g, "_");
+    newName = object[0].TABLE_NAME;
+    cdstable += `Entity ![${object[0].TABLE_NAME}] {\n `;
+  }
+
+  newName !== originalName &&
+    synonyms.set(newName, {
+      target: {object: originalName, schema: object[0].SCHEMA_NAME},
+    });
 
 	var isKey = "FALSE";
 	for (let field of fields) {

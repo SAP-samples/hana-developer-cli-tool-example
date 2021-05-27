@@ -13,6 +13,10 @@
       // Removing this would place the .d.ts files
       // next to the .js files
       "outDir": "types",
-      "skipLibCheck": true
+      "skipLibCheck": true,
+      "lib": ["ES2015","ES2019"],
+      "target": "ES2016",
+      "moduleResolution": "node"
+
     }
   }
