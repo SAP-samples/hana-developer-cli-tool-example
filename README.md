@@ -1362,7 +1362,7 @@ Options:
 
 ```shell
 hana-cli massConvert [schema] [table]
-[aliases: mc, massconvert, massConv, massconv]
+
 Convert a group of tables to CDS or HDBTable format
 
 Connection Parameters:
@@ -1399,8 +1399,13 @@ Options:
                                            Merge settings but will also include
                                            some references that are incompatible
                                            with HDI   [boolean] [default: false]
-      --namespace, --ns                    CDS namespace
-                                                       [string] [default: false]
+      --namespace, --ns                    CDS namespace  [string] [default: ""]
+      --synonyms                           Filename to store sysnonyms
+                                                          [string] [default: ""]
+      --keepPath                           Keep table/view path (with dots)
+                                                      [boolean] [default: false]
+      --noColons                           Replace :: in table/view path with
+                                           dot        [boolean] [default: false]
 ```
 
 ### massUsers

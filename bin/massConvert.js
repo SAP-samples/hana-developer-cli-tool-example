@@ -1,5 +1,8 @@
 const base = require("../utils/base")
 
+const fsp = require('fs/promises');
+const path = require("path");
+
 
 exports.command = 'massConvert [schema] [table]'
 exports.aliases = ['mc', 'massconvert', 'massConv', 'massconv']
@@ -59,7 +62,22 @@ exports.builder = base.getBuilder({
         type: 'string',        
         desc: base.bundle.getText("namespace"),
         default: ''
-    }
+    },
+    synonyms: {
+        type: 'string',        
+        desc: base.bundle.getText("synonyms"),
+        default: ''
+    },
+    keepPath: {        
+        type: 'boolean',
+        default: false,
+        desc: base.bundle.getText("keepPath")
+    },
+    noColons: {        
+        type: 'boolean',
+        default: false,
+        desc: base.bundle.getText("noColons")
+    },
 })
 
 exports.handler = (argv) => {
@@ -110,6 +128,19 @@ exports.handler = (argv) => {
             description: base.bundle.getText("namespace"),
             type: 'string',
             required: false
+        },
+        synonyms:{
+            description: base.bundle.getText("synonyms"),
+            type: 'string',
+            required: false
+        },
+        keepPath: {        
+            type: 'boolean',            
+            description: base.bundle.getText("keepPath")
+        },
+        noColons: {        
+            type: 'boolean',            
+            description: base.bundle.getText("noColons")
         }
     })
 }
@@ -132,9 +163,12 @@ async function getTables(prompts) {
         let results = await getTablesInt(schema, prompts.table, db, prompts.limit)
         const dbInspect = require("../utils/dbInspect")
         dbInspect.options.useHanaTypes = prompts.useHanaTypes
+        dbInspect.options.keepPath = prompts.keepPath
+        dbInspect.options.noColons = prompts.noColons
 
         const search = `"${schema}".`  
-        const replacer = new RegExp(escapeRegExp(search), 'g')
+        const replacer = 
+        new RegExp(escapeRegExp(search), 'g')
 
         switch (prompts.output) {
             case 'hdbtable': {
@@ -218,7 +252,7 @@ async function getTables(prompts) {
                 for (let table of results) {
                     let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
                     let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
-                    let constraints = await dbInspect.getConstraints(db, object)
+                    let constraints = await dbInspect.getConstraints(db, object)                    
                     cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table") + '\n'
                 }
                 let fs = require('fs')
@@ -228,8 +262,20 @@ async function getTables(prompts) {
                 fs.writeFile(filename, cdsSource, (err) => {
                     if (err) throw err
                 })
-                console.log(`${base.bundle.getText("contentWritten")}: ${filename}`);
+                console.log(`${base.bundle.getText("contentWritten")}: ${filename}`);             
+                
+                // store synonyms if filename is provided
+                if (prompts.synonyms) {                    
+                    await fsp.mkdir(path.dirname(prompts.synonyms), {recursive:true})
+                    await fsp.writeFile(
+                        prompts.synonyms,
+                        JSON.stringify(dbInspect.results.synonyms, null, '\t')
+                        )
+                    console.log(`Synonyms are written to ${prompts.synonyms} file`)
+                }
+
                 break
+
             }
         }
         return base.end()
@@ -247,6 +293,7 @@ async function getTablesInt(schema, table, client, limit) {
         `SELECT SCHEMA_NAME, TABLE_NAME, TO_NVARCHAR(TABLE_OID) AS TABLE_OID, COMMENTS  from TABLES 
   WHERE SCHEMA_NAME LIKE ? 
     AND TABLE_NAME LIKE ? 
+    AND IS_USER_DEFINED_TYPE = 'FALSE'
   ORDER BY SCHEMA_NAME, TABLE_NAME `
     if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
         query += `LIMIT ${limit.toString()}`
