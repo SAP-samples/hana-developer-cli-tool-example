@@ -362,7 +362,7 @@ async function formatCDS(db, object, fields, constraints, type, parent) {
 	}
 
 	let originalName, newName;
-  synonyms.clear();
+//   synonyms.clear();
   if (type === "view" || type === "hdbview") {
     originalName = object[0].VIEW_NAME;
     object[0].VIEW_NAME = object[0].VIEW_NAME.replace(/\./g, "_");
