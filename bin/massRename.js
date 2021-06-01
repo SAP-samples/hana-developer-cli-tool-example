@@ -40,8 +40,7 @@ exports.handler = (argv) => {
     },
     prefix: {
       type: 'string',
-      description: base.bundle.getText("prefix"),
-      required: true
+      description: base.bundle.getText("prefix")
     },
     case: {
       type: 'string',
@@ -58,8 +57,6 @@ async function rename(result) {
     let cds = require('@sap/cds')
     let fs = require("fs/promises")
     let convert = require("js-convert-case")
-
-
     const csn = await cds.load(result.schema)
 
     let model = ``
@@ -69,17 +66,22 @@ async function rename(result) {
         ""
       )}';\n`
     } else {
-      model = ` using from './${result.schema.replace(
-        ".cds",
-        ""
-      )}';\n`
+      Object.keys(csn.definitions).forEach((key) => {
+        let entity = csn.definitions[key]
+        if (entity.kind === "entity") {
+          model += ` using {${key}} from './${result.schema.replace(
+            ".cds",
+            ""
+          )}';\n`
+        }
+      })
     }
 
     Object.keys(csn.definitions)
       .filter((key) => {
         if (result.namespace) {
           return key.startsWith(`${result.namespace}.`)
-        }else{
+        } else {
           return true
         }
       })
@@ -91,13 +93,37 @@ async function rename(result) {
             if (result.prefix) {
               model += `entity ${result.prefix}.${key} as projection on ${key} {\n`
             } else {
-              model += `entity ${key} as projection on ${key} {\n`
+              model += `entity ${key}2 as projection on ${key} {\n`
             }
 
             Object.keys(entity.elements).forEach((element, index, array) => {
               // to be extended with more cases if needed
-              let alias =
-                result.case === "snake" ? convert.toSnakeCase(element) : element
+              let alias
+              switch (result.case) {
+                case "snake":
+                  alias = convert.toSnakeCase(element)
+                  break
+                case "camel":
+                  alias = convert.toCamelCase(element)
+                  break
+                case "lower":
+                  alias = convert.toLowerCase(element)
+                  break
+                case "upper":
+                  alias = convert.toUpperCase(element)
+                  break
+                case "pacal":
+                  alias = convert.toPascalCase(element)
+                  break
+                case "dot":
+                  alias = convert.toDotCase(element)
+                  break
+                default:
+                  base.error(base.bundle.getText("caseErr"))
+                  process.exit()
+                  break
+              }
+              //              result.case === "snake" ? convert.toSnakeCase(element) : element
               //tab
               model += "\t"
               // element or alias
@@ -114,8 +140,12 @@ async function rename(result) {
             break
         }
       })
+    if (result.prefix) {
+      fs.writeFile(`${result.prefix}.cds`, model)
+    } else {
+      fs.writeFile(`rename_${result.schema}.cds`, model)
+    }
 
-    fs.writeFile(`${result.prefix}.cds`, model)
     return base.end()
   } catch (error) {
     base.error(error)
