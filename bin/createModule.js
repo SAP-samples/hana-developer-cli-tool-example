@@ -112,9 +112,6 @@ if (fs.existsSync('../package.json')) {
         {
             "minimum_feature_version": "1000",
             "file_suffixes": {
-                "hdbafllangprocedure": {
-                    "plugin_name": "com.sap.hana.di.afllangprocedure"
-                },
                 "hdbapplicationtime": {
                     "plugin_name": "com.sap.hana.di.applicationtime"
                 },
