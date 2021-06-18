@@ -4,8 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## 2.202105.10
+## 2.202106.1
 - Merge [mass rename](https://gist.github.com/ThePlenkov/2fc31e05a43a4ec395c9a4d8f6c8276a#gistcomment-3759807) from [@ThePlenkov](https://github.com/ThePlenkov) 
+- Fix [Issue with connecting to XS Advance Database #53](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/53)
+- Remove warning during HDI deploy from db module created with createModule due to reference to afllangprocedure in the generated .hdiconfig
+- 
   
 ## 2.202105.9
 

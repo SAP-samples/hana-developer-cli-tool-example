@@ -194,12 +194,20 @@ module.exports.getConnOptions = getConnOptions
 /**
  * Create Databse Connection 
  * @param {object} prompts - input prompt values
+ * @param {boolean} directConnect - Direct Connection parameters are supplied in prompts
  * @returns {Promise<object>} HANA DB conneciton of type sap/hdbext
  */
-async function createConnection(prompts) {
+async function createConnection(prompts, directConnect = false) {
     base.debug('createConnection')
     return new Promise((resolve, reject) => {
-        let options = getConnOptions(prompts)
+        /** @type object */
+        let options = []
+        if(directConnect){
+            options.hana = prompts
+        }else{
+            options = getConnOptions(prompts)
+        }
+
         base.debug(`In Create Connection`)
         let hdbext = require("@sap/hdbext")
         hdbext.createConnection(options.hana, (error, client) => {

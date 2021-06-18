@@ -71,9 +71,9 @@ module.exports.setPrompts = setPrompts
 async function createDBConnection(options) {
     if (!dbConnection) {
         if (options) {
-            dbConnection = await conn.createConnection(options)
+            dbConnection = await conn.createConnection(options, true)
         } else {
-            dbConnection = await conn.createConnection(prompts)
+            dbConnection = await conn.createConnection(prompts, false)
         }
     }
     dbClassInstance = new dbClass(dbConnection)
