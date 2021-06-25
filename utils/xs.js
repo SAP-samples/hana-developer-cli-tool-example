@@ -281,7 +281,7 @@ async function getHDIInstances() {
         const planGUID = await getServicePlanGUID(serviceGUID, `hdi-shared`)
         const util = require('util')
         const exec = util.promisify(require('child_process').exec)
-        let script = `xs curl "/v2/service_instances/?q=space_guid:${spaceGUID}%3Bservice_plan_guid:${planGUID}&results-per-page=5000`
+        let script = `xs curl "/v2/service_instances/?q=space_guid:${spaceGUID}%3Bservice_plan_guid:${planGUID}&results-per-page=5000"`
         const { stdout, stderr } = await exec(script)
 
         if (stderr) {
@@ -298,6 +298,97 @@ async function getHDIInstances() {
     }
 }
 module.exports.getHDIInstances = getHDIInstances
+
+
+/**
+ * Get all SBSS service instances 
+ * @returns {Promise<object>}
+ */
+ async function getSbssInstances() {
+    base.debug(`getSbssInstances`)
+    try {
+        const spaceGUID = await getCFSpaceGUID()
+        const serviceGUID = await getServiceGUID('hana')
+        const planGUID = await getServicePlanGUID(serviceGUID, `sbss`)
+        const util = require('util')
+        const exec = util.promisify(require('child_process').exec)
+        let script = `xs curl "/v2/service_instances/?q=space_guid:${spaceGUID}%3Bservice_plan_guid:${planGUID}&results-per-page=5000"`
+        const { stdout, stderr } = await exec(script)
+
+        if (stderr) {
+            console.log(stderr)
+            console.log(stdout)
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
+        } else {
+            return JSON.parse(stdout).serviceInstances
+        }
+    }
+    catch (error) {
+        base.debug(error)
+        throw (error)
+    }
+}
+module.exports.getSbssInstances = getSbssInstances
+
+/**
+ * Get all SecureStore service instances 
+ * @returns {Promise<object>}
+ */
+ async function getSecureStoreInstances() {
+    base.debug(`getSecureStoreInstances`)
+    try {
+        const spaceGUID = await getCFSpaceGUID()
+        const serviceGUID = await getServiceGUID('hana')
+        const planGUID = await getServicePlanGUID(serviceGUID, `securestore`)
+        const util = require('util')
+        const exec = util.promisify(require('child_process').exec)
+        let script = `xs curl "/v2/service_instances/?q=space_guid:${spaceGUID}%3Bservice_plan_guid:${planGUID}&results-per-page=5000"`
+        const { stdout, stderr } = await exec(script)
+
+        if (stderr) {
+            console.log(stderr)
+            console.log(stdout)
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
+        } else {
+            return JSON.parse(stdout).serviceInstances
+        }
+    }
+    catch (error) {
+        base.debug(error)
+        throw (error)
+    }
+}
+module.exports.getSecureStoreInstances = getSecureStoreInstances
+
+/**
+ * Get all Schema service instances 
+ * @returns {Promise<object>}
+ */
+ async function getSchemaInstances() {
+    base.debug(`getSchemaInstances`)
+    try {
+        const spaceGUID = await getCFSpaceGUID()
+        const serviceGUID = await getServiceGUID('hana')
+        const planGUID = await getServicePlanGUID(serviceGUID, `schema`)
+        const util = require('util')
+        const exec = util.promisify(require('child_process').exec)
+        let script = `xs curl "/v2/service_instances/?q=space_guid:${spaceGUID}%3Bservice_plan_guid:${planGUID}&results-per-page=5000"`
+        const { stdout, stderr } = await exec(script)
+
+        if (stderr) {
+            console.log(stderr)
+            console.log(stdout)
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
+        } else {
+            return JSON.parse(stdout).serviceInstances
+        }
+    }
+    catch (error) {
+        base.debug(error)
+        throw (error)
+    }
+}
+module.exports.getSchemaInstances = getSchemaInstances
 
 /**
  * Get all User Provided Service Instances

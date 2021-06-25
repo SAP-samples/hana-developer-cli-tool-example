@@ -216,6 +216,105 @@ async function getHDIInstances() {
 module.exports.getHDIInstances = getHDIInstances
 
 /**
+ * Get all SBSS service instances 
+ * @returns {Promise<object>}
+ */
+ async function getSbssInstances() {
+    base.debug(`getSbssInstances`)
+    try {
+        const space = await getCFSpace()
+        const org = await getCFOrg()
+
+        const spaceGUID = space.GUID
+        const orgGUID = org.GUID
+
+        const util = require('util')
+        const exec = util.promisify(require('child_process').exec)
+        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=sbss&per_page=5000"`
+
+        const { stdout, stderr } = await exec(script)
+
+        if (stderr) {
+            console.log(stdout)
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
+        } else {
+            return JSON.parse(stdout)
+        }
+
+    } catch (error) {
+        base.debug(error)
+        throw (error)
+    }
+}
+module.exports.getSbssInstances = getSbssInstances
+
+/**
+ * Get all SecureStore service instances 
+ * @returns {Promise<object>}
+ */
+ async function getSecureStoreInstances() {
+    base.debug(`getSecureStoreInstances`)
+    try {
+        const space = await getCFSpace()
+        const org = await getCFOrg()
+
+        const spaceGUID = space.GUID
+        const orgGUID = org.GUID
+
+        const util = require('util')
+        const exec = util.promisify(require('child_process').exec)
+        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=securestore&per_page=5000"`
+
+        const { stdout, stderr } = await exec(script)
+
+        if (stderr) {
+            console.log(stdout)
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
+        } else {
+            return JSON.parse(stdout)
+        }
+
+    } catch (error) {
+        base.debug(error)
+        throw (error)
+    }
+}
+module.exports.getSecureStoreInstances = getSecureStoreInstances
+
+/**
+ * Get all SecureStore service instances 
+ * @returns {Promise<object>}
+ */
+ async function getSchemaInstances() {
+    base.debug(`getSchemaInstances`)
+    try {
+        const space = await getCFSpace()
+        const org = await getCFOrg()
+
+        const spaceGUID = space.GUID
+        const orgGUID = org.GUID
+
+        const util = require('util')
+        const exec = util.promisify(require('child_process').exec)
+        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=schema&per_page=5000"`
+
+        const { stdout, stderr } = await exec(script)
+
+        if (stderr) {
+            console.log(stdout)
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
+        } else {
+            return JSON.parse(stdout)
+        }
+
+    } catch (error) {
+        base.debug(error)
+        throw (error)
+    }
+}
+module.exports.getSchemaInstances = getSchemaInstances
+
+/**
  * Get all User Provided Service Instances
  * @returns {Promise<object>}
  */

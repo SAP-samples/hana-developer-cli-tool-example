@@ -1706,6 +1706,25 @@ Options:
 
 ![roles example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/roles.gif)
 
+### sbss
+```shell
+hana-cli sbss                             List all SAP HANA Cloud SBSS service
+                                           instances in your target Space
+[aliases: sbssInstances, sbssinstances, sbssServices, listsbss, sbssservices,
+                                                                       sbsss]
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]                                                                       
+```
+
 ### schemas
 
 ```shell
@@ -1735,6 +1754,47 @@ Options:
 ```
 
 ![schemas example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/schemas.gif)
+
+### schemaInstances
+
+```shell
+hana-cli schemaInstances                  List all SAP HANA Cloud Schema
+                                            service instances in your target
+                                            Space
+         [aliases: schemainstances, schemaServices, listschemas, schemaservices]
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]         
+```
+
+### securestore
+
+```shell
+hana-cli securestore                      List all SAP HANA Cloud SecureStore
+                                            service instances in your target
+                                            Space
+      [aliases: secureStoreInstances, securestoreinstances, secureStoreServices,
+                             listSecureStore, securestoreservices, securestores]
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]                             
+```
 
 ### serviceKey
 
