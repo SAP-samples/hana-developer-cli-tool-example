@@ -4,7 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## 2.202106.1
+## 2.202106.3
+
+### Fixed
+- massConvert - change `require('fs/promises')` to `require('fs').promises` for compatibility with Node 12.x - see [Update fs.md #35740](https://github.com/nodejs/node/issues/35740)
+  
+## 2.202106.2
 ### Added
 - New commands schemaInstances, securestore, and sbss to list cf/xs services instances of these plan types
 
