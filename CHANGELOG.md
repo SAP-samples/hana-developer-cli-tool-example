@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202107.1
+
+### Changed
+- Upgrade to [@sap/cds 5.3.0](https://cap.cloud.sap/docs/releases/july21) and [@sap/xsenv 3.1.1](https://www.npmjs.com/package/@sap/xsenv/v/3.1.1)
+- Upgrade SAPUI5 version to [1.91.1](https://sapui5.hana.ondemand.com/1.91.1/)
+- Change cds command READ exit to req.reply instead of returning the query itself
+  
 ## 2.202106.3
 
 ### Fixed

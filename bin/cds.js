@@ -98,6 +98,7 @@ async function cds(prompts) {
     }
 
     cdsSource =
+      // 
       `service HanaCli { `
 
     let vcap = JSON.parse(process.env.VCAP_SERVICES)
@@ -173,9 +174,9 @@ async function cdsServerSetup(prompts, cdsSource) {
   base.debug('cdsServerSetup')
   const port = process.env.PORT || prompts.port || 3010
 
-  if (!(/^[1-9]\d*$/.test(port) && 1 <= 1 * port && 1 * port <= 65535)){
+  if (!(/^[1-9]\d*$/.test(port) && 1 <= 1 * port && 1 * port <= 65535)) {
     return base.error(`${port} ${base.bundle.getText("errPort")}`)
-   }
+  }
 
   const server = require("http").createServer()
   const express = require("express")
@@ -198,7 +199,8 @@ async function cdsServerSetup(prompts, cdsSource) {
   let entity = prompts.table
   entity = entity.replace(/\./g, "_")
   entity = entity.replace(/::/g, "_")
- // entity = entity.replace(/:/g, "")
+
+  // entity = entity.replace(/:/g, "")
   cds.serve('all').from(await cds.parse(cdsSource), {
     crashOnError: false
   })
@@ -207,10 +209,12 @@ async function cdsServerSetup(prompts, cdsSource) {
     .to('fiori')
     .with(srv => {
       srv.on(['READ'], entity, async (req) => {
-        req.query.SELECT.from.ref = [`"${prompts.table}"`]
-        const db = new dbClass(await conn.createConnection(prompts))
+
+        req.query.SELECT.from.ref = [`${prompts.table}`]
+
         let query = "SELECT "
         if (req.query.SELECT.columns[0].func) {
+          const db = new dbClass(await conn.createConnection(prompts))
           query += `COUNT(*) AS "counted" FROM "${prompts.table}"`
           return (await db.execSQL(query))
         }
@@ -264,7 +268,8 @@ async function cdsServerSetup(prompts, cdsSource) {
             }
           }
         }
-        return (req.query)
+        base.debug(req.query)
+        req.reply(await cds.tx(req).run(req.query))
       })
     })
     .catch((err) => {
@@ -535,7 +540,7 @@ function _manifest(odataURL, entity, table) {
 
 function fiori(manifest, odataURL, entity,) {
   base.debug(`fiori ${odataURL} ${entity}`)
-  let ui5Version = '1.89.0' //'1.85.3' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
+  let ui5Version = '1.91.1' //'1.85.3' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
   ui5Version = ui5Version ? ui5Version + '/' : ''
   base.debug(`SAPUI5 Version ${ui5Version}`)
   return `
