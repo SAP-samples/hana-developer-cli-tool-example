@@ -65,6 +65,16 @@ function setPrompts(newPrompts) {
 module.exports.setPrompts = setPrompts
 
 /**
+ * 
+ * @returns {object} newPrompts - processed input prompts
+ */
+function getPrompts() {
+    debug('Get Prompts')
+    return prompts
+}
+module.exports.getPrompts = getPrompts
+
+/**
  * @param {object} [options] - override the already set parameters with new connection options
  * @returns {Promise<hdbextPromiseInstance>} - hdbext instanced promisfied
  */
@@ -135,6 +145,182 @@ function getBuilder(input, iConn = true, iDebug = true) {
     return builder
 }
 module.exports.getBuilder = getBuilder
+
+/**
+ * Initialize Yargs builder for massConvert Command
+ * @param {boolean} [ui=false] - Mass Convert via Browser-based UI
+ * @returns {import("yargs").CommandBuilder} parameters for the command
+ */
+function getMassConvertBuilder(ui = false) {
+    /** @type any */
+    let parameters = {
+        table: {
+            alias: ['t', 'Table'],
+            type: 'string',
+            default: "*",
+            desc: bundle.getText("table")
+        },
+        schema: {
+            alias: ['s', 'Schema'],
+            type: 'string',
+            default: '**CURRENT_SCHEMA**',
+            desc: bundle.getText("schema")
+        },
+        limit: {
+            alias: ['l'],
+            type: 'number',
+            default: 200,
+            desc: bundle.getText("limit")
+        },
+        folder: {
+            alias: ['f', 'Folder'],
+            type: 'string',
+            default: './',
+            desc: bundle.getText("folder")
+        },
+        filename: {
+            alias: ['n', 'Filename'],
+            type: 'string',
+            desc: bundle.getText("filename")
+        },
+        output: {
+            alias: ['o', 'Output'],
+            choices: ["hdbtable", "cds", "hdbmigrationtable"],
+            default: "cds",
+            type: 'string',
+            desc: bundle.getText("outputType")
+        },
+        useHanaTypes: {
+            alias: ['hana'],
+            type: 'boolean',
+            default: false,
+            desc: bundle.getText("useHanaTypes")
+        },
+        useCatalogPure: {
+            alias: ['catalog', 'pure'],
+            type: 'boolean',
+            default: false,
+            desc: bundle.getText("useCatalogPure")
+        },
+        namespace: {
+            alias: ['ns'],
+            type: 'string',
+            desc: bundle.getText("namespace"),
+            default: ''
+        },
+        synonyms: {
+            type: 'string',
+            desc: bundle.getText("synonyms"),
+            default: ''
+        },
+        keepPath: {
+            type: 'boolean',
+            default: false,
+            desc: bundle.getText("keepPath")
+        },
+        noColons: {
+            type: 'boolean',
+            default: false,
+            desc: bundle.getText("noColons")
+        }
+    }
+    if (ui) {
+        parameters.port = {
+            alias: ['p'],
+            type: 'integer',
+            default: false,
+            desc: bundle.getText("port")
+        }
+    }
+
+    return getBuilder(parameters, true, true)
+
+}
+module.exports.getMassConvertBuilder = getMassConvertBuilder
+
+/**
+ * Initialize Yargs builder for massConvert Command
+ * @param {boolean} [ui=false] - Mass Convert via Browser-based UI
+ * @returns {typeof import("prompt")} - prompts output
+ */
+ function getMassConvertPrompts(ui = false) {
+     let parameters = {
+        table: {
+            description: bundle.getText("table"),
+            type: 'string',
+            required: true
+        },
+        schema: {
+            description: bundle.getText("schema"),
+            type: 'string',
+            required: true
+        },
+        limit: {
+            description: bundle.getText("limit"),
+            type: 'number',
+            required: true
+        },
+        folder: {
+            description: bundle.getText("folder"),
+            type: 'string',
+            required: true
+        },
+        filename: {
+            description: bundle.getText("filename"),
+            type: 'string',
+            required: true,
+            ask: () => {
+                return false
+            }
+        },
+        output: {
+            description: bundle.getText("outputType"),
+            type: 'string',
+            //       validator: /t[bl]*|s[ql]*|c[ds]?/,
+            required: true
+        },
+        useHanaTypes: {
+            description: bundle.getText("useHanaTypes"),
+            type: 'boolean'
+        },
+        useCatalogPure: {
+            description: bundle.getText("useCatalogPure"),
+            type: 'boolean'
+        },
+        namespace:{
+            description: bundle.getText("namespace"),
+            type: 'string',
+            required: false
+        },
+        synonyms:{
+            description: bundle.getText("synonyms"),
+            type: 'string',
+            required: false
+        },
+        keepPath: {        
+            type: 'boolean',            
+            description: bundle.getText("keepPath")
+        },
+        noColons: {        
+            type: 'boolean',            
+            description: bundle.getText("noColons")
+        }
+    }
+
+    if (ui) {
+        parameters.port = {
+            description: bundle.getText("port"),
+            required: false,
+            ask: () => {
+              return false
+            }
+          }
+    }
+
+    return parameters
+
+ }
+ module.exports.getMassConvertPrompts = getMassConvertPrompts
 
 /**
  * Get Prompts from the yargs current values and adjust

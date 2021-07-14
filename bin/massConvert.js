@@ -8,145 +8,14 @@ exports.command = 'massConvert [schema] [table]'
 exports.aliases = ['mc', 'massconvert', 'massConv', 'massconv']
 exports.describe = base.bundle.getText("massConvert")
 
-exports.builder = base.getBuilder({
-    table: {
-        alias: ['t', 'Table'],
-        type: 'string',
-        default: "*",
-        desc: base.bundle.getText("table")
-    },
-    schema: {
-        alias: ['s', 'Schema'],
-        type: 'string',
-        default: '**CURRENT_SCHEMA**',
-        desc: base.bundle.getText("schema")
-    },
-    limit: {
-        alias: ['l'],
-        type: 'number',
-        default: 200,
-        desc: base.bundle.getText("limit")
-    },
-    folder: {
-        alias: ['f', 'Folder'],
-        type: 'string',
-        default: './',
-        desc: base.bundle.getText("folder")
-    },
-    filename: {
-        alias: ['n', 'Filename'],
-        type: 'string',
-        desc: base.bundle.getText("filename")
-    },
-    output: {
-        alias: ['o', 'Output'],
-        choices: ["hdbtable", "cds", "hdbmigrationtable"],
-        default: "cds",
-        type: 'string',
-        desc: base.bundle.getText("outputType")
-    },
-    useHanaTypes: {
-        alias: ['hana'],
-        type: 'boolean',
-        default: false,
-        desc: base.bundle.getText("useHanaTypes")
-    },
-    useCatalogPure: {
-        alias: ['catalog', 'pure'],
-        type: 'boolean',
-        default: false,
-        desc: base.bundle.getText("useCatalogPure")
-    },
-    namespace: {
-        alias: ['ns'],
-        type: 'string',        
-        desc: base.bundle.getText("namespace"),
-        default: ''
-    },
-    synonyms: {
-        type: 'string',        
-        desc: base.bundle.getText("synonyms"),
-        default: ''
-    },
-    keepPath: {        
-        type: 'boolean',
-        default: false,
-        desc: base.bundle.getText("keepPath")
-    },
-    noColons: {        
-        type: 'boolean',
-        default: false,
-        desc: base.bundle.getText("noColons")
-    },
-})
+exports.builder = base.getMassConvertBuilder(false)
 
 exports.handler = (argv) => {
-    base.promptHandler(argv, getTables, {
-        table: {
-            description: base.bundle.getText("table"),
-            type: 'string',
-            required: true
-        },
-        schema: {
-            description: base.bundle.getText("schema"),
-            type: 'string',
-            required: true
-        },
-        limit: {
-            description: base.bundle.getText("limit"),
-            type: 'number',
-            required: true
-        },
-        folder: {
-            description: base.bundle.getText("folder"),
-            type: 'string',
-            required: true
-        },
-        filename: {
-            description: base.bundle.getText("filename"),
-            type: 'string',
-            required: true,
-            ask: () => {
-                return false
-            }
-        },
-        output: {
-            description: base.bundle.getText("outputType"),
-            type: 'string',
-            //       validator: /t[bl]*|s[ql]*|c[ds]?/,
-            required: true
-        },
-        useHanaTypes: {
-            description: base.bundle.getText("useHanaTypes"),
-            type: 'boolean'
-        },
-        useCatalogPure: {
-            description: base.bundle.getText("useCatalogPure"),
-            type: 'boolean'
-        },
-        namespace:{
-            description: base.bundle.getText("namespace"),
-            type: 'string',
-            required: false
-        },
-        synonyms:{
-            description: base.bundle.getText("synonyms"),
-            type: 'string',
-            required: false
-        },
-        keepPath: {        
-            type: 'boolean',            
-            description: base.bundle.getText("keepPath")
-        },
-        noColons: {        
-            type: 'boolean',            
-            description: base.bundle.getText("noColons")
-        }
-    })
+    base.promptHandler(argv, getTables, base.getMassConvertPrompts(false))
 }
 
 function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
   }
 
 async function getTables(prompts) {

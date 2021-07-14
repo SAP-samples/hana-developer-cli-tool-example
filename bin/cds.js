@@ -70,7 +70,7 @@ exports.handler = (argv) => {
       ask: () => {
         return false
       }
-    },
+    }
   })
 }
 
