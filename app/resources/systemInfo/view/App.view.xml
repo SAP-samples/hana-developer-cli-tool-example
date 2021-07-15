@@ -1,0 +1,92 @@
+<mvc:View controllerName="sap.hanacli.systemInfo.controller.App" height="100%" width="100%"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+	
+	<ScrollContainer
+		height="100%"
+		width="100%"
+		vertical="true"
+		focusable="true">
+ 	<f:SimpleForm id="SimpleFormToolbar" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false" ariaLabelledBy="Title1">
+		<f:toolbar>
+			<Toolbar id="TB1">
+				<Title id="Title1" text="hana-cli System Info"/>
+				<ToolbarSpacer />
+			</Toolbar>
+		</f:toolbar>
+		<f:content>
+
+			<Toolbar ariaLabelledBy="Title2">
+				<Title id="Title2" text="Current Session"/>
+				<ToolbarSpacer />
+			</Toolbar>
+
+			<Label text="User Name" />
+			<Input value="{/user/0/CURRENT_USER}" />
+			<Label text="Current Schema" />
+			<Input value="{/user/0/CURRENT_SCHEMA}">
+			</Input>
+
+
+
+			<Toolbar id="TB3">
+				<Title id="Title3" text="Version Info"/>
+				<ToolbarSpacer />
+			</Toolbar>
+
+
+			<Label text="System ID / Database Name" />
+			<Input value="{/version/SYSTEM_ID}">
+				<layoutData>
+					<l:GridData span="XL2 L1 M3 S4" />
+				</layoutData>
+			</Input>
+			<Input value="{/version/DATABASE_NAME}">
+			</Input>
+
+			<Label text="Host" />
+			<Input value="{/version/HOST}" />
+
+			<Label text="Start Time" />
+			<Input value="{/version/START_TIME}" />
+
+			<Label text="Version" />
+			<Input value="{/version/VERSION}" />
+
+		</f:content>
+	</f:SimpleForm>
+
+		<Table id="overviewTable" items="{/overview}">
+			<headerToolbar>
+				<OverflowToolbar>
+					<Title text="System Overview" level="H2"/>
+					<ToolbarSpacer/>
+				</OverflowToolbar>
+			</headerToolbar>
+			<columns>
+				<Column id="SECTION" width="12em">
+					<Text text="Section" />
+				</Column>
+				<Column id="Value" minScreenWidth="Tablet" demandPopin="true">
+					<Text text="Name" />
+				</Column>
+				<Column id="STATUS" minScreenWidth="Tablet" demandPopin="true">
+					<Text text="Status" />
+				</Column>
+
+			</columns>
+			<items>
+				<ColumnListItem>
+					<cells>
+						<Text text="{SECTION}" />
+						<ObjectIdentifier title="{NAME}" text="{VALUE}" class="sapUiTinyMarginTopBottom" />
+						<Text text="{STATUS}" />
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+	</ScrollContainer>
+</mvc:View>

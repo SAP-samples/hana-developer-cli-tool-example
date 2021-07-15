@@ -1413,6 +1413,56 @@ Options:
                                            dot        [boolean] [default: false]
 ```
 
+### massConvertUI
+
+```shell
+hana-cli massConvertUI [schema] [table]
+
+Convert a group of tables to CDS or HDBTable format via a browser based UI
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --table, --Table                     Database Table[string] [default: "*"]
+  -s, --schema, --Schema                   schema
+                                        [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit                              Limit results [number] [default: 200]
+  -f, --folder, --Folder                   DB Module Folder Name
+                                                        [string] [default: "./"]
+  -n, --filename, --Filename               File name                    [string]
+  -o, --output, --Output                   Output Format for inspection
+     [string] [choices: "hdbtable", "cds", "hdbmigrationtable"] [default: "cds"]
+      --useHanaTypes, --hana               Use SAP HANA-Specific Data Types See
+                                           (https://cap.cloud.sap/docs/cds/cdl#p
+                                           redefined-types)
+                                                      [boolean] [default: false]
+      --useCatalogPure, --catalog, --pure  Use "Pure" catalog definitions in a
+                                           massConvert. Will include additional
+                                           metadata such as Associations and
+                                           Merge settings but will also include
+                                           some references that are incompatible
+                                           with HDI   [boolean] [default: false]
+      --namespace, --ns                    CDS namespace  [string] [default: ""]
+      --synonyms                           Filename to store sysnonyms
+                                                          [string] [default: ""]
+      --keepPath                           Keep table/view path (with dots)
+                                                      [boolean] [default: false]
+      --noColons                           Replace :: in table/view path with
+                                           dot        [boolean] [default: false]
+```
+
 ### massRename
 
 ```shell
@@ -1934,6 +1984,28 @@ Troubleshooting:
 ```
 
 ![systemInfo example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/systemInfo.gif)
+
+### systemInfoUI
+
+```shell
+hana-cli systemInfoUI
+[aliases: sysUI, sysinfoui, sysInfoUI, systeminfoui]
+General System Details displayed in a Web Browser
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+```
 
 ### tables
 

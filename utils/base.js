@@ -243,8 +243,8 @@ module.exports.getMassConvertBuilder = getMassConvertBuilder
  * @param {boolean} [ui=false] - Mass Convert via Browser-based UI
  * @returns {typeof import("prompt")} - prompts output
  */
- function getMassConvertPrompts(ui = false) {
-     let parameters = {
+function getMassConvertPrompts(ui = false) {
+    let parameters = {
         table: {
             description: bundle.getText("table"),
             type: 'string',
@@ -287,22 +287,22 @@ module.exports.getMassConvertBuilder = getMassConvertBuilder
             description: bundle.getText("useCatalogPure"),
             type: 'boolean'
         },
-        namespace:{
+        namespace: {
             description: bundle.getText("namespace"),
             type: 'string',
             required: false
         },
-        synonyms:{
+        synonyms: {
             description: bundle.getText("synonyms"),
             type: 'string',
             required: false
         },
-        keepPath: {        
-            type: 'boolean',            
+        keepPath: {
+            type: 'boolean',
             description: bundle.getText("keepPath")
         },
-        noColons: {        
-            type: 'boolean',            
+        noColons: {
+            type: 'boolean',
             description: bundle.getText("noColons")
         }
     }
@@ -312,15 +312,15 @@ module.exports.getMassConvertBuilder = getMassConvertBuilder
             description: bundle.getText("port"),
             required: false,
             ask: () => {
-              return false
+                return false
             }
-          }
+        }
     }
 
     return parameters
 
- }
- module.exports.getMassConvertPrompts = getMassConvertPrompts
+}
+module.exports.getMassConvertPrompts = getMassConvertPrompts
 
 /**
  * Get Prompts from the yargs current values and adjust
@@ -554,3 +554,45 @@ function output(content) {
     }
 }
 module.exports.output = output
+
+/**
+ * Setup Express and Launch Browser
+ * @param {string} urlPath - URL Path to Launch
+ * @returns void
+ */
+async function webServerSetup(urlPath) {
+    const path = require("path")
+    const glob = require('glob')
+    debug('serverSetup')
+    // @ts-ignore
+    const port = process.env.PORT || prompts.port || 3010
+
+    if (!(/^[1-9]\d*$/.test(port) && 1 <= 1 * port && 1 * port <= 65535)) {
+        return error(`${port} ${bundle.getText("errPort")}`)
+    }
+    const server = require("http").createServer()
+    const express = require("express")
+    var app = express()
+
+    //Load routes
+    let routesDir = path.join(__dirname, '..', '/routes/**/*.js')
+    let files = glob.sync(routesDir)
+    if (files.length !== 0) {
+        for (let file of files) {
+            await require(file)(app)
+        }
+    }
+
+    //Start the Server 
+    server.on("request", app)
+    server.listen(port, function () {
+        // @ts-ignore
+        let serverAddr = `http://localhost:${server.address().port}${urlPath}`
+        console.info(`HTTP Server: ${serverAddr}`)
+        const open = require('open')
+        open(serverAddr)
+    })
+
+    return
+}
+module.exports.webServerSetup = webServerSetup

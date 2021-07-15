@@ -51,6 +51,7 @@
     "prompt": "^1.1",
     "properties-to-json": "^0.2.1",
     "sap-hdbext-promisfied": "^2.202105.2",
+    "showdown": "^1.9.1",
     "supports-color": "^9.0.1",
     "swagger-ui-express": "^4.1",
     "terminaltools": "^2.0.1",

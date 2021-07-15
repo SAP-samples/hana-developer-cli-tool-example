@@ -1,0 +1,7 @@
+<mvc:View controllerName="sap.hanacli.massConvert.controller.App" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" class="sapUiSizeCompact">
+	<Panel headerText="Service Test - Multiplication" expandable="true" expanded="true">
+		<List width="400px">
+
+		</List>
+	</Panel>
+</mvc:View>
