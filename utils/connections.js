@@ -117,6 +117,7 @@ module.exports.resolveEnv = resolveEnv
  */
 function getConnOptions(prompts) {
     base.debug('getConnOptions')
+    delete process.env.VCAP_SERVICES
     let envFile
 
     //Look for Admin option - it overrides everything
@@ -131,8 +132,9 @@ function getConnOptions(prompts) {
     }
 
     //No .env File found or it doesn't contain a VCAP_SERVICES - try other options
+    base.debug(process.env.VCAP_SERVICES)
+    base.debug(envFile)
     if (!process.env.VCAP_SERVICES && !envFile) {
-
         //Check for specific configuration file by special parameter 
         if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'conn') && prompts.conn) {
             envFile = getFileCheckParents(prompts.conn)
@@ -144,10 +146,11 @@ function getConnOptions(prompts) {
             }
         }
 
+        base.debug(`Before ${envFile}`)
         //No specific configuration file requested go back to default-env.json
         if (!envFile) {
             envFile = getDefaultEnv()
-
+            base.debug(`Lookup Env ${envFile}`)
             //Last resort - default.json in user profile location
             if (!envFile) {
                 const homedir = require('os').homedir()
@@ -162,7 +165,8 @@ function getConnOptions(prompts) {
     }
 
     //Load Environment 
-    const xsenv = require("@sap/xsenv")
+    let xsenv = require("@sap/xsenv")
+
     xsenv.loadEnv(envFile)
 
     base.debug(base.bundle.getText("connectionFile"))

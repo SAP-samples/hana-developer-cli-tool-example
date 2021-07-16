@@ -27,6 +27,30 @@ sap.ui.define([
 
             // set the device model
             this.setModel(models.createDeviceModel(), "device")
+
+
+
+            let oModel = this.getModel("promptsModel")
+            var aUrl = "/"
+            oModel.setData(JSON.parse(
+                jQuery.ajax({
+                    url: aUrl,
+                    method: "GET",
+                    dataType: "json",
+                    async: false
+                }).responseText))
+
+            let oHanaModel = this.getModel("hanaModel")
+            let aHanaUrl = "/hana"
+            oHanaModel.setData(JSON.parse(
+                jQuery.ajax({
+                    url: aHanaUrl,
+                    method: "GET",
+                    dataType: "json",
+                    async: false
+                }).responseText))
         }
+
+
     })
 })

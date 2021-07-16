@@ -3,7 +3,7 @@ const base = require("../utils/base")
 module.exports = (app) => {
     app.get('/hana', async (req, res) => {
         try {
-
+            await base.clearConnection()
             const dbStatus = await base.createDBConnection()
             const dbInspect = require("../utils/dbInspect")
 

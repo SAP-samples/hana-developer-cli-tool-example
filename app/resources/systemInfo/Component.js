@@ -28,9 +28,9 @@ sap.ui.define([
             // set the device model
             this.setModel(models.createDeviceModel(), "device")
 
-            var oModel = this.getModel("hanaModel")
+            let oModel = this.getModel("hanaModel")
 
-            var aUrl = "/hana"
+            let aUrl = "/hana"
 
             oModel.setData(JSON.parse(
                 jQuery.ajax({

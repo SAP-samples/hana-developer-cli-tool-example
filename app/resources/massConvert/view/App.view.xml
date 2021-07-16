@@ -1,7 +1,43 @@
-<mvc:View controllerName="sap.hanacli.massConvert.controller.App" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" class="sapUiSizeCompact">
-	<Panel headerText="Service Test - Multiplication" expandable="true" expanded="true">
-		<List width="400px">
+<mvc:View controllerName="sap.hanacli.massConvert.controller.App" height="100%" width="100%"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+	<ScrollContainer height="100%" width="100%" vertical="true" focusable="true">
+		<f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+			<f:toolbar>
+				<Toolbar id="TB1">
+					<Title id="Title1" text="{i18n>appTitle} - {i18n>appDescription}"/>
+					<ToolbarSpacer />
+				</Toolbar>
+			</f:toolbar>
+			<f:content>
 
-		</List>
-	</Panel>
+				<Toolbar ariaLabelledBy="Title2">
+					<Title id="Title2" text="{i18n>target}"/>
+					<ToolbarSpacer />
+					<Button icon="sap-icon://settings" tooltip="Target System Details" press=".openUrl('/ui/#systeminfo-ui', true)" />
+				</Toolbar>
+
+				<Label text="Schema" required="true" tooltip="Target Datbase Schema"  />
+				<Input value="{/schema}" valueLiveUpdate="true" >
+				</Input>
+				<Input value="{hanaModel>/user/0/CURRENT_SCHEMA}" visible="{= ${/schema} === '**CURRENT_SCHEMA**'}" editable="false"/>
+
+				<Label text="Database Table" required="true"/>
+				<Input value="{/table}" />
+
+				<Toolbar ariaLabelledBy="Title3">
+					<Title id="Title3" text="{i18n>conn}"/>
+					<Button icon="sap-icon://refresh" tooltip="Refresh Connection" press="refreshConnection" />
+					<ToolbarSpacer />
+				</Toolbar>
+				<Label text="Admin" />
+				<CheckBox selected="{/admin}" />
+				<Label text="Conn" />
+				<Input value="{/conn}" />
+			</f:content>
+		</f:SimpleForm>
+	</ScrollContainer>
 </mvc:View>

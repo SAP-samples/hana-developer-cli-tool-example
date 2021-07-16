@@ -74,6 +74,10 @@ function getPrompts() {
 }
 module.exports.getPrompts = getPrompts
 
+async function clearConnection(){
+    dbConnection = null
+}
+module.exports.clearConnection = clearConnection
 /**
  * @param {object} [options] - override the already set parameters with new connection options
  * @returns {Promise<hdbextPromiseInstance>} - hdbext instanced promisfied
@@ -573,7 +577,7 @@ async function webServerSetup(urlPath) {
     const server = require("http").createServer()
     const express = require("express")
     var app = express()
-
+    app.disable('etag')
     //Load routes
     let routesDir = path.join(__dirname, '..', '/routes/**/*.js')
     let files = glob.sync(routesDir)
