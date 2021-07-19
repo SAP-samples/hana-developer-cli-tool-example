@@ -17,26 +17,47 @@
 				<Toolbar ariaLabelledBy="Title2">
 					<Title id="Title2" text="{i18n>target}"/>
 					<ToolbarSpacer />
-					<Button icon="sap-icon://settings" tooltip="Target System Details" press=".openUrl('/ui/#systeminfo-ui', true)" />
+					<Button icon="sap-icon://settings" tooltip="{i18n>targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
 				</Toolbar>
 
-				<Label text="Schema" required="true" tooltip="Target Datbase Schema"  />
-				<Input value="{/schema}" valueLiveUpdate="true" >
+				<Label text="{i18nReuse>scheam}" required="true" />
+				<Input value="{/schema}" valueLiveUpdate="true">
 				</Input>
 				<Input value="{hanaModel>/user/0/CURRENT_SCHEMA}" visible="{= ${/schema} === '**CURRENT_SCHEMA**'}" editable="false"/>
 
-				<Label text="Database Table" required="true"/>
+				<Label text="{i18nReuse>table}" required="true"/>
 				<Input value="{/table}" />
+
+				<Label text="{i18n>outputType}" required="true"/>
+				<ComboBox selectedKey="{/output}" items="{outputModel>/outputTypes}">
+					<core:Item key="{outputModel>key}" text="{outputModel>text}" />
+				</ComboBox>
 
 				<Toolbar ariaLabelledBy="Title3">
 					<Title id="Title3" text="{i18n>conn}"/>
-					<Button icon="sap-icon://refresh" tooltip="Refresh Connection" press="refreshConnection" />
+					<Button icon="sap-icon://refresh" tooltip="{i18n>refreshConn}" press="refreshConnection" />
 					<ToolbarSpacer />
 				</Toolbar>
-				<Label text="Admin" />
-				<CheckBox selected="{/admin}" />
-				<Label text="Conn" />
-				<Input value="{/conn}" />
+				<Label text="{i18n>admin}" tooltip="{i18nReuse>admin}"/>
+				<CheckBox selected="{/admin}" tooltip="{i18nReuse>admin}"/>
+				<Label text="{i18n>connFile}" tooltip="{i18nReuse>connFile}" />
+				<Input value="{/conn}" tooltip="{i18nReuse>connFile}"/>
+
+				<Toolbar ariaLabelledBy="Title4">
+					<Title id="Title4" text="{i18n>convOptions}"/>
+				</Toolbar>
+				<Label text="{i18n>hanaTypes}" tooltip="{i18nReuse>useHanaTypes}"/>
+				<CheckBox selected="{/useHanaTypes}" tooltip="{i18nReuse>useHanaTypes}"/>
+
+				<Toolbar ariaLabelledBy="Title5">
+					<Title id="Title5" text="{i18nReuse>grpDebug}"/>
+				</Toolbar>
+				<Label text="{i18n>quiet}" tooltip="{i18nReuse>disableVerbose}"/>
+				<CheckBox selected="{/disableVerbose}" tooltip="{i18nReuse>disableVerbose}"/>
+				<Label text="{i18n>debug}" tooltip="{i18nReuse>debug}"/>
+				<CheckBox selected="{/debug}" tooltip="{i18nReuse>debug}"/>
+
+
 			</f:content>
 		</f:SimpleForm>
 	</ScrollContainer>

@@ -1,5 +1,5 @@
 {
-	"_version": "1.12.0",
+	"_version": "1.33.0",
 	"sap.app": {
 		"id": "sap.hanacli.systemInfo",
 		"type": "application",
@@ -18,8 +18,8 @@
 	"sap.ui": {
 		"technology": "UI5",
 		"icons": {
-			"icon": "./images/favicon.ico",
-			"favIcon": "./images/favicon.ico",
+			"icon": "../common/images/favicon.ico",
+			"favIcon": "../common/images/favicon.ico",
 			"phone": "",
 			"phone@2": "",
 			"tablet": "",
@@ -33,6 +33,9 @@
 	},
 
 	"sap.ui5": {
+		"resourceRoots": {
+			"sap.hanacli.common": "../common"
+		},
 		"flexEnabled": false,
 		"rootView": {
 			"viewName": "sap.hanacli.systemInfo.view.App",
@@ -67,11 +70,17 @@
 				"settings": {
 					"bundleName": "sap.hanacli.systemInfo.i18n.i18n"
 				}
+			},
+			"i18nReuse": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleUrl": "/i18n/messages.properties"
+				}
 			}
 		},
 		"resources": {
 			"css": [{
-				"uri": "css/style.css"
+				"uri": "../common/css/style.css"
 			}]
 		},
 		"routing": {

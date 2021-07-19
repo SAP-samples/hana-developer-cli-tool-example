@@ -10,6 +10,29 @@
 	<script>
 		window["sap-ushell-config"] = {
 			defaultRenderer: "fiori2",
+			bootstrapPlugins: {
+				"RuntimeAuthoringPlugin": {
+					"component": "sap.ushell.plugins.rta"
+				},
+				"PersonalizePlugin": {
+					"component": "sap.ushell.plugins.rta-personalize"
+				}
+			},
+			services: {
+				NavTargetResolution: {
+					config: {
+						"allowTestUrlComponentConfig": true,
+						"enableClientSideTargetResolution": true
+					}
+				},
+				EndUserFeedback: {
+					adapter: {
+						config: {
+							enabled: true
+						}
+					}
+				}
+			},
 			applications: {
 				"massconvert-ui": {
 					title: "Mass Convert",
@@ -26,7 +49,7 @@
 					applicationType: "URL",
 					url: "./systemInfo",
 					navigationMode: "embedded"
-				},				
+				},
 				"docs-readme": {
 					title: "ReadMe",
 					description: "hana-cli Documentation",
@@ -42,13 +65,16 @@
 			}
 		}
 	</script>
-
 	<script src="https://sapui5.hana.ondemand.com/test-resources/sap/ushell/bootstrap/sandbox.js"></script>
 	<script src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
-		data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration, sap.ui.layout" data-sap-ui-compatVersion="edge"
-		data-sap-ui-theme="sap_fiori_3_dark" data-sap-ui-frameOptions="allow"></script>
+		data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration, sap.ui.layout, sap.ui.rta" data-sap-ui-compatVersion="edge"
+		data-sap-ui-theme="sap_fiori_3_dark" data-sap-ui-resourceroots='{"sap.hanacli.common": "./common"}'
+		data-sap-ui-frameOptions="allow"></script>
+
 	<script>
-		sap.ui.getCore().attachInit(() => sap.ushell.Container.createRenderer().placeAt("content"))
+		sap.ui.getCore().attachInit(() => {
+			sap.ushell.Container.createRenderer().placeAt("content")
+		})
 	</script>
 
 </head>
