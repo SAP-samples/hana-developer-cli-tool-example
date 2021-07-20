@@ -4,10 +4,10 @@
 sap.ui.define([
     "sap/hanacli/common/controller/BaseController"
 ],
-    function (BaseController) {
+     function (BaseController) {
 
         return BaseController.extend("sap.hanacli.systemInfo.controller.App", {
-            onInit: async function () {
+            onInit: function () {
                 this.getHanaStatus()
                 let hanaModel = this.getModel("hanaModel")
                 this.getView().setModel(hanaModel)

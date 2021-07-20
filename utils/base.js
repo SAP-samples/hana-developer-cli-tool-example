@@ -583,7 +583,7 @@ async function webServerSetup(urlPath) {
     let files = glob.sync(routesDir)
     if (files.length !== 0) {
         for (let file of files) {
-            await require(file)(app)
+            await require(file)(app, server)
         }
     }
 

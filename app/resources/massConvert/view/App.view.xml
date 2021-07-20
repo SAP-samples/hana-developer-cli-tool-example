@@ -10,6 +10,7 @@
 				<Toolbar id="TB1">
 					<Title id="Title1" text="{i18n>appTitle} - {i18n>appDescription}"/>
 					<ToolbarSpacer />
+					<Button icon="sap-icon://split" tooltip="{i18n>convert}" press="onBeginConvert" />
 				</Toolbar>
 			</f:toolbar>
 			<f:content>
@@ -21,12 +22,13 @@
 				</Toolbar>
 
 				<Label text="{i18nReuse>scheam}" required="true" />
-				<Input value="{/schema}" valueLiveUpdate="true">
+				<Input id="Schema" value="{/schema}" valueLiveUpdate="true" showSuggestion="true" suggest="loadSchemaFilter">
 				</Input>
 				<Input value="{hanaModel>/user/0/CURRENT_SCHEMA}" visible="{= ${/schema} === '**CURRENT_SCHEMA**'}" editable="false"/>
 
 				<Label text="{i18nReuse>table}" required="true"/>
-				<Input value="{/table}" />
+				<Input id="Table" value="{/table}" showSuggestion="true" suggest="loadTableFilter" >
+				</Input>
 
 				<Label text="{i18n>outputType}" required="true"/>
 				<ComboBox selectedKey="{/output}" items="{outputModel>/outputTypes}">
@@ -48,6 +50,22 @@
 				</Toolbar>
 				<Label text="{i18n>hanaTypes}" tooltip="{i18nReuse>useHanaTypes}"/>
 				<CheckBox selected="{/useHanaTypes}" tooltip="{i18nReuse>useHanaTypes}"/>
+				<Label text="{i18n>catalog}" tooltip="{i18nReuse>useCatalogPure}"/>
+				<CheckBox selected="{/useCatalogPure}" tooltip="{i18nReuse>useCatalogPure}"/>
+				<Label text="{i18nReuse>limit}" required="true"/>
+				<Input value="{/limit}" />
+				<Label text="{i18n>folder}" required="true"/>
+				<Input value="{/folder}" />
+				<Label text="{i18nReuse>filename}" required="false"/>
+				<Input value="{/filename}" />
+				<Label text="{i18nReuse>namespace}" required="false"/>
+				<Input value="{/namespace}" />
+				<Label text="{i18nReuse>synonyms}" required="false"/>
+				<Input value="{/synonyms}" />
+				<Label text="{i18nReuse>keepPath}"/>
+				<CheckBox selected="{/keepPath}" />
+				<Label text="{i18nReuse>noColons}"/>
+				<CheckBox selected="{/noColons}" />
 
 				<Toolbar ariaLabelledBy="Title5">
 					<Title id="Title5" text="{i18nReuse>grpDebug}"/>
@@ -57,7 +75,20 @@
 				<Label text="{i18n>debug}" tooltip="{i18nReuse>debug}"/>
 				<CheckBox selected="{/debug}" tooltip="{i18nReuse>debug}"/>
 
+			</f:content>
+		</f:SimpleForm>
 
+		<f:SimpleForm id="SimpleFormToolbar2" editable="false" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title6">
+			<f:toolbar>
+				<Toolbar ariaLabelledBy="Title6">
+					<Title id="Title6" text="{i18nReuse>log}"/>
+				</Toolbar>
+			</f:toolbar>
+			<f:content>
+				<Label text="{i18n>progress}" />
+				<ProgressIndicator percentValue="{logModel>/progress}" showValue="true" state="Information" />
+				<Label text="{i18n>log}" />
+				<TextArea id="logInfo" value="{logModel>/log}" cols="60" rows="8" editable="false"/>
 			</f:content>
 		</f:SimpleForm>
 	</ScrollContainer>

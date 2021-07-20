@@ -2,7 +2,7 @@
 /*eslint-env es6 */
 sap.ui.define([
     "sap/hanacli/common/Component"
-], function (UIComponent) {
+],  function (UIComponent) {
     "use strict"
 
     return UIComponent.extend("sap.hanacli.systemInfo.Component", {
@@ -11,7 +11,7 @@ sap.ui.define([
             manifest: "json"
         }, 
 
-        init: function () {
+        init:  function () {
             this.superInit()
         }
     })

@@ -4,7 +4,7 @@ sap.ui.define([
     "sap/ui/core/UIComponent",
     "sap/ui/Device",
     "sap/hanacli/common/model/models"
-], function (UIComponent, Device, models) {
+],  function (UIComponent, Device, models) {
     "use strict"
 
     return UIComponent.extend("sap.hanacli.common.Component", {

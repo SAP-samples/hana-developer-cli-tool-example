@@ -14,7 +14,13 @@ sap.ui.define([
 
         init: function () {
             this.superInit()
-           
+           // Log Model
+			var oModel = this.getModel("logModel")
+			oModel.setData({
+				log: "",
+				message: "", 
+                progress: 0
+			})
         }
 
 

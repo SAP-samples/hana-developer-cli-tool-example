@@ -54,7 +54,7 @@ async function getSchemas(prompts) {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
-    let results = await getSchemasInt(prompts.schema, db, prompts.limit, prompts.all);
+    let results = await getSchemasInt(prompts.schema, db, prompts.limit, prompts.all)
     console.table(results)
     return base.end()
   } catch (error) {

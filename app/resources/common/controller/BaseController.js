@@ -3,7 +3,7 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/routing/History"
-], function (Controller, History) {
+],  function (Controller, History) {
     "use strict";
 
     return Controller.extend("sap.hanacli.common.controller.BaseController", {
@@ -22,7 +22,7 @@ sap.ui.define([
          * @param {string} sName the model name
          * @returns {sap.ui.model.Model} the model instance
          */
-        getModel: function (sName) {
+        getModel:  function (sName) {
             return this.getView().getModel(sName);
         },
 
@@ -33,7 +33,7 @@ sap.ui.define([
          * @param {string} sName the model name
          * @returns {sap.ui.mvc.View} the view instance
          */
-        setModel: function (oModel, sName) {
+        setModel:  function (oModel, sName) {
             return this.getView().setModel(oModel, sName);
         },
 
@@ -52,7 +52,7 @@ sap.ui.define([
          * If not, it will replace the current entry of the browser history with the master route.
          * @public
          */
-        onNavBack: function () {
+        onNavBack:  function () {
             var sPreviousHash = History.getInstance().getPreviousHash();
 
             if (sPreviousHash !== undefined) {
@@ -104,7 +104,7 @@ sap.ui.define([
                 }).responseText))
         },
 
-        onErrorCall: function (oError) {
+        onErrorCall:  function (oError) {
             sap.ui.require(["sap/m/MessageBox"], (MessageBox) => {
                 console.log(oError)
                 if (oError.statusCode === 500 || oError.statusCode === 400 || oError.statusCode === "500" || oError.statusCode === "400" || oError.status === 500) {
