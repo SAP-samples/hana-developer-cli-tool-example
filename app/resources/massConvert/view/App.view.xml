@@ -27,7 +27,7 @@
 				<Input value="{hanaModel>/user/0/CURRENT_SCHEMA}" visible="{= ${/schema} === '**CURRENT_SCHEMA**'}" editable="false"/>
 
 				<Label text="{i18nReuse>table}" required="true"/>
-				<Input id="Table" value="{/table}" showSuggestion="true" suggest="loadTableFilter" >
+				<Input id="Table" value="{/table}" showSuggestion="true" suggest="loadTableFilter">
 				</Input>
 
 				<Label text="{i18n>outputType}" required="true"/>
@@ -35,15 +35,7 @@
 					<core:Item key="{outputModel>key}" text="{outputModel>text}" />
 				</ComboBox>
 
-				<Toolbar ariaLabelledBy="Title3">
-					<Title id="Title3" text="{i18n>conn}"/>
-					<Button icon="sap-icon://refresh" tooltip="{i18n>refreshConn}" press="refreshConnection" />
-					<ToolbarSpacer />
-				</Toolbar>
-				<Label text="{i18n>admin}" tooltip="{i18nReuse>admin}"/>
-				<CheckBox selected="{/admin}" tooltip="{i18nReuse>admin}"/>
-				<Label text="{i18n>connFile}" tooltip="{i18nReuse>connFile}" />
-				<Input value="{/conn}" tooltip="{i18nReuse>connFile}"/>
+				<core:Fragment fragmentName="sap.hanacli.common.view.Connection" type="XML"/>
 
 				<Toolbar ariaLabelledBy="Title4">
 					<Title id="Title4" text="{i18n>convOptions}"/>
@@ -67,14 +59,8 @@
 				<Label text="{i18nReuse>noColons}"/>
 				<CheckBox selected="{/noColons}" />
 
-				<Toolbar ariaLabelledBy="Title5">
-					<Title id="Title5" text="{i18nReuse>grpDebug}"/>
-				</Toolbar>
-				<Label text="{i18n>quiet}" tooltip="{i18nReuse>disableVerbose}"/>
-				<CheckBox selected="{/disableVerbose}" tooltip="{i18nReuse>disableVerbose}"/>
-				<Label text="{i18n>debug}" tooltip="{i18nReuse>debug}"/>
-				<CheckBox selected="{/debug}" tooltip="{i18nReuse>debug}"/>
-
+				<core:Fragment fragmentName="sap.hanacli.common.view.Debug" type="XML"/>
+				
 			</f:content>
 		</f:SimpleForm>
 

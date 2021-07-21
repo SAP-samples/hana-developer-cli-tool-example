@@ -1,6 +1,7 @@
 const base = require("../utils/base")
 
 exports.command = 'readMe'
+exports.aliases = ['readme']
 exports.describe = base.bundle.getText("readMe")
 exports.builder = base.getBuilder({}, false)
 

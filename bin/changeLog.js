@@ -1,7 +1,7 @@
 const base = require("../utils/base")
 
 exports.command = 'changes'
-exports.aliases = 'chg'
+exports.aliases = ['chg', 'changeLog', 'changelog']
 exports.describe = base.bundle.getText("changes");
 
 exports.handler = () => {

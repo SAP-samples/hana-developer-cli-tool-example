@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202107.2
+
+### Changed
+- Upgrade to @sap/cds 5.3.1, @sap/hana-client 2.9.23, @sap/hdbext 7.3.0, and sap-hdbext-promisifed 2.202107.1
+- Major addition of new browser based UIs for certain complex commands.  First focus is on the massConvert command. No new external depencencies.  We launch Express web server from the CLI and then open the web browser.  You can complete the command with visual options, value help and extended documentation. Command is still executed in the CLI and the output is piped to the web broswer using web sockets. 
+- New commands: massConvertUI, systemInfoUI, changesUI, readMeUI, and UI (last one opens a LaunchPad with tiles for all the other commands)
+
 ## 2.202107.1
 
 ### Changed

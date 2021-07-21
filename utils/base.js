@@ -19,6 +19,7 @@ module.exports.colors = colors
 
 
 /** @type {typeof import("debug") } */
+// @ts-ignore
 let debug = require('debug')('hana-cli')
 module.exports.debug = debug
 
@@ -70,11 +71,22 @@ module.exports.setPrompts = setPrompts
  */
 function getPrompts() {
     debug('Get Prompts')
+
+    // @ts-ignore
+    if (!prompts.schema) { prompts.schema = "**CURRENT_SCHEMA**" }
+    // @ts-ignore
+    if (!prompts.table) { prompts.table = "*" }
+    // @ts-ignore
+    if (!prompts.limit) { prompts.limit = 200 }
+    // @ts-ignore
+    if (!prompts.folder) { prompts.folder = "./" }
+    // @ts-ignore
+    if (!prompts.admin || prompts.admin === "") { prompts.admin = false }
     return prompts
 }
 module.exports.getPrompts = getPrompts
 
-async function clearConnection(){
+async function clearConnection() {
     dbConnection = null
 }
 module.exports.clearConnection = clearConnection
@@ -333,6 +345,7 @@ module.exports.getMassConvertPrompts = getMassConvertPrompts
  */
 function getPrompt(argv) {
     /** @type typeof import("prompt") */
+    // @ts-ignore
     const prompt = require('prompt')
     prompt.override = argv
     prompt.message = colors.green(bundle.getText("input"))
@@ -425,6 +438,7 @@ function promptHandler(argv, processingFunction, input, iConn = true, iDebug = t
         }
 
         if (isDebug(result)) {
+            // @ts-ignore
             const setDebug = require('debug')
             setDebug.enable('hana-cli, *')
         }
@@ -566,6 +580,7 @@ module.exports.output = output
  */
 async function webServerSetup(urlPath) {
     const path = require("path")
+    // @ts-ignore
     const glob = require('glob')
     debug('serverSetup')
     // @ts-ignore
@@ -575,6 +590,7 @@ async function webServerSetup(urlPath) {
         return error(`${port} ${bundle.getText("errPort")}`)
     }
     const server = require("http").createServer()
+    // @ts-ignore
     const express = require("express")
     var app = express()
     app.disable('etag')

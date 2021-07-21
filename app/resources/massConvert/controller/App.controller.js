@@ -24,25 +24,9 @@ sap.ui.define([
                 let model = this.getModel("promptsModel")
                 this.getView().setModel(model)
 
+                this.setFilterAsContains("Schema")
+                this.setFilterAsContains("Table")
                 
-                this.byId("Schema").setFilterFunction(function (sTerm, oItem) {
-                    // A case-insensitive "string contains" style filter
-                    if (sTerm === "*") {
-                        return oItem.getText()
-                    } else {
-                        return oItem.getText().match(new RegExp(sTerm, "i"))
-                    }
-                })
-
-                this.byId("Table").setFilterFunction(function (sTerm, oItem) {
-                    // A case-insensitive "string contains" style filter
-                    if (sTerm === "*") {
-                        return oItem.getText()
-                    } else {
-                        return oItem.getText().match(new RegExp(sTerm, "i"))
-                    }
-                })
-
                 // webSocket connection opened 
                 connection.attachOpen(() => {
                     MessageToast.show(connOpenedMsg)
@@ -95,22 +79,6 @@ sap.ui.define([
                 }))
             },
 
-            openUrl: function (url, newTab) {
-                // Require the URLHelper and open the URL in a new window or tab (same as _blank):
-                sap.ui.require(["sap/m/library"], ({ URLHelper }) => URLHelper.redirect(url, newTab));
-            },
-
-            onSchemaLiveChange: function () {
-                let model = this.getModel("promptsModel")
-                model.refresh()
-            },
-
-            refreshConnection: function () {
-                this.updatePrompts()
-                this.getPrompts()
-                this.getHanaStatus()
-            },
-
             initOutputTypes: function () {
                 let oOutput = this.getModel("outputModel")
                 oOutput.setData({
@@ -125,65 +93,8 @@ sap.ui.define([
                         key: "hdbtable"
                     }]
                 })
-            },
-
-            loadSchemaFilter: function () {
-                this.updatePrompts()
-                let oController = this
-                let aUrl = "/hana/schemas/"
-                jQuery.ajax({
-                    url: aUrl,
-                    method: "GET",
-                    dataType: "json",
-                    success: function (myJSON) {
-                        oController.onLoadSchemaFilter(myJSON, oController)
-                    },
-                    error: this.onErrorCall
-                })
-            },
-
-            onLoadSchemaFilter: function (myJSON, oController) {
-
-
-                let oSearchControl = oController.getView().byId("Schema")
-                oSearchControl.destroySuggestionItems()
-                //**CURRENT_SCHEMA**
-                oSearchControl.addSuggestionItem(new sap.ui.core.Item({
-                    text: '**CURRENT_SCHEMA**'
-                }))
-                for (let i = 0; i < myJSON.length; i++) {
-                    oSearchControl.addSuggestionItem(new sap.ui.core.Item({
-                        text: myJSON[i].SCHEMA_NAME
-                    }))
-                }
-            },
-
-            loadTableFilter: function () {
-                this.updatePrompts()
-                let oController = this
-                let aUrl = "/hana/tables/"
-                jQuery.ajax({
-                    url: aUrl,
-                    method: "GET",
-                    dataType: "json",
-                    success: function (myJSON) {
-                        oController.onLoadTableFilter(myJSON, oController)
-                    },
-                    error: this.onErrorCall
-                })
-
-            },
-
-            onLoadTableFilter: function (myJSON, oController) {
-
-                let oSearchControl = oController.getView().byId("Table")
-                oSearchControl.destroySuggestionItems()
-                for (let i = 0; i < myJSON.length; i++) {
-                    oSearchControl.addSuggestionItem(new sap.ui.core.Item({
-                        text: myJSON[i].TABLE_NAME
-                    }))
-                }
             }
+
 
         })
     }

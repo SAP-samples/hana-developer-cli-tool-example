@@ -360,6 +360,14 @@ hana-cli changes
 Display Change Log in CLI
 ```
 
+### changesUI
+
+```shell
+hana-cli changesUI
+[aliases: chgUI, chgui, changeLogUI, changelogui]
+Display Change Log in Browser UI
+```
+
 ### completion
 
 ```shell
@@ -1689,6 +1697,12 @@ hana-cli readMe
 Display Read Me in CLI
 ```
 
+### readMeUI
+
+```shell
+hana-cli readMeUI
+Display Read Me in Browser UI
+```
 ### readme
 
 ```shell
@@ -2115,6 +2129,21 @@ Options:
   -l, --limit                   Limit results            [number] [default: 200]
 ```
 
+### UI
+
+```shell
+hana-cli UI
+[aliases: ui, gui, GUI, launchpad, LaunchPad, launchPad]
+Launch Browser Based UI Version of hana-cli
+
+Troubleshooting:
+  --disableVerbose, --quiet  Disable Verbose output - removes all extra output
+                             that is only helpful to human readable interface.
+                             Useful for scripting commands.
+                                                      [boolean] [default: false]
+  --debug, --Debug           Debug hana-cli itself by adding output of LOTS of
+                             intermediate details     [boolean] [default: false]
+```
 ### ups
 
 ```shell

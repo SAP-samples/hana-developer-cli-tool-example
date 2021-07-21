@@ -1,0 +1,14 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
+
+    <Toolbar ariaLabelledBy="Title5">
+        <Title id="Title5" text="{i18nReuse>grpDebug}"/>
+    </Toolbar>
+    <Label text="{i18nReuse>gui.quiet}" tooltip="{i18nReuse>disableVerbose}"/>
+    <CheckBox selected="{/disableVerbose}" tooltip="{i18nReuse>disableVerbose}"/>
+    <Label text="{i18nReuse>gui.debug}" tooltip="{i18nReuse>debug}"/>
+    <CheckBox selected="{/debug}" tooltip="{i18nReuse>debug}"/>
+
+</core:FragmentDefinition>      
