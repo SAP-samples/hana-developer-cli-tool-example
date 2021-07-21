@@ -1470,6 +1470,7 @@ Options:
       --noColons                           Replace :: in table/view path with
                                            dot        [boolean] [default: false]
 ```
+![massConvertUI example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/massConvertUI.png)
 
 ### massRename
 
@@ -2020,6 +2021,7 @@ Troubleshooting:
                                  of intermediate details
                                                       [boolean] [default: false]
 ```
+![systemInfoUI example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/systemInfoUI.png)
 
 ### tables
 
@@ -2144,6 +2146,8 @@ Troubleshooting:
   --debug, --Debug           Debug hana-cli itself by adding output of LOTS of
                              intermediate details     [boolean] [default: false]
 ```
+![UI example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/UI.png)
+
 ### ups
 
 ```shell
