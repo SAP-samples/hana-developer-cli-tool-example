@@ -29,7 +29,8 @@ module.exports.hanaBin = hanaBin
 
 /** @type boolean */
 let inDebug = false
-
+/** @type boolean */
+let inGui = false
 
 /** @typedef {typeof import("@sap/textbundle").TextBundle} TextBundle - sap/textbundle */
 /** @type TextBundle */
@@ -62,6 +63,8 @@ let prompts = []
 function setPrompts(newPrompts) {
     debug('Set Prompts')
     prompts = newPrompts
+    isDebug(prompts)
+    isGui(prompts)
 }
 module.exports.setPrompts = setPrompts
 
@@ -472,7 +475,7 @@ function error(error) {
     if (spinner) {
         spinner.stop()
     }
-    if (inDebug) {
+    if (inDebug || inGui) {
         throw error
     } else {
         return console.error(`${error}`)
@@ -539,6 +542,23 @@ function isDebug(prompts) {
     }
 }
 module.exports.isDebug = isDebug
+
+/**
+ * Check if we are in GUI mode
+ * @param {*} prompts - input parameters and values
+ * @returns {boolean}
+ */
+ function isGui(prompts) {
+    if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'isGui') && prompts.isGui) {
+        inGui = true
+        return true
+    }
+    else {
+        inGui = false
+        return false
+    }
+}
+module.exports.isGui = isGui
 
 /**
  * Output JSON content either as a table or as formatted JSON to console

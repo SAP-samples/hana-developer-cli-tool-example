@@ -17,6 +17,7 @@ module.exports = (app) => {
     app.put('/', jsonParser, async (req, res) => {
         try {
             let body = req.body
+            body.isGui = true
             await base.setPrompts(body)
             return res.status(200).send({ status: 'ok' })
         } catch (error) {

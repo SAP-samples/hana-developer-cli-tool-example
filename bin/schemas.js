@@ -56,15 +56,17 @@ async function getSchemas(prompts) {
 
     let results = await getSchemasInt(prompts.schema, db, prompts.limit, prompts.all)
     console.table(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.getSchemas = getSchemas
 
 async function getSchemasInt(schema, client, limit, all) {
   base.debug(`getSchemasInt ${schema} ${limit} ${all}`)
-  const dbClass = require("sap-hdbext-promisfied")  
+  const dbClass = require("sap-hdbext-promisfied")
   schema = dbClass.objectName(schema)
   let hasPrivileges = 'FALSE'
   if (!all) { hasPrivileges = 'TRUE' }

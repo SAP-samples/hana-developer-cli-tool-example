@@ -33,15 +33,9 @@ module.exports = (app) => {
     app.get('/hana/tables', async (req, res) => {
         try {
             await base.clearConnection()
-            let prompts = base.getPrompts()
-            const db = await base.createDBConnection()
-            const dbClass = require("sap-hdbext-promisfied")
-
-            let schema = await dbClass.schemaCalc(prompts, db)
-            base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("table")}: ${prompts.table}`)
-
-            let results = await getTablesInt(schema, prompts.table, db, prompts.limit)
-            outputJSON(results, res)
+            const tables = require("../bin/tables")
+            let results = await tables.getTables(base.getPrompts())
+            res.type("application/json").status(200).send(results)
         } catch (error) {
             base.error(error)
             res.status(500).send(error.toString())
@@ -51,57 +45,12 @@ module.exports = (app) => {
     app.get('/hana/schemas', async (req, res) => {
         try {
             await base.clearConnection()
-            let prompts = base.getPrompts()
-            const db = await base.createDBConnection()
-            let results = await getSchemasInt(prompts.schema, db, prompts.limit)
-            outputJSON(results, res)
+            const schemas = require("../bin/schemas")
+            let results = await schemas.getSchemas(base.getPrompts())
+            res.type("application/json").status(200).send(results)
         } catch (error) {
             base.error(error)
             res.status(500).send(error.toString())
         }
     })
-}
-
-async function getTablesInt(schema, table, client, limit) {
-    base.debug(`getTablesInt ${schema} ${table} ${limit}`)
-    const dbClass = require("sap-hdbext-promisfied")
-    table = dbClass.objectName(table)
-
-    let query =
-        `SELECT SCHEMA_NAME, TABLE_NAME, TO_NVARCHAR(TABLE_OID) AS TABLE_OID, COMMENTS  from TABLES 
-    WHERE SCHEMA_NAME LIKE ? 
-      AND TABLE_NAME LIKE ? 
-    ORDER BY SCHEMA_NAME, TABLE_NAME `
-    if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
-        query += `LIMIT ${limit.toString()}`
-    }
-    return await client.statementExecPromisified(await client.preparePromisified(query), [schema, table])
-}
-
-
-async function getSchemasInt(schema, client, limit, all) {
-    base.debug(`getSchemasInt ${schema} ${limit} ${all}`)
-    const dbClass = require("sap-hdbext-promisfied")  
-    schema = dbClass.objectName(schema)
-    let hasPrivileges = 'FALSE'
-    if (!all) { hasPrivileges = 'TRUE' }
-    console.log(schema)
-    var query =
-      `SELECT * from SCHEMAS 
-          WHERE SCHEMA_NAME LIKE ? 
-            AND HAS_PRIVILEGES = ?
-            ORDER BY SCHEMA_NAME `
-    if (limit !== null) {
-      query += `LIMIT ${limit.toString()}`
-    }
-    return await client.statementExecPromisified(await client.preparePromisified(query), [schema, hasPrivileges])
-  }
-
-function outputJSON(jsonOut, res) {
-    let out = []
-    for (let item of jsonOut) {
-        out.push(item)
-    }
-    res.type("application/json").status(200).send(JSON.stringify(out))
-    return
 }

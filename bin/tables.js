@@ -57,11 +57,13 @@ async function getTables(prompts) {
 
     let results = await getTablesInt(schema, prompts.table, db, prompts.limit)
     base.outputTable(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.getTables = getTables
 
 async function getTablesInt(schema, table, client, limit) {
   base.debug(`getTablesInt ${schema} ${table} ${limit}`)
