@@ -19,6 +19,53 @@
 				}
 			},
 			services: {
+				LaunchPage: {
+					adapter: {
+						config: {
+							groups: [{
+								"id": "list_group",
+								"title": "List Objects",
+								"isPreset": true,
+								"isVisible": true,
+								"isGroupLocked": false,
+								"tiles": [
+									{
+										id: "schemas-ui",
+										title: "List Schemas",
+										"size": "1x1",
+										"tileType": "sap.ushell.ui.tile.StaticTile",
+										"properties": {
+											info: "Get a list of all Schemas",
+											title: "List Schemas",
+											additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
+											applicationType: "URL",
+											"targetURL": "#schemas-ui",
+											url: "./tables",
+											"icon": "sap-icon://table-view",
+											navigationMode: "embedded"
+										}
+									},
+									{
+										id: "tables-ui",
+										title: "List Tables",
+										"size": "1x1",
+										"tileType": "sap.ushell.ui.tile.StaticTile",
+										"properties": {
+											info: "Get a list of all tables",
+											title: "List Tables",
+											additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
+											applicationType: "URL",
+											"targetURL": "#tables-ui",
+											url: "./tables",
+											"icon": "sap-icon://table-view",
+											navigationMode: "embedded"
+										}
+									},
+								]
+							}]
+						}
+					}
+				},
 				NavTargetResolution: {
 					config: {
 						"allowTestUrlComponentConfig": true,
@@ -62,7 +109,7 @@
 					applicationType: "URL",
 					url: "/docs/changelog"
 				},
-				"tables-ui": {
+				 "tables-ui": {
 					title: "List Tables",
 					description: "Get a list of all tables",
 					additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
@@ -77,15 +124,15 @@
 					applicationType: "URL",
 					url: "./tables",
 					navigationMode: "embedded"
-				},				
+				}, 
 			}
 		}
 	</script>
 	<script src="https://sapui5.hana.ondemand.com/test-resources/sap/ushell/bootstrap/sandbox.js"></script>
 	<script src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
-		data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration, sap.ui.layout, sap.ui.rta" data-sap-ui-compatVersion="edge"
-		data-sap-ui-theme="sap_fiori_3_dark" data-sap-ui-resourceroots='{"sap.hanacli.common": "./common"}'
-		data-sap-ui-frameOptions="allow"></script>
+		data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration, sap.ui.layout, sap.ui.rta"
+		data-sap-ui-compatVersion="edge" data-sap-ui-theme="sap_fiori_3_dark"
+		data-sap-ui-resourceroots='{"sap.hanacli.common": "./common"}' data-sap-ui-frameOptions="allow"></script>
 
 	<script>
 		sap.ui.getCore().attachInit(() => {
