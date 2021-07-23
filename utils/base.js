@@ -32,6 +32,9 @@ let inDebug = false
 /** @type boolean */
 let inGui = false
 
+/** @type any */
+let lastResults
+
 /** @typedef {typeof import("@sap/textbundle").TextBundle} TextBundle - sap/textbundle */
 /** @type TextBundle */
 const TextBundle = require("@sap/textbundle").TextBundle
@@ -636,3 +639,24 @@ async function webServerSetup(urlPath) {
     return
 }
 module.exports.webServerSetup = webServerSetup
+
+/**
+ * Store and send results JSON
+ * @param {any} res - Express Response object
+ * @param {any} results - JSON content
+ * @returns void
+ */
+function sendResults(res, results){
+    lastResults = results
+    res.type("application/json").status(200).send(results)
+}
+module.exports.sendResults = sendResults
+
+/**
+ * Return the last results JSON 
+ * @returns lastResults
+ */
+function getLastResults() {
+    return lastResults
+}
+module.exports.getLastResults = getLastResults

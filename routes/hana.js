@@ -35,7 +35,7 @@ module.exports = (app) => {
             await base.clearConnection()
             const tables = require("../bin/tables")
             let results = await tables.getTables(base.getPrompts())
-            res.type("application/json").status(200).send(results)
+            base.sendResults(res, results)
         } catch (error) {
             base.error(error)
             res.status(500).send(error.toString())
@@ -47,7 +47,7 @@ module.exports = (app) => {
             await base.clearConnection()
             const schemas = require("../bin/schemas")
             let results = await schemas.getSchemas(base.getPrompts())
-            res.type("application/json").status(200).send(results)
+            base.sendResults(res, results)
         } catch (error) {
             base.error(error)
             res.status(500).send(error.toString())

@@ -12,10 +12,6 @@ sap.ui.define([
 
             onInit: function () {
 
-                let meta = this.getModel("metaModel")
-                let metaData = [{ property: "SCHEMA_NAME" }, { property: "TABLE_NAME" }]
-                meta.setData(metaData)
-
                 this.getHanaStatus()
                 this.getPrompts()
                 let model = this.getModel("promptsModel")
@@ -24,9 +20,11 @@ sap.ui.define([
                 this.setFilterAsContains("Table")
 
             },
-            columnFactory: function (sId, oContext) {
-                alert(sId)
-                alert(oContext)
+
+            downloadExcel: function () {
+                //Excel Download
+                window.open("/excel")
+                return
             },
 
             executeCmd: function () {

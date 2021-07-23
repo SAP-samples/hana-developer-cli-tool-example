@@ -46,11 +46,12 @@
 				rows="{resultsModel>/rows}"
 				threshold="15"
 				enableBusyIndicator="true"
-
 				ariaLabelledBy="TableTitle">
 				<table:extension>
 					<OverflowToolbar style="Clear">
 						<Title id="TableTitle" text="{i18nReuse>gui.cmdResults}"/>
+						<ToolbarSpacer/>
+							<Button icon="sap-icon://excel-attachment" tooltip="{i18nReuse>gui.DownloadExcel}" press="downloadExcel" />	
 					</OverflowToolbar>
 				</table:extension>
 				<table:noData>
