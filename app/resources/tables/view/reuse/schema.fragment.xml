@@ -1,0 +1,9 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Label text="{i18nReuse>scheam}" required="true" />
+    <Input id="Schema" value="{/schema}" valueLiveUpdate="true" showSuggestion="true" suggest="loadSchemaFilter">
+    </Input>
+    <Input value="{hanaModel>/user/0/CURRENT_SCHEMA}" visible="{= ${/schema} === '**CURRENT_SCHEMA**'}" editable="false"/>
+
+</core:FragmentDefinition>  

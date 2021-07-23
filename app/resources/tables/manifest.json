@@ -37,12 +37,6 @@
 			"sap.hanacli.common": "../common"
 		},
 		"flexEnabled": false,
-		"rootView": {
-			"viewName": "sap.hanacli.tables.view.App",
-			"type": "XML",
-			"async": true,
-			"id": "App"
-		},
 		"dependencies": {
 			"minUI5Version": "1.91.0",
 			"libs": {

@@ -1,7 +1,7 @@
 const base = require("../utils/base")
 
-exports.command = 'schemas [schema]'
-exports.aliases = ['sch', 'getSchemas', 'listSchemas']
+exports.command = 'schemasUI [schema]'
+exports.aliases = ['schui', 'getSchemasUI', 'listSchemasUI', 'schemasui', 'getschemasui', 'listschemasui']
 exports.describe = base.bundle.getText("schemas")
 
 exports.builder = base.getBuilder({
@@ -49,35 +49,12 @@ exports.handler = (argv) => {
 }
 
 async function getSchemas(prompts) {
-  base.debug('getSchemas')
+  base.debug('getSchemasUI')
   try {
     base.setPrompts(prompts)
-    const db = await base.createDBConnection()
-
-    let results = await getSchemasInt(prompts.schema, db, prompts.limit, prompts.all)
-    base.outputTable(results)
-    base.end()
-    return results
+    await base.webServerSetup('/ui/#schemas-ui')
+    return base.end()
   } catch (error) {
     base.error(error)
   }
-}
-module.exports.getSchemas = getSchemas
-
-async function getSchemasInt(schema, client, limit, all) {
-  base.debug(`getSchemasInt ${schema} ${limit} ${all}`)
-  const dbClass = require("sap-hdbext-promisfied")
-  schema = dbClass.objectName(schema)
-  let hasPrivileges = 'FALSE'
-  if (!all) { hasPrivileges = 'TRUE' }
-  console.log(schema)
-  var query =
-    `SELECT * from SCHEMAS 
-        WHERE SCHEMA_NAME LIKE ? 
-          AND HAS_PRIVILEGES = ?
-	      ORDER BY SCHEMA_NAME `
-  if (limit !== null) {
-    query += `LIMIT ${limit.toString()}`
-  }
-  return await client.statementExecPromisified(await client.preparePromisified(query), [schema, hasPrivileges])
 }

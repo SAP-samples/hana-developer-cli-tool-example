@@ -1,0 +1,9 @@
+<core:FragmentDefinition xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+    <Toolbar id="TB1">
+        <Title id="Title1" text="{i18n>appTitle}: {config>/cmd}"/>
+        <ToolbarSpacer />
+        <Button icon="sap-icon://refresh" tooltip="{i18nReuse>gui.execute}" press="executeCmd" />
+    </Toolbar>
+</core:FragmentDefinition>    

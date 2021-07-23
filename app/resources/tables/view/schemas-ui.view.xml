@@ -1,0 +1,36 @@
+<mvc:View controllerName="sap.hanacli.tables.controller.schemas-ui" height="100%" width="100%"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+	<ScrollContainer height="100%" width="100%" vertical="true" focusable="true">
+		<f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+			<f:toolbar>
+				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.toolbar" type="XML"/>
+			</f:toolbar>
+			 	<f:content>
+
+				<Toolbar ariaLabelledBy="Title2">
+					<Title id="Title2" text="{i18nReuse>gui.target}"/>
+					<ToolbarSpacer />
+					<Button icon="sap-icon://settings" tooltip="{i18nReuse>gui.targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
+				</Toolbar>
+
+				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.schema" type="XML"/>
+
+				<Label text="{i18nReuse>limit}" required="true"/>
+				<Input value="{/limit}" />
+				<Label text="{i18nReuse>allSchemas}" />
+				<CheckBox selected="{/all}" />
+
+				<core:Fragment fragmentName="sap.hanacli.common.view.Connection" type="XML"/>
+				<core:Fragment fragmentName="sap.hanacli.common.view.Debug" type="XML"/>
+
+			</f:content>
+		</f:SimpleForm>
+
+	
+	<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.table" type="XML"/>
+	</ScrollContainer>
+</mvc:View>

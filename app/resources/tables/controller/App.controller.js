@@ -10,14 +10,12 @@ sap.ui.define([
 
         return BaseController.extend("sap.hanacli.tables.controller.App", {
 
-            onInit: function () {
+            onAppInit: function () {
 
                 this.getHanaStatus()
                 this.getPrompts()
                 let model = this.getModel("promptsModel")
                 this.getView().setModel(model)
-                this.setFilterAsContains("Schema")
-                this.setFilterAsContains("Table")
 
             },
 
@@ -29,7 +27,7 @@ sap.ui.define([
 
             executeCmd: function () {
                 this.updatePrompts()
-                let aUrl = "/hana/tables/"
+                let aUrl = `/hana/${this.getModel("config").getProperty("/cmd")}/`
                 let oController = this
                 jQuery.ajax({
                     url: aUrl,

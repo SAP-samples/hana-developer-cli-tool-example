@@ -30,7 +30,7 @@ module.exports = (app) => {
 
     })
 
-    app.get('/hana/tables', async (req, res) => {
+    app.get(['/hana/tables', '/hana/tables-ui'], async (req, res) => {
         try {
             await base.clearConnection()
             const tables = require("../bin/tables")
@@ -42,7 +42,7 @@ module.exports = (app) => {
         }
     })
 
-    app.get('/hana/schemas', async (req, res) => {
+    app.get(['/hana/schemas', '/hana/schemas-ui'], async (req, res) => {
         try {
             await base.clearConnection()
             const schemas = require("../bin/schemas")
