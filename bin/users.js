@@ -44,11 +44,13 @@ async function getUsers(prompts) {
 
     let results = await getUsersInt(prompts.user, db, prompts.limit)
     base.outputTable(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.getUsers = getUsers
 
 async function getUsersInt(user, client, limit) {
   base.debug(`getUsersInt ${user} ${limit}`)

@@ -53,8 +53,10 @@ async function listInstances(prompts) {
             }
         }
         base.outputTable(output)
-        return base.end()
+        base.end()
+        return output
     } catch (error) {
         base.error(error)
     }
 }
+module.exports.listInstances = listInstances

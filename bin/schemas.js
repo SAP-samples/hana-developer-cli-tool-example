@@ -25,27 +25,30 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
-  base.promptHandler(argv, getSchemas, {
-    schema: {
-      description: base.bundle.getText("schema"),
-      type: 'string',
-      required: true
-    },
-    all: {
-      description: base.bundle.getText("allSchemas"),
-      type: 'boolean',
-      required: true,
-      ask: () => {
-        return false
-      }
-    },
-    limit: {
-      description: base.bundle.getText("limit"),
-      type: 'number',
-      required: true
+let inputPrompts = {
+  schema: {
+    description: base.bundle.getText("schema"),
+    type: 'string',
+    required: true
+  },
+  all: {
+    description: base.bundle.getText("allSchemas"),
+    type: 'boolean',
+    required: true,
+    ask: () => {
+      return false
     }
-  })
+  },
+  limit: {
+    description: base.bundle.getText("limit"),
+    type: 'number',
+    required: true
+  }
+}
+exports.inputPrompts = inputPrompts
+
+exports.handler = (argv) => {
+  base.promptHandler(argv, getSchemas, inputPrompts)
 }
 
 async function getSchemas(prompts) {

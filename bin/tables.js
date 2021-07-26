@@ -25,24 +25,27 @@ exports.builder = base.getBuilder({
   }
 })
 
+let inputPrompts = {
+  table: {
+    description: base.bundle.getText("table"),
+    type: 'string',
+    required: true
+  },
+  schema: {
+    description: base.bundle.getText("schema"),
+    type: 'string',
+    required: true
+  },
+  limit: {
+    description: base.bundle.getText("limit"),
+    type: 'number',
+    required: true
+  }
+}
+exports.inputPrompts = inputPrompts
+
 exports.handler = (argv) => {
-  base.promptHandler(argv, getTables, {
-    table: {
-      description: base.bundle.getText("table"),
-      type: 'string',
-      required: true
-    },
-    schema: {
-      description: base.bundle.getText("schema"),
-      type: 'string',
-      required: true
-    },
-    limit: {
-      description: base.bundle.getText("limit"),
-      type: 'number',
-      required: true
-    }
-  })
+  base.promptHandler(argv, getTables, inputPrompts)
 }
 
 async function getTables(prompts) {

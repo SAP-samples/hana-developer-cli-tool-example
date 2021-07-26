@@ -17,8 +17,10 @@ async function getPorts(prompts) {
               SQL_PORT
               FROM SYS.M_SERVICES`)
     base.outputTable(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.getPorts = getPorts

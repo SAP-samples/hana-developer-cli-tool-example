@@ -115,11 +115,13 @@ async function dbQuery(prompts) {
         }
         break
     }
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.dbQuery  = dbQuery
 
 async function toFile(folder, file, ext, content) {
   base.debug('toFile')

@@ -57,11 +57,13 @@ async function getLibraries(prompts) {
 
     let results = await getLibrariesInt(schema, prompts.library, db, prompts.limit)
     base.outputTable(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.getLibraries = getLibraries
 
 async function getLibrariesInt(schema, library, client, limit) {
   base.debug(`getLibrariesInt ${schema} ${library} ${limit}`)

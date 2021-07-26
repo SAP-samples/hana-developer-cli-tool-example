@@ -57,11 +57,13 @@ async function getViews(prompts) {
 
     let results = await getViewsInt(schema, prompts.view, db, prompts.limit)
     base.outputTable(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.getViews = getViews
 
 async function getViewsInt(schema, view, client, limit) {
   base.debug(`getViewsInt ${schema} ${view} ${limit}`)

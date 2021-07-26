@@ -38,8 +38,10 @@ async function dbCall(prompts) {
       throw new Error(base.bundle.getText("errGUID"))
     }
     base.outputTable(object.results[0])
-    return base.end()
+    base.end()
+    return object.results[0]
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.dbCall = dbCall

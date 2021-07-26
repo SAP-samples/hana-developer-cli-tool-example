@@ -57,11 +57,13 @@ async function getRoles(prompts) {
 
     let results = await getRolesInt(schema, prompts.role, db, prompts.limit)
     base.outputTable(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.getRoles = getRoles
 
 
 async function getRolesInt(schema, role, client, limit) {

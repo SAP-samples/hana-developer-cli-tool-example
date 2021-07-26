@@ -57,11 +57,13 @@ async function getSequences(prompts) {
 
     let results = await getSequencesInt(schema, prompts.sequence, db, prompts.limit)
     console.table(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.getSequences = getSequences
 
 async function getSequencesInt(schema, sequence, client, limit) {
   base.debug(`getSequencesInt ${schema} ${sequence} ${limit}`)

@@ -36,8 +36,8 @@ sap.ui.define([
                     success: function (myJSON) {
                         let model = oController.getModel("resultsModel")
                         let metaData = []
-                        if (myJSON[1]) {
-                            for (const key of Object.keys(myJSON[1])) {
+                        if (myJSON[0]) {
+                            for (const key of Object.keys(myJSON[0])) {
                                 metaData.push({ property: key })
                             }
                         }

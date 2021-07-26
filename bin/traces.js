@@ -17,8 +17,10 @@ async function traces(prompts) {
     let results = await dbStatus.execSQL(
       `SELECT * FROM M_TRACEFILES`)
     base.outputTable(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.traces = traces

@@ -57,11 +57,13 @@ async function getProcedures(prompts) {
 
     let results = await getProceduresInt(schema, prompts.procedure, db, prompts.limit)
     base.outputTable(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.getProcedures = getProcedures
 
 async function getProceduresInt(schema, procedure, client, limit) {
   base.debug(`getProceduresInt ${schema} ${procedure} ${limit}`)

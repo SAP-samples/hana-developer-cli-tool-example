@@ -57,11 +57,13 @@ async function getObjects(prompts) {
 
     let results = await getObjectsInt(schema, prompts.object, db, prompts.limit)
     base.outputTable(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.getObjects = getObjects
 
 async function getObjectsInt(schema, object, client, limit) {
   base.debug(`getObjectsInt ${schema} ${object} ${limit}`)

@@ -68,11 +68,13 @@ async function getSynonyms(prompts) {
 
     let results = await getSynonymsInt(schema, prompts.synonym, prompts.target, db, prompts.limit)
     base.outputTable(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.getSynonyms = getSynonyms
 
 async function getSynonymsInt(schema, synonym, target, client, limit) {
   base.debug(`getSynonymsInt ${schema} ${synonym} ${target} ${limit}`)

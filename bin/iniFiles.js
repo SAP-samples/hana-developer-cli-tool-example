@@ -16,8 +16,10 @@ async function iniFiles(prompts) {
     let results = await dbStatus.execSQL(
       `SELECT * FROM M_INIFILES`)
     base.outputTable(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.iniFiles = iniFiles

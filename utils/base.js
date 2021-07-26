@@ -88,6 +88,10 @@ function getPrompts() {
     if (!prompts.folder) { prompts.folder = "./" }
     // @ts-ignore
     if (!prompts.admin || prompts.admin === "") { prompts.admin = false }
+    // @ts-ignore
+    if (!prompts.container) { prompts.container = "*" }
+    // @ts-ignore
+    if (!prompts.containerGroup) { prompts.containerGroup = "*" }
     return prompts
 }
 module.exports.getPrompts = getPrompts
@@ -551,7 +555,7 @@ module.exports.isDebug = isDebug
  * @param {*} prompts - input parameters and values
  * @returns {boolean}
  */
- function isGui(prompts) {
+function isGui(prompts) {
     if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'isGui') && prompts.isGui) {
         inGui = true
         return true
@@ -646,7 +650,7 @@ module.exports.webServerSetup = webServerSetup
  * @param {any} results - JSON content
  * @returns void
  */
-function sendResults(res, results){
+function sendResults(res, results) {
     lastResults = results
     res.type("application/json").status(200).send(results)
 }

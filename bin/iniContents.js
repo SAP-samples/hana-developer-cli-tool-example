@@ -65,8 +65,10 @@ async function iniContents(prompts) {
     }
     let results = await db.statementExecPromisified(await db.preparePromisified(query), [iniFile, section])
     base.outputTable(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.iniContents = iniContents

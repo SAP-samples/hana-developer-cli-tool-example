@@ -18,8 +18,10 @@ async function dbStatus(prompts) {
     let results = await dbStatus.execSQL(
       `SELECT * FROM M_FEATURES`)
     base.outputTable(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.dbStatus = dbStatus

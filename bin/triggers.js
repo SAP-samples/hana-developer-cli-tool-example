@@ -68,11 +68,13 @@ async function getTriggers(prompts) {
 
     let results = await getTriggersInt(schema, prompts.trigger, prompts.target, db, prompts.limit)
     base.outputTable(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.getTriggers = getTriggers
 
 async function getTriggersInt(schema, trigger, target, client, limit) {
   base.debug(`getTriggersInt ${schema} ${trigger} ${target} ${limit}`)

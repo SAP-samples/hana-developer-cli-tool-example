@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202107.3
+
+### Changed
+- Allow quoted names in massConvert when the target is HDBTABLE
+- UI theme (light or dark) will now adjust automatically to user's OS setting
+- New commands: containersUI, dataTypesUI, schemasUI, and tablesUI
+- Refactored list operations (like schemas, tables, etc) to allow them to be reused in the new Browser UI
+  
 ## 2.202107.2
 
 ### Changed

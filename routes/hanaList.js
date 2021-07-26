@@ -31,26 +31,30 @@ module.exports = (app) => {
     })
 
     app.get(['/hana/tables', '/hana/tables-ui'], async (req, res) => {
-        try {
-            await base.clearConnection()
-            const tables = require("../bin/tables")
-            let results = await tables.getTables(base.getPrompts())
-            base.sendResults(res, results)
-        } catch (error) {
-            base.error(error)
-            res.status(500).send(error.toString())
-        }
+        listHandler(res, "../bin/tables", 'getTables')
     })
 
     app.get(['/hana/schemas', '/hana/schemas-ui'], async (req, res) => {
-        try {
-            await base.clearConnection()
-            const schemas = require("../bin/schemas")
-            let results = await schemas.getSchemas(base.getPrompts())
-            base.sendResults(res, results)
-        } catch (error) {
-            base.error(error)
-            res.status(500).send(error.toString())
-        }
+        listHandler(res, "../bin/schemas", 'getSchemas')
     })
+
+    app.get(['/hana/containers', '/hana/containers-ui'], async (req, res) => {
+        listHandler(res, "../bin/containers", 'getContainers')
+    })
+
+    app.get(['/hana/dataTypes', '/hana/dataTypes-ui'], async (req, res) => {
+        listHandler(res, "../bin/dataTypes", 'dbStatus')
+    })
+}
+
+async function listHandler(res, lib, func) {
+    try {
+        await base.clearConnection()
+        const targetLibrary = require(lib)
+        let results = await targetLibrary[func](base.getPrompts())
+        base.sendResults(res, results)
+    } catch (error) {
+        res.status(500).send(error.toString())
+        return console.error(`${error}`)
+    }
 }

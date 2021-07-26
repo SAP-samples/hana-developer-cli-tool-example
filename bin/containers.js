@@ -25,24 +25,27 @@ exports.builder = base.getBuilder({
   }
 })
 
+let inputPrompts =  {
+  container: {
+    description: base.bundle.getText("container"),
+    type: 'string',
+    required: true
+  },
+  containerGroup: {
+    description: base.bundle.getText("containerGroup"),
+    type: 'string',
+    required: true
+  },
+  limit: {
+    description: base.bundle.getText("limit"),
+    type: 'number',
+    required: true
+  }
+}
+module.exports.inputPrompts = inputPrompts
+
 exports.handler = (argv) => {
-  base.promptHandler(argv, getContainers, {
-    container: {
-      description: base.bundle.getText("container"),
-      type: 'string',
-      required: true
-    },
-    containerGroup: {
-      description: base.bundle.getText("containerGroup"),
-      type: 'string',
-      required: true
-    },
-    limit: {
-      description: base.bundle.getText("limit"),
-      type: 'number',
-      required: true
-    }
-  })
+  base.promptHandler(argv, getContainers, inputPrompts)
 }
 
 async function getContainers(prompts) {
@@ -55,12 +58,13 @@ async function getContainers(prompts) {
 
     let results = await getContainersInt(prompts.containerGroup, prompts.container, db, prompts.limit)
     base.outputTable(results)
-
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.getContainers = getContainers
 
 async function getContainersInt(containerGroup, container, client, limit) {
   base.debug('getContainersInt')

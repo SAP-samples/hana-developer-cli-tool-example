@@ -28,8 +28,37 @@
 								"isPreset": true,
 								"isVisible": true,
 								"isGroupLocked": false,
-								"tiles": [
-									{
+								"tiles": [{
+										id: "containers-ui",
+										title: "List Containers",
+										"size": "1x1",
+										"tileType": "sap.ushell.ui.tile.StaticTile",
+										"properties": {
+											info: "Get a list of all HDI containers",
+											title: "List Containers",
+											additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
+											applicationType: "URL",
+											"targetURL": "#containers-ui",
+											url: "./tables",
+											"icon": "sap-icon://table-view",
+											navigationMode: "embedded"
+										}
+									}, {
+										id: "dataTypes-ui",
+										title: "List Data Types",
+										"size": "1x1",
+										"tileType": "sap.ushell.ui.tile.StaticTile",
+										"properties": {
+											info: "Get a list of all HANA Data Types",
+											title: "List Data Types",
+											additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
+											applicationType: "URL",
+											"targetURL": "#dataTypes-ui",
+											url: "./tables",
+											"icon": "sap-icon://table-view",
+											navigationMode: "embedded"
+										}
+									},{
 										id: "schemas-ui",
 										title: "List Schemas",
 										"size": "1x1",
@@ -109,14 +138,22 @@
 					applicationType: "URL",
 					url: "/docs/changelog"
 				},
-				 "tables-ui": {
-					title: "List Tables",
-					description: "Get a list of all tables",
+				"containers-ui": {
+					title: "List Containers",
+					description: "Get a list of all HDI Containers",
 					additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
 					applicationType: "URL",
 					url: "./tables",
 					navigationMode: "embedded"
 				},
+				"dataTypes-ui": {
+					title: "List Data Types",
+					description: "Get a list of all HANA Data Types",
+					additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
+					applicationType: "URL",
+					url: "./tables",
+					navigationMode: "embedded"
+				},				
 				"schemas-ui": {
 					title: "List Schemas",
 					description: "Get a list of all schemas",
@@ -124,17 +161,30 @@
 					applicationType: "URL",
 					url: "./tables",
 					navigationMode: "embedded"
-				}, 
+				},
+				"tables-ui": {
+					title: "List Tables",
+					description: "Get a list of all tables",
+					additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
+					applicationType: "URL",
+					url: "./tables",
+					navigationMode: "embedded"
+				}
+
 			}
 		}
 	</script>
 	<script src="https://sapui5.hana.ondemand.com/test-resources/sap/ushell/bootstrap/sandbox.js"></script>
+
 	<script src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
 		data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration, sap.ui.layout, sap.ui.rta"
-		data-sap-ui-compatVersion="edge" data-sap-ui-theme="sap_fiori_3_dark"
+		data-sap-ui-compatVersion="edge" data-sap-ui-theme="sap_fiori_3"
 		data-sap-ui-resourceroots='{"sap.hanacli.common": "./common"}' data-sap-ui-frameOptions="allow"></script>
 
 	<script>
+		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+			sap.ui.getCore().applyTheme("sap_fiori_3_dark")
+		}
 		sap.ui.getCore().attachInit(() => {
 			sap.ushell.Container.createRenderer().placeAt("content")
 		})

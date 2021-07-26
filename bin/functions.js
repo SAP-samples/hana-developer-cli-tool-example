@@ -57,11 +57,13 @@ async function getFunctions(prompts) {
 
     let results = await getFunctionsInt(schema, prompts.function, db, prompts.limit)
     base.outputTable(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.getFunctions = getFunctions
 
 
 async function getFunctionsInt(schema, functionName, client, limit) {

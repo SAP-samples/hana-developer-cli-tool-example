@@ -2,8 +2,10 @@
 /* eslint-disable no-undef */
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/core/routing/History"
-],  function (Controller, History) {
+    "sap/ui/core/routing/History",
+    "sap/ui/core/Fragment",
+	"sap/ui/core/syncStyleClass",
+],  function (Controller, History, Fragment, syncStyleClass) {
     "use strict";
 
     return Controller.extend("sap.hanacli.common.controller.BaseController", {
@@ -80,6 +82,7 @@ sap.ui.define([
         },
 
         getPrompts: function () {
+
             let model = this.getModel("promptsModel")
             let aUrl = "/"
 
@@ -187,6 +190,28 @@ sap.ui.define([
                 } else {
                     return oItem.getText().match(new RegExp(sTerm, "i"))
                 }
+            })
+        },
+
+        startBusy: function(){
+            if (!this._pBusyDialog) {
+				this._pBusyDialog = Fragment.load({
+					name: "sap.hanacli.common.view.BusyDialog",
+					controller: this
+				}).then(function (oBusyDialog) {
+					this.getView().addDependent(oBusyDialog)
+					syncStyleClass("sapUiSizeCompact", this.getView(), oBusyDialog)
+					return oBusyDialog
+				}.bind(this))
+			}
+
+			this._pBusyDialog.then(function(oBusyDialog) {
+				oBusyDialog.open()
+			}.bind(this))
+        },
+        endBusy: function(oController){
+            oController._pBusyDialog.then(function(oBusyDialog) {
+                oBusyDialog.close()
             })
         },
 
