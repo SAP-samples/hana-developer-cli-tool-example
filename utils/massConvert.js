@@ -45,7 +45,6 @@ module.exports = {
                             broadcast(wss, table.TABLE_NAME, i / results.length * 100)
                             let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
                             let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
-                            base.outputTable(fields)
                             let constraints = await dbInspect.getConstraints(db, object)
                             let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable")
                             let options = { names : 'quoted', dialect: 'hana', src: 'cds' }
