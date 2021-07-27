@@ -58,6 +58,21 @@
 											"icon": "sap-icon://table-view",
 											navigationMode: "embedded"
 										}
+									},{
+										id: "functions-ui",
+										title: "List Functions",
+										"size": "1x1",
+										"tileType": "sap.ushell.ui.tile.StaticTile",
+										"properties": {
+											info: "Get a list of all HANA Functions",
+											title: "List Functions",
+											additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
+											applicationType: "URL",
+											"targetURL": "#functions-ui",
+											url: "./tables",
+											"icon": "sap-icon://table-view",
+											navigationMode: "embedded"
+										}
 									}, {
 										id: "schemas-ui",
 										title: "List Schemas",
@@ -204,6 +219,14 @@
 				"featureUsage-ui": {
 					title: "List Feature Usage",
 					description: "Get a list of all HANA Feature Usage",
+					additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
+					applicationType: "URL",
+					url: "./tables",
+					navigationMode: "embedded"
+				},
+				"functions-ui": {
+					title: "List Functions",
+					description: "Get a list of all HANA Functions",
 					additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
 					applicationType: "URL",
 					url: "./tables",

@@ -92,6 +92,8 @@ function getPrompts() {
     if (!prompts.container) { prompts.container = "*" }
     // @ts-ignore
     if (!prompts.containerGroup) { prompts.containerGroup = "*" }
+    // @ts-ignore
+    if (!prompts.function) { prompts.function = "*" }
     return prompts
 }
 module.exports.getPrompts = getPrompts

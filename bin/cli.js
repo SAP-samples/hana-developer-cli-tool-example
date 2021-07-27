@@ -58,6 +58,7 @@ versionCheck.checkVersion().then(() => {
         .command(require('./featureUsage'))
         .command(require('./featureUsageUI'))        
         .command(require('./functions'))
+        .command(require('./functionsUI'))        
         .command(require('./hanaCloudHDIInstances'))
         .command(require('./hanaCloudInstances'))
         .command(require('./hanaCloudStart'))

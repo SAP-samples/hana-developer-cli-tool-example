@@ -182,6 +182,33 @@ sap.ui.define([
             }
         },
 
+        loadFunctionFilter: function () {
+            this.updatePrompts()
+            let oController = this
+            let aUrl = "/hana/functions/"
+            jQuery.ajax({
+                url: aUrl,
+                method: "GET",
+                dataType: "json",
+                success: function (myJSON) {
+                    oController.onLoadFunctionFilter(myJSON, oController)
+                },
+                error: this.onErrorCall
+            })
+
+        },
+
+        onLoadFunctionFilter: function (myJSON, oController) {
+
+            let oSearchControl = oController.getView().byId("Function")
+            oSearchControl.destroySuggestionItems()
+            for (let i = 0; i < myJSON.length; i++) {
+                oSearchControl.addSuggestionItem(new sap.ui.core.Item({
+                    text: myJSON[i].FUNCTION_NAME
+                }))
+            }
+        },
+
         setFilterAsContains: function (controlId){
             this.byId(controlId).setFilterFunction(function (sTerm, oItem) {
                 // A case-insensitive "string contains" style filter

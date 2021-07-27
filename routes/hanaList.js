@@ -53,6 +53,10 @@ module.exports = (app) => {
     app.get(['/hana/featureUsage', '/hana/featureUsage-ui'], async (req, res) => {
         listHandler(res, "../bin/featureUsage", 'dbStatus')
     })
+
+    app.get(['/hana/functions', '/hana/functions-ui'], async (req, res) => {
+        listHandler(res, "../bin/functions", 'getFunctions')
+    })
 }
 
 async function listHandler(res, lib, func) {
