@@ -61,6 +61,22 @@ module.exports = (app) => {
     app.get(['/hana/hdi', '/hana/hdi-ui'], async (req, res) => {
         listHandler(res, "../bin/hanaCloudHDIInstances", 'listInstances')
     })
+
+    app.get(['/hana/sbss', '/hana/sbss-ui'], async (req, res) => {
+        listHandler(res, "../bin/hanaCloudSBSSInstances", 'listInstances')
+    })
+
+    app.get(['/hana/schemaInstances', '/hana/schemaInstances-ui'], async (req, res) => {
+        listHandler(res, "../bin/hanaCloudSchemaInstances", 'listInstances')
+    })
+
+    app.get(['/hana/securestore', '/hana/securestore-ui'], async (req, res) => {
+        listHandler(res, "../bin/hanaCloudSecureStoreInstances", 'listInstances')
+    })
+
+    app.get(['/hana/ups', '/hana/ups-ui'], async (req, res) => {
+        listHandler(res, "../bin/hanaCloudUPSInstances", 'listInstances')
+    })
 }
 
 async function listHandler(res, lib, func) {

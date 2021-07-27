@@ -13,15 +13,18 @@ exports.builder = base.getBuilder({
     }
 }, false)
 
+let inputPrompts = {
+    cf: {
+        description: base.bundle.getText("cfxs"),
+        type: 'boolean',
+        default: true,
+        required: false
+    }
+}
+exports.inputPrompts = inputPrompts
+
 exports.handler = (argv) => {
-    base.promptHandler(argv, listInstances, {
-        cf: {
-            description: base.bundle.getText("cfxs"),
-            type: 'boolean',
-            default: true,
-            required: false
-        }
-    }, false)
+    base.promptHandler(argv, listInstances, inputPrompts, false)
 }
 
 async function listInstances(prompts) {

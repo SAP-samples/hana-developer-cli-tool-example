@@ -95,7 +95,7 @@ function getPrompts() {
     // @ts-ignore
     if (!prompts.function) { prompts.function = "*" }
     // @ts-ignore
-    if (!prompts.cf) { prompts.cf = true }
+    if (typeof prompts.cf === 'undefined') { prompts.cf = true }
     return prompts
 }
 module.exports.getPrompts = getPrompts

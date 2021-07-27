@@ -25,43 +25,50 @@ sap.ui.define([
                 return
             },
 
-            executeCmd: function () {
-                this.updatePrompts()
-                let aUrl = `/hana/${this.getModel("config").getProperty("/cmd")}/`
-                let oController = this
-                jQuery.ajax({
-                    url: aUrl,
-                    method: "GET",
-                    dataType: "json",
-                    success: function (myJSON) {
-                        let model = oController.getModel("resultsModel")
-                        let metaData = []
-                        if (myJSON[0]) {
-                            for (const key of Object.keys(myJSON[0])) {
-                                metaData.push({ property: key })
+            executeCmd: async function () {
+                this.startBusy()
+                this.updatePrompts().then(() => {
+                    let aUrl = `/hana/${this.getModel("config").getProperty("/cmd")}/`
+                    let oController = this
+                    jQuery.ajax({
+                        url: aUrl,
+                        method: "GET",
+                        dataType: "json",
+                        success: function (myJSON) {
+                            oController.endBusy(oController)
+                            let model = oController.getModel("resultsModel")
+                            let metaData = []
+                            if (myJSON[0]) {
+                                for (const key of Object.keys(myJSON[0])) {
+                                    metaData.push({ property: key })
+                                }
                             }
-                        }
-                        let data = { rows: myJSON, columns: metaData }
-                        model.setData(data)
+                            let data = { rows: myJSON, columns: metaData }
+                            model.setData(data)
 
-                        let oTable = oController.getView().byId("table")
+                            let oTable = oController.getView().byId("table")
 
-                        oTable.bindColumns('resultsModel>/columns', function (sId, oContext) {
-                            var sColumnId = oContext.getObject().property
+                            oTable.bindColumns('resultsModel>/columns', function (sId, oContext) {
+                                var sColumnId = oContext.getObject().property
 
-                            return new Column({
-                                id: sColumnId,
-                                label: sColumnId,
-                                template: new Text({ "text": { path: "resultsModel>" + sColumnId } }),
-                                sortProperty: sColumnId,
-                                filterProperty: sColumnId
+                                return new Column({
+                                    id: sColumnId,
+                                    label: sColumnId,
+                                    template: new Text({ "text": { path: "resultsModel>" + sColumnId } }),
+                                    sortProperty: sColumnId,
+                                    filterProperty: sColumnId
+                                })
                             })
-                        })
 
-                    },
-                    error: this.onErrorCall
+                        },
+                        error: function (error) {
+                            oController.onErrorCall(error, oController)
+                        }
+                    })
                 })
             }
+
+
         })
     }
 )

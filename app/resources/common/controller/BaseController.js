@@ -4,8 +4,8 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/routing/History",
     "sap/ui/core/Fragment",
-	"sap/ui/core/syncStyleClass",
-],  function (Controller, History, Fragment, syncStyleClass) {
+    "sap/ui/core/syncStyleClass",
+], function (Controller, History, Fragment, syncStyleClass) {
     "use strict";
 
     return Controller.extend("sap.hanacli.common.controller.BaseController", {
@@ -24,7 +24,7 @@ sap.ui.define([
          * @param {string} sName the model name
          * @returns {sap.ui.model.Model} the model instance
          */
-        getModel:  function (sName) {
+        getModel: function (sName) {
             return this.getView().getModel(sName);
         },
 
@@ -35,7 +35,7 @@ sap.ui.define([
          * @param {string} sName the model name
          * @returns {sap.ui.mvc.View} the view instance
          */
-        setModel:  function (oModel, sName) {
+        setModel: function (oModel, sName) {
             return this.getView().setModel(oModel, sName);
         },
 
@@ -54,7 +54,7 @@ sap.ui.define([
          * If not, it will replace the current entry of the browser history with the master route.
          * @public
          */
-        onNavBack:  function () {
+        onNavBack: function () {
             var sPreviousHash = History.getInstance().getPreviousHash();
 
             if (sPreviousHash !== undefined) {
@@ -65,19 +65,22 @@ sap.ui.define([
         },
 
         updatePrompts: function () {
-            let model = this.getModel("promptsModel")
-            let promptsData = model.getData()
-            let aUrl = "/"
+            return new Promise(resolve => {
+                let model = this.getModel("promptsModel")
+                let promptsData = model.getData()
+                let aUrl = "/"
 
-            jQuery.ajax({
-                url: aUrl,
-                contentType: 'application/json',
-                method: "PUT",
-                data: JSON.stringify(promptsData),
-                dataType: "json",
-                processData: false,
-                async: false,
-                error: this.onErrorCall
+                jQuery.ajax({
+                    url: aUrl,
+                    contentType: 'application/json',
+                    method: "PUT",
+                    data: JSON.stringify(promptsData),
+                    dataType: "json",
+                    processData: false,
+                    async: false,
+                    error: this.onErrorCall
+                })
+                resolve()
             })
         },
 
@@ -95,7 +98,7 @@ sap.ui.define([
                 }).responseText))
         },
 
-        getHanaStatus: function () {            
+        getHanaStatus: function () {
             let oHanaModel = this.getModel("hanaModel")
             let aHanaUrl = "/hana"
             oHanaModel.setData(JSON.parse(
@@ -108,9 +111,13 @@ sap.ui.define([
         },
 
         refreshConnection: function () {
-            this.updatePrompts()
-            this.getPrompts()
-            this.getHanaStatus()
+            return new Promise(resolve => {
+                this.updatePrompts().then(() => {
+                    this.getPrompts()
+                    this.getHanaStatus()
+                    resolve()
+                })
+            })
         },
 
         openUrl: function (url, newTab) {
@@ -123,7 +130,7 @@ sap.ui.define([
             model.refresh()
         },
 
-        
+
         loadSchemaFilter: function () {
             this.updatePrompts()
             let oController = this
@@ -209,7 +216,7 @@ sap.ui.define([
             }
         },
 
-        setFilterAsContains: function (controlId){
+        setFilterAsContains: function (controlId) {
             this.byId(controlId).setFilterFunction(function (sTerm, oItem) {
                 // A case-insensitive "string contains" style filter
                 if (sTerm === "*") {
@@ -220,29 +227,32 @@ sap.ui.define([
             })
         },
 
-        startBusy: function(){
+        startBusy: function () {
             if (!this._pBusyDialog) {
-				this._pBusyDialog = Fragment.load({
-					name: "sap.hanacli.common.view.BusyDialog",
-					controller: this
-				}).then(function (oBusyDialog) {
-					this.getView().addDependent(oBusyDialog)
-					syncStyleClass("sapUiSizeCompact", this.getView(), oBusyDialog)
-					return oBusyDialog
-				}.bind(this))
-			}
+                this._pBusyDialog = Fragment.load({
+                    name: "sap.hanacli.common.view.BusyDialog",
+                    controller: this
+                }).then(function (oBusyDialog) {
+                    this.getView().addDependent(oBusyDialog)
+                    syncStyleClass("sapUiSizeCompact", this.getView(), oBusyDialog)
+                    return oBusyDialog
+                }.bind(this))
+            }
 
-			this._pBusyDialog.then(function(oBusyDialog) {
-				oBusyDialog.open()
-			}.bind(this))
+            this._pBusyDialog.then(function (oBusyDialog) {
+                oBusyDialog.open()
+            }.bind(this))
         },
-        endBusy: function(oController){
-            oController._pBusyDialog.then(function(oBusyDialog) {
+        endBusy: function (oController) {
+            oController._pBusyDialog.then(function (oBusyDialog) {
                 oBusyDialog.close()
             })
         },
 
-        onErrorCall:  function (oError) {
+        onErrorCall: function (oError, oController) {
+            if (oController) {
+                oController.endBusy(oController)
+            }
             sap.ui.require(["sap/m/MessageBox"], (MessageBox) => {
                 console.log(oError)
                 if (oError.statusCode === 500 || oError.statusCode === 400 || oError.statusCode === "500" || oError.statusCode === "400" || oError.status === 500) {

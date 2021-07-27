@@ -26,7 +26,7 @@ sap.ui.define([
 
                 this.setFilterAsContains("Schema")
                 this.setFilterAsContains("Table")
-                
+
                 // webSocket connection opened 
                 connection.attachOpen(() => {
                     MessageToast.show(connOpenedMsg)
@@ -68,15 +68,17 @@ sap.ui.define([
             },
 
             onBeginConvert: function () {
-                this.refreshConnection()
-                let oModel = this.getOwnerComponent().getModel("logModel")
-                oModel.setData({
-                    log: "",
-                    progress: 0
-                }, true)
-                connection.send(JSON.stringify({
-                    action: "massConvert"
-                }))
+
+                this.refreshConnection().then(() => {
+                    let oModel = this.getOwnerComponent().getModel("logModel")
+                    oModel.setData({
+                        log: "",
+                        progress: 0
+                    }, true)
+                    connection.send(JSON.stringify({
+                        action: "massConvert"
+                    }))
+                })
             },
 
             initOutputTypes: function () {

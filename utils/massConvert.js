@@ -7,7 +7,9 @@ const path = require("path")
 module.exports = {
     convert: async (wss) => {
         try {
+
             let prompts = base.getPrompts()
+
             const db = await base.createDBConnection()
             const dbClass = require("sap-hdbext-promisfied")
             const cds = require('@sap/cds')
@@ -19,6 +21,7 @@ module.exports = {
 
 
             let results = await getTablesInt(schema, prompts.table, db, prompts.limit)
+            console.table(results)
             const dbInspect = require("../utils/dbInspect")
             dbInspect.options.useHanaTypes = prompts.useHanaTypes
             dbInspect.options.keepPath = prompts.keepPath
@@ -28,12 +31,13 @@ module.exports = {
             const replacer =
                 new RegExp(await escapeRegExp(search), 'g')
 
+
             switch (prompts.output) {
                 case 'hdbtable': {
                     let zip = new require("node-zip")()
                     if (prompts.useCatalogPure) {
                         for (let [i, table] of results.entries()) {
-                            broadcast(wss, i / results.length * 100)
+                            broadcast(wss, table.TABLE_NAME, i / results.length * 100)
                             let output = await dbInspect.getDef(db, schema, table.TABLE_NAME)
 
                             output = output.slice(7)
@@ -159,10 +163,10 @@ module.exports = {
                     break
                 }
             }
-        } catch (error) {
+        }  catch (error) {
             base.error(error)
             broadcast(wss, `${error}`)
-        }
+        } 
     }
 }
 
@@ -179,7 +183,8 @@ async function getTablesInt(schema, table, client, limit) {
     if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
         query += `LIMIT ${limit.toString()}`
     }
-    return await client.statementExecPromisified(await client.preparePromisified(query), [schema, table])
+    let results = await client.statementExecPromisified(await client.preparePromisified(query), [schema, table])
+    return results
 }
 
 async function escapeRegExp(string) {
