@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 2.202107.5
+
+### Changed
+- Add node.js engines version check on startup and output a warning if there is a mismatch based upon the engines specification in package.json
+
+## 2.202107.4
+
+### Fixed
+- version command returned error due to change in latest-version. Reverted to old version of the module
+- Rebuilt npm shrinkwrap due to some install errors with Sqlite3 - errors can be ignored as they don't impact hana-cli but still rather not show errors if possible
+  
 ## 2.202107.3
 
 ### Changed
