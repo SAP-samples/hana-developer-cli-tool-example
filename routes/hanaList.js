@@ -57,6 +57,10 @@ module.exports = (app) => {
     app.get(['/hana/functions', '/hana/functions-ui'], async (req, res) => {
         listHandler(res, "../bin/functions", 'getFunctions')
     })
+    
+    app.get(['/hana/hdi', '/hana/hdi-ui'], async (req, res) => {
+        listHandler(res, "../bin/hanaCloudHDIInstances", 'listInstances')
+    })
 }
 
 async function listHandler(res, lib, func) {

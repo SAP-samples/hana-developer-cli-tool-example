@@ -145,6 +145,30 @@
 										}
 									}
 								]
+							},
+							{
+								"id": "cf_group",
+								"title": "CF/XS",
+								"isPreset": true,
+								"isVisible": true,
+								"isGroupLocked": false,
+								"tiles": [{
+										id: "hdi-ui",
+										title: "List HDI service instances",
+										"size": "1x1",
+										"tileType": "sap.ushell.ui.tile.StaticTile",
+										"properties": {
+											info: "List all SAP HANA Cloud HDI service instances in your target Space",
+											title: "List HDI service instances",
+											additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
+											applicationType: "URL",
+											"targetURL": "#hdi-ui",
+											url: "./tables",
+											"icon": "sap-icon://cloud",
+											navigationMode: "embedded"
+										}
+									},
+								]
 							}]
 						}
 					}
@@ -231,7 +255,15 @@
 					applicationType: "URL",
 					url: "./tables",
 					navigationMode: "embedded"
-				},				
+				},
+				"hdi-ui": {
+					title: "List HDI service instances",
+					description: "List all SAP HANA Cloud HDI service instances in your target Space",
+					additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
+					applicationType: "URL",
+					url: "./tables",
+					navigationMode: "embedded"
+				},					
 				"schemas-ui": {
 					title: "List Schemas",
 					description: "Get a list of all schemas",
