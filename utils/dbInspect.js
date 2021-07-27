@@ -395,11 +395,11 @@ async function formatCDS(db, object, fields, constraints, type, parent) {
 	newName && (cdstable += `Entity ![${newName}] {\n`);
 
 	// if modified real table names will be stored in synonyms
-	if(newName !== originalName) {
+	if (newName !== originalName) {
 		synonyms.set(newName, {
 			target: { object: originalName, schema: object[0].SCHEMA_NAME },
 		})
-	}else{
+	} else {
 		synonyms.set(originalName, {
 			target: { object: originalName, schema: object[0].SCHEMA_NAME },
 		})
@@ -412,7 +412,7 @@ async function formatCDS(db, object, fields, constraints, type, parent) {
 			if (object[0].HAS_PRIMARY_KEY === "TRUE") {
 				for (let constraint of constraints) {
 					if (field.COLUMN_NAME === constraint.COLUMN_NAME) {
-						constraint.COLUMN_NAME = constraint.COLUMN_NAME.replace(/\./g, "_");
+						constraint.COLUMN_NAME = constraint.COLUMN_NAME.replace(/\./g, "_")
 						cdstable += "key ";
 						isKey = "TRUE";
 					}

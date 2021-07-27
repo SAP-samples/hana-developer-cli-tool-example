@@ -26,8 +26,7 @@ module.exports = {
 
             const search = `"${schema}".`
             const replacer =
-                new RegExp(escapeRegExp(search), 'g')
-
+                new RegExp(await escapeRegExp(search), 'g')
 
             switch (prompts.output) {
                 case 'hdbtable': {
@@ -36,8 +35,10 @@ module.exports = {
                         for (let [i, table] of results.entries()) {
                             broadcast(wss, i / results.length * 100)
                             let output = await dbInspect.getDef(db, schema, table.TABLE_NAME)
+
                             output = output.slice(7)
                             output = output.replace(replacer, '')
+                            output = await removeCSTypes(db, output)
                             await zip.file(table.TABLE_NAME.toString() + ".hdbtable", output + "\n\n")
                         }
                     } else {
@@ -47,11 +48,12 @@ module.exports = {
                             let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
                             let constraints = await dbInspect.getConstraints(db, object)
                             let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable")
-                            let options = { names : 'quoted', dialect: 'hana', src: 'cds' }
+                            let options = { names: 'quoted', dialect: 'hana', src: 'cds' }
                             let all = cds.compile.to.hdbtable(cds.parse(cdsSource), options)
                             let output
                             for (let [src] of all) {
                                 output = src
+                                output = await addAssociations(db, schema, table.TABLE_NAME, output)
                             }
                             await zip.file(table.TABLE_NAME.toString() + ".hdbtable", output + "\n\n")
                         }
@@ -82,6 +84,7 @@ module.exports = {
                             output = output.slice(7)
                             output = `== version = 1 \n` + output
                             output = output.replace(replacer, '')
+                            output = await removeCSTypes(db, output)
                             await zip.file(table.TABLE_NAME.toString() + ".hdbmigrationtable", output + "\n\n")
                         }
                     } else {
@@ -91,10 +94,13 @@ module.exports = {
                             let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
                             let constraints = await dbInspect.getConstraints(db, object)
                             let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable")
-                            let all = cds.compile.to.hdbtable(cds.parse(cdsSource))
+                            let options = { names: 'quoted', dialect: 'hana', src: 'cds' }
+                            let all = cds.compile.to.hdbtable(cds.parse(cdsSource), options)
                             let output
                             for (let [src] of all) {
                                 output = `== version = 1 \n` + src
+                                output = await addAssociations(db, schema, table.TABLE_NAME, output)
+
                             }
                             await zip.file(table.TABLE_NAME.toString() + ".hdbmigrationtable", output + "\n\n")
                         }
@@ -164,7 +170,7 @@ async function getTablesInt(schema, table, client, limit) {
     base.debug(`getTablesInt ${schema} ${table} ${limit}`)
     const dbClass = require("sap-hdbext-promisfied")
     table = dbClass.objectName(table)
-    var query =
+    let query =
         `SELECT SCHEMA_NAME, TABLE_NAME, TO_NVARCHAR(TABLE_OID) AS TABLE_OID, COMMENTS  from TABLES 
             WHERE SCHEMA_NAME LIKE ? 
             AND TABLE_NAME LIKE ? 
@@ -187,5 +193,51 @@ function broadcast(wss, msg, progress) {
         } else {
             wss.broadcast(msg)
         }
+    }
+}
+
+async function removeCSTypes(client, output) {
+    try {
+        console.log(output)
+        console.log("\n")
+        base.debug(`removeCSTypes}`)
+        let query =
+            `SELECT DISTINCT CS_DATA_TYPE_NAME from TABLE_COLUMNS ORDER BY LENGTH(CS_DATA_TYPE_NAME) DESC`
+        let results = await client.statementExecPromisified(await client.preparePromisified(query))
+        for (let type of results) {
+            const search = `CS_${type.CS_DATA_TYPE_NAME}`
+            const replacer =
+                new RegExp(await escapeRegExp(search), 'g')
+            output = output.replace(replacer, '')
+        }
+        return output
+    } catch (error) {
+        return output
+        //Ignore errors as CS_TYPES are not present in HANA Cloud systems
+    }
+}
+
+async function addAssociations(client, schema, table, output) {
+    try {
+        base.debug(`addAssociations}`)
+        let query =
+            `SELECT * FROM ASSOCIATIONS WHERE SCHEMA_NAME = ? and OBJECT_NAME = ?`
+        let results = await client.statementExecPromisified(await client.preparePromisified(query), [schema, table])
+        for (let [i, association] of results.entries()) {
+            if(i == 0){
+                output += `\n`
+                output += `WITH ASSOCIATIONS( `
+            }
+            output += ` JOIN "${association.TARGET_OBJECT_NAME}" AS "${association.ASSOCIATION_NAME}" ON ${association.JOIN_CONDITION}`
+            if (i < results.length - 1) {
+                output += ` , `
+            } else {
+                output += ` ) `
+            }
+        }
+        return output
+    } catch (error) {
+        base.error(error)
+        return output
     }
 }
