@@ -6,7 +6,7 @@ sap.ui.define([
 ],
     function (AppController) {
 
-        return AppController.extend("sap.hanacli.tables.controller.dataTypes-ui", {
+        return AppController.extend("sap.hanacli.tables.controller.basic-ui", {
 
             onInit: function () {
 

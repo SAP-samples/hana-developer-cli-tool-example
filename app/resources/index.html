@@ -58,7 +58,7 @@
 											"icon": "sap-icon://table-view",
 											navigationMode: "embedded"
 										}
-									},{
+									}, {
 										id: "schemas-ui",
 										title: "List Schemas",
 										"size": "1x1",
@@ -90,6 +90,45 @@
 											navigationMode: "embedded"
 										}
 									},
+								]
+							},
+							{
+								"id": "admin_group",
+								"title": "Admin",
+								"isPreset": true,
+								"isVisible": true,
+								"isGroupLocked": false,
+								"tiles": [{
+										id: "features-ui",
+										title: "List Features",
+										"size": "1x1",
+										"tileType": "sap.ushell.ui.tile.StaticTile",
+										"properties": {
+											info: "Get a list of all HANA Features",
+											title: "List Features",
+											additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
+											applicationType: "URL",
+											"targetURL": "#features-ui",
+											url: "./tables",
+											"icon": "sap-icon://key-user-settings",
+											navigationMode: "embedded"
+										}
+									},{
+										id: "featureUsage-ui",
+										title: "List Feature Usage",
+										"size": "1x1",
+										"tileType": "sap.ushell.ui.tile.StaticTile",
+										"properties": {
+											info: "Get a list of all HANA Feature Usage",
+											title: "List Feature Usage",
+											additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
+											applicationType: "URL",
+											"targetURL": "#featureUsage-ui",
+											url: "./tables",
+											"icon": "sap-icon://key-user-settings",
+											navigationMode: "embedded"
+										}
+									}
 								]
 							}]
 						}
@@ -149,6 +188,22 @@
 				"dataTypes-ui": {
 					title: "List Data Types",
 					description: "Get a list of all HANA Data Types",
+					additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
+					applicationType: "URL",
+					url: "./tables",
+					navigationMode: "embedded"
+				},
+				"features-ui": {
+					title: "List Features",
+					description: "Get a list of all HANA Features",
+					additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
+					applicationType: "URL",
+					url: "./tables",
+					navigationMode: "embedded"
+				},
+				"featureUsage-ui": {
+					title: "List Feature Usage",
+					description: "Get a list of all HANA Feature Usage",
 					additionalInformation: "SAPUI5.Component=sap.hanacli.tables",
 					applicationType: "URL",
 					url: "./tables",

@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - Add node.js engines version check on startup and output a warning if there is a mismatch based upon the engines specification in package.json
 - massConvert to HDBTABLE or HDBMIGRATIONTABLE with the useCatalogPure option now removes CS_* Types from the output for compatibility with target SAP HANA Cloud systems
 - massConvert to HDBTABLE or HDBMIGRATIONTABLE without the useCatalogPure option also includes associations now. However when coming from HDBCDS based sources the column names contain dots which are incompatible with CAP CDS. The associations will still have the old column names while the rest of the table defition must replace the dot with underscore or recieve CDS Compiler errors.  I will leave this functionality in place, although imperfect. If you have associations in your source system, strongly consider using the useCatalogPure option instead. 
+- Added new commands featuresUI, featureUsageUI
 
 ## 2.202107.4
 
