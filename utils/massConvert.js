@@ -198,9 +198,7 @@ function broadcast(wss, msg, progress) {
 
 async function removeCSTypes(client, output) {
     try {
-        console.log(output)
-        console.log("\n")
-        base.debug(`removeCSTypes}`)
+        base.debug(`removeCSTypes}`)        
         let query =
             `SELECT DISTINCT CS_DATA_TYPE_NAME from TABLE_COLUMNS ORDER BY LENGTH(CS_DATA_TYPE_NAME) DESC`
         let results = await client.statementExecPromisified(await client.preparePromisified(query))
