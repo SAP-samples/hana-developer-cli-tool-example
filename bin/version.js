@@ -1,4 +1,5 @@
 const base = require("../utils/base")
+
 exports.command = 'version'
 exports.aliases = 'ver'
 exports.describe = base.bundle.getText("version")
@@ -17,6 +18,7 @@ exports.handler = (argv) => {
   console.log(`Node.js: ${colors.green(process.version)}`)
   console.log(`Change Log: ${colors.blue('https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/CHANGELOG.md')}`)
   const latestVersion = require('latest-version')
+
   let selfVersion = await latestVersion('hana-cli')
   console.log(`Latest hana-cli version available on npmjs.com: ${colors.green(selfVersion)}`)
   if (info['hana-cli'] < selfVersion){
