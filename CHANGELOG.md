@@ -7,9 +7,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## 2.202107.6
 
 ### Changed
-- Add a devcontainer configuration to allow contributors or testers of this project to start in a remote container or CodeSpaces with all necessary tools (like cf, @sap/cds-dk, etc) and VSCode extensions preinstalled. [https://code.visualstudio.com/docs/remote/containers](https://code.visualstudio.com/docs/remote/containers)
+- Add a devcontainer configuration to allow contributors or testers of this project to start in a remote container or CodeSpaces with all necessary tools (like cf, @sap/cds-dk, etc) and VSCode extensions preinstalled. [https://code.visualstudio.com/docs/remote/containers](https://code.visualstudio.com/docs/remote/containers) and [https://docs.github.com/en/codespaces/customizing-your-codespace/configuring-codespaces-for-your-project](https://docs.github.com/en/codespaces/customizing-your-codespace/configuring-codespaces-for-your-project)
 - Improved error handling in the Browser Based UI especially during start up scenarios where a default-env.json or equivelant is missing.
-     
+   
 ## 2.202107.5
 
 ### Changed
