@@ -101,12 +101,16 @@ sap.ui.define([
         getHanaStatus: function () {
             let oHanaModel = this.getModel("hanaModel")
             let aHanaUrl = "/hana"
+            let oController = this
             oHanaModel.setData(JSON.parse(
                 jQuery.ajax({
                     url: aHanaUrl,
                     method: "GET",
                     dataType: "json",
-                    async: false
+                    async: false,
+                    error: function (error) {
+                        oController.onErrorCall(error, oController)
+                    }
                 }).responseText))
         },
 
@@ -142,7 +146,9 @@ sap.ui.define([
                 success: function (myJSON) {
                     oController.onLoadSchemaFilter(myJSON, oController)
                 },
-                error: this.onErrorCall
+                error: function (error) {
+                    oController.onErrorCall(error, oController)
+                }
             })
         },
 
@@ -173,7 +179,9 @@ sap.ui.define([
                 success: function (myJSON) {
                     oController.onLoadTableFilter(myJSON, oController)
                 },
-                error: this.onErrorCall
+                error: function (error) {
+                    oController.onErrorCall(error, oController)
+                }
             })
 
         },
@@ -200,7 +208,9 @@ sap.ui.define([
                 success: function (myJSON) {
                     oController.onLoadFunctionFilter(myJSON, oController)
                 },
-                error: this.onErrorCall
+                error: function (error) {
+                    oController.onErrorCall(error, oController)
+                }
             })
 
         },
@@ -244,9 +254,11 @@ sap.ui.define([
             }.bind(this))
         },
         endBusy: function (oController) {
-            oController._pBusyDialog.then(function (oBusyDialog) {
-                oBusyDialog.close()
-            })
+            if (oController._pBusyDialog) {
+                oController._pBusyDialog.then(function (oBusyDialog) {
+                    oBusyDialog.close()
+                })
+            }
         },
 
         onErrorCall: function (oError, oController) {

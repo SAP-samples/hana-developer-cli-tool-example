@@ -24,8 +24,8 @@ module.exports = (app) => {
             }
             res.type("application/json").status(200).send(hana)
         } catch (error) {
-            base.error(error)
             res.status(500).send(error.toString())
+            return console.error(`${error}`)
         }
 
     })
