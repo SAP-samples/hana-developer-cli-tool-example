@@ -7,8 +7,8 @@
         <Title id="Title5" text="{i18nReuse>grpDebug}"/>
     </Toolbar>
     <Label text="{i18nReuse>gui.quiet}" tooltip="{i18nReuse>disableVerbose}"/>
-    <CheckBox selected="{/disableVerbose}" tooltip="{i18nReuse>disableVerbose}"/>
+    <CheckBox id="disableVerbose" selected="{/disableVerbose}" tooltip="{i18nReuse>disableVerbose}"/>
     <Label text="{i18nReuse>gui.debug}" tooltip="{i18nReuse>debug}"/>
-    <CheckBox selected="{/debug}" tooltip="{i18nReuse>debug}"/>
+    <CheckBox id="debug" selected="{/debug}" tooltip="{i18nReuse>debug}"/>
 
 </core:FragmentDefinition>      

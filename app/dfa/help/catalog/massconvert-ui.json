@@ -1,0 +1,19 @@
+{
+    "id": "massconvert-ui",
+    "appUrl": "massconvert-ui",
+    "product": "HANA_CLI",
+    "version": "Cloud",
+    "locale": "en-US",
+    "language": "en-US",
+    "state": "PRODUCTION",
+    "system": "",
+    "environment": "",
+    "loio": "",
+    "contextType": "HELP",
+    "_standalone": true,
+    "title": "Convert a group of tables to CDS or HDBTable format",
+    "shortDescription": "Convert a group of tables to CDS or HDBTable format",
+    "alias": "",
+    "editable": "true",
+    "lastModifiedDate": "2021-06-10 07:22:47 GMT+0000"
+}

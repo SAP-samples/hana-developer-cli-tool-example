@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - Add a devcontainer configuration to allow contributors or testers of this project to start in a remote container or CodeSpaces with all necessary tools (like cf, @sap/cds-dk, etc) and VSCode extensions preinstalled. [https://code.visualstudio.com/docs/remote/containers](https://code.visualstudio.com/docs/remote/containers) and [https://docs.github.com/en/codespaces/customizing-your-codespace/configuring-codespaces-for-your-project](https://docs.github.com/en/codespaces/customizing-your-codespace/configuring-codespaces-for-your-project)
 - Improved error handling in the Browser Based UI especially during start up scenarios where a default-env.json or equivelant is missing.
 - Add Web Assistant embedded help and changelog
+- Add full in-app assistance for massConvert command
 
 ## [2.202107.5] - 2021-07-27
 

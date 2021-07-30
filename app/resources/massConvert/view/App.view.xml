@@ -10,7 +10,7 @@
 				<Toolbar id="TB1">
 					<Title id="Title1" text="{i18n>appTitle} - {i18n>appDescription}"/>
 					<ToolbarSpacer />
-					<Button icon="sap-icon://split" tooltip="{i18n>convert}" press="onBeginConvert" />
+					<Button id="btnBeginConvert" icon="sap-icon://split" tooltip="{i18n>convert}" press="onBeginConvert" />
 				</Toolbar>
 			</f:toolbar>
 			<f:content>
@@ -31,7 +31,7 @@
 				</Input>
 
 				<Label text="{i18n>outputType}" required="true"/>
-				<ComboBox selectedKey="{/output}" items="{outputModel>/outputTypes}">
+				<ComboBox id="outputFormat" selectedKey="{/output}" items="{outputModel>/outputTypes}">
 					<core:Item key="{outputModel>key}" text="{outputModel>text}" />
 				</ComboBox>
 
@@ -41,23 +41,23 @@
 					<Title id="Title4" text="{i18n>convOptions}"/>
 				</Toolbar>
 				<Label text="{i18n>hanaTypes}" tooltip="{i18nReuse>useHanaTypes}"/>
-				<CheckBox selected="{/useHanaTypes}" tooltip="{i18nReuse>useHanaTypes}"/>
+				<CheckBox id="chkHanaTypes" selected="{/useHanaTypes}" tooltip="{i18nReuse>useHanaTypes}"/>
 				<Label text="{i18n>catalog}" tooltip="{i18nReuse>useCatalogPure}"/>
-				<CheckBox selected="{/useCatalogPure}" tooltip="{i18nReuse>useCatalogPure}"/>
+				<CheckBox id="chckCatalogPure" selected="{/useCatalogPure}" tooltip="{i18nReuse>useCatalogPure}"/>
 				<Label text="{i18nReuse>limit}" required="true"/>
-				<Input value="{/limit}" />
+				<Input id="inputLimit" value="{/limit}" />
 				<Label text="{i18n>folder}" required="true"/>
-				<Input value="{/folder}" />
+				<Input id="inputFolder" value="{/folder}" />
 				<Label text="{i18nReuse>filename}" required="false"/>
-				<Input value="{/filename}" />
+				<Input id= "inputFilename" value="{/filename}" />
 				<Label text="{i18nReuse>namespace}" required="false"/>
-				<Input value="{/namespace}" />
+				<Input id="inputNamespace" value="{/namespace}" />
 				<Label text="{i18nReuse>synonyms}" required="false"/>
-				<Input value="{/synonyms}" />
+				<Input id="inputSynonyms" value="{/synonyms}" />
 				<Label text="{i18nReuse>keepPath}"/>
-				<CheckBox selected="{/keepPath}" />
+				<CheckBox id="chkKeepPath" selected="{/keepPath}" />
 				<Label text="{i18nReuse>noColons}"/>
-				<CheckBox selected="{/noColons}" />
+				<CheckBox id="chkNoColons" selected="{/noColons}" />
 
 				<core:Fragment fragmentName="sap.hanacli.common.view.Debug" type="XML"/>
 				

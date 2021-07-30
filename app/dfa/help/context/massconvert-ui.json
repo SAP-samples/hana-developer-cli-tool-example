@@ -1,0 +1,307 @@
+{
+    "id": "massconvert-ui",
+    "appUrl": "massconvert-ui",
+    "product": "HANA_CLI",
+    "version": "Cloud",
+    "locale": "en-US",
+    "state": "PRODUCTION",
+    "system": "",
+    "environment": "",
+    "loio": "",
+    "contextType": "HELP",
+    "title": "Convert a group of tables to CDS or HDBTable format",
+    "shortDescription": "",
+    "alias": "",
+    "editable": "true",
+    "lastModifiedDate": "2021-06-10 07:22:47 GMT+0000",
+    "tiles": [
+        {
+            "id": "1",
+            "loio": "",
+            "title": "About This Screen",
+            "summaryText": "General information related to this screen.",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 08:23:46 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": null,
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"unknown\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"CIRCLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 1,
+            "pageUrl": null
+        },
+        {
+            "id": "beginConvert",
+            "loio": "",
+            "title": "Begin Conversion",
+            "summaryText": "Start the Conversion with the Selected Values",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": null,
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 2,
+            "pageUrl": null
+        },
+        {
+            "id": "schema",
+            "loio": "",
+            "title": "Schema",
+            "summaryText": "Target Database Schema",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLVNjaGVtYSclNUQlMjIlMkMlMjJydWxlJTIyJTNBJTIySWRTZWxlY3RvclVJNSUyMiUyQyUyMm9mZnNldCUyMiUzQSU3QiUyMnglMjIlM0EwLjUlMkMlMjJ5JTIyJTNBMC4yODEyJTdEJTdE",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 3,
+            "pageUrl": null
+        },
+        {
+            "id": "table",
+            "loio": "",
+            "title": "Table",
+            "summaryText": "Target Database Table",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLVRhYmxlJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 4,
+            "pageUrl": null
+        },
+        {
+            "id": "outputFormat",
+            "loio": "",
+            "title": "outputFormat",
+            "summaryText": "Output Format for Conversion",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLW91dHB1dEZvcm1hdCclNUQlMjIlMkMlMjJydWxlJTIyJTNBJTIySWRTZWxlY3RvclVJNSUyMiUyQyUyMm9mZnNldCUyMiUzQSU3QiUyMnglMjIlM0EwLjUlMkMlMjJ5JTIyJTNBMC4yODEyJTdEJTdE",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 5,
+            "pageUrl": null
+        },
+        {
+            "id": "logInfo",
+            "loio": "",
+            "title": "Log Info",
+            "summaryText": "Command Output Is Streamed Here",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLWxvZ0luZm8nJTVEJTIyJTJDJTIycnVsZSUyMiUzQSUyMklkU2VsZWN0b3JVSTUlMjIlMkMlMjJvZmZzZXQlMjIlM0ElN0IlMjJ4JTIyJTNBMC41JTJDJTIyeSUyMiUzQTAuMjgxMiU3RCU3RA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 6,
+            "pageUrl": null
+        },
+        {
+            "id": "chkHanaTypes",
+            "loio": "",
+            "title": "HANA Types",
+            "summaryText": "Use HANA Native Data Types",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLWNoa0hhbmFUeXBlcyclNUQlMjIlMkMlMjJydWxlJTIyJTNBJTIySWRTZWxlY3RvclVJNSUyMiUyQyUyMm9mZnNldCUyMiUzQSU3QiUyMnglMjIlM0EwLjUlMkMlMjJ5JTIyJTNBMC4yODEyJTdEJTdE",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 7,
+            "pageUrl": null
+        },
+        {
+            "id": "chckCatalogPure",
+            "loio": "",
+            "title": "Catalog Pure",
+            "summaryText": "Conversion Using Catalog SQL APIs",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLWNoY2tDYXRhbG9nUHVyZSclNUQlMjIlMkMlMjJydWxlJTIyJTNBJTIySWRTZWxlY3RvclVJNSUyMiUyQyUyMm9mZnNldCUyMiUzQSU3QiUyMnglMjIlM0EwLjUlMkMlMjJ5JTIyJTNBMC4yODEyJTdEJTdE",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 8,
+            "pageUrl": null
+        },
+        {
+            "id": "inputLimit",
+            "loio": "",
+            "title": "Input Limit",
+            "summaryText": "Limit Number of Tables to Convert",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLWlucHV0TGltaXQnJTVEJTIyJTJDJTIycnVsZSUyMiUzQSUyMklkU2VsZWN0b3JVSTUlMjIlMkMlMjJvZmZzZXQlMjIlM0ElN0IlMjJ4JTIyJTNBMC41JTJDJTIyeSUyMiUzQTAuMjgxMiU3RCU3RA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 9,
+            "pageUrl": null
+        },
+        {
+            "id": "inputFolder",
+            "loio": "",
+            "title": "Target Folder",
+            "summaryText": "Target Folder for Conversion Output",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLWlucHV0Rm9sZGVyJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 10,
+            "pageUrl": null
+        },   
+        {
+            "id": "inputNamespace",
+            "loio": "",
+            "title": "Namespace",
+            "summaryText": "Add Custom Namespace to Output",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLWlucHV0TmFtZXNwYWNlJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 11,
+            "pageUrl": null
+        },     
+        {
+            "id": "inputSynonyms",
+            "loio": "",
+            "title": "Synonyms",
+            "summaryText": "Filename to Store Synonyms",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLWlucHV0U3lub255bXMnJTVEJTIyJTJDJTIycnVsZSUyMiUzQSUyMklkU2VsZWN0b3JVSTUlMjIlMkMlMjJvZmZzZXQlMjIlM0ElN0IlMjJ4JTIyJTNBMC41JTJDJTIyeSUyMiUzQTAuMjgxMiU3RCU3RA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 12,
+            "pageUrl": null
+        },   
+        {
+            "id": "chkKeepPath",
+            "loio": "",
+            "title": "Keep Path",
+            "summaryText": "Keep Source Table Path",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLWNoa0tlZXBQYXRoJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 13,
+            "pageUrl": null
+        },
+        {
+            "id": "chkNoColons",
+            "loio": "",
+            "title": "No ::",
+            "summaryText": "Replace :: in Table path with .",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLWNoa05vQ29sb25zJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 14,
+            "pageUrl": null
+        },                         
+        {
+            "id": "chkAdmin",
+            "loio": "",
+            "title": "Admin Connection",
+            "summaryText": "Connect with Admin User (default-env-admin.json)",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLWNoa0FkbWluJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 15,
+            "pageUrl": null
+        },
+        {
+            "id": "inputConnFile",
+            "loio": "",
+            "title": "Connection Filename",
+            "summaryText": "Manually Supply an ENV file",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLWlucHV0Q29ubkZpbGUnJTVEJTIyJTJDJTIycnVsZSUyMiUzQSUyMklkU2VsZWN0b3JVSTUlMjIlMkMlMjJvZmZzZXQlMjIlM0ElN0IlMjJ4JTIyJTNBMC41JTJDJTIyeSUyMiUzQTAuMjgxMiU3RCU3RA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 16,
+            "pageUrl": null
+        },
+        {
+            "id": "disableVerbose",
+            "loio": "",
+            "title": "Disable Verbose",
+            "summaryText": "Limit Console Output Detail",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLWRpc2FibGVWZXJib3NlJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 17,
+            "pageUrl": null
+        },
+        {
+            "id": "debug",
+            "loio": "",
+            "title": "Debug",
+            "summaryText": "Lots of extra output",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1tYXNzY29udmVydC11aS1jb21wb25lbnQtLS1BcHAtLWRlYnVnJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 18,
+            "pageUrl": null
+        }
+    ]
+}

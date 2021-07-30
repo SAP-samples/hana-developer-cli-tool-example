@@ -1,5 +1,3 @@
-const base = require("../utils/base")
-
 module.exports = (app) => {
     app.get('/sap/dfa/help/webassistant/catalogue', async (req, res) => {
         try {
@@ -12,14 +10,18 @@ module.exports = (app) => {
             output.status = "OK"
             output.data = []
             input.appUrl.forEach(app => {
-                let jsonData = require(`../app/dfa/help/catalog/${app}`)
-                output.data.push(jsonData)
-
+                try {
+                    let jsonData = require(`../app/dfa/help/catalog/${app}`)
+                    output.data.push(jsonData)
+                } catch (error) {
+                    return
+                }
             })
             res.type("application/json").status(200).send(output)
         } catch (error) {
+            res.status(200).send()
             //res.status(500).send(error.toString())
-            return base.error(error)
+            //return base.error(error)
         }
     })
 
@@ -49,8 +51,8 @@ module.exports = (app) => {
                     let dateString = date.toLocaleDateString()
                     let ChangedInfo = ""
                     item.Changed.forEach(changeItem => {
-                           let html = converter.makeHtml(changeItem)
-                           ChangedInfo += html + "<br/>"
+                        let html = converter.makeHtml(changeItem)
+                        ChangedInfo += html + "<br/>"
                     })
 
                     output.data.tiles.push({
@@ -73,14 +75,17 @@ module.exports = (app) => {
             }
             else {
                 output.data.tiles.forEach(tile => {
-                    let content = fs.readFileSync(path.join(__dirname, `../app/dfa/help/context/${req.query.id}/${tile.id}.html`), "utf8")
-                    tile.content = content
+                    try {
+                        let content = fs.readFileSync(path.join(__dirname, `../app/dfa/help/context/${req.query.id}/${tile.id}.html`), "utf8")
+                        tile.content = content
+                    } catch (error) {
+                        return
+                    }
                 })
             }
             res.type("application/json").status(200).send(output)
 
         } catch (error) {
-            //base.error(error)
             res.status(500).send(error.toString())
         }
     })

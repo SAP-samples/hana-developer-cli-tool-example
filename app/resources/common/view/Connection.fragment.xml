@@ -6,12 +6,12 @@
 
     <Toolbar ariaLabelledBy="Title3">
         <Title id="Title3" text="{i18nReuse>gui.conn}"/>
-        <Button icon="sap-icon://refresh" tooltip="{i18nReuse>gui.refreshConn}" press="refreshConnection" />
+        <Button id="connRefresh" icon="sap-icon://refresh" tooltip="{i18nReuse>gui.refreshConn}" press="refreshConnection" />
         <ToolbarSpacer />
     </Toolbar>
     <Label text="{i18nReuse>gui.admin}" tooltip="{i18nReuse>admin}"/>
-    <CheckBox selected="{/admin}" tooltip="{i18nReuse>admin}" select="refreshConnection"/>
+    <CheckBox id="chkAdmin" selected="{/admin}" tooltip="{i18nReuse>admin}" select="refreshConnection"/>
     <Label text="{i18nReuse>gui.connFile}" tooltip="{i18nReuse>connFile}" />
-    <Input value="{/conn}" tooltip="{i18nReuse>connFile}"/>
+    <Input id="inputConnFile" value="{/conn}" tooltip="{i18nReuse>connFile}"/>
 
 </core:FragmentDefinition>    

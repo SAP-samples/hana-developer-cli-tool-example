@@ -1,0 +1,14 @@
+<body>
+    <div class="body conbody">
+        <p class="shortdesc">Conversion Using Catalog SQL APIs</p>
+        <p class="p">
+            Normally conversion is done by reading the HANA Catalog and building a CDS entity defintion dynamically. We
+            then use the cds.compile.to API to convert to the target output format. But this has restrictions of only
+            supporting what CDS allows.
+        </p>
+        <p class="p">
+            With this option selected, we instead use the SYS.GET_OBJECT_DEFINITION stored procedure. We then strip out
+            the Schema references and CS_* Types to make the output compatible with HDI and HANA Cloud
+        </p>
+    </div>
+</body>
