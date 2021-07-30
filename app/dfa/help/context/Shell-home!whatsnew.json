@@ -1,0 +1,19 @@
+{
+    "id": "Shell-home!whatsnew",
+    "appUrl": "Shell-home!whatsnew",
+    "product": "HANA_CLI",
+    "version": "Cloud",
+    "locale": "en-US",
+    "state": "PRODUCTION",
+    "system": "",
+    "environment": "",
+    "loio": "",
+    "contextType": "HELP",
+    "title": "HELP_WN_Shell-home",
+    "shortDescription": "",
+    "alias": "",
+    "editable": "true",
+    "lastModifiedDate": "2021-06-10 07:22:47 GMT+0000",
+    "tiles": [        
+    ]
+}

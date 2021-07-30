@@ -1,0 +1,51 @@
+{
+    "id": "Shell-home",
+    "appUrl": "Shell-home",
+    "product": "HANA_CLI",
+    "version": "Cloud",
+    "locale": "en-US",
+    "state": "PRODUCTION",
+    "system": "",
+    "environment": "",
+    "loio": "",
+    "contextType": "HELP",
+    "title": "Static Help: hana-cli Landing Page",
+    "shortDescription": "",
+    "alias": "",
+    "editable": "true",
+    "lastModifiedDate": "2021-06-10 07:22:47 GMT+0000",
+    "tiles": [
+        {
+            "id": "1",
+            "loio": "",
+            "title": "About This Screen",
+            "summaryText": "General information related to this screen.",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 08:23:46 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": null,
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"unknown\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"CIRCLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 1,
+            "pageUrl": null
+        },
+        {
+            "id": "2",
+            "loio": "",
+            "title": "Documentation",
+            "summaryText": "Find relevant documentation.",
+            "content": "",
+            "lastModifiedDate": "2021-06-08 13:19:33 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": null,
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"unknown\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"CIRCLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 7,
+            "pageUrl": null
+        }
+    ]
+}

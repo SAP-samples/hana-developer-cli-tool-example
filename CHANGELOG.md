@@ -4,126 +4,145 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## 2.202107.6
+## [2.202107.6] - 2021-07-30
 
-### Changed
+**Changed**
+
 - Add a devcontainer configuration to allow contributors or testers of this project to start in a remote container or CodeSpaces with all necessary tools (like cf, @sap/cds-dk, etc) and VSCode extensions preinstalled. [https://code.visualstudio.com/docs/remote/containers](https://code.visualstudio.com/docs/remote/containers) and [https://docs.github.com/en/codespaces/customizing-your-codespace/configuring-codespaces-for-your-project](https://docs.github.com/en/codespaces/customizing-your-codespace/configuring-codespaces-for-your-project)
 - Improved error handling in the Browser Based UI especially during start up scenarios where a default-env.json or equivelant is missing.
-   
-## 2.202107.5
+- Add Web Assistant embedded help and changelog
 
-### Changed
+## [2.202107.5] - 2021-07-27
+
+**Changed**
+
 - Add node.js engines version check on startup and output a warning if there is a mismatch based upon the engines specification in package.json
 - Add busy indicator in browser based UI
 - massConvert to HDBTABLE or HDBMIGRATIONTABLE with the useCatalogPure option now removes CS_* Types from the output for compatibility with target SAP HANA Cloud systems
 - massConvert to HDBTABLE or HDBMIGRATIONTABLE without the useCatalogPure option also includes associations now. However when coming from HDBCDS based sources the column names contain dots which are incompatible with CAP CDS. The associations will still have the old column names while the rest of the table defition must replace the dot with underscore or recieve CDS Compiler errors.  I will leave this functionality in place, although imperfect. If you have associations in your source system, strongly consider using the useCatalogPure option instead. 
 - Added new commands featuresUI, featureUsageUI, functionsUI, hdiUI, sbssUI, schemaInstancesUI, schemaInstancesUI, securestoreUI, and upsUI
 
-## 2.202107.4
+## [2.202107.4] - 2021-07-27
 
-### Fixed
+**Changed**
+
 - version command returned error due to change in latest-version. Reverted to old version of the module
 - Rebuilt npm shrinkwrap due to some install errors with Sqlite3 - errors can be ignored as they don't impact hana-cli but still rather not show errors if possible
-  
-## 2.202107.3
 
-### Changed
+## [2.202107.3] - 2021-07-26
+
+**Changed**
+
 - Allow quoted names in massConvert when the target is HDBTABLE
 - UI theme (light or dark) will now adjust automatically to user's OS setting
 - New commands: containersUI, dataTypesUI, schemasUI, and tablesUI
 - Refactored list operations (like schemas, tables, etc) to allow them to be reused in the new Browser UI
-  
-## 2.202107.2
 
-### Changed
+## [2.202107.2] - 2021-07-21
+
+**Changed**
+
 - Upgrade to @sap/cds 5.3.1, @sap/hana-client 2.9.23, @sap/hdbext 7.3.0, and sap-hdbext-promisifed 2.202107.1
-- Major addition of new browser based UIs for certain complex commands.  First focus is on the massConvert command. No new external depencencies.  We launch Express web server from the CLI and then open the web browser.  You can complete the command with visual options, value help and extended documentation. Command is still executed in the CLI and the output is piped to the web broswer using web sockets. 
+- Major addition of new browser based UIs for certain complex commands.  First focus is on the massConvert command. No new external depencencies.  We launch Express web server from the CLI and then open the web browser.  You can complete the command with visual options, value help and extended documentation. Command is still executed in the CLI and the output is piped to the web broswer using web sockets.
 - New commands: massConvertUI, systemInfoUI, changesUI, readMeUI, and UI (last one opens a LaunchPad with tiles for all the other commands)
 
-## 2.202107.1
+## [2.202107.1] - 2021-07-13
 
-### Changed
+**Changed**
+
 - Upgrade to [@sap/cds 5.3.0](https://cap.cloud.sap/docs/releases/july21) and [@sap/xsenv 3.1.1](https://www.npmjs.com/package/@sap/xsenv/v/3.1.1)
 - Upgrade SAPUI5 version to [1.91.1](https://sapui5.hana.ondemand.com/1.91.1/)
 - Change cds command READ exit to req.reply instead of returning the query itself
-  
-## 2.202106.3
 
-### Fixed
+## [2.202106.3] - 2021-06-30
+
+**Changed**
+
 - massConvert - change `require('fs/promises')` to `require('fs').promises` for compatibility with Node 12.x - see [Update fs.md #35740](https://github.com/nodejs/node/issues/35740)
-  
-## 2.202106.2
-### Added
+
+## [2.202106.2] - 2021-06-25
+
+**Changed**
+
 - New commands schemaInstances, securestore, and sbss to list cf/xs services instances of these plan types
 
-## 2.202106.1
+## [2.202106.1] - 2021-06-18
+
+**Changed**
+
 - Merge [mass rename](https://gist.github.com/ThePlenkov/2fc31e05a43a4ec395c9a4d8f6c8276a#gistcomment-3759807) from [@ThePlenkov](https://github.com/ThePlenkov) 
 - Fix [Issue with connecting to XS Advance Database #53](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/53)
 - Remove warning during HDI deploy from db module created with createModule due to reference to afllangprocedure in the generated .hdiconfig
-- 
-  
-## 2.202105.9
 
-### Added
+## [2.202105.9] - 2021-05-27
+
+**Changed**
+
 - New functionality for massConvert command to also generate hdbsynonyms. [Generate hdbsynonyms along with CDS for massConvert operation #48](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/48) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
-- Add "no colons" mode for massConvert. This is an option to remove :: from namespaces which would complicate usage from CAP CDS. :: will be replaced by dot. [no colons mode for massConvert #50](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/50) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
+- Add no colons mode for massConvert. This is an option to remove :: from namespaces which would complicate usage from CAP CDS. :: will be replaced by dot. [no colons mode for massConvert #50](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/50) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
 - [Exclude user defined types from generated CDS](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/51) in massConvert - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
 - cds command wasn't using the new connection information lookup logic
-  
-## 2.202105.8
 
-### Added
+## [2.202105.8] - 2021-05-25
+
+**Changed**
+
 - Added hana client disconnect at error and normal end conditions to avoid segmentation fault in WSL and slightly older versions of Node.js - thanks to [sbarzaghialteaup](https://github.com/sbarzaghialteaup)
 - First round of TypeScript types inclusion - more to come. Will mostly help project maintainers
-  
-## 2.202105.6
 
-### Changed
- - Missing npm shrinkwrap in last release
- - Improved details in thrown errors and added debug info from util/cf and util/xs
- - hana-cli version now reports latest avaialble version on npm and propmpts users to upgrade if they are outdated
+## [2.202105.6] - 2021-05-21
 
-## 2.202105.5
+**Changed**
 
-### Added
-- [Issue #42 Optional namespace for generated cds](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/42) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
+- Missing npm shrinkwrap in last release
+- Improved details in thrown errors and added debug info from util/cf and util/xs
+- hana-cli version now reports latest avaialble version on npm and propmpts users to upgrade if they are outdated
+
+## [2.202105.5] - 2021-05-20
+
+**Changed**
+
 - @cds dependency updated to May 2021 release 5.1.4
 - Update cds preview to UI5 1.89.0
 - cds preview new parameter to allow use to choose HTTP port (and validate that input)
+- [Issue #42 Optional namespace for generated cds](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/42) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
 - serviceKey command no longer requires to pre-create the service key. If the key you specify doesn't exist it will call cf/xs create-service-key for you automatically [Issue #41](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/41)
 - Increase the page size for the xs/cf services commands (ups and hdi) [Issue #40](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/40)
 
-## 2.202105.4
+## [2.202105.4] - 2021-05-11
 
-### Added
+**Changed**
+
 - [Issue #39 - Add support for HANA XSA in the UPS and HDI commands](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/39)
 - [Issue #38 - Add support for hdbmigrationtable in massConvert and inspectTable](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/38)
 - Add option useCatalogPure to massConvert command. Defaults to false and uses the cds.compile api to produce its hdbtable or hdbmigrationtable output. When set to true it will instead use the HANA SYS.GET_OBJECT_DEFINITION which includes more metadata but might produce results which are incompatible with HDI
 - Remove the Schema from output of massConvert commands
 
-## 2.202105.3
+## [2.202105.3] - 2021-05-10
 
-### Changed
+**Changed**
+
 - Upgraded dependencies @sap/cds to 5.1, @sap/hana-client to 2.8.20, and @sap/hdbext to 7.2.0
 - Add User Admin and Role Admin grants to the adminHDI and adminHDIGroup commands for XSA
-  
-## 2.202105.2
 
-### Added
+## [2.202105.2] - 2021-05-06
+
+**Changed**
+
 - quiet output added to most commands allowing for a wide range of scripted usage of the tool overall
-  
-## 2.202105.1
 
-### Fixed
+## [2.202105.1] - 2021-05-05
+
+**Changed**
+
 - copy2DefaultEnv fix to support hanatrial (old HaaS offering) but produce a warning that people should consider using SAP HANA Cloud trial instead
 - Fix not a function error in inspectView with output option of openapi
-  
-### Added
 - swagger-jsdoc output format, which is actually commented YAML version of openAPI, added to inspectTable and inspectView
 
-## 2.202104.2
+## [2.202104.2] - 2021-04-23
 
-### Changed
+**Changed**
+
 - Match the @sap/hdbext and @sap/hana-client versions exactly to remove duplicate copies of the HANA Client in node_modules removing about 135Mb from the footprint of this tool overall
 - Major internal refactoring to streamline the code and reduce duplication. Reusable base code for basic handling of Yargs and Prompts. Consistent error handling and other general stability improvments
 - The default-env*.json file no longer needs to be in the same directory in which you are running the command.  If not found in the current directory, the tool will search in up to 5 parent directories to find it
@@ -131,71 +150,65 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - New parameter --quiet that disables extra output and human readable formatting for when you want to script commands and get pure results output
 - New parameter --debug - for troubleshooting of the hana-cli tool itself. It will produce a LOT of detailed output. Nice if you are curious what queries are being sent to SAP to fullfill a command
 - Options in the help are now grouped by Conneciton Parameters, Troubleshooting, and Options
-- New order of processing for making connections.
-  - First we look for the Admin option and use a default-env-admin.json - this overrides all other parameters
-  - If no admin option or if there was an admin option but no default-env-admin.json could be found in this directory or 5 parent directories then look for a .env file in this directory or up to 5 parent directories
-  - No .env file found or it doesn't contain a VCAP_SERVICES section, then check to see if the --conn parameter was specified. If so check for that file in the current directory or up to 5 parent directories
-  - If the file specified via the --conn parameter wasn't found locally then check for it in the ${homedir}/.hana-cli/ folder
-  - If no specific configuration file was was found then look for a file named default-env.json in the current directory or up to 5 parent directories
-  - Last resort if nothing has been found up to this point - look for a file named default.json in the ${homedir}/.hana-cli/ folder
-## 1.202104.2
-### Added
+- New order of processing for making connections as follows: 
+- First we look for the Admin option and use a default-env-admin.json - this overrides all other parameters
+- If no admin option or if there was an admin option but no default-env-admin.json could be found in this directory or 5 parent directories then look for a .env file in this directory or up to 5 parent directories
+- No .env file found or it doesn't contain a VCAP_SERVICES section, then check to see if the --conn parameter was specified. If so check for that file in the current directory or up to 5 parent directories
+- If the file specified via the --conn parameter wasn't found locally then check for it in the ${homedir}/.hana-cli/ folder
+- If no specific configuration file was was found then look for a file named default-env.json in the current directory or up to 5 parent directories
+- Last resort if nothing has been found up to this point - look for a file named default.json in the ${homedir}/.hana-cli/ folder
 - Add Syntax Highlighting to various command outputs
-  
-## 1.202104.1
 
-### Added
+## [2.202104.1] - 2021-04-15
+
+**Changed**
+
 - New Inspect* output options for sqlite, hdbtable, hdbview and hdbcds
-  
-### Changed
 - Upgrade to @sap/cds 5.x
 - Drop support for Node.js version 10
 - cds preview updated to SAPUI5 1.88.1
-  
-### Fixed
 - connect command now prompts for Encyrypt setting
-  
-## 1.202103.4
 
-### Added
-- New command copy2Secrets to rewrite default-env.json as K8S Secrets format expected by @sap/xsenv - Pull Request [35](https://github.com/SAP-samples/hana-developer-cli-tool-example/pull/35) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
-  
-## 1.202103.3
+## [2.202103.4] - 2021-03-26
 
-### Added
+**Changed**
+
+- New command copy2Secrets to rewrite default-env.json as K8S Secrets format expected by @sap/xsenv - Pull Request [35](https://github.com/SAP-samples/hana-developer-cli-tool-example/pull/35)
+- thanks to [@ThePlenkov](https://github.com/ThePlenkov)
+
+## [2.202103.3] - 2021-03-26
+
+**Changed**
+
 - querySimple now allows output to a file and supports table, json, and Excel output formats Issue [#30](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/30)
+- README.md was reorganized to list all commands alphabetical Issue [#31](https: //github.com/SAP-samples/hana-developer-cli-tool-example/issues/31)
 
-### Changed
-- README.md was reorganized to list all commands alphabetical Issue [#31](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/31)
+## [2.202103.2] - 2021-03-25
 
+**Changed**
 
-## 1.202103.2
-
-### Added
 - Option to massConvert, inspectTable, inspectView, and cds to use HANA native data types if no CAP CDS direct conversion can be made. Issue [#27](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/27) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
-
-### Fixed 
 - Decimal types without decismals generates CDS Error. Issue [#29](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/29) - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
 
-## 1.202103.1
+## [2.202103.1] - 2021-03-24
 
-### Added
+**Changed**
+
 - New commands: changes & readme - output the CHANGELOG.md and README.md to the CLI
 - Issue [#25](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/25) - Add filename option to massConvertion Operation - thanks to [@ThePlenkov](https://github.com/ThePlenkov)
-  
-### Changed
 - Updated several dependent modules including hana-client
 - Put hana-cli on a diet and removed some old module dependencies no longer used. Especially the openAPI related ones which had functionality now offered by CAP directly
 - help command now lists all commands in alphabetical order
 
-## 1.202102.4
+## [2.202102.4] - 2021-02-27
 
-### Added
+**Changed**
+
 - HANA 1.0 Support - Issue [#22](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/22)
-  
-## 1.202102.3
 
-### Added
+## [2.202102.3] - 2021-02-14
+
+**Changed**
 
 - Updated @sap/textbundle
 - Add readme command that opens ReadMe Documentation in your browser
@@ -203,50 +216,47 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - Formatting of output copy2DefaultEnv improved for compatibility to CAP cds run 
 - New command copy2Env - copy default-env.json to .env and reformat contents
 - Support for HANA Cloud Instance Administration - requires cf cli to be installed and you must be logged into cf with a target org and space
-  - Added Command: hdi to list all SAP HANA Cloud HDI container instances in your target space
-  - Added Command: ups to list all Cloud Foundry user provided service instances in your target space
+- Added Command: hdi to list all SAP HANA Cloud HDI container instances in your target space
+- Added Command: ups to list all Cloud Foundry user provided service instances in your target space
 - Switch to the standard CAP Compile to openAPI in inspectTable, inspectView and cds commands. Now supports entity diagrams in the Swagger UI
 
-## 1.202102.2
+## [2.202102.2] - 2021-02-10
 
-### Added
+**Changed**
 
 - Updated @sap/cds to 4.5.x
 - Support for HANA Cloud Instance Administration - requires cf cli to be installed and you must be logged into cf with a target org and space
-  - Added Command: hc to list all SAP HANA Cloud instances in your target space
-  - Added Command: hcStart to Start SAP HANA Cloud instance
-  - Added Command: hcStop to Stop SAP HANA Cloud instance
+- Added Command: hc to list all SAP HANA Cloud instances in your target space
+- Added Command: hcStart to Start SAP HANA Cloud instance
+- Added Command: hcStop to Stop SAP HANA Cloud instance
 
-## 1.202102.1
+## [2.202102.1] - 2021-02-01
 
-### Fixed
+**Changed**
 
 - serviceKey cf default was incorrect
-  
-## 1.202101.3
 
-### Changed
+## [2.202101.3] - 2021-01-20
+
+**Changed**
 
 - Renaming to match new SAP Business Technology Platform branding
 - Minor dependent package version updates
 
-## 1.202101.2
+## [2.202101.2] - 2021-01-13
 
-### Changed
+**Changed**
 
 - Default value on createModule command changed to SAP HANA Cloud
 - Remove postinstall build script from SAP HANA Cloud option - only needed in SAP Web IDE
-  
-## 1.202101.1
 
-### Fixed
+## [2.202101.1] - 2021-01-01
+
+**Changed**
 
 - Update *@sap/hana-client* to v2.7.16, *@sap/cds* to 4.4.7 and *sap-hdbext-promisfied* to 2.202101
 - Correct dump if you run *hana-cli* with no commmand, no defaults to *help* command
 - Correct error when using .env for connections and there are multiple SAP HANA and User Provided Services both in the configuration
 - Correct openDBX command in SAP Business Application Studio when using .env for connections
-
-### Added
-
 - Node.js 14.x support
 - New command copy2DefaultEnv - which copies a .env file to default-env.json and reformats the content. Designed for SAP Business Application Studio and the HANA tooling where a .env file is generated by a binding but CAP still requires a default-env.json for testing

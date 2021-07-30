@@ -1,0 +1,607 @@
+.dgo_editor {
+	background-color: #ffffff;
+}
+
+.dgo_text_container * {
+	padding: 0px;
+	margin: 0px;
+	font-family: 'Arial', 'sans-serif';
+	color: #32363a;
+	word-wrap: break-word;
+}
+
+.dgo_text_container {
+	font-family: 'Arial', 'sans-serif';
+	color: #32363a;
+	font-size: 14px;
+	line-height: 140%;
+}
+
+.dgo_text_container a {
+	color: #0a6ed1;
+	text-decoration: underline;
+}
+
+.dgo_text_container a:hover {
+	color: #0854a0;
+}
+
+.dgo_text_container a:visited {
+	color: #0a6ed1;
+	text-decoration: underline;
+}
+
+.dgo_text_container blockquote {
+	margin: 0px 20px 0px 0px;
+}
+
+.dgo_text_container dir {
+	margin: 0px;
+}
+
+.dgo_text_container menu {
+	margin: 0px;
+}
+
+.dgo_text_container P {
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+.dgo_text_container P.subsection_title {
+	font-size: 16px;
+	font-weight: bold;
+	margin-top: 16px;
+	margin-bottom: 8px;
+}
+
+.dgo_text_container P img {
+	vertical-align: middle;
+}
+
+.dgo_text_container H1 {
+	font-size: 24px;
+	font-weight: bold;
+	line-height: 125%;
+	margin-top: 16px;
+	margin-bottom: 8px;
+}
+
+.dgo_text_container H2 {
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 133%;
+	margin-top: 16px;
+	margin-bottom: 8px;
+}
+
+.dgo_text_container H3 {
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 133%;
+	margin-top: 16px;
+	margin-bottom: 8px;
+}
+
+.dgo_text_container H4 {
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 133%;
+	margin-top: 12px;
+	margin-bottom: 8px;
+}
+
+.dgo_text_container H5 {
+	font-size: 13px;
+	font-weight: bold;
+	line-height: 133%;
+	margin-top: 12px;
+	margin-bottom: 8px;
+}
+
+.dgo_text_container H6 {
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 133%;
+	margin-top: 12px;
+	margin-bottom: 8px;
+}
+
+.dgo_text_container ul {
+	margin: 0px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	list-style-type: disc;
+}
+
+[dir=ltr].dgo_text_container ul,
+[dir=ltr] .dgo_text_container ul {
+	padding-left: 20px;
+}
+
+[dir=rtl].dgo_text_container ul,
+[dir=rtl] .dgo_text_container ul {
+	padding-right: 20px;
+}
+
+.dgo_text_container ul[dir=ltr] {
+	padding-left: 20px;
+}
+
+.dgo_text_container ul[dir=rtl] {
+	padding-right: 20px;
+}
+
+.dgo_text_container ol {
+	margin: 0px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	list-style-type: decimal;
+}
+
+[dir=ltr].dgo_text_container ol,
+[dir=ltr] .dgo_text_container ol {
+	padding-left: 20px;
+}
+
+[dir=rtl].dgo_text_container ol,
+[dir=rtl] .dgo_text_container ol {
+	padding-right: 20px;
+}
+
+.dgo_text_container ol[dir=ltr] {
+	padding-left: 20px;
+}
+
+.dgo_text_container ol[dir=rtl] {
+	padding-right: 20px;
+}
+
+.dgo_text_container ol.ol_upper_alpha {
+	margin: 0px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	list-style-type: upper-alpha;
+}
+
+[dir=ltr].dgo_text_container ol.ol_upper_alpha,
+[dir=ltr] .dgo_text_container ol.ol_upper_alpha {
+	padding-left: 20px;
+}
+
+[dir=rtl].dgo_text_container ol.ol_upper_alpha,
+[dir=rtl] .dgo_text_container ol.ol_upper_alpha {
+	padding-right: 20px;
+}
+
+.dgo_text_container ol.ol_upper_alpha[dir=ltr] {
+	padding-left: 20px;
+}
+
+.dgo_text_container ol.ol_upper_alpha[dir=rtl] {
+	padding-right: 20px;
+}
+
+.dgo_text_container SPAN.gloss_ref {
+	border-bottom: 1px dotted; *border-bottom: none; *text-decoration:underline; /*IE7 fix*/
+}
+
+.dgo_text_container SPAN.box_title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.dgo_text_container SPAN.codeph {
+    font-family: 'Courier New', 'Courier', 'monospace';
+}
+
+.dgo_text_container SPAN.span_italic {
+    font-style: italic;
+}
+
+.dgo_text_container SPAN.figcaption {
+    font-size: 12px;
+}
+
+.dgo_text_container SPAN.key {
+	border-width: 1px;
+	border-color: #32363a;
+	border-style: solid;
+    border-radius: 4px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+[dir=ltr].dgo_text_container SPAN.key,
+[dir=ltr] .dgo_text_container SPAN.key {
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+[dir=rtl].dgo_text_container SPAN.key,
+[dir=rtl] .dgo_text_container SPAN.key {
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+.dgo_text_container SPAN.key[dir=ltr] {
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+.dgo_text_container SPAN.key[dir=rtl] {
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+.dgo_text_container SPAN.menu_cascade {
+	color: #6C6C6C;
+	font-weight: bold;
+}
+
+.dgo_text_container SPAN.menu_cascade img {
+	transform: scale(0.75);
+	padding: 0 4px;
+}
+
+.dgo_text_container SPAN.saptechnicalname {
+	font-family: 'Courier New', 'Courier', 'monospace';
+    color: #6C6C6C;
+}
+
+.dgo_text_container SPAN.dgo_searchterm {
+	background-color: #FFFF4C;
+}
+
+.dgo_text_container SPAN.span_bold {
+	font-weight: bold;
+}
+
+.dgo_text_container SPAN.span_underline {
+	text-decoration: underline;
+}
+
+.dgo_text_container SPAN.uicontrol {
+	color: #004990;
+	font-weight: bold;
+}
+
+.dgo_text_container SPAN.userinput {
+    font-family: 'Courier New', 'Courier', 'monospace';
+}
+
+.dgo_text_container div.InfoBox {
+	background-color: #EFEFEF;
+    border-width: 0 0 0 8px;
+	border-color: #E9730C;
+	border-style: solid;
+    border-radius: 4px;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+[dir=ltr].dgo_text_container div.InfoBox,
+[dir=ltr] .dgo_text_container div.InfoBox {
+	border-width: 0 0 0 8px;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+[dir=rtl].dgo_text_container div.InfoBox,
+[dir=rtl] .dgo_text_container div.InfoBox {
+	border-width: 0 8px 0 0;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+.dgo_text_container div.InfoBox[dir=ltr] {
+	border-width: 0 0 0 8px;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+.dgo_text_container div.InfoBox[dir=rtl] {
+	border-width: 0 8px 0 0;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+.dgo_text_container div.example_box {
+	background-color: #EFEFEF;
+	border-width: 0 0 0 8px;
+	border-color: #6A6D70;
+	border-style: solid;
+    border-radius: 4px;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+[dir=ltr].dgo_text_container div.example_box,
+[dir=ltr] .dgo_text_container div.example_box {
+	border-width: 0 0 0 8px;
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
+[dir=rtl].dgo_text_container div.example_box,
+[dir=rtl] .dgo_text_container div.example_box {
+	border-width: 0 8px 0 0;
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
+.dgo_text_container div.example_box[dir=ltr] {
+	border-width: 0 0 0 8px;
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
+.dgo_text_container div.example_box[dir=rtl] {
+	border-width: 0 8px 0 0;
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
+.dgo_text_container div.note_box {
+	background-color: #EFEFEF;
+    border-width: 0 0 0 8px;
+	border-color: #0A6ED1;
+	border-style: solid;
+    border-radius: 4px;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+[dir=ltr].dgo_text_container div.note_box,
+[dir=ltr] .dgo_text_container div.note_box {
+	border-width: 0 0 0 8px;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+[dir=rtl].dgo_text_container div.note_box,
+[dir=rtl] .dgo_text_container div.note_box {
+	border-width: 0 8px 0 0;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+.dgo_text_container div.note_box[dir=ltr] {
+	border-width: 0 0 0 8px;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+.dgo_text_container div.note_box[dir=rtl] {
+	border-width: 0 8px 0 0;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+.dgo_text_container TABLE.BorderTable {
+	font-family: 'Arial', 'sans-serif';
+    color: #32363a;
+	background-color: transparent;
+	font-size: 14px;
+	border-width: 1px;
+	border-color: #EFEFEF;
+	border-style: solid;
+	border-collapse: collapse;
+	padding-top: 4px;
+	padding-bottom: 4px;
+    vertical-align: top;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+.dgo_text_container TABLE.BorderTable th {
+	border-color: #EFEFEF;
+	background-color: #EFEFEF;
+    padding-top: 4px;
+    padding-bottom: 4px;
+	border-width: 1px;
+	border-style: solid;
+	vertical-align: top;
+    line-height: 125%;
+}
+
+.dgo_text_container TABLE.BorderTable td {
+	border-width: 1px;
+	border-color: #EFEFEF;
+	border-style: solid;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	vertical-align: top;
+}
+
+[dir=ltr].dgo_text_container TABLE.BorderTable,
+[dir=ltr] .dgo_text_container TABLE.BorderTable {
+    text-align: left;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+[dir=ltr].dgo_text_container TABLE.BorderTable,
+[dir=ltr] .dgo_text_container TABLE.BorderTable th {
+    text-align: left;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+[dir=ltr].dgo_text_container TABLE.BorderTable,
+[dir=ltr] .dgo_text_container TABLE.BorderTable td {
+    text-align: left;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+[dir=rtl].dgo_text_container TABLE.BorderTable,
+[dir=rtl] .dgo_text_container TABLE.BorderTable {
+    text-align: right;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+[dir=rtl].dgo_text_container TABLE.BorderTable,
+[dir=rtl] .dgo_text_container TABLE.BorderTable th {
+    text-align: right;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+[dir=rtl].dgo_text_container TABLE.BorderTable,
+[dir=rtl] .dgo_text_container TABLE.BorderTable td {
+    text-align: right;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.dgo_text_container TABLE.BorderTable[dir=ltr] {
+    text-align: left;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.dgo_text_container TABLE.BorderTable[dir=ltr] th {
+    text-align: left;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.dgo_text_container TABLE.BorderTable[dir=ltr] td {
+    text-align: left;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.dgo_text_container TABLE.BorderTable[dir=rtl] {
+    text-align: right;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.dgo_text_container TABLE.BorderTable[dir=rtl] th {
+    text-align: right;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.dgo_text_container TABLE.BorderTable[dir=rtl] td {
+    text-align: right;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.dgo_text_container TABLE.BorderlessTable {
+    font-family: 'Arial', 'sans-serif';
+    color: #FFFFFF;
+    background-color: transparent;
+    font-size: 14px;
+    border-color: #EFEFEF;
+    border-style: none;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    vertical-align: top;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+.dgo_text_container TABLE.BorderlessTable th {
+    border-color: #EFEFEF;
+    background-color: transparent;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-style: none;
+    vertical-align: top;
+    line-height: 125%;
+}
+
+.dgo_text_container TABLE.BorderlessTable td {
+    border-color: #EFEFEF;
+    border-style: none;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    vertical-align: top;
+}
+
+[dir=ltr].dgo_text_container TABLE.BorderlessTable,
+[dir=ltr] .dgo_text_container TABLE.BorderlessTable {
+    text-align: left;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+[dir=ltr].dgo_text_container TABLE.BorderlessTable,
+[dir=ltr] .dgo_text_container TABLE.BorderlessTable th {
+    padding-left: 8px;
+    padding-right: 8px;
+    text-align: left;
+}
+
+[dir=ltr].dgo_text_container TABLE.BorderlessTable,
+[dir=ltr] .dgo_text_container TABLE.BorderlessTable td {
+    text-align: left;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+[dir=rtl].dgo_text_container TABLE.BorderlessTable,
+[dir=rtl] .dgo_text_container TABLE.BorderlessTable {
+    text-align: right;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+[dir=rtl].dgo_text_container TABLE.BorderlessTable,
+[dir=rtl] .dgo_text_container TABLE.BorderlessTable th {
+    padding-left: 8px;
+    padding-right: 8px;
+    text-align: right;
+}
+
+[dir=rtl].dgo_text_container TABLE.BorderlessTable,
+[dir=rtl] .dgo_text_container TABLE.BorderlessTable td {
+    text-align: right;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.dgo_text_container TABLE.BorderlessTable[dir=ltr] {
+    text-align: left;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.dgo_text_container TABLE.BorderlessTable[dir=ltr] th {
+    padding-left: 8px;
+    padding-right: 8px;
+    text-align: left;
+}
+
+.dgo_text_container TABLE.BorderlessTable[dir=ltr] td {
+    text-align: left;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.dgo_text_container TABLE.BorderlessTable[dir=rtl] {
+    text-align: right;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.dgo_text_container TABLE.BorderlessTable[dir=rtl] th {
+    padding-left: 8px;
+    padding-right: 8px;
+    text-align: right;
+}
+
+.dgo_text_container TABLE.BorderlessTable[dir=rtl] td {
+    text-align: right;
+    padding-left: 8px;
+    padding-right: 8px;
+}

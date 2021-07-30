@@ -18,8 +18,8 @@
 	"sap.ui": {
 		"technology": "UI5",
 		"icons": {
-			"icon": "../common/images/favicon.ico",
-			"favIcon": "../common/images/favicon.ico",
+			"icon": "/ui/common/images/favicon.ico",
+			"favIcon": "/ui/common/images/favicon.ico",
 			"phone": "",
 			"phone@2": "",
 			"tablet": "",

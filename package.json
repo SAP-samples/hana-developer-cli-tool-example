@@ -11,6 +11,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "changelog": "node CHANGELOG",
     "types": "npx typescript  --declaration --allowJs --emitDeclarationOnly --outDir types --skipLibCheck"
   },
   "repository": {
@@ -71,6 +72,7 @@
   "devDependencies": {
     "@types/yargs": "^17.0.2",
     "eslint": "^7.31.0",
+    "stringify-changelog": "^0.2.1",
     "typescript": "^4.3.2"
   }
 }

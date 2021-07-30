@@ -1,0 +1,19 @@
+{
+    "id": "Shell-home",
+    "appUrl": "Shell-home",
+    "product": "HANA_CLI",
+    "version": "Cloud",
+    "locale": "en-US",
+    "language": "en-US",
+    "state": "PRODUCTION",
+    "system": "",
+    "environment": "",
+    "loio": "",
+    "contextType": "HELP",
+    "_standalone": true,
+    "title": "Static Help: hana-cli Landing Page",
+    "shortDescription": "",
+    "alias": "",
+    "editable": "true",
+    "lastModifiedDate": "2021-06-10 07:22:47 GMT+0000"
+}

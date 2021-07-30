@@ -8,7 +8,7 @@ exports.handler = (argv) => {
   base.promptHandler(argv, verOutput, {}, false)
 }
 
- async function verOutput() {
+async function verOutput() {
   base.debug('verOutput')
   const colors = require("colors/safe")
   const log = console.log
@@ -21,34 +21,35 @@ exports.handler = (argv) => {
 
   let selfVersion = await latestVersion('hana-cli')
   console.log(`Latest hana-cli version available on npmjs.com: ${colors.green(selfVersion)}`)
-  if (info['hana-cli'] < selfVersion){
+  if (info['hana-cli'] < selfVersion) {
     console.log(`${colors.red('Local version of hana-cli is out of date.')} Consider upgrading with "${colors.green('npm upgrade -g hana-cli')}"`)
   }
   base.end()
-
-  function version() {
-    base.debug('version')
-    const info = version4()
-    Object.defineProperty(info, 'home', { value: __dirname })
-    info['hana-cli home'] = info.home
-    Object.defineProperty(info, 'initialHome', { value: base.hanaBin ? base.hanaBin : '' })
-    if (process.env.DEBUG) info['hana-cli initial home'] = info.initialHome
-    return info
-  }
-
-  function version4(pkgPath = '..', info = {}, parentPath) {
-    base.debug('version4')
-    try {
-      const pkj = require(pkgPath + '/package.json')
-      const name = pkj.name || pkgPath
-      if (info[name]) return // safeguard against circular dependencies
-      info[name] = pkj.version
-      // recurse sap packages in dependencies...
-      for (let dep in pkj.dependencies) if (dep.startsWith('@sap/') || dep.startsWith('sap-hdbext-promisfied')) version4(dep, info, pkgPath)
-    } catch (e) {
-      if (e.code !== 'MODULE_NOT_FOUND') info[pkgPath] = '-- missing --'  // unknown error
-      else if (parentPath) version4(parentPath + '/node_modules/' + pkgPath, info)
-    }
-    return info
-  }
 }
+
+function version4(pkgPath = '..', info = {}, parentPath) {
+  base.debug('version4')
+  try {
+    const pkj = require(pkgPath + '/package.json')
+    const name = pkj.name || pkgPath
+    if (info[name]) return // safeguard against circular dependencies
+    info[name] = pkj.version
+    // recurse sap packages in dependencies...
+    for (let dep in pkj.dependencies) if (dep.startsWith('@sap/') || dep.startsWith('sap-hdbext-promisfied')) version4(dep, info, pkgPath)
+  } catch (e) {
+    if (e.code !== 'MODULE_NOT_FOUND') info[pkgPath] = '-- missing --'  // unknown error
+    else if (parentPath) version4(parentPath + '/node_modules/' + pkgPath, info)
+  }
+  return info
+}
+
+function version() {
+  base.debug('version')
+  const info = version4()
+  Object.defineProperty(info, 'home', { value: __dirname })
+  info['hana-cli home'] = info.home
+  Object.defineProperty(info, 'initialHome', { value: base.hanaBin ? base.hanaBin : '' })
+  if (process.env.DEBUG) info['hana-cli initial home'] = info.initialHome
+  return info
+}
+module.exports.getVersion = version
