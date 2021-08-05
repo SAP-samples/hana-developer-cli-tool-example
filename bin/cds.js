@@ -280,43 +280,52 @@ async function cdsServerSetup(prompts, cdsSource) {
   //Swagger UI
   const swaggerUi = require('swagger-ui-express')
   Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => require('@sap/cds-dk/lib/compile/openapi') })
-  let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
-    service: 'HanaCli',
-    servicePath: '/odata/v4/opensap.hana.CatalogService/',
-    'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
-    'openapi:diagram': true
-  })
-  let serveOptions = {
-    explorer: true
-  }
-  app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(metadata, serveOptions))
+  try {
+    let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
+      service: 'HanaCli',
+      servicePath: '/odata/v4/opensap.hana.CatalogService/',
+      'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
+      'openapi:diagram': true
+    })
 
-  app.get('/', (_, res) => res.send(getIndex(odataURL, entity)))
-  app.get('/fiori.html', (_, res) => {
-    const manifest = _manifest(odataURL, entity, prompts.table)
-    res.send(fiori(manifest, odataURL, entity))
-  })
+    let serveOptions = {
+      explorer: true
+    }
+    app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(metadata, serveOptions))
 
-  app.get('/app/Component.js', (_, res) => {
-    const manifest = _manifest(odataURL, entity, prompts.table)
-    const content = `sap.ui.define(["sap/fe/core/AppComponent"], function(AppComponent) {
+    app.get('/', (_, res) => res.send(getIndex(odataURL, entity)))
+    app.get('/fiori.html', (_, res) => {
+      const manifest = _manifest(odataURL, entity, prompts.table)
+      res.send(fiori(manifest, odataURL, entity))
+    })
+
+    app.get('/app/Component.js', (_, res) => {
+      const manifest = _manifest(odataURL, entity, prompts.table)
+      const content = `sap.ui.define(["sap/fe/core/AppComponent"], function(AppComponent) {
       "use strict";
       return AppComponent.extend("preview.Component", {
         metadata: { manifest: ${JSON.stringify(manifest, null, 2)} }
       });
     });`
-    res.send(content)
-  })
+      res.send(content)
+    })
 
-  //Start the Server 
-  server.on("request", app)
-  server.listen(port, function () {
-    let serverAddr = `http://localhost:${server.address().port}`
-    console.info(`HTTP Server: ${serverAddr}`)
-    const open = require('open')
-    open(serverAddr)
-  })
-
+    //Start the Server 
+    server.on("request", app)
+    server.listen(port, function () {
+      let serverAddr = `http://localhost:${server.address().port}`
+      console.info(`HTTP Server: ${serverAddr}`)
+      const open = require('open')
+      open(serverAddr)
+    })
+  }
+  catch (e) {
+    if (e.code !== 'MODULE_NOT_FOUND') {
+      // Re-throw not "Module not found" errors 
+      throw e
+    }
+    throw base.bundle.getText("cds-dk")
+  }
   return
 }
 

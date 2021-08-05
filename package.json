@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "2.202107.6",
+  "version": "2.202108.1",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -12,7 +12,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "changelog": "node CHANGELOG",
-    "types": "npx typescript  --declaration --allowJs --emitDeclarationOnly --outDir types --skipLibCheck"
+    "types": "npx typescript  --declaration --allowJs --emitDeclarationOnly --outDir types --skipLibCheck",
+    "postinstall": "npm link @sap/cds-dk"
   },
   "repository": {
     "type": "git",
@@ -23,18 +24,15 @@
   ],
   "types": "types/index.d.ts",
   "dependencies": {
-    "@sap/audit-logging": "^5.0",
-    "@sap/cds": "^5.3.2",
-    "@sap/cds-dk": "^4.3.3",
+    "@sap/cds": "^5.4.1",
     "@sap/hana-client": "2.9.23",
     "@sap/hdbext": "7.3.0",
     "@sap/textbundle": "^4.0",
     "@sap/xsenv": "^3.1.1",
-    "@sap/xssec": "^3.2.2",
-    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "check-node-version": "^4.1.0",
     "cli-highlight": "^2.1.11",
+    "colors": "^1.4.0",
     "console.table": "~0.10",
     "debug": "^4.3.2",
     "dotenv": "^10.0.0",
@@ -55,13 +53,15 @@
     "properties-to-json": "^0.2.1",
     "sap-hdbext-promisfied": "^2.202107.1",
     "showdown": "^1.9.1",
-    "supports-color": "^9.0.2",
     "swagger-ui-express": "^4.1",
     "terminaltools": "^2.0.1",
     "uuid": "^8.3",
-    "ws": "^7.5.3",
+    "ws": "^8.0",
     "yargonaut": "1.1",
-    "yargs": "^17.0"
+    "yargs": "^17.1"
+  },
+  "peerDependencies": {
+    "@sap/cds-dk": ">=4"
   },
   "author": "SAP",
   "license": "SEE LICENSE IN LICENSE",
@@ -71,7 +71,7 @@
   "homepage": "https://github.com/SAP-samples/hana-developer-cli-tool-example#readme",
   "devDependencies": {
     "@types/yargs": "^17.0.2",
-    "eslint": "^7.31.0",
+    "eslint": "^7.32.0",
     "stringify-changelog": "^0.2.1",
     "typescript": "^4.3.2"
   }

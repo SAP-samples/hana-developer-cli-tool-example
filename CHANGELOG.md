@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [2.202108.1] - 2021-08-06
+
+**Changed**
+
+- Update dependencies - especially SAP Cloud Application Programming Model to 5.4.1
+- Trimmed several unused dependencies in an effort to keep hana-cli as slim as possible
+- Remove @sap/cds-dk as a direct dependency. To use the openAPI features in commands like inspectTable, inspectView or cds; you must have @sap/cds-dk globally. But most development environments where this option would be used should already have @sap/cds-dk installed this way.  Remove many unneded depenencies and duplicated modules from hana-cli most importantly removing the sqlite3 depenency that was never used but caused lots of install issues.
+
 ## [2.202107.6] - 2021-07-30
 
 **Changed**

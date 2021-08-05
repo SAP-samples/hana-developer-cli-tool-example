@@ -174,37 +174,55 @@ async function viewInspect(prompts) {
       case 'openapi': {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view")
         cdsSource = `service HanaCli { ${cdsSource} } `
-        let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
-          service: 'HanaCli',
-          servicePath: '/odata/v4/opensap.hana.CatalogService/',
-          'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
-          'openapi:diagram': true
-        })
-        console.log(highlight(JSON.stringify(metadata, null, 2)))
-        break
+        try {
+          let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
+            service: 'HanaCli',
+            servicePath: '/odata/v4/opensap.hana.CatalogService/',
+            'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
+            'openapi:diagram': true
+          })
+          console.log(highlight(JSON.stringify(metadata, null, 2)))
+          break
+        }
+        catch (e) {
+          if (e.code !== 'MODULE_NOT_FOUND') {
+            // Re-throw not "Module not found" errors 
+            throw e
+          }
+          throw base.bundle.getText("cds-dk")
+        }
       }
       case 'jsdoc': {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view")
         cdsSource = `service HanaCli { ${cdsSource} } `
-        let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
-          service: 'HanaCli',
-          servicePath: '/odata/v4/opensap.hana.CatalogService/',
-          'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
-          'openapi:diagram': true
-        })
-        const YAML = require('json-to-pretty-yaml')
-        let data = YAML.stringify(metadata)
-        var lines = data.split('\n')
-        let output =
-          '/**\n' +
-          ' * @swagger\n' +
-          ' * \n'
-        for (let line of lines) {
-          output += ' * ' + line + '\n'
+        try {
+          let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
+            service: 'HanaCli',
+            servicePath: '/odata/v4/opensap.hana.CatalogService/',
+            'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
+            'openapi:diagram': true
+          })
+          const YAML = require('json-to-pretty-yaml')
+          let data = YAML.stringify(metadata)
+          var lines = data.split('\n')
+          let output =
+            '/**\n' +
+            ' * @swagger\n' +
+            ' * \n'
+          for (let line of lines) {
+            output += ' * ' + line + '\n'
+          }
+          output += ' */ \n'
+          console.log(highlight(output))
+          break
         }
-        output += ' */ \n'
-        console.log(highlight(output))
-        break
+        catch (e) {
+          if (e.code !== 'MODULE_NOT_FOUND') {
+            // Re-throw not "Module not found" errors 
+            throw e
+          }
+          throw base.bundle.getText("cds-dk")
+        }
       }
       default: {
         console.error(base.bundle.getText("unsupportedFormat"))
