@@ -117,6 +117,22 @@
                                         "icon": "sap-icon://table-view",
                                         "navigationMode": "embedded"
                                     }
+                                },
+                                {
+                                    "id": "inspectTable-ui",
+                                    "title": "Inspect Table",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "Get details of a single Table",
+                                        "title": "Inspect Table",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
+                                        "applicationType": "URL",
+                                        "targetURL": "#inspectTable-ui",
+                                        "url": "./inspect",
+                                        "icon": "sap-icon://table-view",
+                                        "navigationMode": "embedded"
+                                    }
                                 }
                             ]
                         },
@@ -382,6 +398,14 @@
             "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
             "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "inspectTable-ui": {
+            "title": "Inspect Table",
+            "description": "Get details of a single Table",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
+            "applicationType": "URL",
+            "url": "./inspect",
             "navigationMode": "embedded"
         },
         "ups-ui": {

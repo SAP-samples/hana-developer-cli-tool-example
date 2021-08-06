@@ -97,6 +97,8 @@ function getPrompts() {
     // @ts-ignore
     if (!prompts.indexes) { prompts.indexes = "*" }
     // @ts-ignore
+    if (!prompts.output) { prompts.output = "tbl" }
+    // @ts-ignore 
     if (typeof prompts.cf === 'undefined') { prompts.cf = true }
     return prompts
 }

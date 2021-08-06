@@ -31,29 +31,32 @@ exports.builder = base.getBuilder({
   }
 })
 
+let inputPrompts = {
+  table: {
+    description: base.bundle.getText("table"),
+    type: 'string',
+    required: true
+  },
+  schema: {
+    description: base.bundle.getText("schema"),
+    type: 'string',
+    required: true
+  },
+  output: {
+    description: base.bundle.getText("outputType"),
+    type: 'string',
+    //       validator: /t[bl]*|s[ql]*|c[ds]?/,
+    required: true
+  },
+  useHanaTypes: {
+    description: base.bundle.getText("useHanaTypes"),
+    type: 'boolean'
+  }
+}
+exports.inputPrompts = inputPrompts
+
 exports.handler = (argv) => {
-  base.promptHandler(argv, tableInspect, {
-    table: {
-      description: base.bundle.getText("table"),
-      type: 'string',
-      required: true
-    },
-    schema: {
-      description: base.bundle.getText("schema"),
-      type: 'string',
-      required: true
-    },
-    output: {
-      description: base.bundle.getText("outputType"),
-      type: 'string',
-      //       validator: /t[bl]*|s[ql]*|c[ds]?/,
-      required: true
-    },
-    useHanaTypes: {
-      description: base.bundle.getText("useHanaTypes"),
-      type: 'boolean'
-    }
-  })
+  base.promptHandler(argv, tableInspect, inputPrompts)
 }
 
 async function tableInspect(prompts) {
@@ -76,15 +79,20 @@ async function tableInspect(prompts) {
     Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => require('@sap/cds-dk/lib/compile/openapi') })
     const highlight = require('cli-highlight').highlight
 
+    var results = {}
     switch (prompts.output) {
       case 'tbl':
         console.log(object[0])
+        results.basic = object[0]
         console.log("\n")
         console.table(fields)
+        results.fields = fields
         console.table(constraints)
+        results.constraints = constraints
         break
       case 'sql': {
         let definition = await dbInspect.getDef(db, schema, prompts.table)
+        results.sql = definition
         console.log(highlight(definition))
         break
       }
@@ -96,6 +104,7 @@ async function tableInspect(prompts) {
       }
       case 'cds': {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "table")
+        results.cds = cdsSource
         console.log(highlight(cdsSource))
         break
       }
@@ -116,8 +125,10 @@ async function tableInspect(prompts) {
       case 'hdbtable': {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable")
         let all = cds.compile.to.hdbtable(cds.parse(cdsSource))
-        for (let [src] of all)
+        for (let [src] of all){
+          results.hdbtable = src
           console.log(highlight(src))
+        }
         console.log(`\n`)
         break
       }
@@ -238,12 +249,13 @@ async function tableInspect(prompts) {
         }
       }
       default: {
-        console.error(base.bundle.getText("unsupportedFormat"))
-        break
+        throw base.bundle.getText("unsupportedFormat")
       }
     }
-    return base.end()
+    await base.end()
+    return results
   } catch (error) {
     base.error(error)
   }
 }
+module.exports.tableInspect = tableInspect

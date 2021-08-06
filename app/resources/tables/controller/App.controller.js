@@ -4,9 +4,10 @@
 sap.ui.define([
     "sap/hanacli/common/controller/BaseController",
     "sap/m/Text",
+    "sap/m/Link",
     "sap/ui/table/Column"
 ],
-    function (BaseController, Text, Column) {
+    function (BaseController, Text, Link, Column) {
 
         return BaseController.extend("sap.hanacli.tables.controller.App", {
 
@@ -28,7 +29,9 @@ sap.ui.define([
             executeCmd: async function () {
                 this.startBusy()
                 this.updatePrompts().then(() => {
-                    let aUrl = `/hana/${this.getModel("config").getProperty("/cmd")}/`
+                    let cmd = this.getModel("config").getProperty("/cmd")
+                    let aUrl = `/hana/${cmd}/`
+
                     let oController = this
                     jQuery.ajax({
                         url: aUrl,
@@ -50,11 +53,14 @@ sap.ui.define([
 
                             oTable.bindColumns('resultsModel>/columns', function (sId, oContext) {
                                 var sColumnId = oContext.getObject().property
-
+                                let template = new Text({ "text": { path: "resultsModel>" + sColumnId } })
+                                if(cmd === 'tables-ui' && sColumnId === 'TABLE_NAME'){
+                                    template = new Link({ "text": { path: "resultsModel>" + sColumnId }, "target": "_blank", "href": { path: "resultsModel>" + sColumnId, formatter: function(value){return `/ui/?tbl=${value}#inspectTable-ui`}  }})
+                                }
                                 return new Column({
                                     id: sColumnId,
                                     label: sColumnId,
-                                    template: new Text({ "text": { path: "resultsModel>" + sColumnId } }),
+                                    template: template,
                                     sortProperty: sColumnId,
                                     filterProperty: sColumnId
                                 })

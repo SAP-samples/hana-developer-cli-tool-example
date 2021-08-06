@@ -77,6 +77,7 @@ versionCheck.checkVersion().then(() => {
         .command(require('./inspectLibrary'))
         .command(require('./inspectProcedure'))
         .command(require('./inspectTable'))
+        .command(require('./inspectTableUI'))        
         .command(require('./inspectTrigger'))
         .command(require('./inspectUser'))
         .command(require('./inspectView'))

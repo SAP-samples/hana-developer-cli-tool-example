@@ -1,0 +1,98 @@
+<mvc:View controllerName="sap.hanacli.inspect.controller.inspectTable-ui" height="100%" width="100%"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:table="sap.ui.table"
+	xmlns="sap.m">
+	<ScrollContainer height="100%" width="100%" vertical="true" focusable="true">
+		<f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+			<f:toolbar>
+				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.toolbar" type="XML"/>
+			</f:toolbar>
+			<f:content>
+
+				<Toolbar ariaLabelledBy="Title2">
+					<Title id="Title2" text="{i18nReuse>gui.target}"/>
+					<ToolbarSpacer />
+					<Button icon="sap-icon://settings" tooltip="{i18nReuse>gui.targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
+				</Toolbar>
+
+				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.schema" type="XML"/>
+
+				<Label text="{i18nReuse>table}" required="true"/>
+				<Input id="Table" value="{/table}" showSuggestion="true" suggest="loadTableFilter">
+				</Input>
+
+				<core:Fragment fragmentName="sap.hanacli.common.view.Connection" type="XML"/>
+				<core:Fragment fragmentName="sap.hanacli.common.view.Debug" type="XML"/>
+
+			</f:content>
+		</f:SimpleForm>
+
+		<IconTabBar id="idIconTabBarNoIcons" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
+			<items>
+				<IconTabFilter text="Basic Info" key="info">
+					<f:SimpleForm id="infoForm" editable="false" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+						<f:content>
+							<Label text="{i18nReuse>scheam}" />
+							<Input value="{resultsModel>/rows/basic/SCHEMA_NAME}" editable="false" />
+
+							<Label text="{i18nReuse>table}" />
+							<Input value="{resultsModel>/rows/basic/TABLE_NAME}" editable="false" />
+
+							<Label text="{i18nReuse>gui.tableType}" />
+							<Input value="{resultsModel>/rows/basic/TABLE_TYPE}" editable="false" />
+
+							<Label text="{i18nReuse>gui.tableOID}" />
+							<Input value="{resultsModel>/rows/basic/TABLE_OID}" editable="false" />
+
+							<Label text="{i18nReuse>gui.hasPrimaryKey}" />
+							<Input value="{resultsModel>/rows/basic/HAS_PRIMARY_KEY}" editable="false" />
+
+							<Label text="{i18nReuse>gui.isPreload}" />
+							<Input value="{resultsModel>/rows/basic/IS_PRELOAD}" editable="false" />
+
+							<Label text="{i18nReuse>gui.unloadPriority}" />
+							<Input value="{resultsModel>/rows/basic/UNLOAD_PRIORITY}" editable="false" />
+
+							<Label text="{i18nReuse>gui.created}" />
+							<Input value="{resultsModel>/rows/basic/CREATE_TIME}" editable="false" />
+
+
+						</f:content>
+					</f:SimpleForm>
+
+				</IconTabFilter>
+				<IconTabFilter text="{i18nReuse>gui.fields}" key="fields">
+					<table:Table id="fieldsTable" selectionMode="MultiToggle" visibleRowCount="10" enableSelectAll="false" rows="{resultsModel>/rows/fields}" threshold="15" enableBusyIndicator="true">
+						<table:noData>
+							<BusyIndicator class="sapUiMediumMargin"/>
+						</table:noData>
+					</table:Table>
+				</IconTabFilter>
+
+				<IconTabFilter text="{i18nReuse>gui.constraints}" key="constraints">
+					<table:Table id="constraintsTable" selectionMode="MultiToggle" visibleRowCount="10" enableSelectAll="false" rows="{resultsModel>/rows/constraints}" threshold="15" enableBusyIndicator="true">
+						<table:noData>
+							<BusyIndicator class="sapUiMediumMargin"/>
+						</table:noData>
+					</table:Table>
+				</IconTabFilter>
+
+				<IconTabFilter text="{i18nReuse>gui.sql}" key="sql">
+					<TextArea value="{resultsModel>/rows/sql}" cols="120" rows="8" editable="false"/>
+				</IconTabFilter>
+
+				<IconTabFilter text="{i18nReuse>gui.cds}" key="cds">
+					<TextArea value="{resultsModel>/rows/cds}" cols="120" rows="8" editable="false"/>
+				</IconTabFilter>
+
+				<IconTabFilter text="{i18nReuse>gui.hdbtable}" key="hdbtable">
+					<TextArea value="{resultsModel>/rows/hdbtable}" cols="120" rows="8" editable="false"/>
+				</IconTabFilter>
+			</items>
+		</IconTabBar>
+
+	</ScrollContainer>
+</mvc:View>
