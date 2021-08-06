@@ -227,14 +227,16 @@ sap.ui.define([
         },
 
         setFilterAsContains: function (controlId) {
-            this.byId(controlId).setFilterFunction(function (sTerm, oItem) {
-                // A case-insensitive "string contains" style filter
-                if (sTerm === "*") {
-                    return oItem.getText()
-                } else {
-                    return oItem.getText().match(new RegExp(sTerm, "i"))
-                }
-            })
+            if (this.byId(controlId)) {
+                this.byId(controlId).setFilterFunction(function (sTerm, oItem) {
+                    // A case-insensitive "string contains" style filter
+                    if (sTerm === "*") {
+                        return oItem.getText()
+                    } else {
+                        return oItem.getText().match(new RegExp(sTerm, "i"))
+                    }
+                })
+            }
         },
 
         startBusy: function () {

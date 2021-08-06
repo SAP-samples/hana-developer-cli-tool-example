@@ -77,6 +77,11 @@ module.exports = (app) => {
     app.get(['/hana/ups', '/hana/ups-ui'], async (req, res) => {
         listHandler(res, "../bin/hanaCloudUPSInstances", 'listInstances')
     })
+
+    
+    app.get(['/hana/indexes', '/hana/indexes-ui'], async (req, res) => {
+        listHandler(res, "../bin/indexes", 'getIndexes')
+    })
 }
 
 async function listHandler(res, lib, func) {

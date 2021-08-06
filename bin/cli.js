@@ -67,6 +67,7 @@ versionCheck.checkVersion().then(() => {
         .command(require('./hdbsql'))
         .command(require('./hostInformation'))
         .command(require('./indexes'))
+        .command(require('./indexesUI'))
         .command(require('./iniContents'))
         .command(require('./iniFiles'))
         .command(require('./inspectFunction'))

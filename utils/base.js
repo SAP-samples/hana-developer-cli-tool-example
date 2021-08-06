@@ -95,6 +95,8 @@ function getPrompts() {
     // @ts-ignore
     if (!prompts.function) { prompts.function = "*" }
     // @ts-ignore
+    if (!prompts.indexes) { prompts.indexes = "*" }
+    // @ts-ignore
     if (typeof prompts.cf === 'undefined') { prompts.cf = true }
     return prompts
 }

@@ -11,7 +11,7 @@ sap.ui.define([
             onInit: function () {
 
                 this.onAppInit()
-
+                this.setFilterAsContains("Schema")
             },
 
         })

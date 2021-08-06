@@ -71,6 +71,21 @@
                                         "icon": "sap-icon://table-view",
                                         "navigationMode": "embedded"
                                     }
+                                },{
+                                    "id": "indexes-ui",
+                                    "title": "List Indexes",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "Get a list of all HANA Indexes",
+                                        "title": "List Indexes",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#indexes-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://table-view",
+                                        "navigationMode": "embedded"
+                                    }
                                 }, {
                                     "id": "schemas-ui",
                                     "title": "List Schemas",
@@ -316,6 +331,14 @@
         "hdi-ui": {
             "title": "List HDI service instances",
             "description": "List all SAP HANA Cloud HDI service instances in your target Space",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "indexes-ui": {
+            "title": "List Indexes",
+            "description": "List all databasae indexes",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
             "url": "./tables",

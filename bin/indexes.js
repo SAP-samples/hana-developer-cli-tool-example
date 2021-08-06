@@ -25,24 +25,27 @@ exports.builder = base.getBuilder({
   }
 })
 
+let inputPrompts = {
+  indexes: {
+    description: base.bundle.getText("indexes"),
+    type: 'string',
+    required: true
+  },
+  schema: {
+    description: base.bundle.getText("schema"),
+    type: 'string',
+    required: true
+  },
+  limit: {
+    description: base.bundle.getText("limit"),
+    type: 'number',
+    required: true
+  }
+}
+exports.inputPrompts = inputPrompts
+
 exports.handler = (argv) => {
-  base.promptHandler(argv, getIndexes, {
-    indexes: {
-      description: base.bundle.getText("indexes"),
-      type: 'string',
-      required: true
-    },
-    schema: {
-      description: base.bundle.getText("schema"),
-      type: 'string',
-      required: true
-    },
-    limit: {
-      description: base.bundle.getText("limit"),
-      type: 'number',
-      required: true
-    }
-  })
+  base.promptHandler(argv, getIndexes, inputPrompts)
 }
 
 async function getIndexes(prompts) {
