@@ -7,6 +7,11 @@ const base = require("../utils/base")
 const versionCheck = require("../utils/versionCheck")
 versionCheck.checkVersion().then(() => {
 
+    const updateNotifier = require('update-notifier')
+    // @ts-ignore
+    const pkg = require('../package.json')
+    updateNotifier({pkg}).notify({isGlobal: true})
+
     require('console.table')
     require('yargonaut')
         .style('blue')
