@@ -42,6 +42,7 @@
     "glob": "^7.1.7",
     "js-convert-case": "^4.1.2",
     "json-to-pretty-yaml": "^1.2.2",
+    "json2csv": "^5.0.6",
     "latest-version": "^5.1",
     "marked": "^2.1.3",
     "marked-terminal": "^4.1.1",

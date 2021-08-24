@@ -1,4 +1,5 @@
 const base = require("../utils/base")
+const { parse: parseToCsv } = require('json2csv');
 
 exports.command = 'querySimple'
 exports.aliases = ['qs', "querysimple"]
@@ -23,7 +24,7 @@ exports.builder = base.getBuilder({
   },
   output: {
     alias: ['o', 'Output'],
-    choices: ["table", "json", "excel"],
+    choices: ["table", "json", "excel", "csv"],
     default: "table",
     type: 'string',
     desc: base.bundle.getText("outputTypeQuery")
@@ -104,6 +105,14 @@ async function dbQuery(prompts) {
         } else {
           const highlight = require('cli-highlight').highlight
           console.log(highlight(JSON.stringify(results, null, 2)))
+        }
+        break
+      case 'csv':
+        if (prompts.filename) {
+          await toFile(prompts.folder, prompts.filename, 'csv', parseToCsv(results))
+        } else {
+          const highlight = require('cli-highlight').highlight
+          console.log(highlight(parseToCsv(results)))
         }
         break
       default:
