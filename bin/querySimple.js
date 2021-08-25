@@ -59,6 +59,23 @@ exports.handler = (argv) => {
   })
 }
 
+function removeNewlineCharacter(dataRow) {
+  
+  let newDataRow = {};
+
+  Object.keys(dataRow).forEach((key) => {
+
+    if (typeof dataRow[key] === "string") {
+      newDataRow[key] = dataRow[key].replace(/[\n\r]+/g, ' ');
+    } else {
+      newDataRow[key] = dataRow[key];
+    }
+
+  });
+
+  return newDataRow;
+}
+
 async function dbQuery(prompts) {
   base.debug('dbQuery')
   try {
@@ -109,7 +126,7 @@ async function dbQuery(prompts) {
         break
       case 'csv':
         if (prompts.filename) {
-          await toFile(prompts.folder, prompts.filename, 'csv', parseToCsv(results))
+          await toFile(prompts.folder, prompts.filename, 'csv', parseToCsv(results, {delimiter : ";", transforms : [removeNewlineCharacter]}))
         } else {
           const highlight = require('cli-highlight').highlight
           console.log(highlight(parseToCsv(results)))
