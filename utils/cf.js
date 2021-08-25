@@ -4,19 +4,21 @@
 /**
  * @module cf - library for calling CF APIs via CLI
  */
-"use strict";
-const base = require("./base")
+import * as base from "./base.js"
 const bundle = base.bundle
+import * as fs from 'fs'
+import { homedir } from 'os'
+import { promisify } from 'util'
+import * as child_process from 'child_process'
 
 /**
  * Read central configuration file for CF CLI
  * @returns {Promise<object>}
  */
-async function getCFConfig() {
+export async function getCFConfig() {
     base.debug('getCFConfig')
     try {
-        const fs = require('fs')
-        const homedir = require('os').homedir()
+
         const data = fs.readFileSync(`${homedir}/.cf/config.json`,
             { encoding: 'utf8', flag: 'r' })
         const object = JSON.parse(data)
@@ -26,97 +28,91 @@ async function getCFConfig() {
         throw new Error(bundle.getText("errCFConfig"))
     }
 }
-module.exports.getCFConfig = getCFConfig
+
 
 /**
  * Get target organziation
  * @returns {Promise<object>}
  */
-async function getCFOrg() {
+export async function getCFOrg() {
     base.debug('getCFOrg')
     const config = await getCFConfig()
     base.debug(config)
     return config.OrganizationFields
 }
-module.exports.getCFOrg = getCFOrg
 
 /**
  * Get target orgnaization name
  * @returns {Promise<string>}
  */
-async function getCFOrgName() {
+export async function getCFOrgName() {
     base.debug('getCFOrgName')
     const org = await getCFOrg()
     base.debug(org)
     return org.Name
 }
-module.exports.getCFOrgName = getCFOrgName
 
 /**
  * Get target orgnaization GUID
  * @returns {Promise<string>}
  */
-async function getCFOrgGUID() {
+export async function getCFOrgGUID() {
     base.debug('getCFOrgGUID')
     const org = await getCFOrg()
     base.debug(org)
     return org.GUID
 }
-module.exports.getCFOrgGUID = getCFOrgGUID
+
 
 /**
  * Get target space details
  * @returns {Promise<object>}
  */
-async function getCFSpace() {
+export async function getCFSpace() {
     base.debug('getCFSpace')
     const config = await getCFConfig()
     base.debug(config)
     return config.SpaceFields
 }
-module.exports.getCFSpace = getCFSpace
 
 /**
  * Get target space name
  * @returns {Promise<string>}
  */
-async function getCFSpaceName() {
+export async function getCFSpaceName() {
     base.debug('getCFSpaceName')
     const space = await getCFSpace()
     base.debug(space)
     return space.Name
 }
-module.exports.getCFSpaceName = getCFSpaceName
 
 /**
  * Get target space GUID
  * @returns {Promise<string>}
  */
-async function getCFSpaceGUID() {
+export async function getCFSpaceGUID() {
     base.debug('getCFSpaceGUID')
     const space = await getCFSpace()
     base.debug(space)
     return space.GUID
 }
-module.exports.getCFSpaceGUID = getCFSpaceGUID
 
 /**
  * Get currrent targets
  * @returns {Promise<object>}
  */
-async function getCFTarget() {
+export async function getCFTarget() {
     base.debug('getCFTarget')
     const config = await getCFConfig()
     base.debug(config)
     return config.Target
 }
-module.exports.getCFTarget = getCFTarget
 
 /**
  * Get all instances of service plan hana
  * @returns {Promise<object>}
  */
-async function getHANAInstances() {
+export async function getHANAInstances() {
     base.debug('getHANAInstances')
 
     try {
@@ -125,8 +121,8 @@ async function getHANAInstances() {
 
         const spaceGUID = space.GUID
         const orgGUID = org.GUID
-        const util = require('util')
-        const exec = util.promisify(require('child_process').exec)
+
+        const exec = promisify(child_process.exec)
         let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hana&per_page=5000"`
 
         const { stdout, stderr } = await exec(script)
@@ -144,14 +140,13 @@ async function getHANAInstances() {
         throw (error)
     }
 }
-module.exports.getHANAInstances = getHANAInstances
 
 /**
  * Get instances of service plan hana that match input name
  * @param {string} name - service instance name
  * @returns {Promise<object>}
  */
-async function getHANAInstanceByName(name) {
+export async function getHANAInstanceByName(name) {
     base.debug(`getHANAInstanceByName ${name}`)
 
     try {
@@ -160,9 +155,7 @@ async function getHANAInstanceByName(name) {
 
         const spaceGUID = space.GUID
         const orgGUID = org.GUID
-
-        const util = require('util')
-        const exec = util.promisify(require('child_process').exec)
+        const exec = promisify(child_process.exec)
         let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hana&names=${name}&per_page=5000"`
 
         const { stdout, stderr } = await exec(script)
@@ -180,13 +173,13 @@ async function getHANAInstanceByName(name) {
         throw (error)
     }
 }
-module.exports.getHANAInstanceByName = getHANAInstanceByName
+
 
 /**
  * Get all HDI service instances 
  * @returns {Promise<object>}
  */
-async function getHDIInstances() {
+export async function getHDIInstances() {
     base.debug(`getHDIInstances`)
     try {
         const space = await getCFSpace()
@@ -195,8 +188,7 @@ async function getHDIInstances() {
         const spaceGUID = space.GUID
         const orgGUID = org.GUID
 
-        const util = require('util')
-        const exec = util.promisify(require('child_process').exec)
+        const exec = promisify(child_process.exec)
         let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hdi-shared&per_page=5000"`
 
         const { stdout, stderr } = await exec(script)
@@ -213,13 +205,12 @@ async function getHDIInstances() {
         throw (error)
     }
 }
-module.exports.getHDIInstances = getHDIInstances
 
 /**
  * Get all SBSS service instances 
  * @returns {Promise<object>}
  */
- async function getSbssInstances() {
+export async function getSbssInstances() {
     base.debug(`getSbssInstances`)
     try {
         const space = await getCFSpace()
@@ -228,8 +219,7 @@ module.exports.getHDIInstances = getHDIInstances
         const spaceGUID = space.GUID
         const orgGUID = org.GUID
 
-        const util = require('util')
-        const exec = util.promisify(require('child_process').exec)
+        const exec = promisify(child_process.exec)
         let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=sbss&per_page=5000"`
 
         const { stdout, stderr } = await exec(script)
@@ -246,13 +236,12 @@ module.exports.getHDIInstances = getHDIInstances
         throw (error)
     }
 }
-module.exports.getSbssInstances = getSbssInstances
 
 /**
  * Get all SecureStore service instances 
  * @returns {Promise<object>}
  */
- async function getSecureStoreInstances() {
+export async function getSecureStoreInstances() {
     base.debug(`getSecureStoreInstances`)
     try {
         const space = await getCFSpace()
@@ -261,8 +250,7 @@ module.exports.getSbssInstances = getSbssInstances
         const spaceGUID = space.GUID
         const orgGUID = org.GUID
 
-        const util = require('util')
-        const exec = util.promisify(require('child_process').exec)
+        const exec = promisify(child_process.exec)
         let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=securestore&per_page=5000"`
 
         const { stdout, stderr } = await exec(script)
@@ -279,13 +267,12 @@ module.exports.getSbssInstances = getSbssInstances
         throw (error)
     }
 }
-module.exports.getSecureStoreInstances = getSecureStoreInstances
 
 /**
  * Get all SecureStore service instances 
  * @returns {Promise<object>}
  */
- async function getSchemaInstances() {
+export async function getSchemaInstances() {
     base.debug(`getSchemaInstances`)
     try {
         const space = await getCFSpace()
@@ -294,8 +281,7 @@ module.exports.getSecureStoreInstances = getSecureStoreInstances
         const spaceGUID = space.GUID
         const orgGUID = org.GUID
 
-        const util = require('util')
-        const exec = util.promisify(require('child_process').exec)
+        const exec = promisify(child_process.exec)
         let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=schema&per_page=5000"`
 
         const { stdout, stderr } = await exec(script)
@@ -312,13 +298,12 @@ module.exports.getSecureStoreInstances = getSecureStoreInstances
         throw (error)
     }
 }
-module.exports.getSchemaInstances = getSchemaInstances
 
 /**
  * Get all User Provided Service Instances
  * @returns {Promise<object>}
  */
-async function getUpsInstances() {
+export async function getUpsInstances() {
     base.debug(`getUpsInstances`)
 
     try {
@@ -328,8 +313,7 @@ async function getUpsInstances() {
         const spaceGUID = space.GUID
         const orgGUID = org.GUID
 
-        const util = require('util')
-        const exec = util.promisify(require('child_process').exec)
+        const exec = promisify(child_process.exec)
         let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&type=user-provided&per_page=5000"`
 
         const { stdout, stderr } = await exec(script)
@@ -347,21 +331,18 @@ async function getUpsInstances() {
         throw (error)
     }
 }
-module.exports.getUpsInstances = getUpsInstances
+
 
 /**
  * Start HANA Cloud Instance
  * @param {string} name - HANA Cloud instance name 
  * @returns any
  */
-async function startHana(name) {
+export async function startHana(name) {
     base.debug(`startHana ${name}`)
     try {
         await getCFSpace()
-        const util = require('util')
-        const exec = util.promisify(require('child_process').exec)
-        const homedir = require('os').homedir()
-        const fs = require('fs')
+        const exec = promisify(child_process.exec)
         const data = { "data": { "serviceStopped": false } }
         const fileName = `${homedir}/hana_start.json`
         fs.writeFileSync(fileName, JSON.stringify(data))
@@ -382,21 +363,17 @@ async function startHana(name) {
         throw (error)
     }
 }
-module.exports.startHana = startHana
 
 /**
  * Stop HANA Cloud Instance
  * @param {string} name - HANA Cloud instance name
  * @returns any
  */
-async function stopHana(name) {
+export async function stopHana(name) {
     base.debug(`stopHana ${name}`)
     try {
         await getCFSpace()
-        const util = require('util')
-        const exec = util.promisify(require('child_process').exec)
-        const homedir = require('os').homedir()
-        const fs = require('fs')
+        const exec = promisify(child_process.exec)
         const data = { "data": { "serviceStopped": true } }
         const fileName = `${homedir}/hana_stop.json`
         fs.writeFileSync(fileName, JSON.stringify(data))
@@ -417,4 +394,3 @@ async function stopHana(name) {
         throw (error)
     }
 }
-module.exports.stopHana = stopHana

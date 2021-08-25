@@ -1,5 +1,5 @@
-const path = require('path')
-const express = require('express')
+import path from 'path'
+import express from 'express'
 const base = require("../utils/base")
 
 module.exports = (app) => {
@@ -12,7 +12,7 @@ module.exports = (app) => {
     app.get('/appconfig/fioriSandboxConfig.json', async (req, res) => {
         try {
             let jsonData = require( '../app/appconfig/fioriSandboxConfig')
-            const version = require('../bin/version')
+            import version from '../bin/version'
             const info = version.getVersion()
             jsonData.bootstrapPlugins.BootstrapXrayPlugin.config.version = info['hana-cli']
             res.type("application/json").status(200).send(jsonData)           

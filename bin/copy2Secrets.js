@@ -1,7 +1,7 @@
 const base = require("../utils/base")
 
-const fs = require('fs');
-const path = require('path')
+import fs from 'fs';
+import path from 'path'
 
 exports.command = 'copy2Secrets'
 exports.aliases = ['secrets', 'make:secrets']

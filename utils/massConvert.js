@@ -1,7 +1,7 @@
 /*eslint-env node, es6 */
 "use strict"
 const base = require("./base")
-const fsp = require('fs').promises
+import fsp from 'fs'.promises
 const path = require("path")
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
 
             const db = await base.createDBConnection()
             const dbClass = require("sap-hdbext-promisfied")
-            const cds = require('@sap/cds')
+            import cds from '@sap/cds'
 
             let schema = await dbClass.schemaCalc(prompts, db)
             let targetMsg = `${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("table")}: ${prompts.table}`

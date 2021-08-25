@@ -6,11 +6,11 @@ exports.describe = base.bundle.getText("readMe")
 exports.builder = base.getBuilder({}, false)
 
 exports.handler = async function () {
-  const fs = require('fs')
-  const path = require('path')
+  import fs from 'fs'
+  import path from 'path'
 
-  const marked = require('marked')
-  const TerminalRenderer = require('marked-terminal')
+  import marked from 'marked'
+  import TerminalRenderer from 'marked-terminal'
 
   marked.setOptions({
     // Define custom renderer

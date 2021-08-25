@@ -72,7 +72,7 @@ async function viewInspect(prompts) {
     let fields = await dbInspect.getViewFields(db, object[0].VIEW_OID)
     const cds = require("@sap/cds")
     Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => require('@sap/cds-dk/lib/compile/openapi') })
-    const highlight = require('cli-highlight').highlight
+    import highlight from 'cli-highlight'.highlight
 
     switch (prompts.output) {
       case 'tbl':
@@ -202,7 +202,7 @@ async function viewInspect(prompts) {
             'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
             'openapi:diagram': true
           })
-          const YAML = require('json-to-pretty-yaml')
+          import YAML from 'json-to-pretty-yaml'
           let data = YAML.stringify(metadata)
           var lines = data.split('\n')
           let output =

@@ -69,7 +69,7 @@ async function procedureInspect(prompts) {
       console.table(columns)
     } else if (prompts.output === 'sql') {
       let definition = await dbInspect.getDef(db, schema, prompts.procedure)
-      const highlight = require('cli-highlight').highlight
+      import highlight from 'cli-highlight'.highlight
       console.log(highlight(definition))
     }
     return base.end()

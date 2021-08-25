@@ -278,7 +278,7 @@ async function cdsServerSetup(prompts, cdsSource) {
     })
 
   //Swagger UI
-  const swaggerUi = require('swagger-ui-express')
+  import swaggerUi from 'swagger-ui-express'
   Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => require('@sap/cds-dk/lib/compile/openapi') })
   try {
     let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
@@ -315,7 +315,7 @@ async function cdsServerSetup(prompts, cdsSource) {
     server.listen(port, function () {
       let serverAddr = `http://localhost:${server.address().port}`
       console.info(`HTTP Server: ${serverAddr}`)
-      const open = require('open')
+      import open from 'open'
       open(serverAddr)
     })
   }

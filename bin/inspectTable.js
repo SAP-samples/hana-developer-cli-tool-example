@@ -75,9 +75,9 @@ async function tableInspect(prompts) {
     let object = await dbInspect.getTable(db, schema, prompts.table)
     let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
     let constraints = await dbInspect.getConstraints(db, object)
-    const cds = require('@sap/cds')
+    import cds from '@sap/cds'
     Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => require('@sap/cds-dk/lib/compile/openapi') })
-    const highlight = require('cli-highlight').highlight
+    import highlight from 'cli-highlight'.highlight
 
     var results = {}
     switch (prompts.output) {
@@ -226,7 +226,7 @@ async function tableInspect(prompts) {
             'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
             'openapi:diagram': true
           })
-          const YAML = require('json-to-pretty-yaml')
+          import YAML from 'json-to-pretty-yaml'
           let data = YAML.stringify(metadata)
           var lines = data.split('\n')
           let output =

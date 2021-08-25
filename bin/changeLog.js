@@ -9,11 +9,11 @@ exports.handler = () => {
 }
 
 function getChangeLog() {
-  const fs = require('fs')
-  const path = require('path')
+  import fs from 'fs'
+  import path from 'path'
 
-  const marked = require('marked')
-  const TerminalRenderer = require('marked-terminal')
+  import marked from 'marked'
+  import TerminalRenderer from 'marked-terminal'
 
   marked.setOptions({
     // Define custom renderer

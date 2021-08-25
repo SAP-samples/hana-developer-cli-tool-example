@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [2.202108.4] - 2021-08-25
+
+**Changed**
+
+- querySimple Export to CSV Format feature added by [sbarzaghialteaup](https://github.com/sbarzaghialteaup)
+- Update Dependencies - especially HANA Client to 2.9.28
+
 ## [2.202108.1] - 2021-08-06
 
 **Changed**

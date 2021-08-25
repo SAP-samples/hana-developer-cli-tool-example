@@ -163,7 +163,7 @@ async function saveEnv(options) {
     defaultEnv.VCAP_SERVICES.hana[0].credentials.sslCryptoProvider = 'openssl'
     defaultEnv.VCAP_SERVICES.hana[0].credentials.sslValidateCertificate = true
   }
-  const fs = require('fs')
+  import fs from 'fs'
   fs.writeFile("default-env-admin.json", JSON.stringify(defaultEnv, null, '\t'),  (err) => {
     if (err) {
       throw new Error(`${base.bundle.getText("errConn")} ${JSON.stringify(err)}`)

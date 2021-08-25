@@ -73,7 +73,7 @@ async function triggerInspect(prompts) {
       let definition = await db.statementExecPromisified(await db.preparePromisified(query), [schema, prompts.trigger])
       let output = definition[0].DEFINITION.toString()
       output = output.replace(new RegExp(" ,", "g"), ",\n")
-      const highlight = require('cli-highlight').highlight
+      import highlight from 'cli-highlight'.highlight
       console.log(highlight(output))
     }
     return base.end()

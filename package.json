@@ -6,6 +6,7 @@
   "bin": {
     "hana-cli": "./bin/cli.js"
   },
+  "type": "module",
   "engines": {
     "node": "^12.18.0 || ^14.0.0"
   },
@@ -42,7 +43,7 @@
     "js-convert-case": "^4.1.2",
     "json-to-pretty-yaml": "^1.2.2",
     "json2csv": "^5.0.6",
-    "latest-version": "^5.1",
+    "latest-version": "^6.0",
     "marked": "^3.0",
     "marked-terminal": "^4.1.1",
     "node-xlsx": "^0.17.1",

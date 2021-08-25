@@ -12,12 +12,12 @@ async function verOutput() {
   base.debug('verOutput')
   const colors = require("colors/safe")
   const log = console.log
-  const highlight = require('cli-highlight').highlight
+  import highlight from 'cli-highlight'.highlight
   const info = version()
   Object.keys(info).forEach(key => log(highlight(`${key}: ${info[key]}`)))
   console.log(`Node.js: ${colors.green(process.version)}`)
   console.log(`Change Log: ${colors.blue('https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/CHANGELOG.md')}`)
-  const latestVersion = require('latest-version')
+  import latestVersion from 'latest-version'
 
   let selfVersion = await latestVersion('hana-cli')
   console.log(`Latest hana-cli version available on npmjs.com: ${colors.green(selfVersion)}`)

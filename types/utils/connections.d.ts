@@ -44,6 +44,7 @@ export function getConnOptions(prompts: object): object;
 /**
  * Create Databse Connection
  * @param {object} prompts - input prompt values
+ * @param {boolean} directConnect - Direct Connection parameters are supplied in prompts
  * @returns {Promise<object>} HANA DB conneciton of type sap/hdbext
  */
-export function createConnection(prompts: object): Promise<object>;
+export function createConnection(prompts: object, directConnect?: boolean): Promise<object>;

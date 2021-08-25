@@ -1,12 +1,12 @@
-const path = require('path')
-  const fs = require('fs').promises
+import path from 'path'
+  import fs from 'fs'.promises
 
 module.exports = (app) => {
     app.get('/docs/readme', async (req, res) => {
 
         try {
             let mdReadMe = await fs.readFile(path.resolve(__dirname, "../README.md"), "utf-8")
-            const showdown = require('showdown')
+            import showdown from 'showdown'
             const converter = new showdown.Converter()
             let html = converter.makeHtml(mdReadMe)
             res.type("text/html").status(200).send(html)
@@ -21,7 +21,7 @@ module.exports = (app) => {
 
         try {
             let mdChangeLog = await fs.readFile(path.resolve(__dirname, "../CHANGELOG.md"), "utf-8")
-            const showdown = require('showdown')
+            import showdown from 'showdown'
             const converter = new showdown.Converter()
             let html = converter.makeHtml(mdChangeLog)
             res.type("text/html").status(200).send(html)

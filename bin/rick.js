@@ -4,7 +4,7 @@ exports.command = 'rick'
 exports.describe = base.bundle.getText("rick")
 exports.builder = base.getBuilder({}, false, false)
 exports.handler = async function () {
-  const prompt = require('prompt')
+  import prompt from 'prompt'
   prompt.start()
   var property = {
     name: 'yesno',
@@ -17,7 +17,7 @@ exports.handler = async function () {
 
     if (result.yesno === `yes`) {
 
-      const prompt2 = require('prompt')
+      import prompt2 from 'prompt'
       prompt2.start()
       var property2 = {
         name: 'yesno',
@@ -29,7 +29,7 @@ exports.handler = async function () {
       prompt2.get(property2, function (err, result) {
         if (result.yesno === `yes`) {
           try {
-            const open = require('open')
+            import open from 'open'
             const helpVideoURL = `https://www.youtube.com/watch?v=j5a0jTc9S10&list=PL3KnTfyhrIlcudeMemKd6rZFGDWy`
             open(helpVideoURL)
 

@@ -1,11 +1,18 @@
 // @ts-check
-
 /**
  * @module base - Central functionality shared by all the various commands
  */
-/** @typedef {typeof import("sap-hdbext-promisfied")} hdbextPromise - sap-hdbext-promisified module */
-const dbClass = require("sap-hdbext-promisfied")
-const conn = require("../utils/connections")
+
+ import { fileURLToPath } from 'url'
+ // @ts-ignore
+ const __dirname = fileURLToPath(new URL('.', import.meta.url))
+ import { createRequire } from 'module'
+  // @ts-ignore
+ const require = createRequire(import.meta.url)
+
+// @ts-ignore
+import * as dbClass from "sap-hdbext-promisfied"
+import * as conn from "../utils/connections.js"
 
 /** @type Object - HANA Client DB Connection */
 let dbConnection = null
@@ -14,18 +21,27 @@ let dbConnection = null
 let dbClassInstance = null
 
 /** @type {typeof import("colors/safe")} */
-const colors = require("colors/safe")
-module.exports.colors = colors
+ import * as Colors from 'colors/safe.js'
+export const colors = Colors
 
+/** @type typeof import("prompt") */
+import prompt from 'prompt'
+
+/** @type typeof import("glob") */
+import glob from 'glob'
+
+// @ts-ignore
+import open from 'open'
 
 /** @type {typeof import("debug") } */
-// @ts-ignore
-let debug = require('debug')('hana-cli')
-module.exports.debug = debug
+import debugModule from 'debug'
+export const debug = new debugModule('hana-cli')
+import setDebug from 'debug'
+
+import { inspect } from 'util'
 
 /** @type string */
-let hanaBin = __dirname
-module.exports.hanaBin = hanaBin
+export let hanaBin = __dirname
 
 /** @type boolean */
 let inDebug = false
@@ -35,17 +51,16 @@ let inGui = false
 /** @type any */
 let lastResults
 
-/** @typedef {typeof import("@sap/textbundle").TextBundle} TextBundle - sap/textbundle */
-/** @type TextBundle */
-const TextBundle = require("@sap/textbundle").TextBundle
+import * as locale from "../utils/locale.js"
+const TextBundle = require('@sap/textbundle').TextBundle
 /** @typeof TextBundle - instance of sap/textbundle */
-const bundle = new TextBundle("../_i18n/messages", require("../utils/locale").getLocale())
-/** @type {typeof import("../utils/base")} */
-module.exports.bundle = bundle
+export const bundle = new TextBundle("../_i18n/messages", locale.getLocale())
+
 
 /** @typedef {typeof import("ora")} Ora*/
 /** @type Ora - Elegant terminal spinner */
-const ora = require('ora')
+import ora from 'ora'
+
 /** @typeof Ora.Options - Terminal spinner options */
 let oraOptions = { type: 'clock', text: '\n' }
 /** @typeof Ora.spinner | Void - elgant termianl spinner instance*/
@@ -63,19 +78,18 @@ let prompts = []
  * 
  * @param {object} newPrompts - processed input prompts
  */
-function setPrompts(newPrompts) {
+export function setPrompts(newPrompts) {
     debug('Set Prompts')
     prompts = newPrompts
     isDebug(prompts)
     isGui(prompts)
 }
-module.exports.setPrompts = setPrompts
 
 /**
  * 
  * @returns {object} newPrompts - processed input prompts
  */
-function getPrompts() {
+export function getPrompts() {
     debug('Get Prompts')
 
     // @ts-ignore
@@ -102,17 +116,16 @@ function getPrompts() {
     if (typeof prompts.cf === 'undefined') { prompts.cf = true }
     return prompts
 }
-module.exports.getPrompts = getPrompts
 
-async function clearConnection() {
+export async function clearConnection() {
     dbConnection = null
 }
-module.exports.clearConnection = clearConnection
+
 /**
  * @param {object} [options] - override the already set parameters with new connection options
  * @returns {Promise<hdbextPromiseInstance>} - hdbext instanced promisfied
  */
-async function createDBConnection(options) {
+export async function createDBConnection(options) {
     if (!dbConnection) {
         if (options) {
             dbConnection = await conn.createConnection(options, true)
@@ -123,7 +136,6 @@ async function createDBConnection(options) {
     dbClassInstance = new dbClass(dbConnection)
     return dbClassInstance
 }
-module.exports.createDBConnection = createDBConnection
 
 /**
  * Initialize Yargs builder 
@@ -132,7 +144,7 @@ module.exports.createDBConnection = createDBConnection
  * @param {boolean} [iDebug=true] - Add Debug Group
  * @returns {import("yargs").CommandBuilder} parameters for the command
  */
-function getBuilder(input, iConn = true, iDebug = true) {
+export function getBuilder(input, iConn = true, iDebug = true) {
 
     let grpConn = {}
     let grpDebug = {}
@@ -178,14 +190,13 @@ function getBuilder(input, iConn = true, iDebug = true) {
     }
     return builder
 }
-module.exports.getBuilder = getBuilder
 
 /**
  * Initialize Yargs builder for massConvert Command
  * @param {boolean} [ui=false] - Mass Convert via Browser-based UI
  * @returns {import("yargs").CommandBuilder} parameters for the command
  */
-function getMassConvertBuilder(ui = false) {
+export function getMassConvertBuilder(ui = false) {
     /** @type any */
     let parameters = {
         table: {
@@ -270,14 +281,13 @@ function getMassConvertBuilder(ui = false) {
     return getBuilder(parameters, true, true)
 
 }
-module.exports.getMassConvertBuilder = getMassConvertBuilder
 
 /**
  * Initialize Yargs builder for massConvert Command
  * @param {boolean} [ui=false] - Mass Convert via Browser-based UI
  * @returns {typeof import("prompt")} - prompts output
  */
-function getMassConvertPrompts(ui = false) {
+export function getMassConvertPrompts(ui = false) {
     let parameters = {
         table: {
             description: bundle.getText("table"),
@@ -354,23 +364,18 @@ function getMassConvertPrompts(ui = false) {
     return parameters
 
 }
-module.exports.getMassConvertPrompts = getMassConvertPrompts
 
 /**
  * Get Prompts from the yargs current values and adjust
  * @param {import("yargs").CommandBuilder} argv - parameters for the command
  * @returns {typeof import("prompt")} - prompts output
  */
-function getPrompt(argv) {
-    /** @type typeof import("prompt") */
-    // @ts-ignore
-    const prompt = require('prompt')
+export function getPrompt(argv) {
     prompt.override = argv
     prompt.message = colors.green(bundle.getText("input"))
     prompt.start()
     return prompt
 }
-module.exports.getPrompt = getPrompt
 
 /**
  * Fill the prompts schema 
@@ -379,7 +384,7 @@ module.exports.getPrompt = getPrompt
  * @param {boolean} [iDebug=true] - Add Debug Group 
  * @returns {any} prompts schema as json
  */
-function getPromptSchema(input, iConn = true, iDebug = true) {
+export function getPromptSchema(input, iConn = true, iDebug = true) {
 
     let grpConn = {}
     let grpDebug = {}
@@ -427,16 +432,14 @@ function getPromptSchema(input, iConn = true, iDebug = true) {
     }
     return schema
 }
-module.exports.getPromptSchema = getPromptSchema
 
 /**
  * Function that always retruns false
  * @returns {boolean}
  */
-function askFalse() {
+export function askFalse() {
     return false
 }
-module.exports.askFalse = askFalse
 
 /**
  * Prompts handler function
@@ -446,7 +449,7 @@ module.exports.askFalse = askFalse
  * @param {boolean} [iConn=true] - Add Connection Group
  * @param {boolean} [iDebug=true] - Add Debug Group 
  */
-function promptHandler(argv, processingFunction, input, iConn = true, iDebug = true) {
+export function promptHandler(argv, processingFunction, input, iConn = true, iDebug = true) {
     const prompt = getPrompt(argv)
     let schema = getPromptSchema(input, iConn, iDebug)
 
@@ -456,8 +459,6 @@ function promptHandler(argv, processingFunction, input, iConn = true, iDebug = t
         }
 
         if (isDebug(result)) {
-            // @ts-ignore
-            const setDebug = require('debug')
             setDebug.enable('hana-cli, *')
         }
 
@@ -470,13 +471,12 @@ function promptHandler(argv, processingFunction, input, iConn = true, iDebug = t
         processingFunction(result)
     })
 }
-module.exports.promptHandler = promptHandler
 
 /**
  * Handle Errors cleanup connections and decide how to alter the user
  * @param {*} error - Error Object
  */
-function error(error) {
+export function error(error) {
     debug(`Error`)
     if (dbConnection) {
         debug(`HANA Disconnect Started`)
@@ -496,12 +496,11 @@ function error(error) {
         return console.error(`${error}`)
     }
 }
-module.exports.error = error
 
 /**
  * Normal processing end and cleanup for single comand
  */
-async function end() {
+export async function end() {
     debug(`Natural End`)
     if (dbConnection) {
         debug(`HANA Disconnect Started`)
@@ -517,36 +516,33 @@ async function end() {
         spinner.stop()
     }
 }
-module.exports.end = end
 
 /**
  * Start Console UI spinner 
  * @param {*} prompts - input parameters and values
  */
-function startSpinner(prompts) {
+export function startSpinner(prompts) {
     if (verboseOutput(prompts)) { startSpinnerInt() }
 }
-module.exports.startSpinner = startSpinner
 
 /**
  * Check for Verbose output
  * @param {*} prompts - input parameters and values
  * @returns {boolean}
  */
-function verboseOutput(prompts) {
+export function verboseOutput(prompts) {
     if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'disableVerbose') && prompts.disableVerbose) {
         return false
     }
     else { return true }
 }
-module.exports.verboseOutput = verboseOutput
 
 /**
  * Check if we are in debug mode
  * @param {*} prompts - input parameters and values
  * @returns {boolean}
  */
-function isDebug(prompts) {
+export function isDebug(prompts) {
     if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'debug') && prompts.debug) {
         inDebug = true
         return true
@@ -556,14 +552,13 @@ function isDebug(prompts) {
         return false
     }
 }
-module.exports.isDebug = isDebug
 
 /**
  * Check if we are in GUI mode
  * @param {*} prompts - input parameters and values
  * @returns {boolean}
  */
-function isGui(prompts) {
+export function isGui(prompts) {
     if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'isGui') && prompts.isGui) {
         inGui = true
         return true
@@ -573,50 +568,44 @@ function isGui(prompts) {
         return false
     }
 }
-module.exports.isGui = isGui
 
 /**
  * Output JSON content either as a table or as formatted JSON to console
  * @param {*} content - json content often a HANA result set
  * @returns void 
  */
-function outputTable(content) {
+export function outputTable(content) {
     if (content.length < 1) {
         console.log(bundle.getText('noData'))
     } else {
         if (verboseOutput(prompts)) {
             return console.table(content)
         } else {
-            const util = require('util')
-            return console.log(util.inspect(content, { maxArrayLength: null }))
+            return console.log(inspect(content, { maxArrayLength: null }))
         }
     }
 }
-module.exports.outputTable = outputTable
 
 /**
  * Only output this content to console if in verbose mode
  * @param {*} content - json content often a HANA result set
  * @returns void
  */
-function output(content) {
+export function output(content) {
     if (verboseOutput(prompts)) {
         return console.log(content)
     } else {
         return
     }
 }
-module.exports.output = output
 
 /**
  * Setup Express and Launch Browser
  * @param {string} urlPath - URL Path to Launch
  * @returns void
  */
-async function webServerSetup(urlPath) {
+export async function webServerSetup(urlPath) {
     const path = require("path")
-    // @ts-ignore
-    const glob = require('glob')
     debug('serverSetup')
     // @ts-ignore
     const port = process.env.PORT || prompts.port || 3010
@@ -625,6 +614,7 @@ async function webServerSetup(urlPath) {
         return error(`${port} ${bundle.getText("errPort")}`)
     }
     const server = require("http").createServer()
+    // @ts-ignore
     // @ts-ignore
     const express = require("express")
     var app = express()
@@ -644,13 +634,11 @@ async function webServerSetup(urlPath) {
         // @ts-ignore
         let serverAddr = `http://localhost:${server.address().port}${urlPath}`
         console.info(`HTTP Server: ${serverAddr}`)
-        const open = require('open')
         open(serverAddr)
     })
 
     return
 }
-module.exports.webServerSetup = webServerSetup
 
 /**
  * Store and send results JSON
@@ -658,17 +646,15 @@ module.exports.webServerSetup = webServerSetup
  * @param {any} results - JSON content
  * @returns void
  */
-function sendResults(res, results) {
+export function sendResults(res, results) {
     lastResults = results
     res.type("application/json").status(200).send(results)
 }
-module.exports.sendResults = sendResults
 
 /**
  * Return the last results JSON 
  * @returns lastResults
  */
-function getLastResults() {
+export function getLastResults() {
     return lastResults
 }
-module.exports.getLastResults = getLastResults

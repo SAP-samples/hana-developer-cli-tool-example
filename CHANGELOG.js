@@ -1,4 +1,4 @@
-const changelog = require('stringify-changelog')
+import changelog from 'stringify-changelog'
 let markdown = changelog("./CHANGELOG.json")
 
 markdown = `# Change Log
@@ -9,5 +9,5 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ${markdown}`
 
-const fs = require("fs")
+import fs from 'fs'
 fs.writeFileSync('./CHANGELOG.md', markdown)

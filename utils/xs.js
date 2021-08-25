@@ -15,8 +15,8 @@ const bundle = base.bundle
 async function getCFConfig() {
     base.debug('getCFConfig')
     try {
-        const fs = require('fs')
-        const homedir = require('os').homedir()
+        import fs from 'fs'
+        import homedir from 'os'.homedir()
         const propertiesToJSON = require("properties-to-json")
         const data = fs.readFileSync(`${homedir}/.xsconfig`,
             { encoding: 'utf8', flag: 'r' })
@@ -122,7 +122,7 @@ async function getHANAInstances() {
 
     try {
         const spaceGUID = await getCFSpaceGUID()
-        const util = require('util')
+        import util from 'util'
         const exec = util.promisify(require('child_process').exec)
         let script = `xs curl "/v2/service_instances?q=space_guid:${spaceGUID}&results-per-page=5000"`
 
@@ -153,7 +153,7 @@ async function getHANAInstanceByName(name) {
 
     try {
         const spaceGUID = await getCFSpaceGUID()
-        const util = require('util')
+        import util from 'util'
         const exec = util.promisify(require('child_process').exec)
         let script = `xs curl "/v2/service_instances?q=space_guid:${spaceGUID}%3Bname:${name}&results-per-page=5000"`
 
@@ -182,7 +182,7 @@ module.exports.getHANAInstanceByName = getHANAInstanceByName
 async function getServicePlans(serviceGUID) {
     base.debug(`getServicePlans ${serviceGUID}`)
     try {
-        const util = require('util')
+        import util from 'util'
         const exec = util.promisify(require('child_process').exec)
         let script = `xs curl "/v2/services/${serviceGUID}/service_plans"`
 
@@ -208,7 +208,7 @@ module.exports.getServicePlans = getServicePlans
 async function getServices() {
     base.debug('getServices')
     try {
-        const util = require('util')
+        import util from 'util'
         const exec = util.promisify(require('child_process').exec)
         let script = `xs curl "/v2/services"`
 
@@ -279,7 +279,7 @@ async function getHDIInstances() {
         const spaceGUID = await getCFSpaceGUID()
         const serviceGUID = await getServiceGUID('hana')
         const planGUID = await getServicePlanGUID(serviceGUID, `hdi-shared`)
-        const util = require('util')
+        import util from 'util'
         const exec = util.promisify(require('child_process').exec)
         let script = `xs curl "/v2/service_instances/?q=space_guid:${spaceGUID}%3Bservice_plan_guid:${planGUID}&results-per-page=5000"`
         const { stdout, stderr } = await exec(script)
@@ -310,7 +310,7 @@ module.exports.getHDIInstances = getHDIInstances
         const spaceGUID = await getCFSpaceGUID()
         const serviceGUID = await getServiceGUID('hana')
         const planGUID = await getServicePlanGUID(serviceGUID, `sbss`)
-        const util = require('util')
+        import util from 'util'
         const exec = util.promisify(require('child_process').exec)
         let script = `xs curl "/v2/service_instances/?q=space_guid:${spaceGUID}%3Bservice_plan_guid:${planGUID}&results-per-page=5000"`
         const { stdout, stderr } = await exec(script)
@@ -340,7 +340,7 @@ module.exports.getSbssInstances = getSbssInstances
         const spaceGUID = await getCFSpaceGUID()
         const serviceGUID = await getServiceGUID('hana')
         const planGUID = await getServicePlanGUID(serviceGUID, `securestore`)
-        const util = require('util')
+        import util from 'util'
         const exec = util.promisify(require('child_process').exec)
         let script = `xs curl "/v2/service_instances/?q=space_guid:${spaceGUID}%3Bservice_plan_guid:${planGUID}&results-per-page=5000"`
         const { stdout, stderr } = await exec(script)
@@ -370,7 +370,7 @@ module.exports.getSecureStoreInstances = getSecureStoreInstances
         const spaceGUID = await getCFSpaceGUID()
         const serviceGUID = await getServiceGUID('hana')
         const planGUID = await getServicePlanGUID(serviceGUID, `schema`)
-        const util = require('util')
+        import util from 'util'
         const exec = util.promisify(require('child_process').exec)
         let script = `xs curl "/v2/service_instances/?q=space_guid:${spaceGUID}%3Bservice_plan_guid:${planGUID}&results-per-page=5000"`
         const { stdout, stderr } = await exec(script)
@@ -397,7 +397,7 @@ module.exports.getSchemaInstances = getSchemaInstances
 async function getUpsInstances() {
     base.debug(`getUpsInstances`)
     try {
-        const util = require('util')
+        import util from 'util'
         const exec = util.promisify(require('child_process').exec)
         let script = `xs curl "/v2/user_provided_service_instances/?results-per-page=5000"`
 

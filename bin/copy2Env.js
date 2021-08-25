@@ -16,7 +16,7 @@ async function copy(prompts) {
     let envFile = conn.resolveEnv(prompts)
     const xsenv = require("@sap/xsenv")
     xsenv.loadEnv(envFile)
-    const fs = require('fs')
+    import fs from 'fs'
     base.debug(process.env.VCAP_SERVICES)
     fs.writeFile(".env", `VCAP_SERVICES=${process.env.VCAP_SERVICES}`, async (err) => {
         if (err) {

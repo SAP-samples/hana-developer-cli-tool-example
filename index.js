@@ -1,8 +1,11 @@
 /*eslint no-console: 0 */
 /*eslint-env node, es6 */
 
+
+import * as cf from "./utils/cf.js"
+
 async function  init(){
-    const cf = require("./utils/cf")
+
     let data = await cf.getHANAInstanceByName('HANA_Cloud_Trial_TPJ')
   /*  last_operation: [Object],
       relationships: [Object],

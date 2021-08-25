@@ -166,7 +166,7 @@ async function saveEnv(options, input) {
   }
 
   if (input.save) {
-    const fs = require('fs')
+    import fs from 'fs'
     fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), (err) => {
       if (err) {
         throw new Error(`${base.bundle.getText("errConn")} ${JSON.stringify(err)}`)

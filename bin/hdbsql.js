@@ -33,7 +33,7 @@ async function launchHdbsql(prompts) {
     }
     base.debug(options)
     let cmd = `hdbsql -u ${options.hana.user} -n ${options.hana.host + ":" + options.hana.port} -p ${options.hana.password} ${encrypt} -A -m -j`
-    const { spawn } = require('child_process')
+    import { spawn } from 'child_process'
     await spawn(cmd, [], { shell: true, stdio: 'inherit' })
     return base.end()
   } catch (error) {

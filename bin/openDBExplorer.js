@@ -48,7 +48,7 @@ async function getDBX(prompts) {
             }
         }
         console.log(dbxURL)
-        const open = require('open')
+        import open from 'open'
         open(dbxURL)
         return base.end()
     } catch (error) {

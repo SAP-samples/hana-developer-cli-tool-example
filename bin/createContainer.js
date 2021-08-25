@@ -52,7 +52,7 @@ async function activate(prompts) {
     let envFile = conn.resolveEnv()
 
 
-    const { v4: uuidv4 } = require('uuid')
+    import { v4: uuidv4 } from 'uuid'
     let passwordDT = uuidv4()
     passwordDT = passwordDT.replace(/-/g, "A")
     let passwordRT = uuidv4()
@@ -190,7 +190,7 @@ async function saveEnv(options, container, userDT, userRT, passwordDT, passwordR
     }
   }]
 
-  const fs = require('fs')
+  import fs from 'fs'
   base.debug(defaultEnv)
   fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), (err) => {
     if (err) {

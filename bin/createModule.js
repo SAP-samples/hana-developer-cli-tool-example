@@ -49,8 +49,8 @@ async function save(prompts) {
 //
 // This is a workaround that will be replaced by a solution where CDS generates the DB module along with package.json.
 
-const fs = require('fs');
-const childproc = require('child_process');
+import fs from 'fs';
+import childproc from 'child_process';
 
 if (fs.existsSync('../package.json')) {
     // true at build-time, false at CF staging time
@@ -64,7 +64,7 @@ if (fs.existsSync('../package.json')) {
         if (err) throw err
     })
 
-    const latestVersion = require('latest-version')
+    import latestVersion from 'latest-version'
     let hdiVersion = await latestVersion('@sap/hdi-deploy')
     base.debug(`HDI Version ${hdiVersion}`)
     var packageContent = ``

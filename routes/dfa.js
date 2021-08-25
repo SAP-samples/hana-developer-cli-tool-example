@@ -31,7 +31,7 @@ module.exports = (app) => {
                 throw new Error("Missing parameter: id")
             }
             const path = require("path")
-            const fs = require('fs')
+            import fs from 'fs'
 
             let output = {}
             output.status = "OK"
@@ -41,7 +41,7 @@ module.exports = (app) => {
             if (req.query.id === "Shell-home!whatsnew") {
                 output.data.tiles = []
 
-                const showdown = require('showdown')
+                import showdown from 'showdown'
                 const converter = new showdown.Converter()
 
                 let changelog = require("../CHANGELOG.json")
@@ -93,7 +93,7 @@ module.exports = (app) => {
 }
 
 function getURLQuery(req) {
-    const { URL } = require('url')
+    import { URL } from 'url'
     const baseURL = 'http://' + req.headers.host + '/'
     const myURL = new URL(req.url, baseURL)
     let query = myURL.search.substr(1)

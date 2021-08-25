@@ -7,9 +7,9 @@ const base = require("../utils/base")
 const versionCheck = require("../utils/versionCheck")
 versionCheck.checkVersion().then(() => {
 
-    const updateNotifier = require('update-notifier')
+    import updateNotifier from 'update-notifier'
     // @ts-ignore
-    const pkg = require('../package.json')
+    import pkg from '../package.json'
     updateNotifier({pkg}).notify({isGlobal: true})
 
     require('console.table')

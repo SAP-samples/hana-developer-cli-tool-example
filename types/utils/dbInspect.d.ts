@@ -1,4 +1,5 @@
 export namespace options { }
+export namespace results { }
 /**
  * Get Table Constraints
  */

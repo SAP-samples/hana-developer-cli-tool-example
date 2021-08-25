@@ -1,5 +1,5 @@
 const base = require("../utils/base")
-const { parse: parseToCsv } = require('json2csv');
+import { parse: parseToCsv } from 'json2csv';
 
 exports.command = 'querySimple'
 exports.aliases = ['qs', "querysimple"]
@@ -120,7 +120,7 @@ async function dbQuery(prompts) {
         if (prompts.filename) {
           await toFile(prompts.folder, prompts.filename, 'json', JSON.stringify(results, null, 2))
         } else {
-          const highlight = require('cli-highlight').highlight
+          import highlight from 'cli-highlight'.highlight
           console.log(highlight(JSON.stringify(results, null, 2)))
         }
         break
@@ -128,13 +128,13 @@ async function dbQuery(prompts) {
         if (prompts.filename) {
           await toFile(prompts.folder, prompts.filename, 'csv', parseToCsv(results, {delimiter : ";", transforms : [removeNewlineCharacter]}))
         } else {
-          const highlight = require('cli-highlight').highlight
+          import highlight from 'cli-highlight'.highlight
           console.log(highlight(parseToCsv(results)))
         }
         break
       default:
         if (prompts.filename) {
-          const Table = require('easy-table')
+          import Table from 'easy-table'
           await toFile(prompts.folder, prompts.filename, 'txt', Table.print(results))
         } else {
           console.table(results)

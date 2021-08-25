@@ -37,7 +37,7 @@ async function copy() {
     }
     
     base.debug(defaultEnv)
-    const fs = require('fs')
+    import fs from 'fs'
     fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), async (err) => {
         if (err) {
             return base.error(err)
