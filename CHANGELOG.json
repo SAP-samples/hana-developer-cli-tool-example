@@ -1,5 +1,14 @@
 [
     {
+        "date": "2021-08-25",
+        "version": "2.202108.4",
+        "Changed": [
+            "querySimple Export to CSV Format feature added by [sbarzaghialteaup](https://github.com/sbarzaghialteaup)",
+            "Update Dependencies - especially HANA Client to 2.9.28"
+
+        ]
+    },
+    {
         "date": "2021-08-06",
         "version": "2.202108.1",
         "Changed": [
