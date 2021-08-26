@@ -1,10 +1,10 @@
-const base = require("../utils/base")
+import * as base from '../utils/base.js'
 
-exports.command = 'activateHDI [tenant]';
-exports.aliases = ['ahdi', 'ah'];
-exports.describe = base.bundle.getText("activateHDI");
+export const command = 'activateHDI [tenant]'
+export const aliases = ['ahdi', 'ah']
+export const describe = base.bundle.getText("activateHDI")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   tenant: {
     alias: ['t', 'Tenant'],
     type: 'string',
@@ -12,7 +12,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, activate, {
     tenant: {
       description: base.bundle.getText("tenant"),
@@ -22,7 +22,7 @@ exports.handler = (argv) => {
   })
 }
 
-async function activate(prompts) {
+export async function activate(prompts) {
   base.debug('activate')
   try {
     base.setPrompts(prompts)

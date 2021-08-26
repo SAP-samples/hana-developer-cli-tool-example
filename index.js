@@ -6,7 +6,7 @@ import * as cf from "./utils/cf.js"
 
 async function  init(){
 
-    let data = await cf.getHANAInstanceByName('HANA_Cloud_Trial_TPJ')
+    let data = await cf.getHANAInstanceByName('HANA_CLOUD_2')
   /*  last_operation: [Object],
       relationships: [Object],
       metadata: [Object],

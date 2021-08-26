@@ -1,10 +1,10 @@
-const base = require("../utils/base")
+import * as base from '../utils/base.js'
 
-exports.command = 'adminHDIGroup [user] [group]'
-exports.aliases = ['adHDIG', 'adhdig']
-exports.describe = base.bundle.getText("adminHDIGroup")
+export const command = 'adminHDIGroup [user] [group]'
+export const aliases = ['adHDIG', 'adhdig']
+export const describe = base.bundle.getText("adminHDIGroup")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   user: {
     alias: ['u', 'User'],
     desc: base.bundle.getText("user")
@@ -17,7 +17,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, activate, {
     user: {
       description: base.bundle.getText("user"),
@@ -30,7 +30,7 @@ exports.handler = (argv) => {
   })
 }
 
-async function activate(prompts) {
+export async function activate(prompts) {
   base.debug('activate')
   try {
     base.setPrompts(prompts)

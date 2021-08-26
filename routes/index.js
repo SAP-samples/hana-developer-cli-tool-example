@@ -1,18 +1,16 @@
-const base = require("../utils/base")
+import * as base from '../utils/base.js'
+import * as bodyParser from 'body-parser'
+let jsonParser = bodyParser.json()
 
-module.exports = (app) => {
+export default function (app) {
     app.get('/', async (req, res) => {
         try {
-
             res.type("application/json").status(200).send(base.getPrompts())
         } catch (error) {
             base.error(error)
             res.status(500).send(error.toString())
         }
-
     })
-    let bodyParser = require('body-parser')
-    var jsonParser = bodyParser.json()
 
     app.put('/', jsonParser, async (req, res) => {
         try {

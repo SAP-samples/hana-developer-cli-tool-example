@@ -1,12 +1,14 @@
-const base = require("../utils/base")
-const dbClass = require("sap-hdbext-promisfied")
-const dbInspect = require("../utils/dbInspect")
+import * as base from '../utils/base.js'
+import * as dbClass from 'sap-hdbext-promisfied'
+import * as dbInspect from '../utils/dbInspect.js'
+import * as conn from'../utils/connections.js'
+import * as hdbext from '@sap/hdbext'
 
-exports.command = 'callProcedure [schema] [procedure]'
-exports.aliases = ['cp', 'callprocedure', 'callProc', 'callproc', 'callSP', 'callsp']
-exports.describe = base.bundle.getText("callProcedure")
+export const command = 'callProcedure [schema] [procedure]'
+export const aliases = ['cp', 'callprocedure', 'callProc', 'callproc', 'callSP', 'callsp']
+export const describe = base.bundle.getText("callProcedure")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   procedure: {
     alias: ['p', 'Procedure', 'sp'],
     type: 'string',
@@ -21,7 +23,7 @@ exports.builder = base.getBuilder({
 })
 
 
-exports.handler = async (argv) => {
+export async function handler (argv) {
   let schema = {
     procedure: {
       description: base.bundle.getText("procedure"),
@@ -37,7 +39,7 @@ exports.handler = async (argv) => {
 
   try {
 
-    const conn = require("../utils/connections")
+
     const dbConn = await conn.createConnection(argv)
     const db = new dbClass(dbConn)
     let procSchema = await dbClass.schemaCalc(argv, db)
@@ -84,7 +86,7 @@ exports.handler = async (argv) => {
 }
 
 
-async function callProc(prompts) {
+export async function callProc(prompts) {
   base.debug('callProc')
   try {
     base.setPrompts(prompts)
@@ -100,9 +102,8 @@ async function callProc(prompts) {
         inputParams[parameter.PARAMETER_NAME] = prompts[parameter.PARAMETER_NAME]
       }
     }
-    let hdbext = require("@sap/hdbext")
-    let sp = await db.loadProcedurePromisified(hdbext, proc[0].SCHEMA_NAME, prompts.procedure)
 
+    let sp = await db.loadProcedurePromisified(hdbext, proc[0].SCHEMA_NAME, prompts.procedure)
     let output = await db.callProcedurePromisified(sp, inputParams)
     base.debug(output)
     base.outputTable(output.outputScalar)

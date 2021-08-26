@@ -1,9 +1,13 @@
-"use strict"
-const base = require("./base")
+import * as base from './base.js'
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+const check = require('check-node-version')
+import * as Colors from 'colors/safe.js'
+const colors = Colors
 
-function checkVersion() {
+export function checkVersion() {
     return new Promise(resolve => {
-        const check = require("check-node-version")
+
         const version = require("../package.json").engines.node
         base.debug(base.bundle.getText('requestedVersion', [version]))
         check({ node: version },
@@ -16,7 +20,7 @@ function checkVersion() {
                 if (results.isSatisfied) {
                     resolve()
                 }
-                const colors = require("colors/safe")
+
                 for (const packageName of Object.keys(results.versions)) {
                     if (!results.versions[packageName].isSatisfied) {
                         base.error(
@@ -27,4 +31,3 @@ function checkVersion() {
             })
     })
 }
-module.exports.checkVersion = checkVersion

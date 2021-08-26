@@ -1,12 +1,10 @@
 /*eslint no-console: 0, no-unused-vars: 0, new-cap:0 */
 /*eslint-env node, es6 */
-"use strict"
-const base = require("../utils/base")
-var WebSocketServer = require("ws").Server
+import * as base from '../utils/base.js'
+import {Server as WebSocketServer } from 'ws'
+import * as massConvertLib from '../utils/massConvert.js'
 
-module.exports = (app, server) => {
-
-	const massConvertLib = require("../utils/massConvert")
+export default function (app, server) {
 
 	app.get('/websockets', (req, res) => {
 		let output =
@@ -22,9 +20,7 @@ module.exports = (app, server) => {
 		})
 
 		server.on("upgrade", (request, socket, head) => {
-			const url = require("url")
-			const pathname = url.parse(request.url).pathname
-
+			const pathname = new URL(request.url).pathname 
 			if (pathname === "/websockets") {
 				wss.handleUpgrade(request, socket, head, (ws) => {
 					wss.emit("connection", ws, request)

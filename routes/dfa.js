@@ -1,7 +1,15 @@
-module.exports = (app) => {
+import { URL } from 'url'
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+import { fileURLToPath } from 'url'
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
+import * as path from 'path'
+import * as fs from 'fs'
+import * as showdown from 'showdown'
+
+export default function (app) {
     app.get('/sap/dfa/help/webassistant/catalogue', async (req, res) => {
         try {
-
             let input = JSON.parse(getURLQuery(req))
             if (!input.appUrl) {
                 throw new Error("Missing parameter: appUrl")
@@ -11,7 +19,7 @@ module.exports = (app) => {
             output.data = []
             input.appUrl.forEach(app => {
                 try {
-                    let jsonData = require(`../app/dfa/help/catalog/${app}`)
+                    let jsonData = require(`../app/dfa/help/catalog/${app}.json`)
                     output.data.push(jsonData)
                 } catch (error) {
                     return
@@ -20,8 +28,6 @@ module.exports = (app) => {
             res.type("application/json").status(200).send(output)
         } catch (error) {
             res.status(200).send()
-            //res.status(500).send(error.toString())
-            //return base.error(error)
         }
     })
 
@@ -30,18 +36,14 @@ module.exports = (app) => {
             if (!req.query.id) {
                 throw new Error("Missing parameter: id")
             }
-            const path = require("path")
-            import fs from 'fs'
 
             let output = {}
             output.status = "OK"
             output.data = []
-            let jsonData = require(`../app/dfa/help/context/${req.query.id}`)
+            let jsonData = require(`../app/dfa/help/context/${req.query.id}.json`)
             output.data = jsonData
             if (req.query.id === "Shell-home!whatsnew") {
                 output.data.tiles = []
-
-                import showdown from 'showdown'
                 const converter = new showdown.Converter()
 
                 let changelog = require("../CHANGELOG.json")
@@ -93,7 +95,6 @@ module.exports = (app) => {
 }
 
 function getURLQuery(req) {
-    import { URL } from 'url'
     const baseURL = 'http://' + req.headers.host + '/'
     const myURL = new URL(req.url, baseURL)
     let query = myURL.search.substr(1)

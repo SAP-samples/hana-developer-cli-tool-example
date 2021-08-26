@@ -1,20 +1,22 @@
-const base = require("../utils/base")
+import * as base from '../utils/base.js'
+import * as fs from 'fs'
+import * as path from 'path'
 
-exports.command = 'changes'
-exports.aliases = ['chg', 'changeLog', 'changelog']
-exports.describe = base.bundle.getText("changes");
+import marked from 'marked'
+import TerminalRenderer from 'marked-terminal'
 
-exports.handler = () => {
+import { fileURLToPath } from 'url'
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
+
+export const command = 'changes'
+export const aliases = ['chg', 'changeLog', 'changelog']
+export const describe = base.bundle.getText("changes")
+
+export function handler () {
   getChangeLog()
 }
 
-function getChangeLog() {
-  import fs from 'fs'
-  import path from 'path'
-
-  import marked from 'marked'
-  import TerminalRenderer from 'marked-terminal'
-
+export function getChangeLog() {
   marked.setOptions({
     // Define custom renderer
     renderer: new TerminalRenderer({

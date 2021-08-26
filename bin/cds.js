@@ -1,11 +1,23 @@
-const base = require("../utils/base")
+import * as base from '../utils/base.js'
+import * as dbClass from 'sap-hdbext-promisfied'
+import * as dbInspect from '../utils/dbInspect.js'
+import * as swaggerUi from 'swagger-ui-express'
+import * as open from 'open'
+import * as conn from '../utils/connections.js'
+import * as server from 'http'
+import * as express from 'express'
+import * as cds from '@sap/cds'
+
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+
 global.__xRef = []
 
-exports.command = 'cds [schema] [table]'
-exports.aliases = ['cdsPreview']
-exports.describe = base.bundle.getText("cds")
+export const command = 'cds [schema] [table]'
+export const aliases = ['cdsPreview']
+export const describe = base.bundle.getText("cds")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   table: {
     alias: ['t', 'Table'],
     type: 'string',
@@ -37,8 +49,8 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
-  base.promptHandler(argv, cds, {
+export function handler (argv) {
+  base.promptHandler(argv, cdsBuild, {
     table: {
       description: base.bundle.getText("table"),
       type: 'string',
@@ -75,12 +87,10 @@ exports.handler = (argv) => {
 }
 
 
-async function cds(prompts) {
+export async function cdsBuild(prompts) {
   base.debug('cds')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
-    const dbInspect = require("../utils/dbInspect")
     const db = await base.createDBConnection()
 
     let schema = await dbClass.schemaCalc(prompts, db)
@@ -178,12 +188,11 @@ async function cdsServerSetup(prompts, cdsSource) {
     return base.error(`${port} ${base.bundle.getText("errPort")}`)
   }
 
-  const server = require("http").createServer()
-  const express = require("express")
+  server.createServer()
   var app = express()
 
   //CDS OData Service
-  const cds = require("@sap/cds")
+
   let options = {
     kind: "hana",
     logLevel: "error",
@@ -191,9 +200,6 @@ async function cdsServerSetup(prompts, cdsSource) {
   cds.connect(options)
   cds.env.requires.db = {}
   cds.env.requires.db.multiTenant = false
-
-  const dbClass = require("sap-hdbext-promisfied")
-  const conn = require("../utils/connections")
 
   let odataURL = "/odata/v4/opensap.hana.CatalogService/"
   let entity = prompts.table
@@ -278,7 +284,7 @@ async function cdsServerSetup(prompts, cdsSource) {
     })
 
   //Swagger UI
-  import swaggerUi from 'swagger-ui-express'
+
   Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => require('@sap/cds-dk/lib/compile/openapi') })
   try {
     let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
@@ -315,7 +321,7 @@ async function cdsServerSetup(prompts, cdsSource) {
     server.listen(port, function () {
       let serverAddr = `http://localhost:${server.address().port}`
       console.info(`HTTP Server: ${serverAddr}`)
-      import open from 'open'
+
       open(serverAddr)
     })
   }

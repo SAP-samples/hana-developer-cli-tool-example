@@ -1,12 +1,14 @@
 import path from 'path'
-  import fs from 'fs'.promises
+import { promises as fs } from 'fs'
+import * as showdown from 'showdown'
+import { fileURLToPath } from 'url'
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
-module.exports = (app) => {
+export default function (app) {
     app.get('/docs/readme', async (req, res) => {
 
         try {
             let mdReadMe = await fs.readFile(path.resolve(__dirname, "../README.md"), "utf-8")
-            import showdown from 'showdown'
             const converter = new showdown.Converter()
             let html = converter.makeHtml(mdReadMe)
             res.type("text/html").status(200).send(html)
@@ -21,7 +23,6 @@ module.exports = (app) => {
 
         try {
             let mdChangeLog = await fs.readFile(path.resolve(__dirname, "../CHANGELOG.md"), "utf-8")
-            import showdown from 'showdown'
             const converter = new showdown.Converter()
             let html = converter.makeHtml(mdChangeLog)
             res.type("text/html").status(200).send(html)

@@ -1,8 +1,13 @@
-import path from 'path'
-import express from 'express'
-const base = require("../utils/base")
+import * as path from 'path'
+import * as express from 'express'
+import * as base from '../utils/base.js'
+import { fileURLToPath } from 'url'
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+import * as version from '../bin/version.js'
 
-module.exports = (app) => {
+export default function (app) {
     app.use('/ui', express.static(path.join(__dirname, '../app/resources')))
     app.use('/sap/dfa/', express.static(path.join(__dirname, '../app/dfa')))
     app.use('/resources/sap/dfa/', express.static(path.join(__dirname, '../app/dfa')))
@@ -11,8 +16,7 @@ module.exports = (app) => {
    
     app.get('/appconfig/fioriSandboxConfig.json', async (req, res) => {
         try {
-            let jsonData = require( '../app/appconfig/fioriSandboxConfig')
-            import version from '../bin/version'
+            let jsonData = require('../app/appconfig/fioriSandboxConfig.js')
             const info = version.getVersion()
             jsonData.bootstrapPlugins.BootstrapXrayPlugin.config.version = info['hana-cli']
             res.type("application/json").status(200).send(jsonData)           

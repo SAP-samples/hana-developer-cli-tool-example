@@ -1,7 +1,6 @@
-const base = require("../utils/base")
+import * as base from '../utils/base.js'
 
-module.exports = (app) => {
-
+export default function (app) {
     app.get(['/hana/inspectTable', '/hana/inspectTable-ui'], async (req, res) => {
         inspectTableHandler(res, "../bin/inspectTable", 'tableInspect')
     })
@@ -10,7 +9,7 @@ module.exports = (app) => {
 async function inspectTableHandler(res, lib, func) {
     try {
         await base.clearConnection()
-        const targetLibrary = require(lib)
+        const targetLibrary = await import(`${lib}.js`)
         let prompts = base.getPrompts()
         prompts.useHanaTypes = true
         prompts.output = 'tbl'
@@ -38,11 +37,10 @@ async function inspectTableHandler(res, lib, func) {
     }
 }
 
-// eslint-disable-next-line no-unused-vars
-async function inspectHandler(res, lib, func) {
+export async function inspectHandler(res, lib, func) {
     try {
         await base.clearConnection()
-        const targetLibrary = require(lib)
+        const targetLibrary = await import(`${lib}.js`)
         let results = await targetLibrary[func](base.getPrompts())
         base.sendResults(res, results)
     } catch (error) {

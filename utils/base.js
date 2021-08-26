@@ -9,6 +9,7 @@
  import { createRequire } from 'module'
   // @ts-ignore
  const require = createRequire(import.meta.url)
+ import * as path from 'path'
 
 // @ts-ignore
 import * as dbClass from "sap-hdbext-promisfied"
@@ -21,8 +22,7 @@ let dbConnection = null
 let dbClassInstance = null
 
 /** @type {typeof import("colors/safe")} */
- import * as Colors from 'colors/safe.js'
-export const colors = Colors
+export const colors = require('colors/safe')
 
 /** @type typeof import("prompt") */
 import prompt from 'prompt'
@@ -54,7 +54,7 @@ let lastResults
 import * as locale from "../utils/locale.js"
 const TextBundle = require('@sap/textbundle').TextBundle
 /** @typeof TextBundle - instance of sap/textbundle */
-export const bundle = new TextBundle("../_i18n/messages", locale.getLocale())
+export const bundle = new TextBundle(path.join(__dirname, '..', '/_i18n/messages'), locale.getLocale())
 
 
 /** @typedef {typeof import("ora")} Ora*/
