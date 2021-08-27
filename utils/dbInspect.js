@@ -542,8 +542,8 @@ export async function formatCDS(db, object, fields, constraints, type, parent) {
 		}
 
 		xref.dataType = field.DATA_TYPE_NAME
-		// @ts-ignore
-		global.__xRef.push(xref);
+		
+		global.__xRef.push(xref)
 		//	if (field.DEFAULT_VALUE) {
 		//		cdstable += ` default "${field.DEFAULT_VALUE}"`
 		//	}

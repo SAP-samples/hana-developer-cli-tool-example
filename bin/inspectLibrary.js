@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from "sap-hdbext-promisfied"
+import {highlight} from 'cli-highlight'
 
-exports.command = 'inspectLibrary [schema] [library]'
-exports.aliases = ['il', 'library', 'insLib', 'inspectlibrary']
-exports.describe = base.bundle.getText("inspectLibrary")
+export const command = 'inspectLibrary [schema] [library]'
+export const aliases = ['il', 'library', 'insLib', 'inspectlibrary']
+export const describe = base.bundle.getText("inspectLibrary")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   library: {
     alias: ["lib", 'Library'],
     type: 'string',
@@ -25,7 +28,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, libraryInspect, {
     library: {
       description: base.bundle.getText("library"),
@@ -48,12 +51,11 @@ exports.handler = (argv) => {
 
 
 
-async function libraryInspect(prompts) {
+export async function libraryInspect(prompts) {
   base.debug('libraryInspect')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    const dbClass = require("sap-hdbext-promisfied")
 
     let schema = await dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("library")}: ${prompts.library}`)
@@ -85,7 +87,6 @@ async function libraryInspect(prompts) {
       let definition = await db.statementExecPromisified(await db.preparePromisified(query), [schema, prompts.library])
       let output = definition[0].DEFINITION.toString()
       output = output.replace(new RegExp(" ,", "g"), ",\n")
-      import highlight from 'cli-highlight'.highlight
       console.log(highlight(output))
     }
     return base.end()

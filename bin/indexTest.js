@@ -1,5 +1,5 @@
 
-import * as changeLog from './hdbsql.js'
+import * as changeLog from './inspectTable.js'
 export const commands = [
     changeLog
 ]

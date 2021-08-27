@@ -1,3 +1,4 @@
+// @ts-check
 import * as activateHDI from './activateHDI.js'
 import * as adminHDI from './adminHDI.js'
 import * as adminHDIGroup from './adminHDIGroup.js'

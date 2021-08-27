@@ -1,13 +1,15 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'iniFiles'
-exports.aliases = ['if', 'inifiles', 'ini']
-exports.describe = base.bundle.getText("iniFiles")
-exports.builder = base.getBuilder({})
-exports.handler = (argv) => {
+export const command = 'iniFiles'
+export const aliases = ['if', 'inifiles', 'ini']
+export const describe = base.bundle.getText("iniFiles")
+export const builder = base.getBuilder({})
+export function handler (argv) {
   base.promptHandler(argv, iniFiles, {})
 }
-async function iniFiles(prompts) {
+
+export async function iniFiles(prompts) {
   base.debug('iniFiles')
   try {
     base.setPrompts(prompts)
@@ -22,4 +24,3 @@ async function iniFiles(prompts) {
     base.error(error)
   }
 }
-module.exports.iniFiles = iniFiles

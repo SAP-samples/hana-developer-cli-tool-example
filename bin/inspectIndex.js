@@ -1,10 +1,12 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from "sap-hdbext-promisfied"
 
-exports.command = 'inspectIndex [schema] [index]'
-exports.aliases = ['ii', 'index', 'insIndex', 'inspectindex']
-exports.describe = base.bundle.getText("inspectIndex")
+export const command = 'inspectIndex [schema] [index]'
+export const aliases = ['ii', 'index', 'insIndex', 'inspectindex']
+export const describe = base.bundle.getText("inspectIndex")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   index: {
     alias: ['i', 'Index'],
     type: 'string',
@@ -18,7 +20,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, indexInspect, {
     schema: {
       description: base.bundle.getText("schema"),
@@ -33,12 +35,11 @@ exports.handler = (argv) => {
   })
 }
 
-async function indexInspect(prompts) {
+export async function indexInspect(prompts) {
   base.debug('indexInspect')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    const dbClass = require("sap-hdbext-promisfied")
 
     let schema = await dbClass.schemaCalc(prompts, db)
     base.output(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("index")}: ${prompts.index}`)
