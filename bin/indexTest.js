@@ -1,5 +1,5 @@
 
-import * as changeLog from './changeLog.js'
+import * as changeLog from './cds.js'
 export const commands = [
     changeLog
 ]

@@ -11,14 +11,12 @@
  const require = createRequire(import.meta.url)
  import * as path from 'path'
 
-// @ts-ignore
-import * as dbClass from "sap-hdbext-promisfied"
+import dbClass from "sap-hdbext-promisfied"
 import * as conn from "../utils/connections.js"
 
 /** @type Object - HANA Client DB Connection */
 let dbConnection = null
-/** @typedef {import("sap-hdbext-promisfied")} hdbextPromiseInstance - instance of sap-hdbext-promisified module */
-/** @type {import("sap-hdbext-promisfied")} */
+/** @typedef {dbClass} hdbextPromiseInstance - instance of sap-hdbext-promisified module */
 let dbClassInstance = null
 
 /** @type {typeof import("colors/safe")} */

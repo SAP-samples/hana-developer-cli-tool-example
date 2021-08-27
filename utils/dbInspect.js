@@ -331,11 +331,11 @@ export let options = {
 let synonyms = new Map()
 
 // @ts-ignore
-options = {
+/* options = {
 	set useHanaTypes(useHanaTypes) { options.useHanaTypes = useHanaTypes },
 	set noColons(noColons) { options.noColons = noColons },
 	set keepPath(keepPath) { options.keepPath = keepPath },
-}
+} */
 
 export let results = {
 	get synonyms() { return Object.fromEntries(synonyms) }

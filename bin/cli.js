@@ -15,7 +15,7 @@ require('yargonaut')
 
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import { commands } from './index.js'
+import { commands } from './indexTest.js'
 
 versionCheck.checkVersion().then(async () => {
 
@@ -31,8 +31,8 @@ versionCheck.checkVersion().then(async () => {
         base.error(err)
         process.exit(1)
     }
-    process.on('uncaughtException', errorHandler)
-    process.on('unhandledRejection', errorHandler)
+/*     process.on('uncaughtException', errorHandler)
+    process.on('unhandledRejection', errorHandler) */
 
     yargs(hideBin(process.argv))
         .scriptName('hana-cli')

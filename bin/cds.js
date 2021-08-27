@@ -1,12 +1,12 @@
 import * as base from '../utils/base.js'
-import * as dbClass from 'sap-hdbext-promisfied'
+import dbClass from 'sap-hdbext-promisfied'
 import * as dbInspect from '../utils/dbInspect.js'
 import * as swaggerUi from 'swagger-ui-express'
-import * as open from 'open'
+import open from 'open'
 import * as conn from '../utils/connections.js'
-import * as server from 'http'
-import * as express from 'express'
-import * as cds from '@sap/cds'
+import * as Server from 'http'
+import express from 'express'
+import cds from '@sap/cds'
 
 import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
@@ -188,7 +188,7 @@ async function cdsServerSetup(prompts, cdsSource) {
     return base.error(`${port} ${base.bundle.getText("errPort")}`)
   }
 
-  server.createServer()
+  const server = Server.createServer()
   var app = express()
 
   //CDS OData Service
@@ -335,9 +335,9 @@ async function cdsServerSetup(prompts, cdsSource) {
   return
 }
 
-function getIndex(odataURL, entity) {
+export function getIndex(odataURL, entity) {
   base.debug('getIndex')
-  return this._html = `
+  return `
   <html>
       <head>
       <meta name="color-scheme" content="dark light">
@@ -416,7 +416,7 @@ function getIndex(odataURL, entity) {
   </html>`
 }
 
-function _manifest(odataURL, entity, table) {
+export function _manifest(odataURL, entity, table) {
   base.debug(`_manifest ${odataURL} ${entity} ${table}`)
   //const serviceProv = odataURL
   const serviceInfo = entity
@@ -553,9 +553,9 @@ function _manifest(odataURL, entity, table) {
   return manifest
 }
 
-function fiori(manifest, odataURL, entity,) {
+export function fiori(manifest, odataURL, entity,) {
   base.debug(`fiori ${odataURL} ${entity}`)
-  let ui5Version = '1.91.1' //'1.85.3' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
+  let ui5Version = '1.93.0' //'1.85.3' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
   ui5Version = ui5Version ? ui5Version + '/' : ''
   base.debug(`SAPUI5 Version ${ui5Version}`)
   return `

@@ -1,5 +1,6 @@
 import * as base from '../utils/base.js'
-import * as dbClass from 'sap-hdbext-promisfied'
+import dbClass from 'sap-hdbext-promisfied'
+
 import * as dbInspect from '../utils/dbInspect.js'
 import * as conn from'../utils/connections.js'
 import * as hdbext from '@sap/hdbext'

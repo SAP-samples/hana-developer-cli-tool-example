@@ -2,7 +2,7 @@
 import * as base from './base.js'
 import { promises as fsp } from 'fs'
 import * as path from 'path'
-import * as dbClass from 'sap-hdbext-promisfied'
+import dbClass from 'sap-hdbext-promisfied'
 import * as cds from '@sap/cds'
 import * as dbInspect from '../utils/dbInspect.js'
 import * as fs from 'fs'
