@@ -5,7 +5,9 @@
 
  import { fileURLToPath } from 'url'
  // @ts-ignore
+ import { URL } from 'url'
  const __dirname = fileURLToPath(new URL('.', import.meta.url))
+
  import { createRequire } from 'module'
   // @ts-ignore
  const require = createRequire(import.meta.url)
@@ -622,7 +624,9 @@ export async function webServerSetup(urlPath) {
     let files = glob.sync(routesDir)
     if (files.length !== 0) {
         for (let file of files) {
-            await require(file)(app, server)
+            debug(file)
+            const Route = await import(`file://${file}`)
+            Route.route(app,server)
         }
     }
 
@@ -631,6 +635,7 @@ export async function webServerSetup(urlPath) {
     server.listen(port, function () {
         // @ts-ignore
         let serverAddr = `http://localhost:${server.address().port}${urlPath}`
+        debug(serverAddr)
         console.info(`HTTP Server: ${serverAddr}`)
         open(serverAddr)
     })

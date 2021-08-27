@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /*eslint no-console: 0, no-process-exit:0*/
 /*eslint-env node, es6, module */
+// @ts-check
 
 import * as base from '../utils/base.js'
 import * as versionCheck from '../utils/versionCheck.js'
@@ -31,13 +32,14 @@ versionCheck.checkVersion().then(async () => {
         base.error(err)
         process.exit(1)
     }
-/*     process.on('uncaughtException', errorHandler)
-    process.on('unhandledRejection', errorHandler) */
+    process.on('uncaughtException', errorHandler)
+    process.on('unhandledRejection', errorHandler)
 
     yargs(hideBin(process.argv))
         .scriptName('hana-cli')
         .usage(base.bundle.getText("usage"))
         .demandCommand(1, "")
+        // @ts-ignore
         .command(commands)
         .option('h', {
             alias: 'help',

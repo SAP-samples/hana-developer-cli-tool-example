@@ -1,15 +1,16 @@
-const base = require("../utils/base")
-const featureUsage = require("./featureUsage")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as featureUsage from './featureUsage.js'
 
-exports.command = 'featureUsageUI'
-exports.aliases = ['fuui', 'featureusageui', 'FeaturesUsageUI', 'featuresusageui']
-exports.describe = featureUsage.describe
-exports.builder = featureUsage.builder
+export const command = 'featureUsageUI'
+export const aliases = ['fuui', 'featureusageui', 'FeaturesUsageUI', 'featuresusageui']
+export const describe = featureUsage.describe
+export const builder = featureUsage.builder
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, dbStatus, {})
 }
-async function dbStatus(prompts) {
+export async function dbStatus(prompts) {
   base.debug('getFeatureUsageUI')
   try {
     base.setPrompts(prompts)

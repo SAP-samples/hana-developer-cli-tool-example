@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as fs from 'fs'
+import latestVersion from 'latest-version'
 
-exports.command = 'createModule'
-exports.aliases = ['createDB', 'createDBModule']
-exports.describe = base.bundle.getText("createModule")
+export const command = 'createModule'
+export const aliases = ['createDB', 'createDBModule']
+export const describe = base.bundle.getText("createModule")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
     folder: {
         alias: ['f', 'Folder'],
         type: 'string',
@@ -19,7 +22,7 @@ exports.builder = base.getBuilder({
     }
 }, false)
 
-exports.handler = (argv) => {
+export function handler (argv) {
     base.promptHandler(argv, save, {
         folder: {
             description: base.bundle.getText("folder"),
@@ -35,11 +38,9 @@ exports.handler = (argv) => {
     }, false)
 }
 
-async function save(prompts) {
+export async function save(prompts) {
     base.debug('save')
-    let fs = require('fs')
     let dir = './' + prompts.folder
-
     !fs.existsSync(dir) && fs.mkdirSync(dir)
 
     let build = `
@@ -64,7 +65,7 @@ if (fs.existsSync('../package.json')) {
         if (err) throw err
     })
 
-    import latestVersion from 'latest-version'
+ 
     let hdiVersion = await latestVersion('@sap/hdi-deploy')
     base.debug(`HDI Version ${hdiVersion}`)
     var packageContent = ``

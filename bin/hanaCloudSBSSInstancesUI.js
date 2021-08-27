@@ -1,16 +1,17 @@
-const base = require("../utils/base")
-const sbss = require("./hanaCloudSBSSInstances")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as sbss from './hanaCloudSBSSInstances.js'
 
-exports.command = 'sbssUI'
-exports.aliases = ['sbssInstancesUI', 'sbssinstancesui', 'sbssServicesUI', 'listsbssui', 'sbssservicesui', 'sbsssui']
-exports.describe = sbss.describe
-exports.builder = sbss.builder
+export const command = 'sbssUI'
+export const aliases = ['sbssInstancesUI', 'sbssinstancesui', 'sbssServicesUI', 'listsbssui', 'sbssservicesui', 'sbsssui']
+export const describe = sbss.describe
+export const builder = sbss.builder
 
-exports.handler = (argv) => {
+export function handler (argv) {
     base.promptHandler(argv, listInstances, sbss.inputPrompts)
 }
 
-async function listInstances(prompts) {
+export async function listInstances(prompts) {
     base.debug('getSbssUI')
     try {
         base.setPrompts(prompts)

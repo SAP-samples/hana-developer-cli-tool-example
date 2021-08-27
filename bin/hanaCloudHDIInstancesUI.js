@@ -1,17 +1,18 @@
-const base = require("../utils/base")
-const hanaCloudHDIInstances = require("./hanaCloudHDIInstances")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as hanaCloudHDIInstances from './hanaCloudHDIInstances.js'
 
-exports.command = 'hdiUI'
-exports.aliases = ['hdiInstancesUI', 'hdiinstancesui', 'hdiServicesUI', 'listhdiui', 'hdiservicesui', 'hdisui']
-exports.describe = hanaCloudHDIInstances.describe
-exports.builder = hanaCloudHDIInstances.builder
+export const command = 'hdiUI'
+export const aliases = ['hdiInstancesUI', 'hdiinstancesui', 'hdiServicesUI', 'listhdiui', 'hdiservicesui', 'hdisui']
+export const describe = hanaCloudHDIInstances.describe
+export const builder = hanaCloudHDIInstances.builder
 
-exports.handler = (argv) => {
+export function handler (argv) {
     base.promptHandler(argv, listInstances, hanaCloudHDIInstances.inputPrompts)
 }
 
 
-async function listInstances(prompts) {
+export async function listInstances(prompts) {
     base.debug('listInstancesUI')
     try {
         base.setPrompts(prompts)

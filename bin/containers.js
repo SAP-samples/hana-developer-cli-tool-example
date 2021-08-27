@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as hdbext from '@sap/hdbext'
+import dbClass from 'sap-hdbext-promisfied'
 
-exports.command = 'containers [containerGroup] [container]'
-exports.aliases = ['cont', 'listContainers', 'listcontainers']
-exports.describe = base.bundle.getText("containers")
+export const command = 'containers [containerGroup] [container]'
+export const aliases = ['cont', 'listContainers', 'listcontainers']
+export const describe = base.bundle.getText("containers")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   container: {
     alias: ['c', 'Container'],
     type: 'string',
@@ -25,7 +28,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-let inputPrompts =  {
+export let inputPrompts =  {
   container: {
     description: base.bundle.getText("container"),
     type: 'string',
@@ -42,13 +45,12 @@ let inputPrompts =  {
     required: true
   }
 }
-module.exports.inputPrompts = inputPrompts
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, getContainers, inputPrompts)
 }
 
-async function getContainers(prompts) {
+export async function getContainers(prompts) {
   base.debug('getContainers')
   try {
     base.setPrompts(prompts)
@@ -64,11 +66,10 @@ async function getContainers(prompts) {
     base.error(error)
   }
 }
-module.exports.getContainers = getContainers
 
-async function getContainersInt(containerGroup, container, client, limit) {
+export async function getContainersInt(containerGroup, container, client, limit) {
   base.debug('getContainersInt')
-  const dbClass = require("sap-hdbext-promisfied")
+
   let query =
     `SELECT A.CONTAINER_NAME, A.CONTAINER_GROUP_NAME, B.SCHEMA_NAME, A.CREATE_USER_NAME, A.CREATE_TIMESTAMP_UTC
         FROM ( _SYS_DI.M_ALL_CONTAINERS AS A
@@ -78,7 +79,7 @@ async function getContainersInt(containerGroup, container, client, limit) {
          WHERE A.CONTAINER_NAME LIKE ? 
            AND A.CONTAINER_GROUP_NAME LIKE ?
          ORDER BY A.CONTAINER_NAME `
-  if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [dbClass.objectName(container), dbClass.objectName(containerGroup)])

@@ -1,18 +1,19 @@
-const base = require("../utils/base")
-const ups = require("./hanaCloudUPSInstances")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as ups from './hanaCloudUPSInstances.js'
 
-exports.command = 'upsUI'
-exports.aliases = ['upsInstancesUI', 'upsinstancesui', 'upServicesUI', 'listupsui', 'upsservicesui']
-exports.describe = ups.describe
+export const command = 'upsUI'
+export const aliases = ['upsInstancesUI', 'upsinstancesui', 'upServicesUI', 'listupsui', 'upsservicesui']
+export const describe = ups.describe
 
-exports.builder = ups.builder
-exports.handler = (argv) => {
+export const builder = ups.builder
+export function handler (argv) {
     base.promptHandler(argv, listInstances, ups.inputPrompts)
   }
 
 
 
-async function listInstances(prompts) {
+export async function listInstances(prompts) {
     base.debug('getUpsUI')
     try {
       base.setPrompts(prompts)

@@ -1,10 +1,13 @@
+// @ts-check
+import * as base from '../utils/base.js'
 import path from 'path'
 import { promises as fs } from 'fs'
-import * as showdown from 'showdown'
+import showdown from 'showdown'
 import { fileURLToPath } from 'url'
+// @ts-ignore
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
-export default function (app) {
+export function route (app) {
     app.get('/docs/readme', async (req, res) => {
 
         try {
@@ -13,7 +16,7 @@ export default function (app) {
             let html = converter.makeHtml(mdReadMe)
             res.type("text/html").status(200).send(html)
         } catch (error) {
-            app.logger.error(error)
+            base.error(error)
             res.status(500).send(error.toString())
         }
 
@@ -27,7 +30,7 @@ export default function (app) {
             let html = converter.makeHtml(mdChangeLog)
             res.type("text/html").status(200).send(html)
         } catch (error) {
-            app.logger.error(error)
+            base.error(error)
             res.status(500).send(error.toString())
         }
 

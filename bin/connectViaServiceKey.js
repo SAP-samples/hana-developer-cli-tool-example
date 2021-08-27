@@ -1,10 +1,14 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as fs from 'fs'
+import * as child_process from 'child_process'
+let child = child_process.exec
 
-exports.command = 'serviceKey [instance] [key]'
-exports.aliases = ['key', 'servicekey', 'service-key']
-exports.describe = base.bundle.getText("serviceKey")
+export const command = 'serviceKey [instance] [key]'
+export const aliases = ['key', 'servicekey', 'service-key']
+export const describe = base.bundle.getText("serviceKey")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   instance: {
     alias: ['i', 'Instance'],
     desc: base.bundle.getText("instance")
@@ -39,7 +43,7 @@ exports.builder = base.getBuilder({
   }
 }, false)
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, setKeyDetails, {
     instance: {
       description: base.bundle.getText("instance"),
@@ -75,13 +79,13 @@ exports.handler = (argv) => {
   }, false)
 }
 
-async function setKeyDetails(input) {
+export async function setKeyDetails(input) {
   base.debug('setKeyDetails')
   base.debug(input)
 
   //create serviceKey
   try {
-    let child = require("child_process").exec
+
     let script = ''
 
     if (input.cf) {
@@ -94,8 +98,6 @@ async function setKeyDetails(input) {
         return base.error(err)
       } 
       console.log(`Service Key ${input.key} created`)
-
-      let child = require("child_process").exec
       let script = ''
       if (input.cf) {
         script = `cf service-key ${input.instance} ${input.key}`
@@ -127,7 +129,7 @@ async function setKeyDetails(input) {
   }
 }
 
-async function saveEnv(options, input) {
+export async function saveEnv(options, input) {
   base.debug('saveEnv')
   let defaultEnv = {}
   defaultEnv.VCAP_SERVICES = {}
@@ -166,7 +168,6 @@ async function saveEnv(options, input) {
   }
 
   if (input.save) {
-    import fs from 'fs'
     fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), (err) => {
       if (err) {
         throw new Error(`${base.bundle.getText("errConn")} ${JSON.stringify(err)}`)

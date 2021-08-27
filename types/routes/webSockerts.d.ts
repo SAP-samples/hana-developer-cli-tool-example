@@ -1,2 +1,1 @@
-declare function _exports(app: any, server: any): any;
-export = _exports;
+export default function _default(app: any, server: any): any;

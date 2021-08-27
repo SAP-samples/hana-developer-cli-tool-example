@@ -79,10 +79,10 @@ export function getUpsInstances(): Promise<object>;
  * @param {string} name - HANA Cloud instance name
  * @returns any
  */
-export function startHana(name: string): Promise<any>;
+export function startHana(name: string): Promise<string>;
 /**
  * Stop HANA Cloud Instance
  * @param {string} name - HANA Cloud instance name
  * @returns any
  */
-export function stopHana(name: string): Promise<any>;
+export function stopHana(name: string): Promise<string>;

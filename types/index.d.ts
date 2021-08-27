@@ -1,1 +1,1 @@
-export {};
+export function init(): Promise<void>;

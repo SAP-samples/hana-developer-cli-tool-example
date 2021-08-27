@@ -1,23 +1,33 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'version'
-exports.aliases = 'ver'
-exports.describe = base.bundle.getText("version")
-exports.builder = base.getBuilder({}, false)
-exports.handler = (argv) => {
+import {highlight} from 'cli-highlight'
+import latestVersion from 'latest-version'
+import { createRequire } from 'module'
+// @ts-ignore
+const require = createRequire(import.meta.url)
+import { URL } from 'url'
+import { fileURLToPath } from 'url'
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
+
+export const command = 'version'
+export const aliases = 'ver'
+export const describe = base.bundle.getText("version")
+export const builder = base.getBuilder({}, false)
+export let handler = function (argv) {
   base.promptHandler(argv, verOutput, {}, false)
 }
 
-async function verOutput() {
+export async function verOutput() {
   base.debug('verOutput')
-  const colors = require("colors/safe")
+  const colors = base.colors
   const log = console.log
-  import highlight from 'cli-highlight'.highlight
-  const info = version()
+
+  const info = getVersion()
   Object.keys(info).forEach(key => log(highlight(`${key}: ${info[key]}`)))
   console.log(`Node.js: ${colors.green(process.version)}`)
   console.log(`Change Log: ${colors.blue('https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/CHANGELOG.md')}`)
-  import latestVersion from 'latest-version'
+
 
   let selfVersion = await latestVersion('hana-cli')
   console.log(`Latest hana-cli version available on npmjs.com: ${colors.green(selfVersion)}`)
@@ -27,7 +37,7 @@ async function verOutput() {
   base.end()
 }
 
-function version4(pkgPath = '..', info = {}, parentPath) {
+export function version4(pkgPath = '..', info = {}, parentPath) {
   base.debug('version4')
   try {
     const pkj = require(pkgPath + '/package.json')
@@ -43,7 +53,7 @@ function version4(pkgPath = '..', info = {}, parentPath) {
   return info
 }
 
-function version() {
+export function getVersion() {
   base.debug('version')
   const info = version4()
   Object.defineProperty(info, 'home', { value: __dirname })
@@ -52,4 +62,3 @@ function version() {
   if (process.env.DEBUG) info['hana-cli initial home'] = info.initialHome
   return info
 }
-module.exports.getVersion = version

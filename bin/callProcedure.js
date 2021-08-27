@@ -1,3 +1,4 @@
+// @ts-check
 import * as base from '../utils/base.js'
 import dbClass from 'sap-hdbext-promisfied'
 

@@ -1,7 +1,9 @@
+// @ts-check
 import * as base from '../utils/base.js'
 import * as dbInspect from '../utils/dbInspect.js'
 
-export default function (app) {
+export function route (app) {
+    base.debug('hanaList Route')
     app.get('/hana', async (req, res) => {
         try {
             await base.clearConnection()
@@ -84,7 +86,7 @@ export default function (app) {
     })
 }
 
-async function listHandler(res, lib, func) {
+export async function listHandler(res, lib, func) {
     try {
         await base.clearConnection()
         const targetLibrary = await import(`${lib}.js`)

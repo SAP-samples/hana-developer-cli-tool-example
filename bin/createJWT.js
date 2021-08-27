@@ -1,10 +1,11 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'createJWT [name]'
-exports.aliases = ['cJWT', 'cjwt', 'cJwt']
-exports.describe = base.bundle.getText("createJWT")
+export const command = 'createJWT [name]'
+export const aliases = ['cJWT', 'cjwt', 'cJwt']
+export const describe = base.bundle.getText("createJWT")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   name: {
     alias: ['c', 'Name'],
     type: 'string',
@@ -22,7 +23,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, activate, {
     name: {
       description: base.bundle.getText("jwtName"),
@@ -39,7 +40,7 @@ exports.handler = (argv) => {
   })
 }
 
-async function activate(prompts) {
+export async function activate(prompts) {
   base.debug('activate')
   try {
     base.setPrompts(prompts)

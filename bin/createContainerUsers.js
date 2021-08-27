@@ -1,10 +1,15 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import { v4 as  uuidv4 } from 'uuid'
+import * as conn from "../utils/connections.js"
+import * as fs from 'fs'
+import * as xsenv from '@sap/xsenv'
 
-exports.command = 'createContainerUsers [container]'
-exports.aliases = ['ccu', 'cContU']
-exports.describe = base.bundle.getText("createContainerUsers")
+export const command = 'createContainerUsers [container]'
+export const aliases = ['ccu', 'cContU']
+export const describe = base.bundle.getText("createContainerUsers")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   container: {
     alias: ['c', 'Container'],
     type: 'string',
@@ -24,7 +29,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, activate, {
     container: {
       description: base.bundle.getText("container"),
@@ -43,17 +48,14 @@ exports.handler = (argv) => {
   })
 }
 
-async function activate(prompts) {
+export async function activate(prompts) {
   base.debug('activate')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    const conn = require("../utils/connections")
     let envFile = conn.resolveEnv()
 
 
-
-    import { v4: uuidv4 } from 'uuid'
     let passwordDT = uuidv4()
     passwordDT = passwordDT.replace(/-/g, "A")
     let passwordRT = uuidv4()
@@ -132,7 +134,6 @@ async function activate(prompts) {
     console.table(results)
 
     if (prompts.save) {
-      const xsenv = require("@sap/xsenv")
       xsenv.loadEnv(envFile)
       let options = xsenv.getServices({ hana: { tag: 'hana' }, })
       base.debug(options)
@@ -178,7 +179,6 @@ async function saveEnv(options, container, userDT, userRT, passwordDT, passwordR
     }
   }]
 
-  import fs from 'fs'
   base.debug(defaultEnv)
   fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), (err) => {
     if (err) {

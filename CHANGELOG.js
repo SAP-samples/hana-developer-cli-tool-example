@@ -1,3 +1,4 @@
+// @ts-check
 import changelog from 'stringify-changelog'
 let markdown = changelog("./CHANGELOG.json")
 

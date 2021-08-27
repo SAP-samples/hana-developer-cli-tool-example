@@ -1,12 +1,3 @@
-export namespace options { }
-export namespace results { }
-/**
- * Get Table Constraints
- */
-export type objType = {
-    SCHEMA_NAME: string;
-    TABLE_NAME: string;
-};
 /**
  * Return the HANA DB Version
  * @param {object} db - Database Connection
@@ -117,3 +108,16 @@ export function formatCDS(db: object, object: object, fields: object, constraint
  * @returns {Promise<string>} GEO SRS ID
  */
 export function getGeoColumns(db: object, object: object, field: object, type: string): Promise<string>;
+export namespace options {
+    const useHanaTypes: boolean;
+    const noColons: boolean;
+    const keepPath: boolean;
+}
+export namespace results { }
+/**
+ * Get Table Constraints
+ */
+export type objType = {
+    SCHEMA_NAME: string;
+    TABLE_NAME: string;
+};

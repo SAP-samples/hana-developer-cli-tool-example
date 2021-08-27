@@ -1,12 +1,13 @@
+// @ts-check
 import * as base from '../utils/base.js'
 
-export default function (app) {
+export function route (app) {
     app.get(['/hana/inspectTable', '/hana/inspectTable-ui'], async (req, res) => {
         inspectTableHandler(res, "../bin/inspectTable", 'tableInspect')
     })
 }
 
-async function inspectTableHandler(res, lib, func) {
+export async function inspectTableHandler(res, lib, func) {
     try {
         await base.clearConnection()
         const targetLibrary = await import(`${lib}.js`)

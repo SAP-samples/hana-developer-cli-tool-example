@@ -1,16 +1,16 @@
 export var command: string;
 export var aliases: string[];
-export var describe: any;
-export var builder: any;
+export var describe: string;
+export var builder: import("yargs").CommandBuilder<{}, {}>;
 export function handler(argv: any): void;
 export namespace inputPrompts {
     namespace table {
-        const description: any;
+        const description: string;
         const type: string;
         const required: boolean;
     }
     namespace schema {
-        const description_1: any;
+        const description_1: string;
         export { description_1 as description };
         const type_1: string;
         export { type_1 as type };
@@ -18,7 +18,7 @@ export namespace inputPrompts {
         export { required_1 as required };
     }
     namespace output {
-        const description_2: any;
+        const description_2: string;
         export { description_2 as description };
         const type_2: string;
         export { type_2 as type };
@@ -26,7 +26,7 @@ export namespace inputPrompts {
         export { required_2 as required };
     }
     namespace useHanaTypes {
-        const description_3: any;
+        const description_3: string;
         export { description_3 as description };
         const type_3: string;
         export { type_3 as type };

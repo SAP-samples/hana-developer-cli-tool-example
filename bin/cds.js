@@ -1,3 +1,4 @@
+// @ts-check
 import * as base from '../utils/base.js'
 import dbClass from 'sap-hdbext-promisfied'
 import * as dbInspect from '../utils/dbInspect.js'
@@ -43,13 +44,13 @@ export const builder = base.getBuilder({
   },
   port: {
     alias: ['p'],
-    type: 'integer',
+    type: 'number',
     default: false,
     desc: base.bundle.getText("port")
   }
 })
 
-export function handler (argv) {
+export function handler(argv) {
   base.promptHandler(argv, cdsBuild, {
     table: {
       description: base.bundle.getText("table"),
@@ -196,9 +197,12 @@ async function cdsServerSetup(prompts, cdsSource) {
   let options = {
     kind: "hana",
     logLevel: "error",
+    credentials: null
   }
   cds.connect(options)
+  // @ts-ignore
   cds.env.requires.db = {}
+  // @ts-ignore
   cds.env.requires.db.multiTenant = false
 
   let odataURL = "/odata/v4/opensap.hana.CatalogService/"
@@ -207,6 +211,7 @@ async function cdsServerSetup(prompts, cdsSource) {
   entity = entity.replace(/::/g, "_")
 
   // entity = entity.replace(/:/g, "")
+  // @ts-ignore
   cds.serve('all').from(await cds.parse(cdsSource), {
     crashOnError: false
   })
@@ -215,16 +220,17 @@ async function cdsServerSetup(prompts, cdsSource) {
     .to('fiori')
     .with(srv => {
       srv.on(['READ'], entity, async (req) => {
-
+        // @ts-ignore
         req.query.SELECT.from.ref = [`${prompts.table}`]
 
         let query = "SELECT "
+        // @ts-ignore
         if (req.query.SELECT.columns[0].func) {
           const db = new dbClass(await conn.createConnection(prompts))
           query += `COUNT(*) AS "counted" FROM "${prompts.table}"`
           return (await db.execSQL(query))
         }
-
+        // @ts-ignore
         for (let column of req.query.SELECT.columns) {
           for (let xref of global.__xRef) {
             if (column.ref[0] === xref.after) {
@@ -236,9 +242,11 @@ async function cdsServerSetup(prompts, cdsSource) {
         //Req Paramers for Single Record GET
         if (req.params) {
           if (req.params.length > 0) {
+            // @ts-ignore
             const { SELECT } = req.query
             SELECT.where = []
             for (let param of req.params) {
+              // @ts-ignore
               for (let property in param) {
                 SELECT.where.push({ "ref": [property] })
                 SELECT.where.push("=")
@@ -251,7 +259,9 @@ async function cdsServerSetup(prompts, cdsSource) {
         }
 
         //Where
+        // @ts-ignore
         if (req.query.SELECT.where) {
+          // @ts-ignore
           for (let where of req.query.SELECT.where) {
             if (where.ref) {
               for (let xref of global.__xRef) {
@@ -264,8 +274,10 @@ async function cdsServerSetup(prompts, cdsSource) {
         }
 
         //Order By
+        // @ts-ignore
         if (req.query.SELECT.orderBy) {
           query += ` ORDER BY `
+          // @ts-ignore
           for (let orderBy of req.query.SELECT.orderBy) {
             for (let xref of global.__xRef) {
               if (orderBy.ref[0] === xref.after) {
@@ -287,6 +299,7 @@ async function cdsServerSetup(prompts, cdsSource) {
 
   Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => require('@sap/cds-dk/lib/compile/openapi') })
   try {
+    // @ts-ignore
     let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
       service: 'HanaCli',
       servicePath: '/odata/v4/opensap.hana.CatalogService/',
@@ -319,6 +332,7 @@ async function cdsServerSetup(prompts, cdsSource) {
     //Start the Server 
     server.on("request", app)
     server.listen(port, function () {
+      // @ts-ignore
       let serverAddr = `http://localhost:${server.address().port}`
       console.info(`HTTP Server: ${serverAddr}`)
 
@@ -537,6 +551,7 @@ export function _manifest(odataURL, entity, table) {
       id: `${navProperty}Target`,
       name: 'sap.fe.templates.ObjectPage',
       options: {
+        // @ts-ignore
         settings: {
           entitySet: targetEntity
         }

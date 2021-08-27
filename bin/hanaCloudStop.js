@@ -1,10 +1,12 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as cf from '../utils/cf.js'
 
-exports.command = 'hcStop [name]'
-exports.aliases = ['hcstop', 'hc_stop', 'stop']
-exports.describe = base.bundle.getText("hcStop")
+export const command = 'hcStop [name]'
+export const aliases = ['hcstop', 'hc_stop', 'stop']
+export const describe = base.bundle.getText("hcStop")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
     name: {
         alias: ['n'],
         type: 'string',
@@ -13,7 +15,7 @@ exports.builder = base.getBuilder({
     }
 }, false)
 
-exports.handler = (argv) => {
+export function handler (argv) {
     base.promptHandler(argv, hcStop, {
         name: {
             description: base.bundle.getText("hc_instance_name"),
@@ -24,16 +26,17 @@ exports.handler = (argv) => {
 }
 
 
-async function hcStop(prompts) {
+export async function hcStop(prompts) {
     base.debug(`hcStop`)
     try {
-        const cf = require("../utils/cf")
+
         let results = ''
         if (prompts.name === '**default**') {
             results = await cf.getHANAInstances()
         } else {
             results = await cf.getHANAInstanceByName(prompts.name)
         }
+        // @ts-ignore
         for (let item of results.resources) {
             console.log(await cf.stopHana(item.name))
         }

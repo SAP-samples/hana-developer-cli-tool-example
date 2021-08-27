@@ -1,11 +1,12 @@
 /*eslint no-console: 0, no-unused-vars: 0, new-cap:0 */
 /*eslint-env node, es6 */
+// @ts-check
 import * as base from '../utils/base.js'
-import {Server as WebSocketServer } from 'ws'
+import { WebSocketServer }  from 'ws'
 import * as massConvertLib from '../utils/massConvert.js'
 
-export default function (app, server) {
-
+export function route (app, server) {
+    base.debug('WebSockets Route')
 	app.get('/websockets', (req, res) => {
 		let output =
 			`<H1>${base.bundle.getText("websocket")}</H1></br>`

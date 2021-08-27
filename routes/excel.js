@@ -1,7 +1,8 @@
+// @ts-check
 import * as base from '../utils/base.js'
 import * as excel from 'node-xlsx'
 
-export default function (app) {
+export function route (app) {
     app.get('/excel', async (req, res) => {
         try {
 

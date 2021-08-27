@@ -1,3 +1,4 @@
+// @ts-check
 import * as base from './base.js'
 import { createRequire } from 'module'
 const require = createRequire(import.meta.url)

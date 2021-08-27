@@ -1,3 +1,4 @@
+// @ts-check
 import { URL } from 'url'
 import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
@@ -7,7 +8,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import * as showdown from 'showdown'
 
-export default function (app) {
+export function route (app) {
     app.get('/sap/dfa/help/webassistant/catalogue', async (req, res) => {
         try {
             let input = JSON.parse(getURLQuery(req))

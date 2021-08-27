@@ -1,16 +1,17 @@
-const base = require("../utils/base")
-const schemaInstances = require("./hanaCloudSchemaInstances")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as schemaInstances from './hanaCloudSchemaInstances.js'
 
-exports.command = 'schemaInstancesUI'
-exports.aliases = ['schemainstancesui', 'schemaServicesUI', 'listschemasui', 'schemaservicesui']
-exports.describe = schemaInstances.describe
-exports.builder = schemaInstances.builder
+export const command = 'schemaInstancesUI'
+export const aliases = ['schemainstancesui', 'schemaServicesUI', 'listschemasui', 'schemaservicesui']
+export const describe = schemaInstances.describe
+export const builder = schemaInstances.builder
 
-exports.handler = (argv) => {
+export function handler (argv) {
     base.promptHandler(argv, listInstances, schemaInstances.inputPrompts)
   }
 
-async function listInstances(prompts) {
+export async function listInstances(prompts) {
     base.debug('getSchemaInstancesUI')
   try {
     base.setPrompts(prompts)

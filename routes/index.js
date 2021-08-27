@@ -1,8 +1,10 @@
+// @ts-check
 import * as base from '../utils/base.js'
-import * as bodyParser from 'body-parser'
+import bodyParser from 'body-parser'
 let jsonParser = bodyParser.json()
 
-export default function (app) {
+export function route (app) {
+    base.debug('Index Route')
     app.get('/', async (req, res) => {
         try {
             res.type("application/json").status(200).send(base.getPrompts())
@@ -11,7 +13,7 @@ export default function (app) {
             res.status(500).send(error.toString())
         }
     })
-
+ 
     app.put('/', jsonParser, async (req, res) => {
         try {
             let body = req.body
@@ -22,5 +24,5 @@ export default function (app) {
             base.error(error)
             res.status(500).send(error.toString())
         }
-    })
+    }) 
 }

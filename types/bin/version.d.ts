@@ -1,7 +1,8 @@
-export var command: string;
-export var aliases: string;
-export var describe: any;
-export var builder: any;
+export function verOutput(): Promise<void>;
+export function version4(pkgPath: string, info: {}, parentPath: any): {};
+export function getVersion(): {};
+export const command: "version";
+export const aliases: "ver";
+export const describe: string;
+export const builder: import("yargs").CommandBuilder<{}, {}>;
 export function handler(argv: any): void;
-export { version as getVersion };
-declare function version(): {};

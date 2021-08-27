@@ -1,4 +1,6 @@
 /*eslint-env node, es6 */
+// @ts-check
+
 import * as base from './base.js'
 import { promises as fsp } from 'fs'
 import * as path from 'path'
@@ -6,7 +8,7 @@ import dbClass from 'sap-hdbext-promisfied'
 import * as cds from '@sap/cds'
 import * as dbInspect from '../utils/dbInspect.js'
 import * as fs from 'fs'
-import * as zipClass from 'node-zip'
+import zipClass from 'node-zip'
 const zip = new zipClass()
 import * as hdbext from '@sap/hdbext'
 
@@ -51,7 +53,7 @@ export async function convert(wss) {
                         let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
                         let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
                         let constraints = await dbInspect.getConstraints(db, object)
-                        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable")
+                        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable", null)
                         let options = { names: 'quoted', dialect: 'hana', src: 'cds' }
                         let all = cds.compile.to.hdbtable(cds.parse(cdsSource), options)
                         let output
@@ -96,7 +98,7 @@ export async function convert(wss) {
                         let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
                         let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
                         let constraints = await dbInspect.getConstraints(db, object)
-                        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable")
+                        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable", null)
                         let options = { names: 'quoted', dialect: 'hana', src: 'cds' }
                         let all = cds.compile.to.hdbtable(cds.parse(cdsSource), options)
                         let output
@@ -131,7 +133,7 @@ export async function convert(wss) {
                     let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
                     let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
                     let constraints = await dbInspect.getConstraints(db, object)
-                    cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table") + '\n'
+                    cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table", null) + '\n'
                 }
                 let dir = prompts.folder
                 !fs.existsSync(dir) && fs.mkdirSync(dir)
@@ -166,7 +168,14 @@ export async function convert(wss) {
     }
 }
 
-
+/**
+ * Check parameter folders to see if the input file exists there
+ * @param {string} schema 
+ * @param {string} table
+ * @param {any} client
+ * @param {number} limit
+ * @returns {Promise<any>} - the file path if found 
+ */
 async function getTablesInt(schema, table, client, limit) {
     base.debug(`getTablesInt ${schema} ${table} ${limit}`)
     table = dbClass.objectName(table)
@@ -176,7 +185,7 @@ async function getTablesInt(schema, table, client, limit) {
             AND TABLE_NAME LIKE ? 
             AND IS_USER_DEFINED_TYPE = 'FALSE'
             ORDER BY SCHEMA_NAME, TABLE_NAME `
-    if (limit !== null | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
+    if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
         query += `LIMIT ${limit.toString()}`
     }
     let results = await client.statementExecPromisified(await client.preparePromisified(query), [schema, table])

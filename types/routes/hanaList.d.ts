@@ -1,2 +1,2 @@
-declare function _exports(app: any): void;
-export = _exports;
+export function route(app: any): void;
+export function listHandler(res: any, lib: any, func: any): Promise<void>;
