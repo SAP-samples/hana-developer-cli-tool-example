@@ -6,7 +6,8 @@ import { fileURLToPath } from 'url'
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 import * as path from 'path'
 import * as fs from 'fs'
-import * as showdown from 'showdown'
+import showdown from 'showdown'
+const {Converter} = showdown
 
 export function route (app) {
     app.get('/sap/dfa/help/webassistant/catalogue', async (req, res) => {
@@ -45,7 +46,7 @@ export function route (app) {
             output.data = jsonData
             if (req.query.id === "Shell-home!whatsnew") {
                 output.data.tiles = []
-                const converter = new showdown.Converter()
+                const converter = new Converter()
 
                 let changelog = require("../CHANGELOG.json")
                 changelog.forEach(item => {
