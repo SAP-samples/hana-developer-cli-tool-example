@@ -1,19 +1,21 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as dotenv from 'dotenv'
+import * as fs from 'fs'
 
-exports.command = 'copy2DefaultEnv'
-exports.aliases = ['copyDefaultEnv', 'copyDefault-Env', 'copy2defaultenv', 'copydefaultenv', 'copydefault-env']
-exports.describe = base.bundle.getText("copy2DefaultEnv")
+export const command = 'copy2DefaultEnv'
+export const aliases = ['copyDefaultEnv', 'copyDefault-Env', 'copy2defaultenv', 'copydefaultenv', 'copydefault-env']
+export const describe = base.bundle.getText("copy2DefaultEnv")
 
-exports.builder = base.getBuilder({}, false)
+export const builder = base.getBuilder({}, false)
 
-exports.handler = (argv) => {
+export function handler (argv) {
     base.promptHandler(argv, copy, {}, false)
 }
 
-async function copy() {
+export async function copy() {
     base.debug('copy')
-    require('dotenv').config()
-
+    dotenv.config()
     let defaultEnv = {}
     if (process.env.VCAP_SERVICES == null) {
         return base.error(base.bundle.getText("errNoEnv"))
@@ -37,7 +39,6 @@ async function copy() {
     }
     
     base.debug(defaultEnv)
-    const fs = require('fs')
     fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), async (err) => {
         if (err) {
             return base.error(err)

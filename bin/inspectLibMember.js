@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from "sap-hdbext-promisfied"
+import {highlight} from 'cli-highlight'
 
-exports.command = 'inspectLibMember [schema] [library] [libraryMem]'
-exports.aliases = ['ilm', 'libraryMember', 'librarymember', 'insLibMem', 'inspectlibrarymember']
-exports.describe = base.bundle.getText("inspectLibMember")
+export const command = 'inspectLibMember [schema] [library] [libraryMem]'
+export const aliases = ['ilm', 'libraryMember', 'librarymember', 'insLibMem', 'inspectlibrarymember']
+export const describe = base.bundle.getText("inspectLibMember")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   library: {
     alias: ["lib", 'Library'],
     type: 'string',
@@ -30,7 +33,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, libraryMemInspect, {
     library: {
       description: base.bundle.getText("library"),
@@ -56,14 +59,13 @@ exports.handler = (argv) => {
   })
 }
 
-async function libraryMemInspect(prompts) {
+export async function libraryMemInspect(prompts) {
   base.debug('libraryMemInspect')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    const dbClass = require("sap-hdbext-promisfied")
 
-    let schema = await dbClass.schemaCalc(prompts, db);
+    let schema = await dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("library")}: ${prompts.library}, ${base.bundle.getText("libMember")}: ${prompts.libraryMem}`)
 
     let query =
@@ -95,7 +97,6 @@ async function libraryMemInspect(prompts) {
       let definition = await db.statementExecPromisified(await db.preparePromisified(query), [schema, prompts.library, prompts.libraryMem])
       let output = definition[0].DEFINITION.toString()
       output = output.replace(new RegExp(" ,", "g"), ",\n")
-      const highlight = require('cli-highlight').highlight
       console.log(highlight(output))
     }
     return base.end()

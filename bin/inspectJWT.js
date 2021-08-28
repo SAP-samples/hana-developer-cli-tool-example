@@ -1,14 +1,15 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'inspectJWT'
-exports.aliases = ['jwt', 'ijwt', 'iJWT', 'iJwt']
-exports.describe = base.bundle.getText("inspectJWT")
-exports.builder = base.getBuilder({})
-exports.handler = (argv) => {
+export const command = 'inspectJWT'
+export const aliases = ['jwt', 'ijwt', 'iJWT', 'iJwt']
+export const describe = base.bundle.getText("inspectJWT")
+export const builder = base.getBuilder({})
+export function handler (argv) {
   base.promptHandler(argv, inspectJWT, {})
 }
 
-async function inspectJWT(prompts) {
+export async function inspectJWT(prompts) {
   base.debug('inspectJWT')
   try {
     base.setPrompts(prompts)

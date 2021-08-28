@@ -1,10 +1,14 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from 'sap-hdbext-promisfied'
+import * as dbInspect from '../utils/dbInspect.js'
+import {highlight} from 'cli-highlight'
 
-exports.command = 'inspectFunction [schema] [function]'
-exports.aliases = ['if', 'function', 'insFunc', 'inspectfunction']
-exports.describe = base.bundle.getText("inspectFunction")
+export const command = 'inspectFunction [schema] [function]'
+export const aliases = ['if', 'function', 'insFunc', 'inspectfunction']
+export const describe = base.bundle.getText("inspectFunction")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   function: {
     alias: ['f', 'Function'],
     type: 'string',
@@ -25,7 +29,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, functionInspect, {
     function: {
       description: base.bundle.getText("function"),
@@ -46,13 +50,12 @@ exports.handler = (argv) => {
   })
 }
 
-async function functionInspect(prompts) {
+export async function functionInspect(prompts) {
   base.debug('functionInspect')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    const dbClass = require("sap-hdbext-promisfied")
-    const dbInspect = require("../utils/dbInspect")
+  
 
     let schema = await dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("function")}: ${prompts.function}`);
@@ -69,7 +72,6 @@ async function functionInspect(prompts) {
       console.table(columns);
     } else if (prompts.output === 'sql') {
       let definition = await dbInspect.getDef(db, schema, prompts.function);
-      const highlight = require('cli-highlight').highlight
       console.log(highlight(definition))
     }
     return base.end()

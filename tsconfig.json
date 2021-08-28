@@ -14,9 +14,12 @@
       // next to the .js files
       "outDir": "types",
       "skipLibCheck": true,
-      "lib": ["ES2015","ES2019"],
-      "target": "ES2016",
-      "moduleResolution": "node"
+      "lib": ["ES2020", "DOM"],
+      "target": "ES2020",
+      "moduleResolution": "Node",
+      "module": "es2020",
+      "allowSyntheticDefaultImports": true,
+      "resolveJsonModule": true
 
     }
   }

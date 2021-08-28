@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as cf from '../utils/cf.js'
+const colors = base.colors
 
-exports.command = 'hc [name]'
-exports.aliases = ['hcInstances', 'instances', 'listHC', 'listhc', 'hcinstances']
-exports.describe = base.bundle.getText("hcInstances")
+export const command = 'hc [name]'
+export const aliases = ['hcInstances', 'instances', 'listHC', 'listhc', 'hcinstances']
+export const describe = base.bundle.getText("hcInstances")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
     name: {
         alias: ['n'],
         type: 'string',
@@ -13,7 +16,7 @@ exports.builder = base.getBuilder({
     }
 }, false)
 
-exports.handler = (argv) => {
+export function handler (argv) {
     base.promptHandler(argv, listInstances, {
         name: {
             description: base.bundle.getText("hc_instance_name"),
@@ -24,11 +27,9 @@ exports.handler = (argv) => {
 }
 
 
-async function listInstances(prompts) {
+export async function listInstances(prompts) {
     base.debug(`listInstances`)
     try {
-        const cf = require("../utils/cf")
-        const colors = require("colors/safe")
         let results = ''
         if (prompts.name === '**default**') {
             results = await cf.getHANAInstances()
@@ -36,6 +37,7 @@ async function listInstances(prompts) {
             results = await cf.getHANAInstanceByName(prompts.name)
         }
         base.debug(results)
+        // @ts-ignore
         for (let item of results.resources) {
             let outputItem = {}
             outputItem.name = item.name

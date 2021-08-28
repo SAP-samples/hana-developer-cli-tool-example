@@ -1,16 +1,17 @@
-const base = require("../utils/base")
-const functions = require("./functions")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as functions from './functions.js'
 
-exports.command = 'functionsUI [schema] [function]'
-exports.aliases = ['fui', 'listFuncsUI', 'ListFuncUI', 'listfuncsui', 'Listfuncui', "listFunctionsUI", "listfunctionsui"]
-exports.describe = functions.describe
+export const command = 'functionsUI [schema] [function]'
+export const aliases = ['fui', 'listFuncsUI', 'ListFuncUI', 'listfuncsui', 'Listfuncui', "listFunctionsUI", "listfunctionsui"]
+export const describe = functions.describe
 
-exports.builder = functions.builder
-exports.handler = (argv) => {
+export const builder = functions.builder
+export function handler (argv) {
   base.promptHandler(argv, getFunctions, functions.inputPrompts)
 }
 
-async function getFunctions(prompts) {
+export async function getFunctions(prompts) {
   base.debug('getFunctionsUI')
   try {
     base.setPrompts(prompts)

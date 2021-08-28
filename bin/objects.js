@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from 'sap-hdbext-promisfied'
+import * as hdbext from '@sap/hdbext'
 
-exports.command = 'objects [schema] [object]'
-exports.aliases = ['o', 'listObjects', 'listobjects']
-exports.describe = base.bundle.getText("objects")
+export const command = 'objects [schema] [object]'
+export const aliases = ['o', 'listObjects', 'listobjects']
+export const describe = base.bundle.getText("objects")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   object: {
     alias: ['o', 'Object'],
     type: 'string',
@@ -25,7 +28,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, getObjects, {
     object: {
       description: base.bundle.getText("object"),
@@ -45,12 +48,11 @@ exports.handler = (argv) => {
   })
 }
 
-async function getObjects(prompts) {
+export async function getObjects(prompts) {
   base.debug('getObjects')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    const dbClass = require("sap-hdbext-promisfied")
 
     let schema = await dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("object")}: ${prompts.object}`)
@@ -63,11 +65,9 @@ async function getObjects(prompts) {
     base.error(error)
   }
 }
-module.exports.getObjects = getObjects
 
 async function getObjectsInt(schema, object, client, limit) {
   base.debug(`getObjectsInt ${schema} ${object} ${limit}`)
-  const dbClass = require("sap-hdbext-promisfied")
   object = dbClass.objectName(object)
 
   var query =
@@ -75,7 +75,7 @@ async function getObjectsInt(schema, object, client, limit) {
   WHERE SCHEMA_NAME LIKE ? 
     AND OBJECT_NAME LIKE ? 
   ORDER BY OBJECT_TYPE, OBJECT_NAME `
-  if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, object])

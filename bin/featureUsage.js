@@ -1,13 +1,14 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'featureUsage'
-exports.aliases = ['fu', 'FeaturesUsage']
-exports.describe = base.bundle.getText("featureUsage")
-exports.builder = base.getBuilder({})
-exports.handler = (argv) => {
+export const command = 'featureUsage'
+export const aliases = ['fu', 'FeaturesUsage']
+export const describe = base.bundle.getText("featureUsage")
+export const builder = base.getBuilder({})
+export function handler (argv) {
   base.promptHandler(argv, dbStatus, {})
 }
-async function dbStatus(prompts) {
+export async function dbStatus(prompts) {
   base.debug('dbStatus')
   try {
     base.setPrompts(prompts)
@@ -23,4 +24,3 @@ async function dbStatus(prompts) {
     base.error(error)
   }
 }
-module.exports.dbStatus = dbStatus

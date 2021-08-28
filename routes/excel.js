@@ -1,9 +1,11 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as excel from 'node-xlsx'
 
-module.exports = (app) => {
+export function route (app) {
     app.get('/excel', async (req, res) => {
         try {
-            let excel = require("node-xlsx")
+
             const results = base.getLastResults()
             let out = []
 

@@ -1,13 +1,14 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as fs from 'fs'
+import * as path from 'path'
+import * as xsenv from '@sap/xsenv'
 
-const fs = require('fs');
-const path = require('path')
+export const command = 'copy2Secrets'
+export const aliases = ['secrets', 'make:secrets']
+export const describe = base.bundle.getText("copy2Secrets")
 
-exports.command = 'copy2Secrets'
-exports.aliases = ['secrets', 'make:secrets']
-exports.describe = base.bundle.getText("copy2Secrets")
-
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
     envJson: {
         alias: ['from-file'],
         type: 'string',
@@ -27,14 +28,13 @@ exports.builder = base.getBuilder({
 }, false)
 
 
-exports.handler = function (argv) {
+export function handler (argv) {
     makeSecrets(argv)
 }
 
-async function makeSecrets({ envFile, secretsFolder, filter }) {
+export async function makeSecrets({ envFile, secretsFolder, filter }) {
 
     base.debug(`makeSecrets ${envFile} ${secretsFolder} ${filter}`)
-    const xsenv = require("@sap/xsenv")
     xsenv.loadEnv(envFile)
 
     const VCAP_SERVICES = JSON.parse(process.env.VCAP_SERVICES)

@@ -1,10 +1,23 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from "sap-hdbext-promisfied"
+import * as dbInspect from '../utils/dbInspect.js'
+import {highlight} from 'cli-highlight'
+import cds from '@sap/cds'
+import YAML from 'json-to-pretty-yaml'
+import {
+  parse,
+  convert
+} from 'odata2openapi'
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+global.__xRef = []
 
-exports.command = 'inspectView [schema] [view]'
-exports.aliases = ['iv', 'view', 'insVew', 'inspectview']
-exports.describe = base.bundle.getText("inspectView")
+export const command = 'inspectView [schema] [view]'
+export const aliases = ['iv', 'view', 'insVew', 'inspectview']
+export const describe = base.bundle.getText("inspectView")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   view: {
     alias: ['v', 'View'],
     type: 'string',
@@ -31,7 +44,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, viewInspect, {
     view: {
       description: base.bundle.getText("view"),
@@ -56,23 +69,20 @@ exports.handler = (argv) => {
   })
 }
 
-async function viewInspect(prompts) {
+export async function viewInspect(prompts) {
   base.debug('viewInspect')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    const dbClass = require("sap-hdbext-promisfied")
     let schema = await dbClass.schemaCalc(prompts, db)
 
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("view")}: ${prompts.view}`)
-    const dbInspect = require("../utils/dbInspect")
     dbInspect.options.useHanaTypes = prompts.useHanaTypes
 
     let object = await dbInspect.getView(db, schema, prompts.view)
     let fields = await dbInspect.getViewFields(db, object[0].VIEW_OID)
-    const cds = require("@sap/cds")
+    // @ts-ignore
     Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => require('@sap/cds-dk/lib/compile/openapi') })
-    const highlight = require('cli-highlight').highlight
 
     switch (prompts.output) {
       case 'tbl':
@@ -88,6 +98,7 @@ async function viewInspect(prompts) {
       case 'sqlite': {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "hdbview")
         cdsSource = `service HanaCli { ${cdsSource} } `
+        // @ts-ignore
         console.log(highlight(cds.compile.to.sql(cds.parse(cdsSource), { as: 'str', names: 'quoted', dialect: 'sqlite' })))
         break
       }
@@ -106,6 +117,7 @@ async function viewInspect(prompts) {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "hdbview")
         let all = cds.compile.to.hdbcds(cds.parse(cdsSource))
         for (let [src] of all)
+          // @ts-ignore
           console.log(highlight(src))
         console.log(`\n`)
         break
@@ -114,6 +126,7 @@ async function viewInspect(prompts) {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "hdbview")
         let all = cds.compile.to.hdbtable(cds.parse(cdsSource))
         for (let [src] of all)
+          // @ts-ignore
           console.log(highlight(src))
         console.log(`\n`)
         break
@@ -127,6 +140,7 @@ async function viewInspect(prompts) {
       case 'cdl': {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view")
         cdsSource = `service HanaCli { ${cdsSource} } `
+        // @ts-ignore
         console.log(highlight(cds.compile.to.cdl(cds.parse(cdsSource))))
         break
       }
@@ -136,6 +150,7 @@ async function viewInspect(prompts) {
         let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
           version: 'v4',
         })
+        // @ts-ignore
         console.log(highlight(metadata))
         break
       }
@@ -143,8 +158,10 @@ async function viewInspect(prompts) {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view")
         cdsSource = `service HanaCli { ${cdsSource} } `
         let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
+          // @ts-ignore
           annos: 'only'
         })
+        // @ts-ignore
         console.log(highlight(metadata))
         break
       }
@@ -161,11 +178,9 @@ async function viewInspect(prompts) {
           version: 'v4',
         })
         const odataOptions = { basePath: '/odata/v4/opensap.hana.CatalogService/' }
-        const {
-          parse,
-          convert
-        } = require('odata2openapi')
+        // @ts-ignore
         parse(metadata)
+          // @ts-ignore
           .then(service => convert(service.entitySets, odataOptions, service.version))
           .then(swagger => console.log(highlight(JSON.stringify(swagger, null, 2))))
           .catch(error => console.error(error))
@@ -175,6 +190,7 @@ async function viewInspect(prompts) {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view")
         cdsSource = `service HanaCli { ${cdsSource} } `
         try {
+          // @ts-ignore
           let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
             service: 'HanaCli',
             servicePath: '/odata/v4/opensap.hana.CatalogService/',
@@ -196,13 +212,13 @@ async function viewInspect(prompts) {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view")
         cdsSource = `service HanaCli { ${cdsSource} } `
         try {
+          // @ts-ignore
           let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
             service: 'HanaCli',
             servicePath: '/odata/v4/opensap.hana.CatalogService/',
             'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
             'openapi:diagram': true
           })
-          const YAML = require('json-to-pretty-yaml')
           let data = YAML.stringify(metadata)
           var lines = data.split('\n')
           let output =

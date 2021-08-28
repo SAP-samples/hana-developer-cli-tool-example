@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as fs from 'fs'
+import * as path from 'path'
 
-exports.command = 'dropContainer [container]'
-exports.aliases = ['dc', 'dropC']
-exports.describe = base.bundle.getText("dropContainer")
+export const command = 'dropContainer [container]'
+export const aliases = ['dc', 'dropC']
+export const describe = base.bundle.getText("dropContainer")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   container: {
     alias: ['c', 'Container'],
     type: 'string',
@@ -12,7 +15,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, drop, {
     container: {
       description: base.bundle.getText("container"),
@@ -21,7 +24,7 @@ exports.handler = (argv) => {
   })
 }
 
-async function drop(prompts) {
+export async function drop(prompts) {
   base.debug('drop')
   try {
     base.setPrompts(prompts)
@@ -42,10 +45,8 @@ async function drop(prompts) {
     results = await db.execSQL(
       `DROP TABLE #PARAMETERS;`)
     console.table(results)
-
-    let path = require("path")
+    
     let hdiFile = path.resolve(process.cwd(), 'default-env.json')
-    const fs = require("fs")
     let hdi = JSON.parse(fs.readFileSync(hdiFile, "utf8"))
 
     results = await db.execSQL(

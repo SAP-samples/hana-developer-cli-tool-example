@@ -1,19 +1,20 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as  conn from '../utils/connections.js'
+import * as xsenv from '@sap/xsenv'
+import { spawn } from 'child_process'
 
-exports.command = 'hdbsql'
-exports.describe = base.bundle.getText("hdbsql")
-exports.builder = base.getBuilder({})
-exports.handler = (argv) => {
+export const command = 'hdbsql'
+export const describe = base.bundle.getText("hdbsql")
+export const builder = base.getBuilder({})
+export function handler (argv) {
   base.promptHandler(argv, launchHdbsql, {})
 }
 
-async function launchHdbsql(prompts) {
+export async function launchHdbsql(prompts) {
   base.debug('launchHdbsql')
   try {
-    const conn = require("../utils/connections")
-
     let envFile = conn.resolveEnv(prompts)
-    const xsenv = require("@sap/xsenv")
     xsenv.loadEnv(envFile)
 
     let options = await xsenv.getServices({ hana: { tag: 'hana' }, })
@@ -33,7 +34,6 @@ async function launchHdbsql(prompts) {
     }
     base.debug(options)
     let cmd = `hdbsql -u ${options.hana.user} -n ${options.hana.host + ":" + options.hana.port} -p ${options.hana.password} ${encrypt} -A -m -j`
-    const { spawn } = require('child_process')
     await spawn(cmd, [], { shell: true, stdio: 'inherit' })
     return base.end()
   } catch (error) {

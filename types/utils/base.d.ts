@@ -1,30 +1,14 @@
-/// <reference types="@sap/textbundle" />
-/**
- * - sap-hdbext-promisified module
- */
-export type hdbextPromise = typeof import("sap-hdbext-promisfied");
-/**
- * - instance of sap-hdbext-promisified module
- */
-export type hdbextPromiseInstance = import("sap-hdbext-promisfied");
-/**
- * - sap/textbundle
- */
-export type TextBundle = typeof import("@sap/textbundle").TextBundle;
-export type Ora = typeof import("ora");
-/** @type {typeof import("colors/safe")} */
-export const colors: typeof import("colors/safe");
-/** @type {typeof import("debug") } */
-export let debug: any;
-/** @type string */
-export let hanaBin: string;
-/** @typeof TextBundle - instance of sap/textbundle */
-export const bundle: import("@sap/textbundle").TextBundle;
 /**
  *
  * @param {object} newPrompts - processed input prompts
  */
 export function setPrompts(newPrompts: object): void;
+/**
+ *
+ * @returns {object} newPrompts - processed input prompts
+ */
+export function getPrompts(): object;
+export function clearConnection(): Promise<void>;
 /**
  * @param {object} [options] - override the already set parameters with new connection options
  * @returns {Promise<hdbextPromiseInstance>} - hdbext instanced promisfied
@@ -38,6 +22,18 @@ export function createDBConnection(options?: object): Promise<hdbextPromiseInsta
  * @returns {import("yargs").CommandBuilder} parameters for the command
  */
 export function getBuilder(input: import("yargs").CommandBuilder, iConn?: boolean, iDebug?: boolean): import("yargs").CommandBuilder;
+/**
+ * Initialize Yargs builder for massConvert Command
+ * @param {boolean} [ui=false] - Mass Convert via Browser-based UI
+ * @returns {import("yargs").CommandBuilder} parameters for the command
+ */
+export function getMassConvertBuilder(ui?: boolean): import("yargs").CommandBuilder;
+/**
+ * Initialize Yargs builder for massConvert Command
+ * @param {boolean} [ui=false] - Mass Convert via Browser-based UI
+ * @returns {typeof import("prompt")} - prompts output
+ */
+export function getMassConvertPrompts(ui?: boolean): any;
 /**
  * Get Prompts from the yargs current values and adjust
  * @param {import("yargs").CommandBuilder} argv - parameters for the command
@@ -93,6 +89,12 @@ export function verboseOutput(prompts: any): boolean;
  */
 export function isDebug(prompts: any): boolean;
 /**
+ * Check if we are in GUI mode
+ * @param {*} prompts - input parameters and values
+ * @returns {boolean}
+ */
+export function isGui(prompts: any): boolean;
+/**
  * Output JSON content either as a table or as formatted JSON to console
  * @param {*} content - json content often a HANA result set
  * @returns void
@@ -104,3 +106,36 @@ export function outputTable(content: any): void;
  * @returns void
  */
 export function output(content: any): void;
+/**
+ * Setup Express and Launch Browser
+ * @param {string} urlPath - URL Path to Launch
+ * @returns void
+ */
+export function webServerSetup(urlPath: string): Promise<void>;
+/**
+ * Store and send results JSON
+ * @param {any} res - Express Response object
+ * @param {any} results - JSON content
+ * @returns void
+ */
+export function sendResults(res: any, results: any): void;
+/**
+ * Return the last results JSON
+ * @returns lastResults
+ */
+export function getLastResults(): any;
+/** @type {typeof import("colors/safe")} */
+export const colors: typeof import("colors/safe");
+export const debug: any;
+/** @type string */
+export let hanaBin: string;
+/** @typeof TextBundle - instance of sap/textbundle */
+export const bundle: TextBundle;
+/**
+ * - instance of sap-hdbext-promisified module
+ */
+export type hdbextPromiseInstance = dbClass;
+export type Ora = typeof import("ora");
+import TextBundle_1 = require("@sap/textbundle");
+import TextBundle = TextBundle_1.TextBundle;
+import dbClass from "sap-hdbext-promisfied";

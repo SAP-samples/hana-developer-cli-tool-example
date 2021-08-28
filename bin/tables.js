@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from "sap-hdbext-promisfied"
+import * as hdbext from "@sap/hdbext"
 
-exports.command = 'tables [schema] [table]'
-exports.aliases = ['t', 'listTables', 'listtables']
-exports.describe = base.bundle.getText("tables")
+export const command = 'tables [schema] [table]'
+export const aliases = ['t', 'listTables', 'listtables']
+export const describe = base.bundle.getText("tables")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   table: {
     alias: ['t', 'Table'],
     type: 'string',
@@ -25,7 +28,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-let inputPrompts = {
+export let inputPrompts = {
   table: {
     description: base.bundle.getText("table"),
     type: 'string',
@@ -42,18 +45,16 @@ let inputPrompts = {
     required: true
   }
 }
-exports.inputPrompts = inputPrompts
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, getTables, inputPrompts)
 }
 
-async function getTables(prompts) {
+export async function getTables(prompts) {
   base.debug('getTables')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    const dbClass = require("sap-hdbext-promisfied")
 
     let schema = await dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("table")}: ${prompts.table}`)
@@ -66,11 +67,9 @@ async function getTables(prompts) {
     base.error(error)
   }
 }
-module.exports.getTables = getTables
 
 async function getTablesInt(schema, table, client, limit) {
   base.debug(`getTablesInt ${schema} ${table} ${limit}`)
-  const dbClass = require("sap-hdbext-promisfied")  
   table = dbClass.objectName(table)
 
   let query =
@@ -78,7 +77,7 @@ async function getTablesInt(schema, table, client, limit) {
   WHERE SCHEMA_NAME LIKE ? 
     AND TABLE_NAME LIKE ? 
   ORDER BY SCHEMA_NAME, TABLE_NAME `
-  if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, table])

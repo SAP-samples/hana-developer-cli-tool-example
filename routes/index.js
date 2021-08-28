@@ -1,19 +1,19 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import bodyParser from 'body-parser'
+let jsonParser = bodyParser.json()
 
-module.exports = (app) => {
+export function route (app) {
+    base.debug('Index Route')
     app.get('/', async (req, res) => {
         try {
-
             res.type("application/json").status(200).send(base.getPrompts())
         } catch (error) {
             base.error(error)
             res.status(500).send(error.toString())
         }
-
     })
-    let bodyParser = require('body-parser')
-    var jsonParser = bodyParser.json()
-
+ 
     app.put('/', jsonParser, async (req, res) => {
         try {
             let body = req.body
@@ -24,5 +24,5 @@ module.exports = (app) => {
             base.error(error)
             res.status(500).send(error.toString())
         }
-    })
+    }) 
 }

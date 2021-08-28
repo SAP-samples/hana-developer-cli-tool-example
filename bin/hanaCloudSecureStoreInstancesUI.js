@@ -1,16 +1,17 @@
-const base = require("../utils/base")
-const securestore = require("./hanaCloudSecureStoreInstances")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as securestore from './hanaCloudSecureStoreInstances.js'
 
-exports.command = 'securestoreUI'
-exports.aliases = ['secureStoreInstancesUI', 'secureStoreUI', 'securestoreinstancesui', 'secureStoreServicesUI', 'listSecureStoreUI', 'securestoreservicesui', 'securestoresui']
-exports.describe = securestore.describe
-exports.builder = securestore.builder 
+export const command = 'securestoreUI'
+export const aliases = ['secureStoreInstancesUI', 'secureStoreUI', 'securestoreinstancesui', 'secureStoreServicesUI', 'listSecureStoreUI', 'securestoreservicesui', 'securestoresui']
+export const describe = securestore.describe
+export const builder = securestore.builder 
 
-exports.handler = (argv) => {
+export function handler (argv) {
     base.promptHandler(argv, listInstances, securestore.inputPrompts)
   }
 
-async function listInstances(prompts) {
+export async function listInstances(prompts) {
     base.debug('getSecureStoreUI')
     try {
       base.setPrompts(prompts)

@@ -1,22 +1,23 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as conn from "../utils/connections.js"
+import * as fs from 'fs'
+import * as xsenv from '@sap/xsenv'
 
-exports.command = 'copy2Env'
-exports.aliases = ['copyEnv', 'copyenv', 'copy2env']
-exports.describe = base.bundle.getText("copy2Env")
+export const command = 'copy2Env'
+export const aliases = ['copyEnv', 'copyenv', 'copy2env']
+export const describe = base.bundle.getText("copy2Env")
 
-exports.builder = base.getBuilder({})
+export const builder = base.getBuilder({})
 
-exports.handler = (argv) => {
+export function handler(argv) {
     base.promptHandler(argv, copy, {})
 }
 
-async function copy(prompts) {
+export async function copy(prompts) {
     base.debug('copy')
-    const conn = require("../utils/connections")
     let envFile = conn.resolveEnv(prompts)
-    const xsenv = require("@sap/xsenv")
     xsenv.loadEnv(envFile)
-    const fs = require('fs')
     base.debug(process.env.VCAP_SERVICES)
     fs.writeFile(".env", `VCAP_SERVICES=${process.env.VCAP_SERVICES}`, async (err) => {
         if (err) {

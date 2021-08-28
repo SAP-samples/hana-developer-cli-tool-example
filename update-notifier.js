@@ -1,6 +1,4 @@
-  
-'use strict';
-const updateNotifier = require('update-notifier')
+import updateNotifier from 'update-notifier'
 
 // Run: $ node example
 

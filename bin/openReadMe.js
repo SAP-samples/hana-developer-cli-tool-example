@@ -1,18 +1,19 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import open from 'open'
 
-exports.command = 'readme'
-exports.aliases = ['openreadme', 'openReadme', 'openReadMe', 'openHelp', 'openhelp']
-exports.describe = base.bundle.getText("readme")
-exports.builder = base.getBuilder({}, false)
-exports.handler = (argv) => {
+export const command = 'readme'
+export const aliases = ['openreadme', 'openReadme', 'openReadMe', 'openHelp', 'openhelp']
+export const describe = base.bundle.getText("readme")
+export const builder = base.getBuilder({}, false)
+export function handler (argv) {
     base.promptHandler(argv, getReadMe, {}, false)
 }
 
-async function getReadMe() {
+export async function getReadMe() {
     base.debug('getReadMe')
     let dbxReadmeURL = 'https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/README.md'
     console.log(dbxReadmeURL)
-    const open = require('open')
     open(dbxReadmeURL)
     return base.end()
 }

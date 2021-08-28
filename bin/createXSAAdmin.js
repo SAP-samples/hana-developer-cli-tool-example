@@ -1,10 +1,11 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'createXSAAdmin [user] [password]'
-exports.aliases = ['cXSAAdmin', 'cXSAA', 'cxsaadmin', 'cxsaa']
-exports.describe = base.bundle.getText("createXSAAdmin")
+export const command = 'createXSAAdmin [user] [password]'
+export const aliases = ['cXSAAdmin', 'cXSAA', 'cxsaadmin', 'cxsaa']
+export const describe = base.bundle.getText("createXSAAdmin")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   user: {
     alias: ['u', 'User'],
     desc: base.bundle.getText("user")
@@ -15,7 +16,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, activate, {
     user: {
       description: base.bundle.getText("user"),
@@ -30,7 +31,7 @@ exports.handler = (argv) => {
   })
 }
 
-async function activate(prompts) {
+export async function activate(prompts) {
   base.debug('activate')
   try {
     base.setPrompts(prompts)

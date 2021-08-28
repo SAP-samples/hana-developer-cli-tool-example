@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from 'sap-hdbext-promisfied'
+import * as hdbext from '@sap/hdbext'
 
-exports.command = 'functions [schema] [function]'
-exports.aliases = ['f', 'listFuncs', 'ListFunc', 'listfuncs', 'Listfunc', "listFunctions", "listfunctions"]
-exports.describe = base.bundle.getText("functions")
+export const command = 'functions [schema] [function]'
+export const aliases = ['f', 'listFuncs', 'ListFunc', 'listfuncs', 'Listfunc', "listFunctions", "listfunctions"]
+export const describe = base.bundle.getText("functions")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   function: {
     alias: ['f', 'Function'],
     type: 'string',
@@ -25,7 +28,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-let inputPrompts = {
+export let inputPrompts = {
   function: {
     description: base.bundle.getText("function"),
     type: 'string',
@@ -42,17 +45,16 @@ let inputPrompts = {
     required: true
   }
 }
-exports.inputPrompts = inputPrompts
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, getFunctions, inputPrompts)
 }
 
-async function getFunctions(prompts) {
+export async function getFunctions(prompts) {
   base.debug('getFunctions')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
+
     const db = await base.createDBConnection()
 
     let schema = await dbClass.schemaCalc(prompts, db)
@@ -66,12 +68,10 @@ async function getFunctions(prompts) {
     base.error(error)
   }
 }
-module.exports.getFunctions = getFunctions
 
 
 async function getFunctionsInt(schema, functionName, client, limit) {
   base.debug(`getFunctionsInt ${schema} ${functionName} ${limit}`)
-  const dbClass = require("sap-hdbext-promisfied")
   functionName = dbClass.objectName(functionName)
 
   var query =
@@ -79,7 +79,7 @@ async function getFunctionsInt(schema, functionName, client, limit) {
   WHERE SCHEMA_NAME LIKE ? 
     AND FUNCTION_NAME LIKE ? 
   ORDER BY FUNCTION_NAME `
-  if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, functionName])

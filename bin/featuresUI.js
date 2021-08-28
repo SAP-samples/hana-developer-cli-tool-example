@@ -1,16 +1,17 @@
-const base = require("../utils/base")
-const features = require("./dataTypes")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as features from './dataTypes.js'
 
-exports.command = 'featuresUI'
-exports.aliases = ['feui', 'featuresui', 'FeaturesUI']
-exports.describe = features.describe
+export const command = 'featuresUI'
+export const aliases = ['feui', 'featuresui', 'FeaturesUI']
+export const describe = features.describe
 
-exports.builder = features.builder
-exports.handler = (argv) => {
+export const builder = features.builder
+export function handler (argv) {
   base.promptHandler(argv, dbStatus, {})
 }
 
-async function dbStatus(prompts) {
+export async function dbStatus(prompts) {
   base.debug('getFeaturesUI')
   try {
     base.setPrompts(prompts)

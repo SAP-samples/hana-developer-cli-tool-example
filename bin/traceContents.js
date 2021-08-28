@@ -1,10 +1,11 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'traceContents [host] [file]'
-exports.aliases = ['tc', 'traceContents', 'traceContent', 'tracecontent']
-exports.describe = base.bundle.getText("traceContents")
+export const command = 'traceContents [host] [file]'
+export const aliases = ['tc', 'traceContents', 'traceContent', 'tracecontent']
+export const describe = base.bundle.getText("traceContents")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   host: {
     alias: ['ho', 'Host'],
     type: 'string',
@@ -23,7 +24,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, traceContents, {
     host: {
       description: base.bundle.getText("host"),
@@ -43,7 +44,7 @@ exports.handler = (argv) => {
   })
 }
 
-async function traceContents(prompts) {
+export async function traceContents(prompts) {
   base.debug('traceContents')
   try {
     base.setPrompts(prompts)
@@ -69,4 +70,3 @@ async function traceContents(prompts) {
     base.error(error)
   }
 }
-module.exports.traceContents = traceContents

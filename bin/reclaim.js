@@ -1,14 +1,15 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'reclaim'
-exports.aliases = 're'
-exports.describe = base.bundle.getText("reclaim")
-exports.builder = base.getBuilder({})
-exports.handler = (argv) => {
+export const command = 'reclaim'
+export const aliases = 're'
+export const describe = base.bundle.getText("reclaim")
+export const builder = base.getBuilder({})
+export function handler (argv)  {
   base.promptHandler(argv, reclaim, {})
 }
 
-async function reclaim(prompts) {
+export async function reclaim(prompts) {
   base.debug('reclaim')
   try {
     base.setPrompts(prompts)

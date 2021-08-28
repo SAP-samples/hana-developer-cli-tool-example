@@ -1,17 +1,18 @@
-const base = require("../utils/base")
-const tables = require("./tables")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as tables from './tables.js'
 
-exports.command = 'tablesUI [schema] [table]'
-exports.aliases = ['tui', 'listTablesUI', 'listtablesui', 'tablesui']
-exports.describe = tables.describe 
+export const command = 'tablesUI [schema] [table]'
+export const aliases = ['tui', 'listTablesUI', 'listtablesui', 'tablesui']
+export const describe = tables.describe 
 
-exports.builder = tables.builder
+export const builder = tables.builder
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, getTables, tables.inputPrompts)
 }
 
-async function getTables(prompts) {
+export async function getTables(prompts) {
   base.debug('getTablesUI')
   try {
     base.setPrompts(prompts)

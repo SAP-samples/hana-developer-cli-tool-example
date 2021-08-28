@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [2.202108.4] - 2021-08-25
+
+**Changed**
+
+- querySimple Export to CSV Format feature added by [sbarzaghialteaup](https://github.com/sbarzaghialteaup)
+- Update Dependencies - especially HANA Client to 2.9.28
+- Update to SAPUI5 1.93.0
+- Convert entire project to ECMAScript Modules (ESM) - this is a massive internal change and we appologize in advance if it results in any instablity. If you hit any issues please report then you can target specifically the last version until they are resolved
+
 ## [2.202108.1] - 2021-08-06
 
 **Changed**

@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from 'sap-hdbext-promisfied'
+import * as hdbext from '@sap/hdbext'
 
-exports.command = 'roles [schema] [role]'
-exports.aliases = ['r', 'listRoles', 'listroles']
-exports.describe = base.bundle.getText("roles")
+export const command = 'roles [schema] [role]'
+export const aliases = ['r', 'listRoles', 'listroles']
+export const describe = base.bundle.getText("roles")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   role: {
     alias: ['r', 'Role'],
     type: 'string',
@@ -25,7 +28,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, getRoles, {
     role: {
       description: base.bundle.getText("role"),
@@ -45,12 +48,11 @@ exports.handler = (argv) => {
   })
 }
 
-async function getRoles(prompts) {
+export async function getRoles(prompts) {
   base.debug('getRoles')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    const dbClass = require("sap-hdbext-promisfied")
 
     let schema = await dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("role")}: ${prompts.role}`)
@@ -63,12 +65,10 @@ async function getRoles(prompts) {
     base.error(error)
   }
 }
-module.exports.getRoles = getRoles
 
 
 async function getRolesInt(schema, role, client, limit) {
   base.debug(`getRolesInt ${schema} ${role} ${limit}`)
-  const dbClass = require("sap-hdbext-promisfied")  
   role = dbClass.objectName(role)
   let query = ''
   if (schema === '%') {
@@ -91,7 +91,7 @@ async function getRolesInt(schema, role, client, limit) {
     ORDER BY ROLE_SCHEMA_NAME, ROLE_NAME `
   }
 
-  if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, role])

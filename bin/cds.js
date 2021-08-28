@@ -1,11 +1,24 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from 'sap-hdbext-promisfied'
+import * as dbInspect from '../utils/dbInspect.js'
+import * as swaggerUi from 'swagger-ui-express'
+import open from 'open'
+import * as conn from '../utils/connections.js'
+import * as Server from 'http'
+import express from 'express'
+import cds from '@sap/cds'
+
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+
 global.__xRef = []
 
-exports.command = 'cds [schema] [table]'
-exports.aliases = ['cdsPreview']
-exports.describe = base.bundle.getText("cds")
+export const command = 'cds [schema] [table]'
+export const aliases = ['cdsPreview']
+export const describe = base.bundle.getText("cds")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   table: {
     alias: ['t', 'Table'],
     type: 'string',
@@ -31,14 +44,14 @@ exports.builder = base.getBuilder({
   },
   port: {
     alias: ['p'],
-    type: 'integer',
+    type: 'number',
     default: false,
     desc: base.bundle.getText("port")
   }
 })
 
-exports.handler = (argv) => {
-  base.promptHandler(argv, cds, {
+export function handler(argv) {
+  base.promptHandler(argv, cdsBuild, {
     table: {
       description: base.bundle.getText("table"),
       type: 'string',
@@ -75,12 +88,10 @@ exports.handler = (argv) => {
 }
 
 
-async function cds(prompts) {
+export async function cdsBuild(prompts) {
   base.debug('cds')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
-    const dbInspect = require("../utils/dbInspect")
     const db = await base.createDBConnection()
 
     let schema = await dbClass.schemaCalc(prompts, db)
@@ -178,22 +189,21 @@ async function cdsServerSetup(prompts, cdsSource) {
     return base.error(`${port} ${base.bundle.getText("errPort")}`)
   }
 
-  const server = require("http").createServer()
-  const express = require("express")
+  const server = Server.createServer()
   var app = express()
 
   //CDS OData Service
-  const cds = require("@sap/cds")
+
   let options = {
     kind: "hana",
     logLevel: "error",
+    credentials: null
   }
   cds.connect(options)
+  // @ts-ignore
   cds.env.requires.db = {}
+  // @ts-ignore
   cds.env.requires.db.multiTenant = false
-
-  const dbClass = require("sap-hdbext-promisfied")
-  const conn = require("../utils/connections")
 
   let odataURL = "/odata/v4/opensap.hana.CatalogService/"
   let entity = prompts.table
@@ -201,6 +211,7 @@ async function cdsServerSetup(prompts, cdsSource) {
   entity = entity.replace(/::/g, "_")
 
   // entity = entity.replace(/:/g, "")
+  // @ts-ignore
   cds.serve('all').from(await cds.parse(cdsSource), {
     crashOnError: false
   })
@@ -209,16 +220,17 @@ async function cdsServerSetup(prompts, cdsSource) {
     .to('fiori')
     .with(srv => {
       srv.on(['READ'], entity, async (req) => {
-
+        // @ts-ignore
         req.query.SELECT.from.ref = [`${prompts.table}`]
 
         let query = "SELECT "
+        // @ts-ignore
         if (req.query.SELECT.columns[0].func) {
           const db = new dbClass(await conn.createConnection(prompts))
           query += `COUNT(*) AS "counted" FROM "${prompts.table}"`
           return (await db.execSQL(query))
         }
-
+        // @ts-ignore
         for (let column of req.query.SELECT.columns) {
           for (let xref of global.__xRef) {
             if (column.ref[0] === xref.after) {
@@ -230,9 +242,11 @@ async function cdsServerSetup(prompts, cdsSource) {
         //Req Paramers for Single Record GET
         if (req.params) {
           if (req.params.length > 0) {
+            // @ts-ignore
             const { SELECT } = req.query
             SELECT.where = []
             for (let param of req.params) {
+              // @ts-ignore
               for (let property in param) {
                 SELECT.where.push({ "ref": [property] })
                 SELECT.where.push("=")
@@ -245,7 +259,9 @@ async function cdsServerSetup(prompts, cdsSource) {
         }
 
         //Where
+        // @ts-ignore
         if (req.query.SELECT.where) {
+          // @ts-ignore
           for (let where of req.query.SELECT.where) {
             if (where.ref) {
               for (let xref of global.__xRef) {
@@ -258,8 +274,10 @@ async function cdsServerSetup(prompts, cdsSource) {
         }
 
         //Order By
+        // @ts-ignore
         if (req.query.SELECT.orderBy) {
           query += ` ORDER BY `
+          // @ts-ignore
           for (let orderBy of req.query.SELECT.orderBy) {
             for (let xref of global.__xRef) {
               if (orderBy.ref[0] === xref.after) {
@@ -278,9 +296,10 @@ async function cdsServerSetup(prompts, cdsSource) {
     })
 
   //Swagger UI
-  const swaggerUi = require('swagger-ui-express')
+
   Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => require('@sap/cds-dk/lib/compile/openapi') })
   try {
+    // @ts-ignore
     let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
       service: 'HanaCli',
       servicePath: '/odata/v4/opensap.hana.CatalogService/',
@@ -313,9 +332,10 @@ async function cdsServerSetup(prompts, cdsSource) {
     //Start the Server 
     server.on("request", app)
     server.listen(port, function () {
+      // @ts-ignore
       let serverAddr = `http://localhost:${server.address().port}`
       console.info(`HTTP Server: ${serverAddr}`)
-      const open = require('open')
+
       open(serverAddr)
     })
   }
@@ -329,9 +349,9 @@ async function cdsServerSetup(prompts, cdsSource) {
   return
 }
 
-function getIndex(odataURL, entity) {
+export function getIndex(odataURL, entity) {
   base.debug('getIndex')
-  return this._html = `
+  return `
   <html>
       <head>
       <meta name="color-scheme" content="dark light">
@@ -410,7 +430,7 @@ function getIndex(odataURL, entity) {
   </html>`
 }
 
-function _manifest(odataURL, entity, table) {
+export function _manifest(odataURL, entity, table) {
   base.debug(`_manifest ${odataURL} ${entity} ${table}`)
   //const serviceProv = odataURL
   const serviceInfo = entity
@@ -531,6 +551,7 @@ function _manifest(odataURL, entity, table) {
       id: `${navProperty}Target`,
       name: 'sap.fe.templates.ObjectPage',
       options: {
+        // @ts-ignore
         settings: {
           entitySet: targetEntity
         }
@@ -547,9 +568,9 @@ function _manifest(odataURL, entity, table) {
   return manifest
 }
 
-function fiori(manifest, odataURL, entity,) {
+export function fiori(manifest, odataURL, entity,) {
   base.debug(`fiori ${odataURL} ${entity}`)
-  let ui5Version = '1.91.1' //'1.85.3' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
+  let ui5Version = '1.93.0' //'1.85.3' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
   ui5Version = ui5Version ? ui5Version + '/' : ''
   base.debug(`SAPUI5 Version ${ui5Version}`)
   return `

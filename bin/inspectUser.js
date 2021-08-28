@@ -1,10 +1,10 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+export const command = 'inspectUser [user]'
+export const aliases = ['iu', 'user', 'insUser', 'inspectuser']
+export const describe = base.bundle.getText("inspectUser")
 
-exports.command = 'inspectUser [user]'
-exports.aliases = ['iu', 'user', 'insUser', 'inspectuser']
-exports.describe = base.bundle.getText("inspectUser")
-
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   user: {
     alias: ['u', 'User'],
     type: 'string',
@@ -12,7 +12,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, userInspect, {
     user: {
       description: base.bundle.getText("user"),
@@ -22,7 +22,7 @@ exports.handler = (argv) => {
   })
 }
 
-async function userInspect(prompts) {
+export async function userInspect(prompts) {
   base.debug('userInspect')
   try {
     base.setPrompts(prompts)

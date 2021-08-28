@@ -1,11 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as dbInspect from '../utils/dbInspect.js'
 
-module.exports = (app) => {
+export function route (app) {
+    base.debug('hanaList Route')
     app.get('/hana', async (req, res) => {
         try {
             await base.clearConnection()
             const dbStatus = await base.createDBConnection()
-            const dbInspect = require("../utils/dbInspect")
 
             let [session, user, overview, services, version] = await Promise.all([
                 dbStatus.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`),
@@ -84,10 +86,10 @@ module.exports = (app) => {
     })
 }
 
-async function listHandler(res, lib, func) {
+export async function listHandler(res, lib, func) {
     try {
         await base.clearConnection()
-        const targetLibrary = require(lib)
+        const targetLibrary = await import(`${lib}.js`)
         let results = await targetLibrary[func](base.getPrompts())
         base.sendResults(res, results)
     } catch (error) {

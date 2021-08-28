@@ -55,6 +55,21 @@ export function getHANAInstanceByName(name: string): Promise<object>;
  */
 export function getHDIInstances(): Promise<object>;
 /**
+ * Get all SBSS service instances
+ * @returns {Promise<object>}
+ */
+export function getSbssInstances(): Promise<object>;
+/**
+ * Get all SecureStore service instances
+ * @returns {Promise<object>}
+ */
+export function getSecureStoreInstances(): Promise<object>;
+/**
+ * Get all SecureStore service instances
+ * @returns {Promise<object>}
+ */
+export function getSchemaInstances(): Promise<object>;
+/**
  * Get all User Provided Service Instances
  * @returns {Promise<object>}
  */

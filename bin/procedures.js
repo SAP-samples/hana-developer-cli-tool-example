@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from 'sap-hdbext-promisfied'
+import * as hdbext from '@sap/hdbext'
 
-exports.command = 'procedures [schema] [procedure]'
-exports.aliases = ['p', 'listProcs', 'ListProc', 'listprocs', 'Listproc', "listProcedures", "listprocedures"]
-exports.describe = base.bundle.getText("procedures")
+export const command = 'procedures [schema] [procedure]'
+export const aliases = ['p', 'listProcs', 'ListProc', 'listprocs', 'Listproc', "listProcedures", "listprocedures"]
+export const describe = base.bundle.getText("procedures")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   procedure: {
     alias: ['p', 'Procedure'],
     type: 'string',
@@ -25,7 +28,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, getProcedures, {
     procedure: {
       description: base.bundle.getText("procedure"),
@@ -45,12 +48,11 @@ exports.handler = (argv) => {
   })
 }
 
-async function getProcedures(prompts) {
+export async function getProcedures(prompts) {
   base.debug('getProcedures')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    const dbClass = require("sap-hdbext-promisfied")
 
     let schema = await dbClass.schemaCalc(prompts, db);
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("procedure")}: ${prompts.procedure}`);
@@ -63,18 +65,16 @@ async function getProcedures(prompts) {
     base.error(error)
   }
 }
-module.exports.getProcedures = getProcedures
 
 async function getProceduresInt(schema, procedure, client, limit) {
   base.debug(`getProceduresInt ${schema} ${procedure} ${limit}`)
-  const dbClass = require("sap-hdbext-promisfied")
   procedure = dbClass.objectName(procedure)
   let query =
     `SELECT SCHEMA_NAME, PROCEDURE_NAME, SQL_SECURITY, CREATE_TIME from PROCEDURES 
   WHERE SCHEMA_NAME LIKE ? 
     AND PROCEDURE_NAME LIKE ? 
   ORDER BY PROCEDURE_NAME `
-  if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, procedure])

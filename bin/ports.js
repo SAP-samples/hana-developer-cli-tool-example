@@ -1,12 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'ports'
-exports.describe = base.bundle.getText("ports")
-exports.builder = base.getBuilder({})
-exports.handler = (argv) => {
+export const command = 'ports'
+export const describe = base.bundle.getText("ports")
+export const builder = base.getBuilder({})
+export function handler (argv) {
   base.promptHandler(argv, getPorts, {})
 }
-async function getPorts(prompts) {
+export async function getPorts(prompts) {
   base.debug('getPorts')
   try {
     base.setPrompts(prompts)
@@ -23,4 +24,3 @@ async function getPorts(prompts) {
     base.error(error)
   }
 }
-module.exports.getPorts = getPorts

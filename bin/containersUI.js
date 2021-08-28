@@ -1,16 +1,17 @@
-const base = require("../utils/base")
-const containers = require("./containers")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as containers from './containers.js'
 
-exports.command = 'containersUI [containerGroup] [container]'
-exports.aliases = ['containersui', 'contUI', 'listContainersUI', 'listcontainersui']
-exports.describe = containers.describe
-exports.builder = containers.builder
+export const command = 'containersUI [containerGroup] [container]'
+export const aliases = ['containersui', 'contUI', 'listContainersUI', 'listcontainersui']
+export const describe = containers.describe
+export const builder = containers.builder
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, getContainers, containers.inputPrompts)
 }
 
-async function getContainers(prompts) {
+export async function getContainers(prompts) {
   base.debug('getContainersUI')
   try {
     base.setPrompts(prompts)

@@ -1,10 +1,14 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import cds from '@sap/cds'
+import { promises as fs } from 'fs'
+import * as  convert from 'js-convert-case'
 
-exports.command = 'massRename'
-exports.aliases = ['mr', 'massrename', 'massRN', 'massrn']
-exports.describe = base.bundle.getText("massRename")
+export const command = 'massRename'
+export const aliases = ['mr', 'massrename', 'massRN', 'massrn']
+export const describe = base.bundle.getText("massRename")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   schema: {
     alias: ['s', 'schema'],
     type: 'string',
@@ -27,7 +31,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, rename, {
     schema: {
       type: 'string',
@@ -50,14 +54,11 @@ exports.handler = (argv) => {
   })
 }
 
-async function rename(result) {
+export async function rename(result) {
   base.debug('rename')
   try {
     base.setPrompts(result)
-    let cds = require('@sap/cds')
-    let fs = require("fs/promises")
-    let convert = require("js-convert-case")
-    const csn = await cds.load(result.schema)
+     const csn = await cds.load(result.schema)
 
     let model = ``
     if (result.namespace) {
@@ -96,6 +97,7 @@ async function rename(result) {
               model += `entity ${key}2 as projection on ${key} {\n`
             }
 
+            // @ts-ignore
             Object.keys(entity.elements).forEach((element, index, array) => {
               // to be extended with more cases if needed
               let alias

@@ -1,15 +1,16 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'dataVolumes'
-exports.aliases = ['dv', 'datavolumes']
-exports.describe = base.bundle.getText("dataVolumes")
+export const command = 'dataVolumes'
+export const aliases = ['dv', 'datavolumes']
+export const describe = base.bundle.getText("dataVolumes")
 
-exports.builder = base.getBuilder({})
-exports.handler = (argv) => {
+export const builder = base.getBuilder({})
+export function handler (argv) {
   base.promptHandler(argv, dbStatus, {})
 }
 
-async function dbStatus(prompts) {
+export async function dbStatus(prompts) {
   base.debug('dbStatus')
   try {
     base.setPrompts(prompts)

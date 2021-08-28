@@ -1,11 +1,12 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'hdi'
-exports.aliases = ['hdiInstances', 'hdiinstances', 'hdiServices', 'listhdi', 'hdiservices', 'hdis']
-exports.describe = base.bundle.getText("hdiInstances")
+export const command = 'hdi'
+export const aliases = ['hdiInstances', 'hdiinstances', 'hdiServices', 'listhdi', 'hdiservices', 'hdis']
+export const describe = base.bundle.getText("hdiInstances")
 
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
     cf: {
         alias: ['c', 'cmd'],
         desc: base.bundle.getText("cfxs"),
@@ -14,7 +15,7 @@ exports.builder = base.getBuilder({
     }
 }, false)
 
-let inputPrompts = {
+export let inputPrompts = {
     cf: {
         description: base.bundle.getText("cfxs"),
         type: 'boolean',
@@ -22,26 +23,26 @@ let inputPrompts = {
         required: false
     }
 }
-exports.inputPrompts = inputPrompts
 
-exports.handler = (argv) => {
+export function handler (argv) {
     base.promptHandler(argv, listInstances, inputPrompts, false)
 }
 
-async function listInstances(prompts) {
+export async function listInstances(prompts) {
     base.debug('listInstances')
     try {
         let cf = null
         if (prompts.cf) {
-            cf = require("../utils/cf")
+            cf = await import("../utils/cf.js")
         } else {
-            cf = require("../utils/xs")
+            cf = await import("../utils/xs.js")
         }
 
         let results = ''
         results = await cf.getHDIInstances()
         let output = []
         if (prompts.cf) {
+            // @ts-ignore
             for (let item of results.resources) {
                 let outputItem = {}
                 outputItem.name = item.name
@@ -52,7 +53,9 @@ async function listInstances(prompts) {
         } else {
           for (let item of results){
               let outputItem = {}
+              // @ts-ignore
               outputItem.name = item.serviceInstanceEntity.name
+              // @ts-ignore
               outputItem.last_operation = `${item.serviceInstanceEntity.last_operation.type} ${item.serviceInstanceEntity.last_operation.state} `
               output.push(outputItem)
           }
@@ -64,4 +67,3 @@ async function listInstances(prompts) {
         base.error(error)
     }
 }
-module.exports.listInstances = listInstances

@@ -1,13 +1,15 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'readMeUI'
-exports.aliases = ['readmeui', 'readMeUi', 'readmeUI']
-exports.describe = base.bundle.getText("readMe")
-exports.builder = base.getBuilder({}, false)
-exports.handler = (argv) => {
+export const command = 'readMeUI'
+export const aliases = ['readmeui', 'readMeUi', 'readmeUI']
+export const describe = base.bundle.getText("readMe")
+export const builder = base.getBuilder({}, false)
+export function handler (argv) {
   base.promptHandler(argv, readMe, {})
 }
-async function readMe(prompts){
+
+export async function readMe(prompts){
   base.debug('readMeUI')
   try {
     base.setPrompts(prompts)

@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from "sap-hdbext-promisfied"
+import * as hdbext from "@sap/hdbext"
 
-exports.command = 'schemas [schema]'
-exports.aliases = ['sch', 'getSchemas', 'listSchemas']
-exports.describe = base.bundle.getText("schemas")
+export const command = 'schemas [schema]'
+export const aliases = ['sch', 'getSchemas', 'listSchemas']
+export const describe = base.bundle.getText("schemas")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   schema: {
     alias: ['s', 'schemas'],
     type: 'string',
@@ -25,7 +28,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-let inputPrompts = {
+export let inputPrompts = {
   schema: {
     description: base.bundle.getText("schema"),
     type: 'string',
@@ -45,13 +48,13 @@ let inputPrompts = {
     required: true
   }
 }
-exports.inputPrompts = inputPrompts
 
-exports.handler = (argv) => {
+
+export function handler(argv) {
   base.promptHandler(argv, getSchemas, inputPrompts)
 }
 
-async function getSchemas(prompts) {
+export async function getSchemas(prompts) {
   base.debug('getSchemas')
   try {
     base.setPrompts(prompts)
@@ -65,11 +68,9 @@ async function getSchemas(prompts) {
     base.error(error)
   }
 }
-module.exports.getSchemas = getSchemas
 
 async function getSchemasInt(schema, client, limit, all) {
   base.debug(`getSchemasInt ${schema} ${limit} ${all}`)
-  const dbClass = require("sap-hdbext-promisfied")
   schema = dbClass.objectName(schema)
   let hasPrivileges = 'FALSE'
   if (!all) { hasPrivileges = 'TRUE' }
@@ -79,7 +80,7 @@ async function getSchemasInt(schema, client, limit, all) {
         WHERE SCHEMA_NAME LIKE ? 
           AND HAS_PRIVILEGES = ?
 	      ORDER BY SCHEMA_NAME `
-  if (limit !== null) {
+  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, hasPrivileges])

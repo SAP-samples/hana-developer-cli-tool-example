@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from 'sap-hdbext-promisfied'
+import * as hdbext from '@sap/hdbext'
 
-exports.command = 'iniContents [file] [section]'
-exports.aliases = ['if', 'inifiles', 'ini']
-exports.describe = base.bundle.getText("iniContents")
+export const command = 'iniContents [file] [section]'
+export const aliases = ['if', 'inifiles', 'ini']
+export const describe = base.bundle.getText("iniContents")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   file: {
     alias: ['f', 'File'],
     type: 'string',
@@ -25,7 +28,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, iniContents, {
     file: {
       description: base.bundle.getText("file"),
@@ -45,11 +48,10 @@ exports.handler = (argv) => {
   })
 }
 
-async function iniContents(prompts) {
+export async function iniContents(prompts) {
   base.debug('iniContents')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
     const db = await base.createDBConnection()
 
     let iniFile = dbClass.objectName(prompts.file)
@@ -60,7 +62,7 @@ async function iniContents(prompts) {
     WHERE FILE_NAME LIKE ? 
       AND SECTION LIKE ?
     ORDER BY FILE_NAME, SECTION, KEY `
-    if (prompts.limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(prompts.limit)) {
+    if (prompts.limit | hdbext.sqlInjectionUtils.isAcceptableParameter(prompts.limit)) {
       query += `LIMIT ${prompts.limit.toString()}`
     }
     let results = await db.statementExecPromisified(await db.preparePromisified(query), [iniFile, section])
@@ -71,4 +73,3 @@ async function iniContents(prompts) {
     base.error(error)
   }
 }
-module.exports.iniContents = iniContents

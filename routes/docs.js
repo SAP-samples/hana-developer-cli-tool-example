@@ -1,17 +1,22 @@
-const path = require('path')
-  const fs = require('fs').promises
+// @ts-check
+import * as base from '../utils/base.js'
+import path from 'path'
+import { promises as fs } from 'fs'
+import showdown from 'showdown'
+import { fileURLToPath } from 'url'
+// @ts-ignore
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
-module.exports = (app) => {
+export function route (app) {
     app.get('/docs/readme', async (req, res) => {
 
         try {
             let mdReadMe = await fs.readFile(path.resolve(__dirname, "../README.md"), "utf-8")
-            const showdown = require('showdown')
             const converter = new showdown.Converter()
             let html = converter.makeHtml(mdReadMe)
             res.type("text/html").status(200).send(html)
         } catch (error) {
-            app.logger.error(error)
+            base.error(error)
             res.status(500).send(error.toString())
         }
 
@@ -21,12 +26,11 @@ module.exports = (app) => {
 
         try {
             let mdChangeLog = await fs.readFile(path.resolve(__dirname, "../CHANGELOG.md"), "utf-8")
-            const showdown = require('showdown')
             const converter = new showdown.Converter()
             let html = converter.makeHtml(mdChangeLog)
             res.type("text/html").status(200).send(html)
         } catch (error) {
-            app.logger.error(error)
+            base.error(error)
             res.status(500).send(error.toString())
         }
 

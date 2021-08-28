@@ -1,10 +1,11 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as fs from 'fs'
+export const command = 'connect [user] [password]'
+export const aliases = ['c', 'login']
+export const describe = base.bundle.getText("connect")
 
-exports.command = 'connect [user] [password]'
-exports.aliases = ['c', 'login']
-exports.describe = base.bundle.getText("connect")
-
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   connection: {
     alias: 'n',
     desc: base.bundle.getText("connection")
@@ -39,7 +40,7 @@ exports.builder = base.getBuilder({
 }, false)
 
 
-exports.handler = (argv) => {
+export function handler(argv) {
   base.promptHandler(argv, dbConnect, {
     connection: {
       description: base.bundle.getText("connection"),
@@ -94,7 +95,7 @@ exports.handler = (argv) => {
   }, false)
 }
 
-async function dbConnect(input) {
+export async function dbConnect(input) {
   base.debug(`dbConnect`)
   try {
     base.setPrompts(input)
@@ -130,7 +131,7 @@ async function dbConnect(input) {
   }
 }
 
-async function saveEnv(options) {
+export async function saveEnv(options) {
   base.debug('saveEnv')
   let parts = options.serverNode.split(':')
   let defaultEnv = {}
@@ -163,8 +164,7 @@ async function saveEnv(options) {
     defaultEnv.VCAP_SERVICES.hana[0].credentials.sslCryptoProvider = 'openssl'
     defaultEnv.VCAP_SERVICES.hana[0].credentials.sslValidateCertificate = true
   }
-  const fs = require('fs')
-  fs.writeFile("default-env-admin.json", JSON.stringify(defaultEnv, null, '\t'),  (err) => {
+  fs.writeFile("default-env-admin.json", JSON.stringify(defaultEnv, null, '\t'), (err) => {
     if (err) {
       throw new Error(`${base.bundle.getText("errConn")} ${JSON.stringify(err)}`)
     }

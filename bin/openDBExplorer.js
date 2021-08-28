@@ -1,18 +1,20 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from 'sap-hdbext-promisfied'
+import * as conn from '../utils/connections.js'
+import open from 'open'
 
-exports.command = 'opendbx'
-exports.aliases = ['open', 'openDBX', 'opendb', 'openDBExplorer', 'opendbexplorer']
-exports.describe = base.bundle.getText("opendbx")
-exports.builder = base.getBuilder({})
-exports.handler = (argv) => {
+export const command = 'opendbx'
+export const aliases = ['open', 'openDBX', 'opendb', 'openDBExplorer', 'opendbexplorer']
+export const describe = base.bundle.getText("opendbx")
+export const builder = base.getBuilder({})
+export function handler (argv) {
     base.promptHandler(argv, getDBX, {})
 }
 
-async function getDBX(prompts) {
+export async function getDBX(prompts) {
     base.debug('getDBX')
     try {
-        const dbClass = require("sap-hdbext-promisfied")
-        const conn = require("../utils/connections")
         let options = conn.getConnOptions(prompts)
         
         const host = options.hana.host
@@ -48,7 +50,6 @@ async function getDBX(prompts) {
             }
         }
         console.log(dbxURL)
-        const open = require('open')
         open(dbxURL)
         return base.end()
     } catch (error) {

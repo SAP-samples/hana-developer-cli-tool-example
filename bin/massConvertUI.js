@@ -1,14 +1,16 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+global.__xRef = []
 
-exports.command = 'massConvertUI [schema] [table]'
-exports.aliases = ['mcui', 'massconvertui', 'massConvUI', 'massconvui']
-exports.describe = base.bundle.getText("massConvertUI")
+export const command = 'massConvertUI [schema] [table]'
+export const aliases = ['mcui', 'massconvertui', 'massConvUI', 'massconvui']
+export const describe = base.bundle.getText("massConvertUI")
 
 
-exports.builder = base.getMassConvertBuilder(true)
+export const builder = base.getMassConvertBuilder(true)
 
 
-exports.handler = (argv) => {
+export function handler (argv) {
     base.promptHandler(argv, startWebServer, base.getMassConvertPrompts(true))
 }
 

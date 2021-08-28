@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from "sap-hdbext-promisfied"
+import * as hdbext from '@sap/hdbext'
 
-exports.command = 'indexes [schema] [indexes]'
-exports.aliases = ['ind', 'listIndexes', 'ListInd', 'listind', 'Listind', "listfindexes"]
-exports.describe = base.bundle.getText("indexes")
+export const command = 'indexes [schema] [indexes]'
+export const aliases = ['ind', 'listIndexes', 'ListInd', 'listind', 'Listind', "listfindexes"]
+export const describe = base.bundle.getText("indexes")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   indexes: {
     alias: ['i', 'Indexes'],
     type: 'string',
@@ -25,7 +28,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-let inputPrompts = {
+export let inputPrompts = {
   indexes: {
     description: base.bundle.getText("indexes"),
     type: 'string',
@@ -42,17 +45,15 @@ let inputPrompts = {
     required: true
   }
 }
-exports.inputPrompts = inputPrompts
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, getIndexes, inputPrompts)
 }
 
-async function getIndexes(prompts) {
+export async function getIndexes(prompts) {
   base.debug('getIndexes')
   try {
     base.setPrompts(prompts)
-    const dbClass = require("sap-hdbext-promisfied")
     const db = await base.createDBConnection()
 
     let schema = await dbClass.schemaCalc(prompts, db)
@@ -66,12 +67,10 @@ async function getIndexes(prompts) {
     base.error(error)
   }
 }
-module.exports.getIndexes = getIndexes
 
 
 async function getIndexesInt(schema, indexes, client, limit) {
   base.debug(`getIndexesInt ${schema} ${indexes} ${limit}`)
-  const dbClass = require("sap-hdbext-promisfied")
   indexes = dbClass.objectName(indexes)
 
   let query =
@@ -79,7 +78,7 @@ async function getIndexesInt(schema, indexes, client, limit) {
   WHERE SCHEMA_NAME LIKE ? 
     AND INDEX_NAME LIKE ? 
   ORDER BY SCHEMA_NAME, TABLE_NAME, INDEX_NAME `
-  if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, indexes])

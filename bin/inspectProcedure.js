@@ -1,10 +1,14 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from "sap-hdbext-promisfied"
+import * as dbInspect from '../utils/dbInspect.js'
+import {highlight} from 'cli-highlight'
 
-exports.command = 'inspectProcedure [schema] [procedure]'
-exports.aliases = ['ip', 'procedure', 'insProc', 'inspectprocedure', 'inspectsp']
-exports.describe = base.bundle.getText("inspectProcedure")
+export const command = 'inspectProcedure [schema] [procedure]'
+export const aliases = ['ip', 'procedure', 'insProc', 'inspectprocedure', 'inspectsp']
+export const describe = base.bundle.getText("inspectProcedure")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   procedure: {
     alias: ['p', 'Procedure', 'sp'],
     type: 'string',
@@ -25,7 +29,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, procedureInspect, {
     procedure: {
       description: base.bundle.getText("procedure"),
@@ -46,13 +50,11 @@ exports.handler = (argv) => {
   })
 }
 
-async function procedureInspect(prompts) {
+export async function procedureInspect(prompts) {
   base.debug('procedureInspect')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    const dbClass = require("sap-hdbext-promisfied")
-    const dbInspect = require("../utils/dbInspect")
 
     let schema = await dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("procedure")}: ${prompts.procedure}`)
@@ -69,7 +71,6 @@ async function procedureInspect(prompts) {
       console.table(columns)
     } else if (prompts.output === 'sql') {
       let definition = await dbInspect.getDef(db, schema, prompts.procedure)
-      const highlight = require('cli-highlight').highlight
       console.log(highlight(definition))
     }
     return base.end()

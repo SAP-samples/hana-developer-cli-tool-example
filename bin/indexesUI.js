@@ -1,18 +1,20 @@
-const base = require("../utils/base")
-const indexes = require("./indexes")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as indexes from './indexes.js'
 
-exports.command = 'indexesUI [schema] [indexes]'
-exports.aliases = ['indUI', 'listIndexesUI', 'ListIndUI', 'listindui', 'Listindui', "listfindexesui", "indexesui"]
-exports.describe = indexes.describe
 
-exports.builder = indexes.builder
+export const command = 'indexesUI [schema] [indexes]'
+export const aliases = ['indUI', 'listIndexesUI', 'ListIndUI', 'listindui', 'Listindui', "listfindexesui", "indexesui"]
+export const describe = indexes.describe
 
-exports.handler = (argv) => {
+export const builder = indexes.builder
+
+export function handler(argv) {
   base.promptHandler(argv, getIndexes, indexes.inputPrompts)
 }
 
 
-async function getIndexes(prompts) {
+export async function getIndexes(prompts) {
   base.debug('getIndexesUI')
   try {
     base.setPrompts(prompts)

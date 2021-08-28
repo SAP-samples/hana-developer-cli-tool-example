@@ -1,17 +1,19 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as fs from 'fs'
+import * as path from 'path'
+import marked from 'marked'
+import TerminalRenderer from 'marked-terminal'
+import { fileURLToPath } from 'url'
+import { URL } from 'url'
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
-exports.command = 'readMe'
-exports.aliases = ['readme']
-exports.describe = base.bundle.getText("readMe")
-exports.builder = base.getBuilder({}, false)
+export const command = 'readMe'
+export const aliases = ['readme']
+export const describe = base.bundle.getText("readMe")
+export const builder = base.getBuilder({}, false)
 
-exports.handler = async function () {
-  const fs = require('fs')
-  const path = require('path')
-
-  const marked = require('marked')
-  const TerminalRenderer = require('marked-terminal')
-
+export const handler = async function () {
   marked.setOptions({
     // Define custom renderer
     renderer: new TerminalRenderer({
