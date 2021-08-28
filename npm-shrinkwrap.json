@@ -712,6 +712,11 @@
         "@types/node": "*"
       }
     },
+    "@types/showdown": {
+      "version": "1.9.4",
+      "resolved": "https://registry.npmjs.org/@types/showdown/-/showdown-1.9.4.tgz",
+      "integrity": "sha512-50ehC3IAijfkvoNqmQ+VL73S7orOxmAK8ljQAFBv8o7G66lAZyxQj1L3BAv2dD86myLXI+sgKP1kcxAaxW356w=="
+    },
     "@types/yargs": {
       "version": "17.0.2",
       "resolved": "https://registry.npmjs.org/@types/yargs/-/yargs-17.0.2.tgz",
