@@ -1,20 +1,21 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as dbInspect from '../utils/dbInspect.js'
 
-exports.command = 'systemInfo'
-exports.aliases = ['sys', 'sysinfo', 'sysInfo', 'systeminfo']
-exports.describe = base.bundle.getText("systemInfo")
-exports.builder = base.getBuilder({})
-exports.handler = (argv) => {
+export const command = 'systemInfo'
+export const aliases = ['sys', 'sysinfo', 'sysInfo', 'systeminfo']
+export const describe = base.bundle.getText("systemInfo")
+export const builder = base.getBuilder({})
+export function handler (argv) {
   base.promptHandler(argv, sysInfo, {})
 }
 
-async function sysInfo(prompts) {
+export async function sysInfo(prompts) {
   base.debug('sysInfo')
   try {
     base.setPrompts(prompts)
     const dbStatus = await base.createDBConnection()
 
-    const dbInspect = require("../utils/dbInspect")
     base.outputTable(await dbInspect.getHANAVersion(dbStatus))
 
     let results = await dbStatus.execSQL(`SELECT TOP 100 * FROM "M_SYSTEM_OVERVIEW"`)

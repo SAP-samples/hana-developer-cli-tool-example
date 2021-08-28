@@ -1,11 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as tools from 'terminaltools'
 
-exports.command = 'matrix'
-exports.describe = base.bundle.getText("matrix")
-exports.builder = base.getBuilder({}, false, false)
-exports.handler = async function () { 
+export const command = 'matrix'
+export const describe = base.bundle.getText("matrix")
+export const builder = base.getBuilder({}, false, false)
+export async function handler () { 
   try {
-    const tools = require("terminaltools")
+
     tools.fun.matrix()
   } catch (err) {
     return console.error(err)

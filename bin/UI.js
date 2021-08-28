@@ -1,13 +1,14 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'UI'
-exports.aliases = ['ui', 'gui', 'GUI', 'launchpad', 'LaunchPad', 'launchPad']
-exports.describe = base.bundle.getText("UI")
-exports.builder = base.getBuilder({}, false)
-exports.handler = (argv) => {
+export const command = 'UI'
+export const aliases = ['ui', 'gui', 'GUI', 'launchpad', 'LaunchPad', 'launchPad']
+export const describe = base.bundle.getText("UI")
+export const builder = base.getBuilder({}, false)
+export function handler (argv) {
   base.promptHandler(argv, UI, {})
 }
-async function UI(prompts){
+export async function UI(prompts){
   base.debug('UI')
   try {
     base.setPrompts(prompts)

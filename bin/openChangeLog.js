@@ -1,3 +1,4 @@
+// @ts-check
 import * as base from '../utils/base.js'
 import * as open from 'open'
 

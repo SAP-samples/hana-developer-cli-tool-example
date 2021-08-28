@@ -4,7 +4,6 @@
  */
 
  import { fileURLToPath } from 'url'
- // @ts-ignore
  import { URL } from 'url'
  const __dirname = fileURLToPath(new URL('.', import.meta.url))
 

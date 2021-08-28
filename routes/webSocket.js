@@ -2,11 +2,11 @@
 /*eslint-env node, es6 */
 // @ts-check
 import * as base from '../utils/base.js'
-import { WebSocketServer }  from 'ws'
+import { WebSocketServer } from 'ws'
 import * as massConvertLib from '../utils/massConvert.js'
 
-export function route (app, server) {
-    base.debug('WebSockets Route')
+export function route(app, server) {
+	base.debug('WebSockets Route')
 	app.get('/websockets', (req, res) => {
 		let output =
 			`<H1>${base.bundle.getText("websocket")}</H1></br>`
@@ -21,12 +21,12 @@ export function route (app, server) {
 		})
 
 		server.on("upgrade", (request, socket, head) => {
-			const pathname = new URL(request.url).pathname 
-			if (pathname === "/websockets") {
-				wss.handleUpgrade(request, socket, head, (ws) => {
-					wss.emit("connection", ws, request)
-				})
-			}
+			//	const pathname = new URL(request.url).pathname 
+			//	if (pathname === "/websockets") {
+			wss.handleUpgrade(request, socket, head, (ws) => {
+				wss.emit("connection", ws, request)
+			})
+			//	}
 		})
 
 		wss.broadcast = (data, progress) => {
@@ -60,13 +60,13 @@ export function route (app, server) {
 				base.debug(`${base.bundle.getText("received")}: ${message}`)
 				var data = JSON.parse(message)
 				switch (data.action) {
-				case "massConvert":
-					massConvertLib.convert(wss)
-					break
-				default:
-					base.error(`${base.bundle.getText("errorUndefinedAction")}: ${data.action}`)
-					wss.broadcast(`${base.bundle.getText("errorUndefinedAction")}: ${data.action}`)
-					break
+					case "massConvert":
+						massConvertLib.convert(wss)
+						break
+					default:
+						base.error(`${base.bundle.getText("errorUndefinedAction")}: ${data.action}`)
+						wss.broadcast(`${base.bundle.getText("errorUndefinedAction")}: ${data.action}`)
+						break
 				}
 			})
 

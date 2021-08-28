@@ -1,8 +1,18 @@
-export var command: string;
-export var aliases: string[];
-export var describe: string;
-export var builder: import("yargs").CommandBuilder<{}, {}>;
 export function handler(argv: any): void;
+export function tableInspect(prompts: any): Promise<{
+    basic: any;
+    fields: any;
+    constraints: any;
+    sql: string;
+    cds: string;
+    hdbtable: string | {
+        file: string;
+    };
+}>;
+export const command: "inspectTable [schema] [table]";
+export const aliases: string[];
+export const describe: string;
+export const builder: import("yargs").CommandBuilder<{}, {}>;
 export namespace inputPrompts {
     namespace table {
         const description: string;
@@ -32,11 +42,3 @@ export namespace inputPrompts {
         export { type_3 as type };
     }
 }
-export function tableInspect(prompts: any): Promise<{
-    basic: any;
-    fields: any;
-    constraints: any;
-    sql: string;
-    cds: string;
-    hdbtable: any;
-}>;

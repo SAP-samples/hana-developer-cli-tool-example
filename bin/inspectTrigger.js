@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from "sap-hdbext-promisfied"
+import {highlight} from 'cli-highlight'
 
-exports.command = 'inspectTrigger [schema] [trigger]'
-exports.aliases = ['itrig', 'trigger', 'insTrig', 'inspecttrigger', 'inspectrigger']
-exports.describe = base.bundle.getText("inspectTrigger")
+export const command = 'inspectTrigger [schema] [trigger]'
+export const aliases = ['itrig', 'trigger', 'insTrig', 'inspecttrigger', 'inspectrigger']
+export const describe = base.bundle.getText("inspectTrigger")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   trigger: {
     alias: ['t', 'Trigger'],
     type: 'string',
@@ -25,7 +28,8 @@ exports.builder = base.getBuilder({
     desc: base.bundle.getText("outputType")
   }
 })
-exports.handler = (argv) => {
+
+export function handler (argv) {
   base.promptHandler(argv, triggerInspect, {
     trigger: {
       description: base.bundle.getText("trigger"),
@@ -46,12 +50,11 @@ exports.handler = (argv) => {
   })
 }
 
-async function triggerInspect(prompts) {
+export async function triggerInspect(prompts) {
   base.debug('triggerInspect')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    const dbClass = require("sap-hdbext-promisfied")
 
     let schema = await dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("trigger")}: ${prompts.trigger}`)
@@ -73,7 +76,6 @@ async function triggerInspect(prompts) {
       let definition = await db.statementExecPromisified(await db.preparePromisified(query), [schema, prompts.trigger])
       let output = definition[0].DEFINITION.toString()
       output = output.replace(new RegExp(" ,", "g"), ",\n")
-      import highlight from 'cli-highlight'.highlight
       console.log(highlight(output))
     }
     return base.end()

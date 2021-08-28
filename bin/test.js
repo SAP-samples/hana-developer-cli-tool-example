@@ -1,19 +1,20 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as conn from '../utils/connections.js'
 
-exports.command = 'test'
-exports.describe = base.bundle.getText("test")
+export const command = 'test'
+export const describe = base.bundle.getText("test")
 
-exports.builder = base.getBuilder({  
+export const builder = base.getBuilder({  
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, test, {})
 }
 
-async function test(result) {
+export async function test(result) {
   base.debug('test')
   try {
-    const conn = require("../utils/connections")
     console.log( await conn.createConnection(result))
     return base.end()
   } catch (error) {

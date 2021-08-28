@@ -1,8 +1,9 @@
-export var command: string;
-export var aliases: string[];
-export var describe: string;
-export var builder: import("yargs").CommandBuilder<{}, {}>;
 export function handler(argv: any): void;
+export function getSchemas(prompts: any): Promise<any>;
+export const command: "schemas [schema]";
+export const aliases: string[];
+export const describe: string;
+export const builder: import("yargs").CommandBuilder<{}, {}>;
 export namespace inputPrompts {
     namespace schema {
         const description: string;
@@ -27,4 +28,3 @@ export namespace inputPrompts {
         export { required_2 as required };
     }
 }
-export function getSchemas(prompts: any): Promise<any>;

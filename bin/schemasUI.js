@@ -1,17 +1,18 @@
-const base = require("../utils/base")
-const schemas = require("./schemas")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as schemas from './schemas.js'
 
-exports.command = 'schemasUI [schema]'
-exports.aliases = ['schui', 'getSchemasUI', 'listSchemasUI', 'schemasui', 'getschemasui', 'listschemasui']
-exports.describe = schemas.describe 
+export const command = 'schemasUI [schema]'
+export const aliases = ['schui', 'getSchemasUI', 'listSchemasUI', 'schemasui', 'getschemasui', 'listschemasui']
+export const describe = schemas.describe 
 
-exports.builder = schemas.builder
+export const builder = schemas.builder
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, getSchemas, schemas.inputPrompts)
 }
 
-async function getSchemas(prompts) {
+export async function getSchemas(prompts) {
   base.debug('getSchemasUI')
   try {
     base.setPrompts(prompts)

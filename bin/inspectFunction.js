@@ -1,6 +1,6 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from "sap-hdbext-promisfied"
+import dbClass from 'sap-hdbext-promisfied'
 import * as dbInspect from '../utils/dbInspect.js'
 import {highlight} from 'cli-highlight'
 

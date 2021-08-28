@@ -1,15 +1,16 @@
-const base = require("../utils/base")
-const inspectTable = require("./inspectTable")
+// @ts-check
+import * as base from '../utils/base.js'
+import * as inspectTable from './inspectTable.js'
 
-exports.command = 'inspectTableUI [schema] [table]'
-exports.aliases = ['itui', 'tableUI', 'tableui', 'insTblUI', 'inspecttableui', 'inspectableui']
-exports.describe = inspectTable.describe
-exports.builder = inspectTable.builder
-exports.handler = (argv) => {
+export const command = 'inspectTableUI [schema] [table]'
+export const aliases = ['itui', 'tableUI', 'tableui', 'insTblUI', 'inspecttableui', 'inspectableui']
+export const describe = inspectTable.describe
+export const builder = inspectTable.builder
+export function handler (argv) {
   base.promptHandler(argv, tableInspect, inspectTable.inputPrompts)
 }
 
-async function tableInspect(prompts) {
+export async function tableInspect(prompts) {
   base.debug('inspectTableUI')
   try {
     base.setPrompts(prompts)

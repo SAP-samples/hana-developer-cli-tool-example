@@ -1,8 +1,10 @@
-export var command: string;
-export var aliases: string[];
-export var describe: string;
-export var builder: import("yargs").CommandBuilder<{}, {}>;
 export function handler(argv: any): void;
+export function getContainers(prompts: any): Promise<any>;
+export function getContainersInt(containerGroup: any, container: any, client: any, limit: any): Promise<any>;
+export const command: "containers [containerGroup] [container]";
+export const aliases: string[];
+export const describe: string;
+export const builder: import("yargs").CommandBuilder<{}, {}>;
 export namespace inputPrompts {
     namespace container {
         const description: string;
@@ -26,4 +28,3 @@ export namespace inputPrompts {
         export { required_2 as required };
     }
 }
-export function getContainers(prompts: any): Promise<any>;

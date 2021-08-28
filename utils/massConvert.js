@@ -5,11 +5,11 @@ import * as base from './base.js'
 import { promises as fsp } from 'fs'
 import * as path from 'path'
 import dbClass from 'sap-hdbext-promisfied'
-import * as cds from '@sap/cds'
+import cds from '@sap/cds'
 import * as dbInspect from '../utils/dbInspect.js'
 import * as fs from 'fs'
 import zipClass from 'node-zip'
-const zip = new zipClass()
+
 import * as hdbext from '@sap/hdbext'
 
 export async function convert(wss) {
@@ -36,7 +36,8 @@ export async function convert(wss) {
 
 
         switch (prompts.output) {
-            case 'hdbtable': {                
+            case 'hdbtable': {
+                const zip = new zipClass()                
                 if (prompts.useCatalogPure) {
                     for (let [i, table] of results.entries()) {
                         broadcast(wss, table.TABLE_NAME, i / results.length * 100)
@@ -81,7 +82,7 @@ export async function convert(wss) {
                 break
             }
             case 'hdbmigrationtable': {
-  
+                const zip = new zipClass()
                 if (prompts.useCatalogPure) {
                     for (let [i, table] of results.entries()) {
                         broadcast(wss, table.TABLE_NAME, i / results.length * 100)

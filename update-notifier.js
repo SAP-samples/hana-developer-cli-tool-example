@@ -1,5 +1,3 @@
-  
-'use strict';
 import updateNotifier from 'update-notifier'
 
 // Run: $ node example

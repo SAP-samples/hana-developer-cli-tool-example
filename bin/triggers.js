@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from 'sap-hdbext-promisfied'
+import * as hdbext from '@sap/hdbext'
 
-exports.command = 'triggers [schema] [trigger] [target]'
-exports.aliases = ['trig', 'listTriggers', 'ListTrigs', 'listtrigs', 'Listtrig', "listrig"]
-exports.describe = base.bundle.getText("triggers")
+export const command = 'triggers [schema] [trigger] [target]'
+export const aliases = ['trig', 'listTriggers', 'ListTrigs', 'listtrigs', 'Listtrig', "listrig"]
+export const describe = base.bundle.getText("triggers")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   trigger: {
     alias: ['t', 'Trigger'],
     type: 'string',
@@ -31,7 +34,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, getTriggers, {
     trigger: {
       description: base.bundle.getText("trigger"),
@@ -56,12 +59,11 @@ exports.handler = (argv) => {
   })
 }
 
-async function getTriggers(prompts) {
+export async function getTriggers(prompts) {
   base.debug('getTriggers')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    const dbClass = require("sap-hdbext-promisfied")
 
     let schema = await dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("trigger")}: ${prompts.trigger}, ${base.bundle.getText("target")}: ${prompts.target}`)
@@ -74,11 +76,9 @@ async function getTriggers(prompts) {
     base.error(error)
   }
 }
-module.exports.getTriggers = getTriggers
 
 async function getTriggersInt(schema, trigger, target, client, limit) {
   base.debug(`getTriggersInt ${schema} ${trigger} ${target} ${limit}`)
-  const dbClass = require("sap-hdbext-promisfied")  
   trigger = dbClass.objectName(trigger)
   target = dbClass.objectName(target)
 
@@ -90,7 +90,7 @@ async function getTriggersInt(schema, trigger, target, client, limit) {
     AND TRIGGER_NAME LIKE ? 
     AND SUBJECT_TABLE_NAME LIKE ?
   ORDER BY SCHEMA_NAME, TRIGGER_NAME `
-  if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, trigger, target])

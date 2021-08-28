@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from "sap-hdbext-promisfied"
+import * as hdbext from '@sap/hdbext'
 
-exports.command = 'libraries [schema] [library]'
-exports.aliases = ['l', 'listLibs', 'ListLibs', 'listlibs', 'ListLib', "listLibraries", "listlibraries"]
-exports.describe = base.bundle.getText("libraries")
+export const command = 'libraries [schema] [library]'
+export const aliases = ['l', 'listLibs', 'ListLibs', 'listlibs', 'ListLib', "listLibraries", "listlibraries"]
+export const describe = base.bundle.getText("libraries")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   library: {
     alias: ['lib', 'Library'],
     type: 'string',
@@ -25,7 +28,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, getLibraries, {
     library: {
       description: base.bundle.getText("library"),
@@ -45,12 +48,11 @@ exports.handler = (argv) => {
   })
 }
 
-async function getLibraries(prompts) {
+export async function getLibraries(prompts) {
   base.debug('getLibraries')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    const dbClass = require("sap-hdbext-promisfied")
  
     let schema = await dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("library")}: ${prompts.library}`)
@@ -63,18 +65,16 @@ async function getLibraries(prompts) {
     base.error(error)
   }
 }
-module.exports.getLibraries = getLibraries
 
 async function getLibrariesInt(schema, library, client, limit) {
   base.debug(`getLibrariesInt ${schema} ${library} ${limit}`)
-  const dbClass = require("sap-hdbext-promisfied")
   library = dbClass.objectName(library)
   let query =
     `SELECT SCHEMA_NAME, LIBRARY_NAME, OWNER_NAME, LIBRARY_TYPE, IS_VALID, CREATE_TIME from LIBRARIES 
   WHERE SCHEMA_NAME LIKE ? 
     AND LIBRARY_NAME LIKE ? 
   ORDER BY LIBRARY_NAME `
-  if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, library])

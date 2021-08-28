@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from 'sap-hdbext-promisfied'
+import * as hdbext from '@sap/hdbext'
 
-exports.command = 'users [user]'
-exports.aliases = ['u', 'listUsers', 'listusers']
-exports.describe = base.bundle.getText("users")
+export const command = 'users [user]'
+export const aliases = ['u', 'listUsers', 'listusers']
+export const describe = base.bundle.getText("users")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   user: {
     alias: ['u', 'User'],
     type: 'string',
@@ -19,7 +22,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, getUsers, {
     user: {
       description: base.bundle.getText("user"),
@@ -34,12 +37,11 @@ exports.handler = (argv) => {
   })
 }
 
-async function getUsers(prompts) {
+export async function getUsers(prompts) {
   base.debug('getUsers')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-
     base.debug(`${base.bundle.getText("user")}: ${prompts.user}`)
 
     let results = await getUsersInt(prompts.user, db, prompts.limit)
@@ -50,18 +52,16 @@ async function getUsers(prompts) {
     base.error(error)
   }
 }
-module.exports.getUsers = getUsers
 
 async function getUsersInt(user, client, limit) {
   base.debug(`getUsersInt ${user} ${limit}`)
-  const dbClass = require("sap-hdbext-promisfied")  
   user = dbClass.objectName(user)
   let query =
     `SELECT USER_NAME, USERGROUP_NAME, CREATOR, CREATE_TIME  
   FROM USERS 
   WHERE USER_NAME LIKE ? 
   ORDER BY USER_NAME `
-  if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [user])

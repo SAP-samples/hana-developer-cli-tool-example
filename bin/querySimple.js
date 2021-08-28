@@ -1,11 +1,17 @@
-const base = require("../utils/base")
-import { parse: parseToCsv } from 'json2csv';
+// @ts-check
+import * as base from '../utils/base.js'
+import { parse as  parseToCsv } from 'json2csv'
+import * as fs from 'fs'
+import * as path from 'path'
+import {highlight} from 'cli-highlight'
+import * as excel from 'node-xlsx'
+import * as Table from 'easy-table'
 
-exports.command = 'querySimple'
-exports.aliases = ['qs', "querysimple"]
-exports.describe = base.bundle.getText("querySimple")
+export const command = 'querySimple'
+export const aliases = ['qs', "querysimple"]
+export const describe = base.bundle.getText("querySimple")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   query: {
     alias: ['q', 'Query'],
     type: 'string',
@@ -31,7 +37,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, dbQuery, {
     query: {
       description: base.bundle.getText("query"),
@@ -59,24 +65,20 @@ exports.handler = (argv) => {
   })
 }
 
-function removeNewlineCharacter(dataRow) {
+export function removeNewlineCharacter(dataRow) {
   
-  let newDataRow = {};
-
+  let newDataRow = {}
   Object.keys(dataRow).forEach((key) => {
-
     if (typeof dataRow[key] === "string") {
-      newDataRow[key] = dataRow[key].replace(/[\n\r]+/g, ' ');
+      newDataRow[key] = dataRow[key].replace(/[\n\r]+/g, ' ')
     } else {
       newDataRow[key] = dataRow[key];
     }
-
-  });
-
-  return newDataRow;
+  })
+  return newDataRow
 }
 
-async function dbQuery(prompts) {
+export async function dbQuery(prompts) {
   base.debug('dbQuery')
   try {
     base.setPrompts(prompts)
@@ -90,9 +92,7 @@ async function dbQuery(prompts) {
     switch (prompts.output) {
       case 'excel':
         if (prompts.filename) {
-          const excel = require("node-xlsx")
           let out = []
-
           //Column Headers
           let header = []
           for (const [key] of Object.entries(results[0])) {
@@ -120,7 +120,6 @@ async function dbQuery(prompts) {
         if (prompts.filename) {
           await toFile(prompts.folder, prompts.filename, 'json', JSON.stringify(results, null, 2))
         } else {
-          import highlight from 'cli-highlight'.highlight
           console.log(highlight(JSON.stringify(results, null, 2)))
         }
         break
@@ -128,13 +127,11 @@ async function dbQuery(prompts) {
         if (prompts.filename) {
           await toFile(prompts.folder, prompts.filename, 'csv', parseToCsv(results, {delimiter : ";", transforms : [removeNewlineCharacter]}))
         } else {
-          import highlight from 'cli-highlight'.highlight
           console.log(highlight(parseToCsv(results)))
         }
         break
       default:
         if (prompts.filename) {
-          import Table from 'easy-table'
           await toFile(prompts.folder, prompts.filename, 'txt', Table.print(results))
         } else {
           console.table(results)
@@ -147,12 +144,9 @@ async function dbQuery(prompts) {
     base.error(error)
   }
 }
-module.exports.dbQuery  = dbQuery
 
 async function toFile(folder, file, ext, content) {
   base.debug('toFile')
-  let fs = require('fs')
-  let path = require('path')
   let dir = folder
   !fs.existsSync(dir) && fs.mkdirSync(dir)
   file = `${file}.${ext}`

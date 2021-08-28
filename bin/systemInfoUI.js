@@ -1,14 +1,15 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'systemInfoUI'
-exports.aliases = ['sysUI', 'sysinfoui', 'sysInfoUI', 'systeminfoui']
-exports.describe = base.bundle.getText("systemInfoUI")
-exports.builder = base.getBuilder({})
-exports.handler = (argv) => {
+export const command = 'systemInfoUI'
+export const aliases = ['sysUI', 'sysinfoui', 'sysInfoUI', 'systeminfoui']
+export const describe = base.bundle.getText("systemInfoUI")
+export const builder = base.getBuilder({})
+export function handler (argv) {
   base.promptHandler(argv, sysInfo, {})
 }
 
-async function sysInfo(prompts) {
+export async function sysInfo(prompts) {
   base.debug('sysInfoUI')
   try {
     base.setPrompts(prompts)

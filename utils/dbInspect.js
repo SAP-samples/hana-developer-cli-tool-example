@@ -348,7 +348,7 @@ export let results = {
  * @param {object} fields - Object Fields
  * @param {object} constraints - Object Contstraints
  * @param {string} type - DB Object type 
- * @param {string} parent - Calling context which impacts formatting
+ * @param {string} [parent] - Calling context which impacts formatting
  * @returns {Promise<string>}
  */
 export async function formatCDS(db, object, fields, constraints, type, parent) {

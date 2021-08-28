@@ -1,10 +1,13 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
+import dbClass from 'sap-hdbext-promisfied'
+import * as hdbext from '@sap/hdbext'
 
-exports.command = 'synonyms [schema] [synonym] [target]'
-exports.aliases = ['syn', 'listSynonyms', 'listsynonyms']
-exports.describe = base.bundle.getText("synonyms")
+export const command = 'synonyms [schema] [synonym] [target]'
+export const aliases = ['syn', 'listSynonyms', 'listsynonyms']
+export const describe = base.bundle.getText("synonyms")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   synonym: {
     alias: ['syn', 'Synonym'],
     type: 'string',
@@ -31,7 +34,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, getSynonyms, {
     synonym: {
       description: base.bundle.getText("synonym"),
@@ -56,12 +59,11 @@ exports.handler = (argv) => {
   })
 }
 
-async function getSynonyms(prompts) {
+export async function getSynonyms(prompts) {
   base.debug('getSynonyms')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    const dbClass = require("sap-hdbext-promisfied")
 
     let schema = await dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("synonym")}: ${prompts.synonym}, ${base.bundle.getText("target")}: ${prompts.target}`)
@@ -74,11 +76,9 @@ async function getSynonyms(prompts) {
     base.error(error)
   }
 }
-module.exports.getSynonyms = getSynonyms
 
 async function getSynonymsInt(schema, synonym, target, client, limit) {
   base.debug(`getSynonymsInt ${schema} ${synonym} ${target} ${limit}`)
-  const dbClass = require("sap-hdbext-promisfied")  
   synonym = dbClass.objectName(synonym)
   target = dbClass.objectName(target)
   let query =
@@ -88,7 +88,7 @@ async function getSynonymsInt(schema, synonym, target, client, limit) {
       AND OBJECT_NAME LIKE ?
     ORDER BY SCHEMA_NAME, SYNONYM_NAME `
 
-  if (limit !== null | require("@sap/hdbext").sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, synonym, target])

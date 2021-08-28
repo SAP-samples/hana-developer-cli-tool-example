@@ -16,7 +16,7 @@ require('yargonaut')
 
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import { commands } from './indexTest.js'
+import { commands } from './index.js'
 
 versionCheck.checkVersion().then(async () => {
 

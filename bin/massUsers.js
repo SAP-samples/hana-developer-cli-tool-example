@@ -1,10 +1,11 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'massUsers [user] [password]'
-exports.aliases = ['massUser', 'mUsers', 'mUser', 'mu']
-exports.describe = base.bundle.getText("massUsers")
+export const command = 'massUsers [user] [password]'
+export const aliases = ['massUser', 'mUsers', 'mUser', 'mu']
+export const describe = base.bundle.getText("massUsers")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   user: {
     alias: ['u', 'User'],
     desc: base.bundle.getText("user")
@@ -15,7 +16,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, massUsers, {
     user: {
       description: base.bundle.getText("user"),
@@ -31,7 +32,7 @@ exports.handler = (argv) => {
 }
 
 
-async function massUsers(prompts) {
+export async function massUsers(prompts) {
   base.debug('massUsers')
   try {
     base.setPrompts(prompts)

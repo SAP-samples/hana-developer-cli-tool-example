@@ -1,10 +1,11 @@
-const base = require("../utils/base")
+// @ts-check
+import * as base from '../utils/base.js'
 
-exports.command = 'status'
-exports.aliases = ['s', 'whoami']
-exports.describe = base.bundle.getText("status")
+export const command = 'status'
+export const aliases = ['s', 'whoami']
+export const describe = base.bundle.getText("status")
 
-exports.builder = base.getBuilder({
+export const builder = base.getBuilder({
   priv: {
     alias: ['p', 'privileges'],
     type: 'boolean',
@@ -13,7 +14,7 @@ exports.builder = base.getBuilder({
   }
 })
 
-exports.handler = (argv) => {
+export function handler (argv) {
   base.promptHandler(argv, dbStatus, {
     priv: {
       description: base.bundle.getText("privileges"),
@@ -24,7 +25,7 @@ exports.handler = (argv) => {
   })
 }
 
-async function dbStatus(prompts) {
+export async function dbStatus(prompts) {
   base.debug('dbStatus')
   try {
     base.setPrompts(prompts)
