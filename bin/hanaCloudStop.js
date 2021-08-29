@@ -25,8 +25,17 @@ export function handler (argv) {
     }, false)
 }
 
+function suggestHanaCli(stdout, instanceName) {
+    let out = stdout.split("\n")
+
+    // Replace message 'Update in progress. Use 'cf services' or 'cf service dbhana-hana' to check operation status.'
+    out[3] = `Update in progress. Use 'hana-cli hc ${instanceName}' to check operation status.`
+
+    return out.join("\n")
+}
 
 export async function hcStop(prompts) {
+
     base.debug(`hcStop`)
     try {
 
@@ -38,7 +47,9 @@ export async function hcStop(prompts) {
         }
         // @ts-ignore
         for (let item of results.resources) {
-            console.log(await cf.stopHana(item.name))
+            const stdout = await cf.stopHana(item.name)
+
+            console.log(suggestHanaCli(stdout, item.name));
         }
         return base.end()
     } catch (error) {
