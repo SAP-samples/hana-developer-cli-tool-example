@@ -1734,7 +1734,7 @@ Options:
   -f, --folder, --Folder      DB Module Folder Name     [string] [default: "./"]
   -n, --filename, --Filename  File name                                 [string]
   -o, --output, --Output      Output Type for Query Results
-                 [string] [choices: "table", "json", "excel"] [default: "table"]
+                 [string] [choices: "table", "json", "excel", "csv"] [default: "table"]
 ```
 
 ![querySimple example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/querySimple.gif)
