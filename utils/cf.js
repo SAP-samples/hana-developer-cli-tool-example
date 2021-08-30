@@ -174,6 +174,30 @@ export async function getHANAInstanceByName(name) {
     }
 }
 
+/**
+ * Get status of hana instance
+ * @param {string} hanaInstanceGUID - HANA Service instance GUID
+ * @returns {Promise<string>}
+ */
+ export async function getHANAInstanceStatus(hanaInstanceGUID) {
+    base.debug('getHANAInstanceStatus')
+
+    const serviceParameters = await getCFServiceInstanceParameters(hanaInstanceGUID);
+
+    if (serviceParameters.errors) {
+        return "Update in progress";
+    }
+
+    switch (serviceParameters.data.serviceStopped) {
+        case false:
+            return 'Running'
+        case true:
+            return 'Stopped'
+        default:
+            return 'Unknown'
+    }
+
+}
 
 /**
  * Get all HDI service instances 
@@ -387,6 +411,33 @@ export async function stopHana(name) {
         } else {
             fs.unlinkSync(fileName)
             return stdout
+        }
+
+    } catch (error) {
+        base.debug(error)
+        throw (error)
+    }
+}
+
+/**
+ * Get Cloud Foundry service instance parameters
+ * @param {string} serviceInstanceGUID - Service instance GUID
+ * @returns object
+ */
+export async function getCFServiceInstanceParameters(serviceInstanceGUID) {
+    base.debug('getCFServiceInstanceParameters')
+
+    try {
+        const exec = promisify(child_process.exec)
+        let script = `cf curl "/v3/service_instances/${serviceInstanceGUID}/parameters"`
+
+        const { stdout, stderr } = await exec(script)
+
+        if (stderr) {
+            console.log(stdout)
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
+        } else {
+            return JSON.parse(stdout)
         }
 
     } catch (error) {

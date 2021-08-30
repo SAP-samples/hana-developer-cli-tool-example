@@ -44,6 +44,12 @@ export function getCFTarget(): Promise<object>;
  */
 export function getHANAInstances(): Promise<object>;
 /**
+ * Get status of hana instance
+ * @param {string} hanaInstanceGUID - HANA Cloud instance GUID
+ * @returns {Promise<string>}
+ */
+export function getHANAInstanceStatus(hanaInstanceGUID: string) : Promise<string>
+/**
  * Get instances of service plan hana that match input name
  * @param {string} name - service instance name
  * @returns {Promise<object>}
@@ -86,3 +92,10 @@ export function startHana(name: string): Promise<string>;
  * @returns any
  */
 export function stopHana(name: string): Promise<string>;
+/**
+ * Get Cloud Foundry service instance parameters
+ * @param {string} serviceInstanceGUID - Service instance GUID
+ * @returns {object}
+ */
+ export function getCFServiceInstanceParameters(serviceInstanceGUID: string): Promise<string>;
+ 

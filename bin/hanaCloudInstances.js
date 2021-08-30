@@ -42,6 +42,7 @@ export async function listInstances(prompts) {
             let outputItem = {}
             outputItem.name = item.name
             outputItem.created_at = item.created_at
+            outputItem.status = await cf.getHANAInstanceStatus(item.guid);
             outputItem.last_operation = `${item.last_operation.type} ${item.last_operation.state} @ ${item.last_operation.updated_at}`
             outputItem.hana_cockpit = item.dashboard_url
 
@@ -50,6 +51,7 @@ export async function listInstances(prompts) {
             outputItem.db_explorer = `${url.protocol}//${url.host}/sap/hana/cst/catalog/index.html`
             console.log(`Name: ${colors.green(outputItem.name)}`)
             console.log(`Created At: ${colors.green(outputItem.created_at)}`)
+            console.log(`Status: ${colors.green(outputItem.status)}`)
             console.log(`Last Operation: ${colors.green(outputItem.last_operation)}`)
             console.log(`SAP HANA Cockpit: ${colors.blue(outputItem.hana_cockpit)}`)
             console.log(`SAP HANA Cloud Central: ${colors.blue(outputItem.hana_central)}`)
