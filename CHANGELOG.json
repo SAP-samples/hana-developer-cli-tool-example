@@ -1,5 +1,13 @@
 [
     {
+        "date": "2021-09-03",
+        "version": "2.202109.1",
+        "Changed": [
+            "Added status of hana cloud instance to output of command hc by [sbarzaghialteaup](https://github.com/sbarzaghialteaup) [Pull Request 64](https://github.com/SAP-samples/hana-developer-cli-tool-example/pull/64)"
+            
+        ]
+    },
+    {
         "date": "2021-08-25",
         "version": "2.202108.4",
         "Changed": [

@@ -29,8 +29,9 @@ function suggestHanaCli(stdout, instanceName) {
     let out = stdout.split("\n")
 
     // Replace message 'Update in progress. Use 'cf services' or 'cf service dbhana-hana' to check operation status.'
-    out[3] = `Update in progress. Use 'hana-cli hc ${instanceName}' to check operation status.`
-
+    if(out[3]){
+        out[3] = `${base.bundle.getText("hc.updateProgress")}. ${base.bundle.getText("hc.progress", [instanceName])}`
+    }
     return out.join("\n")
 }
 

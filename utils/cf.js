@@ -182,19 +182,19 @@ export async function getHANAInstanceByName(name) {
  export async function getHANAInstanceStatus(hanaInstanceGUID) {
     base.debug('getHANAInstanceStatus')
 
-    const serviceParameters = await getCFServiceInstanceParameters(hanaInstanceGUID);
+    const serviceParameters = await getCFServiceInstanceParameters(hanaInstanceGUID)
 
     if (serviceParameters.errors) {
-        return "Update in progress";
+        return bundle.getText("hc.updateProgress")
     }
 
     switch (serviceParameters.data.serviceStopped) {
         case false:
-            return 'Running'
+            return bundle.getText("hc.running")
         case true:
-            return 'Stopped'
+            return bundle.getText("hc.stopped")
         default:
-            return 'Unknown'
+            return bundle.getText("hc.unknown")
     }
 
 }

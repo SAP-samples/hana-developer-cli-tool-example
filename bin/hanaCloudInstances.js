@@ -42,20 +42,20 @@ export async function listInstances(prompts) {
             let outputItem = {}
             outputItem.name = item.name
             outputItem.created_at = item.created_at
-            outputItem.status = await cf.getHANAInstanceStatus(item.guid);
+            outputItem.status = await cf.getHANAInstanceStatus(item.guid)
             outputItem.last_operation = `${item.last_operation.type} ${item.last_operation.state} @ ${item.last_operation.updated_at}`
             outputItem.hana_cockpit = item.dashboard_url
 
             var url = new URL(outputItem.hana_cockpit)
             outputItem.hana_central = `${url.protocol}//${url.host}/hcs/sap/hana/cloud/index.html#/org/${await cf.getCFOrgGUID()}/space/${await cf.getCFSpaceGUID()}/databases`
             outputItem.db_explorer = `${url.protocol}//${url.host}/sap/hana/cst/catalog/index.html`
-            console.log(`Name: ${colors.green(outputItem.name)}`)
-            console.log(`Created At: ${colors.green(outputItem.created_at)}`)
-            console.log(`Status: ${colors.green(outputItem.status)}`)
-            console.log(`Last Operation: ${colors.green(outputItem.last_operation)}`)
-            console.log(`SAP HANA Cockpit: ${colors.blue(outputItem.hana_cockpit)}`)
-            console.log(`SAP HANA Cloud Central: ${colors.blue(outputItem.hana_central)}`)
-            console.log(`Database Explorer: ${colors.blue(outputItem.db_explorer)}`)
+            console.log(`${base.bundle.getText("hc.name")}: ${colors.green(outputItem.name)}`)
+            console.log(`${base.bundle.getText("hc.created")}: ${colors.green(outputItem.created_at)}`)
+            console.log(`${base.bundle.getText("hc.status")}: ${colors.green(outputItem.status)}`)
+            console.log(`${base.bundle.getText("hc.lastOperation")}: ${colors.green(outputItem.last_operation)}`)
+            console.log(`${base.bundle.getText("hc.cockpit")}: ${colors.blue(outputItem.hana_cockpit)}`)
+            console.log(`${base.bundle.getText("hc.central")}: ${colors.blue(outputItem.hana_central)}`)
+            console.log(`${base.bundle.getText("hc.dbx")}: ${colors.blue(outputItem.db_explorer)}`)
             console.log(`\r\n`)
         }
         return base.end()
