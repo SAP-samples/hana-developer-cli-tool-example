@@ -4,6 +4,7 @@
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core"
 	xmlns:table="sap.ui.table"
+	xmlns:ce="sap.ui.codeeditor"
 	xmlns="sap.m">
 	<ScrollContainer height="100%" width="100%" vertical="true" focusable="true">
 		<f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
@@ -81,15 +82,16 @@
 				</IconTabFilter>
 
 				<IconTabFilter text="{i18nReuse>gui.sql}" key="sql">
-					<TextArea value="{resultsModel>/rows/sql}" cols="120" rows="8" editable="false"/>
+					<ce:CodeEditor id="aCodeEditorSQL" type="sql" value="{resultsModel>/rows/sql}" editable="false" height="auto" maxLines="25" />
 				</IconTabFilter>
 
 				<IconTabFilter text="{i18nReuse>gui.cds}" key="cds">
-					<TextArea value="{resultsModel>/rows/cds}" cols="120" rows="8" editable="false"/>
+					<ce:CodeEditor id="aCodeEditorCDS" type="javascript" value="{resultsModel>/rows/cds}" syntaxHints="false" editable="false" height="auto" maxLines="25" />
 				</IconTabFilter>
 
 				<IconTabFilter text="{i18nReuse>gui.hdbtable}" key="hdbtable">
-					<TextArea value="{resultsModel>/rows/hdbtable}" cols="120" rows="8" editable="false"/>
+					<ce:CodeEditor id="aCodeEditorHDBTable" type="sql" value="{resultsModel>/rows/hdbtable}" editable="false" height="auto" maxLines="25" />
+
 				</IconTabFilter>
 			</items>
 		</IconTabBar>

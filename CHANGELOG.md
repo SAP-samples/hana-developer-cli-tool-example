@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [2.202109.1] - 2021-09-03
+
+**Changed**
+
+- Added status of hana cloud instance to output of command hc by [sbarzaghialteaup](https://github.com/sbarzaghialteaup) [Pull Request 64](https://github.com/SAP-samples/hana-developer-cli-tool-example/pull/64)
+- Optimize performance for the inspectTable feature in the Browser based UI
+- Switch to the UI5 CodeEditor for output in the inspectTable command in the Browser
+
 ## [2.202108.4] - 2021-08-25
 
 **Changed**

@@ -19,6 +19,8 @@ sap.ui.define([
                 if(tbl){
                     this.getModel("promptsModel").setProperty("/table", tbl)
                 }
+                //let editor = this.getView().byId("aCodeEditor")
+               // editor.session.setMode("/ace/hanasql1")
                 this.executeCmd()
 
             },
@@ -78,7 +80,6 @@ sap.ui.define([
                                     filterProperty: sColumnId
                                 })
                             })
-
                         },
                         error: function (error) {
                             oController.onErrorCall(error, oController)

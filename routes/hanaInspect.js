@@ -14,22 +14,28 @@ export async function inspectTableHandler(res, lib, func) {
         let prompts = base.getPrompts()
         prompts.useHanaTypes = true
         prompts.output = 'tbl'
-        let results = await targetLibrary[func](prompts)
+        let promptsSQL = Object.assign({}, prompts)
+        promptsSQL.output = 'sql'
+        let promptsCDS = Object.assign({}, prompts)
+        promptsCDS.output = 'cds'
+        let promptsHDBTable = Object.assign({}, prompts)
+        promptsHDBTable.output = 'hdbtable'
 
-        await base.clearConnection()
-        prompts.output = 'sql'
-        let sql =  await targetLibrary[func](prompts)
-        results.sql = sql.sql
-
-        await base.clearConnection()
-        prompts.output = 'cds'
-        let cds =  await targetLibrary[func](prompts)
-        results.cds = cds.cds
-
-        await base.clearConnection()
-        prompts.output = 'hdbtable'
-        let hdbtable =  await targetLibrary[func](prompts)
-        results.hdbtable = hdbtable.hdbtable
+        let [results, sql, cds, hdbtable] = await Promise.all([
+            targetLibrary[func](prompts),
+            targetLibrary[func](promptsSQL),
+            targetLibrary[func](promptsCDS),
+            targetLibrary[func](promptsHDBTable)
+        ])
+        if(sql.sql){
+            results.sql = sql.sql
+        }
+        if(cds.cds){
+            results.cds = cds.cds
+        }
+        if(hdbtable.hdbtable){
+            results.hdbtable = hdbtable.hdbtable
+        }
 
         base.sendResults(res, results)
     } catch (error) {

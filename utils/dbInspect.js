@@ -82,7 +82,7 @@ export async function getDef(db, schema, Id) {
 	}
 	let output = object.results[0].OBJECT_CREATION_STATEMENT
 	output = output.toString()
-	output = output.replace(new RegExp(" ,", "g"), ",\n")
+	output = output.replace(new RegExp(",", "g"), ",\n")
 	return output
 }
 
