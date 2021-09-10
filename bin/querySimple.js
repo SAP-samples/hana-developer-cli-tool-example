@@ -37,32 +37,34 @@ export const builder = base.getBuilder({
   }
 })
 
-export function handler (argv) {
-  base.promptHandler(argv, dbQuery, {
-    query: {
-      description: base.bundle.getText("query"),
-      type: 'string',
-      required: true
-    },
-    folder: {
-      description: base.bundle.getText("folder"),
-      type: 'string',
-      required: true
-    },
-    filename: {
-      description: base.bundle.getText("filename"),
-      type: 'string',
-      required: true,
-      ask: () => {
-        return false
-      }
-    },
-    output: {
-      description: base.bundle.getText("outputTypeQuery"),
-      type: 'string',
-      required: true
+export let inputPrompts = {
+  query: {
+    description: base.bundle.getText("query"),
+    type: 'string',
+    required: true
+  },
+  folder: {
+    description: base.bundle.getText("folder"),
+    type: 'string',
+    required: true
+  },
+  filename: {
+    description: base.bundle.getText("filename"),
+    type: 'string',
+    required: true,
+    ask: () => {
+      return false
     }
-  })
+  },
+  output: {
+    description: base.bundle.getText("outputTypeQuery"),
+    type: 'string',
+    required: true
+  }
+}
+
+export function handler (argv) {
+  base.promptHandler(argv, dbQuery, inputPrompts)
 }
 
 export function removeNewlineCharacter(dataRow) {
@@ -121,6 +123,7 @@ export async function dbQuery(prompts) {
           await toFile(prompts.folder, prompts.filename, 'json', JSON.stringify(results, null, 2))
         } else {
           console.log(highlight(JSON.stringify(results, null, 2)))
+          return JSON.stringify(results, null, 2)
         }
         break
       case 'csv':
@@ -128,6 +131,7 @@ export async function dbQuery(prompts) {
           await toFile(prompts.folder, prompts.filename, 'csv', parseToCsv(results, {delimiter : ";", transforms : [removeNewlineCharacter]}))
         } else {
           console.log(highlight(parseToCsv(results)))
+          return parseToCsv(results)
         }
         break
       default:

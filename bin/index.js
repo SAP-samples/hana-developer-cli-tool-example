@@ -64,6 +64,7 @@ import * as ports from './ports.js'
 import * as privilegeError from './privilegeError.js'
 import * as procedures from './procedures.js'
 import * as querySimple from './querySimple.js'
+import * as querySimpleUI from './querySimpleUI.js'
 import * as readMe from './readMe.js'
 import * as readMeUI from './readMeUI.js'
 import * as openReadMe from './openReadMe.js'
@@ -108,7 +109,7 @@ export const commands = [
     inspectIndex, inspectJWT, inspectLibMember, inspectLibrary, inspectProcedure,
     inspectTable, inspectTableUI, inspectTrigger, inspectUser, inspectView,
     libraries, massConvert, massConvertUI, massRename, massUsers, matrix, objects,
-    openDBExplorer, ports, privilegeError, procedures, querySimple, readMe, readMeUI,
+    openDBExplorer, ports, privilegeError, procedures, querySimple, querySimpleUI, readMe, readMeUI,
     openReadMe, reclaim, rick, roles, hanaCloudSBSSInstances, hanaCloudSBSSInstancesUI,
     schemas, schemasUI, hanaCloudSchemaInstances, hanaCloudSchemaInstancesUI,
     hanaCloudSecureStoreInstances, hanaCloudSecureStoreInstancesUI, connectViaServiceKey,

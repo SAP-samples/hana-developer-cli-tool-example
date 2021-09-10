@@ -3,7 +3,9 @@
         "date": "2021-09-10",
         "version": "2.202109.2",
         "Changed": [
-            "Tested and made fixes for upcomming Node.js 16.x support. Tested under Node.js 16.9.0. You can use with Node.js 16, but will receive installation warnings and a warning on each command as the inner SAP supplied modules are technically not validated or supported yet on Node.js 16. However my local tests have been sucessful after some minor code changes. We will offically support Node.js 16 as soon as key SAP inner modules do as well"
+            "Tested and made fixes for upcomming Node.js 16.x support. Tested under Node.js 16.9.0. You can use with Node.js 16, but will receive installation warnings and a warning on each command as the inner SAP supplied modules are technically not validated or supported yet on Node.js 16. However my local tests have been sucessful after some minor code changes. We will offically support Node.js 16 as soon as key SAP inner modules do as well",
+            "Upgrade dependencies @sap/cds to 5.4.4 and SAPUI5 to 1.94.0",
+            "New Command querySimpleUI - browser based UI for executing single SQL Statements"
             
         ]
     },

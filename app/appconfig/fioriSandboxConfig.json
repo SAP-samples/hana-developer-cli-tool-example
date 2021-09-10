@@ -172,6 +172,21 @@
                                     "icon": "sap-icon://key-user-settings",
                                     "navigationMode": "embedded"
                                 }
+                            },{
+                                "id": "querySimple-ui",
+                                "title": "Write DB Query using SQL",
+                                "size": "1x1",
+                                "tileType": "sap.ushell.ui.tile.StaticTile",
+                                "properties": {
+                                    "info": "Execute single SQL Query",
+                                    "title": "Query Simple",
+                                    "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
+                                    "applicationType": "URL",
+                                    "targetURL": "#querySimple-ui",
+                                    "url": "./querySimple",
+                                    "icon": "sap-icon://search",
+                                    "navigationMode": "embedded"
+                                }
                             }]
                         },
                         {
@@ -414,6 +429,14 @@
             "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
             "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "querySimple-ui": {
+            "title": "Query Simple",
+            "description": "Execute Single SQL Statement",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
+            "applicationType": "URL",
+            "url": "./inspect",
             "navigationMode": "embedded"
         }
     }

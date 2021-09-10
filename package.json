@@ -25,7 +25,7 @@
   ],
   "types": "types/index.d.ts",
   "dependencies": {
-    "@sap/cds": "^5.4.1",
+    "@sap/cds": "^5.4.4",
     "@sap/hana-client": "2.9.28",
     "@sap/hdbext": "7.3.1",
     "@sap/textbundle": "^4.0",

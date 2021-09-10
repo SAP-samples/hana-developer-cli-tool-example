@@ -5,6 +5,23 @@ export function route (app) {
     app.get(['/hana/inspectTable', '/hana/inspectTable-ui'], async (req, res) => {
         inspectTableHandler(res, "../bin/inspectTable", 'tableInspect')
     })
+
+    app.get(['/hana/querySimple', '/hana/querySimple-ui'], async (req, res) => {
+        querySimpleHandler(res, "../bin/querySimple", 'dbQuery')
+    })
+}
+
+
+export async function querySimpleHandler(res, lib, func) {
+    try {
+        await base.clearConnection()
+        const targetLibrary = await import(`${lib}.js`)
+        let results = await targetLibrary[func](base.getPrompts())
+        base.sendResults(res, results)
+    } catch (error) {
+        res.status(500).send(error.toString())
+        return console.error(`${error}`)
+    }
 }
 
 export async function inspectTableHandler(res, lib, func) {

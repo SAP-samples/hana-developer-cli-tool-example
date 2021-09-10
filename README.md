@@ -1739,6 +1739,34 @@ Options:
 
 ![querySimple example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/querySimple.gif)
 
+### querySimpleUI
+
+```shell
+hana-cli querySimpleUI
+[aliases: qsui, querysimpleui, queryUI, sqlUI]
+Execute single SQL command and output results via HTML UI
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -q, --query, --Query        SQL Statement                             [string]
+  -f, --folder, --Folder      DB Module Folder Name     [string] [default: "./"]
+  -n, --filename, --Filename  File name                                 [string]
+  -o, --output, --Output      Output Type for Query Results
+                 [string] [choices: "table", "json", "excel", "csv"] [default: "table"]
+```
 
 ### readMe
 

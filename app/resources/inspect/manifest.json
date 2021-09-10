@@ -57,6 +57,12 @@
 					"defaultBindingMode": "TwoWay"
 				}
 			},
+			"outputModel": {
+				"type": "sap.ui.model.json.JSONModel",
+				"settings": {
+					"defaultBindingMode": "TwoWay"
+				}
+			},
 			"hanaModel": {
 				"type": "sap.ui.model.json.JSONModel",
 				"settings": {
@@ -81,7 +87,7 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "sap.hanacli.tables.i18n.i18n"
+					"bundleName": "sap.hanacli.inspect.i18n.i18n"
 				}
 			},
 			"i18nReuse": {
