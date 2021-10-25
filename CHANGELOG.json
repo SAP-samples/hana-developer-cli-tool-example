@@ -1,5 +1,12 @@
 [
     {
+        "date": "2021-10-25",
+        "version": "2.202110.1",
+        "Changed": [
+            "Upgrade dependencies @sap/hdbext 7.4, @sap/hana-client 2.10.x, @sap/cds to 5.5.5 and SAPUI5 to 1.95.0"           
+        ]
+    },
+    {
         "date": "2021-09-10",
         "version": "2.202109.2",
         "Changed": [

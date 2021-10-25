@@ -570,7 +570,7 @@ export function _manifest(odataURL, entity, table) {
 
 export function fiori(manifest, odataURL, entity,) {
   base.debug(`fiori ${odataURL} ${entity}`)
-  let ui5Version = '1.94.0' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
+  let ui5Version = '1.95.0' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
   ui5Version = ui5Version ? ui5Version + '/' : ''
   base.debug(`SAPUI5 Version ${ui5Version}`)
   return `

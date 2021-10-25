@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [2.202110.1] - 2021-10-25
+
+**Changed**
+
+- Upgrade dependencies @sap/hdbext 7.4, @sap/hana-client 2.10.x, @sap/cds to 5.5.5 and SAPUI5 to 1.95.0
+
 ## [2.202109.2] - 2021-09-10
 
 **Changed**
