@@ -1,5 +1,15 @@
 [
     {
+        "date": "2021-12-01",
+        "version": "2.202112.1",
+        "Changed": [
+            "Upgrade dependencies @sap/hdbext 7.4.1, @sap/hana-client 2.10.20, @sap/cds to 5.6.4 and SAPUI5 to 1.96.1",
+            "Add first support for GraphQL Experimental (queries don't exit and cross reference table name yet)",
+            "Switch to SAP_HORIZON new visual theme",
+            "Support for Node.js 16.x although you might see some warnings for inner packages upon install"           
+        ]
+    },
+    {
         "date": "2021-10-25",
         "version": "2.202110.1",
         "Changed": [
