@@ -193,17 +193,19 @@ async function cdsServerSetup(prompts, cdsSource) {
   var app = express()
 
   //CDS OData Service
-
+  let vcap = JSON.parse(process.env.VCAP_SERVICES)
   let options = {
     kind: "hana",
     logLevel: "error",
-    credentials: null
+    credentials: vcap.hana[0].credentials
   }
   cds.connect(options)
   // @ts-ignore
   cds.env.requires.db = {}
   // @ts-ignore
   cds.env.requires.db.multiTenant = false
+  // @ts-ignore
+  cds.env.features.graphql = true
 
   let odataURL = "/odata/v4/opensap.hana.CatalogService/"
   let entity = prompts.table
@@ -218,6 +220,7 @@ async function cdsServerSetup(prompts, cdsSource) {
     .at(odataURL)
     .in(app)
     .to('fiori')
+
     .with(srv => {
       srv.on(['READ'], entity, async (req) => {
         // @ts-ignore
@@ -225,38 +228,42 @@ async function cdsServerSetup(prompts, cdsSource) {
 
         let query = "SELECT "
         // @ts-ignore
-        if (req.query.SELECT.columns[0].func) {
-          const db = new dbClass(await conn.createConnection(prompts))
-          query += `COUNT(*) AS "counted" FROM "${prompts.table}"`
-          return (await db.execSQL(query))
-        }
-        // @ts-ignore
-        for (let column of req.query.SELECT.columns) {
-          for (let xref of global.__xRef) {
-            if (column.ref[0] === xref.after) {
-              column.ref[0] = xref.after
+        if (req.query.SELECT.columns) { //&& req.query.SELECT.columns[0].func) {
+          // @ts-ignore
+          if (req.query.SELECT.columns[0].func) {
+            const db = new dbClass(await conn.createConnection(prompts))
+            query += `COUNT(*) AS "counted" FROM "${prompts.table}"`
+            return (await db.execSQL(query))
+          }
+          // @ts-ignore
+          for (let column of req.query.SELECT.columns) {
+            for (let xref of global.__xRef) {
+              if (column.ref[0] === xref.after) {
+                column.ref[0] = xref.after
+              }
             }
           }
         }
 
+
         //Req Paramers for Single Record GET
-        if (req.params) {
-          if (req.params.length > 0) {
-            // @ts-ignore
-            const { SELECT } = req.query
-            SELECT.where = []
-            for (let param of req.params) {
-              // @ts-ignore
-              for (let property in param) {
-                SELECT.where.push({ "ref": [property] })
-                SELECT.where.push("=")
-                SELECT.where.push({ "val": param[property] })
-                SELECT.where.push("and")
-              }
-            }
-            SELECT.where.splice(-1, 1)
-          }
-        }
+        /*         if (req.params) {
+                  if (req.params.length > 0) {
+                    // @ts-ignore
+                    const { SELECT } = req.query
+                    SELECT.where = []
+                    for (let param of req.params) {
+                      // @ts-ignore
+                      for (let property in param) {
+                        SELECT.where.push({ "ref": [property] })
+                        SELECT.where.push("=")
+                        SELECT.where.push({ "val": param[property] })
+                        SELECT.where.push("and")
+                      }
+                    }
+                    SELECT.where.splice(-1, 1)
+                  }
+                } */
 
         //Where
         // @ts-ignore
@@ -272,6 +279,8 @@ async function cdsServerSetup(prompts, cdsSource) {
             }
           }
         }
+
+
 
         //Order By
         // @ts-ignore
@@ -335,6 +344,11 @@ async function cdsServerSetup(prompts, cdsSource) {
       // @ts-ignore
       let serverAddr = `http://localhost:${server.address().port}`
       console.info(`HTTP Server: ${serverAddr}`)
+
+      //GraphQL Experimental
+      const GraphQLAdapter = require('@sap/cds/libx/gql/GraphQLAdapter')
+      app.use(new GraphQLAdapter(cds.services, { graphiql: true }))
+      console.log("serving GraphQL endpoint for all services { at: '/graphql' }")
 
       open(serverAddr)
     })
@@ -415,6 +429,7 @@ export function getIndex(odataURL, entity) {
           <h2> Web Applications: </h2>
           <h3><a href="/fiori.html">Fiori Test UI</a></h3> 
           <h3><a href="/api/api-docs/">Swagger UI</a></h3> 
+          <hs><a href="/graphql">GraphQL (Experimental)</a></h3>
 
           <h2> Service Endpoints: </h2>
               <h3>
@@ -570,7 +585,7 @@ export function _manifest(odataURL, entity, table) {
 
 export function fiori(manifest, odataURL, entity,) {
   base.debug(`fiori ${odataURL} ${entity}`)
-  let ui5Version = '1.95.0' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
+  let ui5Version = '1.96.1' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
   ui5Version = ui5Version ? ui5Version + '/' : ''
   base.debug(`SAPUI5 Version ${ui5Version}`)
   return `
@@ -599,7 +614,7 @@ export function fiori(manifest, odataURL, entity,) {
     <script id="sap-ushell-bootstrap" src="https://sapui5.hana.ondemand.com/${ui5Version}test-resources/sap/ushell/bootstrap/sandbox.js"></script>
     <script id="sap-ui-bootstrap" src="https://sapui5.hana.ondemand.com/${ui5Version}resources/sap-ui-core.js"
         data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration, sap.ui.layout" data-sap-ui-compatVersion="edge"
-        data-sap-ui-theme="sap_fiori_3_dark" data-sap-ui-frameOptions="allow"></script>
+        data-sap-ui-theme="sap_horizon" data-sap-ui-frameOptions="allow"></script>
         <script src="https://sapui5.hana.ondemand.com/${ui5Version}test-resources/sap/ushell/bootstrap/standalone.js"></script>        
 
         <script>
