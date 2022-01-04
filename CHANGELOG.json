@@ -1,5 +1,12 @@
 [
     {
+        "date": "2022-01-07",
+        "version": "2.202201.1",
+        "Changed": [
+            "Updates to support SAP BTP Free Tier and the hana-free service plan"         
+        ]
+    },
+    {
         "date": "2021-12-01",
         "version": "2.202112.1",
         "Changed": [

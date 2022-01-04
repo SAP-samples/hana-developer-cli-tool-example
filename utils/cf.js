@@ -123,7 +123,7 @@ export async function getHANAInstances() {
         const orgGUID = org.GUID
 
         const exec = promisify(child_process.exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hana&per_page=5000"`
+        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hana,hana-free&per_page=5000"`
 
         const { stdout, stderr } = await exec(script)
 
@@ -156,7 +156,7 @@ export async function getHANAInstanceByName(name) {
         const spaceGUID = space.GUID
         const orgGUID = org.GUID
         const exec = promisify(child_process.exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hana&names=${name}&per_page=5000"`
+        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hana,hana-free&names=${name}&per_page=5000"`
 
         const { stdout, stderr } = await exec(script)
 
