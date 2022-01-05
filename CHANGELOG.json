@@ -3,7 +3,8 @@
         "date": "2022-01-07",
         "version": "2.202201.1",
         "Changed": [
-            "Updates to support SAP BTP Free Tier and the hana-free service plan"         
+            "Updates to support SAP BTP Free Tier and the hana-free service plan",
+            "createModule command update package.json it produces to support newer versions of Node.js"       
         ]
     },
     {

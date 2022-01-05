@@ -77,7 +77,7 @@ if (fs.existsSync('../package.json')) {
           "@sap/hdi-deploy": "^${hdiVersion}"
         },
         "engines": {
-          "node": "^10"
+           "node": "^12.18.0 || ^14.0.0 || ^16.0.0"
         },
         "scripts": {
           "start": "node node_modules/@sap/hdi-deploy/deploy.js  --auto-undeploy"
@@ -92,7 +92,7 @@ if (fs.existsSync('../package.json')) {
               "@sap/hdi-deploy": "^${hdiVersion}"
             },
             "engines": {
-              "node": "^10"
+                "node": "^12.18.0 || ^14.0.0 || ^16.0.0"
             },
             "scripts": {
               "postinstall": "node .build.js",                
