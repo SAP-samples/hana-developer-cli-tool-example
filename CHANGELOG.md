@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [2.202201.1] - 2022-01-07
+
+**Changed**
+
+- Updates to support SAP BTP Free Tier and the hana-free service plan
+- createModule command update package.json it produces to support newer versions of Node.js
+- Version dependency updates @sap/hdbext 7.5, @sap/hana-client 2.11.14, @sap/cds to 5.7.4 and SAPUI5 to 1.97.1
+
 ## [2.202112.1] - 2021-12-01
 
 **Changed**

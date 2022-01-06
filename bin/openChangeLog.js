@@ -1,6 +1,6 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import * as open from 'open'
+import open from 'open'
 
 export const command = 'changelog'
 export const aliases = ['openrchangelog', 'openChangeLog', 'openChangelog', 'ChangeLog', 'Changelog', 'changes', 'Changes']

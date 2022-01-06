@@ -4,7 +4,8 @@
         "version": "2.202201.1",
         "Changed": [
             "Updates to support SAP BTP Free Tier and the hana-free service plan",
-            "createModule command update package.json it produces to support newer versions of Node.js"       
+            "createModule command update package.json it produces to support newer versions of Node.js",
+            "Version dependency updates @sap/hdbext 7.5, @sap/hana-client 2.11.14, @sap/cds to 5.7.4 and SAPUI5 to 1.97.1"       
         ]
     },
     {

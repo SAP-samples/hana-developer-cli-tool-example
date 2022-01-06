@@ -2,8 +2,7 @@
 import * as base from '../utils/base.js'
 import * as fs from 'fs'
 import * as path from 'path'
-
-import marked from 'marked'
+import { marked } from 'marked'
 import TerminalRenderer from 'marked-terminal'
 
 import { fileURLToPath } from 'url'

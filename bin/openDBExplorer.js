@@ -5,7 +5,7 @@ import * as conn from '../utils/connections.js'
 import open from 'open'
 
 export const command = 'opendbx'
-export const aliases = ['open', 'openDBX', 'opendb', 'openDBExplorer', 'opendbexplorer']
+export const aliases = ['open', 'openDBX', 'opendb', 'openDBExplorer', 'opendbexplorer', 'dbx', 'DBX']
 export const describe = base.bundle.getText("opendbx")
 export const builder = base.getBuilder({})
 export function handler (argv) {
