@@ -143,7 +143,7 @@ export async function saveEnv(options, input) {
       "relational"
     ],
     plan: "hdi-shared",
-    credentials: options
+    credentials: options.credentials
   }]
 
   defaultEnv.VCAP_SERVICES.hana[0].credentials.encrypt = input.encrypt
@@ -156,7 +156,7 @@ export async function saveEnv(options, input) {
   }
   base.debug(defaultEnv.VCAP_SERVICES)
   try {
-    const db = await base.createDBConnection(options)
+    const db = await base.createDBConnection(defaultEnv.VCAP_SERVICES.hana[0].credentials) //options)
     let results = await db.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`);
     console.table(results)
 
