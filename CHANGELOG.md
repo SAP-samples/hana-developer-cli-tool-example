@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [2.202201.8] - 2022-01-10
+
+**Changed**
+
+- Fix [Issue #66](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/66) - account for different return JSON in cf service-key depending upon if the cf cli is ver 7 or ver 8
+
+## [2.202201.7] - 2022-01-10
+
+**Changed**
+
+- Replace Node.js module colors with chalk [https://www.bleepingcomputer.com/news/security/dev-corrupts-npm-libs-colors-and-faker-breaking-thousands-of-apps/](https://www.bleepingcomputer.com/news/security/dev-corrupts-npm-libs-colors-and-faker-breaking-thousands-of-apps/)
+
 ## [2.202201.1] - 2022-01-07
 
 **Changed**

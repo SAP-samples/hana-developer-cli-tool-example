@@ -133,6 +133,12 @@ export async function saveEnv(options, input) {
   base.debug('saveEnv')
   let defaultEnv = {}
   defaultEnv.VCAP_SERVICES = {}
+  let credentials
+  if(options["credentials"]){
+    credentials = options.credentials
+  }else{
+    credentials = options
+  }
   defaultEnv.VCAP_SERVICES.hana = [{
     name: input.instance,
     instance_name: input.instance,
@@ -143,7 +149,7 @@ export async function saveEnv(options, input) {
       "relational"
     ],
     plan: "hdi-shared",
-    credentials: options.credentials
+    credentials: credentials
   }]
 
   defaultEnv.VCAP_SERVICES.hana[0].credentials.encrypt = input.encrypt

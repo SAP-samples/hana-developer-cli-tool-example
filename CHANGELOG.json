@@ -1,6 +1,13 @@
 [
     {
         "date": "2022-01-10",
+        "version": "2.202201.8",
+        "Changed": [
+            "Fix [Issue #66](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/66) - account for different return JSON in cf service-key depending upon if the cf cli is ver 7 or ver 8"       
+        ]
+    },
+    {
+        "date": "2022-01-10",
         "version": "2.202201.7",
         "Changed": [
             "Replace Node.js module colors with chalk [https://www.bleepingcomputer.com/news/security/dev-corrupts-npm-libs-colors-and-faker-breaking-thousands-of-apps/](https://www.bleepingcomputer.com/news/security/dev-corrupts-npm-libs-colors-and-faker-breaking-thousands-of-apps/)"       
