@@ -5,6 +5,7 @@
 
 import * as base from '../utils/base.js'
 import * as versionCheck from '../utils/versionCheck.js'
+// @ts-ignore
 import updateNotifier from 'update-notifier'
 import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
@@ -35,6 +36,7 @@ versionCheck.checkVersion().then(async () => {
     process.on('uncaughtException', errorHandler)
     process.on('unhandledRejection', errorHandler)
 
+    // @ts-ignore
     yargs(hideBin(process.argv))
         .scriptName('hana-cli')
         .usage(base.bundle.getText("usage"))

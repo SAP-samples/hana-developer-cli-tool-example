@@ -1,5 +1,12 @@
 [
     {
+        "date": "2022-01-10",
+        "version": "2.202201.7",
+        "Changed": [
+            "Replace Node.js module colors with chalk [https://www.bleepingcomputer.com/news/security/dev-corrupts-npm-libs-colors-and-faker-breaking-thousands-of-apps/](https://www.bleepingcomputer.com/news/security/dev-corrupts-npm-libs-colors-and-faker-breaking-thousands-of-apps/)"       
+        ]
+    },
+    {
         "date": "2022-01-07",
         "version": "2.202201.1",
         "Changed": [

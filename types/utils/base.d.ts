@@ -124,8 +124,7 @@ export function sendResults(res: any, results: any): void;
  * @returns lastResults
  */
 export function getLastResults(): any;
-/** @type {typeof import("colors/safe")} */
-export const colors: typeof import("colors/safe");
+export const colors: import("chalk").ChalkInstance;
 export const debug: any;
 /** @type string */
 export let hanaBin: string;

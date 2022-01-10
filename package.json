@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "2.202201.6",
+  "version": "2.202201.7",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -13,7 +13,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "changelog": "node CHANGELOG",
-    "types": "npx typescript  --declaration --allowJs --emitDeclarationOnly --outDir types --skipLibCheck",
+    "types": "tsc  --declaration --allowJs --emitDeclarationOnly --outDir types --skipLibCheck",
     "postinstall": "npm link @sap/cds-dk --local"
   },
   "repository": {
@@ -35,7 +35,7 @@
     "body-parser": "^1.19.1",
     "check-node-version": "^4.2.1",
     "cli-highlight": "^2.1.11",
-    "colors": "^1.4.0",
+    "chalk": "^5.0.0",
     "console.table": "~0.10",
     "debug": "^4.3.3",
     "dotenv": "^10.0.0",

@@ -3,7 +3,7 @@ import * as base from './base.js'
 import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
 const check = require('check-node-version')
-import 'colors'
+import chalk from 'chalk'
 
 export function checkVersion() {
     return new Promise(resolve => {
@@ -24,7 +24,7 @@ export function checkVersion() {
                 for (const packageName of Object.keys(results.versions)) {
                     if (!results.versions[packageName].isSatisfied) {
                         base.error(
-                            `${ base.bundle.getText('warning').red} ${base.bundle.getText('versionCheckFail', [results.versions[packageName].wanted, results.versions[packageName].version])}`)
+                            `${ chalk.red(base.bundle.getText('warning'))} ${base.bundle.getText('versionCheckFail', [results.versions[packageName].wanted, results.versions[packageName].version])}`)
                     }
                 }
                 resolve()

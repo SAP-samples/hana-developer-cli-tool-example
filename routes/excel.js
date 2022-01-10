@@ -26,6 +26,7 @@ export function route (app) {
               }
               out.push(innerItem)
             }
+            // @ts-ignore
             let excelOutput = excel.build([{
               name: base.bundle.getText("gui.Results"),
               data: out

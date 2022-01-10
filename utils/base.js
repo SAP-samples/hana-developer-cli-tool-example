@@ -20,8 +20,9 @@ let dbConnection = null
 /** @typedef {dbClass} hdbextPromiseInstance - instance of sap-hdbext-promisified module */
 let dbClassInstance = null
 
-/** @type {typeof import("colors/safe")} */
-export const colors = require('colors/safe')
+/** @type {typeof import("chalk")} */
+import chalk from 'chalk'
+export const colors = chalk
 
 /** @type typeof import("prompt") */
 import prompt from 'prompt'

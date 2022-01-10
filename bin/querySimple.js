@@ -5,6 +5,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import {highlight} from 'cli-highlight'
 import * as excel from 'node-xlsx'
+// @ts-ignore
 import * as Table from 'easy-table'
 
 export const command = 'querySimple'
@@ -109,6 +110,7 @@ export async function dbQuery(prompts) {
             }
             out.push(innerItem)
           }
+          // @ts-ignore
           let excelOutput = excel.build([{
             name: "Query Results",
             data: out
