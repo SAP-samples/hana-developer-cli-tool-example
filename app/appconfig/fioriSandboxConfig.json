@@ -1,5 +1,52 @@
 {
     "defaultRenderer": "fiori2",
+    "renderers": {
+        "fiori2": {
+            "componentData": {
+                "config": {
+                    "header": "hidden",
+                    "enableSearch": false,
+                    "enablePersonalization": true,
+                    "enableUserThemes": true,
+                    "enableHideGroups": false,
+                    "enableJamIntegration": false,
+                    "enablePerformanceDataCollection": false,
+                    "enableSetTheme": true,
+                    "enableSetLanguage": true,
+                    "interceptAjaxRequests": true,
+                    "enableActionModeMenuButton": true,
+                    "enableActionModeFloatingButton": true,
+                    "enableBackGroundShapes": false,
+                    "sizeBehavior": "Responsive",
+                    "enableNotificationsUI": false,
+                    "disableSignOut": false,
+                    "enableEasyAccess": false,
+                    "enableEasyAccessSAPMenu": false,
+                    "enableEasyAccessUserMenu": false,
+                    "enableRecentActivity": true,
+                    "moveAppFinderActionToShellHeader": false,
+                    "moveUserSettingsActionToShellHeader": false,
+                    "moveEditHomePageActionToShellHeader": false,
+                    "enableLaunchWDAAppsInPlace": false,
+                    "enableLaunchGUIAppsInPlace": false,
+                    "enableHelp": true,
+                    "enableContentDensity": false,
+                    "applications": {
+                        "Shell-home": {
+                            "enableActionModeMenuButton": true,
+                            "enableActionModeFloatingButton": true,
+                            "enableHideGroups": false,
+                            "enableTilesOpacity": false,
+                            "disableSortedLockedGroups": true,
+                            "enableHomePageSettings": false,
+                            "enableEasyAccessSAPMenuSearch": false,
+                            "enableEasyAccessUserMenuSearch": false
+                        }
+                    }
+                }
+            }
+        }
+    },
     "bootstrapPlugins": {
         "RuntimeAuthoringPlugin": {
             "component": "sap.ushell.plugins.rta"
@@ -7,8 +54,8 @@
         "PersonalizePlugin": {
             "component": "sap.ushell.plugins.rta-personalize"
         },
-        "BootstrapXrayPlugin":{
-            "module":"sap.dfa.help.utils.adapters.fiori.Module",
+        "BootstrapXrayPlugin": {
+            "component": "sap.dfa.help.utils.adapters.fiori",
             "config": {
                 "serviceLayerVersion": "UACP v1.1",
                 "product": "HANA_CLI",
@@ -20,13 +67,15 @@
         "LaunchPage": {
             "adapter": {
                 "config": {
-                    "groups": [{
+                    "groups": [
+                        {
                             "id": "list_group",
                             "title": "List Objects",
                             "isPreset": true,
                             "isVisible": true,
                             "isGroupLocked": false,
-                            "tiles": [{
+                            "tiles": [
+                                {
                                     "id": "containers-ui",
                                     "title": "List Containers",
                                     "size": "1x1",
@@ -41,7 +90,8 @@
                                         "icon": "sap-icon://table-view",
                                         "navigationMode": "embedded"
                                     }
-                                }, {
+                                },
+                                {
                                     "id": "dataTypes-ui",
                                     "title": "List Data Types",
                                     "size": "1x1",
@@ -56,7 +106,8 @@
                                         "icon": "sap-icon://table-view",
                                         "navigationMode": "embedded"
                                     }
-                                }, {
+                                },
+                                {
                                     "id": "functions-ui",
                                     "title": "List Functions",
                                     "size": "1x1",
@@ -71,7 +122,8 @@
                                         "icon": "sap-icon://table-view",
                                         "navigationMode": "embedded"
                                     }
-                                },{
+                                },
+                                {
                                     "id": "indexes-ui",
                                     "title": "List Indexes",
                                     "size": "1x1",
@@ -86,7 +138,8 @@
                                         "icon": "sap-icon://table-view",
                                         "navigationMode": "embedded"
                                     }
-                                }, {
+                                },
+                                {
                                     "id": "schemas-ui",
                                     "title": "List Schemas",
                                     "size": "1x1",
@@ -142,52 +195,56 @@
                             "isPreset": true,
                             "isVisible": true,
                             "isGroupLocked": false,
-                            "tiles": [{
-                                "id": "features-ui",
-                                "title": "List Features",
-                                "size": "1x1",
-                                "tileType": "sap.ushell.ui.tile.StaticTile",
-                                "properties": {
-                                    "info": "Get a list of all HANA Features",
+                            "tiles": [
+                                {
+                                    "id": "features-ui",
                                     "title": "List Features",
-                                    "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
-                                    "applicationType": "URL",
-                                    "targetURL": "#features-ui",
-                                    "url": "./tables",
-                                    "icon": "sap-icon://key-user-settings",
-                                    "navigationMode": "embedded"
-                                }
-                            }, {
-                                "id": "featureUsage-ui",
-                                "title": "List Feature Usage",
-                                "size": "1x1",
-                                "tileType": "sap.ushell.ui.tile.StaticTile",
-                                "properties": {
-                                    "info": "Get a list of all HANA Feature Usage",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "Get a list of all HANA Features",
+                                        "title": "List Features",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#features-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://key-user-settings",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
+                                    "id": "featureUsage-ui",
                                     "title": "List Feature Usage",
-                                    "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
-                                    "applicationType": "URL",
-                                    "targetURL": "#featureUsage-ui",
-                                    "url": "./tables",
-                                    "icon": "sap-icon://key-user-settings",
-                                    "navigationMode": "embedded"
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "Get a list of all HANA Feature Usage",
+                                        "title": "List Feature Usage",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#featureUsage-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://key-user-settings",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
+                                    "id": "querySimple-ui",
+                                    "title": "Write DB Query using SQL",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "Execute single SQL Query",
+                                        "title": "Query Simple",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
+                                        "applicationType": "URL",
+                                        "targetURL": "#querySimple-ui",
+                                        "url": "./querySimple",
+                                        "icon": "sap-icon://search",
+                                        "navigationMode": "embedded"
+                                    }
                                 }
-                            },{
-                                "id": "querySimple-ui",
-                                "title": "Write DB Query using SQL",
-                                "size": "1x1",
-                                "tileType": "sap.ushell.ui.tile.StaticTile",
-                                "properties": {
-                                    "info": "Execute single SQL Query",
-                                    "title": "Query Simple",
-                                    "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
-                                    "applicationType": "URL",
-                                    "targetURL": "#querySimple-ui",
-                                    "url": "./querySimple",
-                                    "icon": "sap-icon://search",
-                                    "navigationMode": "embedded"
-                                }
-                            }]
+                            ]
                         },
                         {
                             "id": "cf_group",
@@ -195,82 +252,88 @@
                             "isPreset": true,
                             "isVisible": true,
                             "isGroupLocked": false,
-                            "tiles": [{
-                                "id": "hdi-ui",
-                                "title": "List HDI service instances",
-                                "size": "1x1",
-                                "tileType": "sap.ushell.ui.tile.StaticTile",
-                                "properties": {
-                                    "info": "List all SAP HANA Cloud HDI service instances in your target Space",
+                            "tiles": [
+                                {
+                                    "id": "hdi-ui",
                                     "title": "List HDI service instances",
-                                    "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
-                                    "applicationType": "URL",
-                                    "targetURL": "#hdi-ui",
-                                    "url": "./tables",
-                                    "icon": "sap-icon://cloud",
-                                    "navigationMode": "embedded"
-                                }
-                            },{
-                                "id": "sbss-ui",
-                                "title": "List SBSS service instances",
-                                "size": "1x1",
-                                "tileType": "sap.ushell.ui.tile.StaticTile",
-                                "properties": {
-                                    "info": "List all SAP HANA Cloud SBSS service instances in your target Space",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "List all SAP HANA Cloud HDI service instances in your target Space",
+                                        "title": "List HDI service instances",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#hdi-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://cloud",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
+                                    "id": "sbss-ui",
                                     "title": "List SBSS service instances",
-                                    "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
-                                    "applicationType": "URL",
-                                    "targetURL": "#sbss-ui",
-                                    "url": "./tables",
-                                    "icon": "sap-icon://cloud",
-                                    "navigationMode": "embedded"
-                                }
-                            },{
-                                "id": "schemaInstances-ui",
-                                "title": "List Schema service instances",
-                                "size": "1x1",
-                                "tileType": "sap.ushell.ui.tile.StaticTile",
-                                "properties": {
-                                    "info": "List all SAP HANA Cloud Schema service instances in your target Space",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "List all SAP HANA Cloud SBSS service instances in your target Space",
+                                        "title": "List SBSS service instances",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#sbss-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://cloud",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
+                                    "id": "schemaInstances-ui",
                                     "title": "List Schema service instances",
-                                    "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
-                                    "applicationType": "URL",
-                                    "targetURL": "#schemaInstances-ui",
-                                    "url": "./tables",
-                                    "icon": "sap-icon://cloud",
-                                    "navigationMode": "embedded"
-                                }
-                            },{
-                                "id": "securestore-ui",
-                                "title": "List SecureStore service instances",
-                                "size": "1x1",
-                                "tileType": "sap.ushell.ui.tile.StaticTile",
-                                "properties": {
-                                    "info": "List all SAP HANA Cloud SecureStore service instances in your target Space",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "List all SAP HANA Cloud Schema service instances in your target Space",
+                                        "title": "List Schema service instances",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#schemaInstances-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://cloud",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
+                                    "id": "securestore-ui",
                                     "title": "List SecureStore service instances",
-                                    "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
-                                    "applicationType": "URL",
-                                    "targetURL": "#securestore-ui",
-                                    "url": "./tables",
-                                    "icon": "sap-icon://cloud",
-                                    "navigationMode": "embedded"
-                                }
-                            },{
-                                "id": "ups-ui",
-                                "title": "List UPS service instances",
-                                "size": "1x1",
-                                "tileType": "sap.ushell.ui.tile.StaticTile",
-                                "properties": {
-                                    "info": "List all Cloud Foundry user provided service instances in your target Space",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "List all SAP HANA Cloud SecureStore service instances in your target Space",
+                                        "title": "List SecureStore service instances",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#securestore-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://cloud",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
+                                    "id": "ups-ui",
                                     "title": "List UPS service instances",
-                                    "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
-                                    "applicationType": "URL",
-                                    "targetURL": "#ups-ui",
-                                    "url": "./tables",
-                                    "icon": "sap-icon://cloud",
-                                    "navigationMode": "embedded"
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "List all Cloud Foundry user provided service instances in your target Space",
+                                        "title": "List UPS service instances",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#ups-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://cloud",
+                                        "navigationMode": "embedded"
+                                    }
                                 }
-                            } ]
+                            ]
                         }
                     ]
                 }

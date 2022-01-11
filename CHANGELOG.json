@@ -1,5 +1,12 @@
 [
     {
+        "date": "2022-01-11",
+        "version": "2.202201.9",
+        "Changed": [
+            "Update the Web UI Web Asssistant feature to work with the experimental SAP Horizon theme"       
+        ]
+    },
+    {
         "date": "2022-01-10",
         "version": "2.202201.8",
         "Changed": [
