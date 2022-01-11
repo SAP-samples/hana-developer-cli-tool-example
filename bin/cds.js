@@ -209,10 +209,13 @@ async function cdsServerSetup(prompts, cdsSource) {
 
   let odataURL = "/odata/v4/opensap.hana.CatalogService/"
   let entity = prompts.table
+  base.debug(`Entity Before ${entity}`)
   entity = entity.replace(/\./g, "_")
   entity = entity.replace(/::/g, "_")
-
+  let graphQLEntity = entity.replace(/_/g, ".")
+  base.debug(`GraphQL Entity After ${graphQLEntity}`)
   // entity = entity.replace(/:/g, "")
+
   // @ts-ignore
   cds.serve('all').from(await cds.parse(cdsSource), {
     crashOnError: false
@@ -222,7 +225,9 @@ async function cdsServerSetup(prompts, cdsSource) {
     .to('fiori')
 
     .with(srv => {
-      srv.on(['READ'], entity, async (req) => {
+      // @ts-ignore
+      srv.on(['READ'], [entity, `HanaCli.${graphQLEntity}`, "HanaCli.STAR.WARS.FILM"], async (req) => {
+        base.debug(`In Read Exit ${prompts.table}`)
         // @ts-ignore
         req.query.SELECT.from.ref = [`${prompts.table}`]
 

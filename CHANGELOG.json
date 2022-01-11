@@ -3,7 +3,8 @@
         "date": "2022-01-11",
         "version": "2.202201.9",
         "Changed": [
-            "Update the Web UI Web Asssistant feature to work with the experimental SAP Horizon theme"       
+            "Update the Web UI Web Asssistant feature to work with the experimental SAP Horizon theme",
+            "GraphQL option of cds command now fully works and cross references entity name in the exit correctly"       
         ]
     },
     {

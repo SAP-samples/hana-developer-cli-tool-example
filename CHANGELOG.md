@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [2.202201.9] - 2022-01-11
+
+**Changed**
+
+- Update the Web UI Web Asssistant feature to work with the experimental SAP Horizon theme
+- GraphQL option of cds command now fully works and cross references entity name in the exit correctly
+
 ## [2.202201.8] - 2022-01-10
 
 **Changed**
