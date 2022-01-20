@@ -4,20 +4,17 @@
 import * as base from './base.js'
 import { promises as fsp } from 'fs'
 import * as path from 'path'
-import dbClass from 'sap-hdbext-promisfied'
 import cds from '@sap/cds'
 import * as dbInspect from '../utils/dbInspect.js'
 import * as fs from 'fs'
 import zipClass from 'node-zip'
-
-import * as hdbext from '@sap/hdbext'
 
 export async function convert(wss) {
     try {
         let prompts = base.getPrompts()
         const db = await base.createDBConnection()
 
-        let schema = await dbClass.schemaCalc(prompts, db)
+        let schema = await base.dbClass.schemaCalc(prompts, db)
         let targetMsg = `${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("table")}: ${prompts.table}`
         base.debug(targetMsg)
         broadcast(wss, targetMsg)
@@ -179,14 +176,14 @@ export async function convert(wss) {
  */
 async function getTablesInt(schema, table, client, limit) {
     base.debug(`getTablesInt ${schema} ${table} ${limit}`)
-    table = dbClass.objectName(table)
+    table = base.dbClass.objectName(table)
     let query =
         `SELECT SCHEMA_NAME, TABLE_NAME, TO_NVARCHAR(TABLE_OID) AS TABLE_OID, COMMENTS  from TABLES 
             WHERE SCHEMA_NAME LIKE ? 
             AND TABLE_NAME LIKE ? 
             AND IS_USER_DEFINED_TYPE = 'FALSE'
             ORDER BY SCHEMA_NAME, TABLE_NAME `
-    if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
+    if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
         query += `LIMIT ${limit.toString()}`
     }
     let results = await client.statementExecPromisified(await client.preparePromisified(query), [schema, table])

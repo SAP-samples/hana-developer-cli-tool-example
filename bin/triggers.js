@@ -1,7 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from 'sap-hdbext-promisfied'
-import * as hdbext from '@sap/hdbext'
 
 export const command = 'triggers [schema] [trigger] [target]'
 export const aliases = ['trig', 'listTriggers', 'ListTrigs', 'listtrigs', 'Listtrig', "listrig"]
@@ -65,7 +63,7 @@ export async function getTriggers(prompts) {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
-    let schema = await dbClass.schemaCalc(prompts, db)
+    let schema = await base.dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("trigger")}: ${prompts.trigger}, ${base.bundle.getText("target")}: ${prompts.target}`)
 
     let results = await getTriggersInt(schema, prompts.trigger, prompts.target, db, prompts.limit)
@@ -79,8 +77,8 @@ export async function getTriggers(prompts) {
 
 async function getTriggersInt(schema, trigger, target, client, limit) {
   base.debug(`getTriggersInt ${schema} ${trigger} ${target} ${limit}`)
-  trigger = dbClass.objectName(trigger)
-  target = dbClass.objectName(target)
+  trigger = base.dbClass.objectName(trigger)
+  target = base.dbClass.objectName(target)
 
   let query =
     `SELECT SCHEMA_NAME, TRIGGER_NAME, OWNER_NAME, SUBJECT_TABLE_SCHEMA, SUBJECT_TABLE_NAME, TRIGGER_ACTION_TIME,
@@ -90,7 +88,7 @@ async function getTriggersInt(schema, trigger, target, client, limit) {
     AND TRIGGER_NAME LIKE ? 
     AND SUBJECT_TABLE_NAME LIKE ?
   ORDER BY SCHEMA_NAME, TRIGGER_NAME `
-  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, trigger, target])

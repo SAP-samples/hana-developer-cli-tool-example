@@ -1,6 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import * as hdbext from '@sap/hdbext'
 
 export const command = 'privilegeError [guid]'
 export const aliases = ['pe', 'privilegeerror', 'privilegerror', 'getInsuffficientPrivilegeErrorDetails']
@@ -34,7 +33,7 @@ export async function dbCall(prompts) {
       GUID: prompts.guid
     }
  
-    let sp = await db.loadProcedurePromisified(hdbext, "SYS", "GET_INSUFFICIENT_PRIVILEGE_ERROR_DETAILS")
+    let sp = await db.loadProcedurePromisified("SYS", "GET_INSUFFICIENT_PRIVILEGE_ERROR_DETAILS")
     let object = await db.callProcedurePromisified(sp, inputParams)
     if (object.results < 1) {
       throw new Error(base.bundle.getText("errGUID"))

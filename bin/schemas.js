@@ -1,7 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from "sap-hdbext-promisfied"
-import * as hdbext from "@sap/hdbext"
 
 export const command = 'schemas [schema]'
 export const aliases = ['sch', 'getSchemas', 'listSchemas']
@@ -71,7 +69,7 @@ export async function getSchemas(prompts) {
 
 async function getSchemasInt(schema, client, limit, all) {
   base.debug(`getSchemasInt ${schema} ${limit} ${all}`)
-  schema = dbClass.objectName(schema)
+  schema = base.dbClass.objectName(schema)
   let hasPrivileges = 'FALSE'
   if (!all) { hasPrivileges = 'TRUE' }
   console.log(schema)
@@ -80,7 +78,7 @@ async function getSchemasInt(schema, client, limit, all) {
         WHERE SCHEMA_NAME LIKE ? 
           AND HAS_PRIVILEGES = ?
 	      ORDER BY SCHEMA_NAME `
-  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, hasPrivileges])

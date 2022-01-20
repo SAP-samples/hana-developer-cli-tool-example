@@ -1,6 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from "sap-hdbext-promisfied"
 import * as dbInspect from '../utils/dbInspect.js'
 import {highlight} from 'cli-highlight'
 import cds from '@sap/cds'
@@ -74,7 +73,7 @@ export async function viewInspect(prompts) {
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    let schema = await dbClass.schemaCalc(prompts, db)
+    let schema = await base.dbClass.schemaCalc(prompts, db)
 
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("view")}: ${prompts.view}`)
     dbInspect.options.useHanaTypes = prompts.useHanaTypes

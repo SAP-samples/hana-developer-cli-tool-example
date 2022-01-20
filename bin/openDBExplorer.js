@@ -1,6 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from 'sap-hdbext-promisfied'
 import * as conn from '../utils/connections.js'
 import open from 'open'
 
@@ -34,7 +33,7 @@ export async function getDBX(prompts) {
         } else if (host.includes('ap21.hanacloud')) {
             dbxURL = 'https://hana-cockpit.cfapps.ap21.hana.ondemand.com/sap/hana/cst/catalog/index.html'
         } else {
-            const db = new dbClass(await conn.createConnection(prompts))
+            const db = new base.dbClass(await conn.createConnection(prompts))
             let query =
                 `SELECT *  from M_INIFILE_CONTENTS 
                 WHERE FILE_NAME LIKE 'xscontroller.ini'

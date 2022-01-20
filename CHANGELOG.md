@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202201.1] - 2022-01-21
+
+**Changed**
+
+- Major New Version: Remove dependency upon @sap/hdbext and @sap/hana-client. Replaced with smaller footprint hdb module
+
 ## [2.202201.9] - 2022-01-11
 
 **Changed**

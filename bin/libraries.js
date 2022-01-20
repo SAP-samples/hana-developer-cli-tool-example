@@ -1,8 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from "sap-hdbext-promisfied"
-import * as hdbext from '@sap/hdbext'
-
 export const command = 'libraries [schema] [library]'
 export const aliases = ['l', 'listLibs', 'ListLibs', 'listlibs', 'ListLib', "listLibraries", "listlibraries"]
 export const describe = base.bundle.getText("libraries")
@@ -54,7 +51,7 @@ export async function getLibraries(prompts) {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
  
-    let schema = await dbClass.schemaCalc(prompts, db)
+    let schema = await base.dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("library")}: ${prompts.library}`)
 
     let results = await getLibrariesInt(schema, prompts.library, db, prompts.limit)
@@ -68,13 +65,13 @@ export async function getLibraries(prompts) {
 
 async function getLibrariesInt(schema, library, client, limit) {
   base.debug(`getLibrariesInt ${schema} ${library} ${limit}`)
-  library = dbClass.objectName(library)
+  library = base.dbClass.objectName(library)
   let query =
     `SELECT SCHEMA_NAME, LIBRARY_NAME, OWNER_NAME, LIBRARY_TYPE, IS_VALID, CREATE_TIME from LIBRARIES 
   WHERE SCHEMA_NAME LIKE ? 
     AND LIBRARY_NAME LIKE ? 
   ORDER BY LIBRARY_NAME `
-  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | base.sqlInjection.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, library])

@@ -1,7 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from 'sap-hdbext-promisfied'
-import * as hdbext from '@sap/hdbext'
 
 export const command = 'sequences [schema] [sequence]'
 export const aliases = ['seq', 'listSeqs', 'ListSeqs', 'listseqs', 'Listseq', "listSequences"]
@@ -54,7 +52,7 @@ export async function getSequences(prompts) {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
-    let schema = await dbClass.schemaCalc(prompts, db)
+    let schema = await base.dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("sequence")}: ${prompts.sequence}`)
 
     let results = await getSequencesInt(schema, prompts.sequence, db, prompts.limit)
@@ -68,13 +66,13 @@ export async function getSequences(prompts) {
 
 async function getSequencesInt(schema, sequence, client, limit) {
   base.debug(`getSequencesInt ${schema} ${sequence} ${limit}`)
-  sequence = dbClass.objectName(sequence)
+  sequence = base.dbClass.objectName(sequence)
   let query =
     `SELECT SCHEMA_NAME, SEQUENCE_NAME, CACHE_SIZE, START_VALUE, END_VALUE, CURRENT_VALUE from M_SEQUENCES 
   WHERE SCHEMA_NAME LIKE ? 
     AND SEQUENCE_NAME LIKE ? 
   ORDER BY SCHEMA_NAME, SEQUENCE_NAME `
-  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, sequence])

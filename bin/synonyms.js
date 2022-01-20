@@ -1,7 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from 'sap-hdbext-promisfied'
-import * as hdbext from '@sap/hdbext'
 
 export const command = 'synonyms [schema] [synonym] [target]'
 export const aliases = ['syn', 'listSynonyms', 'listsynonyms']
@@ -65,7 +63,7 @@ export async function getSynonyms(prompts) {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
-    let schema = await dbClass.schemaCalc(prompts, db)
+    let schema = await base.dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("synonym")}: ${prompts.synonym}, ${base.bundle.getText("target")}: ${prompts.target}`)
 
     let results = await getSynonymsInt(schema, prompts.synonym, prompts.target, db, prompts.limit)
@@ -79,8 +77,8 @@ export async function getSynonyms(prompts) {
 
 async function getSynonymsInt(schema, synonym, target, client, limit) {
   base.debug(`getSynonymsInt ${schema} ${synonym} ${target} ${limit}`)
-  synonym = dbClass.objectName(synonym)
-  target = dbClass.objectName(target)
+  synonym = base.dbClass.objectName(synonym)
+  target = base.dbClass.objectName(target)
   let query =
     `SELECT SCHEMA_NAME, SYNONYM_NAME, OBJECT_SCHEMA, OBJECT_NAME, OBJECT_TYPE, CREATE_TIME  from SYNONYMS 
     WHERE SCHEMA_NAME LIKE ? 
@@ -88,7 +86,7 @@ async function getSynonymsInt(schema, synonym, target, client, limit) {
       AND OBJECT_NAME LIKE ?
     ORDER BY SCHEMA_NAME, SYNONYM_NAME `
 
-  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, synonym, target])

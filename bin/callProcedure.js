@@ -1,10 +1,7 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from 'sap-hdbext-promisfied'
-
 import * as dbInspect from '../utils/dbInspect.js'
-import * as conn from'../utils/connections.js'
-import * as hdbext from '@sap/hdbext'
+import * as conn from '../utils/connections.js'
 
 export const command = 'callProcedure [schema] [procedure]'
 export const aliases = ['cp', 'callprocedure', 'callProc', 'callproc', 'callSP', 'callsp']
@@ -25,7 +22,7 @@ export const builder = base.getBuilder({
 })
 
 
-export async function handler (argv) {
+export async function handler(argv) {
   let schema = {
     procedure: {
       description: base.bundle.getText("procedure"),
@@ -43,8 +40,8 @@ export async function handler (argv) {
 
 
     const dbConn = await conn.createConnection(argv)
-    const db = new dbClass(dbConn)
-    let procSchema = await dbClass.schemaCalc(argv, db)
+    const db = new base.dbClass(dbConn)
+    let procSchema = await base.dbClass.schemaCalc(argv, db)
     base.debug(`${base.bundle.getText("schema")}: ${procSchema}, ${base.bundle.getText("procedure")}: ${argv.procedure}`)
 
     let proc = await dbInspect.getProcedure(db, procSchema, argv.procedure)
@@ -80,7 +77,7 @@ export async function handler (argv) {
         }
       }
     }
-   base.debug(schema)
+    base.debug(schema)
   } catch (error) {
     base.error(error)
   }
@@ -94,7 +91,7 @@ export async function callProc(prompts) {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
-    let schema = await dbClass.schemaCalc(prompts, db)
+    let schema = await base.dbClass.schemaCalc(prompts, db)
     let proc = await dbInspect.getProcedure(db, schema, prompts.procedure)
     let parameters = await dbInspect.getProcedurePrams(db, proc[0].PROCEDURE_OID)
     var inputParams = {
@@ -105,7 +102,7 @@ export async function callProc(prompts) {
       }
     }
 
-    let sp = await db.loadProcedurePromisified(hdbext, proc[0].SCHEMA_NAME, prompts.procedure)
+    let sp = await db.loadProcedurePromisified(proc[0].SCHEMA_NAME, prompts.procedure)
     let output = await db.callProcedurePromisified(sp, inputParams)
     base.debug(output)
     base.outputTable(output.outputScalar)
@@ -114,7 +111,7 @@ export async function callProc(prompts) {
       case 1:
         break
       case 2:
-        if(output.results){
+        if (output.results) {
           base.outputTable(output.results)
         }
         break

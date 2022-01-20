@@ -1,8 +1,6 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from "sap-hdbext-promisfied"
 import * as dbInspect from '../utils/dbInspect.js'
-import * as conn from "../utils/connections.js"
 import { highlight } from 'cli-highlight'
 import cds from '@sap/cds'
 // @ts-ignore
@@ -76,12 +74,9 @@ export function handler(argv) {
 export async function tableInspect(prompts) {
   base.debug('tableInspect')
   try {
-  //  base.setPrompts(prompts)
-    //const db = await base.createDBConnection()
-
-    let dbConnection = await conn.createConnection(prompts, false)
-    const db = new dbClass(dbConnection)
-    let schema = await dbClass.schemaCalc(prompts, db)
+    base.setPrompts(prompts)
+    const db = await base.createDBConnection()
+    let schema = await base.dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("table")}: ${prompts.table}`)
 
     dbInspect.options.useHanaTypes = prompts.useHanaTypes

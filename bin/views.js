@@ -1,7 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from 'sap-hdbext-promisfied'
-import * as hdbext from '@sap/hdbext'
 
 export const command = 'views [schema] [view]'
 export const aliases = ['v', 'listViews', 'listviews']
@@ -53,7 +51,7 @@ export async function getViews(prompts) {
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-    let schema = await dbClass.schemaCalc(prompts, db)
+    let schema = await base.dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("view")}: ${prompts.view}`)
 
     let results = await getViewsInt(schema, prompts.view, db, prompts.limit)
@@ -67,13 +65,13 @@ export async function getViews(prompts) {
 
 async function getViewsInt(schema, view, client, limit) {
   base.debug(`getViewsInt ${schema} ${view} ${limit}`)
-  view = dbClass.objectName(view)
+  view = base.dbClass.objectName(view)
   let query =
     `SELECT SCHEMA_NAME, VIEW_NAME, TO_NVARCHAR(VIEW_OID) AS VIEW_OID, COMMENTS  from VIEWS 
   WHERE SCHEMA_NAME LIKE ? 
     AND VIEW_NAME LIKE ? 
   ORDER BY VIEW_NAME `
-  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, view])

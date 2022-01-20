@@ -1,7 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from "sap-hdbext-promisfied"
-import * as hdbext from '@sap/hdbext'
 
 export const command = 'indexes [schema] [indexes]'
 export const aliases = ['ind', 'listIndexes', 'ListInd', 'listind', 'Listind', "listfindexes"]
@@ -56,7 +54,7 @@ export async function getIndexes(prompts) {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
-    let schema = await dbClass.schemaCalc(prompts, db)
+    let schema = await base.dbClass.schemaCalc(prompts, db)
     base.output(`Schema: ${schema}, Index: ${prompts.indexes}`)
 
     let results = await getIndexesInt(schema, prompts.indexes, db, prompts.limit)
@@ -71,14 +69,14 @@ export async function getIndexes(prompts) {
 
 async function getIndexesInt(schema, indexes, client, limit) {
   base.debug(`getIndexesInt ${schema} ${indexes} ${limit}`)
-  indexes = dbClass.objectName(indexes)
+  indexes = base.dbClass.objectName(indexes)
 
   let query =
     `SELECT SCHEMA_NAME, TABLE_NAME, INDEX_NAME, INDEX_TYPE, CONSTRAINT, CREATE_TIME from INDEXES 
   WHERE SCHEMA_NAME LIKE ? 
     AND INDEX_NAME LIKE ? 
   ORDER BY SCHEMA_NAME, TABLE_NAME, INDEX_NAME `
-  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | base.sqlInjection.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, indexes])

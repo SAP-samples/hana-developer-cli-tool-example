@@ -124,6 +124,14 @@ export function sendResults(res: any, results: any): void;
  * @returns lastResults
  */
 export function getLastResults(): any;
+/**
+ * - instance of sap-hdb-promisified module
+ */
+export type dbClass = dbClassDef;
+/** @typedef {dbClassDef} dbClass - instance of sap-hdb-promisified module */
+export const dbClass: typeof dbClassDef;
+export const sqlInjection: typeof sqlInjectionDef;
+export const sqlInjectionUtils: typeof sqlInjectionDef;
 export const colors: import("chalk").ChalkInstance;
 export const debug: any;
 /** @type string */
@@ -135,6 +143,7 @@ export const bundle: TextBundle;
  */
 export type hdbextPromiseInstance = dbClass;
 export type Ora = typeof import("ora");
+import dbClassDef from "sap-hdb-promisfied";
+import * as sqlInjectionDef from "../utils/sqlInjection.js";
 import TextBundle_1 = require("@sap/textbundle");
 import TextBundle = TextBundle_1.TextBundle;
-import dbClass from "sap-hdbext-promisfied";

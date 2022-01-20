@@ -1,6 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from "sap-hdbext-promisfied"
 import {highlight} from 'cli-highlight'
 
 export const command = 'inspectLibMember [schema] [library] [libraryMem]'
@@ -65,7 +64,7 @@ export async function libraryMemInspect(prompts) {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
-    let schema = await dbClass.schemaCalc(prompts, db)
+    let schema = await base.dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("library")}: ${prompts.library}, ${base.bundle.getText("libMember")}: ${prompts.libraryMem}`)
 
     let query =
