@@ -16,7 +16,7 @@ export function handler (argv) {
 export async function getTables(prompts) {
     base.debug('getTables')
     base.setPrompts(prompts)
-    massConvertLib.convert()
+    await massConvertLib.convert()
     return base.end()
 }
 
