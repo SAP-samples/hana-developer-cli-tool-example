@@ -1,7 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import * as hdbext from '@sap/hdbext'
-import dbClass from 'sap-hdbext-promisfied'
 
 export const command = 'containers [containerGroup] [container]'
 export const aliases = ['cont', 'listContainers', 'listcontainers']
@@ -28,7 +26,7 @@ export const builder = base.getBuilder({
   }
 })
 
-export let inputPrompts =  {
+export let inputPrompts = {
   container: {
     description: base.bundle.getText("container"),
     type: 'string',
@@ -46,7 +44,7 @@ export let inputPrompts =  {
   }
 }
 
-export function handler (argv) {
+export function handler(argv) {
   base.promptHandler(argv, getContainers, inputPrompts)
 }
 
@@ -79,9 +77,16 @@ export async function getContainersInt(containerGroup, container, client, limit)
          WHERE A.CONTAINER_NAME LIKE ? 
            AND A.CONTAINER_GROUP_NAME LIKE ?
          ORDER BY A.CONTAINER_NAME `
-  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
+         
+  if (limit | base.sqlInjection.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
-  return await client.statementExecPromisified(await client.preparePromisified(query), [dbClass.objectName(container), dbClass.objectName(containerGroup)])
+  return await client.statementExecPromisified(
+    await client.preparePromisified(query),
+    [
+      base.dbClass.objectName(container),
+      base.dbClass.objectName(containerGroup)
+    ]
+  )
 }
 

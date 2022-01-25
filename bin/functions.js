@@ -1,7 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from 'sap-hdbext-promisfied'
-import * as hdbext from '@sap/hdbext'
 
 export const command = 'functions [schema] [function]'
 export const aliases = ['f', 'listFuncs', 'ListFunc', 'listfuncs', 'Listfunc', "listFunctions", "listfunctions"]
@@ -57,7 +55,7 @@ export async function getFunctions(prompts) {
 
     const db = await base.createDBConnection()
 
-    let schema = await dbClass.schemaCalc(prompts, db)
+    let schema = await base.dbClass.schemaCalc(prompts, db)
     base.output(`Schema: ${schema}, Function: ${prompts.function}`)
 
     let results = await getFunctionsInt(schema, prompts.function, db, prompts.limit)
@@ -72,14 +70,14 @@ export async function getFunctions(prompts) {
 
 async function getFunctionsInt(schema, functionName, client, limit) {
   base.debug(`getFunctionsInt ${schema} ${functionName} ${limit}`)
-  functionName = dbClass.objectName(functionName)
+  functionName = base.dbClass.objectName(functionName)
 
   var query =
     `SELECT SCHEMA_NAME, FUNCTION_NAME, SQL_SECURITY, CREATE_TIME from FUNCTIONS 
   WHERE SCHEMA_NAME LIKE ? 
     AND FUNCTION_NAME LIKE ? 
   ORDER BY FUNCTION_NAME `
-  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | base.sqlInjection.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, functionName])

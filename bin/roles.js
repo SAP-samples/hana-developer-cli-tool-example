@@ -1,7 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from 'sap-hdbext-promisfied'
-import * as hdbext from '@sap/hdbext'
 
 export const command = 'roles [schema] [role]'
 export const aliases = ['r', 'listRoles', 'listroles']
@@ -54,7 +52,7 @@ export async function getRoles(prompts) {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
-    let schema = await dbClass.schemaCalc(prompts, db)
+    let schema = await base.dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("role")}: ${prompts.role}`)
 
     let results = await getRolesInt(schema, prompts.role, db, prompts.limit)
@@ -69,7 +67,7 @@ export async function getRoles(prompts) {
 
 async function getRolesInt(schema, role, client, limit) {
   base.debug(`getRolesInt ${schema} ${role} ${limit}`)
-  role = dbClass.objectName(role)
+  role = base.dbClass.objectName(role)
   let query = ''
   if (schema === '%') {
     query =
@@ -91,7 +89,7 @@ async function getRolesInt(schema, role, client, limit) {
     ORDER BY ROLE_SCHEMA_NAME, ROLE_NAME `
   }
 
-  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, role])

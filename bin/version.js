@@ -45,7 +45,9 @@ export function version4(pkgPath = '..', info = {}, parentPath) {
     if (info[name]) return // safeguard against circular dependencies
     info[name] = pkj.version
     // recurse sap packages in dependencies...
-    for (let dep in pkj.dependencies) if (dep.startsWith('@sap/') || dep.startsWith('sap-hdbext-promisfied')) version4(dep, info, pkgPath)
+    for (let dep in pkj.dependencies) if (
+      dep.startsWith('@sap/') || dep === 'sap-hdb-promisfied' || dep === 'hdb'
+      ) version4(dep, info, pkgPath)
   } catch (e) {
     if (e.code !== 'MODULE_NOT_FOUND') info[pkgPath] = '-- missing --'  // unknown error
     else if (parentPath) version4(parentPath + '/node_modules/' + pkgPath, info)

@@ -12,8 +12,14 @@
  const require = createRequire(import.meta.url)
  import * as path from 'path'
 
-import dbClass from "sap-hdbext-promisfied"
+import dbClassDef from "sap-hdb-promisfied"
+/** @typedef {dbClassDef} dbClass - instance of sap-hdb-promisified module */
+export const dbClass = dbClassDef
 import * as conn from "../utils/connections.js"
+
+import * as sqlInjectionDef from "../utils/sqlInjection.js"
+export const sqlInjection = sqlInjectionDef
+export const sqlInjectionUtils = sqlInjectionDef  //alias for backwards compatibility with @sap/hdbext
 
 /** @type Object - HANA Client DB Connection */
 let dbConnection = null

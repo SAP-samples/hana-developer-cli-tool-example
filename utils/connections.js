@@ -7,10 +7,9 @@
 import * as base from "./base.js"
 import * as fs from 'fs'
 import * as path from 'path'
-import * as dotenv from 'dotenv'
+import dotenv from 'dotenv'
 import { homedir } from 'os'
 import * as xsenv from '@sap/xsenv'
-import * as hdbext from '@sap/hdbext'
 
 /**
  * Check parameter folders to see if the input file exists there
@@ -189,27 +188,19 @@ export function getConnOptions(prompts) {
  * Create Databse Connection 
  * @param {object} prompts - input prompt values
  * @param {boolean} directConnect - Direct Connection parameters are supplied in prompts
- * @returns {Promise<object>} HANA DB conneciton of type sap/hdbext
+ * @returns {Promise<object>} HANA DB conneciton of type hdb
  */
 export async function createConnection(prompts, directConnect = false) {
     base.debug('createConnection')
-    return new Promise((resolve, reject) => {
-        /** @type object */
-        let options = []
-        if (directConnect) {
-            options.hana = prompts
-        } else {
-            options = getConnOptions(prompts)
-        }
 
-        base.debug(`In Create Connection`)
-        hdbext.createConnection(options.hana, (error, client) => {
-            if (error) {
-                reject(error)
-            } else {
-                resolve(client)
-            }
-        })
+    /** @type object */
+    let options = []
+    if (directConnect) {
+        options.hana = prompts
+    } else {
+        options = getConnOptions(prompts)
     }
-    )
+
+    base.debug(`In Create Connection`)
+    return base.dbClass.createConnection(options)
 }

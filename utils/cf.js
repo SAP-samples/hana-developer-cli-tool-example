@@ -128,10 +128,16 @@ export async function getHANAInstances() {
         const { stdout, stderr } = await exec(script)
 
         if (stderr) {
-            console.log(stdout)
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
         } else {
-            return JSON.parse(stdout)
+            if(stdout){
+                try {
+               return JSON.parse(stdout)
+            } catch(e) {
+                return
+            }
+            }
+            return
         }
 
 

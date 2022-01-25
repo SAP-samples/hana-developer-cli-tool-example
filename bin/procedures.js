@@ -1,7 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from 'sap-hdbext-promisfied'
-import * as hdbext from '@sap/hdbext'
 
 export const command = 'procedures [schema] [procedure]'
 export const aliases = ['p', 'listProcs', 'ListProc', 'listprocs', 'Listproc', "listProcedures", "listprocedures"]
@@ -54,7 +52,7 @@ export async function getProcedures(prompts) {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
-    let schema = await dbClass.schemaCalc(prompts, db);
+    let schema = await base.dbClass.schemaCalc(prompts, db);
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("procedure")}: ${prompts.procedure}`);
 
     let results = await getProceduresInt(schema, prompts.procedure, db, prompts.limit)
@@ -68,13 +66,13 @@ export async function getProcedures(prompts) {
 
 async function getProceduresInt(schema, procedure, client, limit) {
   base.debug(`getProceduresInt ${schema} ${procedure} ${limit}`)
-  procedure = dbClass.objectName(procedure)
+  procedure = base.dbClass.objectName(procedure)
   let query =
     `SELECT SCHEMA_NAME, PROCEDURE_NAME, SQL_SECURITY, CREATE_TIME from PROCEDURES 
   WHERE SCHEMA_NAME LIKE ? 
     AND PROCEDURE_NAME LIKE ? 
   ORDER BY PROCEDURE_NAME `
-  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, procedure])

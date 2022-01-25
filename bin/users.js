@@ -1,7 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from 'sap-hdbext-promisfied'
-import * as hdbext from '@sap/hdbext'
 
 export const command = 'users [user]'
 export const aliases = ['u', 'listUsers', 'listusers']
@@ -55,13 +53,13 @@ export async function getUsers(prompts) {
 
 async function getUsersInt(user, client, limit) {
   base.debug(`getUsersInt ${user} ${limit}`)
-  user = dbClass.objectName(user)
+  user = base.dbClass.objectName(user)
   let query =
     `SELECT USER_NAME, USERGROUP_NAME, CREATOR, CREATE_TIME  
   FROM USERS 
   WHERE USER_NAME LIKE ? 
   ORDER BY USER_NAME `
-  if (limit | hdbext.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [user])

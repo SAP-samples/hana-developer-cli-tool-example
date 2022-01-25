@@ -1,24 +1,31 @@
 [
     {
+        "date": "2022-01-25",
+        "version": "3.202201.1",
+        "Changed": [
+            "Major New Version: Remove dependency upon @sap/hdbext and @sap/hana-client. Replaced with smaller footprint hdb module."
+        ]
+    },
+    {
         "date": "2022-01-11",
         "version": "2.202201.9",
         "Changed": [
             "Update the Web UI Web Asssistant feature to work with the experimental SAP Horizon theme",
-            "GraphQL option of cds command now fully works and cross references entity name in the exit correctly"       
+            "GraphQL option of cds command now fully works and cross references entity name in the exit correctly"
         ]
     },
     {
         "date": "2022-01-10",
         "version": "2.202201.8",
         "Changed": [
-            "Fix [Issue #66](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/66) - account for different return JSON in cf service-key depending upon if the cf cli is ver 7 or ver 8"       
+            "Fix [Issue #66](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/66) - account for different return JSON in cf service-key depending upon if the cf cli is ver 7 or ver 8"
         ]
     },
     {
         "date": "2022-01-10",
         "version": "2.202201.7",
         "Changed": [
-            "Replace Node.js module colors with chalk [https://www.bleepingcomputer.com/news/security/dev-corrupts-npm-libs-colors-and-faker-breaking-thousands-of-apps/](https://www.bleepingcomputer.com/news/security/dev-corrupts-npm-libs-colors-and-faker-breaking-thousands-of-apps/)"       
+            "Replace Node.js module colors with chalk [https://www.bleepingcomputer.com/news/security/dev-corrupts-npm-libs-colors-and-faker-breaking-thousands-of-apps/](https://www.bleepingcomputer.com/news/security/dev-corrupts-npm-libs-colors-and-faker-breaking-thousands-of-apps/)"
         ]
     },
     {
@@ -27,7 +34,7 @@
         "Changed": [
             "Updates to support SAP BTP Free Tier and the hana-free service plan",
             "createModule command update package.json it produces to support newer versions of Node.js",
-            "Version dependency updates @sap/hdbext 7.5, @sap/hana-client 2.11.14, @sap/cds to 5.7.4 and SAPUI5 to 1.97.1"       
+            "Version dependency updates @sap/hdbext 7.5, @sap/hana-client 2.11.14, @sap/cds to 5.7.4 and SAPUI5 to 1.97.1"
         ]
     },
     {
@@ -37,14 +44,14 @@
             "Upgrade dependencies @sap/hdbext 7.4.1, @sap/hana-client 2.10.20, @sap/cds to 5.6.4 and SAPUI5 to 1.96.1",
             "Add first support for GraphQL Experimental (queries don't exit and cross reference table name yet)",
             "Switch to SAP_HORIZON new visual theme",
-            "Support for Node.js 16.x although you might see some warnings for inner packages upon install"           
+            "Support for Node.js 16.x although you might see some warnings for inner packages upon install"
         ]
     },
     {
         "date": "2021-10-25",
         "version": "2.202110.1",
         "Changed": [
-            "Upgrade dependencies @sap/hdbext 7.4, @sap/hana-client 2.10.x, @sap/cds to 5.5.5 and SAPUI5 to 1.95.0"           
+            "Upgrade dependencies @sap/hdbext 7.4, @sap/hana-client 2.10.x, @sap/cds to 5.5.5 and SAPUI5 to 1.95.0"
         ]
     },
     {
@@ -54,7 +61,6 @@
             "Tested and made fixes for upcomming Node.js 16.x support. Tested under Node.js 16.9.0. You can use with Node.js 16, but will receive installation warnings and a warning on each command as the inner SAP supplied modules are technically not validated or supported yet on Node.js 16. However my local tests have been sucessful after some minor code changes. We will offically support Node.js 16 as soon as key SAP inner modules do as well",
             "Upgrade dependencies @sap/cds to 5.4.4 and SAPUI5 to 1.94.0",
             "New Command querySimpleUI - browser based UI for executing single SQL Statements"
-            
         ]
     },
     {
@@ -64,7 +70,6 @@
             "Added status of hana cloud instance to output of command hc by [sbarzaghialteaup](https://github.com/sbarzaghialteaup) [Pull Request 64](https://github.com/SAP-samples/hana-developer-cli-tool-example/pull/64)",
             "Optimize performance for the inspectTable feature in the Browser based UI",
             "Switch to the UI5 CodeEditor for output in the inspectTable command in the Browser"
-            
         ]
     },
     {
@@ -75,7 +80,6 @@
             "Update Dependencies - especially HANA Client to 2.9.28",
             "Update to SAPUI5 1.93.0",
             "Convert entire project to ECMAScript Modules (ESM) - this is a massive internal change and we appologize in advance if it results in any instablity. If you hit any issues please report then you can target specifically the last version until they are resolved"
-
         ]
     },
     {

@@ -7,7 +7,6 @@
  */
 import * as base from "./base.js"
 const bundle = base.bundle
-import * as hdbext from '@sap/hdbext'
 
 /**
  * Return the HANA DB Version
@@ -75,7 +74,7 @@ export async function getDef(db, schema, Id) {
 		OBJECT: `"${Id}"`
 	}
 
-	let sp = await db.loadProcedurePromisified(hdbext, "SYS", "GET_OBJECT_DEFINITION")
+	let sp = await db.loadProcedurePromisified("SYS", "GET_OBJECT_DEFINITION")
 	let object = await db.callProcedurePromisified(sp, inputParams)
 	if (object.length < 1) {
 		throw new Error(bundle.getText("errObj"))

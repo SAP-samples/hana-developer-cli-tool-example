@@ -1,6 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import dbClass from 'sap-hdbext-promisfied'
 import * as dbInspect from '../utils/dbInspect.js'
 import * as swaggerUi from 'swagger-ui-express'
 import open from 'open'
@@ -94,7 +93,7 @@ export async function cdsBuild(prompts) {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
-    let schema = await dbClass.schemaCalc(prompts, db)
+    let schema = await base.dbClass.schemaCalc(prompts, db)
     let object, fields, constraints, cdsSource
     dbInspect.options.useHanaTypes = prompts.useHanaTypes
     dbInspect.options.noColons = true
@@ -236,7 +235,7 @@ async function cdsServerSetup(prompts, cdsSource) {
         if (req.query.SELECT.columns) { //&& req.query.SELECT.columns[0].func) {
           // @ts-ignore
           if (req.query.SELECT.columns[0].func) {
-            const db = new dbClass(await conn.createConnection(prompts))
+            const db = new base.dbClass(await conn.createConnection(prompts))
             query += `COUNT(*) AS "counted" FROM "${prompts.table}"`
             return (await db.execSQL(query))
           }

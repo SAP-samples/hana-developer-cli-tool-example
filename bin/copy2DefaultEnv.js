@@ -1,6 +1,6 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import * as dotenv from 'dotenv'
+import 'dotenv/config'
 import * as fs from 'fs'
 
 export const command = 'copy2DefaultEnv'
@@ -15,7 +15,6 @@ export function handler (argv) {
 
 export async function copy() {
     base.debug('copy')
-    dotenv.config()
     let defaultEnv = {}
     if (process.env.VCAP_SERVICES == null) {
         return base.error(base.bundle.getText("errNoEnv"))
