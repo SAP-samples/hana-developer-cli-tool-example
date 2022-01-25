@@ -46,10 +46,13 @@ export async function hcStart(prompts) {
             results = await cf.getHANAInstanceByName(prompts.name)
         }
         // @ts-ignore
+        if(!results || !results.resources){
+            return base.error(new Error(base.bundle.getText("hc.error")))
+        }
+        // @ts-ignore
         for (let item of results.resources) {
             const stdout = await cf.startHana(item.name)
-
-            console.log(suggestHanaCli(stdout, item.name));
+            console.log(suggestHanaCli(stdout, item.name))
         }
         return base.end()
     } catch (error) {
