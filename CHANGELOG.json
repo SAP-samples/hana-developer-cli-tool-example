@@ -1,6 +1,6 @@
 [
     {
-        "date": "2022-01-21",
+        "date": "2022-01-25",
         "version": "3.202201.1",
         "Changed": [
             "Major New Version: Remove dependency upon @sap/hdbext and @sap/hana-client. Replaced with smaller footprint hdb module."
