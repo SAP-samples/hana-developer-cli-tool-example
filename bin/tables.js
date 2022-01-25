@@ -54,7 +54,6 @@ export async function getTables(prompts) {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
-    console.table(prompts)
     let schema = await base.dbClass.schemaCalc(prompts, db)
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("table")}: ${prompts.table}`)
 
