@@ -37,7 +37,7 @@
 			"sap.hanacli.common": "../common",
 			"sap.hanacli.tables": "../tables"
 		},
-		"flexEnabled": false,
+		"flexEnabled": true,
 		"dependencies": {
 			"minUI5Version": "1.91.0",
 			"libs": {

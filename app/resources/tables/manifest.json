@@ -36,7 +36,7 @@
 		"resourceRoots": {
 			"sap.hanacli.common": "../common"
 		},
-		"flexEnabled": false,
+		"flexEnabled": true,
 		"dependencies": {
 			"minUI5Version": "1.91.0",
 			"libs": {

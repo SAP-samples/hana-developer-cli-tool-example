@@ -49,10 +49,16 @@
     },
     "bootstrapPlugins": {
         "RuntimeAuthoringPlugin": {
-            "component": "sap.ushell.plugins.rta"
+            "component": "sap.ushell.plugins.rta",
+            "config": {
+                "validateAppVersion": false
+              }
         },
         "PersonalizePlugin": {
-            "component": "sap.ushell.plugins.rta-personalize"
+            "component": "sap.ushell.plugins.rta-personalize",
+            "config": {
+                "validateAppVersion": false
+              }
         },
         "BootstrapXrayPlugin": {
             "component": "sap.dfa.help.utils.adapters.fiori",

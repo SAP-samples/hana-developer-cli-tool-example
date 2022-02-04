@@ -30,7 +30,7 @@ export const builder = base.getBuilder({
   },
   output: {
     alias: ['o', 'Output'],
-    choices: ["tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi", "hdbview", "hdbcds", "jsdoc"],
+    choices: ["tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi", "hdbview", "hdbcds", "jsdoc", "graphql"],
     default: "tbl",
     type: 'string',
     desc: base.bundle.getText("outputType")
@@ -141,6 +141,13 @@ export async function viewInspect(prompts) {
         cdsSource = `service HanaCli { ${cdsSource} } `
         // @ts-ignore
         console.log(highlight(cds.compile.to.cdl(cds.parse(cdsSource))))
+        break
+      }
+      case 'graphql': {
+        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view")
+        cdsSource = `service HanaCli { ${cdsSource} } `
+        // @ts-ignore
+        console.log(highlight(cds.compile.to.gql(cds.parse(cdsSource))))
         break
       }
       case 'edmx': {

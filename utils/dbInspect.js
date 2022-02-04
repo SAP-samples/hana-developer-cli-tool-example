@@ -38,7 +38,7 @@ export async function getView(db, scheam, viewId) {
 	base.debug(`getView ${scheam} ${viewId}`)
 	//Select View
 	let statementString = ``
-	const vers = await await getHANAVersion(db)
+	const vers = await getHANAVersion(db)
 	if (vers.versionMajor < 2) {
 		statementString = `SELECT SCHEMA_NAME, VIEW_NAME, VIEW_OID, COMMENTS, IS_COLUMN_VIEW, VIEW_TYPE, HAS_STRUCTURED_PRIVILEGE_CHECK, HAS_CACHE
 		FROM VIEWS 

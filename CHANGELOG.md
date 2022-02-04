@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202202.1] - 2022-02-04
+
+**Changed**
+
+- Update @sap/cds to Feb 2022 release - 5.8.0
+- inspectTable and inspectView now support graphQL output (CDS Experimental Option)
+- systemInfo new output options - env (display environment connection as JSON) or dbx (display connection details ready to input in the new Database Explorer VSCode Extension)
+
 ## [3.202201.1] - 2022-01-25
 
 **Changed**
@@ -14,7 +22,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 **Changed**
 
-- Update the Web UI Web Asssistant feature to work with the experimental SAP Horizon theme
+- Update the Web UI Web Assistant feature to work with the experimental SAP Horizon theme
 - GraphQL option of cds command now fully works and cross references entity name in the exit correctly
 
 ## [2.202201.8] - 2022-01-10

@@ -1,5 +1,14 @@
 [
     {
+        "date": "2022-02-04",
+        "version": "3.202202.1",
+        "Changed": [
+            "Update @sap/cds to Feb 2022 release - 5.8.0",
+            "inspectTable and inspectView now support graphQL output (CDS Experimental Option)",
+            "systemInfo new output options - env (display environment connection as JSON) or dbx (display connection details ready to input in the new Database Explorer VSCode Extension)"
+        ]
+    },
+    {
         "date": "2022-01-25",
         "version": "3.202201.1",
         "Changed": [
@@ -10,7 +19,7 @@
         "date": "2022-01-11",
         "version": "2.202201.9",
         "Changed": [
-            "Update the Web UI Web Asssistant feature to work with the experimental SAP Horizon theme",
+            "Update the Web UI Web Assistant feature to work with the experimental SAP Horizon theme",
             "GraphQL option of cds command now fully works and cross references entity name in the exit correctly"
         ]
     },

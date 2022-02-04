@@ -36,7 +36,7 @@
 		"resourceRoots": {
 			"sap.hanacli.common": "../common"
 		},
-		"flexEnabled": false,
+		"flexEnabled": true,
 		"rootView": {
 			"viewName": "sap.hanacli.systemInfo.view.App",
 			"type": "XML",
