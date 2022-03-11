@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202203.1] - 2022-03-11
+
+**Changed**
+
+- Various minor dependency updates in used packages
+- SAPUI5 update to 1.99.0
+
 ## [3.202202.1] - 2022-02-04
 
 **Changed**

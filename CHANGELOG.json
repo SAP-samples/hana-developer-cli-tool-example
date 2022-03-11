@@ -1,5 +1,13 @@
 [
     {
+        "date": "2022-03-11",
+        "version": "3.202203.1",
+        "Changed": [
+            "Various minor dependency updates in used packages",
+            "SAPUI5 update to 1.99.0"
+        ]
+    },
+    {
         "date": "2022-02-04",
         "version": "3.202202.1",
         "Changed": [
