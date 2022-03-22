@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202203.2] - 2022-03-22
+
+**Changed**
+
+- Fix for connect and incorrect options format for hdb module
+- CDS output escape quotes within comments
+
 ## [3.202203.1] - 2022-03-11
 
 **Changed**
