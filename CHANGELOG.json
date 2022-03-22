@@ -1,5 +1,13 @@
 [
     {
+        "date": "2022-03-22",
+        "version": "3.202203.2",
+        "Changed": [
+            "Fix for connect and incorrect options format for hdb module",
+            "CDS output escape quotes within comments"
+        ]
+    },
+    {
         "date": "2022-03-11",
         "version": "3.202203.1",
         "Changed": [

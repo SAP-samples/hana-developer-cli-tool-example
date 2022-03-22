@@ -98,11 +98,12 @@ export function handler(argv) {
 export async function dbConnect(input) {
   base.debug(`dbConnect`)
   try {
+    input.admin = true
     base.setPrompts(input)
-    let options = {};
-    options.pooling = true;
-    options.encrypt = input.encrypt;
-    options.serverNode = input.userstorekey || input.connection;
+    let options = {}
+    options.pooling = true
+    options.encrypt = input.encrypt
+    options.serverNode = input.userstorekey || input.connection
     if (!input.userstorekey) { options.user = input.user }
     if (!input.userstorekey) { options.password = input.password }
     options.sslValidateCertificate = false
@@ -114,7 +115,10 @@ export async function dbConnect(input) {
     }
     base.debug(options)
 
-    const db = await base.createDBConnection(options)
+    if (input.save) {
+      await saveEnv(options)
+    }
+    const db = await base.createDBConnection()
 
     let results = await db.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`)
     base.outputTable(results)
@@ -122,9 +126,6 @@ export async function dbConnect(input) {
     let resultsSession = await db.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`)
     base.outputTable(resultsSession)
 
-    if (input.save) {
-      await saveEnv(options)
-    }
     return base.end()
   } catch (error) {
     base.error(error)
@@ -164,10 +165,7 @@ export async function saveEnv(options) {
     defaultEnv.VCAP_SERVICES.hana[0].credentials.sslCryptoProvider = 'openssl'
     defaultEnv.VCAP_SERVICES.hana[0].credentials.sslValidateCertificate = true
   }
-  fs.writeFile("default-env-admin.json", JSON.stringify(defaultEnv, null, '\t'), (err) => {
-    if (err) {
-      throw new Error(`${base.bundle.getText("errConn")} ${JSON.stringify(err)}`)
-    }
-    console.log(base.bundle.getText("adminSaved"))
-  })
+  fs.writeFileSync("default-env-admin.json", JSON.stringify(defaultEnv, null, '\t'))
+  console.log(base.bundle.getText("adminSaved"))
+
 }

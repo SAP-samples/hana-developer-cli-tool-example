@@ -557,7 +557,7 @@ export async function formatCDS(db, object, fields, constraints, type, parent) {
 			//	}
 		}
 		if (field.COMMENTS) {
-			cdstable += `  @title: '${field.COLUMN_NAME}: ${field.COMMENTS}' `
+			cdstable += `  @title: '${field.COLUMN_NAME}: ${field.COMMENTS.replace(/[']/g, "'$&")}' `
 		} else {
 			cdstable += `  @title: '${field.COLUMN_NAME}' `
 		}
