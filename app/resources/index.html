@@ -7,9 +7,9 @@
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>hana-cli LaunchPad</title>
-	<script src="https://sapui5.hana.ondemand.com/1.99.0/test-resources/sap/ushell/bootstrap/sandbox.js"></script>
+	<script src="https://sapui5.hana.ondemand.com/1.100.0/test-resources/sap/ushell/bootstrap/sandbox.js"></script>
 
-	<script src="https://sapui5.hana.ondemand.com/1.99.0/resources/sap-ui-core.js"
+	<script src="https://sapui5.hana.ondemand.com/1.100.0/resources/sap-ui-core.js"
 		data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration, sap.ui.layout, sap.ui.rta, sap.dfa.help,sap.uxap"
 		data-sap-ui-compatVersion="edge" data-sap-ui-theme="sap_horizon"
 		data-sap-ui-async="true"
@@ -32,7 +32,7 @@
 	<!-- <script src="./WebAssistant.js"></script> -->
 	<script>
 		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-			sap.ui.getCore().applyTheme( "sap_horizon" )//"sap_horizon")
+			sap.ui.getCore().applyTheme( "sap_horizon_dark" )
 		}
 		sap.ui.getCore().attachInit(() => {
 			sap.ushell.Container.createRenderer().placeAt("content")

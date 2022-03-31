@@ -589,7 +589,7 @@ export function _manifest(odataURL, entity, table) {
 
 export function fiori(manifest, odataURL, entity,) {
   base.debug(`fiori ${odataURL} ${entity}`)
-  let ui5Version = '1.99.0' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
+  let ui5Version = '1.100.0' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
   ui5Version = ui5Version ? ui5Version + '/' : ''
   base.debug(`SAPUI5 Version ${ui5Version}`)
   return `
@@ -626,6 +626,9 @@ export function fiori(manifest, odataURL, entity,) {
         jQuery.sap.require("sap.ushell.iconfonts");
         jQuery.sap.require("sap.ushell.services.AppConfiguration");
         sap.ushell.iconfonts.registerFiori2IconFont();
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          sap.ui.getCore().applyTheme( "sap_horizon_dark" )
+        }
         sap.ui.getCore().attachInit(function() { sap.ushell.Container.createRenderer().placeAt("content") })
     </script>
     </head>
