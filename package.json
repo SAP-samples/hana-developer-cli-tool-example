@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "3.202203.3",
+  "version": "3.202204.1",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -25,11 +25,11 @@
   ],
   "types": "types/index.d.ts",
   "dependencies": {
-    "@graphql-tools/schema": "^8.3.6",
-    "@sap/cds": "^5.9.1",
+    "@graphql-tools/schema": "^8.3.10",
+    "@sap/cds": "^5.9.3",
     "@sap/textbundle": "^4.1",
-    "@sap/xsenv": "^3.2.1",
-    "body-parser": "^1.19.2",
+    "@sap/xsenv": "^3.2.2",
+    "body-parser": "^1.20.0",
     "chalk": "^5.0.1",
     "check-node-version": "^4.2.1",
     "cli-highlight": "^2.1.11",
@@ -37,33 +37,34 @@
     "debug": "^4.3.4",
     "dotenv": "^16.0.0",
     "easy-table": "1.2.0",
-    "express": "^4.17.3",
+    "express": "^4.18.0",
     "express-graphql": "^0.12.0",
-    "glob": "^7.1.7",
+    "glob": "^8.0.1",
     "graphql": "^15.8.0",
-    "hdb": "0.19.1",
+    "hdb": "0.19.2",
     "js-convert-case": "^4.2.0",
     "json-to-pretty-yaml": "^1.2.2",
     "json2csv": "^5.0.7",
     "latest-version": "^6.0",
-    "marked": "^4.0.12",
+    "marked": "^4.0.14",
     "marked-terminal": "^5.1.1",
     "node-xlsx": "^0.21",
-    "node-zip": "^1.0.1",
+    "node-zip": "^1.1.1",
     "odata2openapi": "^1.3",
     "open": "^8.2.1",
     "ora": "^6.1",
-    "prompt": "^1.2.2",
+    "prompt": "^1.3.0",
     "properties-to-json": "^0.2.1",
-    "sap-hdb-promisfied": "2.202203.3",
-    "showdown": "^2.0.3",
+    "sap-hdb-promisfied": "2.202204.1",
+    "showdown": "^2.1.0",
     "swagger-ui-express": "^4.3",
     "terminaltools": "^2.1",
+    "upath": "^2.0.1",
     "update-notifier": "^5.1.0",
     "uuid": "^8.3",
     "ws": "^8.5.0",
     "yargonaut": "1.1",
-    "yargs": "^17.4.0"
+    "yargs": "^17.4.1"
   },
   "peerDependencies": {
     "@sap/cds-dk": ">=4"
@@ -75,15 +76,15 @@
   },
   "homepage": "https://github.com/SAP-samples/hana-developer-cli-tool-example#readme",
   "devDependencies": {
-    "@types/showdown": "^1.9.4",
+    "@types/showdown": "^2.0.0",
     "@types/yargs": "^17.0.10",
-    "eslint": "^8.12.0",
+    "eslint": "^8.14.0",
     "stringify-changelog": "^0.2.1"
   },
   "cds": {
     "preview": {
       "ui5": {
-        "version": "1.100.0"
+        "version": "1.101.1"
       }
     },
     "hana": {

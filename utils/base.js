@@ -6,7 +6,7 @@
  import { fileURLToPath } from 'url'
  import { URL } from 'url'
  const __dirname = fileURLToPath(new URL('.', import.meta.url))
-
+ import upath from 'upath'
  import { createRequire } from 'module'
   // @ts-ignore
  const require = createRequire(import.meta.url)
@@ -627,7 +627,7 @@ export async function webServerSetup(urlPath) {
     app.disable('etag')
     //Load routes
     let routesDir = path.join(__dirname, '..', '/routes/**/*.js')
-    let files = glob.sync(routesDir)
+    let files = glob.sync(upath.normalize(routesDir))
     if (files.length !== 0) {
         for (let file of files) {
             debug(file)
