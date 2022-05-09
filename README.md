@@ -332,7 +332,7 @@ Options:
                               cloud.sap/docs/cds/cdl#predefined-types)
                                                       [boolean] [default: false]
   -p, --port                  Port to run HTTP server for CDS preview
-                                                                [default: false]                                                      
+                                                                [default: false]
 ```
 
 ### changelog
@@ -405,7 +405,7 @@ Options:
                                             SAP HANA service for SAP BTP or SAP
                                             HANA Cloud)                [boolean]
   -t, --trustStore, --Trust, --trust,       SSL Trust Store
-  --truststore                                                     
+  --truststore
 ```
 
 ![connect example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/connect.gif)
@@ -528,6 +528,31 @@ Options:
   --secretsFolder, --to-folder  Folder name for storing secrets
                                                    [string] [default: "secrets"]
   --filter                      List of service instances to process    [string]
+```
+
+### createGroup
+
+```shell
+hana-cli createGroup [group]
+[aliases: cg, cGrp]
+Create an HDI container group
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -g, --group, --Group           Container Group Name                   [string]
 ```
 
 ### createContainer
@@ -794,6 +819,31 @@ Options:
   -c, --container, --Container  Container Name                          [string]
 ```
 
+### dropGroup
+
+```shell
+hana-cli dropGroup [group]
+[aliases: dg, dropG]
+Drop HDI container group
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -g, --group, --Group           Container Group Name                   [string]
+```
+
 ### features
 
 ```shell
@@ -887,7 +937,7 @@ Troubleshooting:
   --debug, --Debug           Debug hana-cli itself by adding output of LOTS of
                              intermediate details     [boolean] [default: false]
 Options:
-  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]                             
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]
 ```
 ![hdi example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hdi.gif)
 
@@ -1864,7 +1914,7 @@ Troubleshooting:
                                                       [boolean] [default: false]
 
 Options:
-  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]                                                                       
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]
 ```
 
 ### schemas
@@ -1940,7 +1990,7 @@ Troubleshooting:
                                                       [boolean] [default: false]
 
 Options:
-  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]         
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]
 ```
 
 ### securestore
@@ -1961,7 +2011,7 @@ Troubleshooting:
                                                       [boolean] [default: false]
 
 Options:
-  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]                             
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]
 ```
 
 ### serviceKey
@@ -2291,7 +2341,7 @@ Troubleshooting:
   --debug, --Debug           Debug hana-cli itself by adding output of LOTS of
                              intermediate details     [boolean] [default: false]
 Options:
-  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]                             
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]
 ```
 
 ### users
