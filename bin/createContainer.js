@@ -72,6 +72,12 @@ export async function activate(prompts) {
     else
       apiSchema = '_SYS_DI#' + prompts.group
 
+    let rolePrefix = ''
+    if (prompts.group.length == 0)
+      rolePrefix = prompts.container
+    else
+      rolePrefix = prompts.group + '::' + prompts.container
+
     let passwordDT = uuidv4()
     passwordDT = passwordDT.replace(/-/g, "A")
     let passwordRT = uuidv4()
@@ -154,11 +160,11 @@ export async function activate(prompts) {
     CALL ${apiSchema}.CONFIGURE_LIBRARIES('${prompts.container}', :default, :no_params, :return_code, :request_id, :MESSAGES);
     SELECT :userDT as "Object Owner", :userRT as "Application User" from DUMMY;
 
-    EXEC 'CREATE ROLE "${prompts.container}::access_role"';
-    EXEC 'CREATE ROLE "${prompts.container}::external_privileges_role"';
+    EXEC 'CREATE ROLE "${rolePrefix}::access_role"';
+    EXEC 'CREATE ROLE "${rolePrefix}::external_privileges_role"';
 
-    EXEC 'GRANT  "${prompts.container}::access_role" TO ${userRT} ';
-    EXEC 'GRANT  "${prompts.container}::external_privileges_role" TO ${userRT} ';
+    EXEC 'GRANT  "${rolePrefix}::access_role" TO ${userRT} ';
+    EXEC 'GRANT  "${rolePrefix}::external_privileges_role" TO ${userRT} ';
   END;`)
     console.table(results)
 
