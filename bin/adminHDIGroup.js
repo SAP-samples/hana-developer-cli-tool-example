@@ -36,6 +36,7 @@ export async function activate(prompts) {
   try {
     base.setPrompts(prompts)
     const dbStatus = await base.createDBConnection()
+    let databaseUser =  await base.getDatabaseUser(prompts)
 
     let resultsGrant = await dbStatus.execSQL(
       `CREATE LOCAL TEMPORARY COLUMN TABLE #PRIVILEGES LIKE _SYS_DI.TT_API_PRIVILEGES;`)
@@ -53,14 +54,18 @@ export async function activate(prompts) {
       `DROP TABLE #PRIVILEGES;`)
     console.table(resultsGrant)
 
-    resultsGrant = await dbStatus.execSQL(
-      `GRANT USER ADMIN TO ${prompts.user}`)
-    console.table(resultsGrant)
+    // avoid grantor and grantee are identical error
+    if (prompts.user != databaseUser)
+    {
+      resultsGrant = await dbStatus.execSQL(
+        `GRANT USER ADMIN TO ${prompts.user}`)
+      console.table(resultsGrant)
 
-    resultsGrant = await dbStatus.execSQL(
-      `GRANT ROLE ADMIN TO ${prompts.user}`)
-    console.table(resultsGrant)
-        
+      resultsGrant = await dbStatus.execSQL(
+        `GRANT ROLE ADMIN TO ${prompts.user}`)
+      console.table(resultsGrant)
+    }
+
     return base.end()
   } catch (error) {
     base.error(error)

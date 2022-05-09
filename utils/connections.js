@@ -13,8 +13,8 @@ import * as xsenv from '@sap/xsenv'
 
 /**
  * Check parameter folders to see if the input file exists there
- * @param {string} filename 
- * @returns {string} - the file path if found 
+ * @param {string} filename
+ * @returns {string} - the file path if found
  */
 export function getFileCheckParents(filename) {
     base.debug(`getFileCheckParents ${filename}`)
@@ -46,7 +46,7 @@ export function getFileCheckParents(filename) {
 
 /**
  * Check current and parent directories for a package.json
- * @returns {string} - the file path if found 
+ * @returns {string} - the file path if found
  */
 export function getPackageJSON() {
     base.debug('getPackageJSON')
@@ -55,7 +55,7 @@ export function getPackageJSON() {
 
 /**
  * Check current and parent directories for a mta.yaml
- * @returns {string} - the file path if found 
+ * @returns {string} - the file path if found
  */
 export function getMTA() {
     base.debug('getMTA')
@@ -64,7 +64,7 @@ export function getMTA() {
 
 /**
  * Check current and parent directories for a default-env.json
- * @returns {string} - the file path if found 
+ * @returns {string} - the file path if found
  */
 export function getDefaultEnv() {
     base.debug('getDefaultEnv')
@@ -73,7 +73,7 @@ export function getDefaultEnv() {
 
 /**
  * Check current and parent directories for a default-env-admin.json
- * @returns {string} - the file path if found 
+ * @returns {string} - the file path if found
  */
 export function getDefaultEnvAdmin() {
     base.debug('getDefaultEnvAdmin')
@@ -82,7 +82,7 @@ export function getDefaultEnvAdmin() {
 
 /**
  * Check current and parent directories for a .env
- * @returns {string} - the file path if found 
+ * @returns {string} - the file path if found
  */
 export function getEnv() {
     base.debug('getEnv')
@@ -91,8 +91,8 @@ export function getEnv() {
 
 /**
  * Resolve Environment by deciding which option between default-env and default-env-admin we should take
- * @param {*} options 
- * @returns {string} - the file path if found 
+ * @param {*} options
+ * @returns {string} - the file path if found
  */
 export function resolveEnv(options) {
     base.debug(`resolveEnv ${options}`)
@@ -120,7 +120,7 @@ export function getConnOptions(prompts) {
         envFile = getDefaultEnvAdmin()
     }
 
-    //No Admin option or no default-env-admin.json file found - try for .env 
+    //No Admin option or no default-env-admin.json file found - try for .env
     if (!envFile) {
         let dotEnvFile = getEnv()
         dotenv.config({ path: dotEnvFile })
@@ -130,7 +130,7 @@ export function getConnOptions(prompts) {
     base.debug(process.env.VCAP_SERVICES)
     base.debug(envFile)
     if (!process.env.VCAP_SERVICES && !envFile) {
-        //Check for specific configuration file by special parameter 
+        //Check for specific configuration file by special parameter
         if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'conn') && prompts.conn) {
             envFile = getFileCheckParents(prompts.conn)
 
@@ -185,7 +185,7 @@ export function getConnOptions(prompts) {
 }
 
 /**
- * Create Databse Connection 
+ * Create Databse Connection
  * @param {object} prompts - input prompt values
  * @param {boolean} directConnect - Direct Connection parameters are supplied in prompts
  * @returns {Promise<object>} HANA DB conneciton of type hdb
@@ -203,4 +203,19 @@ export async function createConnection(prompts, directConnect = false) {
 
     base.debug(`In Create Connection`)
     return base.dbClass.createConnection(options)
+}
+
+/**
+ * Get Database User Name
+ * @param {object} prompts - input prompt values
+ * @returns {Promise<string>} HANA database user name used to create the connection
+ */
+export async function getDatabaseUser(prompts) {
+  base.debug('getDatabaseUser')
+
+  let options = getConnOptions(prompts)
+
+  /** @type string */
+  let userName = options.hana.user
+  return userName
 }
