@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import * as fs from 'fs'
 import * as xsenv from '@sap/xsenv'
 
-export const command = 'createContainer [container]'
+export const command = 'createContainer [container] [group]'
 export const aliases = ['cc', 'cCont']
 export const describe = base.bundle.getText("createContainer")
 
@@ -14,6 +14,12 @@ export const builder = base.getBuilder({
     alias: ['c', 'Container'],
     type: 'string',
     desc: base.bundle.getText("container")
+  },
+  group: {
+    alias: ['g', 'Group'],
+    type: 'string',
+    default: '',
+    desc: base.bundle.getText("group")
   },
   save: {
     alias: ['s', 'Save'],
@@ -34,6 +40,10 @@ export function handler (argv) {
     container: {
       description: base.bundle.getText("container"),
       required: true
+    },
+    group: {
+      description: base.bundle.getText("group"),
+      required: false
     },
     save: {
       description: base.bundle.getText("saveHDI"),
@@ -56,7 +66,17 @@ export async function activate(prompts) {
 
     let envFile = conn.resolveEnv()
 
+    let apiSchema = ''
+    if (prompts.group.length == 0)
+      apiSchema = '_SYS_DI'
+    else
+      apiSchema = '_SYS_DI#' + prompts.group
 
+    let rolePrefix = ''
+    if (prompts.group.length == 0)
+      rolePrefix = prompts.container
+    else
+      rolePrefix = prompts.group + '::' + prompts.container
 
     let passwordDT = uuidv4()
     passwordDT = passwordDT.replace(/-/g, "A")
@@ -70,7 +90,7 @@ export async function activate(prompts) {
     userRT = userRT.toUpperCase()
 
     let results = await db.execSQL(
-      `CALL _SYS_DI.CREATE_CONTAINER('${prompts.container}', _SYS_DI.T_NO_PARAMETERS, ?, ?, ?);`)
+      `CALL ${apiSchema}.CREATE_CONTAINER('${prompts.container}', _SYS_DI.T_NO_PARAMETERS, ?, ?, ?);`)
     console.table(results)
 
     //SCHEMA_PRIV = SELECT PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, (SELECT :userRT FROM DUMMY) AS PRINCIPAL_NAME FROM _SYS_DI.T_DEFAULT_CONTAINER_USER_PRIVILEGES;
@@ -85,66 +105,66 @@ export async function activate(prompts) {
     results = await db.execSQL(
       `DO
   BEGIN
-    DECLARE userName NVARCHAR(100); 
-    DECLARE userDT NVARCHAR(100); 
-    DECLARE userRT NVARCHAR(100);   
+    DECLARE userName NVARCHAR(100);
+    DECLARE userDT NVARCHAR(100);
+    DECLARE userRT NVARCHAR(100);
     declare return_code int;
     declare request_id bigint;
     declare MESSAGES _SYS_DI.TT_MESSAGES;
     declare PRIVILEGES _SYS_DI.TT_API_PRIVILEGES;
     declare SCHEMA_PRIV _SYS_DI.TT_SCHEMA_PRIVILEGES;
-  
+
     no_params = SELECT * FROM _SYS_DI.T_NO_PARAMETERS;
-  
-    SELECT SYSUUID INTO userName FROM DUMMY; 
+
+    SELECT SYSUUID INTO userName FROM DUMMY;
     SELECT '${userDT}' into userDT FROM DUMMY;
-    SELECT '${userRT}' into userRT FROM DUMMY;  
+    SELECT '${userRT}' into userRT FROM DUMMY;
     EXEC 'CREATE USER ' || :userDT || ' PASSWORD "${passwordDT}" NO FORCE_FIRST_PASSWORD_CHANGE ${useGroup ? ` SET USERGROUP DEFAULT ` : ''}';
     EXEC 'CREATE USER ' || :userRT || ' PASSWORD "${passwordRT}" NO FORCE_FIRST_PASSWORD_CHANGE ${useGroup ? ` SET USERGROUP DEFAULT ` : ''}';
-  
+
     COMMIT;
 
     PRIVILEGES = SELECT PRIVILEGE_NAME, OBJECT_NAME, PRINCIPAL_SCHEMA_NAME, (SELECT :userDT FROM DUMMY) AS PRINCIPAL_NAME FROM _SYS_DI.T_DEFAULT_CONTAINER_ADMIN_PRIVILEGES;
-    CALL _SYS_DI.GRANT_CONTAINER_API_PRIVILEGES('${prompts.container}', :PRIVILEGES, :no_params, :return_code, :request_id, :MESSAGES); 
+    CALL ${apiSchema}.GRANT_CONTAINER_API_PRIVILEGES('${prompts.container}', :PRIVILEGES, :no_params, :return_code, :request_id, :MESSAGES);
     select * from :MESSAGES;
-  
+
     SCHEMA_PRIV = SELECT PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, (SELECT :userRT FROM DUMMY) AS PRINCIPAL_NAME FROM _SYS_DI.T_DEFAULT_CONTAINER_USER_PRIVILEGES;
-    CALL _SYS_DI.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${prompts.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
+    CALL ${apiSchema}.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${prompts.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
     select * from :MESSAGES;
 
-    SCHEMA_PRIV = SELECT 'INSERT' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;  
-    CALL _SYS_DI.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${prompts.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
-    select * from :MESSAGES;
-  
-    SCHEMA_PRIV = SELECT 'CREATE TEMPORARY TABLE' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;  
-    CALL _SYS_DI.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${prompts.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
+    SCHEMA_PRIV = SELECT 'INSERT' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;
+    CALL ${apiSchema}.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${prompts.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
     select * from :MESSAGES;
 
-    SCHEMA_PRIV = SELECT 'DELETE' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;  
-    CALL _SYS_DI.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${prompts.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
+    SCHEMA_PRIV = SELECT 'CREATE TEMPORARY TABLE' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;
+    CALL ${apiSchema}.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${prompts.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
     select * from :MESSAGES;
 
-    SCHEMA_PRIV = SELECT 'EXECUTE' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;  
-    CALL _SYS_DI.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${prompts.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
-    select * from :MESSAGES;    
+    SCHEMA_PRIV = SELECT 'DELETE' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;
+    CALL ${apiSchema}.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${prompts.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
+    select * from :MESSAGES;
 
-    SCHEMA_PRIV = SELECT 'UPDATE' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;  
-    CALL _SYS_DI.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${prompts.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
-    select * from :MESSAGES; 
+    SCHEMA_PRIV = SELECT 'EXECUTE' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;
+    CALL ${apiSchema}.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${prompts.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
+    select * from :MESSAGES;
 
-    SCHEMA_PRIV = SELECT 'SELECT CDS METADATA' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;  
-    CALL _SYS_DI.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${prompts.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
+    SCHEMA_PRIV = SELECT 'UPDATE' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;
+    CALL ${apiSchema}.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${prompts.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
+    select * from :MESSAGES;
+
+    SCHEMA_PRIV = SELECT 'SELECT CDS METADATA' AS PRIVILEGE_NAME, '' AS PRINCIPAL_SCHEMA_NAME, :userRT AS PRINCIPAL_NAME FROM DUMMY;
+    CALL ${apiSchema}.GRANT_CONTAINER_SCHEMA_PRIVILEGES('${prompts.container}', :SCHEMA_PRIV, :no_params, :return_code, :request_id, :MESSAGES);
     select * from :MESSAGES;
 
     default = SELECT * FROM _SYS_DI.T_DEFAULT_LIBRARIES;
-    CALL _SYS_DI.CONFIGURE_LIBRARIES('${prompts.container}', :default, :no_params, :return_code, :request_id, :MESSAGES);
+    CALL ${apiSchema}.CONFIGURE_LIBRARIES('${prompts.container}', :default, :no_params, :return_code, :request_id, :MESSAGES);
     SELECT :userDT as "Object Owner", :userRT as "Application User" from DUMMY;
 
-    EXEC 'CREATE ROLE "${prompts.container}::access_role"';
-    EXEC 'CREATE ROLE "${prompts.container}::external_privileges_role"';
+    EXEC 'CREATE ROLE "${rolePrefix}::access_role"';
+    EXEC 'CREATE ROLE "${rolePrefix}::external_privileges_role"';
 
-    EXEC 'GRANT  "${prompts.container}::access_role" TO ${userRT} ';
-    EXEC 'GRANT  "${prompts.container}::external_privileges_role" TO ${userRT} ';    
+    EXEC 'GRANT  "${rolePrefix}::access_role" TO ${userRT} ';
+    EXEC 'GRANT  "${rolePrefix}::external_privileges_role" TO ${userRT} ';
   END;`)
     console.table(results)
 

@@ -15,6 +15,7 @@ import * as copy2DefaultEnv from './copy2DefaultEnv.js'
 import * as copy2Env from './copy2Env.js'
 import * as copy2Secrets from './copy2Secrets.js'
 import * as createContainer from './createContainer.js'
+import * as createGroup from './createGroup.js'
 import * as createContainerUsers from './createContainerUsers.js'
 import * as createJWT from './createJWT.js'
 import * as createModule from './createModule.js'
@@ -24,6 +25,7 @@ import * as dataTypesUI from './dataTypesUI.js'
 import * as dataVolumes from './dataVolumes.js'
 import * as disks from './disks.js'
 import * as dropContainer from './dropContainer.js'
+import * as dropGroup from './dropGroup.js'
 import * as features from './features.js'
 import * as featuresUI from './featuresUI.js'
 import * as featureUsage from './featureUsage.js'
@@ -101,8 +103,8 @@ import * as views from './views.js'
 export const commands = [
     activateHDI, adminHDI, adminHDIGroup, callProcedure, certificates, cds, openChangeLog,
     changeLog, changeLogUI, connect, containers, containersUI, copy2DefaultEnv, copy2Env,
-    copy2Secrets, createContainer, createContainerUsers, createJWT, createModule,
-    createXSAAdmin, dataTypes, dataTypesUI, dataVolumes, disks, dropContainer, features,
+    copy2Secrets, createGroup, createContainer, createContainerUsers, createJWT, createModule,
+    createXSAAdmin, dataTypes, dataTypesUI, dataVolumes, disks, dropGroup, dropContainer, features,
     featuresUI, featureUsage, featureUsageUI, functions, functionsUI, hanaCloudHDIInstances,
     hanaCloudHDIInstancesUI, hanaCloudInstances, hanaCloudStart, hanaCloudStop, hdbsql,
     hostInformation, indexes, indexesUI, iniContents, iniFiles, inspectFunction,
@@ -117,5 +119,3 @@ export const commands = [
     traces, traceContents, triggers, UI, hanaCloudUPSInstances, hanaCloudUPSInstancesUI,
     users, version, views
 ]
-
-
