@@ -558,7 +558,7 @@ Options:
 ### createContainer
 
 ```shell
-hana-cli createContainer [container]
+hana-cli createContainer [container] [group]
 [aliases: cc, cCont]
 Create an HDI Container and populate connection details into default-env.json
 
@@ -578,6 +578,7 @@ Troubleshooting:
 
 Options:
   -c, --container, --Container     Container Name                       [string]
+  -g, --group, --Group             Container Group Name [string] [default: empty]
   -s, --save, --Save               Save Credentials to default-env.json
                                                        [boolean] [default: true]
   -e, --encrypt, --Encrypt, --ssl  Encrypt connections (required for SAP HANA
@@ -797,7 +798,7 @@ Troubleshooting:
 ### dropContainer
 
 ```shell
-hana-cli dropContainer [container]
+hana-cli dropContainer [container] [group]
 [aliases: dc, dropC]
 Drop HDI container and clean up HDI Container users
 
@@ -817,6 +818,7 @@ Troubleshooting:
 
 Options:
   -c, --container, --Container  Container Name                          [string]
+  -g, --group, --Group          Container Group Name   [string] [default: empty]
 ```
 
 ### dropGroup
