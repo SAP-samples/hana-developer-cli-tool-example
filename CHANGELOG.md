@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202205.1] - 2022-05-09
+
+**Changed**
+
+- [Add support for container groups](https://github.com/SAP-samples/hana-developer-cli-tool-example/pull/73) by [Meyer-J](https://github.com/Meyer-J)
+- Remove support for Node.js 12 as it is End of Life as of the end of April 2022
+- Minor dependency updates
+
 ## [3.202203.3] - 2022-03-31
 
 **Changed**

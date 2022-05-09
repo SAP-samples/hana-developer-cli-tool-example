@@ -28,7 +28,7 @@ npm install -g hana-cli
 
 Otherwise you can also run it from the sources as described here:
 
-* Install Node.js version 12.x, 14.x, or 16.x on your development machine [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
+* Install Node.js version 14.x or 16.x on your development machine [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
 * @sap Node.js packages have moved from https://npm.sap.com to the default registry https://registry.npmjs.org. As future versions of @sap modules are going to be published only there, please make sure to adjust your registry with:
 
