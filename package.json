@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "3.202205.1",
+  "version": "3.202205.2",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -55,7 +55,7 @@
     "ora": "^6.1",
     "prompt": "^1.3.0",
     "properties-to-json": "^0.2.1",
-    "sap-hdb-promisfied": "2.202204.1",
+    "sap-hdb-promisfied": "2.202205.1",
     "showdown": "^2.1.0",
     "swagger-ui-express": "^4.3",
     "terminaltools": "^2.1",
