@@ -63,7 +63,7 @@ export async function activate(prompts) {
       console.table(resultsGrant)
     }
     else
-      base.debug('Do not grant privieges to ' + prompts.user)
+      base.debug('Do not grant privileges to ' + prompts.user)
 
     return base.end()
   } catch (error) {
