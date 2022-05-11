@@ -53,14 +53,18 @@ export async function activate(prompts) {
       `DROP TABLE #PRIVILEGES;`)
     console.table(resultsGrant)
 
-    resultsGrant = await dbStatus.execSQL(
-      `GRANT USER ADMIN TO ${prompts.user}`)
-    console.table(resultsGrant)
+    if (base.getUserName() != prompts.user) {
+      resultsGrant = await dbStatus.execSQL(
+        `GRANT USER ADMIN TO ${prompts.user}`)
+      console.table(resultsGrant)
 
-    resultsGrant = await dbStatus.execSQL(
-      `GRANT ROLE ADMIN TO ${prompts.user}`)
-    console.table(resultsGrant)
-        
+      resultsGrant = await dbStatus.execSQL(
+        `GRANT ROLE ADMIN TO ${prompts.user}`)
+      console.table(resultsGrant)
+    }
+    else
+      base.debug('Do not grant privieges to ' + prompts.user)
+
     return base.end()
   } catch (error) {
     base.error(error)
