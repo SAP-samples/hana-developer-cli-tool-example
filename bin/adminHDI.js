@@ -58,9 +58,6 @@ export async function activate(prompts) {
       `CREATE LOCAL TEMPORARY TABLE #PRIVILEGES LIKE _SYS_DI.TT_API_PRIVILEGES;`)
     console.table(resultsGrant)
     resultsGrant = await dbStatus.execSQL(
-      `INSERT INTO #PRIVILEGES (PRINCIPAL_NAME, PRIVILEGE_NAME, OBJECT_NAME) SELECT 'SYSTEM', PRIVILEGE_NAME, OBJECT_NAME FROM _SYS_DI.T_DEFAULT_DI_ADMIN_PRIVILEGES;`)
-    console.table(resultsGrant)
-    resultsGrant = await dbStatus.execSQL(
       `INSERT INTO #PRIVILEGES (PRINCIPAL_NAME, PRIVILEGE_NAME, OBJECT_NAME) SELECT '${prompts.user}', PRIVILEGE_NAME, OBJECT_NAME FROM _SYS_DI.T_DEFAULT_DI_ADMIN_PRIVILEGES;`)
     console.table(resultsGrant)
     resultsGrant = await dbStatus.execSQL(
