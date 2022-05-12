@@ -202,7 +202,7 @@ Options:
 ```shell
 hana-cli adminHDI [user] [password]
 [aliases: adHDI, adhdi]
-Create an Admin User for HDI
+Create an Admin User for HDI or assign HDI admin privileges to an existing user
 
 Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
@@ -221,6 +221,11 @@ Troubleshooting:
 Options:
   -u, --user, --User          User
   -p, --password, --Password  Password
+  -c, --create, --Create      Set this parameter to false to reuse an existing
+                              database user and assign the HDI admin privileges
+                              to this user. In this case a dummy password can
+                              be given.
+                                                      [boolean] [default: false]
 ```
 
 ### adminHDIGroup

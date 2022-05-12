@@ -13,6 +13,12 @@ export const builder = base.getBuilder({
   password: {
     alias: ['p', 'Password'],
     desc: base.bundle.getText("password")
+  },
+  create: {
+    alias: ['c', 'Create'],
+    desc: base.bundle.getText("createUser"),
+    type: 'boolean',
+    default: true
   }
 })
 
@@ -27,6 +33,10 @@ export function handler (argv) {
       hidden: true,
       replace: '*',
       required: true
+    },
+    create: {
+      description: base.bundle.getText("createUser"),
+      required: false
     }
   })
 }
@@ -37,14 +47,15 @@ export async function activate(prompts) {
     base.setPrompts(prompts)
     const dbStatus = await base.createDBConnection()
 
-    let results = await dbStatus.execSQL(`CREATE USER ${prompts.user} PASSWORD "${prompts.password}" NO FORCE_FIRST_PASSWORD_CHANGE;`)
-    console.table(results)
+    if (prompts.create) {
+      let results = await dbStatus.execSQL(`CREATE USER ${prompts.user} PASSWORD "${prompts.password}" NO FORCE_FIRST_PASSWORD_CHANGE;`)
+      console.table(results)
+    }
+    else
+      base.debug('do not create a new database user')
 
     let resultsGrant = await dbStatus.execSQL(
       `CREATE LOCAL TEMPORARY TABLE #PRIVILEGES LIKE _SYS_DI.TT_API_PRIVILEGES;`)
-    console.table(resultsGrant)
-    resultsGrant = await dbStatus.execSQL(
-      `INSERT INTO #PRIVILEGES (PRINCIPAL_NAME, PRIVILEGE_NAME, OBJECT_NAME) SELECT 'SYSTEM', PRIVILEGE_NAME, OBJECT_NAME FROM _SYS_DI.T_DEFAULT_DI_ADMIN_PRIVILEGES;`)
     console.table(resultsGrant)
     resultsGrant = await dbStatus.execSQL(
       `INSERT INTO #PRIVILEGES (PRINCIPAL_NAME, PRIVILEGE_NAME, OBJECT_NAME) SELECT '${prompts.user}', PRIVILEGE_NAME, OBJECT_NAME FROM _SYS_DI.T_DEFAULT_DI_ADMIN_PRIVILEGES;`)
@@ -55,14 +66,18 @@ export async function activate(prompts) {
     resultsGrant = await dbStatus.execSQL(
       `DROP TABLE #PRIVILEGES;`)
     console.table(resultsGrant)
-    
-    resultsGrant = await dbStatus.execSQL(
-      `GRANT USER ADMIN TO ${prompts.user}`)
-    console.table(resultsGrant)
 
-    resultsGrant = await dbStatus.execSQL(
-      `GRANT ROLE ADMIN TO ${prompts.user}`)
-    console.table(resultsGrant)
+    if (base.getUserName() != prompts.user) {
+      resultsGrant = await dbStatus.execSQL(
+        `GRANT USER ADMIN TO ${prompts.user}`)
+      console.table(resultsGrant)
+
+      resultsGrant = await dbStatus.execSQL(
+        `GRANT ROLE ADMIN TO ${prompts.user}`)
+      console.table(resultsGrant)
+    }
+    else
+      base.debug('Do not grant privieges to ' + prompts.user)
 
     return base.end()
 

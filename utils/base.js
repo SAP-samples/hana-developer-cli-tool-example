@@ -81,7 +81,7 @@ function startSpinnerInt() {
 /** type {object} - processed input prompts*/
 let prompts = []
 /**
- * 
+ *
  * @param {object} newPrompts - processed input prompts
  */
 export function setPrompts(newPrompts) {
@@ -92,7 +92,7 @@ export function setPrompts(newPrompts) {
 }
 
 /**
- * 
+ *
  * @returns {object} newPrompts - processed input prompts
  */
 export function getPrompts() {
@@ -118,7 +118,7 @@ export function getPrompts() {
     if (!prompts.indexes) { prompts.indexes = "*" }
     // @ts-ignore
     if (!prompts.output) { prompts.output = "tbl" }
-    // @ts-ignore 
+    // @ts-ignore
     if (typeof prompts.cf === 'undefined') { prompts.cf = true }
     return prompts
 }
@@ -144,7 +144,7 @@ export async function createDBConnection(options) {
 }
 
 /**
- * Initialize Yargs builder 
+ * Initialize Yargs builder
  * @param {import("yargs").CommandBuilder} input - parameters for the command
  * @param {boolean} [iConn=true] - Add Connection Group
  * @param {boolean} [iDebug=true] - Add Debug Group
@@ -384,10 +384,10 @@ export function getPrompt(argv) {
 }
 
 /**
- * Fill the prompts schema 
+ * Fill the prompts schema
  * @param {typeof import("prompt")} input - prompts current value
  * @param {boolean} [iConn=true] - Add Connection Group
- * @param {boolean} [iDebug=true] - Add Debug Group 
+ * @param {boolean} [iDebug=true] - Add Debug Group
  * @returns {any} prompts schema as json
  */
 export function getPromptSchema(input, iConn = true, iDebug = true) {
@@ -453,7 +453,7 @@ export function askFalse() {
  * @param {function} processingFunction - Function to call after prompts to continue command processing
  * @param {typeof import("prompt")} input - prompts current value
  * @param {boolean} [iConn=true] - Add Connection Group
- * @param {boolean} [iDebug=true] - Add Debug Group 
+ * @param {boolean} [iDebug=true] - Add Debug Group
  */
 export function promptHandler(argv, processingFunction, input, iConn = true, iDebug = true) {
     const prompt = getPrompt(argv)
@@ -524,7 +524,7 @@ export async function end() {
 }
 
 /**
- * Start Console UI spinner 
+ * Start Console UI spinner
  * @param {*} prompts - input parameters and values
  */
 export function startSpinner(prompts) {
@@ -578,7 +578,7 @@ export function isGui(prompts) {
 /**
  * Output JSON content either as a table or as formatted JSON to console
  * @param {*} content - json content often a HANA result set
- * @returns void 
+ * @returns void
  */
 export function outputTable(content) {
     if (content.length < 1) {
@@ -636,7 +636,7 @@ export async function webServerSetup(urlPath) {
         }
     }
 
-    //Start the Server 
+    //Start the Server
     server.on("request", app)
     server.listen(port, function () {
         // @ts-ignore
@@ -661,9 +661,24 @@ export function sendResults(res, results) {
 }
 
 /**
- * Return the last results JSON 
+ * Return the last results JSON
  * @returns lastResults
  */
 export function getLastResults() {
     return lastResults
+}
+
+/**
+ * Get the username of the active database connection
+ * @returns userName
+ */
+export function getUserName() {
+  let userName = ''
+
+  if (dbConnection) {
+    userName = dbConnection.get('user')
+    debug('Username of db connection: ' + userName)
+  }
+
+  return userName
 }
