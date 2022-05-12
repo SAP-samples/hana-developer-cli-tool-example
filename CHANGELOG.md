@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202205.3] - 2022-05-12
+
+**Changed**
+
+- [Issue 74 fixed](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/74) by [Meyer-J](https://github.com/Meyer-J)
+- [Issue 75 fixed](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/75) by [Meyer-J](https://github.com/Meyer-J)
+- Initial support for Node.js 18. Technically some of the inner modules don't support 18. We've tested many scenarios of this tool with 18. Use at your own risk.
+- Minor dependency updates
+
 ## [3.202205.1] - 2022-05-09
 
 **Changed**
