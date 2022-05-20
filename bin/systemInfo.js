@@ -45,7 +45,7 @@ export async function sysInfo(prompts) {
       }
 
       case OUTPUTS.ENV: {
-        environmentOutput(prompts)
+        await environmentOutput(prompts)
         break
       }
       case OUTPUTS.DBX: {
@@ -76,14 +76,14 @@ export async function basicOutput() {
   base.outputTable(results)
 }
 
-export function environmentOutput(prompts) {
+export async function environmentOutput(prompts) {
   prompts.disableVerbose = true
-  console.log(conn.getConnOptions(prompts))
+  console.log(await conn.getConnOptions(prompts))
 }
 
 export async function dbxOutput(prompts) {
   prompts.disableVerbose = true
-  let connDetails = conn.getConnOptions(prompts)
+  let connDetails = await conn.getConnOptions(prompts)
   const dbStatus = await base.createDBConnection()
   const dbVersion = await dbInspect.getHANAVersion(dbStatus)
   const unknown = base.bundle.getText("hc.unknown")

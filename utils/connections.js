@@ -10,6 +10,12 @@ import * as path from 'path'
 import dotenv from 'dotenv'
 import { homedir } from 'os'
 import * as xsenv from '@sap/xsenv'
+import cds from '@sap/cds'
+// @ts-ignore
+const LOG = cds.log('bind')
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+
 
 /**
  * Check parameter folders to see if the input file exists there
@@ -90,6 +96,15 @@ export function getEnv() {
 }
 
 /**
+ * Check current and parent directories for a .cdsrc-private.json
+ * @returns {string} - the file path if found 
+ */
+export function getCdsrcPrivate() {
+    base.debug('getCdsrcPrivate')
+    return getFileCheckParents(`.cdsrc-private.json`)
+}
+
+/**
  * Resolve Environment by deciding which option between default-env and default-env-admin we should take
  * @param {*} options 
  * @returns {string} - the file path if found 
@@ -108,9 +123,9 @@ export function resolveEnv(options) {
 /**
  * Get Connection Options from input prompts
  * @param {object} prompts - input prompts
- * @returns {object} connection options
+ * @returns {Promise<object>} connection options
  */
-export function getConnOptions(prompts) {
+export async function getConnOptions(prompts) {
     base.debug('getConnOptions')
     delete process.env.VCAP_SERVICES
     let envFile
@@ -120,11 +135,40 @@ export function getConnOptions(prompts) {
         envFile = getDefaultEnvAdmin()
     }
 
-    //No Admin option or no default-env-admin.json file found - try for .env 
+    //No Admin option or no default-env-admin.json file found - try for .cdsrc-private.json and cds bind
     if (!envFile) {
-        let dotEnvFile = getEnv()
-        dotenv.config({ path: dotEnvFile })
+        let cdsrcPrivate = getCdsrcPrivate()
+
+        //No Admin option or no default-env-admin.json file found - try for .env 
+        if (!cdsrcPrivate) {
+            let dotEnvFile = getEnv()
+            dotenv.config({ path: dotEnvFile })
+        } else {
+            try {
+                const data = fs.readFileSync(cdsrcPrivate,
+                { encoding: 'utf8', flag: 'r' })
+                const object = JSON.parse(data)
+                const resolveBinding = require('@sap/cds-dk/lib/bind/bindingResolver').resolver(LOG)
+                let resolvedService = await resolveBinding(null, object.requires['[hybrid]'].db.binding)
+                let options = { hana: resolvedService.credentials }
+                options.hana.pooling = true
+                base.debug(options)
+                base.debug(base.bundle.getText("connectionFile"))
+                base.debug(`.cdsrc-private.json`)
+                if (base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile2")} ${`.cdsrc-private.json`} \n`) }
+                return (options)
+            }
+            catch (e) {
+                if (e.code !== 'MODULE_NOT_FOUND') {
+                    // Re-throw not "Module not found" errors 
+                    throw e
+                  }
+                  throw base.bundle.getText("cds-dk2")
+            }
+        }
     }
+
+
 
     //No .env File found or it doesn't contain a VCAP_SERVICES - try other options
     base.debug(process.env.VCAP_SERVICES)
@@ -185,10 +229,10 @@ export function getConnOptions(prompts) {
 }
 
 /**
- * Create Databse Connection 
+ * Create Database Connection 
  * @param {object} prompts - input prompt values
  * @param {boolean} directConnect - Direct Connection parameters are supplied in prompts
- * @returns {Promise<object>} HANA DB conneciton of type hdb
+ * @returns {Promise<object>} HANA DB connection of type hdb
  */
 export async function createConnection(prompts, directConnect = false) {
     base.debug('createConnection')
@@ -198,7 +242,7 @@ export async function createConnection(prompts, directConnect = false) {
     if (directConnect) {
         options.hana = prompts
     } else {
-        options = getConnOptions(prompts)
+        options = await getConnOptions(prompts)
     }
 
     base.debug(`In Create Connection`)

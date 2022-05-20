@@ -14,7 +14,7 @@ export function handler (argv) {
 export async function getDBX(prompts) {
     base.debug('getDBX')
     try {
-        let options = conn.getConnOptions(prompts)
+        let options = await conn.getConnOptions(prompts)
         
         const host = options.hana.host
         let dbxURL = ''

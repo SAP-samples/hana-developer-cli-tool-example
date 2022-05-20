@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202205.4] - 2022-05-20
+
+**Changed**
+
+- Add connection support for [`cds bind`](https://cap.cloud.sap/docs/advanced/hybrid-testing#bind-to-cloud-services) and the resulting `.cdsrc-private.json`. Note this will make each command take a few seconds longer as credentials are no longer stored locally but looked up from cf or k8s dynamically with each command
+
 ## [3.202205.3] - 2022-05-12
 
 **Changed**

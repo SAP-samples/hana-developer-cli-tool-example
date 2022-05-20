@@ -74,3 +74,6 @@ default-*.json
 
 /secrets
 yarn.lock
+
+# added by cds bind
+.cdsrc-private.json
