@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "3.202205.4",
+  "version": "3.202206.1",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -25,10 +25,10 @@
   ],
   "types": "types/index.d.ts",
   "dependencies": {
-    "@graphql-tools/schema": "^8.3.11",
-    "@sap/cds": "^5.9.5",
+    "@graphql-tools/schema": "^8.3.14",
+    "@sap/cds": "^5.9.7",
     "@sap/textbundle": "^4.1",
-    "@sap/xsenv": "^3.2.2",
+    "@sap/xsenv": "^3.3.1",
     "body-parser": "^1.20.0",
     "chalk": "^5.0.1",
     "check-node-version": "^4.2.1",
@@ -39,14 +39,14 @@
     "easy-table": "1.2.0",
     "express": "^4.18.1",
     "express-graphql": "^0.12.0",
-    "glob": "^8.0.2",
+    "glob": "^8.0.3",
     "graphql": "^15.8.0",
-    "hdb": "0.19.2",
+    "hdb": "0.19.3",
     "js-convert-case": "^4.2.0",
     "json-to-pretty-yaml": "^1.2.2",
     "json2csv": "^5.0.7",
     "latest-version": "^6.0",
-    "marked": "^4.0.15",
+    "marked": "^4.0.17",
     "marked-terminal": "^5.1.1",
     "node-xlsx": "^0.21",
     "node-zip": "^1.1.1",
@@ -55,16 +55,16 @@
     "ora": "^6.1",
     "prompt": "^1.3.0",
     "properties-to-json": "^0.2.1",
-    "sap-hdb-promisfied": "2.202205.1",
+    "sap-hdb-promisfied": "2.202206.1",
     "showdown": "^2.1.0",
-    "swagger-ui-express": "^4.3",
+    "swagger-ui-express": "^4.4",
     "terminaltools": "^2.1",
     "upath": "^2.0.1",
     "update-notifier": "^5.1.0",
     "uuid": "^8.3",
-    "ws": "^8.6.0",
+    "ws": "^8.8.0",
     "yargonaut": "1.1",
-    "yargs": "^17.5.0"
+    "yargs": "^17.5.1"
   },
   "peerDependencies": {
     "@sap/cds-dk": ">=4"
@@ -78,13 +78,13 @@
   "devDependencies": {
     "@types/showdown": "^2.0.0",
     "@types/yargs": "^17.0.10",
-    "eslint": "^8.15.0",
+    "eslint": "^8.17.0",
     "stringify-changelog": "^0.2.1"
   },
   "cds": {
     "preview": {
       "ui5": {
-        "version": "1.101.1"
+        "version": "1.102.1"
       }
     },
     "hana": {
