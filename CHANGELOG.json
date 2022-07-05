@@ -1,5 +1,12 @@
 [
     {
+        "date": "2022-07-05",
+        "version": "3.202207.1",
+        "Changed": [
+            "Update to SAP Cloud Application Programming Model 6.0 (including switch to GraphQL GA version as well as other technical optimizations)"
+        ]
+    },
+    {
         "date": "2022-05-20",
         "version": "3.202205.4",
         "Changed": [

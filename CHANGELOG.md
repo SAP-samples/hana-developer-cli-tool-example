@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202207.1] - 2022-07-05
+
+**Changed**
+
+- Update to SAP Cloud Application Programming Model 6.0 (including switch to GraphQL GA version as well as other technical optimizations)
+
 ## [3.202205.4] - 2022-05-20
 
 **Changed**

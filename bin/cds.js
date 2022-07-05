@@ -111,10 +111,13 @@ export async function cdsBuild(prompts) {
       // 
       `service HanaCli { `
 
-    let vcap = JSON.parse(process.env.VCAP_SERVICES)
-    vcap.hana[0].credentials.schema = object[0].SCHEMA_NAME
-    vcap.hana.splice(1, 100)
-    process.env.VCAP_SERVICES = JSON.stringify(vcap)
+    if(process.env.VCAP_SERVICES){
+      let vcap = JSON.parse(process.env.VCAP_SERVICES)
+      vcap.hana[0].credentials.schema = object[0].SCHEMA_NAME
+      vcap.hana.splice(1, 100)
+      process.env.VCAP_SERVICES = JSON.stringify(vcap)
+    }
+
     cdsSource +=
       `@(Capabilities: {
 			InsertRestrictions: {Insertable: true},
@@ -192,12 +195,18 @@ async function cdsServerSetup(prompts, cdsSource) {
   var app = express()
 
   //CDS OData Service
-  let vcap = JSON.parse(process.env.VCAP_SERVICES)
+  let vcap = ''
   let options = {
     kind: "hana",
-    logLevel: "error",
-    credentials: vcap.hana[0].credentials
+    logLevel: "error"
   }
+  if(process.env.VCAP_SERVICES){
+    vcap = JSON.parse(process.env.VCAP_SERVICES)
+    // @ts-ignore
+    options.credentials = vcap.hana[0].credentials
+  }
+ 
+  // @ts-ignore
   cds.connect(options)
   // @ts-ignore
   cds.env.requires.db = {}
@@ -215,6 +224,7 @@ async function cdsServerSetup(prompts, cdsSource) {
   base.debug(`GraphQL Entity After ${graphQLEntity}`)
   // entity = entity.replace(/:/g, "")
 
+      
   // @ts-ignore
   cds.serve('all').from(await cds.parse(cdsSource), {
     crashOnError: false
@@ -349,9 +359,11 @@ async function cdsServerSetup(prompts, cdsSource) {
       let serverAddr = `http://localhost:${server.address().port}`
       console.info(`HTTP Server: ${serverAddr}`)
 
-      //GraphQL Experimental
-      const GraphQLAdapter = require('@sap/cds/libx/gql/GraphQLAdapter')
-      app.use(new GraphQLAdapter(cds.services, { graphiql: true }))
+      //GraphQL 
+        const GraphQLAdapter = require('@sap/cds-graphql/lib')
+        const adapter = new GraphQLAdapter (cds.services, { graphiql: true, path: '/graphql' })
+        app.use('/graphql', adapter)
+       // app.use(new GraphQLAdapter(cds.services, { graphiql: true }))
       console.log("serving GraphQL endpoint for all services { at: '/graphql' }")
 
       open(serverAddr)
