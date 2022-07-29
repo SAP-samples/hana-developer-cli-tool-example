@@ -601,7 +601,7 @@ export function _manifest(odataURL, entity, table) {
 
 export function fiori(manifest, odataURL, entity,) {
   base.debug(`fiori ${odataURL} ${entity}`)
-  let ui5Version = '1.102.1' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
+  let ui5Version = '1.104.2' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
   ui5Version = ui5Version ? ui5Version + '/' : ''
   base.debug(`SAPUI5 Version ${ui5Version}`)
   return `
@@ -627,11 +627,11 @@ export function fiori(manifest, odataURL, entity,) {
       }
     }
   </script>    
-    <script id="sap-ushell-bootstrap" src="https://sapui5.hana.ondemand.com/${ui5Version}test-resources/sap/ushell/bootstrap/sandbox.js"></script>
-    <script id="sap-ui-bootstrap" src="https://sapui5.hana.ondemand.com/${ui5Version}resources/sap-ui-core.js"
+    <script id="sap-ushell-bootstrap" src="https://ui5.sap.com/${ui5Version}test-resources/sap/ushell/bootstrap/sandbox.js"></script>
+    <script id="sap-ui-bootstrap" src="https://ui5.sap.com/${ui5Version}resources/sap-ui-core.js"
         data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration, sap.ui.layout" data-sap-ui-compatVersion="edge"
         data-sap-ui-theme="sap_horizon" data-sap-ui-frameOptions="allow"></script>
-        <script src="https://sapui5.hana.ondemand.com/${ui5Version}test-resources/sap/ushell/bootstrap/standalone.js"></script>        
+        <script src="https://ui5.sap.com/${ui5Version}test-resources/sap/ushell/bootstrap/standalone.js"></script>        
 
         <script>
         // load and register Fiori2 icon font

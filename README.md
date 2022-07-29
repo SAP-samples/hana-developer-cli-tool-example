@@ -1,10 +1,6 @@
 # SAP HANA Developer Command Line Interface
 
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/hana-developer-cli-tool-example)](https://api.reuse.software/info/github.com/SAP-samples/hana-developer-cli-tool-example)
-[![Visits Badge](https://badges.pufler.dev/visits/SAP-samples/hana-developer-cli-tool-example)](https://badges.pufler.dev)
-[![Updated Badge](https://badges.pufler.dev/updated/SAP-samples/hana-developer-cli-tool-example)](https://badges.pufler.dev)
-
-[![Contributors Display](https://badges.pufler.dev/contributors/SAP-samples/hana-developer-cli-tool-example?size=50&padding=5&bots=false)](https://badges.pufler.dev)
 
 The [change log](CHANGELOG.md) describes notable changes in this package.
 
