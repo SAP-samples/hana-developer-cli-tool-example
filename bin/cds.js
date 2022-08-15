@@ -173,7 +173,6 @@ export async function cdsBuild(prompts) {
         `${viewSource} \n }`
     }
 
-    // console.log(cdsSource);
     await cdsServerSetup(prompts, cdsSource)
     return base.end()
   } catch (error) {
@@ -223,8 +222,7 @@ async function cdsServerSetup(prompts, cdsSource) {
   let graphQLEntity = entity.replace(/_/g, ".")
   base.debug(`GraphQL Entity After ${graphQLEntity}`)
   // entity = entity.replace(/:/g, "")
-
-      
+ 
   // @ts-ignore
   cds.serve('all').from(await cds.parse(cdsSource), {
     crashOnError: false
@@ -237,9 +235,10 @@ async function cdsServerSetup(prompts, cdsSource) {
       // @ts-ignore
       srv.on(['READ'], [entity, `HanaCli.${graphQLEntity}`, "HanaCli.STAR.WARS.FILM"], async (req) => {
         base.debug(`In Read Exit ${prompts.table}`)
-        // @ts-ignore
-        req.query.SELECT.from.ref = [`${prompts.table}`]
-
+        let query1 = await cds.parse.cql (`SELECT from ${prompts.table}`)
+         // @ts-ignore
+        req.query.SELECT.from = query1.SELECT.from // ["STAR_WARS_FILM"]//[`![${prompts.table}]`]
+        req.query = query1
         let query = "SELECT "
         // @ts-ignore
         if (req.query.SELECT.columns) { //&& req.query.SELECT.columns[0].func) {
@@ -260,7 +259,7 @@ async function cdsServerSetup(prompts, cdsSource) {
         }
 
 
-        //Req Paramers for Single Record GET
+        //Req Parameters for Single Record GET
         /*         if (req.params) {
                   if (req.params.length > 0) {
                     // @ts-ignore
@@ -445,7 +444,7 @@ export function getIndex(odataURL, entity) {
           <h2> Web Applications: </h2>
           <h3><a href="/fiori.html">Fiori Test UI</a></h3> 
           <h3><a href="/api/api-docs/">Swagger UI</a></h3> 
-          <hs><a href="/graphql">GraphQL (Experimental)</a></h3>
+          <hs><a href="/graphql">GraphQL</a></h3>
 
           <h2> Service Endpoints: </h2>
               <h3>
@@ -601,7 +600,7 @@ export function _manifest(odataURL, entity, table) {
 
 export function fiori(manifest, odataURL, entity,) {
   base.debug(`fiori ${odataURL} ${entity}`)
-  let ui5Version = '1.104.2' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
+  let ui5Version = '1.105.0' //= cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
   ui5Version = ui5Version ? ui5Version + '/' : ''
   base.debug(`SAPUI5 Version ${ui5Version}`)
   return `

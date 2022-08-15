@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202208.1] - 2022-08-15
+
+**Changed**
+
+- Update to SAP Cloud Application Programming Model 6.1
+- Adjust cds command read exit logic for [changes in 6.1](https://cap.cloud.sap/docs/releases/aug22#changes-in-node-js)
+- Update to SAPUI5 1.105
+
 ## [3.202207.1] - 2022-07-05
 
 **Changed**

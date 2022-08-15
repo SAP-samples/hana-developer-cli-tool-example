@@ -1,5 +1,14 @@
 [
     {
+        "date": "2022-08-15",
+        "version": "3.202208.1",
+        "Changed": [
+            "Update to SAP Cloud Application Programming Model 6.1",
+            "Adjust cds command read exit logic for [changes in 6.1](https://cap.cloud.sap/docs/releases/aug22#changes-in-node-js)",
+            "Update to SAPUI5 1.105"
+        ]
+    },
+    {
         "date": "2022-07-05",
         "version": "3.202207.1",
         "Changed": [
