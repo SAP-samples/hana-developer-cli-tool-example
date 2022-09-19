@@ -51,7 +51,7 @@ export async function convert(wss) {
                         let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
                         let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
                         let constraints = await dbInspect.getConstraints(db, object)
-                        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable", null)
+                        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable", schema, null)
                         let options = { names: 'quoted', dialect: 'hana', src: 'cds' }
                         let all = cds.compile.to.hdbtable(cds.parse(cdsSource), options)
                         let output
@@ -96,7 +96,7 @@ export async function convert(wss) {
                         let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
                         let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
                         let constraints = await dbInspect.getConstraints(db, object)
-                        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable", null)
+                        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable", schema, null)
                         let options = { names: 'quoted', dialect: 'hana', src: 'cds' }
                         let all = cds.compile.to.hdbtable(cds.parse(cdsSource), options)
                         let output
@@ -131,7 +131,7 @@ export async function convert(wss) {
                     let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
                     let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
                     let constraints = await dbInspect.getConstraints(db, object)
-                    cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table", null) + '\n'
+                    cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table", schema, null) + '\n'
                 }
                 let dir = prompts.folder
                 !fs.existsSync(dir) && fs.mkdirSync(dir)

@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202209.1] - 2022-09-19
+
+**Changed**
+
+- Update Dependencies
+- [First version of support for Calculation View metadata in inpsectView - no input parameters yet](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/83)
+- Update to SAPUI5 1.106
+
 ## [3.202208.1] - 2022-08-15
 
 **Changed**

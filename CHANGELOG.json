@@ -1,5 +1,14 @@
 [
     {
+        "date": "2022-09-19",
+        "version": "3.202209.1",
+        "Changed": [
+            "Update Dependencies",
+            "[First version of support for Calculation View metadata in inpsectView - no input parameters yet](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/83)",
+            "Update to SAPUI5 1.106"
+        ]
+    },
+    {
         "date": "2022-08-15",
         "version": "3.202208.1",
         "Changed": [

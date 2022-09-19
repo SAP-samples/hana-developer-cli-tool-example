@@ -27,6 +27,31 @@ export async function getHANAVersion(db) {
 	return object[0]
 }
 
+
+/**
+ * Check if a view is a Calculation View
+ * @param {object} db - Database Connection
+ * @param {string} schema - Schema
+ * @param {string} viewId - View Unique ID
+ * @returns {Promise<boolean>}
+ */
+export async function isCalculationView(db, schema, viewId) {
+	base.debug(`isCalculationView ${schema} ${viewId}`)
+	//Select View
+	let statementString = ``
+	statementString = `SELECT CUBE_ID, SCHEMA_NAME, CUBE_NAME, CUBE_TYPE, IS_HDI_OBJECT
+	   FROM _SYS_BI.BIMC_REPORTABLE_VIEWS
+	   WHERE SCHEMA_NAME LIKE ?
+	     AND CUBE_NAME = ?`
+	const statement = await db.preparePromisified(statementString)
+	const object = await db.statementExecPromisified(statement, [schema, viewId])
+	if (object.length < 1) {
+		return false
+	} else {
+		return true
+	}
+}
+
 /**
  * Get DB View details
  * @param {object} db - Database Connection
@@ -85,6 +110,40 @@ export async function getDef(db, schema, Id) {
 	return output
 }
 
+/**
+ * Get View Fields and Metadata
+ * @param {object} db - Database Connection
+ * @param {string} schema - Schema
+ * @param {string} viewId - View Unique ID
+ * @param {string} viewOid - View Unique ID
+ * @returns {Promise<object>}
+ */
+export async function getCalcViewFields(db, schema, viewId, viewOid) {
+	base.debug(`getCalcViewFields ${schema} ${viewId}`)
+	//Select Fields
+	const statement = await db.preparePromisified(
+		`SELECT SCHEMA_NAME, CUBE_NAME AS VIEW_NAME, NULL AS VIEW_OID, COLUMN_NAME, 
+				"ORDER" AS POSITION, DESC_TYPE_D AS DATA_TYPE_NAME, 0 AS OFFSET, 0 AS LENGTH, SCALE, 
+				IS_NULLABLE, NULL AS DEFAULT_VALUE, NULL AS COLUMN_ID, COLUMN_CAPTION AS COMMENTS, KEY_COLUMN_NAME
+         FROM _SYS_BI.BIMC_DIMENSION_VIEW
+		 		  WHERE SCHEMA_NAME LIKE ?
+				    AND CUBE_NAME = ? ORDER BY POSITION`)
+	const fields = await db.statementExecPromisified(statement, [schema, viewId])
+	for (let field of fields) {
+		const fieldStatement = await await db.preparePromisified(
+			`SELECT OFFSET, LENGTH, DEFAULT_VALUE
+			   FROM VIEW_COLUMNS 
+		      WHERE VIEW_OID = ? AND COLUMN_NAME = ?`
+		)
+		const sqlField = await db.statementExecPromisified(fieldStatement, [viewOid, field.COLUMN_NAME])
+		if (sqlField.length >= 1) {
+			field.OFFSET = sqlField[0].OFFSET
+			field.LENGTH = sqlField[0].LENGTH
+			field.DEFAULT_VALUE = sqlField[0].DEFAULT_VALUE
+		}
+	}
+	return fields
+}
 
 /**
  * Get View Fields and Metadata
@@ -96,9 +155,9 @@ export async function getViewFields(db, viewOid) {
 	base.debug(`getViewFields ${viewOid}`)
 	//Select Fields
 	const statement = await db.preparePromisified(
-		`SELECT SCHEMA_NAME, VIEW_NAME, VIEW_OID, COLUMN_NAME, POSITION, DATA_TYPE_NAME, OFFSET, LENGTH, SCALE, IS_NULLABLE, DEFAULT_VALUE, COLUMN_ID, COMMENTS
+		`SELECT SCHEMA_NAME, VIEW_NAME, VIEW_OID, COLUMN_NAME, POSITION, DATA_TYPE_NAME, OFFSET, LENGTH, SCALE, IS_NULLABLE, DEFAULT_VALUE, COLUMN_ID, COMMENTS, NULL as KEY_COLUMN_NAME
          FROM VIEW_COLUMNS 
-				  WHERE VIEW_OID = ? ORDER BY POSITION`)
+		WHERE VIEW_OID = ? ORDER BY POSITION`)
 	const fields = await db.statementExecPromisified(statement, [viewOid])
 	return fields
 }
@@ -345,18 +404,15 @@ export let results = {
  * @param {object} db - Database Connection 
  * @param {object} object - DB Object Details
  * @param {object} fields - Object Fields
- * @param {object} constraints - Object Contstraints
- * @param {string} type - DB Object type 
+ * @param {object} constraints - Object Constraints
+ * @param {string} type - DB Object type
+ * @param {string} [schema] - Schema 
  * @param {string} [parent] - Calling context which impacts formatting
  * @returns {Promise<string>}
  */
-export async function formatCDS(db, object, fields, constraints, type, parent) {
+export async function formatCDS(db, object, fields, constraints, type, schema, parent) {
 	base.debug(`formatCDS ${type}`)
 	let cdstable = ""
-	if (type === "view" || type === "table") {
-		cdstable += "@cds.persistence.exists \n"
-	}
-
 	let originalName
 
 	switch (type) {
@@ -380,7 +436,12 @@ export async function formatCDS(db, object, fields, constraints, type, parent) {
 	// otherwise it will become a_b_c::d_e
 	options.keepPath || (newName = newName.replace(/\./g, "_"))
 
-
+	if (type === "view" || type === "table") {
+		cdstable += "@cds.persistence.exists \n"
+		if (await isCalculationView(db, schema, originalName)) {
+			cdstable += "@cds.persistence.calcview \n"
+		}
+	}
 	newName && (cdstable += `Entity ![${newName}] {\n`)
 
 	// if modified real table names will be stored in synonyms
@@ -408,8 +469,10 @@ export async function formatCDS(db, object, fields, constraints, type, parent) {
 				}
 			}
 		} else {
-			cdstable += "key "
-			isKey = "TRUE"
+			if (field.KEY_COLUMN_NAME) {
+				cdstable += "key "
+				isKey = "TRUE"
+			}
 		}
 		let xref = {}
 		xref.before = field.COLUMN_NAME
@@ -541,7 +604,7 @@ export async function formatCDS(db, object, fields, constraints, type, parent) {
 		}
 
 		xref.dataType = field.DATA_TYPE_NAME
-		
+
 		global.__xRef.push(xref)
 		//	if (field.DEFAULT_VALUE) {
 		//		cdstable += ` default "${field.DEFAULT_VALUE}"`
