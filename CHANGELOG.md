@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202209.2] - 2022-09-23
+
+**Changed**
+
+- [Improved support for Repository based Calculation Views](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/83)
+
 ## [3.202209.1] - 2022-09-19
 
 **Changed**

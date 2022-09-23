@@ -39,14 +39,24 @@ export async function isCalculationView(db, schema, viewId) {
 	base.debug(`isCalculationView ${schema} ${viewId}`)
 	//Select View
 	let statementString = ``
-	statementString = `SELECT CUBE_ID, SCHEMA_NAME, CUBE_NAME, CUBE_TYPE, IS_HDI_OBJECT
+	statementString = `SELECT CUBE_ID, SCHEMA_NAME, QUALIFIED_NAME, VIEW_NAME, CUBE_TYPE, IS_HDI_OBJECT
 	   FROM _SYS_BI.BIMC_REPORTABLE_VIEWS
 	   WHERE SCHEMA_NAME LIKE ?
-	     AND CUBE_NAME = ?`
+	     AND QUALIFIED_NAME = ?`
 	const statement = await db.preparePromisified(statementString)
 	const object = await db.statementExecPromisified(statement, [schema, viewId])
 	if (object.length < 1) {
-		return false
+		statementString = `SELECT CUBE_ID, SCHEMA_NAME, QUALIFIED_NAME, VIEW_NAME, CUBE_TYPE, IS_HDI_OBJECT
+	   FROM _SYS_BI.BIMC_REPORTABLE_VIEWS
+	   WHERE SCHEMA_NAME LIKE ?
+	     AND VIEW_NAME = ?`
+		const statement = await db.preparePromisified(statementString)
+		const object = await db.statementExecPromisified(statement, [schema, viewId])
+		if (object.length < 1) {
+			return false
+		} else {
+			return true
+		}
 	} else {
 		return true
 	}
@@ -122,13 +132,23 @@ export async function getCalcViewFields(db, schema, viewId, viewOid) {
 	base.debug(`getCalcViewFields ${schema} ${viewId}`)
 	//Select Fields
 	const statement = await db.preparePromisified(
-		`SELECT SCHEMA_NAME, CUBE_NAME AS VIEW_NAME, NULL AS VIEW_OID, COLUMN_NAME, 
+		`SELECT SCHEMA_NAME, QUALIFIED_NAME AS VIEW_NAME, NULL AS VIEW_OID, COLUMN_NAME, 
 				"ORDER" AS POSITION, DESC_TYPE_D AS DATA_TYPE_NAME, 0 AS OFFSET, 0 AS LENGTH, SCALE, 
 				IS_NULLABLE, NULL AS DEFAULT_VALUE, NULL AS COLUMN_ID, COLUMN_CAPTION AS COMMENTS, KEY_COLUMN_NAME
          FROM _SYS_BI.BIMC_DIMENSION_VIEW
 		 		  WHERE SCHEMA_NAME LIKE ?
-				    AND CUBE_NAME = ? ORDER BY POSITION`)
-	const fields = await db.statementExecPromisified(statement, [schema, viewId])
+				    AND QUALIFIED_NAME = ? ORDER BY POSITION`)
+	let fields = await db.statementExecPromisified(statement, [schema, viewId])
+	if (fields.length < 1) {
+		const statement = await db.preparePromisified(
+			`SELECT SCHEMA_NAME, VIEW_NAME, NULL AS VIEW_OID, COLUMN_NAME, 
+					"ORDER" AS POSITION, DESC_TYPE_D AS DATA_TYPE_NAME, 0 AS OFFSET, 0 AS LENGTH, SCALE, 
+					IS_NULLABLE, NULL AS DEFAULT_VALUE, NULL AS COLUMN_ID, COLUMN_CAPTION AS COMMENTS, KEY_COLUMN_NAME
+			 FROM _SYS_BI.BIMC_DIMENSION_VIEW
+					   WHERE SCHEMA_NAME LIKE ?
+						AND VIEW_NAME = ? ORDER BY POSITION`)
+		fields = await db.statementExecPromisified(statement, [schema, viewId])
+	}
 	for (let field of fields) {
 		const fieldStatement = await await db.preparePromisified(
 			`SELECT OFFSET, LENGTH, DEFAULT_VALUE

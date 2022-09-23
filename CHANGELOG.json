@@ -1,5 +1,12 @@
 [
     {
+        "date": "2022-09-23",
+        "version": "3.202209.2",
+        "Changed": [
+            "[Improved support for Repository based Calculation Views](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/83)"
+        ]
+    },
+    {
         "date": "2022-09-19",
         "version": "3.202209.1",
         "Changed": [
