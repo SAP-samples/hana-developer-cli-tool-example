@@ -58,9 +58,10 @@
 				<CheckBox id="chkKeepPath" selected="{/keepPath}" />
 				<Label text="{i18nReuse>noColons}"/>
 				<CheckBox id="chkNoColons" selected="{/noColons}" />
-
+				<Label text="{i18nReuse>gui.useExists}"/>
+				<CheckBox id="useExists" selected="{/useExists}"  tooltip="{i18nReuse>useExists}"/>
 				<core:Fragment fragmentName="sap.hanacli.common.view.Debug" type="XML"/>
-				
+
 			</f:content>
 		</f:SimpleForm>
 

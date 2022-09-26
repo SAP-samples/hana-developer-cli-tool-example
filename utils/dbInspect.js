@@ -47,9 +47,9 @@ export async function isCalculationView(db, schema, viewId) {
 	const object = await db.statementExecPromisified(statement, [schema, viewId])
 	if (object.length < 1) {
 		statementString = `SELECT CUBE_ID, SCHEMA_NAME, QUALIFIED_NAME, VIEW_NAME, CUBE_TYPE, IS_HDI_OBJECT
-	   FROM _SYS_BI.BIMC_REPORTABLE_VIEWS
-	   WHERE SCHEMA_NAME LIKE ?
-	     AND VIEW_NAME = ?`
+	   							 FROM _SYS_BI.BIMC_REPORTABLE_VIEWS
+	   							WHERE SCHEMA_NAME LIKE ?
+	    						  AND VIEW_NAME = ?`
 		const statement = await db.preparePromisified(statementString)
 		const object = await db.statementExecPromisified(statement, [schema, viewId])
 		if (object.length < 1) {
@@ -140,14 +140,22 @@ export async function getCalcViewFields(db, schema, viewId, viewOid) {
 				    AND QUALIFIED_NAME = ? ORDER BY POSITION`)
 	let fields = await db.statementExecPromisified(statement, [schema, viewId])
 	if (fields.length < 1) {
-		const statement = await db.preparePromisified(
-			`SELECT SCHEMA_NAME, VIEW_NAME, NULL AS VIEW_OID, COLUMN_NAME, 
-					"ORDER" AS POSITION, DESC_TYPE_D AS DATA_TYPE_NAME, 0 AS OFFSET, 0 AS LENGTH, SCALE, 
-					IS_NULLABLE, NULL AS DEFAULT_VALUE, NULL AS COLUMN_ID, COLUMN_CAPTION AS COMMENTS, KEY_COLUMN_NAME
-			 FROM _SYS_BI.BIMC_DIMENSION_VIEW
-					   WHERE SCHEMA_NAME LIKE ?
-						AND VIEW_NAME = ? ORDER BY POSITION`)
-		fields = await db.statementExecPromisified(statement, [schema, viewId])
+		const statementString = `SELECT CUBE_ID, SCHEMA_NAME, QUALIFIED_NAME, VIEW_NAME, CUBE_TYPE, IS_HDI_OBJECT
+							       FROM _SYS_BI.BIMC_REPORTABLE_VIEWS
+	   							  WHERE SCHEMA_NAME LIKE ?
+									AND VIEW_NAME = ?`
+		const statementLookup = await db.preparePromisified(statementString)
+		const object = await db.statementExecPromisified(statementLookup, [schema, viewId])
+		if (object.length > 1) {
+			const statement = await db.preparePromisified(
+				`SELECT SCHEMA_NAME, VIEW_NAME, NULL AS VIEW_OID, COLUMN_NAME, 
+			"ORDER" AS POSITION, DESC_TYPE_D AS DATA_TYPE_NAME, 0 AS OFFSET, 0 AS LENGTH, SCALE, 
+			IS_NULLABLE, NULL AS DEFAULT_VALUE, NULL AS COLUMN_ID, COLUMN_CAPTION AS COMMENTS, KEY_COLUMN_NAME
+	 			FROM _SYS_BI.BIMC_DIMENSION_VIEW
+			   WHERE SCHEMA_NAME LIKE ?
+				 AND QUALIFIED_NAME = ? ORDER BY POSITION`)
+			fields = await db.statementExecPromisified(statement, [schema, object[0].QUALIFIED_NAME])
+		}
 	}
 	for (let field of fields) {
 		const fieldStatement = await await db.preparePromisified(
@@ -403,7 +411,8 @@ export async function getFunctionPramCols(db, funcOid) {
 export let options = {
 	useHanaTypes: false,
 	noColons: false,
-	keepPath: false
+	keepPath: false,
+	useExists: true
 }
 
 let synonyms = new Map()
@@ -456,7 +465,7 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 	// otherwise it will become a_b_c::d_e
 	options.keepPath || (newName = newName.replace(/\./g, "_"))
 
-	if (type === "view" || type === "table") {
+	if ((type === "view" || type === "table") && (options.useExists)) {
 		cdstable += "@cds.persistence.exists \n"
 		if (await isCalculationView(db, schema, originalName)) {
 			cdstable += "@cds.persistence.calcview \n"

@@ -40,6 +40,12 @@ export const builder = base.getBuilder({
     type: 'boolean',
     default: false,
     desc: base.bundle.getText("useHanaTypes")
+  },
+  useExists: {
+    alias: ['exists', 'persistence'],
+    desc: base.bundle.getText("gui.useExists"),
+    type: 'boolean',
+    default: true
   }
 })
 
@@ -64,6 +70,10 @@ export function handler(argv) {
     useHanaTypes: {
       description: base.bundle.getText("useHanaTypes"),
       type: 'boolean'
+    },
+    useExists: {
+      description: base.bundle.getText("gui.useExists"),
+      type: 'boolean'
     }
   })
 }
@@ -77,6 +87,7 @@ export async function viewInspect(prompts) {
 
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("view")}: ${prompts.view}`)
     dbInspect.options.useHanaTypes = prompts.useHanaTypes
+    dbInspect.options.useExists = prompts.useExists
 
     let object = await dbInspect.getView(db, schema, prompts.view)
     let fields = []

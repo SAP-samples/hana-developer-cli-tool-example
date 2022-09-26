@@ -120,6 +120,8 @@ export function getPrompts() {
     if (!prompts.output) { prompts.output = "tbl" }
     // @ts-ignore
     if (typeof prompts.cf === 'undefined') { prompts.cf = true }
+    // @ts-ignore
+    if (typeof prompts.useExists === 'undefined') { prompts.useExists = true }    
     return prompts
 }
 
@@ -253,6 +255,12 @@ export function getMassConvertBuilder(ui = false) {
             default: false,
             desc: bundle.getText("useCatalogPure")
         },
+        useExists: {
+            alias: ['exists', 'persistence'],
+            desc: bundle.getText("gui.useExists"),
+            type: 'boolean',
+            default: true
+        },        
         namespace: {
             alias: ['ns'],
             type: 'string',
@@ -335,6 +343,10 @@ export function getMassConvertPrompts(ui = false) {
         },
         useCatalogPure: {
             description: bundle.getText("useCatalogPure"),
+            type: 'boolean'
+        },
+        useExists: {
+            description: bundle.getText("gui.useExists"),
             type: 'boolean'
         },
         namespace: {

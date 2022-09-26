@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202209.3] - 2022-09-26
+
+**Changed**
+
+- [Fix for Calculation Views when Non-Qualified Name - / instead of ::](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/83)
+- Add support for useExists default to true. Allows you choose during inspect and massConvert if you want the persistence exists annotations on the output. [Issue 84](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/84)
+
 ## [3.202209.2] - 2022-09-23
 
 **Changed**

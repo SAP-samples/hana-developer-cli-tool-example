@@ -1,5 +1,13 @@
 [
     {
+        "date": "2022-09-26",
+        "version": "3.202209.3",
+        "Changed": [
+            "[Fix for Calculation Views when Non-Qualified Name - / instead of ::](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/83)",
+            "Add support for useExists default to true. Allows you choose during inspect and massConvert if you want the persistence exists annotations on the output. [Issue 84](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/84)"
+        ]
+    },
+    {
         "date": "2022-09-23",
         "version": "3.202209.2",
         "Changed": [

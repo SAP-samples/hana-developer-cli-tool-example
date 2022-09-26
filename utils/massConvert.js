@@ -26,6 +26,7 @@ export async function convert(wss) {
         dbInspect.options.useHanaTypes = prompts.useHanaTypes
         dbInspect.options.keepPath = prompts.keepPath
         dbInspect.options.noColons = prompts.noColons
+        dbInspect.options.useExists = prompts.useExists
 
         const search = `"${schema}".`
         const replacer =

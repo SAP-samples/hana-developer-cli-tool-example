@@ -30,6 +30,7 @@ export async function inspectTableHandler(res, lib, func) {
         const targetLibrary = await import(`${lib}.js`)
         let prompts = base.getPrompts()
         prompts.useHanaTypes = true
+        prompts.useExists = true
         prompts.output = 'tbl'
         let promptsSQL = Object.assign({}, prompts)
         promptsSQL.output = 'sql'

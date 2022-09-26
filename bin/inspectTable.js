@@ -43,6 +43,12 @@ export const builder = base.getBuilder({
     type: 'boolean',
     default: false,
     desc: base.bundle.getText("useHanaTypes")
+  },
+  useExists: {
+    alias: ['exists', 'persistence'],
+    desc: base.bundle.getText("gui.useExists"),
+    type: 'boolean',
+    default: true
   }
 })
 
@@ -66,6 +72,10 @@ export let inputPrompts = {
   useHanaTypes: {
     description: base.bundle.getText("useHanaTypes"),
     type: 'boolean'
+  },
+  useExists: {
+    description: base.bundle.getText("gui.useExists"),
+    type: 'boolean'
   }
 }
 
@@ -84,6 +94,7 @@ export async function tableInspect(prompts) {
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("table")}: ${prompts.table}`)
 
     dbInspect.options.useHanaTypes = prompts.useHanaTypes
+    dbInspect.options.useExists = prompts.useExists
 
     let object = await dbInspect.getTable(db, schema, prompts.table)
     let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
@@ -177,7 +188,7 @@ export async function tableInspect(prompts) {
         // @ts-ignore
         console.log(highlight(cds.compile.to.gql(cds.parse(cdsSource))))
         break
-      }      
+      }
       case 'edmx': {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "table", schema, null)
         cdsSource = `service HanaCli { ${cdsSource} } `
