@@ -146,9 +146,9 @@ export async function getCalcViewFields(db, schema, viewId, viewOid) {
 									AND VIEW_NAME = ?`
 		const statementLookup = await db.preparePromisified(statementString)
 		const object = await db.statementExecPromisified(statementLookup, [schema, viewId])
-		if (object.length > 1) {
+		if (object.length >= 1) {
 			const statement = await db.preparePromisified(
-				`SELECT SCHEMA_NAME, VIEW_NAME, NULL AS VIEW_OID, COLUMN_NAME, 
+				`SELECT SCHEMA_NAME, QUALIFIED_NAME AS VIEW_NAME, NULL AS VIEW_OID, COLUMN_NAME, 
 			"ORDER" AS POSITION, DESC_TYPE_D AS DATA_TYPE_NAME, 0 AS OFFSET, 0 AS LENGTH, SCALE, 
 			IS_NULLABLE, NULL AS DEFAULT_VALUE, NULL AS COLUMN_ID, COLUMN_CAPTION AS COMMENTS, KEY_COLUMN_NAME
 	 			FROM _SYS_BI.BIMC_DIMENSION_VIEW
