@@ -159,7 +159,7 @@ export async function getCalcViewFields(db, schema, viewId, viewOid) {
 	}
 	for (let field of fields) {
 		const fieldStatement = await await db.preparePromisified(
-			`SELECT OFFSET, LENGTH, DEFAULT_VALUE
+			`SELECT OFFSET, LENGTH, DEFAULT_VALUE, DATA_TYPE_NAME
 			   FROM VIEW_COLUMNS 
 		      WHERE VIEW_OID = ? AND COLUMN_NAME = ?`
 		)
@@ -168,6 +168,7 @@ export async function getCalcViewFields(db, schema, viewId, viewOid) {
 			field.OFFSET = sqlField[0].OFFSET
 			field.LENGTH = sqlField[0].LENGTH
 			field.DEFAULT_VALUE = sqlField[0].DEFAULT_VALUE
+			field.DATA_TYPE_NAME = sqlField[0].DATA_TYPE_NAME
 		}
 	}
 	return fields
