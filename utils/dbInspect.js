@@ -37,6 +37,10 @@ export async function getHANAVersion(db) {
  */
 export async function isCalculationView(db, schema, viewId) {
 	base.debug(`isCalculationView ${schema} ${viewId}`)
+	const vers = await getHANAVersion(db)
+	if (vers.versionMajor < 2) {
+		return false
+	}
 	//Select View
 	let statementString = ``
 	statementString = `SELECT CUBE_ID, SCHEMA_NAME, QUALIFIED_NAME, VIEW_NAME, CUBE_TYPE, IS_HDI_OBJECT
