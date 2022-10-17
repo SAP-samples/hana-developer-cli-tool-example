@@ -603,6 +603,12 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 				case "BIGINT":
 					cdstable += "Integer64"
 					break
+				case "TINYINT":
+					cdstable += "UInt8"
+					break
+				case "SMALLINT":
+					cdstable += "Int16"
+					break
 				case "DECIMAL":
 					cdstable += field.SCALE ? `Decimal(${field.LENGTH}, ${field.SCALE})` : `Decimal(${field.LENGTH})`
 					break
@@ -640,9 +646,9 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 		xref.dataType = field.DATA_TYPE_NAME
 
 		global.__xRef.push(xref)
-		//	if (field.DEFAULT_VALUE) {
-		//		cdstable += ` default "${field.DEFAULT_VALUE}"`
-		//	}
+		if (field.DEFAULT_VALUE) {
+			cdstable += ` default "${field.DEFAULT_VALUE}"`
+		}
 
 		if (field.IS_NULLABLE === "FALSE") {
 			if (isKey === "FALSE") {

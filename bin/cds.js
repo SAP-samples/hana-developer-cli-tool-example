@@ -229,7 +229,7 @@ async function cdsServerSetup(prompts, cdsSource) {
   })
     .at(odataURL)
     .in(app)
-    .to('fiori')
+    //.to('fiori')
 
     .with(srv => {
       // @ts-ignore

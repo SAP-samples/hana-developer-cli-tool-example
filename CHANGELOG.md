@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202210.2] - 2022-10-17
+
+**Changed**
+
+- CAP September 2022 Release
+- SAPUI5 to version 107.0
+- Support New CAP Integer Types - TINYINT UInt8 and SMALLINT Int16
+- Support for Postgres in Inspect Table and View
+- Default Values Support [Issue #87](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/87)
+
 ## [3.202209.3] - 2022-09-26
 
 **Changed**

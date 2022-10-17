@@ -33,7 +33,7 @@ export const builder = base.getBuilder({
   },
   output: {
     alias: ['o', 'Output'],
-    choices: ["tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi", "hdbtable", "hdbmigrationtable", "hdbcds", "jsdoc", "graphql"],
+    choices: ["tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi", "hdbtable", "hdbmigrationtable", "hdbcds", "jsdoc", "graphql", "postgres"],
     default: "tbl",
     type: 'string',
     desc: base.bundle.getText("outputType")
@@ -125,6 +125,13 @@ export async function tableInspect(prompts) {
         cdsSource = `service HanaCli { ${cdsSource} } `
         // @ts-ignore
         console.log(highlight(cds.compile.to.sql(cds.parse(cdsSource), { as: 'str', names: 'quoted', dialect: 'sqlite' })))
+        break
+      }
+      case 'postgres': {
+        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable", schema, null)
+        cdsSource = `service HanaCli { ${cdsSource} } `
+        // @ts-ignore
+        console.log(highlight(cds.compile.to.sql(cds.parse(cdsSource), { as: 'str', dialect: 'postgres' })))
         break
       }
       case 'cds': {
