@@ -46,6 +46,12 @@ export const builder = base.getBuilder({
     desc: base.bundle.getText("gui.useExists"),
     type: 'boolean',
     default: true
+  },
+  useQuoted: {
+    alias: ['q', 'quoted', 'quotedIdentifiers'],
+    desc: base.bundle.getText("gui.useQuoted"),
+    type: 'boolean',
+    default: false
   }
 })
 
@@ -74,6 +80,10 @@ export function handler(argv) {
     useExists: {
       description: base.bundle.getText("gui.useExists"),
       type: 'boolean'
+    },
+    useQuoted: {
+      description: base.bundle.getText("gui.useQuoted"),
+      type: 'boolean'
     }
   })
 }
@@ -88,6 +98,7 @@ export async function viewInspect(prompts) {
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("view")}: ${prompts.view}`)
     dbInspect.options.useHanaTypes = prompts.useHanaTypes
     dbInspect.options.useExists = prompts.useExists
+    dbInspect.options.useQuoted = prompts.useQuoted
 
     let object = await dbInspect.getView(db, schema, prompts.view)
     let fields = []

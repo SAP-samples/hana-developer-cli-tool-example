@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202212.1] - 2022-12-01
+
+**Changed**
+
+- Remove the quoted naming as the default and instead put it behind an optional parameter [Issue #90](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/90)
+- CAP October 2022 Release
+- SAPUI5 to version 109.0
+- New Node.js minimal version is 14.18
+
 ## [3.202210.2] - 2022-10-17
 
 **Changed**

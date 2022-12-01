@@ -59,7 +59,9 @@
 				<Label text="{i18nReuse>noColons}"/>
 				<CheckBox id="chkNoColons" selected="{/noColons}" />
 				<Label text="{i18nReuse>gui.useExists}"/>
-				<CheckBox id="useExists" selected="{/useExists}"  tooltip="{i18nReuse>useExists}"/>
+				<CheckBox id="useExists" selected="{/useExists}" tooltip="{i18nReuse>useExists}"/>
+				<Label text="{i18nReuse>gui.useQuoted}"/>
+				<CheckBox id="useQuoted" selected="{/useQuoted}" tooltip="{i18nReuse>useQuoted}"/>
 				<core:Fragment fragmentName="sap.hanacli.common.view.Debug" type="XML"/>
 
 			</f:content>

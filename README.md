@@ -333,6 +333,8 @@ Options:
       --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
                               cloud.sap/docs/cds/cdl#predefined-types)
                                                       [boolean] [default: false]
+  -q, --useQuoted, --quoted, --quotedIdent  Use Quoted Identifiers ![non-identif
+  ifiers                                    ier]      [boolean] [default: false]                                                      
   -p, --port                  Port to run HTTP server for CDS preview
                                                                 [default: false]
 ```
@@ -1350,6 +1352,10 @@ Options:
       --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
                               cloud.sap/docs/cds/cdl#predefined-types)
                                                       [boolean] [default: false]
+      --useExists, --exists, --persistence  Use Persistence Exists Annotation
+                                                       [boolean] [default: true]
+  -q, --useQuoted, --quoted, --quotedIdent  Use Quoted Identifiers ![non-identif
+  ifiers                                    ier]      [boolean] [default: false]                                                      
 ```
 
 ![inspectTable example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectTable.gif)
@@ -1440,6 +1446,10 @@ Options:
       --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
                               cloud.sap/docs/cds/cdl#predefined-types)
                                                       [boolean] [default: false]
+      --useExists, --exists, --persistence  Use Persistence Exists Annotation
+                                                       [boolean] [default: true]
+  -q, --useQuoted, --quoted, --quotedIdent  Use Quoted Identifiers ![non-identif
+  ifiers                                    ier]      [boolean] [default: false]                                                      
 ```
 
 ### libraries
@@ -1514,6 +1524,10 @@ Options:
                                            Merge settings but will also include
                                            some references that are incompatible
                                            with HDI   [boolean] [default: false]
+      --useExists, --exists, --persistence  Use Persistence Exists Annotation
+                                                       [boolean] [default: true]
+  -q, --useQuoted, --quoted, --quotedIdent  Use Quoted Identifiers ![non-identif
+  ifiers                                    ier]      [boolean] [default: false]                                           
       --namespace, --ns                    CDS namespace  [string] [default: ""]
       --synonyms                           Filename to store sysnonyms
                                                           [string] [default: ""]

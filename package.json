@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "3.202210.2",
+  "version": "3.202212.1",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -8,7 +8,7 @@
   },
   "type": "module",
   "engines": {
-    "node": ">=14.15.0"
+    "node": ">=14.18.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -25,10 +25,10 @@
   ],
   "types": "types/index.d.ts",
   "dependencies": {
-    "@sap/cds": "^6.2.2",
+    "@sap/cds": "^6.3.2",
     "@sap/cds-graphql": "^1.2.0",
     "@sap/textbundle": "^4.1",
-    "@sap/xsenv": "^3.3.2",
+    "@sap/xsenv": "^3.4.0",
     "body-parser": "^1.20.1",
     "chalk": "^5.1.2",
     "check-node-version": "^4.2.1",
@@ -44,7 +44,7 @@
     "json-to-pretty-yaml": "^1.2.2",
     "json2csv": "^5.0.7",
     "latest-version": "^7.0",
-    "marked": "^4.1.1",
+    "marked": "^4.2.3",
     "marked-terminal": "^5.1.1",
     "node-xlsx": "^0.21",
     "node-zip": "^1.1.1",
@@ -55,14 +55,14 @@
     "properties-to-json": "^0.2.1",
     "sap-hdb-promisfied": "2.202208.2",
     "showdown": "^2.1.0",
-    "swagger-ui-express": "^4.5.0",
+    "swagger-ui-express": "^4.6.0",
     "terminaltools": "^2.1",
     "upath": "^2.0.1",
     "update-notifier": "^6.0.2",
     "uuid": "^9.0.0",
-    "ws": "^8.9.0",
+    "ws": "^8.11.0",
     "yargonaut": "1.1.4",
-    "yargs": "^17.6.0"
+    "yargs": "^17.6.2"
   },
   "peerDependencies": {
     "@sap/cds-dk": ">=6"
@@ -75,14 +75,14 @@
   "homepage": "https://github.com/SAP-samples/hana-developer-cli-tool-example#readme",
   "devDependencies": {
     "@types/showdown": "^2.0.0",
-    "@types/yargs": "^17.0.13",
-    "eslint": "^8.25.0",
+    "@types/yargs": "^17.0.15",
+    "eslint": "^8.28.0",
     "stringify-changelog": "^0.2.1"
   },
   "cds": {
     "preview": {
       "ui5": {
-        "version": "1.107.0"
+        "version": "1.109.0"
       }
     },
     "hana": {
