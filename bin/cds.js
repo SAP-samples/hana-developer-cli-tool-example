@@ -41,6 +41,12 @@ export const builder = base.getBuilder({
     default: false,
     desc: base.bundle.getText("useHanaTypes")
   },
+  useQuoted: {
+    alias: ['q', 'quoted', 'quotedIdentifiers'],
+    desc: base.bundle.getText("gui.useQuoted"),
+    type: 'boolean',
+    default: false
+  },
   port: {
     alias: ['p'],
     type: 'number',
@@ -76,6 +82,10 @@ export function handler(argv) {
       description: base.bundle.getText("useHanaTypes"),
       type: 'boolean'
     },
+    useQuoted: {
+      description: base.bundle.getText("gui.useQuoted"),
+      type: 'boolean'
+    },
     port: {
       description: base.bundle.getText("port"),
       required: false,
@@ -96,6 +106,7 @@ export async function cdsBuild(prompts) {
     let schema = await base.dbClass.schemaCalc(prompts, db)
     let object, fields, constraints, cdsSource
     dbInspect.options.useHanaTypes = prompts.useHanaTypes
+    dbInspect.options.useQuoted = prompts.useQuoted
     dbInspect.options.noColons = true
 
     if (!prompts.view) {
