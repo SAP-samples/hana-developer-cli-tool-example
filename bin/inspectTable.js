@@ -49,6 +49,12 @@ export const builder = base.getBuilder({
     desc: base.bundle.getText("gui.useExists"),
     type: 'boolean',
     default: true
+  },
+  useQuoted: {
+    alias: ['q', 'quoted', 'quotedIdentifiers'],
+    desc: base.bundle.getText("gui.useQuoted"),
+    type: 'boolean',
+    default: false
   }
 })
 
@@ -76,6 +82,10 @@ export let inputPrompts = {
   useExists: {
     description: base.bundle.getText("gui.useExists"),
     type: 'boolean'
+  },
+  useQuoted: {
+    description: base.bundle.getText("gui.useQuoted"),
+    type: 'boolean'
   }
 }
 
@@ -95,6 +105,7 @@ export async function tableInspect(prompts) {
 
     dbInspect.options.useHanaTypes = prompts.useHanaTypes
     dbInspect.options.useExists = prompts.useExists
+    dbInspect.options.useQuoted = prompts.useQuoted
 
     let object = await dbInspect.getTable(db, schema, prompts.table)
     let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)

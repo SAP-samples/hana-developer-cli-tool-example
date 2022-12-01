@@ -476,7 +476,12 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 			cdstable += "@cds.persistence.calcview \n"
 		}
 	}
-	newName && (cdstable += `Entity ![${newName}] {\n`)
+	if (options.useQuoted){
+		newName && (cdstable += `Entity ![${newName}] {\n`)
+	}else{
+		newName && (cdstable += `Entity ${newName} {\n`)
+	}
+
 
 	// if modified real table names will be stored in synonyms
 	if (newName !== originalName) {
@@ -514,7 +519,12 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 		xref.after = field.COLUMN_NAME
 
 		cdstable += "\t"
-		cdstable += `![${field.COLUMN_NAME}]` + ": "
+		if (options.useQuoted){
+			cdstable += `![${field.COLUMN_NAME}]` + ": "
+		}else{
+			cdstable += `${field.COLUMN_NAME}` + ": "
+		}
+
 		if (options.useHanaTypes) {
 			switch (field.DATA_TYPE_NAME) {
 				case "NVARCHAR":

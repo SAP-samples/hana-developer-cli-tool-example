@@ -131,7 +131,12 @@ export async function cdsBuild(prompts) {
     UI: { 
       LineItem: [ \n`;
     for (let field of fields) {
-      cdsSource += `{$Type: 'UI.DataField', Value: ![${field.COLUMN_NAME}], ![@UI.Importance]:#High}, \n`
+      if(prompts.useQuoted){
+        cdsSource += `{$Type: 'UI.DataField', Value: ![${field.COLUMN_NAME}], ![@UI.Importance]:#High}, \n`
+      }else{
+        cdsSource += `{$Type: 'UI.DataField', Value: ${field.COLUMN_NAME}, ![@UI.Importance]:#High}, \n`
+      }
+
     }
     cdsSource +=
       `], \n`
@@ -237,7 +242,7 @@ async function cdsServerSetup(prompts, cdsSource) {
         base.debug(`In Read Exit ${prompts.table}`)
         let query1 = await cds.parse.cql (`SELECT from ${prompts.table}`)
          // @ts-ignore
-        req.query.SELECT.from = query1.SELECT.from // ["STAR_WARS_FILM"]//[`![${prompts.table}]`]
+        req.query.SELECT.from = query1.SELECT.from 
         req.query = query1
         let query = "SELECT "
         // @ts-ignore
