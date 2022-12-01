@@ -3,14 +3,14 @@
  * @module base - Central functionality shared by all the various commands
  */
 
- import { fileURLToPath } from 'url'
- import { URL } from 'url'
- const __dirname = fileURLToPath(new URL('.', import.meta.url))
- import upath from 'upath'
- import { createRequire } from 'module'
-  // @ts-ignore
- const require = createRequire(import.meta.url)
- import * as path from 'path'
+import { fileURLToPath } from 'url'
+import { URL } from 'url'
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
+import upath from 'upath'
+import { createRequire } from 'module'
+// @ts-ignore
+const require = createRequire(import.meta.url)
+import * as path from 'path'
 
 import dbClassDef from "sap-hdb-promisfied"
 /** @typedef {dbClassDef} dbClass - instance of sap-hdb-promisified module */
@@ -121,7 +121,10 @@ export function getPrompts() {
     // @ts-ignore
     if (typeof prompts.cf === 'undefined') { prompts.cf = true }
     // @ts-ignore
-    if (typeof prompts.useExists === 'undefined') { prompts.useExists = true }    
+    if (typeof prompts.useExists === 'undefined') { prompts.useExists = true }
+    // @ts-ignore
+    if (typeof prompts.useQuoted === 'undefined') { prompts.useQuoted = false }
+
     return prompts
 }
 
@@ -260,7 +263,13 @@ export function getMassConvertBuilder(ui = false) {
             desc: bundle.getText("gui.useExists"),
             type: 'boolean',
             default: true
-        },        
+        },
+        useQuoted: {
+            alias: ['q', 'quoted', 'quotedIdentifiers'],
+            desc: bundle.getText("gui.useQuoted"),
+            type: 'boolean',
+            default: false
+        },
         namespace: {
             alias: ['ns'],
             type: 'string',
@@ -347,6 +356,10 @@ export function getMassConvertPrompts(ui = false) {
         },
         useExists: {
             description: bundle.getText("gui.useExists"),
+            type: 'boolean'
+        },
+        useQuoted: {
+            description: bundle.getText("gui.useQuoted"),
             type: 'boolean'
         },
         namespace: {
@@ -644,7 +657,7 @@ export async function webServerSetup(urlPath) {
         for (let file of files) {
             debug(file)
             const Route = await import(`file://${file}`)
-            Route.route(app,server)
+            Route.route(app, server)
         }
     }
 
@@ -685,12 +698,12 @@ export function getLastResults() {
  * @returns userName
  */
 export function getUserName() {
-  let userName = ''
+    let userName = ''
 
-  if (dbConnection) {
-    userName = dbConnection.get('user')
-    debug('Username of db connection: ' + userName)
-  }
+    if (dbConnection) {
+        userName = dbConnection.get('user')
+        debug('Username of db connection: ' + userName)
+    }
 
-  return userName
+    return userName
 }
