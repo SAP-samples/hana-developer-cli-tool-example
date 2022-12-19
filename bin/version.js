@@ -46,7 +46,7 @@ export function version4(pkgPath = '..', info = {}, parentPath) {
     info[name] = pkj.version
     // recurse sap packages in dependencies...
     for (let dep in pkj.dependencies) if (
-      dep.startsWith('@sap/') || dep === 'sap-hdb-promisfied' || dep === 'hdb'
+      dep.startsWith('@sap/') || dep === 'sap-hdb-promisfied' || dep === 'hdb' || dep.startsWith('@cap-js')
       ) version4(dep, info, pkgPath)
   } catch (e) {
     if (e.code !== 'MODULE_NOT_FOUND') info[pkgPath] = '-- missing --'  // unknown error

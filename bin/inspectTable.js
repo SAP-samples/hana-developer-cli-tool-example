@@ -4,6 +4,7 @@ import * as dbInspect from '../utils/dbInspect.js'
 import dbClass from "sap-hdb-promisfied"
 import * as conn from "../utils/connections.js"
 import { highlight } from 'cli-highlight'
+// @ts-ignore
 import cds from '@sap/cds'
 // @ts-ignore
 import YAML from 'json-to-pretty-yaml'

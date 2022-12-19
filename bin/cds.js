@@ -6,6 +6,7 @@ import open from 'open'
 import * as conn from '../utils/connections.js'
 import * as Server from 'http'
 import express from 'express'
+// @ts-ignore
 import cds from '@sap/cds'
 
 import { createRequire } from 'module'
@@ -375,7 +376,7 @@ async function cdsServerSetup(prompts, cdsSource) {
       console.info(`HTTP Server: ${serverAddr}`)
 
       //GraphQL 
-        const GraphQLAdapter = require('@sap/cds-graphql/lib')
+        const GraphQLAdapter = require('@cap-js/graphql/lib') //require('@sap/cds-graphql/lib')
         const adapter = new GraphQLAdapter (cds.services, { graphiql: true, path: '/graphql' })
         app.use('/graphql', adapter)
        // app.use(new GraphQLAdapter(cds.services, { graphiql: true }))

@@ -1,5 +1,14 @@
 [
     {
+        "date": "2022-12-19",
+        "version": "3.202212.2",
+        "Changed": [
+            "CAP December 2022 Release",
+            "Switch to @cap-js/graphql [Open Source GraphQL Adapter](https://cap.cloud.sap/docs/releases/dec22#open-source-graphql-adapter)",
+            "SAPUI5 to version 109.3"
+        ]
+    },
+    {
         "date": "2022-12-01",
         "version": "3.202212.1",
         "Changed": [

@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202212.2] - 2022-12-19
+
+**Changed**
+
+- CAP December 2022 Release
+- Switch to @cap-js/graphql [Open Source GraphQL Adapter](https://cap.cloud.sap/docs/releases/dec22#open-source-graphql-adapter)
+- SAPUI5 to version 109.3
+
 ## [3.202212.1] - 2022-12-01
 
 **Changed**

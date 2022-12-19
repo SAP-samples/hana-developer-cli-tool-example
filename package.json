@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "3.202212.1",
+  "version": "3.202212.2",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -25,12 +25,13 @@
   ],
   "types": "types/index.d.ts",
   "dependencies": {
-    "@sap/cds": "^6.3.2",
-    "@sap/cds-graphql": "^1.2.0",
+    "@cap-js/graphql": "0.1.0",
+    "@sap/cds": "^6.4.0",
+    "@sap/cds-common-content": "^1.0.1",
     "@sap/textbundle": "^4.1",
     "@sap/xsenv": "^3.4.0",
     "body-parser": "^1.20.1",
-    "chalk": "^5.1.2",
+    "chalk": "^5.2.0",
     "check-node-version": "^4.2.1",
     "cli-highlight": "^2.1.11",
     "console.table": "~0.10",
@@ -44,7 +45,7 @@
     "json-to-pretty-yaml": "^1.2.2",
     "json2csv": "^5.0.7",
     "latest-version": "^7.0",
-    "marked": "^4.2.3",
+    "marked": "^4.2.4",
     "marked-terminal": "^5.1.1",
     "node-xlsx": "^0.21",
     "node-zip": "^1.1.1",
@@ -76,13 +77,13 @@
   "devDependencies": {
     "@types/showdown": "^2.0.0",
     "@types/yargs": "^17.0.15",
-    "eslint": "^8.28.0",
+    "eslint": "^8.30.0",
     "stringify-changelog": "^0.2.1"
   },
   "cds": {
     "preview": {
       "ui5": {
-        "version": "1.109.0"
+        "version": "1.109.3"
       }
     },
     "hana": {
@@ -93,6 +94,7 @@
       "deploy-format": "hdbtable"
     },
     "requires": {
+      "middlewares": true,
       "db": {
         "kind": "hana"
       }
@@ -105,9 +107,12 @@
       "rest_new_adapter": true,
       "odata_new_parser": true
     },
-    "plugins":[
-      { "impl": "@sap/cds-graphql", "path": "/graphql"}
-    ],
+    "protocols": {
+      "graphql": {
+        "path": "/graphql",
+        "impl": "@cap-js/graphql"
+      }
+    },
     "log": {
       "service": true
     }
