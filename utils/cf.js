@@ -31,7 +31,7 @@ export async function getCFConfig() {
 
 
 /**
- * Get target organziation
+ * Get target organization
  * @returns {Promise<object>}
  */
 export async function getCFOrg() {
@@ -42,7 +42,7 @@ export async function getCFOrg() {
 }
 
 /**
- * Get target orgnaization name
+ * Get target organization name
  * @returns {Promise<string>}
  */
 export async function getCFOrgName() {
@@ -53,7 +53,7 @@ export async function getCFOrgName() {
 }
 
 /**
- * Get target orgnaization GUID
+ * Get target organization GUID
  * @returns {Promise<string>}
  */
 export async function getCFOrgGUID() {
@@ -98,7 +98,7 @@ export async function getCFSpaceGUID() {
 }
 
 /**
- * Get currrent targets
+ * Get current targets
  * @returns {Promise<object>}
  */
 export async function getCFTarget() {
