@@ -24,8 +24,12 @@ import * as child_process from 'child_process'
 export async function getBTPConfig() {
     base.debug('getBTPConfig')
     try {
-        let localDir = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share")
-        const data = fs.readFileSync(`${localDir}/SAP/btp/config.json`,
+        let localDir = process.env.BTP_CLIENTCONFIG
+        if (!localDir){
+            localDir = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share")
+            localDir = `${localDir}/SAP/btp/config.json`
+        }
+        const data = fs.readFileSync(localDir,
             { encoding: 'utf8', flag: 'r' })
         const object = JSON.parse(data)
         return object
