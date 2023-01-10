@@ -99,9 +99,10 @@ import * as hanaCloudUPSInstancesUI from './hanaCloudUPSInstancesUI.js'
 import * as users from './users.js'
 import * as version from './version.js'
 import * as views from './views.js'
+import * as btp from './btp.js'
 
 export const commands = [
-    activateHDI, adminHDI, adminHDIGroup, callProcedure, certificates, cds, openChangeLog,
+    activateHDI, adminHDI, adminHDIGroup, btp, callProcedure, certificates, cds, openChangeLog,
     changeLog, changeLogUI, connect, containers, containersUI, copy2DefaultEnv, copy2Env,
     copy2Secrets, createGroup, createContainer, createContainerUsers, createJWT, createModule,
     createXSAAdmin, dataTypes, dataTypesUI, dataVolumes, disks, dropGroup, dropContainer, features,

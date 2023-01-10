@@ -58,7 +58,7 @@ export async function getBTPTarget() {
 
 /**
  * Get target Global Account
- * @returns {Promise<string>}
+ * @returns {Promise<object>}
  */
 export async function getBTPGlobalAccount() {
     base.debug('getBTPGlobalAccount')
@@ -189,6 +189,69 @@ export async function getBASSubURL() {
 }
 
 /**
+ * Get Global Account Hierarchy
+ * @returns {Promise<object>}
+ */
+export async function getBTPHierarchy() {
+    base.debug('getBTPHierarchy')
+
+    try {
+        const exec = promisify(child_process.exec)
+        let script = `btp --format json get accounts/global-account --show-hierarchy`
+
+        const { stdout, stderr } = await exec(script)
+
+        if (stderr) {
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
+        } else {
+            if (stdout) {
+                try {
+                    return JSON.parse(stdout)
+                } catch (e) {
+                    return
+                }
+            }
+            return
+        }
+    } catch (error) {
+        base.debug(error)
+        throw (error)
+    }
+}
+
+
+/**
+ * Get all Sub-Accounts
+ * @returns {Promise<object>}
+ */
+export async function getBTPSubAccounts() {
+    base.debug('getBTPSubAccounts')
+
+    try {
+        const exec = promisify(child_process.exec)
+        let script = `btp --format json list accounts/subaccount`
+
+        const { stdout, stderr } = await exec(script)
+
+        if (stderr) {
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
+        } else {
+            if (stdout) {
+                try {
+                    return JSON.parse(stdout)
+                } catch (e) {
+                    return
+                }
+            }
+            return
+        }
+    } catch (error) {
+        base.debug(error)
+        throw (error)
+    }
+}
+
+/**
  * Get all Subscriptions
  * @returns {Promise<object>}
  */
@@ -308,6 +371,27 @@ export async function getBTPServiceInstanceDetails(id) {
     }
 }
 
+/**
+ * Set Target Subaccount
+ * @param {string} subAccount - BTP Subaccount
+ * @returns {Promise<object>}
+ */
+export async function setBTPSubAccount(subAccount) {
+    base.debug('setBTPSubAccount')
+
+    try {
+
+        const exec = promisify(child_process.exec)
+        let script = `btp target --subaccount ${subAccount}`
+
+        const { stdout } = await exec(script)
+        return stdout    
+
+    } catch (error) {
+        base.debug(error)
+        throw (error)
+    }
+}
 /**
  * Get all Service Instances Parameters
  * @param {string} id - service instance id 

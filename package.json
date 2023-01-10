@@ -41,6 +41,8 @@
     "express": "^4.18.2",
     "glob": "^8.0.3",
     "hdb": "0.19.5",
+    "inquirer": "8.2.4",
+    "inquirer-tree-prompt": "^1.1.2",
     "js-convert-case": "^4.2.0",
     "json-to-pretty-yaml": "^1.2.2",
     "json2csv": "^5.0.7",
