@@ -43,6 +43,7 @@ export async function listInstances(prompts) {
             }
         } catch (error) {
             base.debug(error)
+            console.log(error)
         }
 
         base.debug(results)
@@ -51,9 +52,11 @@ export async function listInstances(prompts) {
             for (let item of results) {
                 let outputItem = {}
                 outputItem.name = item.name
-                outputItem.created_at = item.created_at
+                let createdAt = new Date(item.created_at)
+                outputItem.created_at = createdAt.toString()
                 outputItem.status = await btp.getHANAInstanceStatus(item.parameters)
-                outputItem.last_operation = `${item.last_operation.type} ${item.last_operation.state} @ ${item.last_operation.updated_at}`
+                let updatedAt = new Date(item.last_operation.updated_at)                
+                outputItem.last_operation = `${item.last_operation.type} ${item.last_operation.state} @ ${updatedAt.toString()}`
                 outputItem.hana_cockpit = item.dashboard_url
                 outputItem.version = `${item.parameters.currentProductVersion.id}`
                 outputItem.enabledServices = `Doc Store: ${item.parameters.data.enabledservices.docstore} DP Server: ${item.parameters.data.enabledservices.dpserver} Script Server:${item.parameters.data.enabledservices.scriptserver}`
@@ -89,9 +92,12 @@ export async function listInstances(prompts) {
             for (let item of results.resources) {
                 let outputItem = {}
                 outputItem.name = item.name
-                outputItem.created_at = item.created_at
+                outputItem.name = item.name
+                let createdAt = new Date(item.created_at)
+                outputItem.created_at = createdAt.toString()
                 outputItem.status = await cf.getHANAInstanceStatus(item.guid)
-                outputItem.last_operation = `${item.last_operation.type} ${item.last_operation.state} @ ${item.last_operation.updated_at}`
+                let updatedAt = new Date(item.last_operation.updated_at) 
+                outputItem.last_operation = `${item.last_operation.type} ${item.last_operation.state} @ ${updatedAt.toString()}`
                 outputItem.hana_cockpit = item.dashboard_url
 
                 let url = new URL(outputItem.hana_cockpit)
