@@ -5,6 +5,14 @@
  */
 export function getHANAVersion(db: object): Promise<object>;
 /**
+ * Check if a view is a Calculation View
+ * @param {object} db - Database Connection
+ * @param {string} schema - Schema
+ * @param {string} viewId - View Unique ID
+ * @returns {Promise<boolean>}
+ */
+export function isCalculationView(db: object, schema: string, viewId: string): Promise<boolean>;
+/**
  * Get DB View details
  * @param {object} db - Database Connection
  * @param {string} scheam - Schema
@@ -20,6 +28,15 @@ export function getView(db: object, scheam: string, viewId: string): Promise<obj
  * @returns {Promise<string>}
  */
 export function getDef(db: object, schema: string, Id: any): Promise<string>;
+/**
+ * Get View Fields and Metadata
+ * @param {object} db - Database Connection
+ * @param {string} schema - Schema
+ * @param {string} viewId - View Unique ID
+ * @param {string} viewOid - View Unique ID
+ * @returns {Promise<object>}
+ */
+export function getCalcViewFields(db: object, schema: string, viewId: string, viewOid: string): Promise<object>;
 /**
  * Get View Fields and Metadata
  * @param {object} db - Database Connection
@@ -93,12 +110,13 @@ export function getFunctionPramCols(db: object, funcOid: string): Promise<object
  * @param {object} db - Database Connection
  * @param {object} object - DB Object Details
  * @param {object} fields - Object Fields
- * @param {object} constraints - Object Contstraints
+ * @param {object} constraints - Object Constraints
  * @param {string} type - DB Object type
+ * @param {string} [schema] - Schema
  * @param {string} [parent] - Calling context which impacts formatting
  * @returns {Promise<string>}
  */
-export function formatCDS(db: object, object: object, fields: object, constraints: object, type: string, parent?: string): Promise<string>;
+export function formatCDS(db: object, object: object, fields: object, constraints: object, type: string, schema?: string, parent?: string): Promise<string>;
 /**
  * Get Geo Columns requires special lookup and details
  * @param {object} db - Database Connection
@@ -112,6 +130,7 @@ export namespace options {
     const useHanaTypes: boolean;
     const noColons: boolean;
     const keepPath: boolean;
+    const useExists: boolean;
 }
 export namespace results { }
 /**

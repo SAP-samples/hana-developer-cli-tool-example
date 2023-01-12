@@ -41,4 +41,16 @@ export namespace inputPrompts {
         const type_3: string;
         export { type_3 as type };
     }
+    namespace useExists {
+        const description_4: string;
+        export { description_4 as description };
+        const type_4: string;
+        export { type_4 as type };
+    }
+    namespace useQuoted {
+        const description_5: string;
+        export { description_5 as description };
+        const type_5: string;
+        export { type_5 as type };
+    }
 }
