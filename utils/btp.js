@@ -12,6 +12,7 @@ const hanaCloudTools = "hana-cloud-tools"
 const applicationStudio = "sapappstudio"
 const hanaPlanName = "hana"
 
+import { homedir } from 'os'
 import * as fs from 'fs'
 import { promisify } from 'util'
 import * as child_process from 'child_process'
@@ -484,9 +485,60 @@ export async function getHANAInstanceByName(name) {
     for (let item of instances) {
         // @ts-ignore
         if (item.name === name) {
-            hanaInstance = item
+            hanaInstance.push(item)
         }
     }
     base.debug(hanaInstance)
     return hanaInstance
+}
+
+/**
+ * Start HANA Cloud Instance
+ * @param {string} name - HANA Cloud instance name 
+ * @returns any
+ */
+export async function startHana(name) {
+    base.debug(`startHana ${name}`)
+    try {
+        const exec = promisify(child_process.exec)
+        const data = { "data": { "serviceStopped": false } }
+        const fileName = `${homedir}/hana_start.json`
+        fs.writeFileSync(fileName, JSON.stringify(data))
+
+
+        let script = `btp update services/instance --name ${name} --parameters ${homedir}/hana_start.json`
+        base.debug(script)
+        const { stdout } = await exec(script)
+        fs.unlinkSync(fileName)
+        return stdout    
+
+    } catch (error) {
+        base.debug(error)
+        throw (error)
+    }
+}
+
+/**
+ * Stop HANA Cloud Instance
+ * @param {string} name - HANA Cloud instance name
+ * @returns any
+ */
+export async function stopHana(name) {
+    base.debug(`stopHana ${name}`)
+    try {
+        const exec = promisify(child_process.exec)
+        const data = { "data": { "serviceStopped": true } }
+        const fileName = `${homedir}/hana_stop.json`
+        fs.writeFileSync(fileName, JSON.stringify(data))
+
+        let script = `btp update services/instance --name ${name} --parameters ${homedir}/hana_stop.json`
+        base.debug(script)
+        const { stdout } = await exec(script)
+        fs.unlinkSync(fileName)
+        return stdout    
+
+    } catch (error) {
+        base.debug(error)
+        throw (error)
+    }
 }
