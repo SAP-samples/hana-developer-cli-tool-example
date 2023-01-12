@@ -1,122 +1,146 @@
 // @ts-check
-import * as activateHDI from './activateHDI.js'
-import * as adminHDI from './adminHDI.js'
-import * as adminHDIGroup from './adminHDIGroup.js'
-import * as callProcedure from './callProcedure.js'
-import * as certificates from './certificates.js'
-import * as cds from './cds.js'
-import * as openChangeLog from './openChangeLog.js'
-import * as changeLog from './changeLog.js'
-import * as changeLogUI from './changeLogUI.js'
-import * as connect from './connect.js'
-import * as containers from './containers.js'
-import * as containersUI from './containersUI.js'
-import * as copy2DefaultEnv from './copy2DefaultEnv.js'
-import * as copy2Env from './copy2Env.js'
-import * as copy2Secrets from './copy2Secrets.js'
-import * as createContainer from './createContainer.js'
-import * as createGroup from './createGroup.js'
-import * as createContainerUsers from './createContainerUsers.js'
-import * as createJWT from './createJWT.js'
-import * as createModule from './createModule.js'
-import * as createXSAAdmin from './createXSAAdmin.js'
-import * as dataTypes from './dataTypes.js'
-import * as dataTypesUI from './dataTypesUI.js'
-import * as dataVolumes from './dataVolumes.js'
-import * as disks from './disks.js'
-import * as dropContainer from './dropContainer.js'
-import * as dropGroup from './dropGroup.js'
-import * as features from './features.js'
-import * as featuresUI from './featuresUI.js'
-import * as featureUsage from './featureUsage.js'
-import * as featureUsageUI from './featureUsageUI.js'
-import * as functions from './functions.js'
-import * as functionsUI from './functionsUI.js'
-import * as hanaCloudHDIInstances from './hanaCloudHDIInstances.js'
-import * as hanaCloudHDIInstancesUI from './hanaCloudHDIInstancesUI.js'
-import * as hanaCloudInstances from './hanaCloudInstances.js'
-import * as hanaCloudStart from './hanaCloudStart.js'
-import * as hanaCloudStop from './hanaCloudStop.js'
-import * as hdbsql from './hdbsql.js'
-import * as hostInformation from './hostInformation.js'
-import * as indexes from './indexes.js'
-import * as indexesUI from './indexesUI.js'
-import * as iniContents from './iniContents.js'
-import * as iniFiles from './iniFiles.js'
-import * as inspectFunction from './inspectFunction.js'
-import * as inspectIndex from './inspectIndex.js'
-import * as inspectJWT from './inspectJWT.js'
-import * as inspectLibMember from './inspectLibMember.js'
-import * as inspectLibrary from './inspectLibrary.js'
-import * as inspectProcedure from './inspectProcedure.js'
-import * as inspectTable from './inspectTable.js'
-import * as inspectTableUI from './inspectTableUI.js'
-import * as inspectTrigger from './inspectTrigger.js'
-import * as inspectUser from './inspectUser.js'
-import * as inspectView from './inspectView.js'
-import * as libraries from './libraries.js'
-import * as massConvert from './massConvert.js'
-import * as massConvertUI from './massConvertUI.js'
-import * as massRename from './massRename.js'
-import * as massUsers from './massUsers.js'
-import * as matrix from './matrix.js'
-import * as objects from './objects.js'
-import * as openDBExplorer from './openDBExplorer.js'
-import * as ports from './ports.js'
-import * as privilegeError from './privilegeError.js'
-import * as procedures from './procedures.js'
-import * as querySimple from './querySimple.js'
-import * as querySimpleUI from './querySimpleUI.js'
-import * as readMe from './readMe.js'
-import * as readMeUI from './readMeUI.js'
-import * as openReadMe from './openReadMe.js'
-import * as reclaim from './reclaim.js'
-import * as rick from './rick.js'
-import * as roles from './roles.js'
-import * as hanaCloudSBSSInstances from './hanaCloudSBSSInstances.js'
-import * as hanaCloudSBSSInstancesUI from './hanaCloudSBSSInstancesUI.js'
-import * as schemas from './schemas.js'
-import * as schemasUI from './schemasUI.js'
-import * as hanaCloudSchemaInstances from './hanaCloudSchemaInstances.js'
-import * as hanaCloudSchemaInstancesUI from './hanaCloudSchemaInstancesUI.js'
-import * as hanaCloudSecureStoreInstances from './hanaCloudSecureStoreInstances.js'
-import * as hanaCloudSecureStoreInstancesUI from './hanaCloudSecureStoreInstancesUI.js'
-import * as connectViaServiceKey from './connectViaServiceKey.js'
-import * as sequences from './sequences.js'
-import * as status from './status.js'
-import * as synonyms from './synonyms.js'
-import * as systemInfo from './systemInfo.js'
-import * as systemInfoUI from './systemInfoUI.js'
-import * as tables from './tables.js'
-import * as tablesUI from './tablesUI.js'
-//import * as test from './test.js'
-import * as traces from './traces.js'
-import * as traceContents from './traceContents.js'
-import * as triggers from './triggers.js'
-import * as UI from './UI.js'
-import * as hanaCloudUPSInstances from './hanaCloudUPSInstances.js'
-import * as hanaCloudUPSInstancesUI from './hanaCloudUPSInstancesUI.js'
-import * as users from './users.js'
-import * as version from './version.js'
-import * as views from './views.js'
-import * as btp from './btp.js'
 
-export const commands = [
-    activateHDI, adminHDI, adminHDIGroup, btp, callProcedure, certificates, cds, openChangeLog,
-    changeLog, changeLogUI, connect, containers, containersUI, copy2DefaultEnv, copy2Env,
-    copy2Secrets, createGroup, createContainer, createContainerUsers, createJWT, createModule,
-    createXSAAdmin, dataTypes, dataTypesUI, dataVolumes, disks, dropGroup, dropContainer, features,
-    featuresUI, featureUsage, featureUsageUI, functions, functionsUI, hanaCloudHDIInstances,
-    hanaCloudHDIInstancesUI, hanaCloudInstances, hanaCloudStart, hanaCloudStop, hdbsql,
-    hostInformation, indexes, indexesUI, iniContents, iniFiles, inspectFunction,
-    inspectIndex, inspectJWT, inspectLibMember, inspectLibrary, inspectProcedure,
-    inspectTable, inspectTableUI, inspectTrigger, inspectUser, inspectView,
-    libraries, massConvert, massConvertUI, massRename, massUsers, matrix, objects,
-    openDBExplorer, ports, privilegeError, procedures, querySimple, querySimpleUI, readMe, readMeUI,
-    openReadMe, reclaim, rick, roles, hanaCloudSBSSInstances, hanaCloudSBSSInstancesUI,
-    schemas, schemasUI, hanaCloudSchemaInstances, hanaCloudSchemaInstancesUI,
-    hanaCloudSecureStoreInstances, hanaCloudSecureStoreInstancesUI, connectViaServiceKey,
-    sequences, status, synonyms, systemInfo, systemInfoUI, tables, tablesUI, //test,
-    traces, traceContents, triggers, UI, hanaCloudUPSInstances, hanaCloudUPSInstancesUI,
-    users, version, views
-]
+export async function init() {
+
+    const [
+        activateHDI, adminHDI, adminHDIGroup, btp, callProcedure, certificates, cds, openChangeLog,
+        changeLog, changeLogUI, connect, containers, containersUI, copy2DefaultEnv, copy2Env,
+        copy2Secrets, createGroup, createContainer, createContainerUsers, createJWT, createModule,
+        createXSAAdmin, dataTypes, dataTypesUI, dataVolumes, disks, dropGroup, dropContainer, features,
+        featuresUI, featureUsage, featureUsageUI, functions, functionsUI, hanaCloudHDIInstances,
+        hanaCloudHDIInstancesUI, hanaCloudInstances, hanaCloudStart, hanaCloudStop, hdbsql,
+        hostInformation, indexes, indexesUI, iniContents, iniFiles, inspectFunction,
+        inspectIndex, inspectJWT, inspectLibMember, inspectLibrary, inspectProcedure,
+        inspectTable, inspectTableUI, inspectTrigger, inspectUser, inspectView,
+        libraries, massConvert, massConvertUI, massRename, massUsers, matrix, objects,
+        openBAS, openDBExplorer, ports, privilegeError, procedures, querySimple, querySimpleUI, readMe, readMeUI,
+        openReadMe, reclaim, rick, roles, hanaCloudSBSSInstances, hanaCloudSBSSInstancesUI,
+        schemas, schemasUI, hanaCloudSchemaInstances, hanaCloudSchemaInstancesUI,
+        hanaCloudSecureStoreInstances, hanaCloudSecureStoreInstancesUI, connectViaServiceKey,
+        sequences, status, synonyms, systemInfo, systemInfoUI, tables, tablesUI, //test,
+        traces, traceContents, triggers, UI, hanaCloudUPSInstances, hanaCloudUPSInstancesUI,
+        users, version, views
+    ] = await Promise.all([
+        import('./activateHDI.js'),
+        import('./adminHDI.js'),
+        import('./adminHDIGroup.js'),
+        import('./callProcedure.js'),
+        import('./certificates.js'),
+        import('./cds.js'),
+        import('./openChangeLog.js'),
+        import('./changeLog.js'),
+        import('./changeLogUI.js'),
+        import('./connect.js'),
+        import('./containers.js'),
+        import('./containersUI.js'),
+        import('./copy2DefaultEnv.js'),
+        import('./copy2Env.js'),
+        import('./copy2Secrets.js'),
+        import('./createContainer.js'),
+        import('./createGroup.js'),
+        import('./createContainerUsers.js'),
+        import('./createJWT.js'),
+        import('./createModule.js'),
+        import('./createXSAAdmin.js'),
+        import('./dataTypes.js'),
+        import('./dataTypesUI.js'),
+        import('./dataVolumes.js'),
+        import('./disks.js'),
+        import('./dropContainer.js'),
+        import('./dropGroup.js'),
+        import('./features.js'),
+        import('./featuresUI.js'),
+        import('./featureUsage.js'),
+        import('./featureUsageUI.js'),
+        import('./functions.js'),
+        import('./functionsUI.js'),
+        import('./hanaCloudHDIInstances.js'),
+        import('./hanaCloudHDIInstancesUI.js'),
+        import('./hanaCloudInstances.js'),
+        import('./hanaCloudStart.js'),
+        import('./hanaCloudStop.js'),
+        import('./hdbsql.js'),
+        import('./hostInformation.js'),
+        import('./indexes.js'),
+        import('./indexesUI.js'),
+        import('./iniContents.js'),
+        import('./iniFiles.js'),
+        import('./inspectFunction.js'),
+        import('./inspectIndex.js'),
+        import('./inspectJWT.js'),
+        import('./inspectLibMember.js'),
+        import('./inspectLibrary.js'),
+        import('./inspectProcedure.js'),
+        import('./inspectTable.js'),
+        import('./inspectTableUI.js'),
+        import('./inspectTrigger.js'),
+        import('./inspectUser.js'),
+        import('./inspectView.js'),
+        import('./libraries.js'),
+        import('./massConvert.js'),
+        import('./massConvertUI.js'),
+        import('./massRename.js'),
+        import('./massUsers.js'),
+        import('./matrix.js'),
+        import('./objects.js'),
+        import('./openBAS.js'),
+        import('./openDBExplorer.js'),
+        import('./ports.js'),
+        import('./privilegeError.js'),
+        import('./procedures.js'),
+        import('./querySimple.js'),
+        import('./querySimpleUI.js'),
+        import('./readMe.js'),
+        import('./readMeUI.js'),
+        import('./openReadMe.js'),
+        import('./reclaim.js'),
+        import('./rick.js'),
+        import('./roles.js'),
+        import('./hanaCloudSBSSInstances.js'),
+        import('./hanaCloudSBSSInstancesUI.js'),
+        import('./schemas.js'),
+        import('./schemasUI.js'),
+        import('./hanaCloudSchemaInstances.js'),
+        import('./hanaCloudSchemaInstancesUI.js'),
+        import('./hanaCloudSecureStoreInstances.js'),
+        import('./hanaCloudSecureStoreInstancesUI.js'),
+        import('./connectViaServiceKey.js'),
+        import('./sequences.js'),
+        import('./status.js'),
+        import('./synonyms.js'),
+        import('./systemInfo.js'),
+        import('./systemInfoUI.js'),
+        import('./tables.js'),
+        import('./tablesUI.js'),
+        //import('./test.js'),
+        import('./traces.js'),
+        import('./traceContents.js'),
+        import('./triggers.js'),
+        import('./UI.js'),
+        import('./hanaCloudUPSInstances.js'),
+        import('./hanaCloudUPSInstancesUI.js'),
+        import('./users.js'),
+        import('./version.js'),
+        import('./views.js'),
+        import('./btp.js')
+    ])
+    return [
+        activateHDI, adminHDI, adminHDIGroup, btp, callProcedure, certificates, cds, openChangeLog,
+        changeLog, changeLogUI, connect, containers, containersUI, copy2DefaultEnv, copy2Env,
+        copy2Secrets, createGroup, createContainer, createContainerUsers, createJWT, createModule,
+        createXSAAdmin, dataTypes, dataTypesUI, dataVolumes, disks, dropGroup, dropContainer, features,
+        featuresUI, featureUsage, featureUsageUI, functions, functionsUI, hanaCloudHDIInstances,
+        hanaCloudHDIInstancesUI, hanaCloudInstances, hanaCloudStart, hanaCloudStop, hdbsql,
+        hostInformation, indexes, indexesUI, iniContents, iniFiles, inspectFunction,
+        inspectIndex, inspectJWT, inspectLibMember, inspectLibrary, inspectProcedure,
+        inspectTable, inspectTableUI, inspectTrigger, inspectUser, inspectView,
+        libraries, massConvert, massConvertUI, massRename, massUsers, matrix, objects,
+        openBAS, openDBExplorer, ports, privilegeError, procedures, querySimple, querySimpleUI, readMe, readMeUI,
+        openReadMe, reclaim, rick, roles, hanaCloudSBSSInstances, hanaCloudSBSSInstancesUI,
+        schemas, schemasUI, hanaCloudSchemaInstances, hanaCloudSchemaInstancesUI,
+        hanaCloudSecureStoreInstances, hanaCloudSecureStoreInstancesUI, connectViaServiceKey,
+        sequences, status, synonyms, systemInfo, systemInfoUI, tables, tablesUI, //test,
+        traces, traceContents, triggers, UI, hanaCloudUPSInstances, hanaCloudUPSInstancesUI,
+        users, version, views
+    ]
+}

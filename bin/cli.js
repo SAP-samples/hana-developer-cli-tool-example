@@ -17,7 +17,7 @@ require('yargonaut')
 
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import { commands } from './index.js'
+import * as index from './index.js' //{ commands } from './index.js'
 
 versionCheck.checkVersion().then(async () => {
 
@@ -42,7 +42,7 @@ versionCheck.checkVersion().then(async () => {
         .usage(base.bundle.getText("usage"))
         .demandCommand(1, "")
         // @ts-ignore
-        .command(commands)
+        .command(await index.init())
         .option('h', {
             alias: 'help',
             description: base.bundle.getText("help")
@@ -54,4 +54,3 @@ versionCheck.checkVersion().then(async () => {
         .completion()
         .argv
 })
-
