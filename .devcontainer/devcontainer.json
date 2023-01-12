@@ -1,11 +1,11 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.187.0/containers/javascript-node
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.245.2/containers/javascript-node
 {
 	"name": "SAP hana-cli contributor Devcontainer",
 	"build": {
 		"dockerfile": "Dockerfile",
-		// Update 'VARIANT' to pick a Node version: 12, 14, 16
-		"args": { "VARIANT": "14" }
+		// Update 'VARIANT' to pick a Node version: 14, 16, 18
+		"args": { "VARIANT": "18" }
 	},
 
 	// Set *default* container specific settings.json values on container create.
