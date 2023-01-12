@@ -58,7 +58,7 @@ export async function hcStart(prompts) {
             }
         } catch (error) {
             base.debug(error)
-            console.log(error)
+            // console.log(error)
         }
 
         base.debug(results)
@@ -70,19 +70,23 @@ export async function hcStart(prompts) {
             }
         }
         else {
-            if (prompts.name === '**default**') {
-                results = await cf.getHANAInstances()
-            } else {
-                results = await cf.getHANAInstanceByName(prompts.name)
-            }
-            // @ts-ignore
-            if (!results || !results.resources) {
-                return base.error(new Error(base.bundle.getText("hc.error")))
-            }
-            // @ts-ignore
-            for (let item of results.resources) {
-                const stdout = await cf.startHana(item.name)
-                console.log(suggestHanaCli(stdout, item.name))
+            try {
+                if (prompts.name === '**default**') {
+                    results = await cf.getHANAInstances()
+                } else {
+                    results = await cf.getHANAInstanceByName(prompts.name)
+                }
+                // @ts-ignore
+                if (!results || !results.resources) {
+                    return base.error(new Error(base.bundle.getText("hc.error")))
+                }
+                // @ts-ignore
+                for (let item of results.resources) {
+                    const stdout = await cf.startHana(item.name)
+                    console.log(suggestHanaCli(stdout, item.name))
+                }
+            } catch (error) {
+                base.debug(error)
             }
         }
         return base.end()

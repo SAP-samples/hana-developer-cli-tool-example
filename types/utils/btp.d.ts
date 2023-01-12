@@ -103,3 +103,15 @@ export function getHANAInstanceStatus(serviceParameters: object): Promise<string
  * @returns {Promise<object>}
  */
 export function getHANAInstanceByName(name: string): Promise<object>;
+/**
+ * Start HANA Cloud Instance
+ * @param {string} name - HANA Cloud instance name
+ * @returns any
+ */
+export function startHana(name: string): Promise<string>;
+/**
+ * Stop HANA Cloud Instance
+ * @param {string} name - HANA Cloud instance name
+ * @returns any
+ */
+export function stopHana(name: string): Promise<string>;

@@ -61,7 +61,6 @@ export async function hcStop(prompts) {
             }
         } catch (error) {
             base.debug(error)
-            console.log(error)
         }
 
         base.debug(results)
@@ -73,16 +72,21 @@ export async function hcStop(prompts) {
             }
         }
         else {
-            if (prompts.name === '**default**') {
-                results = await cf.getHANAInstances()
-            } else {
-                results = await cf.getHANAInstanceByName(prompts.name)
-            }
-            // @ts-ignore
-            for (let item of results.resources) {
-                const stdout = await cf.stopHana(item.name)
+            try {
+                if (prompts.name === '**default**') {
+                    results = await cf.getHANAInstances()
+                } else {
+                    results = await cf.getHANAInstanceByName(prompts.name)
+                }
 
-                console.log(suggestHanaCli(stdout, item.name));
+                // @ts-ignore
+                for (let item of results.resources) {
+                    const stdout = await cf.stopHana(item.name)
+
+                    console.log(suggestHanaCli(stdout, item.name));
+                }
+            } catch (error) {
+                base.debug(error)
             }
         }
         return base.end()

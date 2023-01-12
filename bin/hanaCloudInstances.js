@@ -34,6 +34,9 @@ export async function listInstances(prompts) {
     try {
 
         //BTP Multi-Environment Instances
+        if (base.verboseOutput) {
+            console.log(base.bundle.getText("hc.BTPCheck"))
+        }
         let results = []
         try {
             if (prompts.name === '**default**') {
@@ -43,7 +46,7 @@ export async function listInstances(prompts) {
             }
         } catch (error) {
             base.debug(error)
-            console.log(error)
+            //console.log(error)
         }
 
         base.debug(results)
@@ -55,13 +58,13 @@ export async function listInstances(prompts) {
                 let createdAt = new Date(item.created_at)
                 outputItem.created_at = createdAt.toString()
                 outputItem.status = await btp.getHANAInstanceStatus(item.parameters)
-                let updatedAt = new Date(item.last_operation.updated_at)                
+                let updatedAt = new Date(item.last_operation.updated_at)
                 outputItem.last_operation = `${item.last_operation.type} ${item.last_operation.state} @ ${updatedAt.toString()}`
                 outputItem.hana_cockpit = item.dashboard_url
                 outputItem.version = `${item.parameters.currentProductVersion.id}`
                 outputItem.enabledServices = `Doc Store: ${item.parameters.data.enabledservices.docstore} DP Server: ${item.parameters.data.enabledservices.dpserver} Script Server:${item.parameters.data.enabledservices.scriptserver}`
-                outputItem.resources = `Memory: ${item.parameters.data.memory} Gb, Storage: ${item.parameters.data.storage} Gb, VCPUs: ${item.parameters.data.vcpu}` 
- 
+                outputItem.resources = `Memory: ${item.parameters.data.memory} Gb, Storage: ${item.parameters.data.storage} Gb, VCPUs: ${item.parameters.data.vcpu}`
+
                 var url = new URL(outputItem.hana_cockpit)
                 outputItem.hana_central = `${url.protocol}//${url.host}/hcs/sap/hana/cloud/index.html#/org/${await cf.getCFOrgGUID()}/space/${await cf.getCFSpaceGUID()}/databases`
                 outputItem.db_explorer = `${url.protocol}//${url.host}/sap/hana/cst/catalog/index.html`
@@ -81,10 +84,18 @@ export async function listInstances(prompts) {
 
         //Cloud Foundry Specific Instances
         results = []
-        if (prompts.name === '**default**') {
-            results = await cf.getHANAInstances()
-        } else {
-            results = await cf.getHANAInstanceByName(prompts.name)
+        if (base.verboseOutput) {
+            console.log(base.bundle.getText("hc.CFCheck"))
+        }
+        try {
+            if (prompts.name === '**default**') {
+                results = await cf.getHANAInstances()
+            } else {
+                results = await cf.getHANAInstanceByName(prompts.name)
+            }
+        } catch (error) {
+            base.debug(error)
+            //console.log(error)
         }
         base.debug(results)
         if (results) {
@@ -96,7 +107,7 @@ export async function listInstances(prompts) {
                 let createdAt = new Date(item.created_at)
                 outputItem.created_at = createdAt.toString()
                 outputItem.status = await cf.getHANAInstanceStatus(item.guid)
-                let updatedAt = new Date(item.last_operation.updated_at) 
+                let updatedAt = new Date(item.last_operation.updated_at)
                 outputItem.last_operation = `${item.last_operation.type} ${item.last_operation.state} @ ${updatedAt.toString()}`
                 outputItem.hana_cockpit = item.dashboard_url
 
