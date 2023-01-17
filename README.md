@@ -271,6 +271,8 @@ Options:
   --subaccount, --sa  The ID of the subaccount to be targeted           [string]
 ```
 
+![bas example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/btp.gif)
+
 ### callProcedure
 
 ```shell
@@ -965,6 +967,7 @@ Troubleshooting:
 Options:
   -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]
 ```
+
 ![hdi example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hdi.gif)
 
 ### hc
@@ -986,7 +989,10 @@ Troubleshooting:
 Options:
   -n, --name  SAP HANA Cloud Instance name     [string] [default: "**default**"]
 ```
+
 ![hc example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hc.gif)
+
+![hc #2 example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hc_2.gif)
 
 ### hcStart
 
@@ -1709,6 +1715,7 @@ Troubleshooting:
                              ntermediate details      [boolean] [default: false]
 ```
 
+![bas example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/bas.gif)
 ### openDBX
 
 ```shell
