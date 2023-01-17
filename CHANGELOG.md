@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202301.1] - 2023-01-17
+
+**Changed**
+
+- Add support for using btp CLI
+- Allows managing HANA Cloud instances that are multi-environment (not managed by Cloud Foundry) - hc, start, stop commands
+- New command: bas - Allows launch the Business Application Studio from the hana-cli
+- New command: btp - Add helper to target BTP Sub Account
+- Improved HANA Cloud Information Formatting
+- Use BTP CLient Config Environment Variable
+- Parallel Loading of all cli commands for performance improvements
+- Updated devcontainer configuration
+- Proper handling if btp CLI is not installed on target machine
+- Fix btp CLI config lookup on Linux
+
 ## [3.202212.2] - 2022-12-19
 
 **Changed**
