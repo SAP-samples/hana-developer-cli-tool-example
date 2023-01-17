@@ -4,17 +4,17 @@
  */
 export function getCFConfig(): Promise<object>;
 /**
- * Get target organziation
+ * Get target organization
  * @returns {Promise<object>}
  */
 export function getCFOrg(): Promise<object>;
 /**
- * Get target orgnaization name
+ * Get target organization name
  * @returns {Promise<string>}
  */
 export function getCFOrgName(): Promise<string>;
 /**
- * Get target orgnaization GUID
+ * Get target organization GUID
  * @returns {Promise<string>}
  */
 export function getCFOrgGUID(): Promise<string>;
@@ -34,7 +34,7 @@ export function getCFSpaceName(): Promise<string>;
  */
 export function getCFSpaceGUID(): Promise<string>;
 /**
- * Get currrent targets
+ * Get current targets
  * @returns {Promise<object>}
  */
 export function getCFTarget(): Promise<object>;

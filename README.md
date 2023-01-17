@@ -251,6 +251,28 @@ Options:
   -g, --group, --Group  HDI Group       [string] [default: "SYS_XS_HANA_BROKER"]
 ```
 
+### btp
+
+```shell
+hana-cli btp [directory] [subaccount]
+
+Set the target for commands for the btp CLI to the global account, a directory,
+or a subaccount. Commands are executed in the specified target, unless you override it using a parameter. If the specified target is part of an account hierarchy, its parents are also targeted, so that if a command is only available on a higher level, it will be executed there.
+
+Troubleshooting:
+  --disableVerbose, --quiet  Disable Verbose output - removes all extra output t
+                             hat is only helpful to human readable interface. Us
+                             eful for scripting commands.
+                                                      [boolean] [default: false]
+  --debug, --Debug           Debug hana-cli itself by adding output of LOTS of i
+                             ntermediate details      [boolean] [default: false]
+
+Options:
+  --subaccount, --sa  The ID of the subaccount to be targeted           [string]
+```
+
+![bas example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/btp.gif)
+
 ### callProcedure
 
 ```shell
@@ -945,6 +967,7 @@ Troubleshooting:
 Options:
   -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]
 ```
+
 ![hdi example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hdi.gif)
 
 ### hc
@@ -966,7 +989,10 @@ Troubleshooting:
 Options:
   -n, --name  SAP HANA Cloud Instance name     [string] [default: "**default**"]
 ```
+
 ![hc example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hc.gif)
+
+![hc #2 example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hc_2.gif)
 
 ### hcStart
 
@@ -1673,6 +1699,23 @@ Options:
 
 ![objects example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/objects.gif)
 
+### openbas
+
+```shell
+hana-cli openbas
+
+Open SAP Business Appplication Studio
+
+Troubleshooting:
+  --disableVerbose, --quiet  Disable Verbose output - removes all extra output t
+                             hat is only helpful to human readable interface. Us
+                             eful for scripting commands.
+                                                      [boolean] [default: false]
+  --debug, --Debug           Debug hana-cli itself by adding output of LOTS of i
+                             ntermediate details      [boolean] [default: false]
+```
+
+![bas example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/bas.gif)
 ### openDBX
 
 ```shell

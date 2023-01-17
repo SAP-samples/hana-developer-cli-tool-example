@@ -125,6 +125,11 @@ export function sendResults(res: any, results: any): void;
  */
 export function getLastResults(): any;
 /**
+ * Get the username of the active database connection
+ * @returns userName
+ */
+export function getUserName(): string;
+/**
  * - instance of sap-hdb-promisified module
  */
 export type dbClass = dbClassDef;

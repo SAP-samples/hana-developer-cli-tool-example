@@ -2,16 +2,19 @@
 /*eslint-env node, es6 */
 // @ts-check
 
-import * as cf from "./utils/cf.js"
+import * as btp from "./utils/btp.js"
 
 export async function  init(){
 
-    let data = await cf.getHANAInstanceByName('HANA_CLOUD_2')
-  /*  last_operation: [Object],
+    let data = await btp.getBTPConfig()
+    console.log(data)
+
+ /*   let data = await cf.getHANAInstanceByName('HANA_CLOUD_2')
+    last_operation: [Object],
       relationships: [Object],
       metadata: [Object],
-      links: [Object] */
-    console.table(data.resources[0].last_operation)
+      links: [Object]
+    console.table(data.resources[0].last_operation) */
 }
 init()
 
