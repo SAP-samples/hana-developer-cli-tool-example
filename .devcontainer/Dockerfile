@@ -11,7 +11,7 @@ RUN wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.k
 
 # Install extra tools for CAP development & deployment.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends sqlite cf-cli
+    && apt-get -y install --no-install-recommends sqlite cf8-cli git jq 
 
 # Install global node modules for SAP CAP and frontend development.
 RUN su node -c "npm install -g @ui5/cli @sap/cds-dk yo @sapui5/generator-sapui5-templates @sap/generator-add-hdb-module @sap/generator-base-mta-module @sap/generator-cap-project @sap/generator-fiori @sap/generator-hdb-project typescript"

@@ -26,10 +26,17 @@ export async function getBTPConfig() {
     base.debug('getBTPConfig')
     try {
         let localDir = process.env.BTP_CLIENTCONFIG
-        if (!localDir){
-            localDir = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share")
-            localDir = `${localDir}/SAP/btp/config.json`
+        base.debug(localDir)
+        if (!localDir) {
+            if (process.env.APPDATA) {
+                localDir = `${process.env.APPDATA}/SAP/btp/config.json`
+            } else if (process.platform == 'darwin') {
+                localDir = `${process.env.HOME}/Library/Preferences/SAP/btp/config.json`
+            } else {
+                localDir = `${process.env.HOME}/.config/.btp/config.json`
+            }
         }
+        base.debug(localDir)
         const data = fs.readFileSync(localDir,
             { encoding: 'utf8', flag: 'r' })
         const object = JSON.parse(data)
@@ -386,7 +393,7 @@ export async function setBTPSubAccount(subAccount) {
         let script = `btp target --subaccount ${subAccount}`
 
         const { stdout } = await exec(script)
-        return stdout    
+        return stdout
 
     } catch (error) {
         base.debug(error)
@@ -510,7 +517,7 @@ export async function startHana(name) {
         base.debug(script)
         const { stdout } = await exec(script)
         fs.unlinkSync(fileName)
-        return stdout    
+        return stdout
 
     } catch (error) {
         base.debug(error)
@@ -535,7 +542,7 @@ export async function stopHana(name) {
         base.debug(script)
         const { stdout } = await exec(script)
         fs.unlinkSync(fileName)
-        return stdout    
+        return stdout
 
     } catch (error) {
         base.debug(error)
