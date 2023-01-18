@@ -16,12 +16,3 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 # Install global node modules for SAP CAP and frontend development.
 RUN su node -c "npm install -g @ui5/cli @sap/cds-dk yo @sapui5/generator-sapui5-templates @sap/generator-add-hdb-module @sap/generator-base-mta-module @sap/generator-cap-project @sap/generator-fiori @sap/generator-hdb-project typescript"
 
-#RUN curl \
-#  --remote-name \
-#  --location \
-#  --url "https://raw.githubusercontent.com/SAP-samples/sap-tech-bytes/2021-09-01-btp-cli/getbtpcli" \
-#  && chmod +x getbtpcli
-
-#RUN ./getbtpcli
-
-#RUN echo 'export PATH=$PATH:$HOME/bin' >> $HOME/.bashrc
