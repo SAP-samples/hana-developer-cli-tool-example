@@ -12,6 +12,37 @@ import { promisify } from 'util'
 import * as child_process from 'child_process'
 
 /**
+ * Get cf cli version
+ * @returns {Promise<String>}
+ */
+export async function getVersion() {
+    base.debug('getVersion')
+
+    try {
+        const exec = promisify(child_process.exec)
+        let script = `cf -v`
+
+        const { stdout, stderr } = await exec(script)
+
+        if (stderr) {
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
+        } else {
+            if(stdout){
+                try {
+               return stdout
+            } catch(e) {
+                return
+            }
+            }
+            return
+        }
+    } catch (error) {
+        base.debug(error)
+        throw (error)
+    }
+}
+
+/**
  * Read central configuration file for CF CLI
  * @returns {Promise<object>}
  */

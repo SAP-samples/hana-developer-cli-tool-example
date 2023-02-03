@@ -1,6 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import {highlight} from 'cli-highlight'
 
 export const command = 'inspectLibrary [schema] [library]'
 export const aliases = ['il', 'library', 'insLib', 'inspectlibrary']
@@ -52,6 +51,7 @@ export function handler (argv) {
 
 export async function libraryInspect(prompts) {
   base.debug('libraryInspect')
+  const { highlight } = await import('cli-highlight')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()

@@ -3,10 +3,12 @@
 // @ts-check
 
 import * as btp from "./utils/btp.js"
+//import * as cf from "./utils/cf.js"
 
 export async function  init(){
 
-    let data = await btp.getBTPConfig()
+   // let data = await btp.getBTPConfig()
+   let data = await btp.getVersion()
     console.log(data)
 
  /*   let data = await cf.getHANAInstanceByName('HANA_CLOUD_2')

@@ -1,8 +1,6 @@
 // @ts-check
 import * as base from '../utils/base.js'
 import cds from '@sap/cds'
-import { promises as fs } from 'fs'
-import * as  convert from 'js-convert-case'
 
 export const command = 'massRename'
 export const aliases = ['mr', 'massrename', 'massRN', 'massrn']
@@ -56,6 +54,8 @@ export function handler (argv) {
 
 export async function rename(result) {
   base.debug('rename')
+  const convert = await import('js-convert-case')
+
   try {
     base.setPrompts(result)
      const csn = await cds.load(result.schema)
@@ -142,6 +142,7 @@ export async function rename(result) {
             break
         }
       })
+    const {promises:fs} = await import('fs')  
     if (result.prefix) {
       fs.writeFile(`${result.prefix}.cds`, model)
     } else {

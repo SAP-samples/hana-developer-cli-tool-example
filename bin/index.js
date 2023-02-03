@@ -1,9 +1,9 @@
 // @ts-check
-
+import * as base from '../utils/base.js'
 export async function init() {
-
-    const [
-        activateHDI, adminHDI, adminHDIGroup, btp, callProcedure, certificates, cds, openChangeLog,
+    base.debug(`Command Init`)
+     const [
+        activateHDI, adminHDI, adminHDIGroup, callProcedure, certificates, cds, openChangeLog,
         changeLog, changeLogUI, connect, containers, containersUI, copy2DefaultEnv, copy2Env,
         copy2Secrets, createGroup, createContainer, createContainerUsers, createJWT, createModule,
         createXSAAdmin, dataTypes, dataTypesUI, dataVolumes, disks, dropGroup, dropContainer, features,
@@ -19,7 +19,7 @@ export async function init() {
         hanaCloudSecureStoreInstances, hanaCloudSecureStoreInstancesUI, connectViaServiceKey,
         sequences, status, synonyms, systemInfo, systemInfoUI, tables, tablesUI, //test,
         traces, traceContents, triggers, UI, hanaCloudUPSInstances, hanaCloudUPSInstancesUI,
-        users, version, views
+        users, version, views, btp, btpSubs, btpInfo, issue
     ] = await Promise.all([
         import('./activateHDI.js'),
         import('./adminHDI.js'),
@@ -122,10 +122,14 @@ export async function init() {
         import('./users.js'),
         import('./version.js'),
         import('./views.js'),
-        import('./btp.js')
+        import('./btp.js'),
+        import('./btpSubs.js'),
+        import('./btpInfo.js'),
+        import('./issue.js')
     ])
+    base.debug(`Command Init End`)
     return [
-        activateHDI, adminHDI, adminHDIGroup, btp, callProcedure, certificates, cds, openChangeLog,
+        activateHDI, adminHDI, adminHDIGroup, btp, btpSubs, btpInfo, callProcedure, certificates, cds, openChangeLog,
         changeLog, changeLogUI, connect, containers, containersUI, copy2DefaultEnv, copy2Env,
         copy2Secrets, createGroup, createContainer, createContainerUsers, createJWT, createModule,
         createXSAAdmin, dataTypes, dataTypesUI, dataVolumes, disks, dropGroup, dropContainer, features,
@@ -134,7 +138,7 @@ export async function init() {
         hostInformation, indexes, indexesUI, iniContents, iniFiles, inspectFunction,
         inspectIndex, inspectJWT, inspectLibMember, inspectLibrary, inspectProcedure,
         inspectTable, inspectTableUI, inspectTrigger, inspectUser, inspectView,
-        libraries, massConvert, massConvertUI, massRename, massUsers, matrix, objects,
+        issue, libraries, massConvert, massConvertUI, massRename, massUsers, matrix, objects,
         openBAS, openDBExplorer, ports, privilegeError, procedures, querySimple, querySimpleUI, readMe, readMeUI,
         openReadMe, reclaim, rick, roles, hanaCloudSBSSInstances, hanaCloudSBSSInstancesUI,
         schemas, schemasUI, hanaCloudSchemaInstances, hanaCloudSchemaInstancesUI,
@@ -142,5 +146,5 @@ export async function init() {
         sequences, status, synonyms, systemInfo, systemInfoUI, tables, tablesUI, //test,
         traces, traceContents, triggers, UI, hanaCloudUPSInstances, hanaCloudUPSInstancesUI,
         users, version, views
-    ]
+    ] 
 }

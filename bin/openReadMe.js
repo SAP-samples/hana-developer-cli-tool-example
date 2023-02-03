@@ -1,6 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import open from 'open'
 
 export const command = 'readme'
 export const aliases = ['openreadme', 'openReadme', 'openReadMe', 'openHelp', 'openhelp']
@@ -12,6 +11,7 @@ export function handler (argv) {
 
 export async function getReadMe() {
     base.debug('getReadMe')
+    const { default:open } = await import('open')
     let dbxReadmeURL = 'https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/README.md'
     console.log(dbxReadmeURL)
     open(dbxReadmeURL)

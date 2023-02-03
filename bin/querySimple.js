@@ -1,12 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import { parse as  parseToCsv } from 'json2csv'
-import * as fs from 'fs'
-import * as path from 'path'
-import {highlight} from 'cli-highlight'
-import * as excel from 'node-xlsx'
-// @ts-ignore
-import * as Table from 'easy-table'
 
 export const command = 'querySimple'
 export const aliases = ['qs', "querysimple"]
@@ -64,12 +57,12 @@ export let inputPrompts = {
   }
 }
 
-export function handler (argv) {
+export function handler(argv) {
   base.promptHandler(argv, dbQuery, inputPrompts)
 }
 
 export function removeNewlineCharacter(dataRow) {
-  
+
   let newDataRow = {}
   Object.keys(dataRow).forEach((key) => {
     if (typeof dataRow[key] === "string") {
@@ -83,6 +76,17 @@ export function removeNewlineCharacter(dataRow) {
 
 export async function dbQuery(prompts) {
   base.debug('dbQuery')
+  const [{ highlight }, { AsyncParser }, { default: excel }, { default: Table }] = await Promise.all([
+    import('cli-highlight'),
+    import('@json2csv/node'),
+    import('node-xlsx'),
+    import('easy-table')
+  ])
+
+  const opts = { delimiter: ";", transforms: [removeNewlineCharacter] }
+  const transformOpts = {}
+  const asyncOpts = {}
+  const parser = new AsyncParser(opts, transformOpts, asyncOpts)
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
@@ -130,13 +134,15 @@ export async function dbQuery(prompts) {
           return JSON.stringify(results, null, 2)
         }
         break
-      case 'csv':
+      case 'csv':        
         if (prompts.filename) {
-          await toFile(prompts.folder, prompts.filename, 'csv', parseToCsv(results, {delimiter : ";", transforms : [removeNewlineCharacter]}))
+          const csv = await parser.parse(results).promise()
+          await toFile(prompts.folder, prompts.filename, 'csv', csv)
         } else {
-          console.log(highlight(parseToCsv(results)))
+          const csv = await parser.parse(results).promise()
+          console.log(highlight(csv))
           base.end()
-          return parseToCsv(results)
+          return csv
         }
         break
       default:
@@ -156,6 +162,10 @@ export async function dbQuery(prompts) {
 
 async function toFile(folder, file, ext, content) {
   base.debug('toFile')
+  const [{ default: fs }, { default: path }] = await Promise.all([
+    import('fs'),
+    import('path')
+  ])
   let dir = folder
   !fs.existsSync(dir) && fs.mkdirSync(dir)
   file = `${file}.${ext}`

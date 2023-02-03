@@ -1,4 +1,12 @@
 /**
+ * Start the Terminal Spinner
+ */
+export function startSpinnerInt(): void;
+/**
+ * Stop the Terminal Spinner
+ */
+export function stopSpinnerInt(): void;
+/**
  *
  * @param {object} newPrompts - processed input prompts
  */
@@ -68,7 +76,7 @@ export function promptHandler(argv: import("yargs").CommandBuilder, processingFu
  */
 export function error(error: any): void;
 /**
- * Normal processing end and cleanup for single comand
+ * Normal processing end and cleanup for single command
  */
 export function end(): Promise<void>;
 /**
@@ -129,6 +137,7 @@ export function getLastResults(): any;
  * @returns userName
  */
 export function getUserName(): string;
+export const require: NodeRequire;
 /**
  * - instance of sap-hdb-promisified module
  */

@@ -1,4 +1,4 @@
-export function handler(argv: any): void;
+export function handler(argv: any): Promise<void>;
 export function cdsBuild(prompts: any): Promise<void>;
 export function getIndex(odataURL: any, entity: any): string;
 export function _manifest(odataURL: any, entity: any, table: any): {

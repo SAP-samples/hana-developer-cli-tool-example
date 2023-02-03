@@ -3,17 +3,8 @@ import * as base from '../utils/base.js'
 import * as dbInspect from '../utils/dbInspect.js'
 import dbClass from "sap-hdb-promisfied"
 import * as conn from "../utils/connections.js"
-import { highlight } from 'cli-highlight'
 // @ts-ignore
 import cds from '@sap/cds'
-// @ts-ignore
-import YAML from 'json-to-pretty-yaml'
-import {
-  parse,
-  convert
-} from 'odata2openapi'
-import { createRequire } from 'module'
-const require = createRequire(import.meta.url)
 global.__xRef = []
 
 export const command = 'inspectTable [schema] [table]'
@@ -96,9 +87,13 @@ export function handler(argv) {
 
 export async function tableInspect(prompts) {
   base.debug('tableInspect')
+  const [{ highlight }, YAML, { parse, convert }] = await Promise.all([
+    import('cli-highlight'),
+    import('json-to-pretty-yaml'),
+    import('odata2openapi')
+  ])
+  
   try {
-    //  base.setPrompts(prompts)
-    // const db = await base.createDBConnection()
     let dbConnection = await conn.createConnection(prompts, false)
     const db = new dbClass(dbConnection)
     let schema = await dbClass.schemaCalc(prompts, db)
@@ -113,7 +108,7 @@ export async function tableInspect(prompts) {
     let constraints = await dbInspect.getConstraints(db, object)
 
     // @ts-ignore
-    Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => require('@sap/cds-dk/lib/compile/openapi') })
+    Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => base.require('@sap/cds-dk/lib/compile/openapi') })
 
     var results = {}
     switch (prompts.output) {

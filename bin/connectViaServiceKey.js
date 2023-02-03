@@ -1,8 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import * as fs from 'fs'
-import * as child_process from 'child_process'
-let child = child_process.exec
 
 export const command = 'serviceKey [instance] [key]'
 export const aliases = ['key', 'servicekey', 'service-key']
@@ -82,7 +79,8 @@ export function handler (argv) {
 export async function setKeyDetails(input) {
   base.debug('setKeyDetails')
   base.debug(input)
-
+  const { default:child_process } = await import('child_process')
+  let child = child_process.exec
   //create serviceKey
   try {
 
@@ -174,12 +172,15 @@ export async function saveEnv(options, input) {
   }
 
   if (input.save) {
+    const { default:fs } = await import('fs')
     fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), (err) => {
       if (err) {
         throw new Error(`${base.bundle.getText("errConn")} ${JSON.stringify(err)}`)
       }
-      console.log(base.bundle.getText("saved"));
-
+      console.log(base.bundle.getText("saved"))
+      base.end()
     })
+  } else {
+    base.end()
   }
 }

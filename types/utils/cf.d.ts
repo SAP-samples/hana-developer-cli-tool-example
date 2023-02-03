@@ -1,4 +1,9 @@
 /**
+ * Get cf cli version
+ * @returns {Promise<String>}
+ */
+export function getVersion(): Promise<string>;
+/**
  * Read central configuration file for CF CLI
  * @returns {Promise<object>}
  */

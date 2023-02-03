@@ -273,6 +273,25 @@ Options:
 
 ![bas example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/btp.gif)
 
+### btpInfo
+
+```shell
+Detailed Information about btp CLI target
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra outp
+                                 ut that is only helpful to human readable inter
+                                 face. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -o, --output, --Output  Output Format for inspection
+                              [string] [choices: "tbl", "json"] [default: "tbl"]
+```
+
 ### callProcedure
 
 ```shell
@@ -1478,6 +1497,20 @@ Options:
   ifiers                                    ier]      [boolean] [default: false]                                                      
 ```
 
+### issue
+
+```shell
+Report an Issue with the hana-cli
+
+Troubleshooting:
+  --disableVerbose, --quiet  Disable Verbose output - removes all extra output t
+                             hat is only helpful to human readable interface. Us
+                             eful for scripting commands.
+                                                      [boolean] [default: false]
+  --debug, --Debug           Debug hana-cli itself by adding output of LOTS of i
+                             ntermediate details      [boolean] [default: false]
+```
+
 ### libraries
 
 ```shell
@@ -1960,6 +1993,7 @@ Options:
 ![roles example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/roles.gif)
 
 ### sbss
+
 ```shell
 hana-cli sbss                             List all SAP HANA Cloud SBSS service
                                            instances in your target Space
@@ -2005,6 +2039,7 @@ Options:
       --all, --al, --allSchemas  Show all schemas regardless of permissions
                                                       [boolean] [default: false]
 ```
+
 ![schemas example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/schemas.gif)
 
 ### schemasUI
@@ -2034,6 +2069,7 @@ Options:
       --all, --al, --allSchemas  Show all schemas regardless of permissions
                                                       [boolean] [default: false]
 ```
+
 ### schemaInstances
 
 ```shell
@@ -2159,6 +2195,20 @@ Options:
 ```
 
 ![status example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/status.gif)
+
+### sub
+
+```shell
+BTP Active Subscriptions and their URL
+
+Troubleshooting:
+  --disableVerbose, --quiet  Disable Verbose output - removes all extra output t
+                             hat is only helpful to human readable interface. Us
+                             eful for scripting commands.
+                                                      [boolean] [default: false]
+  --debug, --Debug           Debug hana-cli itself by adding output of LOTS of i
+                             ntermediate details      [boolean] [default: false]
+```
 
 ### synonyms
 

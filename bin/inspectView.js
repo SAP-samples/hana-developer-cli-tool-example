@@ -1,15 +1,7 @@
 // @ts-check
 import * as base from '../utils/base.js'
 import * as dbInspect from '../utils/dbInspect.js'
-import { highlight } from 'cli-highlight'
 import cds from '@sap/cds'
-import YAML from 'json-to-pretty-yaml'
-import {
-  parse,
-  convert
-} from 'odata2openapi'
-import { createRequire } from 'module'
-const require = createRequire(import.meta.url)
 global.__xRef = []
 
 export const command = 'inspectView [schema] [view]'
@@ -90,6 +82,11 @@ export function handler(argv) {
 
 export async function viewInspect(prompts) {
   base.debug('viewInspect')
+  const [{ highlight }, YAML, { parse, convert }] = await Promise.all([
+    import('cli-highlight'),
+    import('json-to-pretty-yaml'),
+    import('odata2openapi')
+  ])
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
@@ -109,7 +106,7 @@ export async function viewInspect(prompts) {
     }
 
     // @ts-ignore
-    Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => require('@sap/cds-dk/lib/compile/openapi') })
+    Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => base.require('@sap/cds-dk/lib/compile/openapi') })
 
     switch (prompts.output) {
       case 'tbl':
@@ -158,6 +155,7 @@ export async function viewInspect(prompts) {
       }
       case 'hdbview': {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "hdbview", schema)
+        base.debug(cdsSource)
         let all = cds.compile.to.hdbtable(cds.parse(cdsSource))
         for (let [src] of all)
           // @ts-ignore

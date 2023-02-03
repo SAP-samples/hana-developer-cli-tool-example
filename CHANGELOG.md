@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202302.1] - 2023-02-03
+
+**Changed**
+
+- Lazy Load dependent modules to reduce initial command processor boot time - 10x performance improvement
+- CAP Upgrade to Jan 2023 - 6.5.0 version
+- Switch to @json2csv/node as json2csv is abandoned
+- New 'sub' command to list all active BTP Subscriptions and their URLs
+- New 'btpInfo' command to list detailed information about th btp CLI target
+- New 'issue' command to create GitHub issue preloaded with technical details
+- version command now returns information about @sap/cds-dk, the cf cli, and the btp cli
+
 ## [3.202301.1] - 2023-01-17
 
 **Changed**

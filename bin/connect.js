@@ -1,6 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import * as fs from 'fs'
 export const command = 'connect [user] [password]'
 export const aliases = ['c', 'login']
 export const describe = base.bundle.getText("connect")
@@ -165,6 +164,7 @@ export async function saveEnv(options) {
     defaultEnv.VCAP_SERVICES.hana[0].credentials.sslCryptoProvider = 'openssl'
     defaultEnv.VCAP_SERVICES.hana[0].credentials.sslValidateCertificate = true
   }
+  const {default:fs} = await import('fs')
   fs.writeFileSync("default-env-admin.json", JSON.stringify(defaultEnv, null, '\t'))
   console.log(base.bundle.getText("adminSaved"))
 

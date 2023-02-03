@@ -1,7 +1,6 @@
 // @ts-check
 import * as base from '../utils/base.js'
 import * as conn from '../utils/connections.js'
-import open from 'open'
 
 export const command = 'opendbx'
 export const aliases = ['open', 'openDBX', 'opendb', 'openDBExplorer', 'opendbexplorer', 'dbx', 'DBX']
@@ -13,6 +12,7 @@ export function handler (argv) {
 
 export async function getDBX(prompts) {
     base.debug('getDBX')
+    const { default:open } = await import('open')
     try {
         let options = await conn.getConnOptions(prompts)
         
@@ -47,9 +47,9 @@ export async function getDBX(prompts) {
                 await console.log(`${base.bundle.getText("errDBX")}: ${host}`)
                 return
             }
-        }
-        console.log(dbxURL)
+        }        
         open(dbxURL)
+        console.log(dbxURL)
         return base.end()
     } catch (error) {
         base.error(error)

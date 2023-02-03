@@ -2,11 +2,6 @@
 import * as base from '../utils/base.js'
 import * as btp from '../utils/btp.js'
 const colors = base.colors
-import { createRequire } from 'module'
-const require = createRequire(import.meta.url)
-const inquirer = require('inquirer')
-const TreePrompt = require('inquirer-tree-prompt')
-
 
 export const command = 'btp [directory] [subaccount]'
 export const aliases = ['btpTarget', 'btptarget', 'btp']
@@ -30,13 +25,20 @@ export async function handler(argv) {
         }
     }
 
+    base.debug(`build inquirer prompts`)
+    const inquirer = base.require('inquirer')
+    const TreePrompt = base.require('inquirer-tree-prompt')
 
     try {
+        base.debug(`GetBTPGlobalAccount`)
+        base.startSpinnerInt()
         var account = await btp.getBTPGlobalAccount()
+        base.debug(account)
         try {
-            console.log(`${base.bundle.getText("btpGlobal")}: ${colors.green(account.DisplayName)}`)
             let hierarchy = await btp.getBTPHierarchy()
             base.debug(hierarchy)
+            base.stopSpinnerInt()
+            console.log(`${base.bundle.getText("btpGlobal")}: ${colors.green(account.DisplayName)}`)
             inquirer.registerPrompt('tree', TreePrompt)
 
             let tree = []
@@ -96,10 +98,12 @@ export async function handler(argv) {
 
 export async function callBTP(prompts) {
     base.debug('callBTP')
+    base.startSpinnerInt()
     base.debug(prompts)
     try {
         base.setPrompts(prompts)
         let targetOutput = await btp.setBTPSubAccount(prompts.subaccount)
+        base.stopSpinnerInt()
         console.log(targetOutput)
 
         return base.end()

@@ -1,6 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import {highlight} from 'cli-highlight'
 
 export const command = 'inspectTrigger [schema] [trigger]'
 export const aliases = ['itrig', 'trigger', 'insTrig', 'inspecttrigger', 'inspectrigger']
@@ -51,6 +50,7 @@ export function handler (argv) {
 
 export async function triggerInspect(prompts) {
   base.debug('triggerInspect')
+  const { highlight } = await import('cli-highlight')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()

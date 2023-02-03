@@ -1,16 +1,10 @@
 // @ts-check
 import * as base from '../utils/base.js'
 import * as dbInspect from '../utils/dbInspect.js'
-import * as swaggerUi from 'swagger-ui-express'
-import open from 'open'
 import * as conn from '../utils/connections.js'
-import * as Server from 'http'
-import express from 'express'
+
 // @ts-ignore
 import cds from '@sap/cds'
-
-import { createRequire } from 'module'
-const require = createRequire(import.meta.url)
 
 global.__xRef = []
 
@@ -56,7 +50,7 @@ export const builder = base.getBuilder({
   }
 })
 
-export function handler(argv) {
+export async function handler(argv) {
   base.promptHandler(argv, cdsBuild, {
     table: {
       description: base.bundle.getText("table"),
@@ -201,6 +195,7 @@ export async function cdsBuild(prompts) {
 async function cdsServerSetup(prompts, cdsSource) {
 
   base.debug('cdsServerSetup')
+  const {default:Server} = await import('http')
   const port = process.env.PORT || prompts.port || 3010
 
   if (!(/^[1-9]\d*$/.test(port) && 1 <= 1 * port && 1 * port <= 65535)) {
@@ -208,6 +203,7 @@ async function cdsServerSetup(prompts, cdsSource) {
   }
 
   const server = Server.createServer()
+  const express = base.require('express')
   var app = express()
 
   //CDS OData Service
@@ -336,7 +332,7 @@ async function cdsServerSetup(prompts, cdsSource) {
 
   //Swagger UI
 
-  Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => require('@sap/cds-dk/lib/compile/openapi') })
+  Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => base.require('@sap/cds-dk/lib/compile/openapi') })
   try {
     // @ts-ignore
     let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
@@ -349,6 +345,7 @@ async function cdsServerSetup(prompts, cdsSource) {
     let serveOptions = {
       explorer: true
     }
+    const swaggerUi = await import('swagger-ui-express')
     app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(metadata, serveOptions))
 
     app.get('/', (_, res) => res.send(getIndex(odataURL, entity)))
@@ -370,18 +367,18 @@ async function cdsServerSetup(prompts, cdsSource) {
 
     //Start the Server 
     server.on("request", app)
-    server.listen(port, function () {
+    server.listen(port, async () => {
       // @ts-ignore
       let serverAddr = `http://localhost:${server.address().port}`
       console.info(`HTTP Server: ${serverAddr}`)
 
       //GraphQL 
-        const GraphQLAdapter = require('@cap-js/graphql/lib') //require('@sap/cds-graphql/lib')
+        const GraphQLAdapter = base.require('@cap-js/graphql/lib') //require('@sap/cds-graphql/lib')
         const adapter = new GraphQLAdapter (cds.services, { graphiql: true, path: '/graphql' })
         app.use('/graphql', adapter)
        // app.use(new GraphQLAdapter(cds.services, { graphiql: true }))
       console.log("serving GraphQL endpoint for all services { at: '/graphql' }")
-
+      const { default:open } = await import('open')
       open(serverAddr)
     })
   }

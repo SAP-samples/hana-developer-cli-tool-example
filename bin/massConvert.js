@@ -1,6 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import * as massConvertLib from '../utils/massConvert.js'
 global.__xRef = []
 
 export const command = 'massConvert [schema] [table]'
@@ -15,6 +14,7 @@ export function handler (argv) {
 
 export async function getTables(prompts) {
     base.debug('getTables')
+    const massConvertLib = await import('../utils/massConvert.js')
     base.setPrompts(prompts)
     await massConvertLib.convert()
     return base.end()

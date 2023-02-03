@@ -1,8 +1,6 @@
 // @ts-check
 import * as base from '../utils/base.js'
 import * as conn from "../utils/connections.js"
-import { v4 as uuidv4 } from 'uuid'
-import * as fs from 'fs'
 import * as xsenv from '@sap/xsenv'
 
 export const command = 'createContainer [container] [group]'
@@ -60,6 +58,7 @@ export function handler (argv) {
 
 export async function activate(prompts) {
   base.debug('activate')
+  const { v4: uuidv4 } = base.require('uuid')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
@@ -215,6 +214,7 @@ export async function saveEnv(options, container, userDT, userRT, passwordDT, pa
   }]
 
   base.debug(defaultEnv)
+  const {default:fs} = await import('fs')
   fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), (err) => {
     if (err) {
       throw new Error(`${base.bundle.getText('errDefaultEnv')}: ${JSON.stringify(err)}`)

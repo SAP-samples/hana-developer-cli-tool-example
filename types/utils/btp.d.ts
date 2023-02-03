@@ -1,4 +1,9 @@
 /**
+ * Get btp CLI version
+ * @returns {Promise<String>}
+ */
+export function getVersion(): Promise<string>;
+/**
  * Read central configuration file for BTP CLI
  * @returns {Promise<object>}
  */

@@ -17,6 +17,31 @@ import * as fs from 'fs'
 import { promisify } from 'util'
 import * as child_process from 'child_process'
 
+/**
+ * Get btp CLI version
+ * @returns {Promise<String>}
+ */
+export async function getVersion() {
+    base.debug('getVersion')
+    try {
+        const exec = promisify(child_process.exec)
+        let script = `btp --version`
+
+        const { stdout } = await exec(script)
+        if (stdout) {
+            try {
+                return stdout
+            } catch (e) {
+                return
+            }
+        }
+        return
+
+    } catch (error) {
+        base.debug(error)
+        throw (error)
+    }
+}
 
 /**
  * Read central configuration file for BTP CLI

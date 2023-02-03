@@ -1,7 +1,6 @@
 // @ts-check
 import * as base from '../utils/base.js'
 import * as dbInspect from '../utils/dbInspect.js'
-import {highlight} from 'cli-highlight'
 
 export const command = 'inspectProcedure [schema] [procedure]'
 export const aliases = ['ip', 'procedure', 'insProc', 'inspectprocedure', 'inspectsp']
@@ -51,6 +50,7 @@ export function handler (argv) {
 
 export async function procedureInspect(prompts) {
   base.debug('procedureInspect')
+  const { highlight } = await import('cli-highlight')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()

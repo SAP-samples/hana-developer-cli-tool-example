@@ -1,6 +1,5 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import {highlight} from 'cli-highlight'
 
 export const command = 'inspectLibMember [schema] [library] [libraryMem]'
 export const aliases = ['ilm', 'libraryMember', 'librarymember', 'insLibMem', 'inspectlibrarymember']
@@ -60,6 +59,7 @@ export function handler (argv) {
 
 export async function libraryMemInspect(prompts) {
   base.debug('libraryMemInspect')
+  const { highlight } = await import('cli-highlight')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()

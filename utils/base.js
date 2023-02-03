@@ -9,7 +9,8 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url))
 import upath from 'upath'
 import { createRequire } from 'module'
 // @ts-ignore
-const require = createRequire(import.meta.url)
+export const require = createRequire(import.meta.url)
+
 import * as path from 'path'
 
 import dbClassDef from "sap-hdb-promisfied"
@@ -74,8 +75,16 @@ let spinner = null
 /**
  * Start the Terminal Spinner
  */
-function startSpinnerInt() {
+export function startSpinnerInt() {
     spinner = ora(oraOptions).start()
+}
+/**
+ * Stop the Terminal Spinner
+ */
+export function stopSpinnerInt(){
+    if (spinner) {
+        spinner.stop()
+    }
 }
 
 /** type {object} - processed input prompts*/
@@ -529,7 +538,7 @@ export function error(error) {
 }
 
 /**
- * Normal processing end and cleanup for single comand
+ * Normal processing end and cleanup for single command
  */
 export async function end() {
     debug(`Natural End`)
@@ -668,6 +677,7 @@ export async function webServerSetup(urlPath) {
         let serverAddr = `http://localhost:${server.address().port}${urlPath}`
         debug(serverAddr)
         console.info(`HTTP Server: ${serverAddr}`)
+        startSpinnerInt()
         open(serverAddr)
     })
 
