@@ -10,11 +10,11 @@ import * as path from 'path'
 import dotenv from 'dotenv'
 import { homedir } from 'os'
 import * as xsenv from '@sap/xsenv'
-import cds from '@sap/cds'
+//import cds from '@sap/cds'
 // @ts-ignore
-const LOG = cds.log('bind')
-import { createRequire } from 'module'
-const require = createRequire(import.meta.url)
+//const LOG = cds.log('bind')
+//import { createRequire } from 'module'
+//const require = createRequire(import.meta.url)
 
 
 /**
@@ -148,8 +148,8 @@ export async function getConnOptions(prompts) {
                 const data = fs.readFileSync(cdsrcPrivate,
                 { encoding: 'utf8', flag: 'r' })
                 const object = JSON.parse(data)
-                const resolveBinding = require('@sap/cds-dk/lib/bind/bindingResolver').resolver(LOG)
-                let resolvedService = await resolveBinding(null, object.requires['[hybrid]'].db.binding)
+                const resolveBinding = base.require('@sap/cds-dk/lib/bind/bindingResolver') //.BindingResolver(LOG)
+                let resolvedService = await resolveBinding.resolveBinding(null, object.requires['[hybrid]'].db.binding)
                 let options = { hana: resolvedService.credentials }
                 options.hana.pooling = true
                 base.debug(options)
