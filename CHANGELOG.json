@@ -1,5 +1,12 @@
 [
     {
+        "date": "2023-02-10",
+        "version": "3.202302.3",
+        "Changed": [
+            "Change CDS DEFAULT delimited identifier [Issue 98](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/98)"
+        ]
+    },
+    {
         "date": "2023-02-03",
         "version": "3.202302.1",
         "Changed": [

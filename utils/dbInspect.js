@@ -657,7 +657,7 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 
 		global.__xRef.push(xref)
 		if (field.DEFAULT_VALUE) {
-			cdstable += ` default "${field.DEFAULT_VALUE}"`
+			cdstable += ` default '${field.DEFAULT_VALUE}'`
 		}
 
 		if (field.IS_NULLABLE === "FALSE") {
