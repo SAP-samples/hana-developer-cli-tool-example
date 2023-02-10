@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202302.3] - 2023-02-10
+
+**Changed**
+
+- Change CDS DEFAULT delimited identifier [Issue 98](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/98)
+
 ## [3.202302.1] - 2023-02-03
 
 **Changed**
