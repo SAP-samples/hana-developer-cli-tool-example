@@ -1,5 +1,12 @@
 [
     {
+        "date": "2023-02-14",
+        "version": "3.202302.4",
+        "Changed": [
+            "Fix [Issue 102](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/102) cds compile to sqlite no longer supports quoted"
+        ]
+    },
+    {
         "date": "2023-02-10",
         "version": "3.202302.3",
         "Changed": [

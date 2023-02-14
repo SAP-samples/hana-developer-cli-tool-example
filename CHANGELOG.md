@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202302.4] - 2023-02-14
+
+**Changed**
+
+- Fix [Issue 102](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/102) cds compile to sqlite no longer supports quoted
+
 ## [3.202302.3] - 2023-02-10
 
 **Changed**

@@ -123,7 +123,7 @@ export async function viewInspect(prompts) {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "hdbview", schema)
         cdsSource = `service HanaCli { ${cdsSource} } `
         // @ts-ignore
-        console.log(highlight(cds.compile.to.sql(cds.parse(cdsSource), { as: 'str', names: 'quoted', dialect: 'sqlite' })))
+        console.log(highlight(cds.compile.to.sql(cds.parse(cdsSource), { as: 'str', dialect: 'sqlite' })))
         break
       }
       case 'postgres': {

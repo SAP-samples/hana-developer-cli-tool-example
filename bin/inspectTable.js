@@ -131,7 +131,7 @@ export async function tableInspect(prompts) {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable", schema, null)
         cdsSource = `service HanaCli { ${cdsSource} } `
         // @ts-ignore
-        console.log(highlight(cds.compile.to.sql(cds.parse(cdsSource), { as: 'str', names: 'quoted', dialect: 'sqlite' })))
+        console.log(highlight(cds.compile.to.sql(cds.parse(cdsSource), { as: 'str', dialect: 'sqlite' })))
         break
       }
       case 'postgres': {
