@@ -1,6 +1,8 @@
 // @ts-check
 import * as base from '../utils/base.js'
 import * as dbInspect from '../utils/dbInspect.js'
+import dbClass from "sap-hdb-promisfied"
+import * as conn from "../utils/connections.js"
 import cds from '@sap/cds'
 global.__xRef = []
 
@@ -47,37 +49,39 @@ export const builder = base.getBuilder({
   }
 })
 
+export let inputPrompts = {
+  view: {
+    description: base.bundle.getText("view"),
+    type: 'string',
+    required: true
+  },
+  schema: {
+    description: base.bundle.getText("schema"),
+    type: 'string',
+    required: true
+  },
+  output: {
+    description: base.bundle.getText("outputType"),
+    type: 'string',
+    //       validator: /t[bl]*|s[ql]*|c[ds]?/,
+    required: true
+  },
+  useHanaTypes: {
+    description: base.bundle.getText("useHanaTypes"),
+    type: 'boolean'
+  },
+  useExists: {
+    description: base.bundle.getText("gui.useExists"),
+    type: 'boolean'
+  },
+  useQuoted: {
+    description: base.bundle.getText("gui.useQuoted"),
+    type: 'boolean'
+  }
+}
+
 export function handler(argv) {
-  base.promptHandler(argv, viewInspect, {
-    view: {
-      description: base.bundle.getText("view"),
-      type: 'string',
-      required: true
-    },
-    schema: {
-      description: base.bundle.getText("schema"),
-      type: 'string',
-      required: true
-    },
-    output: {
-      description: base.bundle.getText("outputType"),
-      type: 'string',
-      //  validator: /t[bl]*|s[ql]*|c[ds]?/,
-      required: true
-    },
-    useHanaTypes: {
-      description: base.bundle.getText("useHanaTypes"),
-      type: 'boolean'
-    },
-    useExists: {
-      description: base.bundle.getText("gui.useExists"),
-      type: 'boolean'
-    },
-    useQuoted: {
-      description: base.bundle.getText("gui.useQuoted"),
-      type: 'boolean'
-    }
-  })
+  base.promptHandler(argv, viewInspect, inputPrompts)
 }
 
 export async function viewInspect(prompts) {
@@ -89,7 +93,8 @@ export async function viewInspect(prompts) {
   ])
   try {
     base.setPrompts(prompts)
-    const db = await base.createDBConnection()
+    let dbConnection = await conn.createConnection(prompts, false)
+    const db = new dbClass(dbConnection)
     let schema = await base.dbClass.schemaCalc(prompts, db)
 
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("view")}: ${prompts.view}`)
@@ -108,14 +113,18 @@ export async function viewInspect(prompts) {
     // @ts-ignore
     Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => base.require('@sap/cds-dk/lib/compile/openapi') })
 
+    var results = {}
     switch (prompts.output) {
       case 'tbl':
         console.log(object[0])
+        results.basic = object[0]
         console.log("\n")
         console.table(fields)
+        results.fields = fields
         break
       case 'sql': {
         let definition = await dbInspect.getDef(db, schema, prompts.view)
+        results.sql = definition
         console.log(highlight(definition))
         break
       }
@@ -135,6 +144,7 @@ export async function viewInspect(prompts) {
       }
       case 'cds': {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema)
+        results.cds = cdsSource
         console.log(highlight(cdsSource))
         break
       }
@@ -155,11 +165,12 @@ export async function viewInspect(prompts) {
       }
       case 'hdbview': {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "hdbview", schema)
-        base.debug(cdsSource)
         let all = cds.compile.to.hdbtable(cds.parse(cdsSource))
-        for (let [src] of all)
+        for (let [src] of all){
+          results.hdbtable = src
           // @ts-ignore
           console.log(highlight(src))
+        }
         console.log(`\n`)
         break
       }
@@ -284,7 +295,9 @@ export async function viewInspect(prompts) {
         break
       }
     }
-    return base.end()
+    db.destroyClient()
+    await base.end()
+    return results
   } catch (error) {
     base.error(error)
   }

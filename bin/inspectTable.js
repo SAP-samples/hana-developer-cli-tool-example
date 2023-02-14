@@ -3,7 +3,6 @@ import * as base from '../utils/base.js'
 import * as dbInspect from '../utils/dbInspect.js'
 import dbClass from "sap-hdb-promisfied"
 import * as conn from "../utils/connections.js"
-// @ts-ignore
 import cds from '@sap/cds'
 global.__xRef = []
 
@@ -94,11 +93,12 @@ export async function tableInspect(prompts) {
   ])
   
   try {
+    base.setPrompts(prompts)
     let dbConnection = await conn.createConnection(prompts, false)
     const db = new dbClass(dbConnection)
     let schema = await dbClass.schemaCalc(prompts, db)
-    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("table")}: ${prompts.table}`)
 
+    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("table")}: ${prompts.table}`)
     dbInspect.options.useHanaTypes = prompts.useHanaTypes
     dbInspect.options.useExists = prompts.useExists
     dbInspect.options.useQuoted = prompts.useQuoted

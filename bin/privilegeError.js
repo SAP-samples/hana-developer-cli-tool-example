@@ -32,7 +32,7 @@ export async function dbCall(prompts) {
     let inputParams = {
       GUID: prompts.guid
     }
- 
+    base.debug(inputParams)
     let sp = await db.loadProcedurePromisified("SYS", "GET_INSUFFICIENT_PRIVILEGE_ERROR_DETAILS")
     let object = await db.callProcedurePromisified(sp, inputParams)
     if (object.results < 1) {
