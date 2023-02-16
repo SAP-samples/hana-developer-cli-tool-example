@@ -192,6 +192,22 @@
                                         "icon": "sap-icon://table-view",
                                         "navigationMode": "embedded"
                                     }
+                                },
+                                {
+                                    "id": "views-ui",
+                                    "title": "List Views",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "Get a list of all views",
+                                        "title": "List Views",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#views-ui",
+                                        "url": "./views",
+                                        "icon": "sap-icon://table-view",
+                                        "navigationMode": "embedded"
+                                    }
                                 }
                             ]
                         },
@@ -490,6 +506,14 @@
             "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
             "applicationType": "URL",
             "url": "./inspect",
+            "navigationMode": "embedded"
+        },
+        "views-ui": {
+            "title": "List Views",
+            "description": "Get a list of all views",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
             "navigationMode": "embedded"
         },
         "ups-ui": {

@@ -197,6 +197,35 @@ sap.ui.define([
             }
         },
 
+        loadViewFilter: function () {
+            this.updatePrompts()
+            let oController = this
+            let aUrl = "/hana/views/"
+            jQuery.ajax({
+                url: aUrl,
+                method: "GET",
+                dataType: "json",
+                success: function (myJSON) {
+                    oController.onLoadViewFilter(myJSON, oController)
+                },
+                error: function (error) {
+                    oController.onErrorCall(error, oController)
+                }
+            })
+
+        },
+
+        onLoadViewFilter: function (myJSON, oController) {
+
+            let oSearchControl = oController.getView().byId("View")
+            oSearchControl.destroySuggestionItems()
+            for (let i = 0; i < myJSON.length; i++) {
+                oSearchControl.addSuggestionItem(new sap.ui.core.Item({
+                    text: myJSON[i].VIEW_NAME
+                }))
+            }
+        },
+
         loadFunctionFilter: function () {
             this.updatePrompts()
             let oController = this

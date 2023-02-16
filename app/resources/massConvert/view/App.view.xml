@@ -50,6 +50,8 @@
 				<Input id="inputFolder" value="{/folder}" />
 				<Label text="{i18nReuse>filename}" required="false"/>
 				<Input id= "inputFilename" value="{/filename}" />
+				<Label text="{i18nReuse>mass.log}" required="false"/>
+				<CheckBox id= "chkLog" selected="{/log}" />
 				<Label text="{i18nReuse>namespace}" required="false"/>
 				<Input id="inputNamespace" value="{/namespace}" />
 				<Label text="{i18nReuse>synonyms}" required="false"/>
