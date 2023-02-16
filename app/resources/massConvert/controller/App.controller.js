@@ -26,6 +26,7 @@ sap.ui.define([
 
                 this.setFilterAsContains("Schema")
                 this.setFilterAsContains("Table")
+                this.setFilterAsContains("View")
 
                 // webSocket connection opened 
                 connection.attachOpen(() => {

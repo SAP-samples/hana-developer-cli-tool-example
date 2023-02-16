@@ -29,6 +29,9 @@
 				<Label text="{i18nReuse>table}" required="true"/>
 				<Input id="Table" value="{/table}" showSuggestion="true" suggest="loadTableFilter">
 				</Input>
+				<Label text="{i18nReuse>view}" required="true"/>
+				<Input id="View" value="{/view}" showSuggestion="true" suggest="loadViewFilter">
+				</Input>
 
 				<Label text="{i18n>outputType}" required="true"/>
 				<ComboBox id="outputFormat" selectedKey="{/output}" items="{outputModel>/outputTypes}">
