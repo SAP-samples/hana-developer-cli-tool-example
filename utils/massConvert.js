@@ -22,49 +22,72 @@ export async function convert(wss) {
 
         let results = await getTablesInt(schema, prompts.table, db, prompts.limit)
         console.table(results)
-        
+
         dbInspect.options.useHanaTypes = prompts.useHanaTypes
         dbInspect.options.keepPath = prompts.keepPath
         dbInspect.options.noColons = prompts.noColons
         dbInspect.options.useExists = prompts.useExists
         dbInspect.options.useQuoted = prompts.useQuoted
+        dbInspect.options.log = prompts.log
 
         const search = `"${schema}".`
         const replacer =
             new RegExp(await escapeRegExp(search), 'g')
-
+        let logOutput = []
 
         switch (prompts.output) {
             case 'hdbtable': {
-                const zip = new zipClass()                
+                const zip = new zipClass()
                 if (prompts.useCatalogPure) {
                     for (let [i, table] of results.entries()) {
-                        broadcast(wss, table.TABLE_NAME, i / results.length * 100)
-                        let output = await dbInspect.getDef(db, schema, table.TABLE_NAME)
+                        try {
+                            broadcast(wss, table.TABLE_NAME, i / results.length * 100)
+                            let output = await dbInspect.getDef(db, schema, table.TABLE_NAME)
 
-                        output = output.slice(7)
-                        output = output.replace(replacer, '')
-                        output = await removeCSTypes(db, output)
-                        await zip.file(table.TABLE_NAME.toString() + ".hdbtable", output + "\n\n")
+                            output = output.slice(7)
+                            output = output.replace(replacer, '')
+                            output = await removeCSTypes(db, output)
+                            await zip.file(table.TABLE_NAME.toString() + ".hdbtable", output + "\n\n")
+                            logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
+                        }
+                        catch (error) {
+                            if (prompts.log) {
+                                logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
+                            } else {
+                                base.error(error)
+                                broadcast(wss, `${error}`)
+                            }
+                        }
                     }
                 } else {
                     for (let [i, table] of results.entries()) {
-                        broadcast(wss, table.TABLE_NAME, i / results.length * 100)
-                        let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
-                        let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
-                        let constraints = await dbInspect.getConstraints(db, object)
-                        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable", schema, null)
-                        let options = { names: 'quoted', dialect: 'hana', src: 'cds' }
-                        let all = cds.compile.to.hdbtable(cds.parse(cdsSource), options)
-                        let output
-                        for (let [src] of all) {
-                            output = src
-                            output = await addAssociations(db, schema, table.TABLE_NAME, output)
+                        try {
+                            broadcast(wss, table.TABLE_NAME, i / results.length * 100)
+                            let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
+                            let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
+                            let constraints = await dbInspect.getConstraints(db, object)
+                            let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable", schema, null)
+                            let options = { names: 'quoted', dialect: 'hana', src: 'cds' }
+                            let all = cds.compile.to.hdbtable(cds.parse(cdsSource), options)
+                            let output
+                            for (let [src] of all) {
+                                output = src
+                                output = await addAssociations(db, schema, table.TABLE_NAME, output)
+                            }
+                            await zip.file(table.TABLE_NAME.toString() + ".hdbtable", output + "\n\n")
+                            logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
                         }
-                        await zip.file(table.TABLE_NAME.toString() + ".hdbtable", output + "\n\n")
+                        catch (error) {
+                            if (prompts.log) {
+                                logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
+                            } else {
+                                base.error(error)
+                                broadcast(wss, `${error}`)
+                            }
+                        }
                     }
                 }
- 
+
                 let dir = prompts.folder
                 !fs.existsSync(dir) && fs.mkdirSync(dir)
                 let data = await zip.generate({
@@ -76,6 +99,16 @@ export async function convert(wss) {
                     if (err) throw err
                 })
                 let finishMessage = `${base.bundle.getText("contentWritten")}: ${filename}`
+                if (prompts.log) {
+                    console.table(logOutput)
+                    let logFilename = prompts.filename || dir + 'log.json'
+                    fs.writeFile(logFilename, JSON.stringify(logOutput), (err) => {
+                        if (err) throw err
+                    })
+                    let logMessage = `${base.bundle.getText("logWritten")}: ${logFilename}`
+                    console.log(logMessage)
+                    broadcast(wss, logMessage, 100)
+                }
                 console.log(finishMessage)
                 broadcast(wss, finishMessage, 100)
                 break
@@ -84,30 +117,53 @@ export async function convert(wss) {
                 const zip = new zipClass()
                 if (prompts.useCatalogPure) {
                     for (let [i, table] of results.entries()) {
-                        broadcast(wss, table.TABLE_NAME, i / results.length * 100)
-                        let output = await dbInspect.getDef(db, schema, table.TABLE_NAME)
-                        output = output.slice(7)
-                        output = `== version = 1 \n` + output
-                        output = output.replace(replacer, '')
-                        output = await removeCSTypes(db, output)
-                        await zip.file(table.TABLE_NAME.toString() + ".hdbmigrationtable", output + "\n\n")
+                        try {
+                            broadcast(wss, table.TABLE_NAME, i / results.length * 100)
+                            let output = await dbInspect.getDef(db, schema, table.TABLE_NAME)
+                            output = output.slice(7)
+                            output = `== version = 1 \n` + output
+                            output = output.replace(replacer, '')
+                            output = await removeCSTypes(db, output)
+                            await zip.file(table.TABLE_NAME.toString() + ".hdbmigrationtable", output + "\n\n")
+                            logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
+                        }
+                        catch (error) {
+                            if (prompts.log) {
+                                logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
+                            } else {
+                                base.error(error)
+                                broadcast(wss, `${error}`)
+                            }
+                        }
                     }
+
                 } else {
                     for (let [i, table] of results.entries()) {
-                        broadcast(wss, table.TABLE_NAME, i / results.length * 100)
-                        let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
-                        let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
-                        let constraints = await dbInspect.getConstraints(db, object)
-                        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable", schema, null)
-                        let options = { names: 'quoted', dialect: 'hana', src: 'cds' }
-                        let all = cds.compile.to.hdbtable(cds.parse(cdsSource), options)
-                        let output
-                        for (let [src] of all) {
-                            output = `== version = 1 \n` + src
-                            output = await addAssociations(db, schema, table.TABLE_NAME, output)
+                        try {
+                            broadcast(wss, table.TABLE_NAME, i / results.length * 100)
+                            let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
+                            let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
+                            let constraints = await dbInspect.getConstraints(db, object)
+                            let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "hdbtable", schema, null)
+                            let options = { names: 'quoted', dialect: 'hana', src: 'cds' }
+                            let all = cds.compile.to.hdbtable(cds.parse(cdsSource), options)
+                            let output
+                            for (let [src] of all) {
+                                output = `== version = 1 \n` + src
+                                output = await addAssociations(db, schema, table.TABLE_NAME, output)
 
+                            }
+                            await zip.file(table.TABLE_NAME.toString() + ".hdbmigrationtable", output + "\n\n")
+                            logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
                         }
-                        await zip.file(table.TABLE_NAME.toString() + ".hdbmigrationtable", output + "\n\n")
+                        catch (error) {
+                            if (prompts.log) {
+                                logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
+                            } else {
+                                base.error(error)
+                                broadcast(wss, `${error}`)
+                            }
+                        }
                     }
                 }
 
@@ -122,6 +178,16 @@ export async function convert(wss) {
                     if (err) throw err
                 })
                 let finishMessage = `${base.bundle.getText("contentWritten")}: ${filename}`
+                if (prompts.log) {
+                    console.table(logOutput)
+                    let logFilename = prompts.filename || dir + 'log.txt'
+                    fs.writeFile(logFilename, JSON.stringify(logOutput), (err) => {
+                        if (err) throw err
+                    })
+                    let logMessage = `${base.bundle.getText("logWritten")}: ${logFilename}`
+                    console.log(logMessage)
+                    broadcast(wss, logMessage, 100)
+                }
                 console.log(finishMessage)
                 broadcast(wss, finishMessage, 100)
                 break
@@ -129,11 +195,22 @@ export async function convert(wss) {
             default: {
                 var cdsSource = prompts.namespace && `namespace ${prompts.namespace};\n` || ""
                 for (let [i, table] of results.entries()) {
-                    broadcast(wss, table.TABLE_NAME, i / results.length * 100)
-                    let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
-                    let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
-                    let constraints = await dbInspect.getConstraints(db, object)
-                    cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table", schema, null) + '\n'
+                    try {
+                        broadcast(wss, table.TABLE_NAME, i / results.length * 100)
+                        let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
+                        let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
+                        let constraints = await dbInspect.getConstraints(db, object)
+                        cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table", schema, null) + '\n'
+                        logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
+                    }
+                    catch (error) {
+                        if (prompts.log) {
+                            logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
+                        } else {
+                            base.error(error)
+                            broadcast(wss, `${error}`)
+                        }
+                    }
                 }
                 let dir = prompts.folder
                 !fs.existsSync(dir) && fs.mkdirSync(dir)
@@ -143,6 +220,16 @@ export async function convert(wss) {
                 })
                 let finishMessage = `${base.bundle.getText("contentWritten")}: ${filename}`
                 console.log(finishMessage)
+                if (prompts.log) {
+                    console.table(logOutput)
+                    let logFilename = prompts.filename || dir + 'log.txt'
+                    fs.writeFile(logFilename, JSON.stringify(logOutput), (err) => {
+                        if (err) throw err
+                    })
+                    let logMessage = `${base.bundle.getText("logWritten")}: ${logFilename}`
+                    console.log(logMessage)
+                    broadcast(wss, logMessage, 100)
+                }
                 broadcast(wss, finishMessage, 100)
 
                 // store synonyms if filename is provided
