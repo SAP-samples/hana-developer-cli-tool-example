@@ -81,7 +81,7 @@ export function startSpinnerInt() {
 /**
  * Stop the Terminal Spinner
  */
-export function stopSpinnerInt(){
+export function stopSpinnerInt() {
     if (spinner) {
         spinner.stop()
     }
@@ -112,6 +112,8 @@ export function getPrompts() {
     // @ts-ignore
     if (!prompts.table) { prompts.table = "*" }
     // @ts-ignore
+    if (!prompts.view) { prompts.view = "*" }
+    // @ts-ignore
     if (!prompts.limit) { prompts.limit = 200 }
     // @ts-ignore
     if (!prompts.folder) { prompts.folder = "./" }
@@ -133,6 +135,8 @@ export function getPrompts() {
     if (typeof prompts.useExists === 'undefined') { prompts.useExists = true }
     // @ts-ignore
     if (typeof prompts.useQuoted === 'undefined') { prompts.useQuoted = false }
+    // @ts-ignore
+    if (typeof prompts.log === 'undefined') { prompts.log = false }
 
     return prompts
 }
@@ -225,6 +229,12 @@ export function getMassConvertBuilder(ui = false) {
             default: "*",
             desc: bundle.getText("table")
         },
+        view: {
+            alias: ['v', 'View'],
+            type: 'string',
+            default: "*",
+            desc: bundle.getText("view")
+        },
         schema: {
             alias: ['s', 'Schema'],
             type: 'string',
@@ -247,6 +257,11 @@ export function getMassConvertBuilder(ui = false) {
             alias: ['n', 'Filename'],
             type: 'string',
             desc: bundle.getText("filename")
+        },
+        log: {
+            type: 'boolean',
+            default: false,
+            desc: bundle.getText("mass.log")
         },
         output: {
             alias: ['o', 'Output'],
@@ -326,6 +341,11 @@ export function getMassConvertPrompts(ui = false) {
             type: 'string',
             required: true
         },
+        view: {
+            description: bundle.getText("view"),
+            type: 'string',
+            required: false
+        },
         schema: {
             description: bundle.getText("schema"),
             type: 'string',
@@ -354,6 +374,10 @@ export function getMassConvertPrompts(ui = false) {
             type: 'string',
             //       validator: /t[bl]*|s[ql]*|c[ds]?/,
             required: true
+        },
+        log: {
+            description: bundle.getText("mass.log"),
+            type: 'boolean'
         },
         useHanaTypes: {
             description: bundle.getText("useHanaTypes"),
