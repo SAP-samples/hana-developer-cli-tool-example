@@ -1,0 +1,92 @@
+<mvc:View controllerName="sap.hanacli.inspect.controller.inspectView-ui" height="100%" width="100%"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:table="sap.ui.table"
+	xmlns:ce="sap.ui.codeeditor"
+	xmlns="sap.m">
+	<ScrollContainer height="100%" width="100%" vertical="true" focusable="true">
+		<f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+			<f:toolbar>
+				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.toolbar" type="XML"/>
+			</f:toolbar>
+			<f:content>
+
+				<Toolbar ariaLabelledBy="Title2">
+					<Title id="Title2" text="{i18nReuse>gui.target}"/>
+					<ToolbarSpacer />
+					<Button icon="sap-icon://settings" tooltip="{i18nReuse>gui.targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
+				</Toolbar>
+
+				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.schema" type="XML"/>
+
+				<Label text="{i18nReuse>view}" required="true"/>
+				<Input id="View" value="{/view}" showSuggestion="true" suggest="loadViewFilter">
+				</Input>
+
+				<core:Fragment fragmentName="sap.hanacli.common.view.Connection" type="XML"/>
+				<core:Fragment fragmentName="sap.hanacli.common.view.Debug" type="XML"/>
+
+			</f:content>
+		</f:SimpleForm>
+
+		<IconTabBar id="idIconTabBarNoIcons" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
+			<items>
+				<IconTabFilter text="Basic Info" key="info">
+					<f:SimpleForm id="infoForm" editable="false" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+						<f:content>
+							<Label text="{i18nReuse>scheam}" />
+							<Input value="{resultsModel>/rows/basic/SCHEMA_NAME}" editable="false" />
+
+							<Label text="{i18nReuse>view}" />
+							<Input value="{resultsModel>/rows/basic/VIEW_NAME}" editable="false" />
+
+							<Label text="{i18nReuse>gui.viewType}" />
+							<Input value="{resultsModel>/rows/basic/VIEW_TYPE}" editable="false" />
+
+							<Label text="{i18nReuse>gui.tableOID}" />
+							<Input value="{resultsModel>/rows/basic/VIEW_OID}" editable="false" />
+
+							<Label text="{i18nReuse>gui.hasParameters}" />
+							<Input value="{resultsModel>/rows/basic/HAS_PARAMETERS}" editable="false" />
+
+							<Label text="{i18nReuse>gui.hasCheck}" />
+							<Input value="{resultsModel>/rows/basic/HAS_STRUCTURED_PRIVILEGE_CHECK}" editable="false" />
+
+							<Label text="{i18nReuse>gui.hasCache}" />
+							<Input value="{resultsModel>/rows/basic/HAS_CACHE}" editable="false" />
+
+							<Label text="{i18nReuse>gui.created}" />
+							<Input value="{resultsModel>/rows/basic/CREATE_TIME}" editable="false" />
+
+
+						</f:content>
+					</f:SimpleForm>
+
+				</IconTabFilter>
+				<IconTabFilter text="{i18nReuse>gui.fields}" key="fields">
+					<table:Table id="fieldsTable" selectionMode="MultiToggle" visibleRowCount="10" enableSelectAll="false" rows="{resultsModel>/rows/fields}" threshold="15" enableBusyIndicator="true">
+						<table:noData>
+							<BusyIndicator class="sapUiMediumMargin"/>
+						</table:noData>
+					</table:Table>
+				</IconTabFilter>
+
+				<IconTabFilter text="{i18nReuse>gui.sql}" key="sql">
+					<ce:CodeEditor id="aCodeEditorSQL" type="sql" value="{resultsModel>/rows/sql}" editable="false" height="auto" maxLines="25" />
+				</IconTabFilter>
+
+				<IconTabFilter text="{i18nReuse>gui.cds}" key="cds">
+					<ce:CodeEditor id="aCodeEditorCDS" type="javascript" value="{resultsModel>/rows/cds}" syntaxHints="false" editable="false" height="auto" maxLines="25" />
+				</IconTabFilter>
+
+				<IconTabFilter text="{i18nReuse>gui.hdbtable}" key="hdbtable">
+					<ce:CodeEditor id="aCodeEditorHDBTable" type="sql" value="{resultsModel>/rows/hdbtable}" editable="false" height="auto" maxLines="25" />
+
+				</IconTabFilter>
+			</items>
+		</IconTabBar>
+
+	</ScrollContainer>
+</mvc:View>
