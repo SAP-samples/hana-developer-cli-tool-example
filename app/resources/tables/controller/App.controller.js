@@ -57,6 +57,9 @@ sap.ui.define([
                                 if(cmd === 'tables-ui' && sColumnId === 'TABLE_NAME'){
                                     template = new Link({ "text": { path: "resultsModel>" + sColumnId }, "target": "_blank", "href": { path: "resultsModel>" + sColumnId, formatter: function(value){return `/ui/?tbl=${value}#inspectTable-ui`}  }})
                                 }
+                                if(cmd === 'views-ui' && sColumnId === 'VIEW_NAME'){
+                                    template = new Link({ "text": { path: "resultsModel>" + sColumnId }, "target": "_blank", "href": { path: "resultsModel>" + sColumnId, formatter: function(value){return `/ui/?viewInput=${value}#inspectView-ui`}  }})
+                                }
                                 return new Column({
                                     id: sColumnId,
                                     label: sColumnId,
