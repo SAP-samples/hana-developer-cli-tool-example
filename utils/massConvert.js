@@ -101,7 +101,8 @@ export async function convert(wss) {
                 let finishMessage = `${base.bundle.getText("contentWritten")}: ${filename}`
                 if (prompts.log) {
                     console.table(logOutput)
-                    let logFilename = prompts.filename || dir + 'log.json'
+                    let logFilename = prompts.filename || dir + 'log'
+                    logFilename = `${logFilename}.json`
                     fs.writeFile(logFilename, JSON.stringify(logOutput), (err) => {
                         if (err) throw err
                     })
@@ -180,7 +181,8 @@ export async function convert(wss) {
                 let finishMessage = `${base.bundle.getText("contentWritten")}: ${filename}`
                 if (prompts.log) {
                     console.table(logOutput)
-                    let logFilename = prompts.filename || dir + 'log.txt'
+                    let logFilename = prompts.filename || dir + 'log'
+                    logFilename = `${logFilename}.json`
                     fs.writeFile(logFilename, JSON.stringify(logOutput), (err) => {
                         if (err) throw err
                     })
@@ -222,7 +224,8 @@ export async function convert(wss) {
                 console.log(finishMessage)
                 if (prompts.log) {
                     console.table(logOutput)
-                    let logFilename = prompts.filename || dir + 'log.txt'
+                    let logFilename = prompts.filename || dir + 'log'
+                    logFilename = `${logFilename}.json`
                     fs.writeFile(logFilename, JSON.stringify(logOutput), (err) => {
                         if (err) throw err
                     })
