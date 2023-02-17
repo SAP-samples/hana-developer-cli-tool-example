@@ -16,16 +16,16 @@ export async function inspectJWT(prompts) {
     const dbStatus = await base.createDBConnection()
 
     let results = await dbStatus.execSQL(`SELECT TOP 100 * FROM "PSES" WHERE PURPOSE = 'JWT'`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
 
     results = await dbStatus.execSQL(`SELECT TOP 100 * FROM "CERTIFICATES"`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
 
     results = await dbStatus.execSQL(`SELECT TOP 100 * FROM "PSE_CERTIFICATES"`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
 
     results = await dbStatus.execSQL(`SELECT TOP 100 * FROM "JWT_PROVIDERS"`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
 
     return base.end()
   } catch (error) {

@@ -59,7 +59,7 @@ export async function getSchemas(prompts) {
     const db = await base.createDBConnection()
 
     let results = await getSchemasInt(prompts.schema, db, prompts.limit, prompts.all)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

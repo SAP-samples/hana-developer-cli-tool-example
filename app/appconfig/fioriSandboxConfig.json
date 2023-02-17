@@ -192,6 +192,38 @@
                                         "icon": "sap-icon://table-view",
                                         "navigationMode": "embedded"
                                     }
+                                },
+                                {
+                                    "id": "views-ui",
+                                    "title": "List Views",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "Get a list of all views",
+                                        "title": "List Views",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#views-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://table-view",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
+                                    "id": "inspectView-ui",
+                                    "title": "Inspect Viw",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "Get details of a single View",
+                                        "title": "Inspect View",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
+                                        "applicationType": "URL",
+                                        "targetURL": "#inspectView-ui",
+                                        "url": "./inspect",
+                                        "icon": "sap-icon://table-view",
+                                        "navigationMode": "embedded"
+                                    }
                                 }
                             ]
                         },
@@ -487,6 +519,22 @@
         "inspectTable-ui": {
             "title": "Inspect Table",
             "description": "Get details of a single Table",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
+            "applicationType": "URL",
+            "url": "./inspect",
+            "navigationMode": "embedded"
+        },
+        "views-ui": {
+            "title": "List Views",
+            "description": "Get a list of all views",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "inspectView-ui": {
+            "title": "Inspect View",
+            "description": "Get details of a single View",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
             "applicationType": "URL",
             "url": "./inspect",

@@ -49,7 +49,7 @@ export async function indexInspect(prompts) {
   WHERE SCHEMA_NAME = ? 
     AND INDEX_NAME = ?`
     let indexDetails = (await db.statementExecPromisified(await db.preparePromisified(query), [schema, prompts.index]))
-    base.outputTable(indexDetails)
+    base.outputTableFancy(indexDetails)
 
     base.output(base.bundle.getText("indexColumns"))
     query =
@@ -58,7 +58,7 @@ export async function indexInspect(prompts) {
   WHERE SCHEMA_NAME = ? 
   AND INDEX_NAME = ?`
     let resultsColumns = await db.statementExecPromisified(await db.preparePromisified(query), [schema, prompts.index])
-    base.outputTable(resultsColumns)
+    base.outputTableFancy(resultsColumns)
 
     return base.end()
   } catch (error) {

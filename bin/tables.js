@@ -58,7 +58,7 @@ export async function getTables(prompts) {
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("table")}: ${prompts.table}`)
 
     let results = await getTablesInt(schema, prompts.table, db, prompts.limit)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

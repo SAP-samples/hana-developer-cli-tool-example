@@ -33,11 +33,12 @@ sap.ui.define([
             let model = this.getModel("config")
             let cmd = UriParameters.fromQuery(window.location.search).get("cmd")
             let tbl = UriParameters.fromQuery(window.location.search).get("tbl")
+            let viewInput = UriParameters.fromQuery(window.location.search).get("viewInput")
 
             if (!cmd) {
                 cmd = window.location.hash.substr(1)
             }
-            model.setData({cmd: cmd, tbl: tbl})
+            model.setData({cmd: cmd, tbl: tbl, viewInput: viewInput})
             this.superInit()          
         }
 

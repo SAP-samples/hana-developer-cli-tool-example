@@ -55,7 +55,7 @@ export async function getViews(prompts) {
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("view")}: ${prompts.view}`)
 
     let results = await getViewsInt(schema, prompts.view, db, prompts.limit)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

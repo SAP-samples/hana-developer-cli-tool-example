@@ -18,15 +18,15 @@ export async function dbStatus(prompts) {
 
     let results = await dbStatus.execSQL(
       `SELECT * FROM M_DATA_VOLUMES`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
 
     results = await dbStatus.execSQL(
       `SELECT * FROM M_DATA_VOLUME_STATISTICS`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
 
     results = await dbStatus.execSQL(
       `SELECT * FROM M_DATA_VOLUME_PAGE_STATISTICS`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     return base.end()
   } catch (error) {
     base.error(error)

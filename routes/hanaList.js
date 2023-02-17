@@ -36,6 +36,10 @@ export function route (app) {
         listHandler(res, "../bin/tables", 'getTables')
     })
 
+    app.get(['/hana/views', '/hana/views-ui'], async (req, res) => {
+        listHandler(res, "../bin/views", 'getViews')
+    })
+
     app.get(['/hana/schemas', '/hana/schemas-ui'], async (req, res) => {
         listHandler(res, "../bin/schemas", 'getSchemas')
     })

@@ -17,7 +17,7 @@ export async function getPorts(prompts) {
               PORT, 
               SQL_PORT
               FROM SYS.M_SERVICES`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

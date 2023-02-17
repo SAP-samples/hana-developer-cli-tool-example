@@ -2,7 +2,7 @@
 import * as base from '../utils/base.js'
 global.__xRef = []
 
-export const command = 'massConvert [schema] [table]'
+export const command = 'massConvert [schema] [table] [view]'
 export const aliases = ['mc', 'massconvert', 'massConv', 'massconv']
 export const describe = base.bundle.getText("massConvert")
 

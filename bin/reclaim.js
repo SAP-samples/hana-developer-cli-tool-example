@@ -16,13 +16,13 @@ export async function reclaim(prompts) {
     const dbStatus = await base.createDBConnection()
 
     let results = await dbStatus.execSQL(`ALTER SYSTEM RECLAIM LOB SPACE;`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
 
     results = await dbStatus.execSQL(`ALTER SYSTEM RECLAIM LOG;`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
 
     results = await dbStatus.execSQL(`ALTER SYSTEM RECLAIM DATAVOLUME 105 DEFRAGMENT;`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     return base.end()
   } catch (error) {
     base.error(error)

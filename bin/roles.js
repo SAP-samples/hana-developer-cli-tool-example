@@ -56,7 +56,7 @@ export async function getRoles(prompts) {
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("role")}: ${prompts.role}`)
 
     let results = await getRolesInt(schema, prompts.role, db, prompts.limit)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

@@ -56,7 +56,7 @@ export async function getSequences(prompts) {
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("sequence")}: ${prompts.sequence}`)
 
     let results = await getSequencesInt(schema, prompts.sequence, db, prompts.limit)
-    console.table(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

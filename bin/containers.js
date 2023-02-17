@@ -57,7 +57,7 @@ export async function getContainers(prompts) {
     base.debug(`${base.bundle.getText("containerGroup")}: ${prompts.containerGroup}, ${base.bundle.getText("container")}: ${prompts.container}`)
 
     let results = await getContainersInt(prompts.containerGroup, prompts.container, db, prompts.limit)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

@@ -149,7 +149,7 @@ export async function dbQuery(prompts) {
         if (prompts.filename) {
           await toFile(prompts.folder, prompts.filename, 'txt', Table.print(results))
         } else {
-          console.table(results)
+          base.outputTableFancy(results)
         }
         break
     }

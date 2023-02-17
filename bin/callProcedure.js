@@ -105,19 +105,19 @@ export async function callProc(prompts) {
     let sp = await db.loadProcedurePromisified(proc[0].SCHEMA_NAME, prompts.procedure)
     let output = await db.callProcedurePromisified(sp, inputParams)
     base.debug(output)
-    base.outputTable(output.outputScalar)
+    base.outputTableFancy(output.outputScalar)
     switch (Object.keys(output).length) {
       case 0:
       case 1:
         break
       case 2:
         if (output.results) {
-          base.outputTable(output.results)
+          base.outputTableFancy(output.results)
         }
         break
       default:
         for (let i = 1; i < Object.keys(output).length; i++) {
-          base.outputTable(output[`results${i}`])
+          base.outputTableFancy(output[`results${i}`])
         }
         break
     }

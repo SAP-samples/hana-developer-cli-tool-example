@@ -74,9 +74,9 @@ export async function libraryInspect(prompts) {
     let libMembers = await db.statementExecPromisified(await db.preparePromisified(query), [schema, prompts.library])
 
     if (prompts.output === 'tbl') {
-      console.log(libResults);
+      console.log(libResults)
       console.log("\n")
-      console.table(libMembers);
+      base.outputTableFancy(libMembers)
     } else if (prompts.output === 'sql') {
       let query =
         `SELECT DEFINITION from LIBRARIES 

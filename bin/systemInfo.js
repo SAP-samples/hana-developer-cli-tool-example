@@ -66,14 +66,14 @@ export async function sysInfo(prompts) {
 export async function basicOutput() {
   const dbStatus = await base.createDBConnection()
   console.log(`${colors.green(base.bundle.getText("dbx.user"))}: ${await base.getUserName()}`)
-  base.outputTable(await dbInspect.getHANAVersion(dbStatus))
+  base.outputTableFancy(await dbInspect.getHANAVersion(dbStatus))
   
 
   let results = await dbStatus.execSQL(`SELECT TOP 100 * FROM "M_SYSTEM_OVERVIEW"`)
-  base.outputTable(results)
+  base.outputTableFancy(results)
 
   results = await dbStatus.execSQL(`SELECT TOP 100 * FROM "M_SERVICES"`)
-  base.outputTable(results)
+  base.outputTableFancy(results)
 }
 
 export async function environmentOutput(prompts) {

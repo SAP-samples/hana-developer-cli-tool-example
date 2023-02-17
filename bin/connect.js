@@ -120,10 +120,10 @@ export async function dbConnect(input) {
     const db = await base.createDBConnection()
 
     let results = await db.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
 
     let resultsSession = await db.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`)
-    base.outputTable(resultsSession)
+    base.outputTableFancy(resultsSession)
 
     return base.end()
   } catch (error) {
