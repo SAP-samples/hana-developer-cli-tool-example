@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202302.5] - 2023-02-17
+
+**Changed**
+
+- Complete Feature Request [Issue 100](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/100) Add Views to massConvert
+- Equalize the interface and parameters between inspectTable and inspectView
+- Add new parameters to massConvert to allow logging errors and continue processing rather than stopping on error
+- Add list Views to the Web UI
+- Add inspectView to the Web UI
+- Add link between Views and inspectView in the Web UI
+- External Dependency Updates - CDS-DK to 6.5.2 and SAPUI5 to 1.110.1
+- Add progress bar to the massConvert command in the terminal
+- Add new fancy table output based upon terminal-kit
+
 ## [3.202302.4] - 2023-02-14
 
 **Changed**
