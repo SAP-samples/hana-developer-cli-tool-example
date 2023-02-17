@@ -101,6 +101,9 @@ export let tableOptions = {
     fit: true   // Activate all expand/shrink + wordWrap
 }
 
+export function blankLine(){
+    console.log(`                                                                                        `)
+}
 /** type {object} - processed input prompts*/
 let prompts = []
 /**
