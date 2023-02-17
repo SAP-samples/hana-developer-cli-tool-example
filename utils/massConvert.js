@@ -9,19 +9,45 @@ import * as dbInspect from '../utils/dbInspect.js'
 import * as fs from 'fs'
 import zipClass from 'node-zip'
 
+const progressBarOptionsTemplate = {
+   // width: 80,
+    eta: true,
+    percent: true,
+    inline: true
+}
+
+function getProcessBarTableOptions(prompts, length) {
+    let progressBarOptions = progressBarOptionsTemplate
+    progressBarOptions.title = base.bundle.getText('mass.tblupd', [prompts.output])
+    progressBarOptions.items = length
+    return progressBarOptions
+}
+/* function getProcessBarViewOptions(prompts, length) {
+    let progressBarOptions = progressBarOptionsTemplate
+    progressBarOptions.title = base.bundle.getText('mass.viewupd', [prompts.output])
+    progressBarOptions.items = length
+    return progressBarOptions
+} */
+
 export async function convert(wss) {
     try {
         let prompts = base.getPrompts()
         const db = await base.createDBConnection()
 
         let schema = await base.dbClass.schemaCalc(prompts, db)
-        let targetMsg = `${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("table")}: ${prompts.table}`
+        let targetMsg = `${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("table")}: ${prompts.table}, ${base.bundle.getText("view")}: ${prompts.view}`
         base.debug(targetMsg)
         broadcast(wss, targetMsg)
 
 
         let results = await getTablesInt(schema, prompts.table, db, prompts.limit)
-        console.table(results)
+        base.outputTableFancy(results)
+        let viewResults = []
+        if (prompts.view) {
+            viewResults = await getViewsInt(schema, prompts.view, db, prompts.limit)
+            if (viewResults.length > 0)
+                base.outputTableFancy(viewResults)
+        }
 
         dbInspect.options.useHanaTypes = prompts.useHanaTypes
         dbInspect.options.keepPath = prompts.keepPath
@@ -38,9 +64,13 @@ export async function convert(wss) {
         switch (prompts.output) {
             case 'hdbtable': {
                 const zip = new zipClass()
+                let progressBar = base.terminal.progressBar(
+                    getProcessBarTableOptions(prompts, results.length)
+                )
                 if (prompts.useCatalogPure) {
                     for (let [i, table] of results.entries()) {
                         try {
+                            progressBar.startItem(table.TABLE_NAME)
                             broadcast(wss, table.TABLE_NAME, i / results.length * 100)
                             let output = await dbInspect.getDef(db, schema, table.TABLE_NAME)
 
@@ -48,12 +78,14 @@ export async function convert(wss) {
                             output = output.replace(replacer, '')
                             output = await removeCSTypes(db, output)
                             await zip.file(table.TABLE_NAME.toString() + ".hdbtable", output + "\n\n")
+                            progressBar.itemDone(table.TABLE_NAME)
                             logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
                         }
                         catch (error) {
                             if (prompts.log) {
                                 logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
                             } else {
+                                progressBar.stop()
                                 base.error(error)
                                 broadcast(wss, `${error}`)
                             }
@@ -62,6 +94,7 @@ export async function convert(wss) {
                 } else {
                     for (let [i, table] of results.entries()) {
                         try {
+                            progressBar.startItem(table.TABLE_NAME)
                             broadcast(wss, table.TABLE_NAME, i / results.length * 100)
                             let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
                             let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
@@ -75,19 +108,20 @@ export async function convert(wss) {
                                 output = await addAssociations(db, schema, table.TABLE_NAME, output)
                             }
                             await zip.file(table.TABLE_NAME.toString() + ".hdbtable", output + "\n\n")
+                            progressBar.itemDone(table.TABLE_NAME)
                             logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
                         }
                         catch (error) {
                             if (prompts.log) {
                                 logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
                             } else {
+                                progressBar.stop()
                                 base.error(error)
                                 broadcast(wss, `${error}`)
                             }
                         }
                     }
                 }
-
                 let dir = prompts.folder
                 !fs.existsSync(dir) && fs.mkdirSync(dir)
                 let data = await zip.generate({
@@ -116,9 +150,13 @@ export async function convert(wss) {
             }
             case 'hdbmigrationtable': {
                 const zip = new zipClass()
+                let progressBar = base.terminal.progressBar(
+                    getProcessBarTableOptions(prompts, results.length)
+                )
                 if (prompts.useCatalogPure) {
                     for (let [i, table] of results.entries()) {
                         try {
+                            progressBar.startItem(table.TABLE_NAME)
                             broadcast(wss, table.TABLE_NAME, i / results.length * 100)
                             let output = await dbInspect.getDef(db, schema, table.TABLE_NAME)
                             output = output.slice(7)
@@ -126,12 +164,14 @@ export async function convert(wss) {
                             output = output.replace(replacer, '')
                             output = await removeCSTypes(db, output)
                             await zip.file(table.TABLE_NAME.toString() + ".hdbmigrationtable", output + "\n\n")
+                            progressBar.itemDone(table.TABLE_NAME)
                             logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
                         }
                         catch (error) {
                             if (prompts.log) {
                                 logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
                             } else {
+                                progressBar.stop()
                                 base.error(error)
                                 broadcast(wss, `${error}`)
                             }
@@ -141,6 +181,7 @@ export async function convert(wss) {
                 } else {
                     for (let [i, table] of results.entries()) {
                         try {
+                            progressBar.startItem(table.TABLE_NAME)
                             broadcast(wss, table.TABLE_NAME, i / results.length * 100)
                             let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
                             let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
@@ -155,19 +196,20 @@ export async function convert(wss) {
 
                             }
                             await zip.file(table.TABLE_NAME.toString() + ".hdbmigrationtable", output + "\n\n")
+                            progressBar.itemDone(table.TABLE_NAME)
                             logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
                         }
                         catch (error) {
                             if (prompts.log) {
                                 logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
                             } else {
+                                progressBar.stop()
                                 base.error(error)
                                 broadcast(wss, `${error}`)
                             }
                         }
                     }
                 }
-
                 let dir = prompts.folder
                 !fs.existsSync(dir) && fs.mkdirSync(dir)
                 let data = await zip.generate({
@@ -196,19 +238,25 @@ export async function convert(wss) {
             }
             default: {
                 var cdsSource = prompts.namespace && `namespace ${prompts.namespace};\n` || ""
+                let progressBar = base.terminal.progressBar(
+                    getProcessBarTableOptions(prompts, results.length)
+                )
                 for (let [i, table] of results.entries()) {
                     try {
+                        progressBar.startItem(table.TABLE_NAME)
                         broadcast(wss, table.TABLE_NAME, i / results.length * 100)
                         let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
                         let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
                         let constraints = await dbInspect.getConstraints(db, object)
                         cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table", schema, null) + '\n'
+                        progressBar.itemDone(table.TABLE_NAME)
                         logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
                     }
                     catch (error) {
                         if (prompts.log) {
                             logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
                         } else {
+                            progressBar.stop()
                             base.error(error)
                             broadcast(wss, `${error}`)
                         }
@@ -259,12 +307,12 @@ export async function convert(wss) {
 }
 
 /**
- * Check parameter folders to see if the input file exists there
+ * Get list of tables based upon input parameters
  * @param {string} schema 
  * @param {string} table
  * @param {any} client
  * @param {number} limit
- * @returns {Promise<any>} - the file path if found 
+ * @returns {Promise<any>} - Array of Table Info 
  */
 async function getTablesInt(schema, table, client, limit) {
     base.debug(`getTablesInt ${schema} ${table} ${limit}`)
@@ -279,6 +327,29 @@ async function getTablesInt(schema, table, client, limit) {
         query += `LIMIT ${limit.toString()}`
     }
     let results = await client.statementExecPromisified(await client.preparePromisified(query), [schema, table])
+    return results
+}
+
+/**
+ * Get list of views based upon input parameters
+ * @param {string} schema 
+ * @param {string} view
+ * @param {any} client
+ * @param {number} limit
+ * @returns {Promise<any>} - Array of View Info 
+ */
+async function getViewsInt(schema, view, client, limit) {
+    base.debug(`getViewsInt ${schema} ${view} ${limit}`)
+    view = base.dbClass.objectName(view)
+    let query =
+        `SELECT SCHEMA_NAME, VIEW_NAME, TO_NVARCHAR(VIEW_OID) AS VIEW_OID, COMMENTS  from VIEWS 
+            WHERE SCHEMA_NAME LIKE ? 
+            AND VIEW_NAME LIKE ? 
+            ORDER BY SCHEMA_NAME, VIEW_NAME `
+    if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
+        query += `LIMIT ${limit.toString()}`
+    }
+    let results = await client.statementExecPromisified(await client.preparePromisified(query), [schema, view])
     return results
 }
 

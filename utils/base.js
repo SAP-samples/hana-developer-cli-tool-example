@@ -87,6 +87,20 @@ export function stopSpinnerInt() {
     }
 }
 
+import terminalkit from 'terminal-kit'
+export const { terminal } = terminalkit
+import jsonToTable from 'json-to-table'
+export const json2Table = jsonToTable
+export let tableOptions = {
+    hasBorder: true,
+    contentHasMarkup: false,
+    borderChars: 'lightRounded' ,
+    borderAttr: { color: 'blue' } ,
+    textAttr: { bgColor: 'default' } ,
+    firstRowTextAttr: { bgColor: 'blue' } ,
+    fit: true   // Activate all expand/shrink + wordWrap
+}
+
 /** type {object} - processed input prompts*/
 let prompts = []
 /**
@@ -232,7 +246,6 @@ export function getMassConvertBuilder(ui = false) {
         view: {
             alias: ['v', 'View'],
             type: 'string',
-            default: "*",
             desc: bundle.getText("view")
         },
         schema: {
@@ -649,6 +662,25 @@ export function outputTable(content) {
         }
     }
 }
+
+/**
+ * Output JSON content either as a table or as formatted JSON to console
+ * @param {*} content - json content often a HANA result set
+ * @returns void
+ */
+export function outputTableFancy(content) {
+    if (content.length < 1) {
+        console.log(bundle.getText('noData'))
+    } else {
+        if (verboseOutput(prompts)) {
+            return terminal.table(json2Table(content), tableOptions)
+           // return console.table(content)
+        } else {
+            return console.log(inspect(content, { maxArrayLength: null }))
+        }
+    }
+}
+
 
 /**
  * Only output this content to console if in verbose mode
