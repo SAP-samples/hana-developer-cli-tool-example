@@ -38,7 +38,7 @@ export async function dbCall(prompts) {
     if (object.results < 1) {
       throw new Error(base.bundle.getText("errGUID"))
     }
-    base.outputTable(object.results[0])
+    base.outputTableFancy(object.results[0])
     base.end()
     return object.results[0]
   } catch (error) {

@@ -66,8 +66,8 @@ export async function procedureInspect(prompts) {
     if (prompts.output === 'tbl') {
       console.log(proc[0])
       console.log("\n")
-      console.table(parameters)
-      console.table(columns)
+      base.outputTableFancy(parameters)
+      base.outputTableFancy(columns)
     } else if (prompts.output === 'sql') {
       let definition = await dbInspect.getDef(db, schema, prompts.procedure)
       console.log(highlight(definition))

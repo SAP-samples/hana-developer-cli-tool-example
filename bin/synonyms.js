@@ -67,7 +67,7 @@ export async function getSynonyms(prompts) {
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("synonym")}: ${prompts.synonym}, ${base.bundle.getText("target")}: ${prompts.target}`)
 
     let results = await getSynonymsInt(schema, prompts.synonym, prompts.target, db, prompts.limit)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

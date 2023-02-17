@@ -17,7 +17,7 @@ export async function dbStatus(prompts) {
     let results = await dbStatus.execSQL(
       `SELECT COMPONENT_NAME, FEATURE_NAME, IS_DEPRECATED, OBJECT_COUNT, CALL_COUNT, LAST_TIMESTAMP, LAST_USER_NAME, LAST_APPLICATION_NAME FROM M_FEATURE_USAGE
       ORDER BY COMPONENT_NAME, FEATURE_NAME`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

@@ -63,7 +63,7 @@ export async function traceContents(prompts) {
       AND OFFSET >= ?
     ORDER BY OFFSET `
     let results = await db.statementExecPromisified(await db.preparePromisified(query), [prompts.host, prompts.file, maxOffset])
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

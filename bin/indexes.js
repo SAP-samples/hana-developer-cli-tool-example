@@ -58,7 +58,7 @@ export async function getIndexes(prompts) {
     base.output(`Schema: ${schema}, Index: ${prompts.indexes}`)
 
     let results = await getIndexesInt(schema, prompts.indexes, db, prompts.limit)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

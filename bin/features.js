@@ -18,7 +18,7 @@ export async function dbStatus(prompts) {
 
     let results = await dbStatus.execSQL(
       `SELECT * FROM M_FEATURES`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

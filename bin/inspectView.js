@@ -119,7 +119,7 @@ export async function viewInspect(prompts) {
         console.log(object[0])
         results.basic = object[0]
         console.log("\n")
-        console.table(fields)
+        base.outputTableFancy(fields)
         results.fields = fields
         break
       case 'sql': {

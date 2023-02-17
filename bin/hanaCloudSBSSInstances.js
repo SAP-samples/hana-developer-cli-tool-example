@@ -59,7 +59,7 @@ export async function listInstances(prompts) {
               output.push(outputItem)
           }
         }
-        base.outputTable(output)
+        base.outputTableFancy(output)
         base.end()
         return output
     } catch (error) {

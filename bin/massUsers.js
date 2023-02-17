@@ -62,7 +62,7 @@ export async function massUsers(prompts) {
       END WHILE;
       end;    
     `)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     return base.end()
   } catch (error) {
     base.error(error)

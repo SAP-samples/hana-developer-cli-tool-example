@@ -67,7 +67,7 @@ export async function getTriggers(prompts) {
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("trigger")}: ${prompts.trigger}, ${base.bundle.getText("target")}: ${prompts.target}`)
 
     let results = await getTriggersInt(schema, prompts.trigger, prompts.target, db, prompts.limit)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

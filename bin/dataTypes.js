@@ -17,7 +17,7 @@ export async function dbStatus(prompts) {
     const dbStatus = await base.createDBConnection()
     
     let results = await dbStatus.execSQL(`SELECT TYPE_NAME, COLUMN_SIZE, CREATE_PARAMS FROM DATA_TYPES `)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

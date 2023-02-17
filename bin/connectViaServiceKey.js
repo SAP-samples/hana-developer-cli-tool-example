@@ -162,10 +162,10 @@ export async function saveEnv(options, input) {
   try {
     const db = await base.createDBConnection(defaultEnv.VCAP_SERVICES.hana[0].credentials) //options)
     let results = await db.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`);
-    console.table(results)
+    base.outputTableFancy(results)
 
     let resultsSession = await db.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`);
-    console.table(resultsSession)
+    base.outputTableFancy(resultsSession)
 
   } catch (error) {
     base.error(error)

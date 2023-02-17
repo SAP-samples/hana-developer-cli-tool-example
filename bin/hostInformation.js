@@ -18,12 +18,12 @@ export async function hostInfo(prompts) {
     let results = await dbStatus.execSQL(
       `SELECT * FROM M_HOST_INFORMATION
       ORDER BY HOST, KEY`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
 
     results = await dbStatus.execSQL(
       `SELECT * FROM M_HOST_RESOURCE_UTILIZATION
       ORDER BY HOST`)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     return base.end()
   } catch (error) {
     base.error(error)

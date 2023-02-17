@@ -59,7 +59,7 @@ export async function getFunctions(prompts) {
     base.output(`Schema: ${schema}, Function: ${prompts.function}`)
 
     let results = await getFunctionsInt(schema, prompts.function, db, prompts.limit)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

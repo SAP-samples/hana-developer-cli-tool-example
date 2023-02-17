@@ -43,7 +43,7 @@ export async function getUsers(prompts) {
     base.debug(`${base.bundle.getText("user")}: ${prompts.user}`)
 
     let results = await getUsersInt(prompts.user, db, prompts.limit)
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

@@ -64,7 +64,7 @@ export async function iniContents(prompts) {
       query += `LIMIT ${prompts.limit.toString()}`
     }
     let results = await db.statementExecPromisified(await db.preparePromisified(query), [iniFile, section])
-    base.outputTable(results)
+    base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {

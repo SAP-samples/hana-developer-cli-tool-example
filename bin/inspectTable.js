@@ -116,9 +116,9 @@ export async function tableInspect(prompts) {
         console.log(object[0])
         results.basic = object[0]
         console.log("\n")
-        console.table(fields)
+        base.outputTableFancy(fields)
         results.fields = fields
-        console.table(constraints)
+        base.outputTableFancy(constraints)
         results.constraints = constraints
         break
       case 'sql': {

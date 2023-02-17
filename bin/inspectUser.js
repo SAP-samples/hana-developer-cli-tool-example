@@ -35,7 +35,7 @@ export async function userInspect(prompts) {
   FROM USERS 
   WHERE USER_NAME = ? `;
     let userDetails = (await db.statementExecPromisified(await db.preparePromisified(query), [prompts.user]))
-    base.outputTable(userDetails)
+    base.outputTableFancy(userDetails)
 
     base.output(base.bundle.getText("userParams"))
     query =
@@ -43,7 +43,7 @@ export async function userInspect(prompts) {
   FROM  USER_PARAMETERS
   WHERE USER_NAME = ?`
     let resultsParams = await db.statementExecPromisified(await db.preparePromisified(query), [prompts.user])
-   base.outputTable(resultsParams)
+   base.outputTableFancy(resultsParams)
 
     base.output(base.bundle.getText("grantedRoles"))
     query =
@@ -51,7 +51,7 @@ export async function userInspect(prompts) {
   FROM  GRANTED_ROLES
   WHERE GRANTEE = ?`
     let resultsRoles = await db.statementExecPromisified(await db.preparePromisified(query), [prompts.user])
-    base.outputTable(resultsRoles)
+    base.outputTableFancy(resultsRoles)
 
     base.output(base.bundle.getText("grantedPrivs"))
     query =
@@ -59,7 +59,7 @@ export async function userInspect(prompts) {
   FROM  GRANTED_PRIVILEGES
   WHERE GRANTEE = ?`
     let resultsPrivs = await db.statementExecPromisified(await db.preparePromisified(query), [prompts.user])
-    base.outputTable(resultsPrivs)
+    base.outputTableFancy(resultsPrivs)
     return base.end()
   } catch (error) {
     base.error(error)
