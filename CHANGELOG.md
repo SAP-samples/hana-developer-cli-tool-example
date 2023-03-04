@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202303.1] - 2023-03-03
+
+**Changed**
+
+- External Dependency Updates - CDS to 6.6.0 (Feb 2023 Update) and SAPUI5 to 1.111.0
+- Switch to Glob 9.x
+- Fix CDS Exit Handler
+
 ## [3.202302.5] - 2023-02-17
 
 **Changed**

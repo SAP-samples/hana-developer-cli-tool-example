@@ -117,7 +117,7 @@ export async function cdsBuild(prompts) {
       // 
       `service HanaCli { `
 
-    if(process.env.VCAP_SERVICES){
+    if (process.env.VCAP_SERVICES) {
       let vcap = JSON.parse(process.env.VCAP_SERVICES)
       vcap.hana[0].credentials.schema = object[0].SCHEMA_NAME
       vcap.hana.splice(1, 100)
@@ -137,9 +137,9 @@ export async function cdsBuild(prompts) {
     UI: { 
       LineItem: [ \n`;
     for (let field of fields) {
-      if(prompts.useQuoted){
+      if (prompts.useQuoted) {
         cdsSource += `{$Type: 'UI.DataField', Value: ![${field.COLUMN_NAME}], ![@UI.Importance]:#High}, \n`
-      }else{
+      } else {
         cdsSource += `{$Type: 'UI.DataField', Value: ${field.COLUMN_NAME}, ![@UI.Importance]:#High}, \n`
       }
 
@@ -174,7 +174,8 @@ export async function cdsBuild(prompts) {
       constraints = await dbInspect.getConstraints(db, object)
       let tableSource = await dbInspect.formatCDS(db, object, fields, constraints, "table", "preview")
       cdsSource +=
-        `${tableSource} \n }`
+
+        `@cds.persistence.skip\n ${tableSource} \n }`
     } else {
       console.log(`Schema: ${schema}, View: ${prompts.table}`)
       object = await dbInspect.getView(db, schema, prompts.table)
@@ -195,7 +196,7 @@ export async function cdsBuild(prompts) {
 async function cdsServerSetup(prompts, cdsSource) {
 
   base.debug('cdsServerSetup')
-  const {default:Server} = await import('http')
+  const { default: Server } = await import('http')
   const port = process.env.PORT || prompts.port || 3010
 
   if (!(/^[1-9]\d*$/.test(port) && 1 <= 1 * port && 1 * port <= 65535)) {
@@ -212,12 +213,12 @@ async function cdsServerSetup(prompts, cdsSource) {
     kind: "hana",
     logLevel: "error"
   }
-  if(process.env.VCAP_SERVICES){
+  if (process.env.VCAP_SERVICES) {
     vcap = JSON.parse(process.env.VCAP_SERVICES)
     // @ts-ignore
     options.credentials = vcap.hana[0].credentials
   }
- 
+
   // @ts-ignore
   cds.connect(options)
   // @ts-ignore
@@ -235,7 +236,7 @@ async function cdsServerSetup(prompts, cdsSource) {
   let graphQLEntity = entity.replace(/_/g, ".")
   base.debug(`GraphQL Entity After ${graphQLEntity}`)
   // entity = entity.replace(/:/g, "")
- 
+  base.debug(cdsSource)
   // @ts-ignore
   cds.serve('all').from(await cds.parse(cdsSource), {
     crashOnError: false
@@ -246,21 +247,39 @@ async function cdsServerSetup(prompts, cdsSource) {
 
     .with(srv => {
       // @ts-ignore
-      srv.on(['READ'], [entity, `HanaCli.${graphQLEntity}`, "HanaCli.STAR.WARS.FILM"], async (req) => {
+      srv.on(['READ'], [entity, `HanaCli.${graphQLEntity}`], async (req) => {
         base.debug(`In Read Exit ${prompts.table}`)
-        let query1 = await cds.parse.cql (`SELECT from ${prompts.table}`)
-         // @ts-ignore
-        req.query.SELECT.from = query1.SELECT.from 
-        req.query = query1
-        let query = "SELECT "
+
+        let query1 = await cds.parse.cql(`SELECT from ${prompts.table}`)
         // @ts-ignore
+        base.debug(req.query)
+        query1.SELECT.one = req.query.SELECT.one
+        req.query.SELECT.from = query1.SELECT.from
+
+        // query1.SELECT = req.query.SELECT
+
+        query1.SELECT.limit = req.query.SELECT.limit
+        //query1.SELECT.search = req.query.SELECT.search
+        query1.SELECT.where = req.query.SELECT.where
+        //query1.SELECT.count = req.query.SELECT.count
+        query1.SELECT.orderBy = req.query.SELECT.orderBy
+        //query1.SELECT.columns = req.query.SELECT.columns  
+        req.query = query1
+
+        let query = "SELECT "
+
+        /*         if (req.query.SELECT.count === true){
+                  // @ts-ignore
+                    const db = new base.dbClass(await conn.createConnection(prompts))
+                    query += `COUNT(*) AS "counted" FROM "${prompts.table}"`
+                    base.debug(query)
+                    let count = await db.execSQL(query)
+                    base.debug(count)
+                    return (count)
+                } */
+        // @ts-ignore
+        base.debug(JSON.stringify(req.query))
         if (req.query.SELECT.columns) { //&& req.query.SELECT.columns[0].func) {
-          // @ts-ignore
-          if (req.query.SELECT.columns[0].func) {
-            const db = new base.dbClass(await conn.createConnection(prompts))
-            query += `COUNT(*) AS "counted" FROM "${prompts.table}"`
-            return (await db.execSQL(query))
-          }
           // @ts-ignore
           for (let column of req.query.SELECT.columns) {
             for (let xref of global.__xRef) {
@@ -273,23 +292,23 @@ async function cdsServerSetup(prompts, cdsSource) {
 
 
         //Req Parameters for Single Record GET
-        /*         if (req.params) {
-                  if (req.params.length > 0) {
-                    // @ts-ignore
-                    const { SELECT } = req.query
-                    SELECT.where = []
-                    for (let param of req.params) {
-                      // @ts-ignore
-                      for (let property in param) {
-                        SELECT.where.push({ "ref": [property] })
-                        SELECT.where.push("=")
-                        SELECT.where.push({ "val": param[property] })
-                        SELECT.where.push("and")
-                      }
-                    }
-                    SELECT.where.splice(-1, 1)
-                  }
-                } */
+        if (req.params) {
+          if (req.params.length > 0) {
+            // @ts-ignore
+            const { SELECT } = req.query
+            SELECT.where = []
+          //  for (let param of req.params) {
+              // @ts-ignore
+            //  for (let property in param) {
+                SELECT.where.push({ "ref": ["ID"] })
+                SELECT.where.push("=")
+                SELECT.where.push({ "val": req.params[0] })
+              //  SELECT.where.push("and")
+            //  }
+           // }
+           // SELECT.where.splice(-1, 1)
+          }
+        }
 
         //Where
         // @ts-ignore
@@ -373,12 +392,12 @@ async function cdsServerSetup(prompts, cdsSource) {
       console.info(`HTTP Server: ${serverAddr}`)
 
       //GraphQL 
-        const GraphQLAdapter = base.require('@cap-js/graphql/lib') //require('@sap/cds-graphql/lib')
-        const adapter = new GraphQLAdapter (cds.services, { graphiql: true, path: '/graphql' })
-        app.use('/graphql', adapter)
-       // app.use(new GraphQLAdapter(cds.services, { graphiql: true }))
+      const GraphQLAdapter = base.require('@cap-js/graphql/lib') //require('@sap/cds-graphql/lib')
+      const adapter = new GraphQLAdapter(cds.services, { graphiql: true, path: '/graphql' })
+      app.use('/graphql', adapter)
+      // app.use(new GraphQLAdapter(cds.services, { graphiql: true }))
       console.log("serving GraphQL endpoint for all services { at: '/graphql' }")
-      const { default:open } = await import('open')
+      const { default: open } = await import('open')
       open(serverAddr)
     })
   }

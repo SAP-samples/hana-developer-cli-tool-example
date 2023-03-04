@@ -720,7 +720,7 @@ export async function webServerSetup(urlPath) {
     app.disable('etag')
     //Load routes
     let routesDir = path.join(__dirname, '..', '/routes/**/*.js')
-    let files = glob.sync(upath.normalize(routesDir))
+    let files = await glob(upath.normalize(routesDir))
     if (files.length !== 0) {
         for (let file of files) {
             debug(file)
