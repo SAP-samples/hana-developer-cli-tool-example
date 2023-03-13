@@ -628,11 +628,11 @@ export async function convert(wss) {
 async function getTablesInt(schema, table, client, limit) {
     base.debug(`getTablesInt ${schema} ${table} ${limit}`)
     table = base.dbClass.objectName(table)
+    //            AND IS_USER_DEFINED_TYPE = 'FALSE'
     let query =
         `SELECT SCHEMA_NAME, TABLE_NAME, TO_NVARCHAR(TABLE_OID) AS TABLE_OID, COMMENTS  from TABLES 
             WHERE SCHEMA_NAME LIKE ? 
             AND TABLE_NAME LIKE ? 
-            AND IS_USER_DEFINED_TYPE = 'FALSE'
             ORDER BY SCHEMA_NAME, TABLE_NAME `
     if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
         query += `LIMIT ${limit.toString()}`

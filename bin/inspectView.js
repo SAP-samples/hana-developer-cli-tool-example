@@ -46,6 +46,11 @@ export const builder = base.getBuilder({
     desc: base.bundle.getText("gui.useQuoted"),
     type: 'boolean',
     default: false
+  },
+  noColons: {
+      type: 'boolean',
+      default: false,
+      desc: base.bundle.getText("noColons")
   }
 })
 
@@ -77,6 +82,10 @@ export let inputPrompts = {
   useQuoted: {
     description: base.bundle.getText("gui.useQuoted"),
     type: 'boolean'
+  },
+  noColons: {
+    type: 'boolean',
+    description: base.bundle.getText("noColons")
   }
 }
 
@@ -100,6 +109,7 @@ export async function viewInspect(prompts) {
     base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("view")}: ${prompts.view}`)
     dbInspect.options.useHanaTypes = prompts.useHanaTypes
     dbInspect.options.useExists = prompts.useExists
+    dbInspect.options.noColons = prompts.noColons
     dbInspect.options.useQuoted = prompts.useQuoted
 
     let object = await dbInspect.getView(db, schema, prompts.view)
@@ -166,7 +176,7 @@ export async function viewInspect(prompts) {
       case 'hdbview': {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "hdbview", schema)
         let all = cds.compile.to.hdbtable(cds.parse(cdsSource))
-        for (let [src] of all){
+        for (let [src] of all) {
           results.hdbtable = src
           // @ts-ignore
           console.log(highlight(src))

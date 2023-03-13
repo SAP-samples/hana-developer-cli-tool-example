@@ -46,6 +46,11 @@ export const builder = base.getBuilder({
     desc: base.bundle.getText("gui.useQuoted"),
     type: 'boolean',
     default: false
+  },
+  noColons: {
+      type: 'boolean',
+      default: false,
+      desc: base.bundle.getText("noColons")
   }
 })
 
@@ -77,7 +82,11 @@ export let inputPrompts = {
   useQuoted: {
     description: base.bundle.getText("gui.useQuoted"),
     type: 'boolean'
-  }
+  },
+  noColons: {
+    type: 'boolean',
+    description: base.bundle.getText("noColons")
+}
 }
 
 export function handler(argv) {
@@ -102,6 +111,7 @@ export async function tableInspect(prompts) {
     dbInspect.options.useHanaTypes = prompts.useHanaTypes
     dbInspect.options.useExists = prompts.useExists
     dbInspect.options.useQuoted = prompts.useQuoted
+    dbInspect.options.noColons = prompts.noColons
 
     let object = await dbInspect.getTable(db, schema, prompts.table)
     let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)

@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202303.2] - 2023-03-13
+
+**Changed**
+
+- Issue [#104](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/104) noColons option in inspectTable
+- Issue [#104](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/104) massConvert include user defined types
+
 ## [3.202303.1] - 2023-03-03
 
 **Changed**
