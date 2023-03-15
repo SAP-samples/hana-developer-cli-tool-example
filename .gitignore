@@ -77,3 +77,6 @@ yarn.lock
 
 # added by cds bind
 .cdsrc-private.json
+
+# macos
+.DS_Store
