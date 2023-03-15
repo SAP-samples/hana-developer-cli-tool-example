@@ -98,7 +98,7 @@ export async function listInstances(prompts) {
             //console.log(error)
         }
         base.debug(results)
-        if (results && results.resource) {
+        if (results && results.resources) {
             // @ts-ignore
             for (let item of results.resources) {
                 let outputItem = {}
