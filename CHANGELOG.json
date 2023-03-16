@@ -1,5 +1,12 @@
 [
     {
+        "date": "2023-03-16",
+        "version": "3.202303.3",
+        "Changed": [
+            "Issue [#105](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/105) hc, hcstart, and hcstop commands only work with installed btp cli - fixed by [HP Seitz](https://github.com/6of5)"
+        ]
+    },
+    {
         "date": "2023-03-13",
         "version": "3.202303.2",
         "Changed": [

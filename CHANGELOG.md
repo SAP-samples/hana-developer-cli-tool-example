@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202303.3] - 2023-03-16
+
+**Changed**
+
+- Issue [#105](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/105) hc, hcstart, and hcstop commands only work with installed btp cli - fixed by [HP Seitz](https://github.com/6of5)
+
 ## [3.202303.2] - 2023-03-13
 
 **Changed**
