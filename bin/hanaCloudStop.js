@@ -64,7 +64,7 @@ export async function hcStop(prompts) {
         }
 
         base.debug(results)
-        if (results) {
+        if (results && results.length > 0) {
             // @ts-ignore
             for (let item of results) {
                 const stdout = await btp.stopHana(item.name)
