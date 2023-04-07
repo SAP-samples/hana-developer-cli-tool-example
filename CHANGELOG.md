@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202304.1] - 2023-04-07
+
+**Changed**
+
+- Update [CAP to March 2023](https://cap.cloud.sap/docs/releases/march23) and [SAPUI5 to 1.112.1](https://sapui5.hana.ondemand.com/#/topic/34afc69bf9194d43a9f49042825bb199)
+
 ## [3.202303.3] - 2023-03-16
 
 **Changed**
