@@ -53,4 +53,10 @@ export namespace inputPrompts {
         const type_5: string;
         export { type_5 as type };
     }
+    namespace noColons {
+        const type_6: string;
+        export { type_6 as type };
+        const description_6: string;
+        export { description_6 as description };
+    }
 }

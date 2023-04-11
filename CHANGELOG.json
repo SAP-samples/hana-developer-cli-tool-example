@@ -1,5 +1,12 @@
 [
     {
+        "date": "2023-04-11",
+        "version": "3.202304.2",
+        "Changed": [
+            "First round of new unit tests"
+        ]
+    },
+    {
         "date": "2023-04-07",
         "version": "3.202304.1",
         "Changed": [

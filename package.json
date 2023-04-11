@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "3.202304.1",
+  "version": "3.202304.2",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -11,7 +11,7 @@
     "node": ">14.18.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha './tests/*.Test.js' --parallel --reporter mochawesome --require mochawesome/register --timeout 10s",
     "changelog": "node CHANGELOG",
     "types": "tsc  --declaration --allowJs --emitDeclarationOnly --outDir types --skipLibCheck",
     "postinstall": "npm link @sap/cds-dk --local"
@@ -21,7 +21,10 @@
     "url": "git+https://github.com/SAP-samples/hana-developer-cli-tool-example.git"
   },
   "keywords": [
-    "hana"
+    "hana",
+    "sap",
+    "database",
+    "cli"
   ],
   "types": "types/index.d.ts",
   "dependencies": {
@@ -79,9 +82,14 @@
   },
   "homepage": "https://github.com/SAP-samples/hana-developer-cli-tool-example#readme",
   "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.15.11",
     "@types/showdown": "^2.0.0",
     "@types/yargs": "^17.0.24",
     "eslint": "^8.37.0",
+    "mocha": "^10.2.0",
+    "mochawesome": "^7.1.3",
+    "sinon": "^15.0.3",
     "stringify-changelog": "^0.2.1"
   },
   "cds": {

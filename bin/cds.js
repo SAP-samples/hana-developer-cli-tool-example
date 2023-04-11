@@ -1,7 +1,7 @@
 // @ts-check
 import * as base from '../utils/base.js'
 import * as dbInspect from '../utils/dbInspect.js'
-import * as conn from '../utils/connections.js'
+//import * as conn from '../utils/connections.js'
 
 // @ts-ignore
 import cds from '@sap/cds'
@@ -253,20 +253,24 @@ async function cdsServerSetup(prompts, cdsSource) {
         let query1 = await cds.parse.cql(`SELECT from ${prompts.table}`)
         // @ts-ignore
         base.debug(req.query)
+        // @ts-ignore
         query1.SELECT.one = req.query.SELECT.one
+        // @ts-ignore
         req.query.SELECT.from = query1.SELECT.from
 
         // query1.SELECT = req.query.SELECT
-
+        // @ts-ignore
         query1.SELECT.limit = req.query.SELECT.limit
         //query1.SELECT.search = req.query.SELECT.search
+        // @ts-ignore
         query1.SELECT.where = req.query.SELECT.where
         //query1.SELECT.count = req.query.SELECT.count
+        // @ts-ignore
         query1.SELECT.orderBy = req.query.SELECT.orderBy
         //query1.SELECT.columns = req.query.SELECT.columns  
         req.query = query1
 
-        let query = "SELECT "
+        //let query = "SELECT "
 
         /*         if (req.query.SELECT.count === true){
                   // @ts-ignore
@@ -279,6 +283,7 @@ async function cdsServerSetup(prompts, cdsSource) {
                 } */
         // @ts-ignore
         base.debug(JSON.stringify(req.query))
+        // @ts-ignore
         if (req.query.SELECT.columns) { //&& req.query.SELECT.columns[0].func) {
           // @ts-ignore
           for (let column of req.query.SELECT.columns) {
@@ -330,7 +335,7 @@ async function cdsServerSetup(prompts, cdsSource) {
         //Order By
         // @ts-ignore
         if (req.query.SELECT.orderBy) {
-          query += ` ORDER BY `
+          //query += ` ORDER BY `
           // @ts-ignore
           for (let orderBy of req.query.SELECT.orderBy) {
             for (let xref of global.__xRef) {

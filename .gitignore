@@ -80,3 +80,6 @@ yarn.lock
 
 # macos
 .DS_Store
+
+#Test Results
+/mochawesome-report

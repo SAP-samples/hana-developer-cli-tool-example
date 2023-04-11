@@ -6,6 +6,7 @@ export function startSpinnerInt(): void;
  * Stop the Terminal Spinner
  */
 export function stopSpinnerInt(): void;
+export function blankLine(): void;
 /**
  *
  * @param {object} newPrompts - processed input prompts
@@ -109,6 +110,12 @@ export function isGui(prompts: any): boolean;
  */
 export function outputTable(content: any): void;
 /**
+ * Output JSON content either as a table or as formatted JSON to console
+ * @param {*} content - json content often a HANA result set
+ * @returns void
+ */
+export function outputTableFancy(content: any): any;
+/**
  * Only output this content to console if in verbose mode
  * @param {*} content - json content often a HANA result set
  * @returns void
@@ -152,6 +159,24 @@ export const debug: any;
 export let hanaBin: string;
 /** @typeof TextBundle - instance of sap/textbundle */
 export const bundle: TextBundle;
+export const terminal: any;
+export const json2Table: any;
+export namespace tableOptions {
+    const hasBorder: boolean;
+    const contentHasMarkup: boolean;
+    const borderChars: string;
+    namespace borderAttr {
+        const color: string;
+    }
+    namespace textAttr {
+        const bgColor: string;
+    }
+    namespace firstRowTextAttr {
+        const bgColor_1: string;
+        export { bgColor_1 as bgColor };
+    }
+    const fit: boolean;
+}
 /**
  * - instance of sap-hdbext-promisified module
  */
