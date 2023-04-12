@@ -1,0 +1,9 @@
+{
+    "timeout": "10s",
+    "parallel": true,
+    "reporter": "mochawesome",
+    "require": [
+      "./tests/helper.js",
+      "mochawesome/register"
+    ]
+  }

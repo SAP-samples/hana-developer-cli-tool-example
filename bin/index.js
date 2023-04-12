@@ -146,5 +146,5 @@ export async function init() {
         sequences, status, synonyms, systemInfo, systemInfoUI, tables, tablesUI, //test,
         traces, traceContents, triggers, UI, hanaCloudUPSInstances, hanaCloudUPSInstancesUI,
         users, version, views
-    ] 
+    ]  
 }

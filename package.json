@@ -11,7 +11,7 @@
     "node": ">14.18.0"
   },
   "scripts": {
-    "test": "mocha './tests/*.Test.js' --parallel --reporter mochawesome --require mochawesome/register --timeout 10s",
+    "test": "mocha --config=tests/.mocharc.json './tests/*.Test.js'",
     "changelog": "node CHANGELOG",
     "types": "tsc  --declaration --allowJs --emitDeclarationOnly --outDir types --skipLibCheck",
     "postinstall": "npm link @sap/cds-dk --local"
