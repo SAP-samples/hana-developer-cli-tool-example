@@ -35,7 +35,7 @@ export const colors = chalk
 import prompt from 'prompt'
 
 /** @type typeof import("glob") */
-import glob from 'glob'
+import { glob } from 'glob'
 
 // @ts-ignore
 import open from 'open'
