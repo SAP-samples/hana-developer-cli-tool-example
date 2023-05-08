@@ -657,7 +657,23 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 
 		global.__xRef.push(xref)
 		if (field.DEFAULT_VALUE) {
-			cdstable += ` default '${field.DEFAULT_VALUE}'`
+			if(field.DATA_TYPE_NAME === "BOOLEAN"){
+				switch (field.DEFAULT_VALUE) {
+					case 0:
+						cdstable += ` default false`
+						break
+					case 1:
+						cdstable += ` default true`
+						break
+					default:
+						cdstable += ` default false`
+				}
+				
+			}else{
+				cdstable += ` default '${field.DEFAULT_VALUE}'`
+			}
+
+
 		}
 
 		if (field.IS_NULLABLE === "FALSE") {
