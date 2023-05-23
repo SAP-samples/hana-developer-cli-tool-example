@@ -77,7 +77,7 @@ if (fs.existsSync('../package.json')) {
           "@sap/hdi-deploy": "^${hdiVersion}"
         },
         "engines": {
-           "node": "^12.18.0 || ^14.0.0 || ^16.0.0"
+           "node": "^12.18.0 || ^14.0.0 || ^16.0.0 || ^18.0.0"
         },
         "scripts": {
           "start": "node node_modules/@sap/hdi-deploy/deploy.js  --auto-undeploy"
@@ -92,7 +92,7 @@ if (fs.existsSync('../package.json')) {
               "@sap/hdi-deploy": "^${hdiVersion}"
             },
             "engines": {
-                "node": "^12.18.0 || ^14.0.0 || ^16.0.0"
+                "node": "^12.18.0 || ^14.0.0 || ^16.0.0 || ^18.0.0"
             },
             "scripts": {
               "postinstall": "node .build.js",                
@@ -111,7 +111,7 @@ if (fs.existsSync('../package.json')) {
     if (prompts.hanaCloud) {
         hdiconfig = `
         {
-            "minimum_feature_version": "1000",
+            "minimum_feature_version": "1009",
             "file_suffixes": {
                 "hdbapplicationtime": {
                     "plugin_name": "com.sap.hana.di.applicationtime"
@@ -121,6 +121,9 @@ if (fs.existsSync('../package.json')) {
                 },
                 "hdbcollection": {
                     "plugin_name": "com.sap.hana.di.collection"
+                },
+                "hdbcollectionindex": {
+                    "plugin_name": "com.sap.hana.di.collection.index"
                 },
                 "hdbconstraint": {
                     "plugin_name": "com.sap.hana.di.constraint"
@@ -244,6 +247,9 @@ if (fs.existsSync('../package.json')) {
                 },
                 "hdbvirtualtableconfig": {
                     "plugin_name": "com.sap.hana.di.virtualtable.config"
+                },
+                "hdbschedulerjob": {
+                    "plugin_name": "com.sap.hana.di.schedulerjob"
                 }
             }
         }
@@ -409,5 +415,6 @@ if (fs.existsSync('../package.json')) {
     fs.writeFile(dir + '/src/.hdiconfig', hdiconfig, (err) => {
         if (err) throw err
     })
+    console.log('Module Updated')
     return base.end()
 }
