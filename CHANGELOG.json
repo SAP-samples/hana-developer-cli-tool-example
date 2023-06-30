@@ -1,5 +1,14 @@
 [
     {
+        "date": "2023-07-01",
+        "version": "3.202307.1",
+        "Changed": [
+            "Major new CAP version 7.0",
+            "New minimum Node.js version of 16",
+            "Tested and supported on Node.js 20.x"
+        ]
+    },
+    {
         "date": "2023-04-11",
         "version": "3.202304.2",
         "Changed": [
@@ -50,7 +59,6 @@
             "External Dependency Updates - CDS-DK to 6.5.2 and SAPUI5 to 1.110.1",
             "Add progress bar to the massConvert command in the terminal",
             "Add new fancy table output based upon terminal-kit"
-
         ]
     },
     {
