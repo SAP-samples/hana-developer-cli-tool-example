@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202307.1] - 2023-07-10
+
+**Changed**
+
+- Major new CAP version 7.0.2
+- New minimum Node.js version of 16
+- Tested and supported on Node.js 20.x
+
+## [3.202304.2] - 2023-04-11
+
+**Changed**
+
+- First round of new unit tests
+
 ## [3.202304.1] - 2023-04-07
 
 **Changed**

@@ -162,20 +162,20 @@ export const bundle: TextBundle;
 export const terminal: any;
 export const json2Table: any;
 export namespace tableOptions {
-    const hasBorder: boolean;
-    const contentHasMarkup: boolean;
-    const borderChars: string;
+    let hasBorder: boolean;
+    let contentHasMarkup: boolean;
+    let borderChars: string;
     namespace borderAttr {
-        const color: string;
+        let color: string;
     }
     namespace textAttr {
-        const bgColor: string;
+        let bgColor: string;
     }
     namespace firstRowTextAttr {
-        const bgColor_1: string;
+        let bgColor_1: string;
         export { bgColor_1 as bgColor };
     }
-    const fit: boolean;
+    let fit: boolean;
 }
 /**
  * - instance of sap-hdbext-promisified module

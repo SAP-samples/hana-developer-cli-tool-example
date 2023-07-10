@@ -9,10 +9,10 @@ export const describe: string;
 export const builder: import("yargs").CommandBuilder<{}, {}>;
 export namespace inputPrompts {
     namespace cf {
-        export const description: string;
-        export const type: string;
-        const _default: boolean;
+        export let description: string;
+        export let type: string;
+        let _default: boolean;
         export { _default as default };
-        export const required: boolean;
+        export let required: boolean;
     }
 }

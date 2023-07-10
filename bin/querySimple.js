@@ -86,6 +86,7 @@ export async function dbQuery(prompts) {
   const opts = { delimiter: ";", transforms: [removeNewlineCharacter] }
   const transformOpts = {}
   const asyncOpts = {}
+  // @ts-ignore
   const parser = new AsyncParser(opts, transformOpts, asyncOpts)
   try {
     base.setPrompts(prompts)

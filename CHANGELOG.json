@@ -1,9 +1,9 @@
 [
     {
-        "date": "2023-07-01",
+        "date": "2023-07-10",
         "version": "3.202307.1",
         "Changed": [
-            "Major new CAP version 7.0",
+            "Major new CAP version 7.0.2",
             "New minimum Node.js version of 16",
             "Tested and supported on Node.js 20.x"
         ]

@@ -127,12 +127,14 @@ export function formatCDS(db: object, object: object, fields: object, constraint
  */
 export function getGeoColumns(db: object, object: object, field: object, type: string): Promise<string>;
 export namespace options {
-    const useHanaTypes: boolean;
-    const noColons: boolean;
-    const keepPath: boolean;
-    const useExists: boolean;
+    let useHanaTypes: boolean;
+    let noColons: boolean;
+    let keepPath: boolean;
+    let useExists: boolean;
 }
-export namespace results { }
+export namespace results {
+    let synonyms: any;
+}
 /**
  * Get Table Constraints
  */

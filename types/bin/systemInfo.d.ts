@@ -9,8 +9,8 @@ export const describe: string;
 export const builder: import("yargs").CommandBuilder<{}, {}>;
 export namespace inputPrompts {
     namespace output {
-        const description: string;
-        const type: string;
-        const required: boolean;
+        let description: string;
+        let type: string;
+        let required: boolean;
     }
 }

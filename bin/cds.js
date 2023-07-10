@@ -115,7 +115,9 @@ export async function cdsBuild(prompts) {
 
     cdsSource =
       // 
-      `service HanaCli { `
+      `
+      @protocol: ['odata-v4', 'graphql']
+      service HanaCli { `
 
     if (process.env.VCAP_SERVICES) {
       let vcap = JSON.parse(process.env.VCAP_SERVICES)
@@ -209,24 +211,18 @@ async function cdsServerSetup(prompts, cdsSource) {
 
   //CDS OData Service
   let vcap = ''
-  let options = {
+  let options = { "db": {
     kind: "hana",
-    logLevel: "error"
+    logLevel: "error" }
   }
   if (process.env.VCAP_SERVICES) {
     vcap = JSON.parse(process.env.VCAP_SERVICES)
     // @ts-ignore
-    options.credentials = vcap.hana[0].credentials
+    options.db.credentials = vcap.hana[0].credentials
   }
 
   // @ts-ignore
-  cds.connect(options)
-  // @ts-ignore
-  cds.env.requires.db = {}
-  // @ts-ignore
-  cds.env.requires.db.multiTenant = false
-  // @ts-ignore
-  cds.env.features.graphql = true
+  cds.connect( )//options)
 
   let odataURL = "/odata/v4/opensap.hana.CatalogService/"
   let entity = prompts.table
@@ -397,11 +393,11 @@ async function cdsServerSetup(prompts, cdsSource) {
       console.info(`HTTP Server: ${serverAddr}`)
 
       //GraphQL 
-      const GraphQLAdapter = base.require('@cap-js/graphql/lib') //require('@sap/cds-graphql/lib')
+     /*  const GraphQLAdapter = base.require('@cap-js/graphql/lib/GraphQLAdapter') //require('@sap/cds-graphql/lib')
       const adapter = new GraphQLAdapter(cds.services, { graphiql: true, path: '/graphql' })
-      app.use('/graphql', adapter)
+      app.use('/graphql', adapter) */
       // app.use(new GraphQLAdapter(cds.services, { graphiql: true }))
-      console.log("serving GraphQL endpoint for all services { at: '/graphql' }")
+     // console.log("serving GraphQL endpoint for all services { at: '/graphql' }")
       const { default: open } = await import('open')
       open(serverAddr)
     })
@@ -482,7 +478,6 @@ export function getIndex(odataURL, entity) {
           <h2> Web Applications: </h2>
           <h3><a href="/fiori.html">Fiori Test UI</a></h3> 
           <h3><a href="/api/api-docs/">Swagger UI</a></h3> 
-          <hs><a href="/graphql">GraphQL</a></h3>
 
           <h2> Service Endpoints: </h2>
               <h3>
