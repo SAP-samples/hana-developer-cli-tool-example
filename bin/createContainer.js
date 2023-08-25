@@ -61,6 +61,21 @@ export async function activate(prompts) {
   const { v4: uuidv4 } = base.require('uuid')
   try {
     base.setPrompts(prompts)
+    prompts.container = prompts.container.toUpperCase()
+    prompts.container = prompts.container.replace(/-/g, "_")
+    prompts.group = prompts.group.toUpperCase()
+    prompts.group = prompts.group.replace(/-/g, "_")
+
+    const testChars = ["!", `"`, "$", "%", "'", "(", ")", "*", "+", ",", ".", "/", ":", ";", "<", "=", ">", "?", "@", "[", "]", "\\", "^", "`", "{", "}", "|", "~"]
+    if (testChars.some(r=> prompts.container.includes(r))){
+      base.error(`Illegal Characters in input name ${prompts.container}`)
+      return
+    }
+    if (testChars.some(r=> prompts.group.includes(r))){
+      base.error(`Illegal Characters in input name ${prompts.group}`)
+      return
+    }
+
     const db = await base.createDBConnection()
 
     let envFile = conn.resolveEnv()
