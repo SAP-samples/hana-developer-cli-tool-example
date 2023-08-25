@@ -37,12 +37,12 @@ export function route(app, server) {
 			wss.clients.forEach((client) => {
 				try {
 					client.send(message, (error) => {
-						if (typeof error !== "undefined") {
-							base.error(`${base.bundle.getText("sendError")}: ${error.toString()}`)
+						if (error !== null && typeof error !== "undefined") {
+							base.error(`${base.bundle.getText("sendError")}: ${error}`)
 						}
 					})
 				} catch (e) {
-					base.error(`${base.bundle.getText("broadcastError")}: ${e.toString()}`)
+					base.error(`${base.bundle.getText("broadcastError")}: ${e}`)
 				}
 			})
 			base.debug(`${base.bundle.getText("sent")}: ${message}`)
@@ -50,7 +50,7 @@ export function route(app, server) {
 
 
 		wss.on("error", (error) => {
-			base.error(`${base.bundle.getText("websocketError")}: ${error.toString()}`)
+			base.error(`${base.bundle.getText("websocketError")}: ${error}`)
 		})
 
 		wss.on("connection", (ws) => {
@@ -75,21 +75,21 @@ export function route(app, server) {
 			})
 
 			ws.on("error", (error) => {
-				base.error(`${base.bundle.getText("websocketError")}: ${error.toString()}`)
+				base.error(`${base.bundle.getText("websocketError")}: ${error}`)
 			})
 
 			ws.send(JSON.stringify({
 				text: base.bundle.getText("connectedToProcess")
 			}), (error) => {
-				if (typeof error !== "undefined") {
-					base.error(`${base.bundle.getText("sendError")}: ${error.toString()}`)
+				if (error !== null && typeof error !== "undefined") {
+					base.error(`${base.bundle.getText("sendError")}: ${error}`)
 				}
 			})
 		})
 
 
 	} catch (e) {
-		base.error(`${base.bundle.getText("generalError")}: ${e.toString()}`)
+		base.error(`${base.bundle.getText("generalError")}: ${e}`)
 	}
 	return app
 }
