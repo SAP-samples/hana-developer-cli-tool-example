@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202308.1] - 2023-08-25
+
+**Changed**
+
+- [CAP version 7.1.2](https://cap.cloud.sap/docs/releases/jul23)
+- Fixed Web Socket Error Handling
+- Upgrade to [SAPUI5 1.117.1](https://sapui5.hana.ondemand.com/#/topic/029d3b4a39c84384be6398c444f7e06a)
+- Fix [Issue #111](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/111) - add checks on container and group names for createContainer
+- Complete [Issue #83](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/83) - add support for SQL and Calculation view parameters
+
 ## [3.202307.1] - 2023-07-10
 
 **Changed**

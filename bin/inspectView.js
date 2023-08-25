@@ -114,10 +114,13 @@ export async function viewInspect(prompts) {
 
     let object = await dbInspect.getView(db, schema, prompts.view)
     let fields = []
+    let parameters = []
     if (await dbInspect.isCalculationView(db, schema, prompts.view)) {
       fields = await dbInspect.getCalcViewFields(db, schema, prompts.view, object[0].VIEW_OID)
+      parameters = await dbInspect.getCalcViewParameters(db, schema, prompts.view, object[0].VIEW_OID)
     } else {
       fields = await dbInspect.getViewFields(db, object[0].VIEW_OID)
+      parameters = await  dbInspect.getViewParameters(db, object[0].VIEW_OID)
     }
 
     // @ts-ignore
@@ -130,6 +133,10 @@ export async function viewInspect(prompts) {
         results.basic = object[0]
         console.log("\n")
         base.outputTableFancy(fields)
+        if (parameters && parameters.length > 0){
+          results.parameters = parameters
+          base.outputTableFancy(parameters)
+        }
         results.fields = fields
         break
       case 'sql': {
@@ -153,13 +160,13 @@ export async function viewInspect(prompts) {
         break
       }
       case 'cds': {
-        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema)
+        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema, null, parameters)
         results.cds = cdsSource
         console.log(highlight(cdsSource))
         break
       }
       case 'json': {
-        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema)
+        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema, null, parameters)
         cdsSource = `service HanaCli { ${cdsSource} } `
         console.log(highlight(cds.compile.to.json(cds.parse(cdsSource))))
         break
@@ -185,27 +192,27 @@ export async function viewInspect(prompts) {
         break
       }
       case 'yaml': {
-        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema)
+        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema, null, parameters)
         cdsSource = `service HanaCli { ${cdsSource} } `
         console.log(highlight(cds.compile.to.yaml(cds.parse(cdsSource))))
         break
       }
       case 'cdl': {
-        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema)
+        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema, null, parameters)
         cdsSource = `service HanaCli { ${cdsSource} } `
         // @ts-ignore
         console.log(highlight(cds.compile.to.cdl(cds.parse(cdsSource))))
         break
       }
       case 'graphql': {
-        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema)
+        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema, null, parameters)
         cdsSource = `service HanaCli { ${cdsSource} } `
         // @ts-ignore
         console.log(highlight(cds.compile.to.gql(cds.parse(cdsSource))))
         break
       }
       case 'edmx': {
-        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema)
+        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema, null, parameters)
         cdsSource = `service HanaCli { ${cdsSource} } `
         let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
           version: 'v4',
@@ -215,7 +222,7 @@ export async function viewInspect(prompts) {
         break
       }
       case 'annos': {
-        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema)
+        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema, null, parameters)
         cdsSource = `service HanaCli { ${cdsSource} } `
         let metadata = await cds.compile.to.edmx(cds.parse(cdsSource), {
           // @ts-ignore
@@ -226,7 +233,7 @@ export async function viewInspect(prompts) {
         break
       }
       case 'edm': {
-        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema)
+        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema, null, parameters)
         cdsSource = `service HanaCli { ${cdsSource} } `
         console.log(highlight(JSON.stringify(cds.compile.to.edm(cds.parse(cdsSource)), null, 4)))
         break
@@ -247,7 +254,7 @@ export async function viewInspect(prompts) {
         break
       }
       case 'openapi': {
-        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema)
+        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema, null, parameters)
         cdsSource = `service HanaCli { ${cdsSource} } `
         try {
           // @ts-ignore
@@ -269,7 +276,7 @@ export async function viewInspect(prompts) {
         }
       }
       case 'jsdoc': {
-        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema)
+        let cdsSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema, null, parameters)
         cdsSource = `service HanaCli { ${cdsSource} } `
         try {
           // @ts-ignore

@@ -196,6 +196,58 @@ export async function getViewFields(db, viewOid) {
 }
 
 /**
+ * Get View Parameters and Metadata
+ * @param {object} db - Database Connection
+ * @param {string} schema - Schema
+ * @param {string} viewId - View Unique ID
+ * @param {string} viewOid - View Unique ID
+ * @returns {Promise<object>}
+ */
+export async function getCalcViewParameters(db, schema, viewId, viewOid) {
+	base.debug(`getCalcViewParameters ${schema} ${viewId}`)
+	//Select Fields
+	const statement = await db.preparePromisified(
+		`SELECT SCHEMA_NAME, QUALIFIED_NAME as "VIEW_NAME", VARIABLE_NAME AS "PARAMETER_NAME",
+		        COLUMN_TYPE, COLUMN_TYPE_D as "DATA_TYPE_NAME",
+		        COLUMN_SQL_TYPE, VALUE_TYPE, MANDATORY, DESCRIPTION, 
+				PLACEHOLDER_NAME, DEFAULT_VALUE, SCHEMA_NAME, QUALIFIED_NAME, IS_INPUT_ENABLED,
+				VARIABLE_TYPE, VARIABLE_SUB_TYPE
+         FROM _SYS_BI.BIMC_VARIABLE_VIEW
+		 		  WHERE SCHEMA_NAME LIKE ?
+				    AND QUALIFIED_NAME = ?`)
+	let parameters = await db.statementExecPromisified(statement, [schema, viewId])
+	for (let parameter of parameters) {
+		let temp1 = parameter.COLUMN_SQL_TYPE.split("(")
+		if(temp1.length > 1){
+			let temp2 = temp1[1].split(")")
+			parameter.LENGTH = temp2[0]
+		}else{
+			parameter.LENGTH = 0
+		}
+	}
+	
+	return parameters
+}
+
+/**
+ * Get View Parameters and Metadata
+ * @param {object} db - Database Connection
+ * @param {string} viewOid - View Unique ID
+ * @returns {Promise<object>}
+ */
+export async function getViewParameters(db, viewOid) {
+	base.debug(`getViewParameters ${viewOid}`)
+	//Select Fields
+	const statement = await db.preparePromisified(
+		`SELECT SCHEMA_NAME, VIEW_NAME, VIEW_OID, PARAMETER_NAME, DATA_TYPE_ID, DATA_TYPE_NAME,
+		        LENGTH, SCALE, POSITION, HAS_DEFAULT_VALUE
+         FROM VIEW_PARAMETERS
+	    WHERE VIEW_OID = ?`)
+	let parameters = await db.statementExecPromisified(statement, [viewOid])	
+	return parameters
+}
+
+/**
  * Get DB Table Details
  * @param {object} db - Database Connection
  * @param {string} schema - Schema
@@ -442,9 +494,10 @@ export let results = {
  * @param {string} type - DB Object type
  * @param {string} [schema] - Schema 
  * @param {string} [parent] - Calling context which impacts formatting
+ * @param {object} [parameters] - View Parameters
  * @returns {Promise<string>}
  */
-export async function formatCDS(db, object, fields, constraints, type, schema, parent) {
+export async function formatCDS(db, object, fields, constraints, type, schema, parent, parameters) {
 	base.debug(`formatCDS ${type}`)
 	let cdstable = ""
 	let originalName
@@ -477,11 +530,150 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 		}
 	}
 	if (options.useQuoted){
-		newName && (cdstable += `Entity ![${newName}] {\n`)
+		newName && (cdstable += `Entity ![${newName}] `)
 	}else{
-		newName && (cdstable += `Entity ${newName} {\n`)
+		newName && (cdstable += `Entity ${newName} `)
 	}
 
+	if (parameters && parameters.length > 0){
+		cdstable += `(`
+		for (let parameter of parameters) {
+			cdstable += `${parameter.PARAMETER_NAME} : `
+			if (options.useHanaTypes) {
+				switch (parameter.DATA_TYPE_NAME) {
+					case "NVARCHAR":
+						cdstable += `String(${parameter.LENGTH})`
+						break
+					case "NCLOB":
+						cdstable += "LargeString"
+						break
+					case "VARBINARY":
+						cdstable += `Binary(${parameter.LENGTH})`
+						break
+					case "BLOB":
+						cdstable += "LargeBinary"
+						break
+					case "INTEGER":
+						cdstable += "Integer"
+						break
+					case "BIGINT":
+						cdstable += "Integer64"
+						break
+					case "DECIMAL":
+						cdstable += parameter.SCALE ? `Decimal(${parameter.LENGTH}, ${parameter.SCALE})` : `Decimal(${parameter.LENGTH})`
+						break
+					case "DOUBLE":
+						cdstable += "Double"
+						break
+					case "DATE":
+						cdstable += "Date"
+						break
+					case "TIME":
+						cdstable += "Time"
+						break
+					case "SECONDDATE":
+						cdstable += "String"
+						break
+					case "TIMESTAMP":
+						if (parent === 'preview') {
+							cdstable += "String"
+						} else {
+							cdstable += "Timestamp"
+						}
+						break
+					case "BOOLEAN":
+						cdstable += "Boolean"
+						break
+					// hana types
+					case "SMALLINT":
+					case "TINYINT":
+					case "SMALLDECIMAL":
+					case "REAL":
+					case "CLOB":
+						cdstable += `hana.${parameter.DATA_TYPE_NAME}`
+						break
+					case "CHAR":
+					case "NCHAR":
+					case "BINARY":
+						cdstable += `hana.${parameter.DATA_TYPE_NAME}(${parameter.LENGTH})`
+						break
+					case "VARCHAR":
+						cdstable += `hana.${parameter.DATA_TYPE_NAME}(${parameter.LENGTH})`
+						break
+					case "ST_POINT":
+					case "ST_GEOMETRY":
+						cdstable += `hana.${parameter.DATA_TYPE_NAME}(${await getGeoColumns(db, object[0], parameter, type)})`
+						break
+					default:
+						cdstable += `**UNSUPPORTED TYPE - ${parameter.DATA_TYPE_NAME}`
+				}
+			} else {
+				switch (parameter.DATA_TYPE_NAME) {
+					case "NVARCHAR":
+						cdstable += `String(${parameter.LENGTH})`
+						break
+					case "NCLOB":
+						cdstable += "LargeString"
+						break
+					case "VARBINARY":
+						cdstable += `Binary(${parameter.LENGTH})`
+						break
+					case "BLOB":
+						cdstable += "LargeBinary"
+						break
+					case "INTEGER":
+						cdstable += "Integer"
+						break
+					case "BIGINT":
+						cdstable += "Integer64"
+						break
+					case "TINYINT":
+						cdstable += "UInt8"
+						break
+					case "SMALLINT":
+						cdstable += "Int16"
+						break
+					case "DECIMAL":
+						cdstable += parameter.SCALE ? `Decimal(${parameter.LENGTH}, ${parameter.SCALE})` : `Decimal(${parameter.LENGTH})`
+						break
+					case "DOUBLE":
+						cdstable += "Double"
+						break
+					case "DATE":
+						cdstable += "Date"
+						break
+					case "TIME":
+						cdstable += "Time"
+						break
+					case "SECONDDATE":
+						cdstable += "String"
+						break
+					case "TIMESTAMP":
+						if (parent === 'preview') {
+							cdstable += "String"
+						} else {
+							cdstable += "Timestamp"
+						}
+						break
+					case "BOOLEAN":
+						cdstable += "Boolean"
+						break
+					case "VARCHAR":
+						// backward compatible change
+						cdstable += `String(${parameter.LENGTH})`
+						break
+					default:
+						cdstable += `**UNSUPPORTED TYPE - ${parameter.DATA_TYPE_NAME}`
+				}
+			}
+			cdstable += ", "
+		}
+		cdstable = cdstable.slice(0, -2)
+		cdstable += `)`
+
+	}
+	//closing entity
+	cdstable += `{\n`
 
 	// if modified real table names will be stored in synonyms
 	if (newName !== originalName) {

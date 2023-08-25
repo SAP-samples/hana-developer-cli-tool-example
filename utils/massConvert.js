@@ -205,7 +205,7 @@ async function hdbtableViews(prompts, viewResults, wss, db, schema, replacer, zi
             let object = await dbInspect.getView(db, schema, view.VIEW_NAME)
             let fields = []
             if (await dbInspect.isCalculationView(db, schema, view.VIEW_NAME)) {
-                fields = await dbInspect.getCalcViewFields(db, schema, view.VIEW_NAME, object[0].VIEW_OID)
+                fields = await dbInspect.getCalcViewFields(db, schema, view.VIEW_NAME, object[0].VIEW_OID)                
             } else {
                 fields = await dbInspect.getViewFields(db, object[0].VIEW_OID)
             }
@@ -399,12 +399,15 @@ async function cdsViews(prompts, viewResults, wss, db, schema, cdsSource, logOut
             broadcast(wss, view.VIEW_NAME, i / viewResults.length * 100)
             let object = await dbInspect.getView(db, schema, view.VIEW_NAME)
             let fields = []
+            let parameters = []
             if (await dbInspect.isCalculationView(db, schema, view.VIEW_NAME)) {
                 fields = await dbInspect.getCalcViewFields(db, schema, view.VIEW_NAME, object[0].VIEW_OID)
+                parameters = await dbInspect.getCalcViewParameters(db, schema, view.VIEW_NAME, object[0].VIEW_OID)
             } else {
                 fields = await dbInspect.getViewFields(db, object[0].VIEW_OID)
+                parameters = await  dbInspect.getViewParameters(db, object[0].VIEW_OID)
             }
-            cdsSource += await dbInspect.formatCDS(db, object, fields, null, "view", schema)
+            cdsSource += await dbInspect.formatCDS(db, object, fields, null, "view", schema, null, parameters)
 
             viewProgressBar.itemDone(view.VIEW_NAME)
             logOutput.push({ object: view.VIEW_NAME, status: 'Success' })
