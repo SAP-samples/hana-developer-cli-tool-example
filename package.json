@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "3.202307.1",
+  "version": "3.202308.1",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -28,16 +28,16 @@
   ],
   "types": "types/index.d.ts",
   "dependencies": {
-    "@cap-js/graphql": "0.6.1",
-    "@json2csv/node": "7.0.1",
-    "@sap/cds": "^7.0.2",
+    "@cap-js/graphql": "0.6.2",
+    "@json2csv/node": "7.0.2",
+    "@sap/cds": "^7.1.2",
     "@sap/cds-common-content": "^1.2.0",
     "@sap/cds-fiori": "^1.0.0",
     "@sap/cds-hana": "^2.0.0",
     "@sap/textbundle": "^4.2",
-    "@sap/xsenv": "^3.4.0",
-    "@sap-cloud-sdk/resilience": "^3.2.0",
-    "@cap-js-community/odata-v2-adapter": "^1.11.4",
+    "@sap/xsenv": "^4.0.0",
+    "@sap-cloud-sdk/resilience": "^3.4.0",
+    "@cap-js-community/odata-v2-adapter": "^1.11.6",
     "cds-swagger-ui-express": "^0.6.0",
     "body-parser": "^1.20.2",
     "chalk": "^5.3.0",
@@ -62,10 +62,10 @@
     "node-zip": "^1.1.1",
     "odata2openapi": "^1.3.2",
     "open": "^9.1.0",
-    "ora": "^6.3.1",
+    "ora": "^7.0.1",
     "prompt": "^1.3.0",
     "properties-to-json": "^0.2.1",
-    "sap-hdb-promisfied": "2.202306.1",
+    "sap-hdb-promisfied": "2.202308.1",
     "showdown": "^2.1.0",
     "swagger-ui-express": "^5.0.0",
     "terminal-kit": "^3.0.0",
@@ -88,10 +88,10 @@
   "homepage": "https://github.com/SAP-samples/hana-developer-cli-tool-example#readme",
   "devDependencies": {
     "@types/mocha": "^10.0.1",
-    "@types/node": "^20.3.2",
+    "@types/node": "^20.5.4",
     "@types/showdown": "^2.0.1",
     "@types/yargs": "^17.0.24",
-    "eslint": "^8.43.0",
+    "eslint": "^8.47.0",
     "mocha": "^10.2.0",
     "mochawesome": "^7.1.3",
     "sinon": "^15.2.0",
@@ -100,7 +100,7 @@
   "cds": {
     "preview": {
       "ui5": {
-        "version": "1.115.0"
+        "version": "1.117.1"
       }
     },
     "hana": {
