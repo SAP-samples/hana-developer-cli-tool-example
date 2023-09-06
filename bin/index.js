@@ -17,7 +17,7 @@ export async function init() {
         openReadMe, reclaim, rick, roles, hanaCloudSBSSInstances, hanaCloudSBSSInstancesUI,
         schemas, schemasUI, hanaCloudSchemaInstances, hanaCloudSchemaInstancesUI,
         hanaCloudSecureStoreInstances, hanaCloudSecureStoreInstancesUI, connectViaServiceKey,
-        sequences, status, synonyms, systemInfo, systemInfoUI, tables, tablesUI, //test,
+        sequences, status, synonyms, systemInfo, systemInfoUI, tables, tablesPG, tablesSQLite, tablesUI, //test,
         traces, traceContents, triggers, UI, hanaCloudUPSInstances, hanaCloudUPSInstancesUI,
         users, version, views, btp, btpSubs, btpInfo, issue
     ] = await Promise.all([
@@ -111,6 +111,8 @@ export async function init() {
         import('./systemInfo.js'),
         import('./systemInfoUI.js'),
         import('./tables.js'),
+        import('./tablesPG.js'),
+        import('./tablesSQLite.js'),
         import('./tablesUI.js'),
         //import('./test.js'),
         import('./traces.js'),
@@ -143,7 +145,7 @@ export async function init() {
         openReadMe, reclaim, rick, roles, hanaCloudSBSSInstances, hanaCloudSBSSInstancesUI,
         schemas, schemasUI, hanaCloudSchemaInstances, hanaCloudSchemaInstancesUI,
         hanaCloudSecureStoreInstances, hanaCloudSecureStoreInstancesUI, connectViaServiceKey,
-        sequences, status, synonyms, systemInfo, systemInfoUI, tables, tablesUI, //test,
+        sequences, status, synonyms, systemInfo, systemInfoUI, tables, tablesPG, tablesSQLite, tablesUI, //test,
         traces, traceContents, triggers, UI, hanaCloudUPSInstances, hanaCloudUPSInstancesUI,
         users, version, views
     ]  
