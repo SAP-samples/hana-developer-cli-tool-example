@@ -30,12 +30,12 @@ export const builder = base.getBuilder({
 
 export let inputPrompts = {
   table: {
-    description: base.bundle.getText("profile"),
+    description: base.bundle.getText("table"),
     type: 'string',
     required: true
   },
   profile: {
-    description: base.bundle.getText("table"),
+    description: base.bundle.getText("profile"),
     type: 'string',
     required: true
   }
@@ -52,8 +52,10 @@ export async function getTables(prompts) {
     await dbClient.connect()
     let results = await dbClient.listTables()
     base.outputTableFancy(results)
-    base.end()
+
+    dbClient.disconnect()
     return results
+    
   } catch (error) {
     base.error(error)
   }

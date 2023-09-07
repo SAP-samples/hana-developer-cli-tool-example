@@ -48,6 +48,12 @@ export let inputPrompts = {
     description: base.bundle.getText("limit"),
     type: 'number',
     required: true
+  },
+  profile: {
+    description: base.bundle.getText("profile"),
+    type: 'string',
+    required: false,
+    ask: () => {}
   }
 }
 
@@ -66,7 +72,6 @@ export async function handler(argv) {
 }
 
 export async function getTables(prompts) {
-
   try {
     base.debug('getTables')
     const dbClient = await DBClientClass.getNewClient(prompts)
@@ -74,7 +79,8 @@ export async function getTables(prompts) {
     let results = await dbClient.listTables()
 
     base.outputTableFancy(results)
-    base.end()
+    dbClient.disconnect()
+
     return results
   } catch (error) {
     base.error(error)

@@ -3,7 +3,7 @@ import DBClientClass from "./index.js"
 import * as base from '../base.js'
 
 export default class extends DBClientClass {
-    #clientType = 'postgres'
+    #clientType = 'hanaCDS'
     #schema
     constructor(prompts, optionsCDS) {
         super(prompts, optionsCDS)
@@ -16,15 +16,16 @@ export default class extends DBClientClass {
         const tableName = super.adjustWildcard(super.getPrompts().table)
 
         let dbQuery = SELECT
-            .columns("table_schema",{ref:["table_name"],as:'TABLE_NAME'} )
-            .from("tables")
-            .where({ table_schema: this.#schema, table_name: { like: tableName }, table_type: 'BASE TABLE' })
+            .columns("SCHEMA_NAME", "TABLE_NAME",
+            {ref:["TABLE_OID"], as:'TABLE_OID', cast: {type:"cds.String"}},"COMMENTS" )
+            .from("TABLES")
+            .where({ SCHEMA_NAME: {like: this.#schema}, TABLE_NAME: { like: tableName } })
+            .orderBy("SCHEMA_NAME", "TABLE_NAME")
             .limit(super.getPrompts().limit)
 
-            base.debug(JSON.stringify(dbQuery))
-        let results = await this.getDB().run(dbQuery)
+        base.debug(JSON.stringify(dbQuery))
+        let db = this.getDB()
+        let results = await db.run(dbQuery)
         return results
     }
-
-
 }

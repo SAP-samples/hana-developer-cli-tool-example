@@ -3,7 +3,7 @@ import DBClientClass from "./index.js"
 import * as base from '../base.js'
 
 export default class extends DBClientClass {
-    #clientType = 'hanaDirect'
+    #clientType = 'hanaCDS'
     #schema
     constructor(prompts) {
         super(prompts)
@@ -14,6 +14,10 @@ export default class extends DBClientClass {
         const db = await base.createDBConnection()
         super.setDB(db)
         return db
+    }
+    
+    disconnect(){
+        base.end()
     }
 
     async listTables() {
@@ -36,7 +40,7 @@ export default class extends DBClientClass {
         }
         base.debug(dbQuery)
         let results = await db.statementExecPromisified(await db.preparePromisified(dbQuery), [this.#schema, table])
-        base.debug(results)
         return results
     }
+
 }

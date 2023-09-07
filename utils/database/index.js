@@ -48,6 +48,10 @@ export default class {
                 const { default: classAccess } = await import("./postgres.js")
                 childClass = new classAccess(prompts, optionsCDS)
             }
+            else if (optionsCDS.kind === 'hana') { //HANA CDS
+                const { default: classAccess } = await import("./hanaCDS.js")
+                childClass = new classAccess(prompts, optionsCDS)
+            }
             else {
                 throw new Error(`Unknown or Unsupported database client type: ${optionsCDS.kind}`)
             }
@@ -57,7 +61,14 @@ export default class {
 
     async connect() {
         this.#db = await cds.connect.to(this.#optionsCDS)
+        cds.log('pool', 'log')
         return this.#db
+    }
+
+    disconnect() {
+        base.debug(`Disconnect`)
+        base.end()
+        cds.exit()
     }
 
     async connectTargetSchema(schema) {
@@ -89,5 +100,23 @@ export default class {
 
     setDB(db) {
         this.#db = db
+    }
+
+    schemaCalculation(prompts, optionsCDS){
+        let schema = ""
+        if (!prompts.schema || prompts.schema === '**CURRENT_SCHEMA**') {
+            if (optionsCDS && optionsCDS.credentials && optionsCDS.credentials.schema) {
+                schema = optionsCDS.credentials.schema
+            } else {
+                schema = "public"
+            }
+        }
+        else if (prompts.schema === '*') {
+            schema = "%"
+        }
+        else {
+            schema = prompts.schema
+        }
+        return schema
     }
 }
