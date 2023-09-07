@@ -49,7 +49,7 @@ export async function getTables(prompts) {
   try {
     base.debug('getTablesSQLite')
     const dbClient = await DBClientClass.getNewClient(prompts)
-    await dbClient.cdsConnect()
+    await dbClient.connect()
     let results = await dbClient.listTables()
     base.outputTableFancy(results)
     base.end()

@@ -9,24 +9,15 @@ export default class extends DBClientClass {
         base.debug(`Database client specific class for profile: ${prompts.profile}`)
     }
 
-    adjustWildcard(input) {
-        base.debug(`adjustWildcard for ${this.#clientType}`)
-        input = super.adjustWildcard(input)
-        if (input == "*") {
-            input = "%"
-        }
-        return input
-    }
-
     async listTables() {
         base.debug(`listTables for for ${this.#clientType}`)
-        const tableName = this.adjustWildcard(super.getPrompts().table)
+        const tableName = super.adjustWildcard(super.getPrompts().table)
         let dbQuery = SELECT
-            .columns("name")
+            .columns({ref:["name"],as:'TABLE_NAME'})
             .from("sqlite_schema")
             .where({ type: 'table', name: { like: tableName } })
             .limit(super.getPrompts().limit)
-        base.debug(dbQuery)
+        base.debug(JSON.stringify(dbQuery))
         let results = await this.getDB().run(dbQuery)
         return results
 

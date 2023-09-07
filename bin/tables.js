@@ -1,5 +1,7 @@
 // @ts-check
+// @ts-nocheck
 import * as base from '../utils/base.js'
+import DBClientClass from "../utils/database/index.js"
 
 export const command = 'tables [schema] [table]'
 export const aliases = ['t', 'listTables', 'listtables']
@@ -23,6 +25,11 @@ export const builder = base.getBuilder({
     type: 'number',
     default: 200,
     desc: base.bundle.getText("limit")
+  },
+  profile: {
+    alias: ['p', 'Profile'],
+    type: 'string',
+    desc: base.bundle.getText("profile")
   }
 })
 
@@ -44,39 +51,32 @@ export let inputPrompts = {
   }
 }
 
-export function handler (argv) {
-  base.promptHandler(argv, getTables, inputPrompts)
+export async function handler(argv) {
+  if (argv.profile && argv.profile === 'pg') {  //Redirect to tablesPG / Postgres
+    const tablesPG = await import("./tablesPG.js")
+    base.promptHandler(argv, tablesPG.getTables, tablesPG.inputPrompts)
+  } else if (argv.profile && (argv.profile === 'sqlite')) {  //Redirect to tablesSQLite / SQLite
+    const tablesSQLite = await import("./tablesSQLite.js")
+    base.promptHandler(argv, tablesSQLite.getTables, tablesSQLite.inputPrompts)
+  }
+  else {
+    base.promptHandler(argv, getTables, inputPrompts)
+  }
+
 }
 
 export async function getTables(prompts) {
-  base.debug('getTables')
+
   try {
-    base.setPrompts(prompts)
-    const db = await base.createDBConnection()
+    base.debug('getTables')
+    const dbClient = await DBClientClass.getNewClient(prompts)
+    await dbClient.connect()
+    let results = await dbClient.listTables()
 
-    let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("table")}: ${prompts.table}`)
-
-    let results = await getTablesInt(schema, prompts.table, db, prompts.limit)
     base.outputTableFancy(results)
     base.end()
     return results
   } catch (error) {
     base.error(error)
   }
-}
-
-async function getTablesInt(schema, table, client, limit) {
-  base.debug(`getTablesInt ${schema} ${table} ${limit}`)
-  table = base.dbClass.objectName(table)
-
-  let query =
-    `SELECT SCHEMA_NAME, TABLE_NAME, TO_NVARCHAR(TABLE_OID) AS TABLE_OID, COMMENTS  from TABLES 
-  WHERE SCHEMA_NAME LIKE ? 
-    AND TABLE_NAME LIKE ? 
-  ORDER BY SCHEMA_NAME, TABLE_NAME `
-  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
-    query += `LIMIT ${limit.toString()}`
-  }
-  return await client.statementExecPromisified(await client.preparePromisified(query), [schema, table])
 }

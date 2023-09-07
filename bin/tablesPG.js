@@ -49,7 +49,7 @@ export async function getTables(prompts) {
   try {
     base.debug('getTablesPostgres')
     const dbClient = await DBClientClass.getNewClient(prompts)
-    await dbClient.cdsConnectTargetSchema("information_schema")
+    await dbClient.connectTargetSchema("information_schema")
     let results = await dbClient.listTables()
     base.outputTableFancy(results)
     base.end()

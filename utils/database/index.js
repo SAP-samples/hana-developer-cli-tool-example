@@ -32,33 +32,35 @@ export default class {
     }
 
     static async getNewClient(prompts) {
-        if (!prompts.profile) {
-            prompts.profile = 'hybrid'  //Default to HANA if not selected from input
-        }
-        process.env.CDS_ENV = prompts.profile
-        let optionsCDS = cds.env.requires.db
         let childClass = Object
-
-        if (optionsCDS.kind === 'sqlite') {
-            const { default: classAccess } = await import("./sqlite.js")
-            childClass = new classAccess(prompts, optionsCDS)
-        }
-        else if (optionsCDS.kind === 'postgres') {
-            const { default: classAccess } = await import("./postgres.js")
-            childClass = new classAccess(prompts, optionsCDS)
-        }
-        else {
-            throw new Error(`Unknown or Unsupported database client type: ${optionsCDS.kind}`)
+        if (!prompts.profile) { //HANA Without CDS
+            prompts.profile = 'hybrid'  //Default to HANA if not selected from input
+            const { default: classAccess } = await import("./hanaDirect.js")
+            childClass = new classAccess(prompts)
+        } else {  //CDS based connectivity
+            process.env.CDS_ENV = prompts.profile
+            let optionsCDS = cds.env.requires.db
+            if (optionsCDS.kind === 'sqlite') {  //SQLite CDS
+                const { default: classAccess } = await import("./sqlite.js")
+                childClass = new classAccess(prompts, optionsCDS)
+            }
+            else if (optionsCDS.kind === 'postgres') { //PostgresSQL CDS
+                const { default: classAccess } = await import("./postgres.js")
+                childClass = new classAccess(prompts, optionsCDS)
+            }
+            else {
+                throw new Error(`Unknown or Unsupported database client type: ${optionsCDS.kind}`)
+            }
         }
         return childClass
     }
 
-    async cdsConnect() {
+    async connect() {
         this.#db = await cds.connect.to(this.#optionsCDS)
         return this.#db
     }
 
-    async cdsConnectTargetSchema(schema) {
+    async connectTargetSchema(schema) {
         let optionsCDS = this.#optionsCDS
         optionsCDS.credentials.schema = schema
         this.#db = await cds.connect.to(optionsCDS)
@@ -66,6 +68,10 @@ export default class {
     }
 
     adjustWildcard(input) {
+        base.debug(`adjustWildcard`)
+        if (input == "*") {
+            input = "%"
+        }
         return input
     }
 
@@ -79,5 +85,9 @@ export default class {
 
     getDB() {
         return this.#db
+    }
+
+    setDB(db) {
+        this.#db = db
     }
 }
