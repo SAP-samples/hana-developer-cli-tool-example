@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 // @ts-nocheck
 import * as base from '../utils/base.js'
-import cds from '@sap/cds'
+import DBClientClass from "../utils/database/index.js"
 
 export const command = 'tablesSQLite [table]'
 export const aliases = ['tablessqlite', 'tablesqlite', 'tablesSqlite', 'tables-sqlite', 'tables-sql', 'tablesSQL']
@@ -42,28 +42,15 @@ export let inputPrompts = {
 }
 
 export function handler(argv) {
-  base.promptHandler(argv, getTables, inputPrompts)
+  base.promptHandler(argv, getTables, inputPrompts, false)
 }
 
 export async function getTables(prompts) {
-  base.debug('getTablesSQLite')
   try {
-    base.setPrompts(prompts)
-    process.env.CDS_ENV = prompts.profile
-    let optionsCDS = cds.env.requires.db
-    base.debug(optionsCDS)
-    const db = await cds.connect.to(optionsCDS)
-    if(prompts.table == "*"){
-      prompts.table = "%"
-    }
-    let dbQuery = SELECT
-      .columns("name")
-      .from("sqlite_schema")
-      .where({ type: 'table', name:{like:prompts.table}})
-      .limit(prompts.limit)
-    base.debug(dbQuery)
-    let results = await db.run(dbQuery)
-
+    base.debug('getTablesSQLite')
+    const dbClient = await DBClientClass.getNewClient(prompts)
+    await dbClient.cdsConnect()
+    let results = await dbClient.listTables()
     base.outputTableFancy(results)
     base.end()
     return results

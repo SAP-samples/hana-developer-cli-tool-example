@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 // @ts-nocheck
 import * as base from '../utils/base.js'
-import cds from '@sap/cds'
+import DBClientClass from "../utils/database/index.js"
 
 export const command = 'tablesPG [table]'
 export const aliases = ['tablespg', 'tablespostgres', 'tablesPostgres', 'tables-postgres', 'tables-postgressql', 'tablesPOSTGRES']
@@ -42,36 +42,15 @@ export let inputPrompts = {
 }
 
 export function handler(argv) {
-  base.promptHandler(argv, getTables, inputPrompts)
+  base.promptHandler(argv, getTables, inputPrompts, false)
 }
 
 export async function getTables(prompts) {
-  base.debug('getTablesPostgres')
   try {
-    base.setPrompts(prompts)
-    process.env.CDS_ENV = prompts.profile
-    let optionsCDS = cds.env.requires.db
-    let schema = ""
-    if (optionsCDS.credentials.schema) {
-      schema = optionsCDS.credentials.schema
-    } else {
-      schema = "public"
-    }
-    optionsCDS.credentials.schema = "information_schema"
-
-    base.debug(optionsCDS)
-    const db = await cds.connect.to(optionsCDS)
-    if (prompts.table == "*") {
-      prompts.table = "%"
-    }
-    let dbQuery = SELECT
-      .columns("table_schema", "table_name")
-      .from("tables")
-      .where({ table_schema: schema, table_name: { like: prompts.table }, table_type: 'BASE TABLE' })
-      .limit(prompts.limit)
-    base.debug(dbQuery)
-    let results = await db.run(dbQuery)
-
+    base.debug('getTablesPostgres')
+    const dbClient = await DBClientClass.getNewClient(prompts)
+    await dbClient.cdsConnectTargetSchema("information_schema")
+    let results = await dbClient.listTables()
     base.outputTableFancy(results)
     base.end()
     return results
