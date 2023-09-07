@@ -61,7 +61,7 @@ export default class {
 
     async connect() {
         this.#db = await cds.connect.to(this.#optionsCDS)
-        cds.log('pool', 'log')
+        this.#connectLogging()
         return this.#db
     }
 
@@ -75,7 +75,15 @@ export default class {
         let optionsCDS = this.#optionsCDS
         optionsCDS.credentials.schema = schema
         this.#db = await cds.connect.to(optionsCDS)
+        this.#connectLogging()
         return this.#db
+    }
+
+    #connectLogging() {
+        if (!this.#prompts.debug) {
+            cds.log('pool', 'log')
+        }
+        if (base.verboseOutput(this.#prompts)) { console.log(`${base.bundle.getText("connFile2")} ${`CDS Profiles - ${this.#optionsCDS.kind}`} \n`) }
     }
 
     adjustWildcard(input) {
@@ -102,7 +110,7 @@ export default class {
         this.#db = db
     }
 
-    schemaCalculation(prompts, optionsCDS){
+    schemaCalculation(prompts, optionsCDS) {
         let schema = ""
         if (!prompts.schema || prompts.schema === '**CURRENT_SCHEMA**') {
             if (optionsCDS && optionsCDS.credentials && optionsCDS.credentials.schema) {
