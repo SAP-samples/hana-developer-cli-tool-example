@@ -16,7 +16,9 @@ export default class extends DBClientClass {
         const tableName = super.adjustWildcard(super.getPrompts().table)
 
         let dbQuery = SELECT
-            .columns("table_schema",{ref:["table_name"],as:'TABLE_NAME'} )
+            .columns(
+                {ref:["table_schema"],as: `"SCHEMA_NAME"` },
+                {ref:["table_name"],as:'TABLE_NAME'} )
             .from("tables")
             .where({ table_schema: this.#schema, table_name: { like: tableName }, table_type: 'BASE TABLE' })
             .limit(super.getPrompts().limit)

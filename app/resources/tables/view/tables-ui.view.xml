@@ -4,26 +4,26 @@
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core"
 	xmlns="sap.m">
-	<ScrollContainer height="100%" width="100%" vertical="true" focusable="true">
+	<ScrollContainer id="scTable" height="100%" width="100%" vertical="true" focusable="true">
 		<f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
 			<f:toolbar>
 				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.toolbar" type="XML"/>
 			</f:toolbar>
-			 	<f:content>
+			<f:content>
 
-				<Toolbar ariaLabelledBy="Title2">
+				<Toolbar id="tbTable" ariaLabelledBy="Title2">
 					<Title id="Title2" text="{i18nReuse>gui.target}"/>
-					<ToolbarSpacer />
-					<Button icon="sap-icon://settings" tooltip="{i18nReuse>gui.targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
+					<ToolbarSpacer id="tbSpacerTable" />
+					<Button id="btnTargetDetails" icon="sap-icon://settings" tooltip="{i18nReuse>gui.targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
 				</Toolbar>
 
 				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.schema" type="XML"/>
 
-				<Label text="{i18nReuse>table}" required="true"/>
+				<Label id="lblTable" text="{i18nReuse>table}" required="true"/>
 				<Input id="Table" value="{/table}" showSuggestion="true" suggest="loadTableFilter">
 				</Input>
-				<Label text="{i18nReuse>limit}" required="true"/>
-				<Input value="{/limit}" />
+				<Label id="lblLimit" text="{i18nReuse>limit}" required="true"/>
+				<Input id="Limit" value="{/limit}" />
 
 				<core:Fragment fragmentName="sap.hanacli.common.view.Connection" type="XML"/>
 				<core:Fragment fragmentName="sap.hanacli.common.view.Debug" type="XML"/>
@@ -31,7 +31,7 @@
 			</f:content>
 		</f:SimpleForm>
 
-	
-	<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.table" type="XML"/>
+
+		<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.table" type="XML"/>
 	</ScrollContainer>
 </mvc:View>

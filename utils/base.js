@@ -154,6 +154,8 @@ export function getPrompts() {
     if (typeof prompts.useQuoted === 'undefined') { prompts.useQuoted = false }
     // @ts-ignore
     if (typeof prompts.log === 'undefined') { prompts.log = false }
+    // @ts-ignore
+    if (typeof prompts.profile === 'undefined') { prompts.profile = "" }
 
     return prompts
 }
@@ -713,7 +715,6 @@ export async function webServerSetup(urlPath) {
         return error(`${port} ${bundle.getText("errPort")}`)
     }
     const server = require("http").createServer()
-    // @ts-ignore
     // @ts-ignore
     const express = require("express")
     var app = express()

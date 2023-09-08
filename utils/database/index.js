@@ -8,15 +8,25 @@ import cds from '@sap/cds'
  * @public
  * @classdesc Database Client Abstract Level
  */
-export default class {
+export default class dbClientClass {
 
     /**
      * prompts current value
      * @type {typeof import("prompt")}
-     * @protected
+     * @private
      */
     #prompts
+    /**
+     * CDS connection options
+     * @type {Object}
+     * @private
+     */
     #optionsCDS
+    /**
+     * CDS connection object - returned from cds.connect.to or hdb module instance
+     * @type {Object}
+     * @private
+     */
     #db
 
     /**
@@ -31,6 +41,11 @@ export default class {
         base.debug(`Database client generic class for profile: ${this.#prompts.profile}`)
     }
 
+    /**
+     * Static Factory Method to initialize the DB Client in your selected Flavor
+     * @param {object} prompts - processed input prompts
+     * @returns {Promise<dbClientClass>} childClass - flavor specific DB client class instance
+     */
     static async getNewClient(prompts) {
         let childClass = Object
         if (!prompts.profile) { //HANA Without CDS
@@ -39,6 +54,7 @@ export default class {
             childClass = new classAccess(prompts)
         } else {  //CDS based connectivity
             process.env.CDS_ENV = prompts.profile
+            process.env.NODE_ENV = prompts.profile
             let optionsCDS = cds.env.requires.db
             if (optionsCDS.kind === 'sqlite') {  //SQLite CDS
                 const { default: classAccess } = await import("./sqlite.js")
@@ -59,18 +75,35 @@ export default class {
         return childClass
     }
 
+    /**
+    * Connect to the target database
+    * @returns {Promise<object>} cds connection object
+    */
     async connect() {
         this.#db = await cds.connect.to(this.#optionsCDS)
         this.#connectLogging()
         return this.#db
     }
 
+    /**
+    * Disconnect from the target database
+    */
     disconnect() {
         base.debug(`Disconnect`)
-        base.end()
-        cds.exit()
+        base.debug(`In Gui: ${!base.isGui(this.#prompts)}`)
+        if (!base.isGui(this.#prompts)) {
+            base.end()
+            cds.exit()
+        } else {
+            base.end()
+        }
     }
 
+    /**
+    * Connect to the target database and set a specific Schema
+    * @param {String} schema - Database Schema name
+    * @returns {Promise<object>} cds connection object
+    */
     async connectTargetSchema(schema) {
         let optionsCDS = this.#optionsCDS
         optionsCDS.credentials.schema = schema
@@ -79,6 +112,10 @@ export default class {
         return this.#db
     }
 
+    /**
+    * Set logging parameters upon connect. Deactivate most logging unless in debug mode
+    * @private
+    */
     #connectLogging() {
         if (!this.#prompts.debug) {
             cds.log('pool', 'log')
@@ -86,6 +123,10 @@ export default class {
         if (base.verboseOutput(this.#prompts)) { console.log(`${base.bundle.getText("connFile2")} ${`CDS Profiles - ${this.#optionsCDS.kind}`} \n`) }
     }
 
+    /**
+    * Database specific wildcard handling 
+    * @param {String} input - database object name that needs wildcard handling
+    */
     adjustWildcard(input) {
         base.debug(`adjustWildcard`)
         if (input == "*") {
@@ -94,6 +135,25 @@ export default class {
         return input
     }
 
+
+    /** 
+    * TableData as JSON
+    * @typedef {Object} TableLine
+    * @property {String} [SCHEMA_NAME]
+    * @property {String} TABLE_NAME
+    * @property {String} [TABLE_OID]
+    * @property {String} [COMMENTS]
+    */
+
+    /** 
+    * TableData as JSON
+    * @typedef {Array.<TableLine>} TableData
+    */
+
+    /**
+    * return a list of database tables
+    * @returns {Promise<TableData>} table of database tables
+    */
     async listTables() {
 
     }
@@ -106,8 +166,8 @@ export default class {
         return this.#db
     }
 
-    getKind(){
-        if(this.#optionsCDS){
+    getKind() {
+        if (this.#optionsCDS) {
             return this.#optionsCDS.kind
         }
     }

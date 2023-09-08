@@ -1,7 +1,7 @@
 // @ts-check
 // @ts-nocheck
 import * as base from '../utils/base.js'
-import DBClientClass from "../utils/database/index.js"
+import dbClientClass from "../utils/database/index.js"
 
 export const command = 'tables [schema] [table]'
 export const aliases = ['t', 'listTables', 'listtables']
@@ -74,7 +74,7 @@ export async function handler(argv) {
 export async function getTables(prompts) {
   try {
     base.debug('getTables')
-    const dbClient = await DBClientClass.getNewClient(prompts)
+    const dbClient = await dbClientClass.getNewClient(prompts)
     if(dbClient.getKind() && dbClient.getKind() === 'postgres'){
       await dbClient.connectTargetSchema("information_schema")
     }else{
@@ -82,7 +82,6 @@ export async function getTables(prompts) {
     }
 
     let results = await dbClient.listTables()
-
     base.outputTableFancy(results)
     dbClient.disconnect()
 
