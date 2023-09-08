@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import DBClientClass from "./index.js"
 import * as base from '../base.js'
 

@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import DBClientClass from "./index.js"
 import * as base from '../base.js'
 
@@ -14,7 +13,6 @@ export default class extends DBClientClass {
     async listTables() {
         base.debug(`listTables for ${this.#clientType}`)
         const tableName = super.adjustWildcard(super.getPrompts().table)
-
         let dbQuery = SELECT
             .columns("SCHEMA_NAME", "TABLE_NAME",
             {ref:["TABLE_OID"], as:'TABLE_OID', cast: {type:"cds.String"}},"COMMENTS" )

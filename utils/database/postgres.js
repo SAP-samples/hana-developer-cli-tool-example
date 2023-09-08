@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import DBClientClass from "./index.js"
 import * as base from '../base.js'
 
@@ -28,6 +27,4 @@ export default class extends DBClientClass {
         let results = await this.getDB().run(dbQuery)
         return results
     }
-
-
 }

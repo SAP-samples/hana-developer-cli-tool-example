@@ -1,5 +1,4 @@
-/* eslint-disable no-undef */
-// @ts-nocheck
+// @ts-check
 import * as base from '../utils/base.js'
 const tables = await import("./tables.js")
 

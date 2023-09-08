@@ -13,19 +13,16 @@ export default class dbClientClass {
     /**
      * prompts current value
      * @type {typeof import("prompt")}
-     * @private
      */
     #prompts
     /**
      * CDS connection options
      * @type {Object}
-     * @private
      */
     #optionsCDS
     /**
      * CDS connection object - returned from cds.connect.to or hdb module instance
      * @type {Object}
-     * @private
      */
     #db
 
@@ -56,6 +53,9 @@ export default class dbClientClass {
             process.env.CDS_ENV = prompts.profile
             process.env.NODE_ENV = prompts.profile
             let optionsCDS = cds.env.requires.db
+            if(!optionsCDS || !optionsCDS.kind){
+                throw new Error(`No CAP/CDS Project Configuration Found. Commands via Profiles can only be performed in CAP projects`)
+            }
             if (optionsCDS.kind === 'sqlite') {  //SQLite CDS
                 const { default: classAccess } = await import("./sqlite.js")
                 childClass = new classAccess(prompts, optionsCDS)
@@ -115,7 +115,6 @@ export default class dbClientClass {
 
     /**
     * Set logging parameters upon connect. Deactivate most logging unless in debug mode
-    * @private
     */
     #connectLogging() {
         if (!this.#prompts.debug) {
@@ -156,27 +155,49 @@ export default class dbClientClass {
     * @returns {Promise<TableData>} table of database tables
     */
     async listTables() {
-
+        return
     }
 
+    /**
+    * Getter for Prompts Private Attribute
+    * @returns {typeof import("prompt")} prompts - input prompts current value
+    */    
     getPrompts() {
         return this.#prompts
     }
 
+    /**
+    * Getter for CDS or HDB database object Private Attribute
+    * @returns @type {Object}
+    */        
     getDB() {
         return this.#db
     }
 
+    /**
+    * Getter for database kind/flavor Private Attribute
+    * @returns @type {String} Database Kind / Flavor
+    */      
     getKind() {
         if (this.#optionsCDS) {
             return this.#optionsCDS.kind
         }
+        return ""
     }
 
+    /**
+    * Setter for CDS or HDB database object Private Attribute
+    * @param @type {Object} db
+    */   
     setDB(db) {
         this.#db = db
     }
 
+    /**
+    * From Input parameters, calculate the schema that should be used for the rest of this operation
+    * @param @type {typeof import("prompt")} prompts - input prompts current value 
+    * @param @type {Object} optionsCDS - CDS based Connection Options
+    */     
     schemaCalculation(prompts, optionsCDS) {
         let schema = ""
         if (!prompts.schema || prompts.schema === '**CURRENT_SCHEMA**') {

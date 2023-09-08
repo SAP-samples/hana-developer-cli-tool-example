@@ -1,5 +1,4 @@
 // @ts-check
-// @ts-nocheck
 import * as base from '../utils/base.js'
 import dbClientClass from "../utils/database/index.js"
 
