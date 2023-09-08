@@ -15,6 +15,7 @@ export default class extends DBClientClass {
         base.debug(`listTables for ${this.#clientType}`)
         const tableName = super.adjustWildcard(super.getPrompts().table)
 
+        await this.getDB().run(`SET search_path TO ${this.#schema}, information_schema`)
         let dbQuery = SELECT
             .columns(
                 {ref:["table_schema"],as: `"SCHEMA_NAME"` },

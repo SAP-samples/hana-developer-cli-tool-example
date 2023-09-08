@@ -53,7 +53,7 @@ export let inputPrompts = {
     description: base.bundle.getText("profile"),
     type: 'string',
     required: false,
-    ask: () => {}
+    ask: () => { }
   }
 }
 
@@ -75,11 +75,7 @@ export async function getTables(prompts) {
   try {
     base.debug('getTables')
     const dbClient = await dbClientClass.getNewClient(prompts)
-    if(dbClient.getKind() && dbClient.getKind() === 'postgres'){
-      await dbClient.connectTargetSchema("information_schema")
-    }else{
-      await dbClient.connect()
-    }
+    await dbClient.connect()
 
     let results = await dbClient.listTables()
     base.outputTableFancy(results)

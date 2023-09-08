@@ -90,9 +90,10 @@ export default class dbClientClass {
     */
     disconnect() {
         base.debug(`Disconnect`)
-        base.debug(`In Gui: ${!base.isGui(this.#prompts)}`)
+        base.debug(`In Gui: ${base.isGui(this.#prompts)}`)
         if (!base.isGui(this.#prompts)) {
             base.end()
+            base.debug(`CDS Exit is Called`)
             cds.exit()
         } else {
             base.end()
