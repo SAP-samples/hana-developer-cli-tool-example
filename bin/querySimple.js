@@ -1,5 +1,6 @@
 // @ts-check
 import * as base from '../utils/base.js'
+import dbClientClass from "../utils/database/index.js"
 
 export const command = 'querySimple'
 export const aliases = ['qs', "querysimple"]
@@ -28,6 +29,11 @@ export const builder = base.getBuilder({
     default: "table",
     type: 'string',
     desc: base.bundle.getText("outputTypeQuery")
+  },
+  profile: {
+    alias: ['p', 'Profile'],
+    type: 'string',
+    desc: base.bundle.getText("profile")
   }
 })
 
@@ -54,6 +60,12 @@ export let inputPrompts = {
     description: base.bundle.getText("outputTypeQuery"),
     type: 'string',
     required: true
+  },
+  profile: {
+    description: base.bundle.getText("profile"),
+    type: 'string',
+    required: false,
+    ask: () => { }
   }
 }
 
@@ -89,10 +101,10 @@ export async function dbQuery(prompts) {
   // @ts-ignore
   const parser = new AsyncParser(opts, transformOpts, asyncOpts)
   try {
-    base.setPrompts(prompts)
-    const db = await base.createDBConnection()
+    const dbClient = await dbClientClass.getNewClient(prompts)
+    await dbClient.connect()
+    let results = await dbClient.execSQL(prompts.query)
 
-    let results = await db.execSQL(prompts.query)
     if (!results[0]) {
       return base.error(base.bundle.getText("errNoResults"))
     }
@@ -122,8 +134,9 @@ export async function dbQuery(prompts) {
           }])
           await toFile(prompts.folder, prompts.filename, 'xlsx', excelOutput)
         } else {
-          base.end()
-          return base.error(base.bundle.getText("errExcel"))
+          base.error(base.bundle.getText("errExcel"))
+          dbClient.disconnect()
+          return
         }
         break
       case 'json':
@@ -131,18 +144,18 @@ export async function dbQuery(prompts) {
           await toFile(prompts.folder, prompts.filename, 'json', JSON.stringify(results, null, 2))
         } else {
           console.log(highlight(JSON.stringify(results, null, 2)))
-          base.end()
+          dbClient.disconnect()
           return JSON.stringify(results, null, 2)
         }
         break
-      case 'csv':        
+      case 'csv':
         if (prompts.filename) {
           const csv = await parser.parse(results).promise()
           await toFile(prompts.folder, prompts.filename, 'csv', csv)
         } else {
           const csv = await parser.parse(results).promise()
           console.log(highlight(csv))
-          base.end()
+          dbClient.disconnect()
           return csv
         }
         break
@@ -154,7 +167,7 @@ export async function dbQuery(prompts) {
         }
         break
     }
-    base.end()
+    dbClient.disconnect()
     return results
   } catch (error) {
     base.error(error)

@@ -25,6 +25,11 @@ export default class dbClientClass {
      * @type {Object}
      */
     #db
+    /**
+     * Database Client type/flavor
+     * @type {String}
+     */
+    #clientType = 'generic'
 
     /**
      * Create an instance of the database client specific to the prompt profile
@@ -156,6 +161,17 @@ export default class dbClientClass {
     */
     async listTables() {
         return
+    }
+
+    /**
+     * Execute single SQL Statement and directly return result set
+     * @param {string} sql - SQL Statement
+     * @returns {Promise<any>} - result set object
+     */
+    async execSQL(query){
+        base.debug(`execSQL for ${this.#clientType}`)
+        let results = await this.#db.run(query)
+        return results
     }
 
     /**

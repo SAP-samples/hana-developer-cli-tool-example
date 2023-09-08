@@ -42,4 +42,11 @@ export default class extends DBClientClass {
         return results
     }
 
+    async execSQL(query){
+        base.debug(`execSQL for ${this.#clientType}`)
+        const db = super.getDB()
+        let results = await db.execSQL(query)
+        return results
+    }
+
 }
