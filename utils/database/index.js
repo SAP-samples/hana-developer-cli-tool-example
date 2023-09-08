@@ -106,6 +106,12 @@ export default class {
         return this.#db
     }
 
+    getKind(){
+        if(this.#optionsCDS){
+            return this.#optionsCDS.kind
+        }
+    }
+
     setDB(db) {
         this.#db = db
     }

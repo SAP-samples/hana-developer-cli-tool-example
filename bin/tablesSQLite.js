@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 // @ts-nocheck
 import * as base from '../utils/base.js'
-import DBClientClass from "../utils/database/index.js"
+const tables = await import("./tables.js")
 
 export const command = 'tablesSQLite [table]'
 export const aliases = ['tablessqlite', 'tablesqlite', 'tablesSqlite', 'tables-sqlite', 'tables-sql', 'tablesSQL']
@@ -42,21 +42,5 @@ export let inputPrompts = {
 }
 
 export function handler(argv) {
-  base.promptHandler(argv, getTables, inputPrompts, false)
-}
-
-export async function getTables(prompts) {
-  try {
-    base.debug('getTablesSQLite')
-    const dbClient = await DBClientClass.getNewClient(prompts)
-    await dbClient.connect()
-    let results = await dbClient.listTables()
-    base.outputTableFancy(results)
-
-    dbClient.disconnect()
-    return results
-    
-  } catch (error) {
-    base.error(error)
-  }
+  base.promptHandler(argv, tables.getTables, inputPrompts, false)
 }

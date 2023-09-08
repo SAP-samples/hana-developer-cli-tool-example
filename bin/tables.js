@@ -60,10 +60,10 @@ export let inputPrompts = {
 export async function handler(argv) {
   if (argv.profile && argv.profile === 'pg') {  //Redirect to tablesPG / Postgres
     const tablesPG = await import("./tablesPG.js")
-    base.promptHandler(argv, tablesPG.getTables, tablesPG.inputPrompts)
+    base.promptHandler(argv, getTables, tablesPG.inputPrompts)
   } else if (argv.profile && (argv.profile === 'sqlite')) {  //Redirect to tablesSQLite / SQLite
     const tablesSQLite = await import("./tablesSQLite.js")
-    base.promptHandler(argv, tablesSQLite.getTables, tablesSQLite.inputPrompts)
+    base.promptHandler(argv, getTables, tablesSQLite.inputPrompts)
   }
   else {
     base.promptHandler(argv, getTables, inputPrompts)
@@ -75,7 +75,12 @@ export async function getTables(prompts) {
   try {
     base.debug('getTables')
     const dbClient = await DBClientClass.getNewClient(prompts)
-    await dbClient.connect()
+    if(dbClient.getKind() && dbClient.getKind() === 'postgres'){
+      await dbClient.connectTargetSchema("information_schema")
+    }else{
+      await dbClient.connect()
+    }
+
     let results = await dbClient.listTables()
 
     base.outputTableFancy(results)
