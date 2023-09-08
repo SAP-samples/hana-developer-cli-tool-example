@@ -1,4 +1,3 @@
-// @ts-check
 import * as base from '../utils/base.js'
 import * as dbInspect from '../utils/dbInspect.js'
 //import * as conn from '../utils/connections.js'

@@ -7,7 +7,8 @@
             "New Node.js minimum version of 18. [16 is end of life](https://nodejs.org/en/blog/announcements/nodejs16-eol)",
             "Load HANA Connection via CDS Env API and profile Hybrid instead of direct binding with cds-dk",
             "cds bind based connections are MUCH faster after the first call",
-            "PostgresSQL and SQLite support on key commands thanks to CDS abstraction"
+            "PostgresSQL and SQLite support on key commands thanks to CDS abstraction",
+            "Commands: tables and querySimple support profile based access and db abstraction"
         ]
     },
     {

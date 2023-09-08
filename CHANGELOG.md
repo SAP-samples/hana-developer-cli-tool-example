@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202309.1] - 2023-09-06
+
+**Changed**
+
+- [CAP version 7.2.0](https://cap.cloud.sap/docs/releases/aug23)
+- New Node.js minimum version of 18. [16 is end of life](https://nodejs.org/en/blog/announcements/nodejs16-eol)
+- Load HANA Connection via CDS Env API and profile Hybrid instead of direct binding with cds-dk
+- cds bind based connections are MUCH faster after the first call
+- PostgresSQL and SQLite support on key commands thanks to CDS abstraction
+- Commands: tables and querySimple support profile based access and db abstraction
+
 ## [3.202308.1] - 2023-08-25
 
 **Changed**

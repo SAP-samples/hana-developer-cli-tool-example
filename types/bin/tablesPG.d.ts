@@ -1,11 +1,5 @@
-export function handler(argv: any): Promise<void>;
-export function getTables(prompts: any): Promise<{
-    SCHEMA_NAME?: string;
-    TABLE_NAME: string;
-    TABLE_OID?: string;
-    COMMENTS?: string;
-}[]>;
-export const command: "tables [schema] [table]";
+export function handler(argv: any): void;
+export const command: "tablesPG [schema] [table]";
 export const aliases: string[];
 export const describe: string;
 export const builder: import("yargs").CommandBuilder<{}, {}>;
@@ -23,21 +17,12 @@ export namespace inputPrompts {
         let required_1: boolean;
         export { required_1 as required };
     }
-    namespace limit {
+    namespace profile {
         let description_2: string;
         export { description_2 as description };
         let type_2: string;
         export { type_2 as type };
         let required_2: boolean;
         export { required_2 as required };
-    }
-    namespace profile {
-        let description_3: string;
-        export { description_3 as description };
-        let type_3: string;
-        export { type_3 as type };
-        let required_3: boolean;
-        export { required_3 as required };
-        export function ask(): void;
     }
 }

@@ -45,6 +45,22 @@ export function getCalcViewFields(db: object, schema: string, viewId: string, vi
  */
 export function getViewFields(db: object, viewOid: string): Promise<object>;
 /**
+ * Get View Parameters and Metadata
+ * @param {object} db - Database Connection
+ * @param {string} schema - Schema
+ * @param {string} viewId - View Unique ID
+ * @param {string} viewOid - View Unique ID
+ * @returns {Promise<object>}
+ */
+export function getCalcViewParameters(db: object, schema: string, viewId: string, viewOid: string): Promise<object>;
+/**
+ * Get View Parameters and Metadata
+ * @param {object} db - Database Connection
+ * @param {string} viewOid - View Unique ID
+ * @returns {Promise<object>}
+ */
+export function getViewParameters(db: object, viewOid: string): Promise<object>;
+/**
  * Get DB Table Details
  * @param {object} db - Database Connection
  * @param {string} schema - Schema
@@ -114,9 +130,10 @@ export function getFunctionPramCols(db: object, funcOid: string): Promise<object
  * @param {string} type - DB Object type
  * @param {string} [schema] - Schema
  * @param {string} [parent] - Calling context which impacts formatting
+ * @param {object} [parameters] - View Parameters
  * @returns {Promise<string>}
  */
-export function formatCDS(db: object, object: object, fields: object, constraints: object, type: string, schema?: string, parent?: string): Promise<string>;
+export function formatCDS(db: object, object: object, fields: object, constraints: object, type: string, schema?: string, parent?: string, parameters?: object): Promise<string>;
 /**
  * Get Geo Columns requires special lookup and details
  * @param {object} db - Database Connection

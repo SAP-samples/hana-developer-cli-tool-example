@@ -36,4 +36,14 @@ export namespace inputPrompts {
         let required_3: boolean;
         export { required_3 as required };
     }
+    namespace profile {
+        let description_4: string;
+        export { description_4 as description };
+        let type_4: string;
+        export { type_4 as type };
+        let required_4: boolean;
+        export { required_4 as required };
+        export function ask_1(): void;
+        export { ask_1 as ask };
+    }
 }

@@ -1,6 +1,7 @@
 export function handler(argv: any): void;
 export function viewInspect(prompts: any): Promise<{
     basic: any;
+    parameters: any;
     fields: any;
     sql: string;
     cds: string;
