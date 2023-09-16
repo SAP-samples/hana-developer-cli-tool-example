@@ -44,20 +44,23 @@ export async function handler(argv) {
             let tree = []
             for (let item of hierarchy.children) {
                 let children = []
-                for (let itemSub of item.subaccounts) {
-                    let child = {
-                        name: `🧾 ${itemSub.displayName}`,
-                        value: `{"guid": "${itemSub.guid}", "type": "item" }`,
-                        short: `Selected: ${itemSub.displayName}`
+                if(item.subaccounts){
+                    for (let itemSub of item.subaccounts) {
+                        let child = {
+                            name: `🧾 ${itemSub.displayName}`,
+                            value: `{"guid": "${itemSub.guid}", "type": "item" }`,
+                            short: `Selected: ${itemSub.displayName}`
+                        }
+                        children.push(child)
                     }
-                    children.push(child)
+                    let leaf = {
+                        name: `📁 ${item.displayName}`,
+                        value: `{"guid": "${item.guid}", "type": "folder" }`,
+                        children: children
+                    }
+                    tree.push(leaf)
                 }
-                let leaf = {
-                    name: `📁 ${item.displayName}`,
-                    value: `{"guid": "${item.guid}", "type": "folder" }`,
-                    children: children
-                }
-                tree.push(leaf)
+                
             }
             for (let item of hierarchy.subaccounts) {
                 let leaf = {

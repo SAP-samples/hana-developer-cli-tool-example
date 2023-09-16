@@ -147,9 +147,17 @@ export async function getConnOptions(prompts) {
             dotenv.config({ path: dotEnvFile })
         } else {
             try {
-                process.env.CDS_ENV = 'hybrid'
-                let optionsCDS = cds.env.requires.db
-                let options = { hana: optionsCDS.credentials }
+                const data = fs.readFileSync(cdsrcPrivate,
+                    { encoding: 'utf8', flag: 'r' })
+                const object = JSON.parse(data)
+                const resolveBinding = base.require('@sap/cds-dk/lib/bind/bindingResolver') //.BindingResolver(LOG)
+                let resolvedService = await resolveBinding.resolveBinding(null, object.requires['[hybrid]'].db.binding)
+                let options = { hana: resolvedService.credentials }
+
+                /*                 process.env.CDS_ENV = 'hybrid'
+                                let optionsCDS = cds.env.requires.db
+                                console.log(optionsCDS)
+                                let options = { hana: optionsCDS.credentials } */
                 options.hana.pooling = true
                 base.debug(options)
                 base.debug(base.bundle.getText("connectionFile"))
@@ -161,8 +169,8 @@ export async function getConnOptions(prompts) {
                 if (e.code !== 'MODULE_NOT_FOUND') {
                     // Re-throw not "Module not found" errors 
                     throw e
-                  }
-                  throw base.bundle.getText("cds-dk2")
+                }
+                throw base.bundle.getText("cds-dk2")
             }
         }
     }
