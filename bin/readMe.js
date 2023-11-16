@@ -8,22 +8,19 @@ export const builder = base.getBuilder({}, false)
 
 export const handler = async function () {
 
-  const [{ marked }, { default: fs }, { default: path }, { fileURLToPath }, { URL }] = await Promise.all([
+  const [{ marked }, { default: fs }, { default: path }, { fileURLToPath }, { URL }, { markedTerminal }] = await Promise.all([
     import('marked'),
     import('fs'),
     import('path'),
     import('url'),
-    import('url')
+    import('url'),
+    import('marked-terminal')
   ])
-  const TerminalRenderer = base.require('marked-terminal')
   const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
-  marked.setOptions({
-    // Define custom renderer
-    renderer: new TerminalRenderer({
-      showSectionPrefix: false,
-    })
-  })
+  marked.use(markedTerminal({
+    showSectionPrefix: false,
+  }))
 
   try {
     const data = fs.readFileSync(path.join(__dirname, '..', '/README.md'), 'utf8')

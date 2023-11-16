@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202311.1] - 2023-11-16
+
+**Changed**
+
+- [CAP version 7.4.0](https://cap.cloud.sap/docs/releases/sep23)
+- Major upgrade to Marked for conversion from Markdown in the documentation commands
+
 ## [3.202309.1] - 2023-09-06
 
 **Changed**

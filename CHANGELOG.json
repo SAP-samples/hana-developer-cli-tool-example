@@ -1,5 +1,14 @@
 [
     {
+        "date": "2023-11-16",
+        "version": "3.202311.1",
+        "Changed": [
+            "[CAP version 7.4.0](https://cap.cloud.sap/docs/releases/sep23)",
+            "Major upgrade to Marked for conversion from Markdown in the documentation commands",
+            "Update to SAPUI5 1.120.1"
+        ]
+    },
+    {
         "date": "2023-09-06",
         "version": "3.202309.1",
         "Changed": [
