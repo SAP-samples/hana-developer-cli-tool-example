@@ -44,25 +44,81 @@ export async function getVersion() {
 }
 
 /**
+ * Get btp CLI info
+ * @returns {Promise<Object>}
+ */
+export async function getInfo() {
+    base.debug('getInfo')
+    try {
+        const exec = promisify(child_process.exec)
+        let script = `btp --info`
+
+        const { stdout } = await exec(script)
+        if (stdout) {
+            try {
+                let infoOut = {}
+                let result = stdout.split("\n")
+                if(result[6]){
+                    let config = result[6]
+                    let configOut = config.split(/:(.*)/s)
+                    infoOut.Configuration = configOut[1].trim()
+                }
+
+                if(result[4]){
+                    let url = result[4]
+                    let urlOut = url.split(/:(.*)/s)
+                    infoOut.serverURL = urlOut[1].trim()
+                }
+
+                if(result[5]){
+                    let user = result[5]
+                    let userOut = user.split(/:(.*)/s)                
+                    infoOut.user = userOut[1].trim()
+                }
+
+                return infoOut
+            } catch (e) {
+                return
+            }
+        }
+        return
+
+    } catch (error) {
+        base.debug(error)
+        throw (error)
+    }
+}
+
+/**
  * Read central configuration file for BTP CLI
  * @returns {Promise<object>}
  */
 export async function getBTPConfig() {
     base.debug('getBTPConfig')
-    try {
-        let localDir = process.env.BTP_CLIENTCONFIG
-        base.debug(localDir)
-        if (!localDir) {
-            if (process.env.APPDATA) {
-                localDir = `${process.env.APPDATA}/SAP/btp/config.json`
-            } else if (process.platform == 'darwin') {
-                localDir = `${process.env.HOME}/Library/Preferences/SAP/btp/config.json`
-            } else {
-                localDir = `${process.env.HOME}/.config/.btp/config.json`
-            }
+
+    let localDir = process.env.BTP_CLIENTCONFIG
+    if(!localDir){
+        let info = await getInfo()
+        if(info.Configuration){
+            localDir = info.Configuration
         }
-        base.debug(localDir)
-        const data = fs.readFileSync(localDir,
+    }    
+     if (!localDir || !fs.existsSync(localDir)) {
+        if (process.env.APPDATA) {
+            localDir = `${process.env.APPDATA}/SAP/btp/config.json`
+        } else if (process.platform == 'darwin') {
+            localDir = `${process.env.HOME}/Library/Preferences/SAP/btp/config.json`
+        } else {
+            localDir = `${process.env.HOME}/.config/.btp/config.json`
+        }
+    }
+    //MacOS fallback location
+    if (!fs.existsSync(localDir) && process.platform == 'darwin'){
+       localDir = `${process.env.HOME}/Library/Application Support/.btp/config.json`
+    } 
+    base.debug(localDir)
+    try {
+        let data = fs.readFileSync(localDir,
             { encoding: 'utf8', flag: 'r' })
         const object = JSON.parse(data)
         return object
@@ -84,9 +140,7 @@ export async function getBTPTarget() {
         return config.TargetHierarchy
     } else {
         throw new Error(bundle.getText("err.BTPNoTarget"))
-
     }
-
 }
 
 /**

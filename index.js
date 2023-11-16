@@ -8,7 +8,7 @@ import * as btp from "./utils/btp.js"
 export async function  init(){
 
    // let data = await btp.getBTPConfig()
-   let data = await btp.getVersion()
+   let data = await btp.getInfo()
     console.log(data)
 
  /*   let data = await cf.getHANAInstanceByName('HANA_CLOUD_2')
