@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 - [CAP version 7.4.0](https://cap.cloud.sap/docs/releases/sep23)
 - Major upgrade to Marked for conversion from Markdown in the documentation commands
+- Update to SAPUI5 1.120.1
+- Fix Issue #115 and #116 around the btp-cli commands
 
 ## [3.202309.1] - 2023-09-06
 
