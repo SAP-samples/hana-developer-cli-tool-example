@@ -42,34 +42,39 @@ export async function handler(argv) {
             inquirer.registerPrompt('tree', TreePrompt)
 
             let tree = []
-            for (let item of hierarchy.children) {
-                let children = []
-                if(item.subaccounts){
-                    for (let itemSub of item.subaccounts) {
-                        let child = {
-                            name: `🧾 ${itemSub.displayName}`,
-                            value: `{"guid": "${itemSub.guid}", "type": "item" }`,
-                            short: `Selected: ${itemSub.displayName}`
+            if(hierarchy.children){
+                for (let item of hierarchy.children) {
+                    let children = []
+                    if(item.subaccounts){
+                        for (let itemSub of item.subaccounts) {
+                            let child = {
+                                name: `🧾 ${itemSub.displayName}`,
+                                value: `{"guid": "${itemSub.guid}", "type": "item" }`,
+                                short: `Selected: ${itemSub.displayName}`
+                            }
+                            children.push(child)
                         }
-                        children.push(child)
+                        let leaf = {
+                            name: `📁 ${item.displayName}`,
+                            value: `{"guid": "${item.guid}", "type": "folder" }`,
+                            children: children
+                        }
+                        tree.push(leaf)
                     }
+                    
+                }
+            }
+            if(hierarchy.subaccounts){
+                for (let item of hierarchy.subaccounts) {
                     let leaf = {
-                        name: `📁 ${item.displayName}`,
-                        value: `{"guid": "${item.guid}", "type": "folder" }`,
-                        children: children
+                        name: `🧾 ${item.displayName}`,
+                        value: `{"guid": "${item.guid}", "type": "item" }`,
+                        short: `Selected: ${item.displayName}`
                     }
                     tree.push(leaf)
                 }
-                
             }
-            for (let item of hierarchy.subaccounts) {
-                let leaf = {
-                    name: `🧾 ${item.displayName}`,
-                    value: `{"guid": "${item.guid}", "type": "item" }`,
-                    short: `Selected: ${item.displayName}`
-                }
-                tree.push(leaf)
-            }
+
             inquirer
                 .prompt([
                     {
