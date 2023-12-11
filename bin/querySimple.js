@@ -88,10 +88,10 @@ export function removeNewlineCharacter(dataRow) {
 
 export async function dbQuery(prompts) {
   base.debug('dbQuery')
-  const [{ highlight }, { AsyncParser }, { default: excel }, { default: Table }] = await Promise.all([
+  const [{ highlight }, { AsyncParser }, { default: Table }]= await Promise.all([ //, { default: excel }, { default: Table }] = await Promise.all([
     import('cli-highlight'),
     import('@json2csv/node'),
-    import('node-xlsx'),
+  //  import('node-xlsx'),
     import('easy-table')
   ])
 
@@ -128,11 +128,12 @@ export async function dbQuery(prompts) {
             out.push(innerItem)
           }
           // @ts-ignore
-          let excelOutput = excel.build([{
+/*           let excelOutput = excel.build([{
             name: "Query Results",
             data: out
-          }])
-          await toFile(prompts.folder, prompts.filename, 'xlsx', excelOutput)
+          }]) */
+          throw new Error(`Excel Export temporarily disabled due to issue with install of required module in Business Application Studio`)
+          //await toFile(prompts.folder, prompts.filename, 'xlsx', excelOutput)
         } else {
           base.error(base.bundle.getText("errExcel"))
           dbClient.disconnect()

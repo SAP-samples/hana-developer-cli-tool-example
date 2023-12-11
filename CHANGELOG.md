@@ -4,11 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202312.1] - 2023-12-11
+
+**Changed**
+
+- [CAP version 7.4.0](https://cap.cloud.sap/docs/releases/nov23)
+- Restore openapi export with fix for CAP 7.x
+- Remove node-xlsx and corresponding Export to Excel because this module is causing install issues on Business Application Studio
+
 ## [3.202311.1] - 2023-11-16
 
 **Changed**
 
-- [CAP version 7.4.0](https://cap.cloud.sap/docs/releases/sep23)
+- [CAP version 7.3.0](https://cap.cloud.sap/docs/releases/sep23)
 - Major upgrade to Marked for conversion from Markdown in the documentation commands
 - Update to SAPUI5 1.120.1
 - Fix Issue #115 and #116 around the btp-cli commands

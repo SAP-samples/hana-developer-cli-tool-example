@@ -262,7 +262,8 @@ export async function viewInspect(prompts) {
             service: 'HanaCli',
             servicePath: '/odata/v4/opensap.hana.CatalogService/',
             'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
-            'openapi:diagram': true
+            'openapi:diagram': true,
+            to: 'openapi'
           })
           console.log(highlight(JSON.stringify(metadata, null, 2)))
           break
@@ -284,7 +285,8 @@ export async function viewInspect(prompts) {
             service: 'HanaCli',
             servicePath: '/odata/v4/opensap.hana.CatalogService/',
             'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
-            'openapi:diagram': true
+            'openapi:diagram': true,
+            to: 'openapi'
           })
           let data = YAML.stringify(metadata)
           var lines = data.split('\n')

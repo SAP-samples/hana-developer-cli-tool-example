@@ -354,11 +354,12 @@ async function cdsServerSetup(prompts, cdsSource) {
   Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => base.require('@sap/cds-dk/lib/compile/openapi') })
   try {
     // @ts-ignore
-/*     let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
+     let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
       service: 'HanaCli',
       servicePath: '/odata/v4/opensap.hana.CatalogService/',
       'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
-      'openapi:diagram': true
+      'openapi:diagram': true,
+      to: 'openapi'
     })
 
     let serveOptions = {
@@ -366,7 +367,7 @@ async function cdsServerSetup(prompts, cdsSource) {
     }
     const swaggerUi = await import('swagger-ui-express')
     app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(metadata, serveOptions))
- */
+
     app.get('/', (_, res) => res.send(getIndex(odataURL, entity)))
     app.get('/fiori.html', (_, res) => {
       const manifest = _manifest(odataURL, entity, prompts.table)
