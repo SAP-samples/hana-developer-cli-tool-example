@@ -1,5 +1,14 @@
 [
     {
+        "date": "2024-02-03",
+        "version": "3.202402.1",
+        "Changed": [
+            "[CAP version 7.6.0](https://cap.cloud.sap/docs/releases/jan24)",
+            "Fix cds bind auth on the cds command",
+            "Upgrade Inquirer"
+        ]
+    },
+    {
         "date": "2023-12-11",
         "version": "3.202312.1",
         "Changed": [

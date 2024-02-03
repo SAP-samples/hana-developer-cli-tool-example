@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202402.1] - 2024-02-03
+
+**Changed**
+
+- [CAP version 7.6.0](https://cap.cloud.sap/docs/releases/jan24)
+- Fix cds bind auth on the cds command
+- Upgrade Inquirer
+
 ## [3.202312.1] - 2023-12-11
 
 **Changed**

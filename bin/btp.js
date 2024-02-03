@@ -1,6 +1,8 @@
 // @ts-check
 import * as base from '../utils/base.js'
 import * as btp from '../utils/btp.js'
+import inquirer from 'inquirer'
+import { TreePrompt } from '../utils/inquirer-tree-prompt.js'
 const colors = base.colors
 
 export const command = 'btp [directory] [subaccount]'
@@ -26,8 +28,8 @@ export async function handler(argv) {
     }
 
     base.debug(`build inquirer prompts`)
-    const inquirer = base.require('inquirer')
-    const TreePrompt = base.require('inquirer-tree-prompt')
+   //const inquirer = base.require('inquirer')
+   // const TreePrompt = base.require('inquirer-tree-prompt')
 
     try {
         base.debug(`GetBTPGlobalAccount`)

@@ -123,6 +123,27 @@ export async function cdsBuild(prompts) {
       vcap.hana[0].credentials.schema = object[0].SCHEMA_NAME
       vcap.hana.splice(1, 100)
       process.env.VCAP_SERVICES = JSON.stringify(vcap)
+    } 
+    
+    if (!cds.env.requires.db.credentials) {      
+      const settings =  db.client._settings
+      let out = {}
+      out.schema = object[0].SCHEMA_NAME
+      out.url = settings.url
+      out.certificate = settings.certificate
+      out.database_id = settings.database_id
+      out.driver = settings.driver
+      out.hdi_user = settings.hdi_user
+      out.hdi_password = settings.hdi_password
+      out.host = settings.host
+      out.user = settings.user
+      out.password = settings.password
+      out.port = settings.port
+      out.pooling = settings.pooling
+      out.encrypt = true
+      out.sslValidateCertificate = false
+      out.useTLS = true
+      cds.env.requires.db.credentials = out
     }
 
     cdsSource +=
