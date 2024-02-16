@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202402.2] - 2024-02-16
+
+**Changed**
+
+- Mass Convert of Tables to CDS if you use Pure Catalog Definitions, it will output sql append content
+- Table inspect to CDS if you choose no Persistence Exists, it will output sql append content
+
 ## [3.202402.1] - 2024-02-03
 
 **Changed**

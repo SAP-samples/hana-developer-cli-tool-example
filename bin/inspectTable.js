@@ -48,9 +48,9 @@ export const builder = base.getBuilder({
     default: false
   },
   noColons: {
-      type: 'boolean',
-      default: false,
-      desc: base.bundle.getText("noColons")
+    type: 'boolean',
+    default: false,
+    desc: base.bundle.getText("noColons")
   }
 })
 
@@ -86,7 +86,7 @@ export let inputPrompts = {
   noColons: {
     type: 'boolean',
     description: base.bundle.getText("noColons")
-}
+  }
 }
 
 export function handler(argv) {
@@ -100,7 +100,7 @@ export async function tableInspect(prompts) {
     import('json-to-pretty-yaml'),
     import('odata2openapi')
   ])
-  
+
   try {
     base.setPrompts(prompts)
     let dbConnection = await conn.createConnection(prompts, false)
@@ -153,6 +153,13 @@ export async function tableInspect(prompts) {
       }
       case 'cds': {
         let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "table", schema, null)
+        if (!dbInspect.options.useExists) {
+          let output = await dbInspect.getDef(db, schema, prompts.table)
+          output = output.slice(7)
+          const lastParenthesisIndex = output.lastIndexOf(')')
+          const substringAfterLastParenthesis = output.substring(lastParenthesisIndex + 1)
+          cdsSource = `@sql.append: \`\`\`sql \n${substringAfterLastParenthesis}\n\`\`\`\n${cdsSource}`
+        }
         results.cds = cdsSource
         console.log(highlight(cdsSource))
         break

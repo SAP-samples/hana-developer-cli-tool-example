@@ -205,7 +205,7 @@ async function hdbtableViews(prompts, viewResults, wss, db, schema, replacer, zi
             let object = await dbInspect.getView(db, schema, view.VIEW_NAME)
             let fields = []
             if (await dbInspect.isCalculationView(db, schema, view.VIEW_NAME)) {
-                fields = await dbInspect.getCalcViewFields(db, schema, view.VIEW_NAME, object[0].VIEW_OID)                
+                fields = await dbInspect.getCalcViewFields(db, schema, view.VIEW_NAME, object[0].VIEW_OID)
             } else {
                 fields = await dbInspect.getViewFields(db, object[0].VIEW_OID)
             }
@@ -358,6 +358,13 @@ async function cdsTables(prompts, results, wss, db, schema, cdsSource, logOutput
             let constraints = await dbInspect.getConstraints(db, object)
             cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table", schema, null) + '\n'
 
+            if (dbInspect.options.userCatalogPure) {
+                let output = await dbInspect.getDef(db, schema, table.TABLE_NAME)
+                output = output.slice(7)
+                const lastParenthesisIndex = output.lastIndexOf(')')
+                const substringAfterLastParenthesis = output.substring(lastParenthesisIndex + 1)
+                cdsSource = `@sql.append: \`\`\`sql \n${substringAfterLastParenthesis}\n\`\`\`\n${cdsSource}`
+            }
             progressBar.itemDone(table.TABLE_NAME)
             logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
         }
@@ -405,7 +412,7 @@ async function cdsViews(prompts, viewResults, wss, db, schema, cdsSource, logOut
                 parameters = await dbInspect.getCalcViewParameters(db, schema, view.VIEW_NAME, object[0].VIEW_OID)
             } else {
                 fields = await dbInspect.getViewFields(db, object[0].VIEW_OID)
-                parameters = await  dbInspect.getViewParameters(db, object[0].VIEW_OID)
+                parameters = await dbInspect.getViewParameters(db, object[0].VIEW_OID)
             }
             cdsSource += await dbInspect.formatCDS(db, object, fields, null, "view", schema, null, parameters)
 
@@ -561,6 +568,7 @@ export async function convert(wss) {
         dbInspect.options.useExists = prompts.useExists
         dbInspect.options.useQuoted = prompts.useQuoted
         dbInspect.options.log = prompts.log
+        dbInspect.options.userCatalogPure = prompts.useCatalogPure
 
 
         let logOutput = []
@@ -609,7 +617,7 @@ export async function convert(wss) {
                     prompts, viewResults, wss, db, schema, cdsSource, logOutput
                 )
                 await writeCDS(prompts, wss, cdsSource, logOutput)
-                await writeSynonyms(prompts, wss)                
+                await writeSynonyms(prompts, wss)
                 break
             }
         }
