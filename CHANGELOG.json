@@ -1,5 +1,14 @@
 [
     {
+        "date": "2024-02-16",
+        "version": "3.202402.2",
+        "Changed": [
+            "Mass Convert of Tables to CDS if you use Pure Catalog Definitions, it will output sql append content",
+            "Table inspect to CDS if you choose no Persistence Exists, it will output sql append content"
+
+        ]
+    },
+    {
         "date": "2024-02-03",
         "version": "3.202402.1",
         "Changed": [
