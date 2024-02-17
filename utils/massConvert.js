@@ -356,15 +356,18 @@ async function cdsTables(prompts, results, wss, db, schema, cdsSource, logOutput
             let object = await dbInspect.getTable(db, schema, table.TABLE_NAME)
             let fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
             let constraints = await dbInspect.getConstraints(db, object)
-            cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table", schema, null) + '\n'
-
             if (dbInspect.options.userCatalogPure) {
                 let output = await dbInspect.getDef(db, schema, table.TABLE_NAME)
                 output = output.slice(7)
                 const lastParenthesisIndex = output.lastIndexOf(')')
                 const substringAfterLastParenthesis = output.substring(lastParenthesisIndex + 1)
-                cdsSource = `@sql.append: \`\`\`sql \n${substringAfterLastParenthesis}\n\`\`\`\n${cdsSource}`
+                if(substringAfterLastParenthesis && substringAfterLastParenthesis !== ""){
+                    cdsSource += `@sql.append: \`\`\`sql \n${substringAfterLastParenthesis}\n\`\`\`\n`
+                }
             }
+            cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table", schema, null) + '\n'
+
+           
             progressBar.itemDone(table.TABLE_NAME)
             logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
         }
