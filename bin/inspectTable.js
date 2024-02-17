@@ -158,7 +158,9 @@ export async function tableInspect(prompts) {
           output = output.slice(7)
           const lastParenthesisIndex = output.lastIndexOf(')')
           const substringAfterLastParenthesis = output.substring(lastParenthesisIndex + 1)
-          cdsSource = `@sql.append: \`\`\`sql \n${substringAfterLastParenthesis}\n\`\`\`\n${cdsSource}`
+          if (substringAfterLastParenthesis && substringAfterLastParenthesis !== "") {
+            cdsSource = `@sql.append: \`\`\`sql \n${substringAfterLastParenthesis}\n\`\`\`\n${cdsSource}`
+          }
         }
         results.cds = cdsSource
         console.log(highlight(cdsSource))
