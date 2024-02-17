@@ -913,3 +913,33 @@ export async function getGeoColumns(db, object, field, type) {
 	const geoColumns = await db.statementExecPromisified(statement, [object.SCHEMA_NAME, name, field.COLUMN_NAME])
 	return geoColumns[0].SRS_ID
 }
+
+
+export function parseSQLOptions(output, cdsSource){
+	// Define a regular expression to match the extended syntax
+	const extendedSyntaxRegex = /(?:UNLOAD PRIORITY \d+|AUTO MERGE|NO AUTO MERGE|GROUP TYPE "[^"]*"|GROUP SUBTYPE "[^"]*"|GROUP NAME "[^"]*"|GROUP LEAD|GROUP SUBTYPE "[^"]*"\))/gi
+	// Find the index of PARTITION statement
+	let partitionIndex = output.indexOf('PARTITION')
+	let partitionStatement
+	// Check if PARTITION is found
+	if (partitionIndex !== -1) {
+		// Find the index of the ';' character
+		let semicolonIndex = output.indexOf(';', partitionIndex)
+		// Extract the PARTITION statement
+		partitionStatement = semicolonIndex !== -1 ? output.substring(partitionIndex, semicolonIndex + 1) : output.substring(partitionIndex)
+	}
+	// Extract extended syntax using regex
+	const extendedSyntax = output.match(extendedSyntaxRegex)
+	if (extendedSyntax || partitionStatement) {
+		cdsSource += `@sql.append: \`\`\`sql \n`
+		for (let index = 0; index < extendedSyntax.length; index++) {
+			const element = extendedSyntax[index]
+			cdsSource += `${element}\n`
+		}
+		if (partitionStatement) {
+			cdsSource += `${partitionStatement}\n`
+		}
+		cdsSource += `\`\`\`\n`
+	}
+	return cdsSource
+}

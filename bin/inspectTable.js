@@ -152,16 +152,14 @@ export async function tableInspect(prompts) {
         break
       }
       case 'cds': {
-        let cdsSource = await dbInspect.formatCDS(db, object, fields, constraints, "table", schema, null)
+        let cdsSource = ""
         if (!dbInspect.options.useExists) {
           let output = await dbInspect.getDef(db, schema, prompts.table)
           output = output.slice(7)
-          const lastParenthesisIndex = output.lastIndexOf(')')
-          const substringAfterLastParenthesis = output.substring(lastParenthesisIndex + 1)
-          if (substringAfterLastParenthesis && substringAfterLastParenthesis !== "") {
-            cdsSource = `@sql.append: \`\`\`sql \n${substringAfterLastParenthesis}\n\`\`\`\n${cdsSource}`
-          }
+          cdsSource = dbInspect.parseSQLOptions(output, cdsSource)
         }
+        cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table", schema, null)
+
         results.cds = cdsSource
         console.log(highlight(cdsSource))
         break

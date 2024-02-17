@@ -359,15 +359,9 @@ async function cdsTables(prompts, results, wss, db, schema, cdsSource, logOutput
             if (dbInspect.options.userCatalogPure) {
                 let output = await dbInspect.getDef(db, schema, table.TABLE_NAME)
                 output = output.slice(7)
-                const lastParenthesisIndex = output.lastIndexOf(')')
-                const substringAfterLastParenthesis = output.substring(lastParenthesisIndex + 1)
-                if(substringAfterLastParenthesis && substringAfterLastParenthesis !== ""){
-                    cdsSource += `@sql.append: \`\`\`sql \n${substringAfterLastParenthesis}\n\`\`\`\n`
-                }
+                cdsSource = dbInspect.parseSQLOptions(output, cdsSource)
             }
             cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table", schema, null) + '\n'
-
-           
             progressBar.itemDone(table.TABLE_NAME)
             logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
         }

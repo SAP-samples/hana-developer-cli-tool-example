@@ -1,12 +1,12 @@
 {
   "name": "hana-cli",
-  "version": "3.202402.1",
+  "version": "3.202402.4",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "hana-cli",
-      "version": "3.202402.1",
+      "version": "3.202402.4",
       "hasInstallScript": true,
       "license": "SEE LICENSE IN LICENSE",
       "dependencies": {
