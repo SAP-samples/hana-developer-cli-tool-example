@@ -1,5 +1,14 @@
 [
     {
+        "date": "2024-03-01",
+        "version": "3.202403.1",
+        "Changed": [
+            "[CAP Version 7.7.0](https://cap.cloud.sap/docs/releases/feb24)",
+            "SAPUI5 to version 121.0"
+
+        ]
+    },
+    {
         "date": "2024-02-16",
         "version": "3.202402.2",
         "Changed": [
