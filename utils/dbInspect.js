@@ -565,6 +565,7 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 					case "DOUBLE":
 						cdstable += "Double"
 						break
+					case "DAYDATE":
 					case "DATE":
 						cdstable += "Date"
 						break
@@ -639,6 +640,7 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 					case "DOUBLE":
 						cdstable += "Double"
 						break
+					case "DAYDATE":
 					case "DATE":
 						cdstable += "Date"
 						break
@@ -743,6 +745,7 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 				case "DOUBLE":
 					cdstable += "Double"
 					break
+				case "DAYDATE":
 				case "DATE":
 					cdstable += "Date"
 					break
@@ -817,6 +820,7 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 				case "DOUBLE":
 					cdstable += "Double"
 					break
+				case "DAYDATE":
 				case "DATE":
 					cdstable += "Date"
 					break
