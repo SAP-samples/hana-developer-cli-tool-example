@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202403.3] - 2024-03-29
+
+**Changed**
+
+- Update btpSubs and bas commands to support SAP Build Code.  Will launch Build Code Lobby when subscribed.
+- Beta Support for HANA Vector data type in CDS
+- General Support for HANA Vector Engine at the DB/SQL level
+- [CAP Version 7.8.0](https://cap.cloud.sap/docs/releases/mar24)
+- SAPUI5 to version 122.0
+
 ## [3.202403.1] - 2024-03-01
 
 **Changed**
