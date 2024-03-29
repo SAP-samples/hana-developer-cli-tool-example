@@ -605,6 +605,9 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 					case "ST_GEOMETRY":
 						cdstable += `hana.${parameter.DATA_TYPE_NAME}(${await getGeoColumns(db, object[0], parameter, type)})`
 						break
+					case "REAL_VECTOR":
+						cdstable += "Vector"
+						break
 					default:
 						cdstable += `**UNSUPPORTED TYPE - ${parameter.DATA_TYPE_NAME}`
 				}
@@ -659,6 +662,9 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 						break
 					case "BOOLEAN":
 						cdstable += "Boolean"
+						break
+					case "REAL_VECTOR":
+						cdstable += "Vector"
 						break
 					case "VARCHAR":
 						// backward compatible change
@@ -785,6 +791,9 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 				case "ST_GEOMETRY":
 					cdstable += `hana.${field.DATA_TYPE_NAME}(${await getGeoColumns(db, object[0], field, type)})`
 					break
+				case "REAL_VECTOR":
+					cdstable += "Vector"
+					break
 				default:
 					cdstable += `**UNSUPPORTED TYPE - ${field.DATA_TYPE_NAME}`
 			}
@@ -839,6 +848,9 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 					break
 				case "BOOLEAN":
 					cdstable += "Boolean"
+					break
+				case "REAL_VECTOR":
+					cdstable += "Vector"
 					break
 				case "VARCHAR":
 					// backward compatible change
