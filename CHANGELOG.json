@@ -1,11 +1,19 @@
 [
     {
+        "date": "2024-03-29",
+        "version": "3.202403.3",
+        "Changed": [
+            "Update btpSubs and bas commands to support SAP Build Code.  Will launch Build Code Lobby when subscribed.",
+            "[CAP Version 7.8.0](https://cap.cloud.sap/docs/releases/mar24)",
+            "SAPUI5 to version 122.0"
+        ]
+    },
+    {
         "date": "2024-03-01",
         "version": "3.202403.1",
         "Changed": [
             "[CAP Version 7.7.0](https://cap.cloud.sap/docs/releases/feb24)",
             "SAPUI5 to version 121.0"
-
         ]
     },
     {
@@ -14,7 +22,6 @@
         "Changed": [
             "Mass Convert of Tables to CDS if you use Pure Catalog Definitions, it will output sql append content",
             "Table inspect to CDS if you choose no Persistence Exists, it will output sql append content"
-
         ]
     },
     {

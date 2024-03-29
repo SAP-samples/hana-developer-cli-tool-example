@@ -256,7 +256,7 @@ export async function getBASSub() {
     const subs = await getBTPSubscriptions()
     let basSub = ''
     for (let item of subs.applications) {
-        if (item.appName === applicationStudio) {
+        if ((item.appName === applicationStudio || item.appName === 'build-code') && item.state === 'SUBSCRIBED') {
             basSub = item
         }
     }
