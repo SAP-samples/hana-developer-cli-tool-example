@@ -1,5 +1,6 @@
 import * as base from '../utils/base.js'
 import * as dbInspect from '../utils/dbInspect.js'
+
 //import * as conn from '../utils/connections.js'
 
 // @ts-ignore
@@ -10,7 +11,6 @@ global.__xRef = []
 export const command = 'cds [schema] [table]'
 export const aliases = ['cdsPreview']
 export const describe = base.bundle.getText("cds")
-
 export const builder = base.getBuilder({
   table: {
     alias: ['t', 'Table'],
@@ -123,10 +123,10 @@ export async function cdsBuild(prompts) {
       vcap.hana[0].credentials.schema = object[0].SCHEMA_NAME
       vcap.hana.splice(1, 100)
       process.env.VCAP_SERVICES = JSON.stringify(vcap)
-    } 
-    
-    if (!cds.env.requires.db.credentials) {      
-      const settings =  db.client._settings
+    }
+
+    if (!cds.env.requires.db.credentials) {
+      const settings = db.client._settings
       let out = {}
       out.schema = object[0].SCHEMA_NAME
       out.url = settings.url
@@ -231,9 +231,11 @@ async function cdsServerSetup(prompts, cdsSource) {
 
   //CDS OData Service
   let vcap = ''
-  let options = { "db": {
-    kind: "hana",
-    logLevel: "error" }
+  let options = {
+    "db": {
+      kind: "hana",
+      logLevel: "error"
+    }
   }
   if (process.env.VCAP_SERVICES) {
     vcap = JSON.parse(process.env.VCAP_SERVICES)
@@ -242,7 +244,7 @@ async function cdsServerSetup(prompts, cdsSource) {
   }
 
   // @ts-ignore
-  cds.connect( )//options)
+  cds.connect()//options)
 
   let odataURL = "/odata/v4/opensap.hana.CatalogService/"
   let entity = prompts.table
@@ -318,16 +320,16 @@ async function cdsServerSetup(prompts, cdsSource) {
             // @ts-ignore
             const { SELECT } = req.query
             SELECT.where = []
-          //  for (let param of req.params) {
-              // @ts-ignore
+            //  for (let param of req.params) {
+            // @ts-ignore
             //  for (let property in param) {
-                SELECT.where.push({ "ref": ["ID"] })
-                SELECT.where.push("=")
-                SELECT.where.push({ "val": req.params[0] })
-              //  SELECT.where.push("and")
+            SELECT.where.push({ "ref": ["ID"] })
+            SELECT.where.push("=")
+            SELECT.where.push({ "val": req.params[0] })
+            //  SELECT.where.push("and")
             //  }
-           // }
-           // SELECT.where.splice(-1, 1)
+            // }
+            // SELECT.where.splice(-1, 1)
           }
         }
 
@@ -375,7 +377,7 @@ async function cdsServerSetup(prompts, cdsSource) {
   Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => base.require('@sap/cds-dk/lib/compile/openapi') })
   try {
     // @ts-ignore
-     let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
+    let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
       service: 'HanaCli',
       servicePath: '/odata/v4/opensap.hana.CatalogService/',
       'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
@@ -414,11 +416,11 @@ async function cdsServerSetup(prompts, cdsSource) {
       console.info(`HTTP Server: ${serverAddr}`)
 
       //GraphQL 
-     /*  const GraphQLAdapter = base.require('@cap-js/graphql/lib/GraphQLAdapter') //require('@sap/cds-graphql/lib')
-      const adapter = new GraphQLAdapter(cds.services, { graphiql: true, path: '/graphql' })
-      app.use('/graphql', adapter) */
+      /*  const GraphQLAdapter = base.require('@cap-js/graphql/lib/GraphQLAdapter') //require('@sap/cds-graphql/lib')
+       const adapter = new GraphQLAdapter(cds.services, { graphiql: true, path: '/graphql' })
+       app.use('/graphql', adapter) */
       // app.use(new GraphQLAdapter(cds.services, { graphiql: true }))
-     // console.log("serving GraphQL endpoint for all services { at: '/graphql' }")
+      // console.log("serving GraphQL endpoint for all services { at: '/graphql' }")
       const { default: open } = await import('open')
       open(serverAddr)
     })

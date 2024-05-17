@@ -542,6 +542,9 @@ export function promptHandler(argv, processingFunction, input, iConn = true, iDe
 
         if (isDebug(result)) {
             setDebug.enable('hana-cli, *')
+            process.env['NO_TELEMETRY'] = 'false'
+        }else {
+            process.env['NO_TELEMETRY'] = 'true'
         }
 
         debug(bundle.getText("yargs"))

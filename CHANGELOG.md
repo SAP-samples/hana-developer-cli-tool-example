@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202405.1] - 2024-05-17
+
+**Changed**
+
+- [CAP Version 7.9.0](https://cap.cloud.sap/docs/releases/apr24)
+- SAPUI5 to version 124.0
+- Added @cap-js/telemetry that is activated when the command is in debug
+- Switch to [@cap-js/hana](https://cap.cloud.sap/docs/releases/mar24#new-sap-hana-database-service) for the CAP HANA DB implementation
+
 ## [3.202403.3] - 2024-03-29
 
 **Changed**

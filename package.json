@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "3.202404.1",
+  "version": "3.202405.1",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -28,13 +28,15 @@
   ],
   "types": "types/index.d.ts",
   "dependencies": {
-    "@cap-js-community/odata-v2-adapter": "^1.12.7",
+    "@cap-js-community/odata-v2-adapter": "^1.12.9",
     "@cap-js/graphql": "0.10.1",
-    "@cap-js/postgres": "^1.6.0",
-    "@cap-js/sqlite": "^1.6.0",
+    "@cap-js/hana": "^0.4.0",
+    "@cap-js/postgres": "^1.8.0",
+    "@cap-js/sqlite": "^1.7.1",
+    "@cap-js/telemetry": "^0.1.0",
     "@json2csv/node": "7.0.6",
-    "@sap-cloud-sdk/resilience": "^3.13.0",
-    "@sap/cds": "^7.8.0",
+    "@sap-cloud-sdk/resilience": "^3.15.0",
+    "@sap/cds": "^7.9.1",
     "@sap/cds-common-content": "^1.4.0",
     "@sap/cds-fiori": "^1.2.3",
     "@sap/cds-hana": "^2.0.0",
@@ -52,16 +54,16 @@
     "easy-table": "1.2.0",
     "express": "^4.19.2",
     "figures": "^6.1.0",
-    "glob": "10.3.12",
+    "glob": "10.3.15",
     "hdb": "0.19.8",
-    "inquirer": "9.2.17",
+    "inquirer": "9.2.21",
     "inquirer-tree-prompt": "^1.1.2",
     "js-convert-case": "^4.2.0",
     "json-to-pretty-yaml": "^1.2.2",
     "json-to-table": "^4.2.1",
     "latest-version": "^9.0",
     "lodash": "^4.17.21",
-    "marked": "^12.0",
+    "marked": "^12.0.2",
     "marked-terminal": "^7.0",
     "node-zip": "^1.1.1",
     "odata2openapi": "^1.3.2",
@@ -70,7 +72,7 @@
     "prompt": "^1.3.0",
     "properties-to-json": "^0.2.1",
     "rxjs": "^7.8.1",
-    "sap-hdb-promisfied": "2.202404.2",
+    "sap-hdb-promisfied": "2.202405.1",
     "showdown": "^2.1.0",
     "swagger-ui-express": "^5.0.0",
     "terminal-kit": "^3.1.1",
@@ -78,12 +80,12 @@
     "upath": "^2.0.1",
     "update-notifier": "^7.0.0",
     "uuid": "^9.0.1",
-    "ws": "^8.16.0",
+    "ws": "^8.17.0",
     "yargonaut": "1.1.4",
     "yargs": "^17.7.2"
   },
   "peerDependencies": {
-    "@sap/cds-dk": ">=7.8"
+    "@sap/cds-dk": ">=7.9.2"
   },
   "author": "SAP",
   "license": "SEE LICENSE IN LICENSE",
@@ -92,19 +94,19 @@
   },
   "homepage": "https://github.com/SAP-samples/hana-developer-cli-tool-example#readme",
   "devDependencies": {
-    "@sap/eslint-plugin-cds": "^2.6.7",
-    "@types/node": "^20.12.6",
+    "@sap/eslint-plugin-cds": "^3.0.3",
+    "@types/node": "^20.12.12",
     "@types/showdown": "^2.0.4",
     "@types/yargs": "^17.0.31",
-    "eslint": "^9.0.0",
+    "eslint": "^9.2.0",
     "mochawesome": "^7.1.3",
-    "sinon": "^17.0.1",
+    "sinon": "^18.0.0",
     "stringify-changelog": "^0.2.1"
   },
   "cds": {
     "preview": {
       "ui5": {
-        "version": "1.122.0"
+        "version": "1.124.0"
       }
     },
     "hana": {
@@ -117,7 +119,8 @@
     "requires": {
       "middlewares": true,
       "db": {
-        "kind": "hana"
+        "kind": "hana",
+        "impl": "@cap-js/hana"
       }
     },
     "features": {
