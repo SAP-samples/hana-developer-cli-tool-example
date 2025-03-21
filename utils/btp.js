@@ -58,21 +58,21 @@ export async function getInfo() {
             try {
                 let infoOut = {}
                 let result = stdout.split("\n")
-                if(result[6]){
+                if (result[6]) {
                     let config = result[6]
                     let configOut = config.split(/:(.*)/s)
                     infoOut.Configuration = configOut[1].trim()
                 }
 
-                if(result[4]){
+                if (result[4]) {
                     let url = result[4]
                     let urlOut = url.split(/:(.*)/s)
                     infoOut.serverURL = urlOut[1].trim()
                 }
 
-                if(result[5]){
+                if (result[5]) {
                     let user = result[5]
-                    let userOut = user.split(/:(.*)/s)                
+                    let userOut = user.split(/:(.*)/s)
                     infoOut.user = userOut[1].trim()
                 }
 
@@ -97,13 +97,13 @@ export async function getBTPConfig() {
     base.debug('getBTPConfig')
 
     let localDir = process.env.BTP_CLIENTCONFIG
-    if(!localDir){
+    if (!localDir) {
         let info = await getInfo()
-        if(info.Configuration){
+        if (info.Configuration) {
             localDir = info.Configuration
         }
-    }    
-     if (!localDir || !fs.existsSync(localDir)) {
+    }
+    if (!localDir || !fs.existsSync(localDir)) {
         if (process.env.APPDATA) {
             localDir = `${process.env.APPDATA}/SAP/btp/config.json`
         } else if (process.platform == 'darwin') {
@@ -113,9 +113,9 @@ export async function getBTPConfig() {
         }
     }
     //MacOS fallback location
-    if (!fs.existsSync(localDir) && process.platform == 'darwin'){
-       localDir = `${process.env.HOME}/Library/Application Support/.btp/config.json`
-    } 
+    if (!fs.existsSync(localDir) && process.platform == 'darwin') {
+        localDir = `${process.env.HOME}/Library/Application Support/.btp/config.json`
+    }
     base.debug(localDir)
     try {
         let data = fs.readFileSync(localDir,
@@ -381,7 +381,7 @@ export async function getHANAPlan() {
     const subs = await getBTPPlans()
     let hanaPlan = ''
     for (let item of subs) {
-        if (item.catalog_name === hanaPlanName) {
+        if (item.catalog_name == hanaPlanName) {
             hanaPlan = item
         }
     }
@@ -526,11 +526,15 @@ export async function getHANAServiceInstances() {
     for (let item of subs) {
         // @ts-ignore
         if (item.service_plan_id === hanaPlan.id) {
-            let details = await getBTPServiceInstanceDetails(item.id)
-            let parameters = await getBTPServiceInstanceParameters(item.id)
-            item.last_operation = details.last_operation
-            item.parameters = parameters
-            hanaInstances.push(item)
+            try {
+                let details = await getBTPServiceInstanceDetails(item.id)
+                let parameters = await getBTPServiceInstanceParameters(item.id)
+                item.last_operation = details.last_operation
+                item.parameters = parameters
+                hanaInstances.push(item)
+            } catch (error) {
+
+            }
         }
     }
     base.debug(hanaInstances)

@@ -57,7 +57,11 @@ export async function listInstances(prompts) {
                 outputItem.name = item.name
                 let createdAt = new Date(item.created_at)
                 outputItem.created_at = createdAt.toString()
+                try {
                 outputItem.status = await btp.getHANAInstanceStatus(item.parameters)
+                } catch (error){
+                    
+                }
                 let updatedAt = new Date(item.last_operation.updated_at)
                 outputItem.last_operation = `${item.last_operation.type} ${item.last_operation.state} @ ${updatedAt.toString()}`
                 outputItem.hana_cockpit = item.dashboard_url
