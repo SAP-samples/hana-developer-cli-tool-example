@@ -1,5 +1,13 @@
 [
     {
+        "date": "2025-04-09",
+        "version": "3.202504.1",
+        "Changed": [
+            "[CAP Version 8.9.0](https://cap.cloud.sap/docs/releases/mar25)",
+            "Emergency Fix for CAP version 8.9 - changes to how binding works. This version of hana-cli only works with @sap/cds-dk 8.9 and higher. If you are using older version of @sap/cds-dk then you must also use older versions of the hana-cli."            
+        ]
+    },
+    {
         "date": "2024-05-17",
         "version": "3.202405.1",
         "Changed": [

@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202504.1] - 2025-04-09
+
+**Changed**
+
+- [CAP Version 8.9.0](https://cap.cloud.sap/docs/releases/mar25)
+- Emergency Fix for CAP version 8.9 - changes to how binding works. This version of hana-cli only works with @sap/cds-dk 8.9 and higher. If you are using older version of @sap/cds-dk then you must also use older versions of the hana-cli.
+
 ## [3.202405.1] - 2024-05-17
 
 **Changed**

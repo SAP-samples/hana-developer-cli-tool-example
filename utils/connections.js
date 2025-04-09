@@ -150,14 +150,9 @@ export async function getConnOptions(prompts) {
                 const data = fs.readFileSync(cdsrcPrivate,
                     { encoding: 'utf8', flag: 'r' })
                 const object = JSON.parse(data)
-                const resolveBinding = base.require('@sap/cds-dk/lib/bind/bindingResolver') //.BindingResolver(LOG)
-                let resolvedService = await resolveBinding.resolveBinding(null, object.requires['[hybrid]'].db.binding)
+                const resolveBinding = base.require('@sap/cds-dk/lib/bind/cf') //.BindingResolver(LOG)
+                let resolvedService = await resolveBinding.resolve(null, object.requires['[hybrid]'].db.binding)
                 let options = { hana: resolvedService.credentials }
-
-                /*                 process.env.CDS_ENV = 'hybrid'
-                                let optionsCDS = cds.env.requires.db
-                                console.log(optionsCDS)
-                                let options = { hana: optionsCDS.credentials } */
                 options.hana.pooling = true
                 base.debug(options)
                 base.debug(base.bundle.getText("connectionFile"))

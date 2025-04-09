@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "3.202405.1",
+  "version": "3.202504.1",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -85,7 +85,7 @@
     "yargs": "^17.7.2"
   },
   "peerDependencies": {
-    "@sap/cds-dk": ">=7.9.2"
+    "@sap/cds-dk": ">=8.9.0"
   },
   "author": "SAP",
   "license": "SEE LICENSE IN LICENSE",
