@@ -1,0 +1,11 @@
+{
+  "command": "hana-cli",
+  "timestamp": 1757598577428,
+  "data": {
+    "name": "hana-cli",
+    "description": "spawn hana-cli ENOENT",
+    "subcommands": [],
+    "options": [],
+    "arguments": []
+  }
+}
