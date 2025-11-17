@@ -5,9 +5,7 @@ export function tableInspect(prompts: any): Promise<{
     constraints: any;
     sql: string;
     cds: string;
-    hdbtable: string | {
-        file: string;
-    };
+    hdbtable: any;
 }>;
 export const command: "inspectTable [schema] [table]";
 export const aliases: string[];

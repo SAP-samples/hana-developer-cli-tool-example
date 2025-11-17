@@ -16,7 +16,7 @@ export default class dbClientClass {
      * Create an instance of the database client specific to the prompt profile
      * @param {typeof import("prompt")} prompts - input prompts current value
      */
-    constructor(prompts: any, optionsCDS: any);
+    constructor(prompts: typeof import("prompt"), optionsCDS: any);
     /**
     * Connect to the target database
     * @returns {Promise<object>} cds connection object
@@ -69,7 +69,7 @@ export default class dbClientClass {
     * Getter for Prompts Private Attribute
     * @returns {typeof import("prompt")} prompts - input prompts current value
     */
-    getPrompts(): any;
+    getPrompts(): typeof import("prompt");
     /**
     * Getter for CDS or HDB database object Private Attribute
     * @returns @type {Object}

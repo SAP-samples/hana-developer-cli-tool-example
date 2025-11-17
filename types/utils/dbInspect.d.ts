@@ -143,6 +143,7 @@ export function formatCDS(db: object, object: object, fields: object, constraint
  * @returns {Promise<string>} GEO SRS ID
  */
 export function getGeoColumns(db: object, object: object, field: object, type: string): Promise<string>;
+export function parseSQLOptions(output: any, cdsSource: any): any;
 export namespace options {
     let useHanaTypes: boolean;
     let noColons: boolean;
@@ -150,7 +151,7 @@ export namespace options {
     let useExists: boolean;
 }
 export namespace results {
-    let synonyms: any;
+    const synonyms: any;
 }
 /**
  * Get Table Constraints

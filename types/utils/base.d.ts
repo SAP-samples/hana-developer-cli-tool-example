@@ -42,13 +42,13 @@ export function getMassConvertBuilder(ui?: boolean): import("yargs").CommandBuil
  * @param {boolean} [ui=false] - Mass Convert via Browser-based UI
  * @returns {typeof import("prompt")} - prompts output
  */
-export function getMassConvertPrompts(ui?: boolean): any;
+export function getMassConvertPrompts(ui?: boolean): typeof import("prompt");
 /**
  * Get Prompts from the yargs current values and adjust
  * @param {import("yargs").CommandBuilder} argv - parameters for the command
  * @returns {typeof import("prompt")} - prompts output
  */
-export function getPrompt(argv: import("yargs").CommandBuilder): any;
+export function getPrompt(argv: import("yargs").CommandBuilder): typeof import("prompt");
 /**
  * Fill the prompts schema
  * @param {typeof import("prompt")} input - prompts current value
@@ -56,7 +56,7 @@ export function getPrompt(argv: import("yargs").CommandBuilder): any;
  * @param {boolean} [iDebug=true] - Add Debug Group
  * @returns {any} prompts schema as json
  */
-export function getPromptSchema(input: any, iConn?: boolean, iDebug?: boolean): any;
+export function getPromptSchema(input: typeof import("prompt"), iConn?: boolean, iDebug?: boolean): any;
 /**
  * Function that always retruns false
  * @returns {boolean}
@@ -70,7 +70,7 @@ export function askFalse(): boolean;
  * @param {boolean} [iConn=true] - Add Connection Group
  * @param {boolean} [iDebug=true] - Add Debug Group
  */
-export function promptHandler(argv: import("yargs").CommandBuilder, processingFunction: Function, input: any, iConn?: boolean, iDebug?: boolean): void;
+export function promptHandler(argv: import("yargs").CommandBuilder, processingFunction: Function, input: typeof import("prompt"), iConn?: boolean, iDebug?: boolean): void;
 /**
  * Handle Errors cleanup connections and decide how to alter the user
  * @param {*} error - Error Object
@@ -144,7 +144,7 @@ export function getLastResults(): any;
  * @returns userName
  */
 export function getUserName(): string;
-export const require: NodeRequire;
+export const require: NodeJS.Require;
 /**
  * - instance of sap-hdb-promisified module
  */

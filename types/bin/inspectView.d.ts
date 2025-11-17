@@ -5,9 +5,7 @@ export function viewInspect(prompts: any): Promise<{
     fields: any;
     sql: string;
     cds: string;
-    hdbtable: string | {
-        file: string;
-    };
+    hdbtable: any;
 }>;
 export const command: "inspectView [schema] [view]";
 export const aliases: string[];

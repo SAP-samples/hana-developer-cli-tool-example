@@ -4,6 +4,11 @@
  */
 export function getVersion(): Promise<string>;
 /**
+ * Get btp CLI info
+ * @returns {Promise<Object>}
+ */
+export function getInfo(): Promise<any>;
+/**
  * Read central configuration file for BTP CLI
  * @returns {Promise<object>}
  */

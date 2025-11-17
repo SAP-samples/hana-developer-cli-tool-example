@@ -8,7 +8,7 @@
   },
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": ">=20.19.0"
   },
   "scripts": {
     "test": "mocha --config=tests/.mocharc.json './tests/*.Test.js'",
@@ -82,7 +82,7 @@
     "uuid": "^9.0.1",
     "ws": "^8.17.0",
     "yargonaut": "1.1.4",
-    "yargs": "^17.7.2"
+    "yargs": "^18.0.0"
   },
   "peerDependencies": {
     "@sap/cds-dk": ">=9.4.0"
@@ -95,6 +95,7 @@
   "homepage": "https://github.com/SAP-samples/hana-developer-cli-tool-example#readme",
   "devDependencies": {
     "@sap/eslint-plugin-cds": "^4.1.0",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^20.12.12",
     "@types/showdown": "^2.0.4",
     "@types/yargs": "^17.0.31",

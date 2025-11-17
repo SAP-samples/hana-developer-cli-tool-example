@@ -1,4 +1,3 @@
-/// <reference types="node" />
 export const assert: typeof assertInt;
 export namespace mochaHooks {
     function beforeAll(): void;
