@@ -5,6 +5,7 @@
  * @module connections - helper utility for making connections to HANA DB and determine connection settings
  */
 import * as base from "./base.js"
+import { require } from "./base.js"
 import * as fs from 'fs'
 import * as path from 'path'
 import dotenv from 'dotenv'
@@ -150,7 +151,7 @@ export async function getConnOptions(prompts) {
                 const data = fs.readFileSync(cdsrcPrivate,
                     { encoding: 'utf8', flag: 'r' })
                 const object = JSON.parse(data)
-                const resolveBinding = base.require('@sap/cds-dk/lib/bind/cf') //.BindingResolver(LOG)
+                const resolveBinding = require('@sap/cds-dk/lib/bind/cf') //.BindingResolver(LOG)
                 let resolvedService = await resolveBinding.resolve(null, object.requires['[hybrid]'].db.binding)
                 let options = { hana: resolvedService.credentials }
                 options.hana.pooling = true
