@@ -96,7 +96,7 @@
   "devDependencies": {
     "@sap/eslint-plugin-cds": "^4.1.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^20.12.12",
+    "@types/node": "^24.10.1",
     "@types/showdown": "^2.0.4",
     "@types/yargs": "^17.0.31",
     "eslint": "^9.2.0",

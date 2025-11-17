@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 **Changed**
 
 - Update yargs to v18 and improve type definitions
-- Update SAP UI5 version and dependencies
+- Update SAPUI5 version and dependencies to 1.142.0
 - Update license year, version, and Node.js requirement
 - Update Node.js version to 22 and copyright year
 - Various dependency updates and maintenance
