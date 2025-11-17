@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202511.0] - 2025-11-17
+
+**Changed**
+
+- Update yargs to v18 and improve type definitions
+- Update SAP UI5 version and dependencies
+- Update license year, version, and Node.js requirement
+- Update Node.js version to 22 and copyright year
+- Various dependency updates and maintenance
+
 ## [3.202504.1] - 2025-04-09
 
 **Changed**
@@ -351,9 +361,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 **Changed**
 
-- Tested and made fixes for upcomming Node.js 16.x support. Tested under Node.js 16.9.0. You can use with Node.js 16, but will receive installation warnings and a warning on each command as the inner SAP supplied modules are technically not validated or supported yet on Node.js 16. However my local tests have been sucessful after some minor code changes. We will offically support Node.js 16 as soon as key SAP inner modules do as well
-- Upgrade dependencies @sap/cds to 5.4.4 and SAPUI5 to 1.94.0
-- New Command querySimpleUI - browser based UI for executing single SQL Statements
+- Tested and made fixes for upcoming Node.js 16.x support. Tested under Node.js 16.9.0. You can use with Node.js 16, but will receive installation warnings and a warning on each command as some packages haven't been fully updated for 16.x yet
+- Upgrade dependencies @sap/hdbext 7.3.7, @sap/hana-client 2.9.28, @sap/cds to 5.4.3 and SAPUI5 to 1.92.1
 
 ## [2.202109.1] - 2021-09-03
 
