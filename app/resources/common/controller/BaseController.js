@@ -307,9 +307,11 @@ sap.ui.define([
                     return
                 }
             })
+        },
+        onExit: function () {
+            this.updatePrompts()
         }
 
     })
-
 }
 )

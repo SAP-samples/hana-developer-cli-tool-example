@@ -105,7 +105,7 @@ export function blankLine(){
     console.log(`                                                                                        `)
 }
 /** type {object} - processed input prompts*/
-let prompts = []
+let prompts = {}
 /**
  *
  * @param {object} newPrompts - processed input prompts
