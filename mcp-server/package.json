@@ -1,0 +1,28 @@
+{
+  "name": "hana-cli-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for HANA CLI Tool",
+  "type": "module",
+  "main": "build/index.js",
+  "bin": {
+    "hana-cli-mcp-server": "./build/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "hana",
+    "cli"
+  ],
+  "author": "SAP",
+  "license": "SEE LICENSE IN ../LICENSE",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3"
+  }
+}

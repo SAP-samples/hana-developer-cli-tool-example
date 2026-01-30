@@ -154,7 +154,6 @@ export async function getConnOptions(prompts) {
                 const resolveBinding = require('@sap/cds-dk/lib/bind/cf') //.BindingResolver(LOG)
                 let resolvedService = await resolveBinding.resolve(null, object.requires['[hybrid]'].db.binding)
                 let options = { hana: resolvedService.credentials }
-                options.hana.pooling = true
                 base.debug(options)
                 base.debug(base.bundle.getText("connectionFile"))
                 base.debug(`.cdsrc-private.json`)
@@ -226,7 +225,6 @@ export async function getConnOptions(prompts) {
 
         }
     }
-    options.hana.pooling = true
     base.debug(options)
     return (options)
 }

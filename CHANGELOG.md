@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - Update license year, version, and Node.js requirement
 - Update Node.js version to 24 and copyright year
 - Various dependency updates and maintenance
+- Removed Fiori Preview page from cds command and replaced it with calls to @sap/cds-fiori plugin for better future compatibility
+- Experimental: First, very rough, version of an MCP server that exposes all hana-cli commands
 
 ## [3.202511.0] - 2025-11-17
 

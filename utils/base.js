@@ -98,7 +98,7 @@ export let tableOptions = {
     borderAttr: { color: 'blue' } ,
     textAttr: { bgColor: 'default' } ,
     firstRowTextAttr: { bgColor: 'blue' } ,
-    fit: true   // Activate all expand/shrink + wordWrap
+    fit: false   // Disable auto-sizing to prevent buffer allocation errors
 }
 
 export function blankLine(){
@@ -597,16 +597,29 @@ export async function end() {
             dbConnection.disconnect((err) => {
                 if (err) {
                     dbConnection = null
-                    throw err
+                    debug(`Disconnect Error: ${err}`)
                 }
                 debug(`HANA Disconnect Completed`)
+                dbConnection = null
+                if (spinner) {
+                    spinner.stop()
+                }
+                // Exit the process after successful disconnect to return control to CLI
+                process.exit(0)
             })
         } catch (disconnectErr) {
             debug(`Disconnect Exception: ${disconnectErr}`)
+            if (spinner) {
+                spinner.stop()
+            }
+            process.exit(1)
         }
-    }
-    if (spinner) {
-        spinner.stop()
+    } else {
+        // No connection to clean up, just stop spinner and exit
+        if (spinner) {
+            spinner.stop()
+        }
+        process.exit(0)
     }
 }
 
@@ -681,7 +694,7 @@ export function outputTable(content) {
 
 /**
  * Output JSON content either as a table or as formatted JSON to console
- * @param {*} content - json content often a HANA result set
+ * @param {*}
  * @returns void
  */
 export function outputTableFancy(content) {
@@ -689,8 +702,13 @@ export function outputTableFancy(content) {
         console.log(bundle.getText('noData'))
     } else {
         if (verboseOutput(prompts)) {
-            return terminal.table(json2Table(content), tableOptions)
-           // return console.table(content)
+            try {
+                return terminal.table(json2Table(content), tableOptions)
+            } catch (error) {
+                // Fallback to console.table if terminal.table fails (e.g., buffer allocation errors)
+                console.error('Warning: terminal.table failed, falling back to console.table:', error.message)
+                return console.table(content)
+            }
         } else {
             return console.log(inspect(content, { maxArrayLength: null }))
         }

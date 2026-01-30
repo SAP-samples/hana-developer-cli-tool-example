@@ -6,7 +6,9 @@
             "Update SAPUI5 version and dependencies to 1.144.0",
             "Update license year, version, and Node.js requirement",
             "Update Node.js version to 24 and copyright year",
-            "Various dependency updates and maintenance"
+            "Various dependency updates and maintenance",
+            "Removed Fiori Preview page from cds command and replaced it with calls to @sap/cds-fiori plugin for better future compatibility",
+            "Experimental: First, very rough, version of an MCP server that exposes all hana-cli commands"
         ]
     },
     {
