@@ -1,5 +1,15 @@
 [
     {
+        "date": "2026-01-30",
+        "version": "3.202601.0",
+        "Changed": [
+            "Update SAPUI5 version and dependencies to 1.144.0",
+            "Update license year, version, and Node.js requirement",
+            "Update Node.js version to 24 and copyright year",
+            "Various dependency updates and maintenance"
+        ]
+    },
+    {
         "date": "2025-11-17",
         "version": "3.202511.0",
         "Changed": [

@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.202601.0] - 2026-01-30
+
+**Changed**
+
+- Update SAPUI5 version and dependencies to 1.144.0
+- Update license year, version, and Node.js requirement
+- Update Node.js version to 24 and copyright year
+- Various dependency updates and maintenance
+
 ## [3.202511.0] - 2025-11-17
 
 **Changed**
