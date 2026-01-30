@@ -694,8 +694,8 @@ export function outputTable(content) {
 
 /**
  * Output JSON content either as a table or as formatted JSON to console
- * @param {*}
- * @returns void
+ * @param {*} content - json content often a HANA result set
+ * @returns {void}
  */
 export function outputTableFancy(content) {
     if (content.length < 1) {

@@ -68,6 +68,7 @@ The output formatter can be customized by editing `src/output-formatter.ts`. You
 - Change markdown table formatting style
 
 After making changes, rebuild with:
+
 ```bash
 npm run build
 ```

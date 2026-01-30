@@ -1,12 +1,14 @@
 # Issue Analysis: Zero Results from List Tables Command
 
 ## Problem Statement
+
 The `hana_tables` (and similar list commands) returns zero results when called through the MCP server.
 
 ## Root Cause
+
 The issue is **not** with the `**CURRENT_SCHEMA**` transformation logic, which works correctly. The actual problem is:
 
-**Missing database connection configuration**
+### Missing database connection configuration
 
 The hana-cli tools require a `default-env.json` file (or equivalent environment configuration) containing SAP HANA connection credentials. Without this configuration:
 
@@ -17,12 +19,14 @@ The hana-cli tools require a `default-env.json` file (or equivalent environment 
 ## Technical Details
 
 ### What Works ✓
+
 - The `**CURRENT_SCHEMA**` placeholder replacement logic (in `utils/database/databaseInspect.js`)
 - The default parameter handling in the MCP server
 - The SQL query construction
 - The command execution flow
 
 ### What Was Missing ✗
+
 - Clear error messaging when database connection is not configured
 - Validation that connection credentials are present before executing queries
 - Documentation about the connection setup requirement
@@ -30,6 +34,7 @@ The hana-cli tools require a `default-env.json` file (or equivalent environment 
 ## Solution Implemented
 
 ### 1. Enhanced Error Handling
+
 Added validation in `utils/base.js` to check for valid connection configuration:
 
 ```javascript
@@ -40,6 +45,7 @@ if (!this.options || !this.options.hana || !this.options.hana.host) {
 ```
 
 ### 2. Schema Validation
+
 Added check in `utils/database/databaseInspect.js` to ensure schema is not empty:
 
 ```javascript
@@ -50,6 +56,7 @@ if (!schema1 || schema1.trim() === '') {
 ```
 
 ### 3. Debug Logging
+
 Enhanced the MCP server with debug logging to help diagnose issues:
 
 ```typescript
@@ -61,6 +68,7 @@ if (args.debug) {
 ```
 
 ### 4. Documentation
+
 Created comprehensive troubleshooting guide: `mcp-server/TROUBLESHOOTING.md`
 
 ## How to Fix for Users
@@ -68,6 +76,7 @@ Created comprehensive troubleshooting guide: `mcp-server/TROUBLESHOOTING.md`
 Users experiencing zero results should:
 
 1. **Set up database connection** using one of these methods:
+
    ```bash
    # Method 1: Via service key (recommended)
    hana-cli serviceKey -i <instance-name> -k <key-name>
@@ -77,6 +86,7 @@ Users experiencing zero results should:
    ```
 
 2. **Verify connection**:
+
    ```bash
    hana-cli status
    ```
@@ -88,6 +98,7 @@ Users experiencing zero results should:
 ## Testing
 
 All improvements have been tested:
+
 - ✓ Error handling with missing configuration
 - ✓ Proper error messages guide users to solution
 - ✓ Schema transformation logic remains functional

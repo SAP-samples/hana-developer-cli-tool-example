@@ -19,6 +19,7 @@ hana-cli serviceKey -i <instance-name> -k <key-name>
 ```
 
 This will:
+
 - Retrieve the service key from Cloud Foundry
 - Create a `default-env.json` file with connection details
 - Validate the connection
