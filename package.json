@@ -63,7 +63,7 @@
     "json-to-table": "^4.2.1",
     "latest-version": "^9.0",
     "lodash": "^4.17.23",
-    "marked": "^12.0.2",
+    "marked": "^17.0.1",
     "marked-terminal": "^7.0",
     "node-zip": "^1.1.1",
     "odata2openapi": "^1.3.2",
@@ -140,6 +140,11 @@
     },
     "log": {
       "service": true
+    }
+  },
+  "overrides": {
+    "marked-terminal": {
+      "marked": "^17.0.1"
     }
   }
 }

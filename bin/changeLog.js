@@ -15,18 +15,15 @@ export function handler() {
 }
 
 export async function getChangeLog() {
-  const [{ marked }, { default: TerminalRenderer }] = await
+  const [{ marked }, { markedTerminal }] = await
     Promise.all([
       import('marked'),
       import('marked-terminal')
     ])
 
-  marked.setOptions({
-    // Define custom renderer
-    renderer: new TerminalRenderer({
-      showSectionPrefix: false
-    })
-  })
+  marked.use(markedTerminal({
+    showSectionPrefix: false
+  }))
 
   try {
     const data = fs.readFileSync(path.join(__dirname, '..', '/CHANGELOG.md'), 'utf8')
