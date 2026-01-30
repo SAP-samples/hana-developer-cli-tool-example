@@ -55,7 +55,7 @@
     "easy-table": "1.2.0",
     "express": "^4.22.1",
     "figures": "^6.1.0",
-    "glob": "11.0.3",
+    "glob": "^13.0.0",
     "hdb": "2.26.4",
     "inquirer": "^13.2.2",
     "js-convert-case": "^4.2.0",
