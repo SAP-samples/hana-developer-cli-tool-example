@@ -563,14 +563,18 @@ export function promptHandler(argv, processingFunction, input, iConn = true, iDe
  */
 export function error(error) {
     debug(`Error`)
-    if (dbConnection) {
+    if (dbConnection && dbConnection.client && dbConnection.client._settings) {
         debug(`HANA Disconnect Started`)
-        dbConnection.disconnect((err) => {
-            if (err) {
-                debug(`Disconnect Error: ${err}`)
-            }
-            debug(`HANA Disconnect Completed`)
-        })
+        try {
+            dbConnection.disconnect((err) => {
+                if (err) {
+                    debug(`Disconnect Error: ${err}`)
+                }
+                debug(`HANA Disconnect Completed`)
+            })
+        } catch (disconnectErr) {
+            debug(`Disconnect Exception: ${disconnectErr}`)
+        }
     }
     if (spinner) {
         spinner.stop()
@@ -587,15 +591,19 @@ export function error(error) {
  */
 export async function end() {
     debug(`Natural End`)
-    if (dbConnection) {
+    if (dbConnection && dbConnection.client && dbConnection.client._settings) {
         debug(`HANA Disconnect Started`)
-        dbConnection.disconnect((err) => {
-            if (err) {
-                dbConnection = null
-                throw err
-            }
-            debug(`HANA Disconnect Completed`)
-        })
+        try {
+            dbConnection.disconnect((err) => {
+                if (err) {
+                    dbConnection = null
+                    throw err
+                }
+                debug(`HANA Disconnect Completed`)
+            })
+        } catch (disconnectErr) {
+            debug(`Disconnect Exception: ${disconnectErr}`)
+        }
     }
     if (spinner) {
         spinner.stop()
@@ -704,12 +712,57 @@ export function output(content) {
 }
 
 /**
+ * Global error handling middleware for Express
+ * Compatible with Express 4.x and prepared for 5.x
+ * @param {Error} err - The error object
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
+export function globalErrorHandler(err, req, res, next) {
+    error(`Unhandled error: ${err.message}`)
+    // @ts-ignore
+    const statusCode = err.statusCode || err.status || 500
+    const message = process.env.NODE_ENV === 'development' 
+        ? err.message 
+        : 'Internal Server Error'
+    
+    res.status(statusCode).json({
+        error: {
+            message: message,
+            status: statusCode,
+            ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+        }
+    })
+}
+
+/**
+ * 404 Not Found handler
+ * Must be placed after all other route definitions
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+export function notFoundHandler(req, res) {
+    res.status(404).json({
+        error: {
+            message: 'Route not found',
+            status: 404,
+            path: req.path
+        }
+    })
+}
+
+/**
  * Setup Express and Launch Browser
  * @param {string} urlPath - URL Path to Launch
  * @returns void
  */
 export async function webServerSetup(urlPath) {
-    const path = require("path")
+    const path = await import('path')
+    const expressModule = await import('express')
+    const express = expressModule.default
+    const http = await import('http')
+    
     debug('serverSetup')
     // @ts-ignore
     const port = process.env.PORT || prompts.port || 3010
@@ -717,12 +770,18 @@ export async function webServerSetup(urlPath) {
     if (!(/^[1-9]\d*$/.test(port) && 1 <= 1 * port && 1 * port <= 65535)) {
         return error(`${port} ${bundle.getText("errPort")}`)
     }
-    const server = require("http").createServer()
-    // @ts-ignore
-    const express = require("express")
-    var app = express()
-    app.disable('etag')
-    //Load routes
+    
+    const server = http.createServer()
+    const app = express()
+    
+    // Configure Express settings for compatibility
+    app.set('x-powered-by', false) // Disable x-powered-by header for security
+    app.disable('etag') // Keep existing etag setting
+    
+    // Add centralized error handling setup (must be before routes)
+    app.use(globalErrorHandler)
+    
+    // Load routes
     let routesDir = path.join(__dirname, '..', '/routes/**/*.js')
     let files = await glob(upath.normalize(routesDir))
     if (files.length !== 0) {
@@ -733,7 +792,10 @@ export async function webServerSetup(urlPath) {
         }
     }
 
-    //Start the Server
+    // Add 404 handler (must be after all routes)
+    app.use(notFoundHandler)
+
+    // Start the Server
     server.on("request", app)
     server.listen(port, function () {
         // @ts-ignore

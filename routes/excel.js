@@ -3,9 +3,8 @@ import * as base from '../utils/base.js'
 //import * as excel from 'node-xlsx'
 
 export function route (app) {
-    app.get('/excel', async (req, res) => {
+    app.get('/excel', async (req, res, next) => {
         try {
-
             const results = base.getLastResults()
             let out = []
 
@@ -29,7 +28,8 @@ export function route (app) {
             // @ts-ignore
             let excelOutput = ``
             //base.error(`Excel Export temporarily disabled due to issue with install of required module in Business Application Studio`)
-            res.status(500).send(`Excel Export temporarily disabled due to issue with install of required module in Business Application Studio`)
+            res.status(500)
+               .json({ error: `Excel Export temporarily disabled due to issue with install of required module in Business Application Studio` })
             
             /*excel.build([{
               name: base.bundle.getText("gui.Results"),
@@ -41,8 +41,7 @@ export function route (app) {
 
         } catch (error) {
             base.error(error)
-            res.status(500).send(error.toString())
+            next(error) // Pass to error handler
         }
-
     })
 }

@@ -162,7 +162,7 @@ export async function getCalcViewFields(db, schema, viewId, viewOid) {
 		}
 	}
 	for (let field of fields) {
-		const fieldStatement = await await db.preparePromisified(
+		const fieldStatement = await db.preparePromisified(
 			`SELECT OFFSET, LENGTH, DEFAULT_VALUE, DATA_TYPE_NAME
 			   FROM VIEW_COLUMNS 
 		      WHERE VIEW_OID = ? AND COLUMN_NAME = ?`
@@ -258,7 +258,7 @@ export async function getTable(db, schema, tableId) {
 	base.debug(`getTable ${schema} ${tableId}`)
 	//Select Table
 	let statementString = ``
-	const vers = await await getHANAVersion(db)
+		const vers = await getHANAVersion(db)
 	if (vers.versionMajor < 2) {
 		statementString = `SELECT SCHEMA_NAME, TABLE_NAME, TABLE_OID, TABLE_TYPE, HAS_PRIMARY_KEY, UNLOAD_PRIORITY, IS_PRELOAD
 		FROM TABLES 
@@ -288,7 +288,7 @@ export async function getTableFields(db, tableOid) {
 	base.debug(`getTableFields ${tableOid}`)
 	//Select Fields
 	let statementString = ``
-	const vers = await await getHANAVersion(db)
+	const vers = await getHANAVersion(db)
 	if (vers.versionMajor < 2) {
 		statementString =
 			`SELECT SCHEMA_NAME, TABLE_NAME, TABLE_OID, COLUMN_NAME, POSITION, DATA_TYPE_NAME, OFFSET, LENGTH, SCALE, IS_NULLABLE, DEFAULT_VALUE, COLUMN_ID, COMMENTS
@@ -337,7 +337,7 @@ export async function getProcedure(db, schema, procedure) {
 	base.debug(`getProcedure ${schema} ${procedure}`)
 	//Select View
 	let statementString = ``
-	const vers = await await getHANAVersion(db)
+	const vers = await getHANAVersion(db)
 	if (vers.versionMajor < 2) {
 		statementString = `SELECT SCHEMA_NAME, PROCEDURE_NAME, PROCEDURE_OID, SQL_SECURITY, DEFAULT_SCHEMA_NAME,
 		INPUT_PARAMETER_COUNT, OUTPUT_PARAMETER_COUNT, INOUT_PARAMETER_COUNT, RESULT_SET_COUNT,

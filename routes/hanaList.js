@@ -4,7 +4,7 @@ import * as dbInspect from '../utils/dbInspect.js'
 
 export function route (app) {
     base.debug('hanaList Route')
-    app.get('/hana', async (req, res) => {
+    app.get('/hana', async (req, res, next) => {
         try {
             await base.clearConnection()
             const dbStatus = await base.createDBConnection()
@@ -24,12 +24,13 @@ export function route (app) {
                 services: services,
                 version: version
             }
-            res.type("application/json").status(200).send(hana)
+            res.type("application/json")
+               .status(200)
+               .json(hana)
         } catch (error) {
-            res.status(500).send(error.toString())
+            next(error) // Pass to centralized error handler
             return console.error(`${error}`)
         }
-
     })
 
     app.get(['/hana/tables', '/hana/tables-ui'], async (req, res) => {
@@ -97,7 +98,8 @@ export async function listHandler(res, lib, func) {
         let results = await targetLibrary[func](base.getPrompts())
         base.sendResults(res, results)
     } catch (error) {
-        res.status(500).send(error.toString())
+        res.status(500)
+           .json({ error: error.toString() })
         return console.error(`${error}`)
     }
 }

@@ -1,7 +1,6 @@
 import * as base from '../utils/base.js'
 import * as dbInspect from '../utils/dbInspect.js'
-
-//import * as conn from '../utils/connections.js'
+import { createRequire } from 'module'
 
 // @ts-ignore
 import cds from '@sap/cds'
@@ -209,6 +208,8 @@ export async function cdsBuild(prompts) {
 
     await cdsServerSetup(prompts, cdsSource)
     return base.end()
+    // Don't call base.end() here - let the CDS server keep the connection open
+    // The server will handle its own lifecycle
   } catch (error) {
     base.error(error)
   }
@@ -229,6 +230,35 @@ async function cdsServerSetup(prompts, cdsSource) {
   const express = base.require('express')
   var app = express()
 
+  // Assign Express app to CDS so plugins can use it
+  cds.app = app
+
+  // Load @sap/cds-fiori plugin manually since auto-loading isn't working
+  // This bridges the ES module / CommonJS gap
+  try {
+    const require = createRequire(import.meta.url)
+    console.log('✓ Loading @sap/cds-fiori plugin via CommonJS require...')
+    
+    // Get the plugin's preview functionality
+    const preview = require('@sap/cds-fiori/app/preview')
+    console.log('✓ @sap/cds-fiori plugin loaded successfully')
+    console.log('✓ Preview module:', typeof preview)
+  } catch (pluginErr) {
+    console.warn(`Warning: Failed to load @sap/cds-fiori plugin: ${pluginErr.message}`)
+  }
+
+  // Handle server-level errors gracefully
+  server.on('error', (err) => {
+    base.debug(`Server Error: ${err.message}`)
+    console.error(`Server Error: ${err.message}`)
+  })
+
+  // Handle any unhandled promise rejections in the server context
+  process.on('unhandledRejection', (reason, promise) => {
+    base.debug(`Unhandled Rejection: ${reason}`)
+    console.error(`Unhandled Rejection:`, reason)
+  })
+
   //CDS OData Service
   let vcap = ''
   let options = {
@@ -243,169 +273,182 @@ async function cdsServerSetup(prompts, cdsSource) {
     options.db.credentials = vcap.hana[0].credentials
   }
 
-  // @ts-ignore
-  cds.connect()//options)
+  // Configure CDS Fiori plugin for preview BEFORE cds.serve()
+  if (!cds.env.fiori) {
+    cds.env.fiori = {}
+  }
+  cds.env.fiori.preview = true
+  console.log('✓ CDS Fiori preview enabled: cds.env.fiori.preview =', cds.env.fiori.preview)
 
-  let odataURL = "/odata/v4/opensap.hana.CatalogService/"
+  // Listen for the 'served' event to verify it fires
+  cds.on('served', (services) => {
+    console.log('✓ CDS "served" event fired')
+    console.log('  Services:', Object.keys(services))
+    console.log('  cds.env.fiori:', JSON.stringify(cds.env.fiori, null, 2))
+    
+    // Check if Fiori preview routes were registered
+    if (app._router && app._router.stack) {
+      const fioriRoutes = app._router.stack.filter(layer => 
+        layer.route && layer.route.path && layer.route.path.includes('$fiori-preview')
+      )
+      console.log('  Fiori preview routes found:', fioriRoutes.length)
+      if (fioriRoutes.length > 0) {
+        console.log('  Route paths:', fioriRoutes.map(r => r.route.path))
+      } else {
+        console.warn('  WARNING: No $fiori-preview routes found in Express app')
+      }
+    }
+  })
+
+  // @ts-ignore
+  cds.connect()
+
   let entity = prompts.table
   base.debug(`Entity Before ${entity}`)
   entity = entity.replace(/\./g, "_")
   entity = entity.replace(/::/g, "_")
   let graphQLEntity = entity.replace(/_/g, ".")
   base.debug(`GraphQL Entity After ${graphQLEntity}`)
-  // entity = entity.replace(/:/g, "")
   base.debug(cdsSource)
+
   // @ts-ignore
-  cds.serve('all').from(await cds.parse(cdsSource), {
-    crashOnError: false
-  })
-    .at(odataURL)
-    .in(app)
-    //.to('fiori')
+  let compiledModel
+  let odataURL = "/odata/v4/opensap.hana.CatalogService/"
 
-    .with(srv => {
-      // @ts-ignore
-      srv.on(['READ'], [entity, `HanaCli.${graphQLEntity}`], async (req) => {
-        base.debug(`In Read Exit ${prompts.table}`)
+  try {
+    // Parse and compile the CDS source to get proper CSN model
+    const parsedModel = await cds.parse(cdsSource)
+    compiledModel = cds.compile(parsedModel)
 
-        let query1 = await cds.parse.cql(`SELECT from ${prompts.table}`)
-        // @ts-ignore
-        base.debug(req.query)
-        // @ts-ignore
-        query1.SELECT.one = req.query.SELECT.one
-        // @ts-ignore
-        req.query.SELECT.from = query1.SELECT.from
+    // Ensure model is properly registered in CDS
+    if (!cds.model) {
+      cds.model = compiledModel
+    }
 
-        // query1.SELECT = req.query.SELECT
+    // Use CDS's built-in Fiori UI generation (powered by @sap/cds-fiori internally)
+    // No need to maintain local manifest/fiori HTML copies
+    const services = await cds.serve('all').from(compiledModel, {
+      crashOnError: false
+    })
+      .at(odataURL)
+      .in(app)
+      .with(srv => {
         // @ts-ignore
-        query1.SELECT.limit = req.query.SELECT.limit
-        //query1.SELECT.search = req.query.SELECT.search
-        // @ts-ignore
-        query1.SELECT.where = req.query.SELECT.where
-        //query1.SELECT.count = req.query.SELECT.count
-        // @ts-ignore
-        query1.SELECT.orderBy = req.query.SELECT.orderBy
-        //query1.SELECT.columns = req.query.SELECT.columns  
-        req.query = query1
+        srv.on(['READ'], [entity, `HanaCli.${graphQLEntity}`], async (req) => {
 
-        //let query = "SELECT "
+          base.debug(`In Read Exit ${prompts.table}`)
 
-        /*         if (req.query.SELECT.count === true){
-                  // @ts-ignore
-                    const db = new base.dbClass(await conn.createConnection(prompts))
-                    query += `COUNT(*) AS "counted" FROM "${prompts.table}"`
-                    base.debug(query)
-                    let count = await db.execSQL(query)
-                    base.debug(count)
-                    return (count)
-                } */
-        // @ts-ignore
-        base.debug(JSON.stringify(req.query))
-        // @ts-ignore
-        if (req.query.SELECT.columns) { //&& req.query.SELECT.columns[0].func) {
+          // Build a new query targeting the actual HANA table
+          let query1 = await cds.parse.cql(`SELECT from ${prompts.table}`)
+          
+          // Copy important properties from the original query
           // @ts-ignore
-          for (let column of req.query.SELECT.columns) {
-            for (let xref of global.__xRef) {
-              if (column.ref[0] === xref.after) {
-                column.ref[0] = xref.after
-              }
-            }
-          }
-        }
-
-
-        //Req Parameters for Single Record GET
-        if (req.params) {
-          if (req.params.length > 0) {
-            // @ts-ignore
-            const { SELECT } = req.query
-            SELECT.where = []
-            //  for (let param of req.params) {
-            // @ts-ignore
-            //  for (let property in param) {
-            SELECT.where.push({ "ref": ["ID"] })
-            SELECT.where.push("=")
-            SELECT.where.push({ "val": req.params[0] })
-            //  SELECT.where.push("and")
-            //  }
-            // }
-            // SELECT.where.splice(-1, 1)
-          }
-        }
-
-        //Where
-        // @ts-ignore
-        if (req.query.SELECT.where) {
+          query1.SELECT.one = req.query.SELECT.one
           // @ts-ignore
-          for (let where of req.query.SELECT.where) {
-            if (where.ref) {
+          query1.SELECT.limit = req.query.SELECT.limit
+          // @ts-ignore
+          query1.SELECT.columns = req.query.SELECT.columns
+          // @ts-ignore
+          query1.SELECT.orderBy = req.query.SELECT.orderBy
+          
+          // Handle WHERE clause - check if it's in SELECT.where or in from.ref[0].where
+          // @ts-ignore
+          if (req.query.SELECT.where) {
+            // @ts-ignore
+            query1.SELECT.where = req.query.SELECT.where
+          } 
+          // @ts-ignore
+          else if (req.query.SELECT.from && req.query.SELECT.from.ref && 
+                   // @ts-ignore
+                   req.query.SELECT.from.ref[0] && req.query.SELECT.from.ref[0].where) {
+            // WHERE clause is nested in from.ref[0].where (common for single entity reads)
+            // @ts-ignore
+            query1.SELECT.where = req.query.SELECT.from.ref[0].where
+          }
+
+          // Apply xref transformations for columns
+          // @ts-ignore
+          if (query1.SELECT.columns) {
+            // @ts-ignore
+            for (let column of query1.SELECT.columns) {
               for (let xref of global.__xRef) {
-                if (where.ref[0] === xref.after) {
-                  where.ref[0] = xref.after
+                if (column.ref && column.ref[0] === xref.after) {
+                  column.ref[0] = xref.after
                 }
               }
             }
           }
-        }
 
-
-
-        //Order By
-        // @ts-ignore
-        if (req.query.SELECT.orderBy) {
-          //query += ` ORDER BY `
+          // Apply xref transformations for WHERE clause
           // @ts-ignore
-          for (let orderBy of req.query.SELECT.orderBy) {
-            for (let xref of global.__xRef) {
-              if (orderBy.ref[0] === xref.after) {
-                orderBy.ref[0] = xref.after
+          if (query1.SELECT.where) {
+            // @ts-ignore
+            for (let where of query1.SELECT.where) {
+              if (where.ref) {
+                for (let xref of global.__xRef) {
+                  if (where.ref[0] === xref.after) {
+                    where.ref[0] = xref.after
+                  }
+                }
               }
             }
           }
-        }
-        base.debug(req.query)
-        req.reply(await cds.tx(req).run(req.query))
+
+          // Apply xref transformations for ORDER BY
+          // @ts-ignore
+          if (query1.SELECT.orderBy) {
+            // @ts-ignore
+            for (let orderBy of query1.SELECT.orderBy) {
+              for (let xref of global.__xRef) {
+                if (orderBy.ref && orderBy.ref[0] === xref.after) {
+                  orderBy.ref[0] = xref.after
+                }
+              }
+            }
+          }
+
+          base.debug(query1)
+          req.reply(await cds.tx(req).run(query1))
+        })
       })
-    })
-    .catch((err) => {
-      console.log(err)
-      process.exit(1)
-    })
 
-  //Swagger UI
+    // Manually emit the 'served' event since it's not firing automatically
+    // The @sap/cds-fiori plugin listens for this event to register its routes
+    console.log('✓ Manually emitting CDS "served" event...')
+    cds.emit('served', services)
 
-  Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => base.require('@sap/cds-dk/lib/compile/openapi') })
-  try {
-    // @ts-ignore
-    let metadata = await cds.compile.to.openapi(cds.parse(cdsSource), {
-      service: 'HanaCli',
-      servicePath: '/odata/v4/opensap.hana.CatalogService/',
-      'openapi:url': '/odata/v4/opensap.hana.CatalogService/',
-      'openapi:diagram': true,
-      to: 'openapi'
-    })
-
-    let serveOptions = {
-      explorer: true
-    }
-    const swaggerUi = await import('swagger-ui-express')
-    app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(metadata, serveOptions))
-
+    // CDS OData - add homepage for preview
+    // Serve homepage with links to available endpoints
     app.get('/', (_, res) => res.send(getIndex(odataURL, entity)))
-    app.get('/fiori.html', (_, res) => {
-      const manifest = _manifest(odataURL, entity, prompts.table)
-      res.send(fiori(manifest, odataURL, entity))
-    })
 
-    app.get('/app/Component.js', (_, res) => {
-      const manifest = _manifest(odataURL, entity, prompts.table)
-      const content = `sap.ui.define(["sap/fe/core/AppComponent"], function(AppComponent) {
-      "use strict";
-      return AppComponent.extend("preview.Component", {
-        metadata: { manifest: ${JSON.stringify(manifest, null, 2)} }
-      });
-    });`
-      res.send(content)
+    // Setup Swagger UI for API documentation
+    try {
+      Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => base.require('@sap/cds-dk/lib/compile/to_openapi') })
+      // @ts-ignore
+      let metadata = await cds.compile.to.openapi(compiledModel, {
+        service: 'HanaCli',
+        servicePath: odataURL,
+        'openapi:url': odataURL,
+        'openapi:diagram': true,
+        to: 'openapi'
+      })
+
+      let serveOptions = {
+        explorer: true
+      }
+      const swaggerUi = await import('swagger-ui-express')
+      app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(metadata, serveOptions))
+    } catch (swaggerErr) {
+      base.debug(`Swagger setup skipped: ${swaggerErr.message}`)
+    }
+
+    // Add error handling middleware
+    app.use((err, req, res, next) => {
+      base.debug(`Express Error Handler: ${err.message}`)
+      console.error(`Request Error: ${err.message}`)
+      if (!res.headersSent) {
+        res.status(500).json({ error: 'Internal Server Error', message: err.message })
+      }
     })
 
     //Start the Server 
@@ -414,25 +457,18 @@ async function cdsServerSetup(prompts, cdsSource) {
       // @ts-ignore
       let serverAddr = `http://localhost:${server.address().port}`
       console.info(`HTTP Server: ${serverAddr}`)
-
-      //GraphQL 
-      /*  const GraphQLAdapter = base.require('@cap-js/graphql/lib/GraphQLAdapter') //require('@sap/cds-graphql/lib')
-       const adapter = new GraphQLAdapter(cds.services, { graphiql: true, path: '/graphql' })
-       app.use('/graphql', adapter) */
-      // app.use(new GraphQLAdapter(cds.services, { graphiql: true }))
-      // console.log("serving GraphQL endpoint for all services { at: '/graphql' }")
       const { default: open } = await import('open')
       open(serverAddr)
     })
   }
-  catch (e) {
-    if (e.code !== 'MODULE_NOT_FOUND') {
-      // Re-throw not "Module not found" errors 
-      throw e
+  catch (err) {
+    base.debug(`CDS Setup Error: ${err.code} - ${err.message}`)
+    console.log(err)
+    if (err.code === 'MODULE_NOT_FOUND') {
+      throw base.bundle.getText("cds-dk")
     }
-    throw base.bundle.getText("cds-dk")
+    process.exit(1)
   }
-  return
 }
 
 export function getIndex(odataURL, entity) {
@@ -499,8 +535,8 @@ export function getIndex(odataURL, entity) {
           <p class="subtitle"> These are the paths currently served ...
 
           <h2> Web Applications: </h2>
-          <h3><a href="/fiori.html">Fiori Test UI</a></h3> 
-          <h3><a href="/api/api-docs/">Swagger UI</a></h3> 
+          <h3><a href="/api-docs/">Swagger UI</a></h3>
+          <h3><a href="/$fiori-preview/HanaCli/${entity}">Fiori Preview</a></h3>
 
           <h2> Service Endpoints: </h2>
               <h3>
@@ -509,198 +545,9 @@ export function getIndex(odataURL, entity) {
               </h3>
               <ul>
                   <li>
-                      <a href="/odata/v4/opensap.hana.CatalogService/${entity}">${entity}</a>                    
+                      <a href="${odataURL}${entity}">${entity}</a>                    
                   </li>
               </ul>
       </body>
   </html>`
-}
-
-export function _manifest(odataURL, entity, table) {
-  base.debug(`_manifest ${odataURL} ${entity} ${table}`)
-  //const serviceProv = odataURL
-  const serviceInfo = entity
-
-  const manifest = {
-    _version: '1.8.0',
-    'sap.app': {
-      id: 'preview',
-      type: 'application',
-      title: `Preview of ${table}`,
-      description: 'Preview Application',
-      dataSources: {
-        mainService: {
-          uri: `${odataURL}`,
-          type: 'OData',
-          settings: {
-            odataVersion: '4.0'
-          }
-        }
-      },
-    },
-    'sap.ui5': {
-      dependencies: {
-        libs: {
-          'sap.fe.templates': {}
-        }
-      },
-      models: {
-        '': {
-          dataSource: 'mainService',
-          //preload: true,
-          settings: {
-            synchronizationMode: 'None',
-            operationMode: 'Server',
-            autoExpandSelect: true,
-            earlyRequests: true,
-            groupProperties: {
-              default: {
-                submit: 'Auto'
-              }
-            }
-          }
-        }
-      },
-      routing: {
-        routes: [
-          {
-            name: `${entity}ListRoute`,
-            target: `${entity}ListTarget`,
-            pattern: ':?query:',
-          },
-          {
-            name: `${entity}DetailsRoute`,
-            target: `${entity}DetailsTarget`,
-            pattern: `${entity}({key}):?query:`,
-          }
-        ],
-        targets: {
-          [`${entity}ListTarget`]: {
-            type: 'Component',
-            id: `${entity}ListTarget`,
-            name: 'sap.fe.templates.ListReport',
-            options: {
-              settings: {
-                entitySet: `${entity}`,
-                initialLoad: true,
-                navigation: {
-                  [`${entity}`]: {
-                    detail: {
-                      route: `${entity}DetailsRoute`
-                    }
-                  }
-                }
-              }
-            }
-          },
-          [`${entity}DetailsTarget`]: {
-            type: 'Component',
-            id: `${entity}DetailsTarget`,
-            name: 'sap.fe.templates.ObjectPage',
-            options: {
-              settings: {
-                entitySet: `${entity}`,
-                navigation: {}
-              }
-            }
-          }
-        }
-      },
-    },
-    contentDensities: {
-      compact: true,
-      cozy: true
-    },
-    'sap.ui': {
-      technology: 'UI5',
-      fullWidth: true
-    },
-    'sap.fiori': {
-      registrationIds: [],
-      archeType: 'transactional'
-    },
-  }
-
-  const { routing } = manifest['sap.ui5']
-  for (const { navProperty, targetEntity } of serviceInfo) {
-    // add a route for the navigation property
-    routing.routes.push(
-      {
-        name: `${navProperty}Route`,
-        target: `${navProperty}Target`,
-        pattern: `${entity}({key})/${navProperty}({key2}):?query:`,
-      }
-    )
-    // add a route target leading to the target entity
-    routing.targets[`${navProperty}Target`] = {
-      type: 'Component',
-      id: `${navProperty}Target`,
-      name: 'sap.fe.templates.ObjectPage',
-      options: {
-        // @ts-ignore
-        settings: {
-          entitySet: targetEntity
-        }
-      }
-    }
-    // wire the new route from the source entity's navigation (see above)
-    routing.targets[`${entity}DetailsTarget`].options.settings.navigation[navProperty] = {
-      detail: {
-        route: `${navProperty}Route`
-      }
-    }
-  }
-
-  return manifest
-}
-
-export function fiori(manifest, odataURL, entity,) {
-  base.debug(`fiori ${odataURL} ${entity}`)
-  // @ts-ignore
-  let ui5Version = cds.env.preview && cds.env.preview.ui5 && cds.env.preview.ui5.version
-  ui5Version = ui5Version ? ui5Version + '/' : ''
-  base.debug(`SAPUI5 Version ${ui5Version}`)
-  return `
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${manifest['sap.app'].title}</title>
-    <script>
-    window["sap-ushell-config"] = {
-      defaultRenderer: "fiori2",
-      applications: {
-        "hanacli-preview": {
-          title: "Browse ${entity}",
-          description: "from ${odataURL}",
-          additionalInformation: "SAPUI5.Component=app",
-          applicationType : "URL",
-          url: "./app",
-          navigationMode: "embedded"
-        }
-      }
-    }
-  </script>    
-    <script id="sap-ushell-bootstrap" src="https://ui5.sap.com/${ui5Version}test-resources/sap/ushell/bootstrap/sandbox.js"></script>
-    <script id="sap-ui-bootstrap" src="https://ui5.sap.com/${ui5Version}resources/sap-ui-core.js"
-        data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration, sap.ui.layout" data-sap-ui-compatVersion="edge"
-        data-sap-ui-theme="sap_horizon" data-sap-ui-frameOptions="allow"></script>
-        <script src="https://ui5.sap.com/${ui5Version}test-resources/sap/ushell/bootstrap/standalone.js"></script>        
-
-        <script>
-        // load and register Fiori2 icon font
-        jQuery.sap.require("sap.ushell.iconfonts");
-        jQuery.sap.require("sap.ushell.services.AppConfiguration");
-        sap.ushell.iconfonts.registerFiori2IconFont();
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          sap.ui.getCore().applyTheme( "sap_horizon_dark" )
-        }
-        sap.ui.getCore().attachInit(function() { sap.ushell.Container.createRenderer().placeAt("content") })
-    </script>
-    </head>
-<body class="sapUiBody sapUShellFullHeight" id="content"></body>
-</html>
-`
 }

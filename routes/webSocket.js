@@ -7,10 +7,16 @@ import * as massConvertLib from '../utils/massConvert.js'
 
 export function route(app, server) {
 	base.debug('WebSockets Route')
-	app.get('/websockets', (req, res) => {
-		let output =
-			`<H1>${base.bundle.getText("websocket")}</H1></br>`
-		res.type("text/html").status(200).send(output)
+	app.get('/websockets', (req, res, next) => {
+		try {
+			let output =
+				`<H1>${base.bundle.getText("websocket")}</H1></br>`
+			res.type("text/html")
+			   .status(200)
+			   .send(output)
+		} catch (error) {
+			next(error)
+		}
 	})
 
 	try {
