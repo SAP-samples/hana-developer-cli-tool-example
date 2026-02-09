@@ -18,6 +18,11 @@ export const builder = base.getBuilder({
   }
 })
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler (argv) {
   base.promptHandler(argv, activate, {
     user: {
@@ -31,6 +36,11 @@ export function handler (argv) {
   })
 }
 
+/**
+ * Add a user as an HDI group admin
+ * @param {object} prompts - Input prompts with user and group
+ * @returns {Promise<void>}
+ */
 export async function activate(prompts) {
   base.debug('activate')
   try {

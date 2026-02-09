@@ -44,10 +44,20 @@ export let inputPrompts = {
   }
 }
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler(argv) {
   base.promptHandler(argv, getContainers, inputPrompts)
 }
 
+/**
+ * Get list of HDI containers from database
+ * @param {object} prompts - Input prompts with container group, container name, and limit
+ * @returns {Promise<Array>} - Array of container objects
+ */
 export async function getContainers(prompts) {
   base.debug('getContainers')
   try {

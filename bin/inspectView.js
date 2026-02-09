@@ -89,10 +89,20 @@ export let inputPrompts = {
   }
 }
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler(argv) {
   base.promptHandler(argv, viewInspect, inputPrompts)
 }
 
+/**
+ * Inspect a view and display its metadata, columns, and definition in various formats
+ * @param {object} prompts - Input prompts with schema, view name, and output format
+ * @returns {Promise<void>}
+ */
 export async function viewInspect(prompts) {
   base.debug('viewInspect')
   const [{ highlight }, YAML, { parse, convert }] = await Promise.all([

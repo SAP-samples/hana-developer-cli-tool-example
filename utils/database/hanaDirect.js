@@ -1,20 +1,36 @@
 import DBClientClass from "./index.js"
 import * as base from '../base.js'
 
+/**
+ * Database Client for HANA Direct Connection (non-CDS)
+ * @extends DBClientClass
+ */
 export default class extends DBClientClass {
     #clientType = 'hanaCDS'
     #schema
+    /**
+     * Create an instance of the HANA Direct database client
+     * @param {typeof import("prompt")} prompts - input prompts current value
+     */
     constructor(prompts) {
         super(prompts)
         base.debug(`Database client specific class for profile: ${prompts.profile}`)
     }
 
+    /**
+     * Connect to HANA database directly
+     * @returns {Promise<object>} - database connection object
+     */
     async connect() {
         const db = await base.createDBConnection()
         super.setDB(db)
         return db
     }
     
+    /**
+     * Disconnect from HANA database
+     * @returns {Promise<void>}
+     */
     async disconnect(){
         // Don't call base.end() as it exits the process
         // Instead use disconnectOnly to cleanup connection without exiting
@@ -22,6 +38,10 @@ export default class extends DBClientClass {
         await base.disconnectOnly()
     }
 
+    /**
+     * Get list of tables from HANA database
+     * @returns {Promise<Array>} - array of table objects
+     */
     async listTables() {
         base.debug(`listTables for ${this.#clientType}`)
         const db = super.getDB()
@@ -45,6 +65,11 @@ export default class extends DBClientClass {
         return results
     }
 
+    /**
+     * Execute SQL query directly on HANA
+     * @param {string} query - SQL query string
+     * @returns {Promise<any>} - query results
+     */
     async execSQL(query){
         base.debug(`execSQL for ${this.#clientType}`)
         const db = super.getDB()

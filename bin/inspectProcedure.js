@@ -27,6 +27,11 @@ export const builder = base.getBuilder({
   }
 })
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler (argv) {
   base.promptHandler(argv, procedureInspect, {
     procedure: {
@@ -48,6 +53,11 @@ export function handler (argv) {
   })
 }
 
+/**
+ * Inspect a stored procedure and display its metadata, parameters, and definition
+ * @param {object} prompts - Input prompts with schema, procedure name, and output format
+ * @returns {Promise<void>}
+ */
 export async function procedureInspect(prompts) {
   base.debug('procedureInspect')
   const { highlight } = await import('cli-highlight')

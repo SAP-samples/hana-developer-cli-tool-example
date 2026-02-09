@@ -39,6 +39,11 @@ export const builder = base.getBuilder({
 }, false)
 
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler(argv) {
   base.promptHandler(argv, dbConnect, {
     connection: {
@@ -94,6 +99,11 @@ export function handler(argv) {
   }, false)
 }
 
+/**
+ * Connect to HANA database with provided credentials
+ * @param {object} input - Input prompts with connection details
+ * @returns {Promise<void>}
+ */
 export async function dbConnect(input) {
   base.debug(`dbConnect`)
   try {
@@ -131,6 +141,11 @@ export async function dbConnect(input) {
   }
 }
 
+/**
+ * Save connection environment to default-env-admin.json file
+ * @param {object} options - Connection options to save
+ * @returns {Promise<void>}
+ */
 export async function saveEnv(options) {
   base.debug('saveEnv')
   let parts = options.serverNode.split(':')

@@ -101,6 +101,10 @@ export let tableOptions = {
     fit: false   // Disable auto-sizing to prevent buffer allocation errors
 }
 
+/**
+ * Output a blank line to the console
+ * @returns {void}
+ */
 export function blankLine(){
     console.log(`                                                                                        `)
 }
@@ -160,6 +164,10 @@ export function getPrompts() {
     return prompts
 }
 
+/**
+ * Clear the database connection
+ * @returns {Promise<void>}
+ */
 export async function clearConnection() {
     dbConnection = null
 }

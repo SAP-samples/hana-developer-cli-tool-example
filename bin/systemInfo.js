@@ -29,11 +29,21 @@ export let inputPrompts = {
     required: true
   }
 }
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler(argv) {
   base.promptHandler(argv, sysInfo, inputPrompts)
 }
 
 
+/**
+ * Display system information in various formats
+ * @param {object} prompts - Input prompts with output format selection
+ * @returns {Promise<void>}
+ */
 export async function sysInfo(prompts) {
   base.debug('sysInfo')
   try {
@@ -63,6 +73,10 @@ export async function sysInfo(prompts) {
   }
 }
 
+/**
+ * Output basic system information including HANA version and system overview
+ * @returns {Promise<void>}
+ */
 export async function basicOutput() {
   const dbStatus = await base.createDBConnection()
   console.log(`${colors.green(base.bundle.getText("dbx.user"))}: ${await base.getUserName()}`)
@@ -76,11 +90,21 @@ export async function basicOutput() {
   base.outputTableFancy(results)
 }
 
+/**
+ * Output environment connection configuration
+ * @param {object} prompts - Input prompts
+ * @returns {Promise<void>}
+ */
 export async function environmentOutput(prompts) {
   prompts.disableVerbose = true
   console.log(await conn.getConnOptions(prompts))
 }
 
+/**
+ * Output connection details in DBX-compatible format
+ * @param {object} prompts - Input prompts
+ * @returns {Promise<void>}
+ */
 export async function dbxOutput(prompts) {
   prompts.disableVerbose = true
   let connDetails = await conn.getConnOptions(prompts)

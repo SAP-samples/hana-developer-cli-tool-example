@@ -46,6 +46,11 @@ export function handler (argv) {
   })
 }
 
+/**
+ * Get list of views from database
+ * @param {object} prompts - Input prompts with schema, view, and limit
+ * @returns {Promise<Array>} - Array of view objects
+ */
 export async function getViews(prompts) {
   base.debug('getViews')
   try {
@@ -63,6 +68,14 @@ export async function getViews(prompts) {
   }
 }
 
+/**
+ * Internal function to get views with filters
+ * @param {string} schema - Schema name
+ * @param {string} view - View name pattern
+ * @param {object} client - Database client
+ * @param {number} limit - Maximum number of results
+ * @returns {Promise<Array>} - Array of view objects
+ */
 async function getViewsInt(schema, view, client, limit) {
   base.debug(`getViewsInt ${schema} ${view} ${limit}`)
   view = base.dbClass.objectName(view)

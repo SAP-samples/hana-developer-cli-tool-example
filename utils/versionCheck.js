@@ -5,6 +5,10 @@ const require = createRequire(import.meta.url)
 const check = require('check-node-version')
 import chalk from 'chalk'
 
+/**
+ * Check if the current Node.js version meets the required version specified in package.json
+ * @returns {Promise<void>}
+ */
 export function checkVersion() {
     return new Promise(resolve => {
 

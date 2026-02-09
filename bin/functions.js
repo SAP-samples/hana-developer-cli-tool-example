@@ -44,10 +44,20 @@ export let inputPrompts = {
   }
 }
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler (argv) {
   base.promptHandler(argv, getFunctions, inputPrompts)
 }
 
+/**
+ * Get list of functions from database
+ * @param {object} prompts - Input prompts with schema, function, and limit
+ * @returns {Promise<Array>} - Array of function objects
+ */
 export async function getFunctions(prompts) {
   base.debug('getFunctions')
   try {
@@ -68,6 +78,14 @@ export async function getFunctions(prompts) {
 }
 
 
+/**
+ * Internal function to get functions with filters
+ * @param {string} schema - Schema name
+ * @param {string} functionName - Function name pattern
+ * @param {object} client - Database client
+ * @param {number} limit - Maximum number of results
+ * @returns {Promise<Array>} - Array of function objects
+ */
 async function getFunctionsInt(schema, functionName, client, limit) {
   base.debug(`getFunctionsInt ${schema} ${functionName} ${limit}`)
   functionName = base.dbClass.objectName(functionName)

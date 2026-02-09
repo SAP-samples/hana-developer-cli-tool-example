@@ -32,6 +32,11 @@ export const builder = base.getBuilder({
   }
 })
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler (argv) {
   base.promptHandler(argv, getTriggers, {
     trigger: {
@@ -57,6 +62,11 @@ export function handler (argv) {
   })
 }
 
+/**
+ * Get list of database triggers
+ * @param {object} prompts - Input prompts with schema, trigger pattern, target, and limit
+ * @returns {Promise<Array>} - Array of trigger objects
+ */
 export async function getTriggers(prompts) {
   base.debug('getTriggers')
   try {
@@ -75,6 +85,15 @@ export async function getTriggers(prompts) {
   }
 }
 
+/**
+ * Internal function to get triggers with filters
+ * @param {string} schema - Schema name
+ * @param {string} trigger - Trigger name pattern
+ * @param {string} target - Target object name pattern
+ * @param {object} client - Database client
+ * @param {number} limit - Maximum number of results
+ * @returns {Promise<Array>} - Array of trigger objects
+ */
 async function getTriggersInt(schema, trigger, target, client, limit) {
   base.debug(`getTriggersInt ${schema} ${trigger} ${target} ${limit}`)
   trigger = base.dbClass.objectName(trigger)

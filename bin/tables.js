@@ -56,6 +56,11 @@ export let inputPrompts = {
   }
 }
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {Promise<void>}
+ */
 export async function handler(argv) {
   if (argv.profile && argv.profile === 'pg') {  //Redirect to tablesPG / Postgres
     const tablesPG = await import("./tablesPG.js")
@@ -70,6 +75,11 @@ export async function handler(argv) {
 
 }
 
+/**
+ * Get list of tables from database
+ * @param {object} prompts - Input prompts with schema, table, and limit
+ * @returns {Promise<Array>} - Array of table objects
+ */
 export async function getTables(prompts) {
   try {
     base.debug('getTables')

@@ -20,6 +20,11 @@ export const builder = base.getBuilder({
   }
 })
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler (argv) {
   base.promptHandler(argv, getUsers, {
     user: {
@@ -35,6 +40,11 @@ export function handler (argv) {
   })
 }
 
+/**
+ * Get list of database users
+ * @param {object} prompts - Input prompts with user pattern and limit
+ * @returns {Promise<Array>} - Array of user objects
+ */
 export async function getUsers(prompts) {
   base.debug('getUsers')
   try {
@@ -51,6 +61,13 @@ export async function getUsers(prompts) {
   }
 }
 
+/**
+ * Internal function to get users with filters
+ * @param {string} user - User name pattern
+ * @param {object} client - Database client
+ * @param {number} limit - Maximum number of results
+ * @returns {Promise<Array>} - Array of user objects
+ */
 async function getUsersInt(user, client, limit) {
   base.debug(`getUsersInt ${user} ${limit}`)
   user = base.dbClass.objectName(user)

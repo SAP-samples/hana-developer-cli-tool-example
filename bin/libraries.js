@@ -25,6 +25,11 @@ export const builder = base.getBuilder({
   }
 })
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler (argv) {
   base.promptHandler(argv, getLibraries, {
     library: {
@@ -45,6 +50,11 @@ export function handler (argv) {
   })
 }
 
+/**
+ * Get list of libraries from database
+ * @param {object} prompts - Input prompts with schema, library pattern, and limit
+ * @returns {Promise<Array>} - Array of library objects
+ */
 export async function getLibraries(prompts) {
   base.debug('getLibraries')
   try {
@@ -63,6 +73,14 @@ export async function getLibraries(prompts) {
   }
 }
 
+/**
+ * Internal function to get libraries with filters
+ * @param {string} schema - Schema name
+ * @param {string} library - Library name pattern
+ * @param {object} client - Database client
+ * @param {number} limit - Maximum number of results
+ * @returns {Promise<Array>} - Array of library objects
+ */
 async function getLibrariesInt(schema, library, client, limit) {
   base.debug(`getLibrariesInt ${schema} ${library} ${limit}`)
   library = base.dbClass.objectName(library)

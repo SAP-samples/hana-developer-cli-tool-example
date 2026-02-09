@@ -69,10 +69,20 @@ export let inputPrompts = {
   }
 }
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler(argv) {
   base.promptHandler(argv, dbQuery, inputPrompts)
 }
 
+/**
+ * Remove newline characters from data row values
+ * @param {object} dataRow - Data row object
+ * @returns {object} - Cleaned data row
+ */
 export function removeNewlineCharacter(dataRow) {
 
   let newDataRow = {}
@@ -86,6 +96,11 @@ export function removeNewlineCharacter(dataRow) {
   return newDataRow
 }
 
+/**
+ * Execute a simple database query and output results in various formats
+ * @param {object} prompts - Input prompts with query, output format, and file options
+ * @returns {Promise<void>}
+ */
 export async function dbQuery(prompts) {
   base.debug('dbQuery')
   const [{ highlight }, { AsyncParser }, { default: Table }]= await Promise.all([ //, { default: excel }, { default: Table }] = await Promise.all([

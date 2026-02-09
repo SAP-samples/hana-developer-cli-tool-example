@@ -5,6 +5,10 @@
 import * as btp from "./utils/btp.js"
 //import * as cf from "./utils/cf.js"
 
+/**
+ * Initialize and test BTP connectivity
+ * @returns {Promise<void>}
+ */
 export async function  init(){
 
    // let data = await btp.getBTPConfig()

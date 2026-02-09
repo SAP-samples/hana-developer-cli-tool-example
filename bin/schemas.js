@@ -48,10 +48,20 @@ export let inputPrompts = {
 }
 
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler(argv) {
   base.promptHandler(argv, getSchemas, inputPrompts)
 }
 
+/**
+ * Get list of schemas from database
+ * @param {object} prompts - Input prompts with schema pattern and limit
+ * @returns {Promise<Array>} - Array of schema objects
+ */
 export async function getSchemas(prompts) {
   base.debug('getSchemas')
   try {
@@ -67,6 +77,14 @@ export async function getSchemas(prompts) {
   }
 }
 
+/**
+ * Internal function to get schemas with filters
+ * @param {string} schema - Schema name pattern
+ * @param {object} client - Database client
+ * @param {number} limit - Maximum number of results
+ * @param {boolean} all - Include all schemas or only those with privileges
+ * @returns {Promise<Array>} - Array of schema objects
+ */
 async function getSchemasInt(schema, client, limit, all) {
   base.debug(`getSchemasInt ${schema} ${limit} ${all}`)
   schema = base.dbClass.objectName(schema)

@@ -1,15 +1,28 @@
 import DBClientClass from "./index.js"
 import * as base from '../base.js'
 
+/**
+ * Database Client for PostgreSQL via CDS
+ * @extends DBClientClass
+ */
 export default class extends DBClientClass {
     #clientType = 'postgres'
     #schema
+    /**
+     * Create an instance of the PostgreSQL database client
+     * @param {typeof import("prompt")} prompts - input prompts current value
+     * @param {object} optionsCDS - CDS connection options
+     */
     constructor(prompts, optionsCDS) {
         super(prompts, optionsCDS)
         base.debug(`Database client specific class for profile: ${prompts.profile}`)
         this.#schema = super.schemaCalculation(prompts, optionsCDS)
     }
 
+    /**
+     * Get list of tables from PostgreSQL database
+     * @returns {Promise<Array>} - array of table objects
+     */
     async listTables() {
         base.debug(`listTables for ${this.#clientType}`)
         const tableName = super.adjustWildcard(super.getPrompts().table)

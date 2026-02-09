@@ -13,6 +13,11 @@ export const builder = base.getBuilder({
   }
 })
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler (argv) {
   base.promptHandler(argv, activate, {
     tenant: {
@@ -23,6 +28,11 @@ export function handler (argv) {
   })
 }
 
+/**
+ * Activate HDI (HANA Deployment Infrastructure) diserver on the specified tenant database
+ * @param {object} prompts - Input prompts with tenant name
+ * @returns {Promise<void>}
+ */
 export async function activate(prompts) {
   base.debug('activate')
   try {

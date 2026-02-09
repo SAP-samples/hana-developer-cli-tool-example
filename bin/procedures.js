@@ -26,6 +26,11 @@ export const builder = base.getBuilder({
   }
 })
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler (argv) {
   base.promptHandler(argv, getProcedures, {
     procedure: {
@@ -46,6 +51,11 @@ export function handler (argv) {
   })
 }
 
+/**
+ * Get list of procedures from database
+ * @param {object} prompts - Input prompts with schema, procedure, and limit
+ * @returns {Promise<Array>} - Array of procedure objects
+ */
 export async function getProcedures(prompts) {
   base.debug('getProcedures')
   try {
@@ -64,6 +74,14 @@ export async function getProcedures(prompts) {
   }
 }
 
+/**
+ * Internal function to get procedures with filters
+ * @param {string} schema - Schema name
+ * @param {string} procedure - Procedure name pattern
+ * @param {object} client - Database client
+ * @param {number} limit - Maximum number of results
+ * @returns {Promise<Array>} - Array of procedure objects
+ */
 async function getProceduresInt(schema, procedure, client, limit) {
   base.debug(`getProceduresInt ${schema} ${procedure} ${limit}`)
   procedure = base.dbClass.objectName(procedure)

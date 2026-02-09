@@ -18,6 +18,11 @@ export const builder = base.getBuilder({
     }
 }, false)
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler(argv) {
     base.promptHandler(argv, listInstances, {
         name: {
@@ -29,6 +34,11 @@ export function handler(argv) {
 }
 
 
+/**
+ * List HANA Cloud instances with status and details
+ * @param {object} prompts - Input prompts with instance name filter
+ * @returns {Promise<void>}
+ */
 export async function listInstances(prompts) {
     base.debug(`listInstances`)
     try {

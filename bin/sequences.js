@@ -26,6 +26,11 @@ export const builder = base.getBuilder({
   }
 })
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler (argv) {
   base.promptHandler(argv, getSequences, {
     sequence: {
@@ -46,6 +51,11 @@ export function handler (argv) {
   })
 }
 
+/**
+ * Get list of database sequences
+ * @param {object} prompts - Input prompts with schema, sequence pattern, and limit
+ * @returns {Promise<Array>} - Array of sequence objects
+ */
 export async function getSequences(prompts) {
   base.debug('getSequences')
   try {
@@ -64,6 +74,14 @@ export async function getSequences(prompts) {
   }
 }
 
+/**
+ * Internal function to get sequences with filters
+ * @param {string} schema - Schema name
+ * @param {string} sequence - Sequence name pattern
+ * @param {object} client - Database client
+ * @param {number} limit - Maximum number of results
+ * @returns {Promise<Array>} - Array of sequence objects
+ */
 async function getSequencesInt(schema, sequence, client, limit) {
   base.debug(`getSequencesInt ${schema} ${sequence} ${limit}`)
   sequence = base.dbClass.objectName(sequence)

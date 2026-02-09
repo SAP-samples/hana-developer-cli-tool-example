@@ -17,6 +17,11 @@ export const builder = base.getBuilder({
 }, false)
 
 
+/**
+ * Command handler function to set BTP target (directory and subaccount)
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {Promise<void>}
+ */
 export async function handler(argv) {
     let schema = {
         subaccount: {

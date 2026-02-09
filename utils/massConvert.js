@@ -642,7 +642,7 @@ async function getTablesInt(schema, table, client, limit) {
             WHERE SCHEMA_NAME LIKE ? 
             AND TABLE_NAME LIKE ? 
             ORDER BY SCHEMA_NAME, TABLE_NAME `
-    if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
+    if (limit || base.sqlInjectionUtils.isAcceptableParameter(limit.toString())) {
         query += `LIMIT ${limit.toString()}`
     }
     let results = await client.statementExecPromisified(await client.preparePromisified(query), [schema, table])
@@ -665,7 +665,7 @@ async function getViewsInt(schema, view, client, limit) {
             WHERE SCHEMA_NAME LIKE ? 
             AND VIEW_NAME LIKE ? 
             ORDER BY SCHEMA_NAME, VIEW_NAME `
-    if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
+    if (limit || base.sqlInjectionUtils.isAcceptableParameter(limit.toString())) {
         query += `LIMIT ${limit.toString()}`
     }
     let results = await client.statementExecPromisified(await client.preparePromisified(query), [schema, view])

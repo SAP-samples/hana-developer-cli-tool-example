@@ -26,6 +26,11 @@ export const builder = base.getBuilder({
   }
 })
 
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
 export function handler (argv) {
   base.promptHandler(argv, getRoles, {
     role: {
@@ -46,6 +51,11 @@ export function handler (argv) {
   })
 }
 
+/**
+ * Get list of database roles
+ * @param {object} prompts - Input prompts with schema, role pattern, and limit
+ * @returns {Promise<Array>} - Array of role objects
+ */
 export async function getRoles(prompts) {
   base.debug('getRoles')
   try {
@@ -65,6 +75,14 @@ export async function getRoles(prompts) {
 }
 
 
+/**
+ * Internal function to get roles with filters
+ * @param {string} schema - Schema name
+ * @param {string} role - Role name pattern
+ * @param {object} client - Database client
+ * @param {number} limit - Maximum number of results
+ * @returns {Promise<Array>} - Array of role objects
+ */
 async function getRolesInt(schema, role, client, limit) {
   base.debug(`getRolesInt ${schema} ${role} ${limit}`)
   role = base.dbClass.objectName(role)
