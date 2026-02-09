@@ -11,7 +11,10 @@
     "node": ">=20.19.0"
   },
   "scripts": {
-    "test": "mocha --config=tests/.mocharc.json \"./tests/*.Test.js\"",
+    "test": "mocha --config=tests/.mocharc.json \"./tests/**/*.Test.js\"",
+    "test:cli": "mocha --config=tests/.mocharc.json \"./tests/*.Test.js\"",
+    "test:utils": "mocha --config=tests/.mocharc.json \"./tests/utils/*.Test.js\"",
+    "test:routes": "mocha --config=tests/.mocharc.json \"./tests/routes/*.Test.js\"",
     "changelog": "node CHANGELOG",
     "types": "tsc  --declaration --allowJs --emitDeclarationOnly --outDir types --skipLibCheck",
     "postinstall": "npm link @sap/cds-dk --local"
