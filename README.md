@@ -26,7 +26,7 @@ Otherwise you can also run it from the sources as described here:
 
 * Install Node.js version 14.x or 16.x on your development machine [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
-* @sap Node.js packages have moved from https://npm.sap.com to the default registry https://registry.npmjs.org. As future versions of @sap modules are going to be published only there, please make sure to adjust your registry with:
+* @sap Node.js packages have moved from <https://npm.sap.com> to the default registry <https://registry.npmjs.org>. As future versions of @sap modules are going to be published only there, please make sure to adjust your registry with:
 
 ```shell
 npm config delete @sap:registry
@@ -58,13 +58,13 @@ This application primarily uses the default-env.json that is often used in local
 
 The tool doesn't simply look for a default-env.json file in the current directory however. There are numerous options and places it will look for the connection parameters. Here is the order in which it checks:
 
-  - First we look for the Admin option and use a default-env-admin.json - this overrides all other parameters
-  - If no admin option or if there was an admin option but no default-env-admin.json could be found in this directory or 5 parent directories, then look for `.cdsrc-private.json` in this directory or 5 parent directories and use [`cds bind`](https://cap.cloud.sap/docs/advanced/hybrid-testing#bind-to-cloud-services) functionality to lookup the credentials securely. This is the most secure option, but please note: this will make each command take a few seconds longer as credentials are no longer stored locally but looked up from cf or k8s dynamically with each command
-  - If no `.cdsrc-private.json` found in this directory or 5 parent directories, then look for a .env file in this directory or up to 5 parent directories
-  - No .env file found or it doesn't contain a VCAP_SERVICES section, then check to see if the --conn parameter was specified. If so check for that file in the current directory or up to 5 parent directories
-  - If the file specified via the --conn parameter wasn't found locally then check for it in the ${homedir}/.hana-cli/ folder
-  - If no specific configuration file was was found then look for a file named default-env.json in the current directory or up to 5 parent directories
-  - Last resort if nothing has been found up to this point - look for a file named default.json in the ${homedir}/.hana-cli/ folder
+* First we look for the Admin option and use a default-env-admin.json - this overrides all other parameters
+* If no admin option or if there was an admin option but no default-env-admin.json could be found in this directory or 5 parent directories, then look for `.cdsrc-private.json` in this directory or 5 parent directories and use [`cds bind`](https://cap.cloud.sap/docs/advanced/hybrid-testing#bind-to-cloud-services) functionality to lookup the credentials securely. This is the most secure option, but please note: this will make each command take a few seconds longer as credentials are no longer stored locally but looked up from cf or k8s dynamically with each command
+* If no `.cdsrc-private.json` found in this directory or 5 parent directories, then look for a .env file in this directory or up to 5 parent directories
+* No .env file found or it doesn't contain a VCAP_SERVICES section, then check to see if the --conn parameter was specified. If so check for that file in the current directory or up to 5 parent directories
+* If the file specified via the --conn parameter wasn't found locally then check for it in the ${homedir}/.hana-cli/ folder
+* If no specific configuration file was was found then look for a file named default-env.json in the current directory or up to 5 parent directories
+* Last resort if nothing has been found up to this point - look for a file named default.json in the ${homedir}/.hana-cli/ folder
 
 ## Examples
 
@@ -165,6 +165,72 @@ Schema: OPENSAP_HANA_USER, View: user.models::USER_DETAILS
 
 This tool will even create a temporary OData V4 service for any existing table, view or Calculation View and launch a test Fiori Ui locally.
 ![Fioir Example](images/ex1.png)
+
+## Project Structure and Documentation
+
+### Utils Documentation
+
+For developers looking to understand or extend the internal utilities used by this CLI tool, comprehensive documentation is available in the [utils/README.md](utils/README.md) file. This documentation covers:
+
+* **Core Utilities**: base module, connection management, database inspection, SQL injection protection
+* **CLI Integration**: BTP, Cloud Foundry, and XSA CLI integration utilities
+* **Database Abstraction**: Multi-database support (HANA, PostgreSQL, SQLite) with factory pattern
+* **Usage Examples**: Practical examples for using the utility modules
+
+The utils folder contains reusable modules that provide the foundation for all CLI commands, including database connectivity, terminal UI components, security utilities, and internationalization support.
+
+### HTTP Routes Documentation
+
+The hana-cli tool includes a built-in web server that exposes all CLI functionality through RESTful HTTP endpoints. Detailed documentation for all HTTP routes is available in the [routes/README.md](routes/README.md) file. This documentation covers:
+
+* **Base Configuration Endpoints**: GET/PUT operations for managing CLI prompts and settings
+* **HANA Database Endpoints**: Complete API for listing and inspecting HANA database objects (tables, views, schemas, containers, etc.)
+* **Documentation Endpoints**: Access to README and CHANGELOG as HTML
+* **WebSocket Support**: Real-time communication for long-running operations
+* **Static Resources**: UI5 application and DFA integration
+
+The web server is automatically started when using certain CLI commands with the `-w` or `--web` flag, making all hana-cli functionality accessible via HTTP requests at `http://localhost:3010` (configurable port).
+
+### Web Applications (Fiori Launchpad UI)
+
+The hana-cli tool includes a complete browser-based interface built with SAP UI5 and the Fiori Launchpad, providing a graphical alternative to the command-line interface. This web interface offers an intuitive, tile-based navigation system for all database operations.
+
+**Key Features:**
+* **Fiori Launchpad Interface**: Modern, responsive UI with organized tile groups
+* **Multiple UI5 Applications**: Specialized apps for listing, inspecting, and managing database objects
+* **Real-Time Operations**: WebSocket-based communication for live updates and long-running tasks
+* **Mass Conversion Tool**: Bulk convert tables to CDS, HDBTable, or HDBMigrationTable formats
+* **System Information Dashboard**: View connection details, version info, and system status
+* **Database Object Browser**: Interactive exploration of tables, views, schemas, functions, indexes, and more
+* **Cloud Foundry Integration**: Manage HDI, SBSS, Schema, and SecureStore service instances
+* **Theme Support**: Automatic light/dark mode detection and customization
+* **Integrated Help**: SAP Digital Foundation Adapter (DFA) with contextual assistance
+
+**Quick Start:**
+```shell
+hana-cli tables -w    # Launch web interface with tables view
+hana-cli serve        # Start the web server standalone
+```
+
+The web UI runs on `http://localhost:3010` by default and provides access to all CLI functionality through an easy-to-use graphical interface. For complete documentation of all web applications, UI5 components, configuration, and development guides, see the [app/README.md](app/README.md) file.
+
+### Experimental MCP (Model Context Protocol) Integration
+
+The hana-cli tool now includes experimental support for the Model Context Protocol (MCP), enabling AI assistants like Claude to interact with SAP HANA databases through natural language. This integration exposes all 100+ hana-cli commands as tools that AI assistants can invoke directly.
+
+**Key Features:**
+
+* Natural language database queries and operations
+* Full access to all hana-cli commands through AI assistants
+* Seamless integration with AI development environments (Cline/Claude Dev, etc.)
+* Command execution with proper parameter handling and error responses
+
+For detailed setup instructions, configuration options, and usage examples, please refer to:
+
+* [mcp-server/README.md](mcp-server/README.md) - Complete installation and configuration guide
+* [mcp-server/TROUBLESHOOTING.md](mcp-server/TROUBLESHOOTING.md) - Common issues and solutions
+
+**Note:** This is an experimental feature and may be subject to changes as the MCP specification evolves.
 
 ## Commands
 
@@ -380,6 +446,60 @@ Options:
                                                                 [default: false]
 ```
 
+#### About the CDS Command
+
+The `cds` command is a unique and powerful feature that bridges SAP HANA database objects with the SAP Cloud Application Programming Model (CAP) framework. This command provides an innovative way to instantly preview and interact with existing database tables and views through a fully functional CDS-based service.
+
+**Prerequisites:**
+
+This command requires the separate installation of the SAP CDS Development Kit (`@sap/cds-dk`). Install it globally using:
+
+```shell
+npm install -g @sap/cds-dk
+```
+
+**How It Works:**
+
+When you execute the `cds` command against a table or view, the tool performs the following sophisticated operations:
+
+1. **Metadata Extraction**: Reads the complete schema metadata from the specified HANA table or view, including column names, data types, keys, and constraints.
+
+2. **Dynamic CDS Entity Generation**: Automatically generates a temporary CDS entity definition that mirrors the structure of your database object. This entity is created in-memory and includes:
+   * Proper data type mappings from HANA types to CDS types
+   * Preservation of primary keys and nullable constraints
+   * Optional use of HANA-specific data types when the `--useHanaTypes` flag is specified
+   * Quoted identifiers support for non-standard naming conventions
+
+3. **Temporary Service Creation**: Creates an ephemeral CAP service that exposes the generated entity through a fully functional OData V4 endpoint.
+
+4. **Local Server Launch**: Spins up a local CDS development server (default on a random available port, or specify with `--port` parameter) that serves the data from your actual HANA database table/view.
+
+5. **Interactive Preview**: Opens your default web browser to display the Fiori Elements preview, allowing you to immediately browse, filter, and interact with your data through a modern, responsive UI.
+
+**What This Enables:**
+
+* **Instant Prototyping**: Quickly visualize how database tables will look in a Fiori application without writing any CDS or UI code
+* **Data Exploration**: Browse existing database content through an intuitive interface with built-in filtering, sorting, and pagination
+* **Service Testing**: Test OData queries and operations against real data before committing to a formal service design
+* **Entity Modeling**: See how HANA database types translate to CDS types and identify potential modeling improvements
+* **Demonstration**: Showcase database content to stakeholders in a professional, web-based interface
+* **Development Aid**: Validate database structures and data quality during development iterations
+
+**Example Usage:**
+
+```shell
+# Preview a table with default CDS types
+hana-cli cds -t MY_TABLE
+
+# Preview a view using HANA-specific types on port 4005
+hana-cli cds -v MY_VIEW --hana --port 4005
+
+# Preview with quoted identifiers for non-standard names
+hana-cli cds -t "my-special-table" --quoted
+```
+
+This command effectively transforms any database object into a temporary, fully functional CAP application, demonstrating the power and flexibility of the Cloud Application Programming Model while leveraging your existing HANA assets.
+
 ### changelog
 
 ```shell
@@ -512,6 +632,7 @@ Options:
   --containergroup                                       [string] [default: "*"]
   -l, --limit                               Limit results[number] [default: 200]
 ```
+
 ### copy2DefaultEnv
 
 ```shell
@@ -768,6 +889,7 @@ Troubleshooting:
                                  of intermediate details
                                                       [boolean] [default: false]
 ```
+
 ![dataTypes example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/dataTypes.gif)
 
 ### dataTypesUI
@@ -915,6 +1037,28 @@ Troubleshooting:
 
 ![features example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/features.gif)
 
+### featuresUI
+
+```shell
+hana-cli featuresUI
+[aliases: feui, featuresui, FeaturesUI]
+dataTypes
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+```
+
 ### featureUsage
 
 ```shell
@@ -938,6 +1082,28 @@ Troubleshooting:
 ```
 
 ![featureUsage example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/featureUsage.gif)
+
+### featureUsageUI
+
+```shell
+hana-cli featureUsageUI
+[aliases: fuui, featureusageui, FeaturesUsageUI, featuresusageui]
+Usage Statistics by Feature
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+```
 
 ### functions
 
@@ -969,6 +1135,34 @@ Options:
 
 ![functions example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/functions.gif)
 
+### functionsUI
+
+```shell
+hana-cli functionsUI [schema] [function]
+[aliases: fui, listFuncsUI, ListFuncUI, listfuncsui, Listfuncui,
+                                               listFunctionsUI, listfunctionsui]
+Get a list of all functions
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -f, --function, --Function  Function                   [string] [default: "*"]
+  -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit                 Limit results              [number] [default: 200]
+```
+
 ### hdi
 
 ```shell
@@ -988,6 +1182,27 @@ Options:
 ```
 
 ![hdi example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/hdi.gif)
+
+### hdiUI
+
+```shell
+hana-cli hdiUI
+[aliases: hdiInstancesUI, hdiinstancesui, hdiServicesUI, listhdiui,
+                                                          hdiservicesui, hdisui]
+List all SAP HANA Cloud HDI service instances in your target Space
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]
+```
 
 ### hc
 
@@ -1137,6 +1352,34 @@ Options:
 ```
 
 ![indexes example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/indexes.gif)
+
+### indexesUI
+
+```shell
+hana-cli indexesUI [schema] [indexes]
+[aliases: indUI, listIndexesUI, ListIndUI, listindui, Listindui,
+                                                      listfindexesui, indexesui]
+Get a list of indexes
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -i, --indexes, --Indexes  Function                     [string] [default: "*"]
+  -s, --schema, --Schema    schema      [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit               Limit results                [number] [default: 200]
+```
 
 ### iniContents
 
@@ -1405,6 +1648,48 @@ Options:
 
 ![inspectTable example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/inspectTable.gif)
 
+### inspectTableUI
+
+```shell
+hana-cli inspectTableUI [schema] [table]
+[aliases: itui, tableUI, tableui, insTblUI, inspecttableui, inspectableui]
+Return metadata about a DB table
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --table, --Table                      Database Table              [string]
+  -s, --schema, --Schema                    schema
+                                        [string] [default: "**CURRENT_SCHEMA**"]
+  -o, --output, --Output                    Output Format for inspection
+        [string] [choices: "tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl",
+     "annos", "edm", "edmx", "swgr", "openapi", "hdbtable", "hdbmigrationtable",
+                      "hdbcds", "jsdoc", "graphql", "postgres"] [default: "tbl"]
+      --useHanaTypes, --hana                Use SAP HANA-Specific Data Types See
+                                            (https://cap.cloud.sap/docs/cds/cdl#
+                                            predefined-types)
+                                                      [boolean] [default: false]
+      --useExists, --exists, --persistence  Use Persistence Exists Annotation
+                                                       [boolean] [default: true]
+  -q, --useQuoted, --quoted,                Use Quoted Identifiers
+  --quotedIdentifiers                       ![non-identifier]
+                                                      [boolean] [default: false]
+      --noColons                            Replace :: in table/view path with
+                                            dot       [boolean] [default: false]
+```
+
 ### inspectTrigger
 
 ```shell
@@ -1486,8 +1771,8 @@ Options:
   -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
   -o, --output, --Output      Output Format for inspection
         [string] [choices: "tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl",
-       "annos", "edm", "edmx", "swgr", "openapi", "hdbview", "hdbcds"] [default:
-                                                                          "tbl"]
+        "annos", "edm", "edmx", "swgr", "openapi", "hdbview", "hdbcds", "jsdoc",
+                                         "graphql", "postgres"] [default: "tbl"]
       --useHanaTypes, --hana  Use SAP HANA-Specific Data Types See (https://cap.
                               cloud.sap/docs/cds/cdl#predefined-types)
                                                       [boolean] [default: false]
@@ -1645,6 +1930,7 @@ Options:
       --noColons                           Replace :: in table/view path with
                                            dot        [boolean] [default: false]
 ```
+
 ![massConvertUI example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/massConvertUI.png)
 
 ### massRename
@@ -1749,6 +2035,7 @@ Troubleshooting:
 ```
 
 ![bas example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/bas.gif)
+
 ### openDBX
 
 ```shell
@@ -1924,6 +2211,7 @@ Display Read Me in CLI
 hana-cli readMeUI
 Display Read Me in Browser UI
 ```
+
 ### readme
 
 ```shell
@@ -1931,7 +2219,6 @@ hana-cli readme
 [aliases: openreadme, openReadme, openReadMe, openHelp, openhelp]
 Open Readme Documentation in browser
 ```
-
 
 ### reclaim
 
@@ -1999,6 +2286,27 @@ hana-cli sbss                             List all SAP HANA Cloud SBSS service
                                            instances in your target Space
 [aliases: sbssInstances, sbssinstances, sbssServices, listsbss, sbssservices,
                                                                        sbsss]
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]
+```
+
+### sbssUI
+
+```shell
+hana-cli sbssUI
+[aliases: sbssInstancesUI, sbssinstancesui, sbssServicesUI, listsbssui,
+                                                        sbssservicesui, sbsssui]
+List all SAP HANA Cloud SBSS service instances in your target Space
+
 Troubleshooting:
       --disableVerbose, --quiet  Disable Verbose output - removes all extra
                                  output that is only helpful to human readable
@@ -2090,6 +2398,27 @@ Options:
   -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]
 ```
 
+### schemaInstancesUI
+
+```shell
+hana-cli schemaInstancesUI
+[aliases: schemainstancesui, schemaServicesUI, listschemasui,
+                                                               schemaservicesui]
+List all SAP HANA Cloud Schema service instances in your target Space
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]
+```
+
 ### securestore
 
 ```shell
@@ -2098,6 +2427,28 @@ hana-cli securestore                      List all SAP HANA Cloud SecureStore
                                             Space
       [aliases: secureStoreInstances, securestoreinstances, secureStoreServices,
                              listSecureStore, securestoreservices, securestores]
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]
+```
+
+### securestoreUI
+
+```shell
+hana-cli securestoreUI
+[aliases: secureStoreInstancesUI, secureStoreUI, securestoreinstancesui,
+                secureStoreServicesUI, listSecureStoreUI, securestoreservicesui,
+                                                                 securestoresui]
+List all SAP HANA Cloud SecureStore service instances in your target Space
+
 Troubleshooting:
       --disableVerbose, --quiet  Disable Verbose output - removes all extra
                                  output that is only helpful to human readable
@@ -2284,6 +2635,7 @@ Troubleshooting:
                                  of intermediate details
                                                       [boolean] [default: false]
 ```
+
 ![systemInfoUI example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/systemInfoUI.png)
 
 ### tables
@@ -2312,6 +2664,54 @@ Options:
   -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit             Limit results                  [number] [default: 200]
 ```
+
+### tablesPG
+
+```shell
+hana-cli tablesPG [schema] [table]
+[aliases: tablespg, tablespostgres, tablesPostgres, tables-postgres,
+                                             tables-postgressql, tablesPOSTGRES]
+tablesPG
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --table, --Table      Database Table               [string] [default: "*"]
+  -s, --schema, --Schema    schema      [string] [default: "**CURRENT_SCHEMA**"]
+  -p, --profile, --Profile  CDS Profile                 [string] [default: "pg"]
+  -l, --limit               Limit results                [number] [default: 200]
+```
+
+### tablesSQLite
+
+```shell
+hana-cli tablesSQLite [table]
+[aliases: tablessqlite, tablesqlite, tablesSqlite, tables-sqlite, tables-sql,
+                                                                      tablesSQL]
+Get a list of all tables from Postgres
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --table, --Table      Database Table               [string] [default: "*"]
+  -p, --profile, --Profile  CDS Profile             [string] [default: "sqlite"]
+  -l, --limit               Limit results                [number] [default: 200]
+```
+
 ![tables example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/tables.gif)
 
 ### tablesUI
@@ -2435,7 +2835,96 @@ Troubleshooting:
   --debug, --Debug           Debug hana-cli itself by adding output of LOTS of
                              intermediate details     [boolean] [default: false]
 ```
+
 ![UI example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/UI.png)
+
+#### About the UI Command
+
+The `UI` command represents a comprehensive web-based interface to hana-cli, transforming the command-line tool into a full-featured web application. This command launches a sophisticated local web server that provides browser-based access to most hana-cli functionality through an interactive, modern UI.
+
+**Architecture and Technology Stack:**
+
+The UI command is built on a robust technology stack that combines several key components:
+
+1. **Express.js Web Server**: At its core, the UI runs on an Express.js server that handles HTTP requests, serves static assets, and manages API endpoints. The server automatically binds to an available port (typically starting from 4000) and opens your default browser to the application.
+
+2. **WebSocket Integration**: Real-time communication is enabled through WebSocket connections, allowing for:
+   * Live updates of command execution status
+   * Streaming output from long-running operations
+   * Instant feedback without page refreshes
+   * Push notifications for completed tasks
+
+3. **SAP CDS Integration**: For database object previews, the UI seamlessly integrates with the SAP Cloud Application Programming Model (requires `@sap/cds-dk`):
+   * Dynamic OData service generation for tables and views
+   * Embedded Fiori Elements preview capabilities
+   * Interactive data exploration with filtering and sorting
+   * Full CDS modeling support with type conversions
+
+4. **RESTful API Layer**: The server exposes a comprehensive REST API that mirrors the CLI command structure, enabling programmatic access to all functions through standard HTTP methods.
+
+**Available Capabilities:**
+
+The web interface provides access to a wide range of hana-cli features through an intuitive dashboard:
+
+* **Database Object Exploration**:
+  * Browse tables, views, procedures, functions, and other database objects
+  * View detailed metadata and schema information
+  * Inspect object definitions with syntax highlighting
+  * Navigate relationships between objects
+
+* **Data Management**:
+  * Execute SQL queries with rich result formatting
+  * Export query results to JSON, CSV, or Excel formats
+  * Preview data with pagination and filtering
+  * Mass convert tables to CDS or HDI formats
+
+* **System Information**:
+  * Monitor HANA system health and statistics
+  * View feature usage and version details
+  * Inspect configuration settings and parameters
+  * Track active connections and sessions
+
+* **Development Tools**:
+  * Generate CDS entities from existing tables
+  * Create OData service previews
+  * Convert between different object formats (SQL, CDS, EDMX, OpenAPI)
+  * Test stored procedures with parameter inputs
+
+* **Administration Functions**:
+  * Manage HDI containers and groups
+  * View and configure users and roles
+  * Monitor trace files and logs
+  * Access BTP service instances and bindings
+
+**User Experience Features:**
+
+* **Responsive Design**: The interface adapts to different screen sizes and devices, providing an optimal experience on desktop, tablet, or mobile
+* **Navigation**: Intuitive menu structure with breadcrumbs and search functionality
+* **History**: Command history tracking for easy repetition of common tasks
+* **Themes**: Support for light and dark modes
+* **Bookmarks**: Save frequently used commands and queries for quick access
+* **Multi-tab Support**: Work with multiple objects or queries simultaneously
+
+**How to Use:**
+
+Simply execute the command:
+
+```shell
+hana-cli ui
+```
+
+The server will start, your browser will open automatically to `http://localhost:<port>`, and you'll be presented with the hana-cli launchpad interface. From there, you can navigate through tiles representing different functional areas, each providing access to related commands and features.
+
+**Benefits of the Web UI:**
+
+* **Ease of Use**: No need to remember command syntax or parameters
+* **Visual Feedback**: Rich formatting of results with tables, charts, and graphs
+* **Collaboration**: Share results easily by copying links or exporting data
+* **Documentation**: Inline help and tooltips for every feature
+* **Efficiency**: Faster execution of complex workflows through guided interfaces
+* **Accessibility**: Work from any device with a web browser
+
+The UI command effectively transforms hana-cli from a powerful command-line tool into a full-featured web application, making SAP HANA development and administration accessible to users who prefer graphical interfaces while maintaining all the power and flexibility of the underlying CLI commands.
 
 ### ups
 
@@ -2451,6 +2940,27 @@ Troubleshooting:
                                                       [boolean] [default: false]
   --debug, --Debug           Debug hana-cli itself by adding output of LOTS of
                              intermediate details     [boolean] [default: false]
+Options:
+  -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]
+```
+
+### upsUI
+
+```shell
+hana-cli upsUI
+[aliases: upsInstancesUI, upsinstancesui, upServicesUI, listupsui,
+                                                                  upsservicesui]
+List all Cloud Foundry user provided service instances in your target Space
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
 Options:
   -c, --cf, --cmd  Cloud Foundry?                      [boolean] [default: true]
 ```
@@ -2526,6 +3036,18 @@ Options:
   -v, --view, --View      Database View                  [string] [default: "*"]
   -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit             Limit results                  [number] [default: 200]
+```
+
+## Unit Testing
+
+This project includes comprehensive unit tests to ensure code quality and reliability. The test suite covers core functionality, command execution, and database operations.
+
+For detailed information about running tests, writing new tests, and understanding the test structure, please refer to the [Unit Testing Documentation](./tests/README_UNIT_TESTS.md).
+
+Quick start for running tests:
+
+```shell
+npm test
 ```
 
 ## How to obtain support
