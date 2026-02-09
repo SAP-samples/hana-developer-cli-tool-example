@@ -196,6 +196,7 @@ The web server is automatically started when using certain CLI commands with the
 The hana-cli tool includes a complete browser-based interface built with SAP UI5 and the Fiori Launchpad, providing a graphical alternative to the command-line interface. This web interface offers an intuitive, tile-based navigation system for all database operations.
 
 **Key Features:**
+
 * **Fiori Launchpad Interface**: Modern, responsive UI with organized tile groups
 * **Multiple UI5 Applications**: Specialized apps for listing, inspecting, and managing database objects
 * **Real-Time Operations**: WebSocket-based communication for live updates and long-running tasks
@@ -207,6 +208,7 @@ The hana-cli tool includes a complete browser-based interface built with SAP UI5
 * **Integrated Help**: SAP Digital Foundation Adapter (DFA) with contextual assistance
 
 **Quick Start:**
+
 ```shell
 hana-cli tables -w    # Launch web interface with tables view
 hana-cli serve        # Start the web server standalone

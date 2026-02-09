@@ -638,7 +638,7 @@ export function route(app, server) {
 }
 ```
 
-3. The route will be automatically loaded at server startup
+1. The route will be automatically loaded at server startup
 
 ### Best Practices
 
