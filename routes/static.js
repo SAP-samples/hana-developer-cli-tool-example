@@ -27,7 +27,6 @@ export function route (app) {
                .status(200)
                .json(jsonData)           
         } catch (error) {
-            base.error(error)
             next(error) // Pass to error handler
         }
     }) 

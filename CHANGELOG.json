@@ -7,7 +7,9 @@
             "Migrate from Express 4.x to 5.x now that CAP supports Express 5 as well. This is a major internal change but should be mostly transparent to users. If you do see any issues please report them.",
             "Convert from node-zip to JSZip for better support and maintenance going forward",
             "Low level refactoring of DB connection handling to better support MCP server and future features. This should be mostly transparent to users but if you see any issues please report them.",
-            "Using AI Code Generation - expand the test cases and test coverage"            
+            "Using AI Code Generation - expand the test cases and test coverage",
+            "Enhanced README files throughout the project with better documentation and more examples",
+            "First version of German Localization"            
         ]
     },
     {

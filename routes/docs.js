@@ -19,7 +19,6 @@ export function route(app) {
                .status(200)
                .send(html)
         } catch (error) {
-            base.error(error)
             next(error) // Pass to error handler
         }
     })
@@ -33,7 +32,6 @@ export function route(app) {
                .status(200)
                .send(html)
         } catch (error) {
-            base.error(error)
             next(error) // Pass to error handler
         }
     })

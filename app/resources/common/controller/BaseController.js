@@ -298,9 +298,31 @@ sap.ui.define([
             }
             sap.ui.require(["sap/m/MessageBox"], (MessageBox) => {
                 console.log(oError)
+                
+                let errorMessage = ""
+                
                 if (oError.statusCode === 500 || oError.statusCode === 400 || oError.statusCode === "500" || oError.statusCode === "400" || oError.status === 500) {
                     var errorRes = oError.responseText
-                    MessageBox.alert(errorRes)
+                    
+                    // Try to parse JSON error response
+                    try {
+                        var errorJson = JSON.parse(errorRes)
+                        // Extract message from JSON if available
+                        if (errorJson.message) {
+                            errorMessage = errorJson.message
+                        } else if (errorJson.error) {
+                            // Handle nested error object
+                            errorMessage = typeof errorJson.error === 'string' ? errorJson.error : errorJson.error.message || JSON.stringify(errorJson.error)
+                        } else {
+                            // If no standard message field, display formatted JSON
+                            errorMessage = errorRes
+                        }
+                    } catch (e) {
+                        // If not JSON, use the raw response text
+                        errorMessage = errorRes
+                    }
+                    
+                    MessageBox.alert(errorMessage)
                     return
                 } else {
                     MessageBox.alert(oError.statusText)

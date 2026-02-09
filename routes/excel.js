@@ -42,7 +42,6 @@ export function route (app) {
 			//return res.type("application/vnd.ms-excel").status(200).send(excelOutput)
 
         } catch (error) {
-            base.error(error)
             next(error) // Pass to error handler
         }
     })

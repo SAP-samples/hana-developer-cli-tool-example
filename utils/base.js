@@ -807,20 +807,21 @@ export function output(content) {
  * @param {Function} next - Express next middleware function
  */
 export function globalErrorHandler(err, req, res, next) {
-    error(`Unhandled error: ${err.message}`)
+    // Log error without calling base.error() which would exit the process in CLI mode
+    console.error(`Unhandled error: ${err.message}`)
+    debug(`Unhandled error: ${err.message}`)
+    debug(err.stack)
+    
     // @ts-ignore
     const statusCode = err.statusCode || err.status || 500
-    const message = process.env.NODE_ENV === 'development' 
-        ? err.message 
-        : 'Internal Server Error'
+    // Always send the actual error message to help users diagnose issues
+    const message = err.message || 'Internal Server Error'
     
     // Don't call next() after sending response (Express 5 requirement)
     res.status(statusCode).json({
-        error: {
-            message: message,
-            status: statusCode,
-            ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-        }
+        message: message,
+        status: statusCode,
+        ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
     })
 }
 

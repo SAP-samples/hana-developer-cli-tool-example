@@ -13,7 +13,6 @@ export function route (app) {
                .status(200)
                .json(base.getPrompts())
         } catch (error) {
-            base.error(error)
             next(error) // Pass to error handler instead of direct send
         }
     })
@@ -26,7 +25,6 @@ export function route (app) {
             return res.status(200)
                       .json({ status: 'ok' })
         } catch (error) {
-            base.error(error)
             next(error) // Pass to error handler
         }
     }) 
