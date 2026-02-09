@@ -60,7 +60,7 @@ export async function getSchemas(prompts) {
 
     let results = await getSchemasInt(prompts.schema, db, prompts.limit, prompts.all)
     base.outputTableFancy(results)
-    base.end()
+
     return results
   } catch (error) {
     base.error(error)

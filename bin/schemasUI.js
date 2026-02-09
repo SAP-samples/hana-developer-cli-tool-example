@@ -17,7 +17,7 @@ export async function getSchemas(prompts) {
   try {
     base.setPrompts(prompts)
     await base.webServerSetup('/ui/#schemas-ui')
-    return base.end()
+    // Don't call base.end() - let the web server keep running
   } catch (error) {
     base.error(error)
   }

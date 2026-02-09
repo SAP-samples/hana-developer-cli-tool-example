@@ -28,78 +28,128 @@ export function route (app) {
                .status(200)
                .json(hana)
         } catch (error) {
+            console.error(`${error}`)
             next(error) // Pass to centralized error handler
-            return console.error(`${error}`)
         }
     })
 
-    app.get(['/hana/tables', '/hana/tables-ui'], async (req, res) => {
-        listHandler(res, "../bin/tables", 'getTables')
+    app.get(['/hana/tables', '/hana/tables-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/tables", 'getTables')
+        } catch (error) {
+            next(error)
+        }
     })
 
-    app.get(['/hana/views', '/hana/views-ui'], async (req, res) => {
-        listHandler(res, "../bin/views", 'getViews')
+    app.get(['/hana/views', '/hana/views-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/views", 'getViews')
+        } catch (error) {
+            next(error)
+        }
     })
 
-    app.get(['/hana/schemas', '/hana/schemas-ui'], async (req, res) => {
-        listHandler(res, "../bin/schemas", 'getSchemas')
+    app.get(['/hana/schemas', '/hana/schemas-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/schemas", 'getSchemas')
+        } catch (error) {
+            next(error)
+        }
     })
 
-    app.get(['/hana/containers', '/hana/containers-ui'], async (req, res) => {
-        listHandler(res, "../bin/containers", 'getContainers')
+    app.get(['/hana/containers', '/hana/containers-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/containers", 'getContainers')
+        } catch (error) {
+            next(error)
+        }
     })
 
-    app.get(['/hana/dataTypes', '/hana/dataTypes-ui'], async (req, res) => {
-        listHandler(res, "../bin/dataTypes", 'dbStatus')
+    app.get(['/hana/dataTypes', '/hana/dataTypes-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/dataTypes", 'dbStatus')
+        } catch (error) {
+            next(error)
+        }
     })
 
-    app.get(['/hana/features', '/hana/features-ui'], async (req, res) => {
-        listHandler(res, "../bin/features", 'dbStatus')
+    app.get(['/hana/features', '/hana/features-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/features", 'dbStatus')
+        } catch (error) {
+            next(error)
+        }
     })
     
-    app.get(['/hana/featureUsage', '/hana/featureUsage-ui'], async (req, res) => {
-        listHandler(res, "../bin/featureUsage", 'dbStatus')
+    app.get(['/hana/featureUsage', '/hana/featureUsage-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/featureUsage", 'dbStatus')
+        } catch (error) {
+            next(error)
+        }
     })
 
-    app.get(['/hana/functions', '/hana/functions-ui'], async (req, res) => {
-        listHandler(res, "../bin/functions", 'getFunctions')
+    app.get(['/hana/functions', '/hana/functions-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/functions", 'getFunctions')
+        } catch (error) {
+            next(error)
+        }
     })
     
-    app.get(['/hana/hdi', '/hana/hdi-ui'], async (req, res) => {
-        listHandler(res, "../bin/hanaCloudHDIInstances", 'listInstances')
+    app.get(['/hana/hdi', '/hana/hdi-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/hanaCloudHDIInstances", 'listInstances')
+        } catch (error) {
+            next(error)
+        }
     })
 
-    app.get(['/hana/sbss', '/hana/sbss-ui'], async (req, res) => {
-        listHandler(res, "../bin/hanaCloudSBSSInstances", 'listInstances')
+    app.get(['/hana/sbss', '/hana/sbss-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/hanaCloudSBSSInstances", 'listInstances')
+        } catch (error) {
+            next(error)
+        }
     })
 
-    app.get(['/hana/schemaInstances', '/hana/schemaInstances-ui'], async (req, res) => {
-        listHandler(res, "../bin/hanaCloudSchemaInstances", 'listInstances')
+    app.get(['/hana/schemaInstances', '/hana/schemaInstances-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/hanaCloudSchemaInstances", 'listInstances')
+        } catch (error) {
+            next(error)
+        }
     })
 
-    app.get(['/hana/securestore', '/hana/securestore-ui'], async (req, res) => {
-        listHandler(res, "../bin/hanaCloudSecureStoreInstances", 'listInstances')
+    app.get(['/hana/securestore', '/hana/securestore-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/hanaCloudSecureStoreInstances", 'listInstances')
+        } catch (error) {
+            next(error)
+        }
     })
 
-    app.get(['/hana/ups', '/hana/ups-ui'], async (req, res) => {
-        listHandler(res, "../bin/hanaCloudUPSInstances", 'listInstances')
+    app.get(['/hana/ups', '/hana/ups-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/hanaCloudUPSInstances", 'listInstances')
+        } catch (error) {
+            next(error)
+        }
     })
 
     
-    app.get(['/hana/indexes', '/hana/indexes-ui'], async (req, res) => {
-        listHandler(res, "../bin/indexes", 'getIndexes')
+    app.get(['/hana/indexes', '/hana/indexes-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/indexes", 'getIndexes')
+        } catch (error) {
+            next(error)
+        }
     })
 }
 
 export async function listHandler(res, lib, func) {
-    try {
-        await base.clearConnection()
-        const targetLibrary = await import(`${lib}.js`)
-        let results = await targetLibrary[func](base.getPrompts())
-        base.sendResults(res, results)
-    } catch (error) {
-        res.status(500)
-           .json({ error: error.toString() })
-        return console.error(`${error}`)
-    }
+    await base.clearConnection()
+    const targetLibrary = await import(`${lib}.js`)
+    let results = await targetLibrary[func](base.getPrompts())
+    base.sendResults(res, results)
 }

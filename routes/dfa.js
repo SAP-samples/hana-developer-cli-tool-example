@@ -10,7 +10,7 @@ import showdown from 'showdown'
 const {Converter} = showdown
 
 export function route (app) {
-    app.get('/sap/dfa/help/webassistant/catalogue', async (req, res) => {
+    app.get('/sap/dfa/help/webassistant/catalogue', async (req, res, next) => {
         try {
             let input = JSON.parse(getURLQuery(req))
             if (!input.appUrl) {
@@ -29,11 +29,12 @@ export function route (app) {
             })
             res.type("application/json").status(200).send(output)
         } catch (error) {
-            res.status(200).send()
+            // Return empty OK response for missing catalogs
+            res.status(200).json({ status: "OK", data: [] })
         }
     })
 
-    app.get('/sap/dfa/help/webassistant/context', async (req, res) => {
+    app.get('/sap/dfa/help/webassistant/context', async (req, res, next) => {
         try {
             if (!req.query.id) {
                 throw new Error("Missing parameter: id")
@@ -90,7 +91,7 @@ export function route (app) {
             res.type("application/json").status(200).send(output)
 
         } catch (error) {
-            res.status(500).send(error.toString())
+            next(error)
         }
     })
 

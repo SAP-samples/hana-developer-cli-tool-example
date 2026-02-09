@@ -604,22 +604,30 @@ export async function end() {
                 if (spinner) {
                     spinner.stop()
                 }
-                // Exit the process after successful disconnect to return control to CLI
-                process.exit(0)
+                // Only exit the process when running from CLI (not from MCP/programmatic contexts)
+                if (!inGui) {
+                    process.exit(0)
+                }
             })
         } catch (disconnectErr) {
             debug(`Disconnect Exception: ${disconnectErr}`)
             if (spinner) {
                 spinner.stop()
             }
-            process.exit(1)
+            // Only exit the process when running from CLI
+            if (!inGui) {
+                process.exit(1)
+            }
         }
     } else {
-        // No connection to clean up, just stop spinner and exit
+        // No connection to clean up, just stop spinner and exit if needed
         if (spinner) {
             spinner.stop()
         }
-        process.exit(0)
+        // Only exit the process when running from CLI
+        if (!inGui) {
+            process.exit(0)
+        }
     }
 }
 
@@ -745,6 +753,7 @@ export function globalErrorHandler(err, req, res, next) {
         ? err.message 
         : 'Internal Server Error'
     
+    // Don't call next() after sending response (Express 5 requirement)
     res.status(statusCode).json({
         error: {
             message: message,
@@ -796,9 +805,6 @@ export async function webServerSetup(urlPath) {
     app.set('x-powered-by', false) // Disable x-powered-by header for security
     app.disable('etag') // Keep existing etag setting
     
-    // Add centralized error handling setup (must be before routes)
-    app.use(globalErrorHandler)
-    
     // Load routes
     let routesDir = path.join(__dirname, '..', '/routes/**/*.js')
     let files = await glob(upath.normalize(routesDir))
@@ -810,8 +816,11 @@ export async function webServerSetup(urlPath) {
         }
     }
 
-    // Add 404 handler (must be after all routes)
+    // Add 404 handler (must be after all routes but before error handler)
     app.use(notFoundHandler)
+    
+    // Add error handling middleware (must be last, after all routes and 404 handler)
+    app.use(globalErrorHandler)
 
     // Start the Server
     server.on("request", app)

@@ -43,7 +43,7 @@ export async function copy() {
             return base.error(err)
         }
         console.log(base.bundle.getText("saved"))
-        return base.end() 
+        return base.end()
     })
 
    return base.end()

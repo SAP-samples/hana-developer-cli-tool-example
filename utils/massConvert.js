@@ -7,7 +7,7 @@ import * as path from 'path'
 import cds from '@sap/cds'
 import * as dbInspect from '../utils/dbInspect.js'
 import * as fs from 'fs'
-import zipClass from 'node-zip'
+import JSZip from 'jszip'
 
 const progressBarOptionsTemplate = {
     // width: 80,
@@ -444,8 +444,8 @@ async function writeZip(prompts, wss, zip, logOutput) {
     base.blankLine()
     let dir = prompts.folder
     !fs.existsSync(dir) && fs.mkdirSync(dir)
-    let data = await zip.generate({
-        base64: false,
+    let data = await zip.generateAsync({
+        type: 'nodebuffer',
         compression: "DEFLATE"
     })
     let filename = prompts.filename || dir + 'export.zip'
@@ -572,7 +572,7 @@ export async function convert(wss) {
 
         switch (prompts.output) {
             case 'hdbtable': {
-                const zip = new zipClass()
+                const zip = new JSZip()
                 if (prompts.useCatalogPure) {
                     await hdbtableTablesSQL(
                         prompts, results, wss, db, schema, replacer, zip, logOutput
@@ -592,7 +592,7 @@ export async function convert(wss) {
                 break
             }
             case 'hdbmigrationtable': {
-                const zip = new zipClass()
+                const zip = new JSZip()
                 if (prompts.useCatalogPure) {
                     await hdbmigrationtableTablesSQL(
                         prompts, results, wss, db, schema, replacer, zip, logOutput

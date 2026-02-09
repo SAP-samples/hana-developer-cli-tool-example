@@ -16,7 +16,7 @@ export async function listInstances(prompts) {
     try {
       base.setPrompts(prompts)
       await base.webServerSetup('/ui/#securestore-ui')
-      return base.end()
+      // Don't call base.end() - let the web server keep running
     } catch (error) {
       base.error(error)
     }

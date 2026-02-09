@@ -1,8 +1,8 @@
 // @ts-check
 import * as base from '../utils/base.js'
-import bodyParser from 'body-parser'
+import express from 'express'
 
-const jsonParser = bodyParser.json()
+const jsonParser = express.json()
 
 export function route (app) {
     base.debug('Index Route')

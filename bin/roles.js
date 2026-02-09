@@ -57,7 +57,7 @@ export async function getRoles(prompts) {
 
     let results = await getRolesInt(schema, prompts.role, db, prompts.limit)
     base.outputTableFancy(results)
-    base.end()
+
     return results
   } catch (error) {
     base.error(error)

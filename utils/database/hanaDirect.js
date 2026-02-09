@@ -16,7 +16,8 @@ export default class extends DBClientClass {
     }
     
     disconnect(){
-        base.end()
+        // Don't call base.end() as it exits the process
+        // Connection cleanup handled by base module
     }
 
     async listTables() {

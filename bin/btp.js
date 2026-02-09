@@ -132,14 +132,12 @@ export async function handler(argv) {
                 base.promptHandler(argv, callBTP, schema)
             } else {
                 base.error('No subaccount selected')
-                base.end()
             }
         } catch (error) {
             base.error(error)
         }
     } catch (error) {
         base.error(base.bundle.getText("err.BTPNoTarget"))
-        base.end()
     }
 }
 

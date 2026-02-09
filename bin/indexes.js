@@ -59,7 +59,7 @@ export async function getIndexes(prompts) {
 
     let results = await getIndexesInt(schema, prompts.indexes, db, prompts.limit)
     base.outputTableFancy(results)
-    base.end()
+
     return results
   } catch (error) {
     base.error(error)

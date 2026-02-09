@@ -108,8 +108,8 @@ export async function inspectViewHandler(res, lib, func) {
 
         base.sendResults(res, results)
     } catch (error) {
-        res.status(500).send(error.toString())
         console.error(`${error}`)
+        throw error // Let it propagate to be caught by the outer try-catch
     }
 
 

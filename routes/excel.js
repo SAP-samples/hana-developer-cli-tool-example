@@ -27,9 +27,11 @@ export function route (app) {
             }
             // @ts-ignore
             let excelOutput = ``
-            //base.error(`Excel Export temporarily disabled due to issue with install of required module in Business Application Studio`)
-            res.status(500)
-               .json({ error: `Excel Export temporarily disabled due to issue with install of required module in Business Application Studio` })
+            // Excel export is temporarily disabled
+            const disabledError = new Error('Excel Export temporarily disabled due to issue with install of required module in Business Application Studio')
+            // @ts-ignore
+            disabledError.statusCode = 503
+            throw disabledError
             
             /*excel.build([{
               name: base.bundle.getText("gui.Results"),

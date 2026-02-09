@@ -193,7 +193,7 @@ export async function cdsBuild(prompts) {
       object = await dbInspect.getTable(db, schema, prompts.table)
       fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
       constraints = await dbInspect.getConstraints(db, object)
-      let tableSource = await dbInspect.formatCDS(db, object, fields, constraints, "table", "preview")
+      let tableSource = await dbInspect.formatCDS(db, object, fields, constraints, "table", schema, "preview")
       cdsSource +=
 
         `@cds.persistence.skip\n ${tableSource} \n }`
@@ -201,15 +201,13 @@ export async function cdsBuild(prompts) {
       console.log(`Schema: ${schema}, View: ${prompts.table}`)
       object = await dbInspect.getView(db, schema, prompts.table)
       fields = await dbInspect.getViewFields(db, object[0].VIEW_OID)
-      let viewSource = await dbInspect.formatCDS(db, object, fields, null, "view", "preview")
+      let viewSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema, "preview")
       cdsSource +=
         `${viewSource} \n }`
     }
 
     await cdsServerSetup(prompts, cdsSource)
-    return base.end()
-    // Don't call base.end() here - let the CDS server keep the connection open
-    // The server will handle its own lifecycle
+    // Don't call base.end() - let the CDS server keep running
   } catch (error) {
     base.error(error)
   }
@@ -309,16 +307,26 @@ async function cdsServerSetup(prompts, cdsSource) {
   entity = entity.replace(/::/g, "_")
   let graphQLEntity = entity.replace(/_/g, ".")
   base.debug(`GraphQL Entity After ${graphQLEntity}`)
+  base.debug('CDS Source:')
   base.debug(cdsSource)
+  console.log(`✓ Entity name for routes: ${entity}`)
+  console.log('✓ CDS Source preview:')
+  console.log(cdsSource.substring(0, 500) + '...')
 
   // @ts-ignore
   let compiledModel
-  let odataURL = "/odata/v4/opensap.hana.CatalogService/"
+  let odataURL = "/odata/v4/HanaCli"
 
   try {
     // Parse and compile the CDS source to get proper CSN model
     const parsedModel = await cds.parse(cdsSource)
     compiledModel = cds.compile(parsedModel)
+    
+    // Debug: show what's in the compiled model
+    console.log('✓ Compiled model definitions:')
+    Object.keys(compiledModel.definitions || {}).forEach(key => {
+      console.log(`  - ${key}`)
+    })
 
     // Ensure model is properly registered in CDS
     if (!cds.model) {
@@ -327,14 +335,25 @@ async function cdsServerSetup(prompts, cdsSource) {
 
     // Use CDS's built-in Fiori UI generation (powered by @sap/cds-fiori internally)
     // No need to maintain local manifest/fiori HTML copies
+    let actualEntityName = entity // Will be updated from service
     const services = await cds.serve('all').from(compiledModel, {
       crashOnError: false
     })
       .at(odataURL)
       .in(app)
       .with(srv => {
+        // Log the actual entity names in the service for debugging
+        const entityNames = Object.keys(srv.entities || {})
+        base.debug(`Service entities: ${entityNames.join(', ')}`)
+        console.log(`✓ Service entities: ${entityNames.join(', ')}`)
+        
+        // Use the actual entity name from the service (first entity)
+        // This ensures we match what CDS actually registered
+        actualEntityName = entityNames.length > 0 ? entityNames[0] : entity
+        console.log(`✓ Using entity name: ${actualEntityName}`)
+        
         // @ts-ignore
-        srv.on(['READ'], [entity, `HanaCli.${graphQLEntity}`], async (req) => {
+        srv.on(['READ'], [actualEntityName], async (req) => {
 
           base.debug(`In Read Exit ${prompts.table}`)
 
@@ -419,7 +438,7 @@ async function cdsServerSetup(prompts, cdsSource) {
 
     // CDS OData - add homepage for preview
     // Serve homepage with links to available endpoints
-    app.get('/', (_, res) => res.send(getIndex(odataURL, entity)))
+    app.get('/', (_, res) => res.send(getIndex(odataURL, actualEntityName)))
 
     // Setup Swagger UI for API documentation
     try {
@@ -541,11 +560,11 @@ export function getIndex(odataURL, entity) {
           <h2> Service Endpoints: </h2>
               <h3>
                   <a href="${odataURL}">${odataURL}</a> /
-                  <a href="${odataURL}$metadata">$metadata</a>
+                  <a href="${odataURL}/$metadata">$metadata</a>
               </h3>
               <ul>
                   <li>
-                      <a href="${odataURL}${entity}">${entity}</a>                    
+                      <a href="${odataURL}/${entity}">${entity}</a>                    
                   </li>
               </ul>
       </body>

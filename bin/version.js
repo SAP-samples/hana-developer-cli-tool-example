@@ -34,7 +34,8 @@ export async function verOutput() {
   if (info['hana-cli'] < selfVersion) {
     console.log(`${colors.red('Local version of hana-cli is out of date.')} Consider upgrading with "${colors.green('npm upgrade -g hana-cli')}"`)
   }
-  base.end()
+  // No need to call base.end() as there's no DB connection to clean up
+  // Let the process exit naturally to avoid Windows libuv assertion errors
 }
 
 export function version4(pkgPath = '..', info = {}, parentPath) {

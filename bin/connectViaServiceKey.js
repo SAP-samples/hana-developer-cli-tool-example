@@ -178,9 +178,9 @@ export async function saveEnv(options, input) {
         throw new Error(`${base.bundle.getText("errConn")} ${JSON.stringify(err)}`)
       }
       console.log(base.bundle.getText("saved"))
-      base.end()
+      // Don't call base.end() as it exits the process
     })
   } else {
-    base.end()
+    // No need to call base.end() for non-save path
   }
 }

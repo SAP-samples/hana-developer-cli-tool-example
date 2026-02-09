@@ -97,12 +97,11 @@ export default class dbClientClass {
         base.debug(`Disconnect`)
         base.debug(`In Gui: ${base.isGui(this.#prompts)}`)
         if (!base.isGui(this.#prompts)) {
-            base.end()
+            // Don't call base.end() as it exits the process
             base.debug(`CDS Exit is Called`)
             cds.exit()
-        } else {
-            base.end()
         }
+        // Connection cleanup handled naturally
     }
 
     /**
