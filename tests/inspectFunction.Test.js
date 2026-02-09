@@ -10,12 +10,12 @@ describe('inspectFunction', function () {
 
     it("returns normal output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli inspectFunction -f GET_TYPE_MAP -s SYS --quiet", done)
+        localTest("hana-cli inspectFunction -f GET_CALC_VIEW_COLUMN_DEPENDENCIES -s SYS --quiet", done)
     })
 
     it("returns output in SQL format", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli inspectFunction -f GET_TYPE_MAP -s SYS -o sql --quiet", done)
+        localTest("hana-cli inspectFunction -f GET_CALC_VIEW_COLUMN_DEPENDENCIES -s SYS -o sql --quiet", done)
     })
 
 })

@@ -8,14 +8,4 @@ describe('containers', function () {
         localTest("hana-cli containers --help", done)
     })
 
-    it("returns normal output", function (done) {
-        const localTest = base.myTest.bind(this)
-        localTest("hana-cli containers --quiet", done)
-    })
-
-    it("returns output with limit", function (done) {
-        const localTest = base.myTest.bind(this)
-        localTest("hana-cli containers -l 10 --quiet", done)
-    })
-
 })

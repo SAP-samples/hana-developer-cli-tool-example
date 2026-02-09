@@ -10,22 +10,22 @@ describe('inspectView', function () {
 
     it("returns normal output with quiet", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli inspectView -v M_VIEWS -s SYS --quiet", done)
+        localTest("hana-cli inspectView -v M_FEATURES -s SYS --quiet", done)
     })
 
     it("returns output in SQL format", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli inspectView -v M_VIEWS -s SYS -o sql --quiet", done)
+        localTest("hana-cli inspectView -v M_FEATURES -s SYS -o sql --quiet", done)
     })
 
     it("returns output in CDS format", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli inspectView -v M_VIEWS -s SYS -o cds --quiet", done)
+        localTest("hana-cli inspectView -v M_FEATURES -s SYS -o cds --quiet", done)
     })
 
     it("returns output in JSON format", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli inspectView -v M_VIEWS -s SYS -o json --quiet", done)
+        localTest("hana-cli inspectView -v M_FEATURES -s SYS -o json --quiet", done)
     })
 
 })

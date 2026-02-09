@@ -10,12 +10,12 @@ describe('inspectProcedure', function () {
 
     it("returns normal output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli inspectProcedure -p GET_TYPE_MAP -s SYS --quiet", done)
+        localTest("hana-cli inspectProcedure -p GET_CHECK_ACTIONS -s SYS --quiet", done)
     })
 
     it("returns output in SQL format", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli inspectProcedure -p GET_TYPE_MAP -s SYS -o sql --quiet", done)
+        localTest("hana-cli inspectProcedure -p GET_CHECK_ACTIONS -s SYS -o sql --quiet", done)
     })
 
 })
