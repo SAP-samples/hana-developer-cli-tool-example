@@ -9,6 +9,12 @@ import { executeCommand, formatResult, validateEnvironment } from './executor.js
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 /**
+ * Sanitize tool name to conform to MCP naming rules [a-z0-9_-]
+ */
+function sanitizeToolName(name) {
+    return name.replace(/[^a-z0-9_-]/g, '_');
+}
+/**
  * MCP Server for SAP HANA CLI Tools
  *
  * Exposes all hana-cli commands as MCP tools that can be called by LLMs
@@ -44,7 +50,7 @@ class HanaCliMcpServer {
             for (const [name, commandModule] of this.commands) {
                 const info = extractCommandInfo(commandModule);
                 tools.push({
-                    name: `hana_${name}`,
+                    name: `hana_${sanitizeToolName(name)}`,
                     description: info.description,
                     inputSchema: info.schema,
                 });
@@ -52,7 +58,7 @@ class HanaCliMcpServer {
                 if (info.aliases && info.aliases.length > 0) {
                     for (const alias of info.aliases) {
                         tools.push({
-                            name: `hana_${alias}`,
+                            name: `hana_${sanitizeToolName(alias)}`,
                             description: `${info.description} (alias for ${name})`,
                             inputSchema: info.schema,
                         });
@@ -69,11 +75,17 @@ class HanaCliMcpServer {
             // Check if command exists (either as main name or alias)
             let actualCommandName = commandName;
             if (!this.commands.has(commandName)) {
-                // Check if it's an alias
+                // Check if it's an alias (compare sanitized versions)
                 for (const [cmdName, cmdModule] of this.commands) {
-                    if (cmdModule.aliases && cmdModule.aliases.includes(commandName)) {
-                        actualCommandName = cmdName;
-                        break;
+                    if (cmdModule.aliases) {
+                        for (const alias of cmdModule.aliases) {
+                            if (sanitizeToolName(alias) === commandName) {
+                                actualCommandName = cmdName;
+                                break;
+                            }
+                        }
+                        if (actualCommandName !== commandName)
+                            break;
                     }
                 }
             }
