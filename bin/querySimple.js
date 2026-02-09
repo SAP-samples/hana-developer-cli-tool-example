@@ -136,7 +136,7 @@ export async function dbQuery(prompts) {
           //await toFile(prompts.folder, prompts.filename, 'xlsx', excelOutput)
         } else {
           base.error(base.bundle.getText("errExcel"))
-          dbClient.disconnect()
+          await dbClient.disconnect()
           return
         }
         break
@@ -145,7 +145,7 @@ export async function dbQuery(prompts) {
           await toFile(prompts.folder, prompts.filename, 'json', JSON.stringify(results, null, 2))
         } else {
           console.log(highlight(JSON.stringify(results, null, 2)))
-          dbClient.disconnect()
+          await dbClient.disconnect()
           return JSON.stringify(results, null, 2)
         }
         break
@@ -156,7 +156,7 @@ export async function dbQuery(prompts) {
         } else {
           const csv = await parser.parse(results).promise()
           console.log(highlight(csv))
-          dbClient.disconnect()
+          await dbClient.disconnect()
           return csv
         }
         break
@@ -168,10 +168,10 @@ export async function dbQuery(prompts) {
         }
         break
     }
-    dbClient.disconnect()
+    await dbClient.disconnect()
     return results
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }
 

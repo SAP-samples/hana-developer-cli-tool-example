@@ -15,6 +15,6 @@ export async function getChangeLog(prompts) {
     await base.webServerSetup('/docs/changelog')
     // Don't call base.end() - let the web server keep running
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }

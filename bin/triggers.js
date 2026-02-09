@@ -71,7 +71,7 @@ export async function getTriggers(prompts) {
 
     return results
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }
 

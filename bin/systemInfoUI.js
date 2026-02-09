@@ -16,7 +16,7 @@ export async function sysInfo(prompts) {
     await base.webServerSetup('/ui/#systeminfo-ui')
     // Don't call base.end() - let the web server keep running
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 
 }

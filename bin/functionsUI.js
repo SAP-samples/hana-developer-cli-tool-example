@@ -18,6 +18,6 @@ export async function getFunctions(prompts) {
     await base.webServerSetup('/ui/#functions-ui')
     // Don't call base.end() - let the web server keep running
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }

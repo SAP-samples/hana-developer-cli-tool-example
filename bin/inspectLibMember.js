@@ -100,6 +100,6 @@ export async function libraryMemInspect(prompts) {
     }
     return base.end()
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }

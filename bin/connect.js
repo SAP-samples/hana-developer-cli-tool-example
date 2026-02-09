@@ -127,7 +127,7 @@ export async function dbConnect(input) {
 
     return base.end()
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }
 

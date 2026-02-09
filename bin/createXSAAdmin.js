@@ -51,6 +51,6 @@ export async function activate(prompts) {
     console.table(resultsGrant)
     return base.end()
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }

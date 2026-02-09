@@ -90,6 +90,6 @@ export async function libraryInspect(prompts) {
     }
     return base.end()
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }

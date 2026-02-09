@@ -21,6 +21,6 @@ export async function certs(prompts) {
     base.outputTableFancy(results)
     return base.end()
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }

@@ -17,6 +17,6 @@ export async function tableInspect(prompts) {
     await base.webServerSetup('/ui/#inspectTable-ui')
     // Don't call base.end() - let the web server keep running
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }

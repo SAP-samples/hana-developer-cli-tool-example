@@ -15,9 +15,11 @@ export default class extends DBClientClass {
         return db
     }
     
-    disconnect(){
+    async disconnect(){
         // Don't call base.end() as it exits the process
-        // Connection cleanup handled by base module
+        // Instead use disconnectOnly to cleanup connection without exiting
+        base.debug(`hanaDirect disconnect called`)
+        await base.disconnectOnly()
     }
 
     async listTables() {

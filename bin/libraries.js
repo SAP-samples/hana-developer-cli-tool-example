@@ -59,7 +59,7 @@ export async function getLibraries(prompts) {
     base.end()
     return results
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }
 

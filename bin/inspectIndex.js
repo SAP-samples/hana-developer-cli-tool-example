@@ -62,6 +62,6 @@ export async function indexInspect(prompts) {
 
     return base.end()
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }

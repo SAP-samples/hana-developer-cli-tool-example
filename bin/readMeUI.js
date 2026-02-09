@@ -16,6 +16,6 @@ export async function readMe(prompts){
     await base.webServerSetup('/docs/readme')
     // Don't call base.end() - let the web server keep running
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }

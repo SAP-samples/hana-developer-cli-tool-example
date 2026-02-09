@@ -62,6 +62,6 @@ export async function userInspect(prompts) {
     base.outputTableFancy(resultsPrivs)
     return base.end()
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }

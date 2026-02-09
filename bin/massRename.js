@@ -151,6 +151,6 @@ export async function rename(result) {
 
     return base.end()
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }

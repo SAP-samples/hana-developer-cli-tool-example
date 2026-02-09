@@ -82,7 +82,7 @@ export async function activate(prompts) {
     return base.end()
 
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 
 }

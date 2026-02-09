@@ -318,6 +318,6 @@ export async function viewInspect(prompts) {
     await base.end()
     return results
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }

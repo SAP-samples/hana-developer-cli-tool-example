@@ -37,7 +37,7 @@ export async function launchHdbsql(prompts) {
     await spawn(cmd, [], { shell: true, stdio: 'inherit' })
     return base.end()
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 
 }

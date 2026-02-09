@@ -21,6 +21,6 @@ export async function iniFiles(prompts) {
 
     return results
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }

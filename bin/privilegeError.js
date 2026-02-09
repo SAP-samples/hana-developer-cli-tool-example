@@ -42,6 +42,6 @@ export async function dbCall(prompts) {
     base.end()
     return object.results[0]
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }

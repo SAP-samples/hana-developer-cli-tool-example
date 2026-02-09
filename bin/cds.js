@@ -209,7 +209,7 @@ export async function cdsBuild(prompts) {
     await cdsServerSetup(prompts, cdsSource)
     // Don't call base.end() - let the CDS server keep running
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 
 }

@@ -78,10 +78,10 @@ export async function getTables(prompts) {
 
     let results = await dbClient.listTables()
     base.outputTableFancy(results)
-    dbClient.disconnect()
+    await dbClient.disconnect()
 
     return results
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }

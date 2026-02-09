@@ -170,14 +170,16 @@ export async function clearConnection() {
  */
 export async function createDBConnection(options) {
     if (!dbConnection) {
+        let rawClient
         if (options) {
-            dbConnection = await conn.createConnection(options, true)
+            rawClient = await conn.createConnection(options, true)
         } else {
-            dbConnection = await conn.createConnection(prompts, false)
+            rawClient = await conn.createConnection(prompts, false)
         }
+        dbClassInstance = new dbClass(rawClient)
+        dbConnection = dbClassInstance  // Store the wrapped instance
     }
-    dbClassInstance = new dbClass(dbConnection)
-    return dbClassInstance
+    return dbConnection
 }
 
 /**
@@ -561,19 +563,24 @@ export function promptHandler(argv, processingFunction, input, iConn = true, iDe
  * Handle Errors cleanup connections and decide how to alter the user
  * @param {*} error - Error Object
  */
-export function error(error) {
+export async function error(error) {
     debug(`Error`)
     if (dbConnection && dbConnection.client && dbConnection.client._settings) {
         debug(`HANA Disconnect Started`)
         try {
-            dbConnection.disconnect((err) => {
-                if (err) {
-                    debug(`Disconnect Error: ${err}`)
-                }
-                debug(`HANA Disconnect Completed`)
+            await new Promise((resolve) => {
+                dbConnection.client.disconnect((err) => {
+                    if (err) {
+                        debug(`Disconnect Error: ${err}`)
+                    }
+                    debug(`HANA Disconnect Completed`)
+                    dbConnection = null
+                    resolve()
+                })
             })
         } catch (disconnectErr) {
             debug(`Disconnect Exception: ${disconnectErr}`)
+            dbConnection = null
         }
     }
     if (spinner) {
@@ -582,7 +589,53 @@ export function error(error) {
     if (inDebug || inGui) {
         throw error
     } else {
-        return console.error(`${error}`)
+        console.error(`${error}`)
+        // Exit process after error in CLI mode
+        if (!inGui) {
+            process.exit(1)
+        }
+    }
+}
+
+/**
+ * Disconnect database connection without exiting process
+ * @returns {Promise<void>}
+ */
+export async function disconnectOnly() {
+    debug(`Disconnect Only`)
+    if (dbConnection && dbConnection.client && dbConnection.client._settings) {
+        debug(`HANA Disconnect Started`)
+        return new Promise((resolve, reject) => {
+            try {
+                dbConnection.client.disconnect((err) => {
+                    if (err) {
+                        debug(`Disconnect Error: ${err}`)
+                        dbConnection = null
+                        reject(err)
+                    } else {
+                        debug(`HANA Disconnect Completed`)
+                        dbConnection = null
+                        if (spinner) {
+                            spinner.stop()
+                        }
+                        resolve()
+                    }
+                })
+            } catch (disconnectErr) {
+                debug(`Disconnect Exception: ${disconnectErr}`)
+                if (spinner) {
+                    spinner.stop()
+                }
+                dbConnection = null
+                reject(disconnectErr)
+            }
+        })
+    } else {
+        debug(`No connection to disconnect`)
+        if (spinner) {
+            spinner.stop()
+        }
+        return Promise.resolve()
     }
 }
 
@@ -594,7 +647,7 @@ export async function end() {
     if (dbConnection && dbConnection.client && dbConnection.client._settings) {
         debug(`HANA Disconnect Started`)
         try {
-            dbConnection.disconnect((err) => {
+            dbConnection.client.disconnect((err) => {
                 if (err) {
                     dbConnection = null
                     debug(`Disconnect Error: ${err}`)

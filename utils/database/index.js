@@ -62,14 +62,32 @@ export default class dbClientClass {
                 throw new Error(`No CAP/CDS Project Configuration Found. Commands via Profiles can only be performed in CAP projects`)
             }
             if (optionsCDS.kind === 'sqlite') {  //SQLite CDS
+                // Load actual SQLite credentials and merge them into optionsCDS if needed
+                const conn = await import("../connections.js")
+                const credentials = await conn.getConnOptions(prompts)
+                if (credentials && credentials.sqlite) {
+                    optionsCDS.credentials = credentials.sqlite
+                }
                 const { default: classAccess } = await import("./sqlite.js")
                 childClass = new classAccess(prompts, optionsCDS)
             }
             else if (optionsCDS.kind === 'postgres') { //PostgresSQL CDS
+                // Load actual Postgres credentials and merge them into optionsCDS if needed
+                const conn = await import("../connections.js")
+                const credentials = await conn.getConnOptions(prompts)
+                if (credentials && credentials.postgres) {
+                    optionsCDS.credentials = credentials.postgres
+                }
                 const { default: classAccess } = await import("./postgres.js")
                 childClass = new classAccess(prompts, optionsCDS)
             }
             else if (optionsCDS.kind === 'hana') { //HANA CDS
+                // Load actual HANA credentials and merge them into optionsCDS
+                const conn = await import("../connections.js")
+                const credentials = await conn.getConnOptions(prompts)
+                if (credentials && credentials.hana) {
+                    optionsCDS.credentials = credentials.hana
+                }
                 const { default: classAccess } = await import("./hanaCDS.js")
                 childClass = new classAccess(prompts, optionsCDS)
             }
@@ -93,13 +111,13 @@ export default class dbClientClass {
     /**
     * Disconnect from the target database
     */
-    disconnect() {
+    async disconnect() {
         base.debug(`Disconnect`)
         base.debug(`In Gui: ${base.isGui(this.#prompts)}`)
         if (!base.isGui(this.#prompts)) {
             // Don't call base.end() as it exits the process
             base.debug(`CDS Exit is Called`)
-            cds.exit()
+            await cds.exit()
         }
         // Connection cleanup handled naturally
     }

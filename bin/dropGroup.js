@@ -34,7 +34,7 @@ export async function drop(prompts) {
 
     return base.end()
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 
 }

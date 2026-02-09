@@ -18,6 +18,6 @@ export async function test(result) {
     console.log( await conn.createConnection(result))
     return base.end()
   } catch (error) {
-    base.error(error)
+    await base.error(error)
   }
 }
