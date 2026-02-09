@@ -912,12 +912,17 @@ export function getLastResults() {
  * Get the username of the active database connection
  * @returns userName
  */
-export function getUserName() {
+export async function getUserName() {
     let userName = ''
 
-    if (dbConnection) {
-        userName = dbConnection.get('user')
-        debug('Username of db connection: ' + userName)
+    try {
+        const options = await conn.getConnOptions(prompts)
+        if (options && options.hana && options.hana.user) {
+            userName = options.hana.user
+            debug('Username of db connection: ' + userName)
+        }
+    } catch (error) {
+        debug('Could not retrieve username: ' + error.message)
     }
 
     return userName

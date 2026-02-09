@@ -18,7 +18,7 @@ export async function iniFiles(prompts) {
     let results = await dbStatus.execSQL(
       `SELECT * FROM M_INIFILES`)
     base.outputTableFancy(results)
-
+    base.end()
     return results
   } catch (error) {
     await base.error(error)

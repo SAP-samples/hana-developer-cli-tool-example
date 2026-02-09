@@ -143,7 +143,7 @@ export function getLastResults(): any;
  * Get the username of the active database connection
  * @returns userName
  */
-export function getUserName(): string;
+export function getUserName(): Promise<string>;
 export const require: NodeJS.Require;
 /**
  * - instance of sap-hdb-promisified module

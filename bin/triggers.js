@@ -68,7 +68,7 @@ export async function getTriggers(prompts) {
 
     let results = await getTriggersInt(schema, prompts.trigger, prompts.target, db, prompts.limit)
     base.outputTableFancy(results)
-
+    base.end()
     return results
   } catch (error) {
     await base.error(error)

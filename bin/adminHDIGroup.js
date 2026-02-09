@@ -53,7 +53,7 @@ export async function activate(prompts) {
       `DROP TABLE #PRIVILEGES;`)
     console.table(resultsGrant)
 
-    if (base.getUserName() != prompts.user) {
+    if (await base.getUserName() != prompts.user) {
       resultsGrant = await dbStatus.execSQL(
         `GRANT USER ADMIN TO ${prompts.user}`)
       console.table(resultsGrant)

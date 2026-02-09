@@ -68,7 +68,7 @@ export async function getSynonyms(prompts) {
 
     let results = await getSynonymsInt(schema, prompts.synonym, prompts.target, db, prompts.limit)
     base.outputTableFancy(results)
-
+    base.end()
     return results
   } catch (error) {
     await base.error(error)
