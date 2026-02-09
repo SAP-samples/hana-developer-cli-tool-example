@@ -1,14 +1,16 @@
 /**
- * @param {string} [value]
- * @returns {boolean}
+ * Check if a quoted parameter is acceptable (contains no unescaped quotes)
+ * @param {string} [value] - The string value to check
+ * @returns {boolean} - True if the parameter is acceptable, false otherwise
  */
 export function isAcceptableQuotedParameter(value?: string): boolean;
 /**
- * @param {any} [value]
- * @param {any} [maxToken]
- * @returns {any}
+ * Check if a parameter is acceptable for SQL (no injection attempts, within token limit)
+ * @param {string} [value] - The string value to check
+ * @param {number} [maxToken] - Maximum number of tokens allowed (defaults to 1)
+ * @returns {boolean} - True if the parameter is acceptable, false otherwise
  */
-export function isAcceptableParameter(value?: any, maxToken?: any): any;
+export function isAcceptableParameter(value?: string, maxToken?: number): boolean;
 /**
  * Returns the value parameter with all double quotation marks escaped (i. e. doubled).
  * @param {string} [value]

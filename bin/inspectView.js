@@ -101,7 +101,7 @@ export function handler(argv) {
 /**
  * Inspect a view and display its metadata, columns, and definition in various formats
  * @param {object} prompts - Input prompts with schema, view name, and output format
- * @returns {Promise<void>}
+ * @returns {Promise<any>}
  */
 export async function viewInspect(prompts) {
   base.debug('viewInspect')

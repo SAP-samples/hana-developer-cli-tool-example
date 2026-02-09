@@ -90,7 +90,7 @@ async function getProceduresInt(schema, procedure, client, limit) {
   WHERE SCHEMA_NAME LIKE ? 
     AND PROCEDURE_NAME LIKE ? 
   ORDER BY PROCEDURE_NAME `
-  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit || base.sqlInjectionUtils.isAcceptableParameter(limit.toString())) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, procedure])

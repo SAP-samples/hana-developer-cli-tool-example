@@ -90,7 +90,7 @@ async function getSequencesInt(schema, sequence, client, limit) {
   WHERE SCHEMA_NAME LIKE ? 
     AND SEQUENCE_NAME LIKE ? 
   ORDER BY SCHEMA_NAME, SEQUENCE_NAME `
-  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit || base.sqlInjectionUtils.isAcceptableParameter(limit.toString())) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, sequence])

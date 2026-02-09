@@ -1,5 +1,15 @@
-export function handler(argv: any): void;
-export function getContainers(prompts: any): Promise<any>;
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
+export function handler(argv: object): void;
+/**
+ * Get list of HDI containers from database
+ * @param {object} prompts - Input prompts with container group, container name, and limit
+ * @returns {Promise<Array>} - Array of container objects
+ */
+export function getContainers(prompts: object): Promise<any[]>;
 export function getContainersInt(containerGroup: any, container: any, client: any, limit: any): Promise<any>;
 export const command: "containers [containerGroup] [container]";
 export const aliases: string[];

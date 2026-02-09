@@ -6,6 +6,10 @@ export function startSpinnerInt(): void;
  * Stop the Terminal Spinner
  */
 export function stopSpinnerInt(): void;
+/**
+ * Output a blank line to the console
+ * @returns {void}
+ */
 export function blankLine(): void;
 /**
  *
@@ -17,6 +21,10 @@ export function setPrompts(newPrompts: object): void;
  * @returns {object} newPrompts - processed input prompts
  */
 export function getPrompts(): object;
+/**
+ * Clear the database connection
+ * @returns {Promise<void>}
+ */
 export function clearConnection(): Promise<void>;
 /**
  * @param {object} [options] - override the already set parameters with new connection options
@@ -75,7 +83,12 @@ export function promptHandler(argv: import("yargs").CommandBuilder, processingFu
  * Handle Errors cleanup connections and decide how to alter the user
  * @param {*} error - Error Object
  */
-export function error(error: any): void;
+export function error(error: any): Promise<void>;
+/**
+ * Disconnect database connection without exiting process
+ * @returns {Promise<void>}
+ */
+export function disconnectOnly(): Promise<void>;
 /**
  * Normal processing end and cleanup for single command
  */
@@ -112,15 +125,31 @@ export function outputTable(content: any): void;
 /**
  * Output JSON content either as a table or as formatted JSON to console
  * @param {*} content - json content often a HANA result set
- * @returns void
+ * @returns {void}
  */
-export function outputTableFancy(content: any): any;
+export function outputTableFancy(content: any): void;
 /**
  * Only output this content to console if in verbose mode
  * @param {*} content - json content often a HANA result set
  * @returns void
  */
 export function output(content: any): void;
+/**
+ * Global error handling middleware for Express
+ * Compatible with Express 4.x and prepared for 5.x
+ * @param {Error} err - The error object
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
+export function globalErrorHandler(err: Error, req: any, res: any, next: Function): void;
+/**
+ * 404 Not Found handler
+ * Must be placed after all other route definitions
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+export function notFoundHandler(req: any, res: any): void;
 /**
  * Setup Express and Launch Browser
  * @param {string} urlPath - URL Path to Launch

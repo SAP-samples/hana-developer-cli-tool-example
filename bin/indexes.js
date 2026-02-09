@@ -76,7 +76,7 @@ async function getIndexesInt(schema, indexes, client, limit) {
   WHERE SCHEMA_NAME LIKE ? 
     AND INDEX_NAME LIKE ? 
   ORDER BY SCHEMA_NAME, TABLE_NAME, INDEX_NAME `
-  if (limit | base.sqlInjection.isAcceptableParameter(limit)) {
+  if (limit || base.sqlInjection.isAcceptableParameter(limit.toString())) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, indexes])

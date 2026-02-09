@@ -25,7 +25,7 @@ export default class dbClientClass {
     /**
     * Disconnect from the target database
     */
-    disconnect(): void;
+    disconnect(): Promise<void>;
     /**
     * Connect to the target database and set a specific Schema
     * @param {String} schema - Database Schema name

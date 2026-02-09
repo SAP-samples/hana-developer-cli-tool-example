@@ -1,5 +1,15 @@
-export function handler(argv: any): void;
-export function getSchemas(prompts: any): Promise<any>;
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
+export function handler(argv: object): void;
+/**
+ * Get list of schemas from database
+ * @param {object} prompts - Input prompts with schema pattern and limit
+ * @returns {Promise<Array>} - Array of schema objects
+ */
+export function getSchemas(prompts: object): Promise<any[]>;
 export const command: "schemas [schema]";
 export const aliases: string[];
 export const describe: string;

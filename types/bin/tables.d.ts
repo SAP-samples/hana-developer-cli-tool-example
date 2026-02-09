@@ -1,10 +1,15 @@
-export function handler(argv: any): Promise<void>;
-export function getTables(prompts: any): Promise<{
-    SCHEMA_NAME?: string;
-    TABLE_NAME: string;
-    TABLE_OID?: string;
-    COMMENTS?: string;
-}[]>;
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {Promise<void>}
+ */
+export function handler(argv: object): Promise<void>;
+/**
+ * Get list of tables from database
+ * @param {object} prompts - Input prompts with schema, table, and limit
+ * @returns {Promise<Array>} - Array of table objects
+ */
+export function getTables(prompts: object): Promise<any[]>;
 export const command: "tables [schema] [table]";
 export const aliases: string[];
 export const describe: string;

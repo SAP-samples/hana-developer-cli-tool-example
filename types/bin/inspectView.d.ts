@@ -1,12 +1,15 @@
-export function handler(argv: any): void;
-export function viewInspect(prompts: any): Promise<{
-    basic: any;
-    parameters: any;
-    fields: any;
-    sql: string;
-    cds: string;
-    hdbtable: any;
-}>;
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
+export function handler(argv: object): void;
+/**
+ * Inspect a view and display its metadata, columns, and definition in various formats
+ * @param {object} prompts - Input prompts with schema, view name, and output format
+ * @returns {Promise<any>}
+ */
+export function viewInspect(prompts: object): Promise<any>;
 export const command: "inspectView [schema] [view]";
 export const aliases: string[];
 export const describe: string;

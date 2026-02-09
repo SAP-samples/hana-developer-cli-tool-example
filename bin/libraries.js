@@ -89,7 +89,7 @@ async function getLibrariesInt(schema, library, client, limit) {
   WHERE SCHEMA_NAME LIKE ? 
     AND LIBRARY_NAME LIKE ? 
   ORDER BY LIBRARY_NAME `
-  if (limit | base.sqlInjection.isAcceptableParameter(limit)) {
+  if (limit || base.sqlInjection.isAcceptableParameter(limit.toString())) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, library])

@@ -86,7 +86,7 @@ async function getSynonymsInt(schema, synonym, target, client, limit) {
       AND OBJECT_NAME LIKE ?
     ORDER BY SCHEMA_NAME, SYNONYM_NAME `
 
-  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit || base.sqlInjectionUtils.isAcceptableParameter(limit.toString())) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, synonym, target])

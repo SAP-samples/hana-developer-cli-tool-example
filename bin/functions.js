@@ -95,7 +95,7 @@ async function getFunctionsInt(schema, functionName, client, limit) {
   WHERE SCHEMA_NAME LIKE ? 
     AND FUNCTION_NAME LIKE ? 
   ORDER BY FUNCTION_NAME `
-  if (limit | base.sqlInjection.isAcceptableParameter(limit)) {
+  if (limit || base.sqlInjection.isAcceptableParameter(limit.toString())) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, functionName])

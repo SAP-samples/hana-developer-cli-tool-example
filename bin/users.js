@@ -76,7 +76,7 @@ async function getUsersInt(user, client, limit) {
   FROM USERS 
   WHERE USER_NAME LIKE ? 
   ORDER BY USER_NAME `
-  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit || base.sqlInjectionUtils.isAcceptableParameter(limit.toString())) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [user])

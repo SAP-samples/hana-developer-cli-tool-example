@@ -99,7 +99,7 @@ export function removeNewlineCharacter(dataRow) {
 /**
  * Execute a simple database query and output results in various formats
  * @param {object} prompts - Input prompts with query, output format, and file options
- * @returns {Promise<void>}
+ * @returns {Promise<any>}
  */
 export async function dbQuery(prompts) {
   base.debug('dbQuery')

@@ -73,7 +73,7 @@ async function getObjectsInt(schema, object, client, limit) {
   WHERE SCHEMA_NAME LIKE ? 
     AND OBJECT_NAME LIKE ? 
   ORDER BY OBJECT_TYPE, OBJECT_NAME `
-  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit || base.sqlInjectionUtils.isAcceptableParameter(limit.toString())) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, object])

@@ -96,7 +96,7 @@ async function getSchemasInt(schema, client, limit, all) {
         WHERE SCHEMA_NAME LIKE ? 
           AND HAS_PRIVILEGES = ?
 	      ORDER BY SCHEMA_NAME `
-  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit || base.sqlInjectionUtils.isAcceptableParameter(limit.toString())) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, hasPrivileges])

@@ -107,7 +107,7 @@ async function getRolesInt(schema, role, client, limit) {
     ORDER BY ROLE_SCHEMA_NAME, ROLE_NAME `
   }
 
-  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit || base.sqlInjectionUtils.isAcceptableParameter(limit.toString())) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, role])

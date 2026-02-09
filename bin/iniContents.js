@@ -60,7 +60,7 @@ export async function iniContents(prompts) {
     WHERE FILE_NAME LIKE ? 
       AND SECTION LIKE ?
     ORDER BY FILE_NAME, SECTION, KEY `
-    if (prompts.limit | base.sqlInjectionUtils.isAcceptableParameter(prompts.limit)) {
+    if (prompts.limit || base.sqlInjectionUtils.isAcceptableParameter(prompts.limit.toString())) {
       query += `LIMIT ${prompts.limit.toString()}`
     }
     let results = await db.statementExecPromisified(await db.preparePromisified(query), [iniFile, section])

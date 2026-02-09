@@ -107,7 +107,7 @@ async function getTriggersInt(schema, trigger, target, client, limit) {
     AND TRIGGER_NAME LIKE ? 
     AND SUBJECT_TABLE_NAME LIKE ?
   ORDER BY SCHEMA_NAME, TRIGGER_NAME `
-  if (limit | base.sqlInjectionUtils.isAcceptableParameter(limit)) {
+  if (limit || base.sqlInjectionUtils.isAcceptableParameter(limit.toString())) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, trigger, target])

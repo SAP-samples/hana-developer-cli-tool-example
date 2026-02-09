@@ -88,7 +88,7 @@ export async function getContainersInt(containerGroup, container, client, limit)
            AND A.CONTAINER_GROUP_NAME LIKE ?
          ORDER BY A.CONTAINER_NAME `
          
-  if (limit | base.sqlInjection.isAcceptableParameter(limit)) {
+  if (limit || base.sqlInjection.isAcceptableParameter(limit.toString())) {
     query += `LIMIT ${limit.toString()}`
   }
   return await client.statementExecPromisified(

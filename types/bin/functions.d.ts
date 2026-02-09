@@ -1,5 +1,15 @@
-export function handler(argv: any): void;
-export function getFunctions(prompts: any): Promise<any>;
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
+export function handler(argv: object): void;
+/**
+ * Get list of functions from database
+ * @param {object} prompts - Input prompts with schema, function, and limit
+ * @returns {Promise<Array>} - Array of function objects
+ */
+export function getFunctions(prompts: object): Promise<any[]>;
 export const command: "functions [schema] [function]";
 export const aliases: string[];
 export const describe: string;

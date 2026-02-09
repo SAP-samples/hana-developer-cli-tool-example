@@ -1,8 +1,32 @@
-export function handler(argv: any): void;
-export function sysInfo(prompts: any): Promise<void>;
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {void}
+ */
+export function handler(argv: object): void;
+/**
+ * Display system information in various formats
+ * @param {object} prompts - Input prompts with output format selection
+ * @returns {Promise<void>}
+ */
+export function sysInfo(prompts: object): Promise<void>;
+/**
+ * Output basic system information including HANA version and system overview
+ * @returns {Promise<void>}
+ */
 export function basicOutput(): Promise<void>;
-export function environmentOutput(prompts: any): Promise<void>;
-export function dbxOutput(prompts: any): Promise<any>;
+/**
+ * Output environment connection configuration
+ * @param {object} prompts - Input prompts
+ * @returns {Promise<void>}
+ */
+export function environmentOutput(prompts: object): Promise<void>;
+/**
+ * Output connection details in DBX-compatible format
+ * @param {object} prompts - Input prompts
+ * @returns {Promise<void>}
+ */
+export function dbxOutput(prompts: object): Promise<void>;
 export const command: "systemInfo";
 export const aliases: string[];
 export const describe: string;
