@@ -8,7 +8,7 @@
  const bundle = base.bundle
  import * as fs from 'fs'
  import { homedir } from 'os'
- import * as propertiesToJSON from 'properties-to-json'
+ import properties from 'properties'
  import { promisify } from 'util'
  import * as child_process from 'child_process'
  const exec = promisify(child_process.exec)
@@ -22,7 +22,7 @@ export async function getCFConfig() {
     try {
         const data = fs.readFileSync(`${homedir}/.xsconfig`,
             { encoding: 'utf8', flag: 'r' })
-        const object = propertiesToJSON(data)
+        const object = properties.parse(data)
         return object
     }
     catch (error) {
