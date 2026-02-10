@@ -1,29 +1,29 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as dbInspect from '../utils/dbInspect.js'
 
 export const command = 'inspectProcedure [schema] [procedure]'
 export const aliases = ['ip', 'procedure', 'insProc', 'inspectprocedure', 'inspectsp']
-export const describe = base.bundle.getText("inspectProcedure")
+export const describe = baseLite.bundle.getText("inspectProcedure")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   procedure: {
     alias: ['p', 'Procedure', 'sp'],
     type: 'string',
-    desc: base.bundle.getText("procedure")
+    desc: baseLite.bundle.getText("procedure")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   },
   output: {
     alias: ['o', 'Output'],
     choices: ["tbl", "sql"],
     default: "tbl",
     type: 'string',
-    desc: base.bundle.getText("outputType")
+    desc: baseLite.bundle.getText("outputType")
   }
 })
 
@@ -32,7 +32,8 @@ export const builder = base.getBuilder({
  * @param {object} argv - Command line arguments from yargs
  * @returns {void}
  */
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, procedureInspect, {
     procedure: {
       description: base.bundle.getText("procedure"),
@@ -59,6 +60,7 @@ export function handler (argv) {
  * @returns {Promise<void>}
  */
 export async function procedureInspect(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('procedureInspect')
   const { highlight } = await import('cli-highlight')
   try {
@@ -66,7 +68,7 @@ export async function procedureInspect(prompts) {
     const db = await base.createDBConnection()
 
     let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("procedure")}: ${prompts.procedure}`)
+    base.debug(`${baseLite.bundle.getText("schema")}: ${schema}, ${baseLite.bundle.getText("procedure")}: ${prompts.procedure}`)
 
     let proc = await dbInspect.getProcedure(db, schema, prompts.procedure)
     let parameters = await dbInspect.getProcedurePrams(db, proc[0].PROCEDURE_OID)

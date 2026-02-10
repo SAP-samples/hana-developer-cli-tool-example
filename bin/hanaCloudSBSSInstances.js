@@ -1,14 +1,14 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'sbss'
 export const aliases = ['sbssInstances', 'sbssinstances', 'sbssServices', 'listsbss', 'sbssservices', 'sbsss']
-export const describe = base.bundle.getText("sbssInstances")
+export const describe = baseLite.bundle.getText("sbssInstances")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
     cf: {
         alias: ['c', 'cmd'],
-        desc: base.bundle.getText("cfxs"),
+        desc: baseLite.bundle.getText("cfxs"),
         type: 'boolean',
         default: true
     }
@@ -16,18 +16,20 @@ export const builder = base.getBuilder({
 
 export let inputPrompts = {
     cf: {
-        description: base.bundle.getText("cfxs"),
+        description: baseLite.bundle.getText("cfxs"),
         type: 'boolean',
         default: true,
         required: false
     }
 }
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
     base.promptHandler(argv, listInstances, inputPrompts, false)
 }
 
 export async function listInstances(prompts) {
+  const base = await import('../utils/base.js')
     base.debug('listInstances')
     try {
         let cf = null

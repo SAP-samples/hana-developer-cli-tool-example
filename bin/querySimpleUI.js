@@ -1,5 +1,5 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as querySimple from './querySimple.js'
 
 export const command = 'querySimpleUI'
@@ -13,11 +13,13 @@ tempInput.query.required = false
 tempInput.query.ask =  () => {
   return false
 }
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, dbQuery, tempInput)
 }
 
 export async function dbQuery(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('dbQueryUI')
   try {
     base.setPrompts(prompts)

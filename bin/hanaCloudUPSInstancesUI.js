@@ -1,5 +1,5 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as ups from './hanaCloudUPSInstances.js'
 
 export const command = 'upsUI'
@@ -7,13 +7,15 @@ export const aliases = ['upsInstancesUI', 'upsinstancesui', 'upServicesUI', 'lis
 export const describe = ups.describe
 
 export const builder = ups.builder
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
     base.promptHandler(argv, listInstances, ups.inputPrompts)
   }
 
 
 
 export async function listInstances(prompts) {
+  const base = await import('../utils/base.js')
     base.debug('getUpsUI')
     try {
       base.setPrompts(prompts)

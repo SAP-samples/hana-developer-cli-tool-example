@@ -1,16 +1,18 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as conn from '../utils/connections.js'
 
 export const command = 'opendbx'
 export const aliases = ['open', 'openDBX', 'opendb', 'openDBExplorer', 'opendbexplorer', 'dbx', 'DBX']
-export const describe = base.bundle.getText("opendbx")
-export const builder = base.getBuilder({})
-export function handler (argv) {
+export const describe = baseLite.bundle.getText("opendbx")
+export const builder = baseLite.getBuilder({})
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
     base.promptHandler(argv, getDBX, {})
 }
 
 export async function getDBX(prompts) {
+  const base = await import('../utils/base.js')
     base.debug('getDBX')
     const { default:open } = await import('open')
     try {
@@ -44,11 +46,11 @@ export async function getDBX(prompts) {
                 let apiUrl = results[0].VALUE
                 dbxURL = `${apiUrl}/go/hrtt-core`
             } else {
-                await console.log(`${base.bundle.getText("errDBX")}: ${host}`)
+                await console.log(`${baseLite.bundle.getText("errDBX")}: ${host}`)
                 return
             }
         }        
-        open(dbxURL)
+        await open(dbxURL, {wait: true})
         console.log(dbxURL)
         return base.end()
     } catch (error) {

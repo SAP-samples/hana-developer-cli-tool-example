@@ -1,25 +1,26 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'inspectIndex [schema] [index]'
 export const aliases = ['ii', 'index', 'insIndex', 'inspectindex']
-export const describe = base.bundle.getText("inspectIndex")
+export const describe = baseLite.bundle.getText("inspectIndex")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   index: {
     alias: ['i', 'Index'],
     type: 'string',
-    desc: base.bundle.getText("index")
+    desc: baseLite.bundle.getText("index")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   }
 })
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, indexInspect, {
     schema: {
       description: base.bundle.getText("schema"),
@@ -35,13 +36,14 @@ export function handler (argv) {
 }
 
 export async function indexInspect(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('indexInspect')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
     let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.output(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("index")}: ${prompts.index}`)
+    base.output(`${baseLite.bundle.getText("schema")}: ${schema}, ${baseLite.bundle.getText("index")}: ${prompts.index}`)
 
     let query =
       `SELECT *  
@@ -51,7 +53,7 @@ export async function indexInspect(prompts) {
     let indexDetails = (await db.statementExecPromisified(await db.preparePromisified(query), [schema, prompts.index]))
     base.outputTableFancy(indexDetails)
 
-    base.output(base.bundle.getText("indexColumns"))
+    base.output(baseLite.bundle.getText("indexColumns"))
     query =
       `SELECT *
   FROM  INDEX_COLUMNS

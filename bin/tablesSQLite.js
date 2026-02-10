@@ -1,45 +1,46 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 const tables = await import("./tables.js")
 
 export const command = 'tablesSQLite [table]'
 export const aliases = ['tablessqlite', 'tablesqlite', 'tablesSqlite', 'tables-sqlite', 'tables-sql', 'tablesSQL']
-export const describe = base.bundle.getText("tablesSQLite")
+export const describe = baseLite.bundle.getText("tablesSQLite")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   table: {
     alias: ['t', 'Table'],
     type: 'string',
     default: "*",
-    desc: base.bundle.getText("table")
+    desc: baseLite.bundle.getText("table")
   },
   profile: {
     alias: ['p', 'Profile'],
     type: 'string',
     default: "sqlite",
-    desc: base.bundle.getText("profile")
+    desc: baseLite.bundle.getText("profile")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: base.bundle.getText("limit")
+    desc: baseLite.bundle.getText("limit")
   }
 }, false)
 
 export let inputPrompts = {
   table: {
-    description: base.bundle.getText("table"),
+    description: baseLite.bundle.getText("table"),
     type: 'string',
     required: true
   },
   profile: {
-    description: base.bundle.getText("profile"),
+    description: baseLite.bundle.getText("profile"),
     type: 'string',
     required: true
   }
 }
 
-export function handler(argv) {
+export async function handler(argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, tables.getTables, inputPrompts, false)
 }

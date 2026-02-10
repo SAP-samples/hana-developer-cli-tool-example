@@ -1,27 +1,27 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 export const command = 'libraries [schema] [library]'
 export const aliases = ['l', 'listLibs', 'ListLibs', 'listlibs', 'ListLib', "listLibraries", "listlibraries"]
-export const describe = base.bundle.getText("libraries")
+export const describe = baseLite.bundle.getText("libraries")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   library: {
     alias: ['lib', 'Library'],
     type: 'string',
     default: "*",
-    desc: base.bundle.getText("library")
+    desc: baseLite.bundle.getText("library")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: base.bundle.getText("limit")
+    desc: baseLite.bundle.getText("limit")
   }
 })
 
@@ -30,7 +30,8 @@ export const builder = base.getBuilder({
  * @param {object} argv - Command line arguments from yargs
  * @returns {void}
  */
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, getLibraries, {
     library: {
       description: base.bundle.getText("library"),
@@ -56,13 +57,14 @@ export function handler (argv) {
  * @returns {Promise<Array>} - Array of library objects
  */
 export async function getLibraries(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('getLibraries')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
  
     let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("library")}: ${prompts.library}`)
+    base.debug(`${baseLite.bundle.getText("schema")}: ${schema}, ${baseLite.bundle.getText("library")}: ${prompts.library}`)
 
     let results = await getLibrariesInt(schema, prompts.library, db, prompts.limit)
     base.outputTableFancy(results)
@@ -82,6 +84,7 @@ export async function getLibraries(prompts) {
  * @returns {Promise<Array>} - Array of library objects
  */
 async function getLibrariesInt(schema, library, client, limit) {
+  const base = await import('../utils/base.js')
   base.debug(`getLibrariesInt ${schema} ${library} ${limit}`)
   library = base.dbClass.objectName(library)
   let query =

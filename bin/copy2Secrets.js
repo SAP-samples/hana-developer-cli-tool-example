@@ -1,38 +1,40 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as xsenv from '@sap/xsenv'
 
 export const command = 'copy2Secrets'
 export const aliases = ['secrets', 'make:secrets']
-export const describe = base.bundle.getText("copy2Secrets")
+export const describe = baseLite.bundle.getText("copy2Secrets")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
     envJson: {
         alias: ['from-file'],
         type: 'string',
         default: "default-env.json",
-        desc: base.bundle.getText("envJson")
+        desc: baseLite.bundle.getText("envJson")
     },
     secretsFolder: {
         alias: ['to-folder'],
         type: 'string',
         default: "secrets",
-        desc: base.bundle.getText("secretsFolder")
+        desc: baseLite.bundle.getText("secretsFolder")
     },
     filter: {
         type: 'string',
-        desc: base.bundle.getText("secretsFilter")
+        desc: baseLite.bundle.getText("secretsFilter")
     }
 }, false)
 
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
     makeSecrets(argv)
 }
 
 export async function makeSecrets({ envFile, secretsFolder, filter }) {
+  const base = await import('../utils/base.js')
 
     base.debug(`makeSecrets ${envFile} ${secretsFolder} ${filter}`)
     xsenv.loadEnv(envFile)
@@ -60,7 +62,7 @@ export async function makeSecrets({ envFile, secretsFolder, filter }) {
                     keyPath,
                     typeof value === 'string' ? value : JSON.stringify(value)
                 )
-                console.log(base.bundle.getText("created") + ": " + keyPath)
+                console.log(baseLite.bundle.getText("created") + ": " + keyPath)
             }
         }
     }

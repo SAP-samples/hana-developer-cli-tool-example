@@ -1,37 +1,38 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'roles [schema] [role]'
 export const aliases = ['r', 'listRoles', 'listroles']
-export const describe = base.bundle.getText("roles")
+export const describe = baseLite.bundle.getText("roles")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   role: {
     alias: ['r', 'Role'],
     type: 'string',
     default: "*",
-    desc: base.bundle.getText("role")
+    desc: baseLite.bundle.getText("role")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: base.bundle.getText("limit")
+    desc: baseLite.bundle.getText("limit")
   }
 })
 
 /**
  * Command handler function
  * @param {object} argv - Command line arguments from yargs
- * @returns {void}
+ * @returns {Promise<void>}
  */
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, getRoles, {
     role: {
       description: base.bundle.getText("role"),
@@ -57,13 +58,14 @@ export function handler (argv) {
  * @returns {Promise<Array>} - Array of role objects
  */
 export async function getRoles(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('getRoles')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
     let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("role")}: ${prompts.role}`)
+    base.debug(`${baseLite.bundle.getText("schema")}: ${schema}, ${baseLite.bundle.getText("role")}: ${prompts.role}`)
 
     let results = await getRolesInt(schema, prompts.role, db, prompts.limit)
     base.outputTableFancy(results)
@@ -84,6 +86,7 @@ export async function getRoles(prompts) {
  * @returns {Promise<Array>} - Array of role objects
  */
 async function getRolesInt(schema, role, client, limit) {
+  const base = await import('../utils/base.js')
   base.debug(`getRolesInt ${schema} ${role} ${limit}`)
   role = base.dbClass.objectName(role)
   let query = ''

@@ -1,22 +1,23 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as cf from '../utils/cf.js'
 import * as btp from '../utils/btp.js'
 
 export const command = 'hcStop [name]'
 export const aliases = ['hcstop', 'hc_stop', 'stop']
-export const describe = base.bundle.getText("hcStop")
+export const describe = baseLite.bundle.getText("hcStop")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
     name: {
         alias: ['n'],
         type: 'string',
         default: `**default**`,
-        desc: base.bundle.getText("hc_instance_name")
+        desc: baseLite.bundle.getText("hc_instance_name")
     }
 }, false)
 
-export function handler(argv) {
+export async function handler(argv) {
+  const base = await import('../utils/base.js')
     base.promptHandler(argv, hcStop, {
         name: {
             description: base.bundle.getText("hc_instance_name"),
@@ -31,7 +32,7 @@ function suggestHanaCli(stdout, instanceName) {
 
     // Replace message 'Update in progress. Use 'cf services' or 'cf service dbhana-hana' to check operation status.'
     if (out[3]) {
-        out[3] = `${base.bundle.getText("hc.updateProgress")}. ${base.bundle.getText("hc.progress", [instanceName])}`
+        out[3] = `${baseLite.bundle.getText("hc.updateProgress")}. ${baseLite.bundle.getText("hc.progress", [instanceName])}`
     }
     return out.join("\n")
 }
@@ -40,12 +41,13 @@ function suggestBTPHanaCli(stdout, instanceName) {
     let out = stdout
     // Replace message 'Update in progress. Use 'cf services' or 'cf service dbhana-hana' to check operation status.'
     if (out) {
-        out = `${base.bundle.getText("hc.updateProgress")}. ${base.bundle.getText("hc.progress", [instanceName])}`
+        out = `${baseLite.bundle.getText("hc.updateProgress")}. ${baseLite.bundle.getText("hc.progress", [instanceName])}`
     }
     return out
 }
 
 export async function hcStop(prompts) {
+  const base = await import('../utils/base.js')
 
     base.debug(`hcStop`)
     try {

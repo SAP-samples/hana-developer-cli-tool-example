@@ -1,4 +1,4 @@
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as dbInspect from '../utils/dbInspect.js'
 import { createRequire } from 'module'
 
@@ -9,34 +9,34 @@ global.__xRef = []
 
 export const command = 'cds [schema] [table]'
 export const aliases = ['cdsPreview']
-export const describe = base.bundle.getText("cds")
-export const builder = base.getBuilder({
+export const describe = baseLite.bundle.getText("cds")
+export const builder = baseLite.getBuilder({
   table: {
     alias: ['t', 'Table'],
     type: 'string',
-    desc: base.bundle.getText("table")
+    desc: baseLite.bundle.getText("table")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   },
   view: {
     alias: ['v', 'View'],
     type: 'boolean',
     default: false,
-    desc: base.bundle.getText("viewOpt")
+    desc: baseLite.bundle.getText("viewOpt")
   },
   useHanaTypes: {
     alias: ['hana'],
     type: 'boolean',
     default: false,
-    desc: base.bundle.getText("useHanaTypes")
+    desc: baseLite.bundle.getText("useHanaTypes")
   },
   useQuoted: {
     alias: ['q', 'quoted', 'quotedIdentifiers'],
-    desc: base.bundle.getText("gui.useQuoted"),
+    desc: baseLite.bundle.getText("gui.useQuoted"),
     type: 'boolean',
     default: false
   },
@@ -44,11 +44,12 @@ export const builder = base.getBuilder({
     alias: ['p'],
     type: 'number',
     default: false,
-    desc: base.bundle.getText("port")
+    desc: baseLite.bundle.getText("port")
   }
 })
 
 export async function handler(argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, cdsBuild, {
     table: {
       description: base.bundle.getText("table"),
@@ -91,6 +92,7 @@ export async function handler(argv) {
 
 
 export async function cdsBuild(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('cds')
   try {
     base.setPrompts(prompts)
@@ -215,13 +217,14 @@ export async function cdsBuild(prompts) {
 }
 
 async function cdsServerSetup(prompts, cdsSource) {
+  const base = await import('../utils/base.js')
 
   base.debug('cdsServerSetup')
   const { default: Server } = await import('http')
   const port = process.env.PORT || prompts.port || 3010
 
   if (!(/^[1-9]\d*$/.test(port) && 1 <= 1 * port && 1 * port <= 65535)) {
-    return base.error(`${port} ${base.bundle.getText("errPort")}`)
+    return base.error(`${port} ${baseLite.bundle.getText("errPort")}`)
   }
 
   const server = Server.createServer()
@@ -477,14 +480,14 @@ async function cdsServerSetup(prompts, cdsSource) {
       let serverAddr = `http://localhost:${server.address().port}`
       console.info(`HTTP Server: ${serverAddr}`)
       const { default: open } = await import('open')
-      open(serverAddr)
+      await open(serverAddr, {wait: true})
     })
   }
   catch (err) {
     base.debug(`CDS Setup Error: ${err.code} - ${err.message}`)
     console.log(err)
     if (err.code === 'MODULE_NOT_FOUND') {
-      throw base.bundle.getText("cds-dk")
+      throw baseLite.bundle.getText("cds-dk")
     }
     process.exit(1)
   }
@@ -550,7 +553,7 @@ export function getIndex(odataURL, entity) {
       </style>
       </head>
       <body>
-          <h1>${base.bundle.getText("cdsIndex")}</h1>
+          <h1>${baseLite.bundle.getText("cdsIndex")}</h1>
           <p class="subtitle"> These are the paths currently served ...
 
           <h2> Web Applications: </h2>

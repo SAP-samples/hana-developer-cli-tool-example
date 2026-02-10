@@ -1,27 +1,28 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as fs from 'fs'
 import * as path from 'path'
 
 export const command = 'dropContainer [container] [group]'
 export const aliases = ['dc', 'dropC']
-export const describe = base.bundle.getText("dropContainer")
+export const describe = baseLite.bundle.getText("dropContainer")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   container: {
     alias: ['c', 'Container'],
     type: 'string',
-    desc: base.bundle.getText("container")
+    desc: baseLite.bundle.getText("container")
   },
   group: {
     alias: ['g', 'Group'],
     type: 'string',
     default: '',
-    desc: base.bundle.getText("group")
+    desc: baseLite.bundle.getText("group")
   }
 })
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, drop, {
     container: {
       description: base.bundle.getText("container"),
@@ -35,6 +36,7 @@ export function handler (argv) {
 }
 
 export async function drop(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('drop')
   try {
     base.setPrompts(prompts)

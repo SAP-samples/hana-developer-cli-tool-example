@@ -1,33 +1,34 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'inspectTrigger [schema] [trigger]'
 export const aliases = ['itrig', 'trigger', 'insTrig', 'inspecttrigger', 'inspectrigger']
-export const describe = base.bundle.getText("inspectTrigger")
+export const describe = baseLite.bundle.getText("inspectTrigger")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   trigger: {
     alias: ['t', 'Trigger'],
     type: 'string',
     default: "*",
-    desc: base.bundle.getText("sequence")
+    desc: baseLite.bundle.getText("sequence")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   },
   output: {
     alias: ['o', 'Output'],
     choices: ["tbl", "sql"],
     default: "tbl",
     type: 'string',
-    desc: base.bundle.getText("outputType")
+    desc: baseLite.bundle.getText("outputType")
   }
 })
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, triggerInspect, {
     trigger: {
       description: base.bundle.getText("trigger"),
@@ -49,6 +50,7 @@ export function handler (argv) {
 }
 
 export async function triggerInspect(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('triggerInspect')
   const { highlight } = await import('cli-highlight')
   try {
@@ -56,7 +58,7 @@ export async function triggerInspect(prompts) {
     const db = await base.createDBConnection()
 
     let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("trigger")}: ${prompts.trigger}`)
+    base.debug(`${baseLite.bundle.getText("schema")}: ${schema}, ${baseLite.bundle.getText("trigger")}: ${prompts.trigger}`)
 
     let query =
       `SELECT *

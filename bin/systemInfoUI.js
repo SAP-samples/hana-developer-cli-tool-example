@@ -1,15 +1,17 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'systemInfoUI'
 export const aliases = ['sysUI', 'sysinfoui', 'sysInfoUI', 'systeminfoui']
-export const describe = base.bundle.getText("systemInfoUI")
-export const builder = base.getBuilder({})
-export function handler (argv) {
+export const describe = baseLite.bundle.getText("systemInfoUI")
+export const builder = baseLite.getBuilder({})
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, sysInfo, {})
 }
 
 export async function sysInfo(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('sysInfoUI')
   try {
     base.setPrompts(prompts)

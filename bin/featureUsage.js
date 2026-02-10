@@ -1,14 +1,16 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'featureUsage'
 export const aliases = ['fu', 'FeaturesUsage']
-export const describe = base.bundle.getText("featureUsage")
-export const builder = base.getBuilder({})
-export function handler (argv) {
+export const describe = baseLite.bundle.getText("featureUsage")
+export const builder = baseLite.getBuilder({})
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, dbStatus, {})
 }
 export async function dbStatus(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('dbStatus')
   try {
     base.setPrompts(prompts)

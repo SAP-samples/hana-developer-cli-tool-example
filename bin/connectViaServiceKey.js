@@ -1,46 +1,47 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'serviceKey [instance] [key]'
 export const aliases = ['key', 'servicekey', 'service-key']
-export const describe = base.bundle.getText("serviceKey")
+export const describe = baseLite.bundle.getText("serviceKey")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   instance: {
     alias: ['i', 'Instance'],
-    desc: base.bundle.getText("instance")
+    desc: baseLite.bundle.getText("instance")
   },
   key: {
     alias: ['k', 'key'],
-    desc: base.bundle.getText("key")
+    desc: baseLite.bundle.getText("key")
   },
   encrypt: {
     alias: ['e', 'Encrypt', 'ssl'],
-    desc: base.bundle.getText("encrypt"),
+    desc: baseLite.bundle.getText("encrypt"),
     type: 'boolean',
     default: true
   },
   validate: {
     alias: ['v', 'Validate', 'validateCertificate'],
-    desc: base.bundle.getText("validate"),
+    desc: baseLite.bundle.getText("validate"),
     type: 'boolean',
     default: false
   },
   cf: {
     alias: ['c', 'cmd'],
-    desc: base.bundle.getText("cfxs"),
+    desc: baseLite.bundle.getText("cfxs"),
     type: 'boolean',
     default: true
   },
   save: {
     alias: ['s', 'Save'],
-    desc: base.bundle.getText("save2"),
+    desc: baseLite.bundle.getText("save2"),
     type: 'boolean',
     default: true
   }
 }, false)
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, setKeyDetails, {
     instance: {
       description: base.bundle.getText("instance"),
@@ -77,6 +78,7 @@ export function handler (argv) {
 }
 
 export async function setKeyDetails(input) {
+  const base = await import('../utils/base.js')
   base.debug('setKeyDetails')
   base.debug(input)
   const { default:child_process } = await import('child_process')
@@ -128,6 +130,7 @@ export async function setKeyDetails(input) {
 }
 
 export async function saveEnv(options, input) {
+  const base = await import('../utils/base.js')
   base.debug('saveEnv')
   let defaultEnv = {}
   defaultEnv.VCAP_SERVICES = {}
@@ -175,9 +178,9 @@ export async function saveEnv(options, input) {
     const { default:fs } = await import('fs')
     fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), (err) => {
       if (err) {
-        throw new Error(`${base.bundle.getText("errConn")} ${JSON.stringify(err)}`)
+        throw new Error(`${baseLite.bundle.getText("errConn")} ${JSON.stringify(err)}`)
       }
-      console.log(base.bundle.getText("saved"))
+      console.log(baseLite.bundle.getText("saved"))
       // Don't call base.end() as it exits the process
     })
   } else {

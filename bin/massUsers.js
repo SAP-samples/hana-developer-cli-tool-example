@@ -1,22 +1,23 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'massUsers [user] [password]'
 export const aliases = ['massUser', 'mUsers', 'mUser', 'mu']
-export const describe = base.bundle.getText("massUsers")
+export const describe = baseLite.bundle.getText("massUsers")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   user: {
     alias: ['u', 'User'],
-    desc: base.bundle.getText("user")
+    desc: baseLite.bundle.getText("user")
   },
   password: {
     alias: ['p', 'Password'],
-    desc: base.bundle.getText("password")
+    desc: baseLite.bundle.getText("password")
   }
 })
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, massUsers, {
     user: {
       description: base.bundle.getText("user"),
@@ -33,6 +34,7 @@ export function handler (argv) {
 
 
 export async function massUsers(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('massUsers')
   try {
     base.setPrompts(prompts)

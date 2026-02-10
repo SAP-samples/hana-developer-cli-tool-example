@@ -1,55 +1,55 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
 export const command = 'querySimple'
 export const aliases = ['qs', "querysimple"]
-export const describe = base.bundle.getText("querySimple")
+export const describe = baseLite.bundle.getText("querySimple")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   query: {
     alias: ['q', 'Query'],
     type: 'string',
-    desc: base.bundle.getText("query")
+    desc: baseLite.bundle.getText("query")
   },
   folder: {
     alias: ['f', 'Folder'],
     type: 'string',
     default: './',
-    desc: base.bundle.getText("folder")
+    desc: baseLite.bundle.getText("folder")
   },
   filename: {
     alias: ['n', 'Filename'],
     type: 'string',
-    desc: base.bundle.getText("filename")
+    desc: baseLite.bundle.getText("filename")
   },
   output: {
     alias: ['o', 'Output'],
     choices: ["table", "json", "excel", "csv"],
     default: "table",
     type: 'string',
-    desc: base.bundle.getText("outputTypeQuery")
+    desc: baseLite.bundle.getText("outputTypeQuery")
   },
   profile: {
     alias: ['p', 'Profile'],
     type: 'string',
-    desc: base.bundle.getText("profile")
+    desc: baseLite.bundle.getText("profile")
   }
 })
 
 export let inputPrompts = {
   query: {
-    description: base.bundle.getText("query"),
+    description: baseLite.bundle.getText("query"),
     type: 'string',
     required: true
   },
   folder: {
-    description: base.bundle.getText("folder"),
+    description: baseLite.bundle.getText("folder"),
     type: 'string',
     required: true
   },
   filename: {
-    description: base.bundle.getText("filename"),
+    description: baseLite.bundle.getText("filename"),
     type: 'string',
     required: true,
     ask: () => {
@@ -57,12 +57,12 @@ export let inputPrompts = {
     }
   },
   output: {
-    description: base.bundle.getText("outputTypeQuery"),
+    description: baseLite.bundle.getText("outputTypeQuery"),
     type: 'string',
     required: true
   },
   profile: {
-    description: base.bundle.getText("profile"),
+    description: baseLite.bundle.getText("profile"),
     type: 'string',
     required: false,
     ask: () => { }
@@ -74,7 +74,8 @@ export let inputPrompts = {
  * @param {object} argv - Command line arguments from yargs
  * @returns {void}
  */
-export function handler(argv) {
+export async function handler(argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, dbQuery, inputPrompts)
 }
 
@@ -102,6 +103,7 @@ export function removeNewlineCharacter(dataRow) {
  * @returns {Promise<any>}
  */
 export async function dbQuery(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('dbQuery')
   const [{ highlight }, { AsyncParser }] = await Promise.all([
     import('cli-highlight'),
@@ -119,7 +121,7 @@ export async function dbQuery(prompts) {
     let results = await dbClient.execSQL(prompts.query)
 
     if (!results[0]) {
-      return base.error(base.bundle.getText("errNoResults"))
+      return base.error(baseLite.bundle.getText("errNoResults"))
     }
 
     switch (prompts.output) {
@@ -148,7 +150,7 @@ export async function dbQuery(prompts) {
           throw new Error(`Excel Export temporarily disabled due to issue with install of required module in Business Application Studio`)
           //await toFile(prompts.folder, prompts.filename, 'xlsx', excelOutput)
         } else {
-          base.error(base.bundle.getText("errExcel"))
+          base.error(baseLite.bundle.getText("errExcel"))
           await dbClient.disconnect()
           return
         }
@@ -191,6 +193,7 @@ export async function dbQuery(prompts) {
 }
 
 async function toFile(folder, file, ext, content) {
+  const base = await import('../utils/base.js')
   base.debug('toFile')
   const [{ default: fs }, { default: path }] = await Promise.all([
     import('fs'),
@@ -201,7 +204,7 @@ async function toFile(folder, file, ext, content) {
   file = `${file}.${ext}`
   let fileLocal = path.join(dir, file)
   fs.writeFileSync(fileLocal, content)
-  console.log(`${base.bundle.getText("contentWritten")}: ${fileLocal}`)
+  console.log(`${baseLite.bundle.getText("contentWritten")}: ${fileLocal}`)
 }
 
 /**
@@ -244,7 +247,7 @@ function formatValue(val) {
  */
 function formatAsTextTable(results) {
   if (!results || results.length === 0) {
-    return base.bundle.getText('noData')
+    return baseLite.bundle.getText('noData')
   }
 
   // Get all unique column names

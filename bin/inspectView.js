@@ -1,5 +1,5 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as dbInspect from '../utils/dbInspect.js'
 import dbClass from "sap-hdb-promisfied"
 import * as conn from "../utils/connections.js"
@@ -8,84 +8,84 @@ global.__xRef = []
 
 export const command = 'inspectView [schema] [view]'
 export const aliases = ['iv', 'view', 'insVew', 'inspectview']
-export const describe = base.bundle.getText("inspectView")
+export const describe = baseLite.bundle.getText("inspectView")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   view: {
     alias: ['v', 'View'],
     type: 'string',
-    desc: base.bundle.getText("view")
+    desc: baseLite.bundle.getText("view")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   },
   output: {
     alias: ['o', 'Output'],
     choices: ["tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi", "hdbview", "hdbcds", "jsdoc", "graphql", "postgres"],
     default: "tbl",
     type: 'string',
-    desc: base.bundle.getText("outputType")
+    desc: baseLite.bundle.getText("outputType")
   },
   useHanaTypes: {
     alias: ['hana'],
     type: 'boolean',
     default: false,
-    desc: base.bundle.getText("useHanaTypes")
+    desc: baseLite.bundle.getText("useHanaTypes")
   },
   useExists: {
     alias: ['exists', 'persistence'],
-    desc: base.bundle.getText("gui.useExists"),
+    desc: baseLite.bundle.getText("gui.useExists"),
     type: 'boolean',
     default: true
   },
   useQuoted: {
     alias: ['q', 'quoted', 'quotedIdentifiers'],
-    desc: base.bundle.getText("gui.useQuoted"),
+    desc: baseLite.bundle.getText("gui.useQuoted"),
     type: 'boolean',
     default: false
   },
   noColons: {
       type: 'boolean',
       default: false,
-      desc: base.bundle.getText("noColons")
+      desc: baseLite.bundle.getText("noColons")
   }
 })
 
 export let inputPrompts = {
   view: {
-    description: base.bundle.getText("view"),
+    description: baseLite.bundle.getText("view"),
     type: 'string',
     required: true
   },
   schema: {
-    description: base.bundle.getText("schema"),
+    description: baseLite.bundle.getText("schema"),
     type: 'string',
     required: true
   },
   output: {
-    description: base.bundle.getText("outputType"),
+    description: baseLite.bundle.getText("outputType"),
     type: 'string',
     //       validator: /t[bl]*|s[ql]*|c[ds]?/,
     required: true
   },
   useHanaTypes: {
-    description: base.bundle.getText("useHanaTypes"),
+    description: baseLite.bundle.getText("useHanaTypes"),
     type: 'boolean'
   },
   useExists: {
-    description: base.bundle.getText("gui.useExists"),
+    description: baseLite.bundle.getText("gui.useExists"),
     type: 'boolean'
   },
   useQuoted: {
-    description: base.bundle.getText("gui.useQuoted"),
+    description: baseLite.bundle.getText("gui.useQuoted"),
     type: 'boolean'
   },
   noColons: {
     type: 'boolean',
-    description: base.bundle.getText("noColons")
+    description: baseLite.bundle.getText("noColons")
   }
 }
 
@@ -94,7 +94,8 @@ export let inputPrompts = {
  * @param {object} argv - Command line arguments from yargs
  * @returns {void}
  */
-export function handler(argv) {
+export async function handler(argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, viewInspect, inputPrompts)
 }
 
@@ -104,6 +105,7 @@ export function handler(argv) {
  * @returns {Promise<any>}
  */
 export async function viewInspect(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('viewInspect')
   const [{ highlight }, yaml, { parse, convert }] = await Promise.all([
     import('cli-highlight'),
@@ -116,7 +118,7 @@ export async function viewInspect(prompts) {
     const db = new dbClass(dbConnection)
     let schema = await base.dbClass.schemaCalc(prompts, db)
 
-    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("view")}: ${prompts.view}`)
+    base.debug(`${baseLite.bundle.getText("schema")}: ${schema}, ${baseLite.bundle.getText("view")}: ${prompts.view}`)
     dbInspect.options.useHanaTypes = prompts.useHanaTypes
     dbInspect.options.useExists = prompts.useExists
     dbInspect.options.noColons = prompts.noColons
@@ -283,7 +285,7 @@ export async function viewInspect(prompts) {
             // Re-throw not "Module not found" errors 
             throw e
           }
-          throw base.bundle.getText("cds-dk")
+          throw baseLite.bundle.getText("cds-dk")
         }
       }
       case 'jsdoc': {
@@ -316,11 +318,11 @@ export async function viewInspect(prompts) {
             // Re-throw not "Module not found" errors 
             throw e
           }
-          throw base.bundle.getText("cds-dk")
+          throw baseLite.bundle.getText("cds-dk")
         }
       }
       default: {
-        console.error(base.bundle.getText("unsupportedFormat"))
+        console.error(baseLite.bundle.getText("unsupportedFormat"))
         break
       }
     }

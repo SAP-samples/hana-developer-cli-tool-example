@@ -1,33 +1,34 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as dbInspect from '../utils/dbInspect.js'
 
 export const command = 'inspectFunction [schema] [function]'
 export const aliases = ['if', 'function', 'insFunc', 'inspectfunction']
-export const describe = base.bundle.getText("inspectFunction")
+export const describe = baseLite.bundle.getText("inspectFunction")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   function: {
     alias: ['f', 'Function'],
     type: 'string',
-    desc: base.bundle.getText("function")
+    desc: baseLite.bundle.getText("function")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   },
   output: {
     alias: ['o', 'Output'],
     choices: ["tbl", "sql"],
     default: "tbl",
     type: 'string',
-    desc: base.bundle.getText("outputType")
+    desc: baseLite.bundle.getText("outputType")
   }
 })
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, functionInspect, {
     function: {
       description: base.bundle.getText("function"),
@@ -49,6 +50,7 @@ export function handler (argv) {
 }
 
 export async function functionInspect(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('functionInspect')
   const { highlight } = await import('cli-highlight')
   try {
@@ -57,7 +59,7 @@ export async function functionInspect(prompts) {
   
 
     let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("function")}: ${prompts.function}`);
+    base.debug(`${baseLite.bundle.getText("schema")}: ${schema}, ${baseLite.bundle.getText("function")}: ${prompts.function}`);
 
     let proc = await dbInspect.getFunction(db, schema, prompts.function);
     let parameters = await dbInspect.getFunctionPrams(db, proc[0].FUNCTION_OID)

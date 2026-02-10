@@ -1,17 +1,19 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as cf from '../utils/cf.js'
 import * as btp from '../utils/btp.js'
 
 export const command = 'version'
 export const aliases = 'ver'
-export const describe = base.bundle.getText("version")
-export const builder = base.getBuilder({}, false)
-export let handler = function (argv) {
+export const describe = baseLite.bundle.getText("version")
+export const builder = baseLite.getBuilder({}, false)
+export async function handler(argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, verOutput, {}, false)
 }
 
 export async function verOutput() {
+  const base = await import('../utils/base.js')
   base.debug('verOutput')
   base.startSpinnerInt()
   const [{ highlight }, { default: latestVersion }] =
@@ -19,7 +21,7 @@ export async function verOutput() {
       import('cli-highlight'),
       import('latest-version')
     ])
-  const colors = base.colors
+  const colors = baseLite.colors
   const log = console.log
 
   const info = await getVersion()
@@ -39,9 +41,9 @@ export async function verOutput() {
 }
 
 export function version4(pkgPath = '..', info = {}, parentPath) {
-  base.debug('version4')
+  baseLite.debug('version4')
   try {
-    const pkj = base.require(pkgPath + '/package.json')
+    const pkj = baseLite.require(pkgPath + '/package.json')
     const name = pkj.name || pkgPath
     if (info[name]) return // safeguard against circular dependencies
     info[name] = pkj.version
@@ -60,6 +62,7 @@ export function version4(pkgPath = '..', info = {}, parentPath) {
 }
 
 export async function getVersion() {
+  const base = await import('../utils/base.js')
   base.debug('version')
   const [{ URL }, { fileURLToPath }] = await Promise.all([
     import('url'),

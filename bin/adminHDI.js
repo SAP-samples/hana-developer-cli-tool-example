@@ -1,22 +1,22 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'adminHDI [user] [password]'
 export const aliases = ['adHDI', 'adhdi']
-export const describe = base.bundle.getText("adminHDI")
+export const describe = baseLite.bundle.getText("adminHDI")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   user: {
     alias: ['u', 'User'],
-    desc: base.bundle.getText("user")
+    desc: baseLite.bundle.getText("user")
   },
   password: {
     alias: ['p', 'Password'],
-    desc: base.bundle.getText("password")
+    desc: baseLite.bundle.getText("password")
   },
   create: {
     alias: ['c', 'Create'],
-    desc: base.bundle.getText("createUser"),
+    desc: baseLite.bundle.getText("createUser"),
     type: 'boolean',
     default: true
   }
@@ -27,7 +27,8 @@ export const builder = base.getBuilder({
  * @param {object} argv - Command line arguments from yargs
  * @returns {void}
  */
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, activate, {
     user: {
       description: base.bundle.getText("user"),
@@ -52,6 +53,7 @@ export function handler (argv) {
  * @returns {Promise<void>}
  */
 export async function activate(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('activate')
   try {
     base.setPrompts(prompts)

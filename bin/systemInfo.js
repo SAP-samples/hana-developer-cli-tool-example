@@ -1,8 +1,8 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as dbInspect from '../utils/dbInspect.js'
 import * as conn from '../utils/connections.js'
-const colors = base.colors
+const colors = baseLite.colors
 
 const OUTPUTS = {
   BASIC: "basic",
@@ -11,20 +11,20 @@ const OUTPUTS = {
 }
 export const command = 'systemInfo'
 export const aliases = ['sys', 'sysinfo', 'sysInfo', 'systeminfo']
-export const describe = base.bundle.getText("systemInfo")
-export const builder = base.getBuilder({
+export const describe = baseLite.bundle.getText("systemInfo")
+export const builder = baseLite.getBuilder({
   output: {
     alias: ['o', 'Output'],
     choices: [OUTPUTS.BASIC, OUTPUTS.ENV, OUTPUTS.DBX],
     default: "basic",
     type: 'string',
-    desc: base.bundle.getText("outputType")
+    desc: baseLite.bundle.getText("outputType")
   }
 })
 
 export let inputPrompts = {
   output: {
-    description: base.bundle.getText("outputType"),
+    description: baseLite.bundle.getText("outputType"),
     type: 'string',
     required: true
   }
@@ -34,7 +34,8 @@ export let inputPrompts = {
  * @param {object} argv - Command line arguments from yargs
  * @returns {void}
  */
-export function handler(argv) {
+export async function handler(argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, sysInfo, inputPrompts)
 }
 
@@ -45,6 +46,7 @@ export function handler(argv) {
  * @returns {Promise<void>}
  */
 export async function sysInfo(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('sysInfo')
   try {
     base.setPrompts(prompts)
@@ -63,7 +65,7 @@ export async function sysInfo(prompts) {
         break
       }
       default: {
-        throw base.bundle.getText("unsupportedFormat")
+        throw baseLite.bundle.getText("unsupportedFormat")
       }
     }
 
@@ -78,8 +80,9 @@ export async function sysInfo(prompts) {
  * @returns {Promise<void>}
  */
 export async function basicOutput() {
+  const base = await import('../utils/base.js')
   const dbStatus = await base.createDBConnection()
-  console.log(`${colors.green(base.bundle.getText("dbx.user"))}: ${await base.getUserName()}`)
+  console.log(`${colors.green(baseLite.bundle.getText("dbx.user"))}: ${await base.getUserName()}`)
   base.outputTableFancy(await dbInspect.getHANAVersion(dbStatus))
   
 
@@ -106,42 +109,43 @@ export async function environmentOutput(prompts) {
  * @returns {Promise<void>}
  */
 export async function dbxOutput(prompts) {
+  const base = await import('../utils/base.js')
   prompts.disableVerbose = true
   let connDetails = await conn.getConnOptions(prompts)
   const dbStatus = await base.createDBConnection()
   const dbVersion = await dbInspect.getHANAVersion(dbStatus)
-  const unknown = base.bundle.getText("hc.unknown")
+  const unknown = baseLite.bundle.getText("hc.unknown")
 
   if (dbVersion.versionMajor > 2) {
-    console.log(`${base.bundle.getText("dbx.dbType")}:${colors.red('*')} ${colors.red(`SAP HANA Cloud`)}`)
+    console.log(`${baseLite.bundle.getText("dbx.dbType")}:${colors.red('*')} ${colors.red(`SAP HANA Cloud`)}`)
   } else {
-    console.log(`${base.bundle.getText("dbx.dbType")}:${colors.red('*')} ${colors.red(`SAP HANA`)}`)
+    console.log(`${baseLite.bundle.getText("dbx.dbType")}:${colors.red('*')} ${colors.red(`SAP HANA`)}`)
   }
-  console.log(`  ${base.bundle.getText("dbx.hostPort")}:${colors.red('*')} ${colors.red(connDetails.hana?.host ?? unknown)} - ${colors.red(connDetails.hana?.port ?? unknown)}`)
-  console.log(`         ${base.bundle.getText("dbx.user")}:${colors.red('*')} ${colors.red(connDetails.hana?.user ?? unknown)}`)
-  console.log(`     ${base.bundle.getText("dbx.password")}:${colors.red('*')} ${colors.red(connDetails.hana?.password ?? unknown)}`)
+  console.log(`  ${baseLite.bundle.getText("dbx.hostPort")}:${colors.red('*')} ${colors.red(connDetails.hana?.host ?? unknown)} - ${colors.red(connDetails.hana?.port ?? unknown)}`)
+  console.log(`         ${baseLite.bundle.getText("dbx.user")}:${colors.red('*')} ${colors.red(connDetails.hana?.user ?? unknown)}`)
+  console.log(`     ${baseLite.bundle.getText("dbx.password")}:${colors.red('*')} ${colors.red(connDetails.hana?.password ?? unknown)}`)
 
   if (connDetails.hana?.hdi_user) {
     console.log(``)
-    console.log(`     ${base.bundle.getText("dbx.hdiUser")}:  ${colors.green(connDetails.hana?.hdi_user ?? unknown)}`)
-    console.log(` ${base.bundle.getText("dbx.hdiPassword")}:  ${colors.green(connDetails.hana?.hdi_password ?? unknown)}`)
+    console.log(`     ${baseLite.bundle.getText("dbx.hdiUser")}:  ${colors.green(connDetails.hana?.hdi_user ?? unknown)}`)
+    console.log(` ${baseLite.bundle.getText("dbx.hdiPassword")}:  ${colors.green(connDetails.hana?.hdi_password ?? unknown)}`)
     console.log(``)
   }
 
   if (connDetails.hana?.encrypt) {
-    console.log(`                ${colors.green(`✅`)} ${base.bundle.getText("dbx.secure")}`)
+    console.log(`                ${colors.green(`✅`)} ${baseLite.bundle.getText("dbx.secure")}`)
   }else {
-    console.log(`                ${colors.green(`🔳`)} ${base.bundle.getText("dbx.secure")}`)
+    console.log(`                ${colors.green(`🔳`)} ${baseLite.bundle.getText("dbx.secure")}`)
   }
 
   if (connDetails.hana?.sslValidateCertificate) {
-    console.log(`                ${colors.green(`✅`)} ${base.bundle.getText("dbx.cert")}`)
+    console.log(`                ${colors.green(`✅`)} ${baseLite.bundle.getText("dbx.cert")}`)
   }else {
-    console.log(`                ${colors.green(`🔳`)} ${base.bundle.getText("dbx.cert")}`)
+    console.log(`                ${colors.green(`🔳`)} ${baseLite.bundle.getText("dbx.cert")}`)
   }
 
   if (connDetails.hana?.certificate){
-    console.log(`${base.bundle.getText("dbx.cert2")}:`)
+    console.log(`${baseLite.bundle.getText("dbx.cert2")}:`)
     let cert = connDetails.hana?.certificate.replace(`-----BEGIN CERTIFICATE-----\n`, '')
     cert = cert.replace(`-----END CERTIFICATE-----`, '')    
     console.log(colors.blue(cert))

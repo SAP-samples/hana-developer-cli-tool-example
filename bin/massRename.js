@@ -1,35 +1,36 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import cds from '@sap/cds'
 
 export const command = 'massRename'
 export const aliases = ['mr', 'massrename', 'massRN', 'massrn']
-export const describe = base.bundle.getText("massRename")
+export const describe = baseLite.bundle.getText("massRename")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   schema: {
     alias: ['s', 'schema'],
     type: 'string',
-    desc: base.bundle.getText("schemaCDS")
+    desc: baseLite.bundle.getText("schemaCDS")
   },
   namespace: {
     alias: ['n', 'namespace'],
     type: 'string',
-    desc: base.bundle.getText("namespace")
+    desc: baseLite.bundle.getText("namespace")
   },
   prefix: {
     alias: ['p', 'prefix'],
     type: 'string',
-    desc: base.bundle.getText("prefix")
+    desc: baseLite.bundle.getText("prefix")
   },
   case: {
     alias: ['c', 'case'],
     type: 'string',
-    desc: base.bundle.getText("case")
+    desc: baseLite.bundle.getText("case")
   }
 })
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, rename, {
     schema: {
       type: 'string',
@@ -53,6 +54,7 @@ export function handler (argv) {
 }
 
 export async function rename(result) {
+  const base = await import('../utils/base.js')
   base.debug('rename')
   const convert = await import('js-convert-case')
 
@@ -121,7 +123,7 @@ export async function rename(result) {
                   alias = convert.toDotCase(element)
                   break
                 default:
-                  base.error(base.bundle.getText("caseErr"))
+                  base.error(baseLite.bundle.getText("caseErr"))
                   process.exit()
                   break
               }

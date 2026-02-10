@@ -1,32 +1,33 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'inspectLibrary [schema] [library]'
 export const aliases = ['il', 'library', 'insLib', 'inspectlibrary']
-export const describe = base.bundle.getText("inspectLibrary")
+export const describe = baseLite.bundle.getText("inspectLibrary")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   library: {
     alias: ["lib", 'Library'],
     type: 'string',
-    desc: base.bundle.getText("library")
+    desc: baseLite.bundle.getText("library")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   },
   output: {
     alias: ['o', 'Output'],
     choices: ["tbl", "sql"],
     default: "tbl",
     type: 'string',
-    desc: base.bundle.getText("outputType")
+    desc: baseLite.bundle.getText("outputType")
   }
 })
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, libraryInspect, {
     library: {
       description: base.bundle.getText("library"),
@@ -50,6 +51,7 @@ export function handler (argv) {
 
 
 export async function libraryInspect(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('libraryInspect')
   const { highlight } = await import('cli-highlight')
   try {
@@ -57,7 +59,7 @@ export async function libraryInspect(prompts) {
     const db = await base.createDBConnection()
 
     let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("library")}: ${prompts.library}`)
+    base.debug(`${baseLite.bundle.getText("schema")}: ${schema}, ${baseLite.bundle.getText("library")}: ${prompts.library}`)
 
     let query =
       `SELECT SCHEMA_NAME, LIBRARY_NAME, OWNER_NAME, LIBRARY_TYPE, IS_VALID, CREATE_TIME from LIBRARIES 

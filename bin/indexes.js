@@ -1,54 +1,56 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'indexes [schema] [indexes]'
 export const aliases = ['ind', 'listIndexes', 'ListInd', 'listind', 'Listind', "listfindexes"]
-export const describe = base.bundle.getText("indexes")
+export const describe = baseLite.bundle.getText("indexes")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   indexes: {
     alias: ['i', 'Indexes'],
     type: 'string',
     default: "*",
-    desc: base.bundle.getText("function")
+    desc: baseLite.bundle.getText("function")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: base.bundle.getText("limit")
+    desc: baseLite.bundle.getText("limit")
   }
 })
 
 export let inputPrompts = {
   indexes: {
-    description: base.bundle.getText("indexes"),
+    description: baseLite.bundle.getText("indexes"),
     type: 'string',
     required: true
   },
   schema: {
-    description: base.bundle.getText("schema"),
+    description: baseLite.bundle.getText("schema"),
     type: 'string',
     required: true
   },
   limit: {
-    description: base.bundle.getText("limit"),
+    description: baseLite.bundle.getText("limit"),
     type: 'number',
     required: true
   }
 }
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, getIndexes, inputPrompts)
 }
 
 export async function getIndexes(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('getIndexes')
   try {
     base.setPrompts(prompts)
@@ -68,6 +70,7 @@ export async function getIndexes(prompts) {
 
 
 async function getIndexesInt(schema, indexes, client, limit) {
+  const base = await import('../utils/base.js')
   base.debug(`getIndexesInt ${schema} ${indexes} ${limit}`)
   indexes = base.dbClass.objectName(indexes)
 

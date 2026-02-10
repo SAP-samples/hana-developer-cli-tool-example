@@ -1,15 +1,15 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'activateHDI [tenant]'
 export const aliases = ['ahdi', 'ah']
-export const describe = base.bundle.getText("activateHDI")
+export const describe = baseLite.bundle.getText("activateHDI")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   tenant: {
     alias: ['t', 'Tenant'],
     type: 'string',
-    desc: base.bundle.getText("tenant")
+    desc: baseLite.bundle.getText("tenant")
   }
 })
 
@@ -18,7 +18,8 @@ export const builder = base.getBuilder({
  * @param {object} argv - Command line arguments from yargs
  * @returns {void}
  */
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, activate, {
     tenant: {
       description: base.bundle.getText("tenant"),
@@ -34,6 +35,7 @@ export function handler (argv) {
  * @returns {Promise<void>}
  */
 export async function activate(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('activate')
   try {
     base.setPrompts(prompts)

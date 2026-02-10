@@ -1,5 +1,5 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as sbss from './hanaCloudSBSSInstances.js'
 
 export const command = 'sbssUI'
@@ -7,11 +7,13 @@ export const aliases = ['sbssInstancesUI', 'sbssinstancesui', 'sbssServicesUI', 
 export const describe = sbss.describe
 export const builder = sbss.builder
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
     base.promptHandler(argv, listInstances, sbss.inputPrompts)
 }
 
 export async function listInstances(prompts) {
+  const base = await import('../utils/base.js')
     base.debug('getSbssUI')
     try {
         base.setPrompts(prompts)

@@ -1,44 +1,44 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'containers [containerGroup] [container]'
 export const aliases = ['cont', 'listContainers', 'listcontainers']
-export const describe = base.bundle.getText("containers")
+export const describe = baseLite.bundle.getText("containers")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   container: {
     alias: ['c', 'Container'],
     type: 'string',
     default: "*",
-    desc: base.bundle.getText("container")
+    desc: baseLite.bundle.getText("container")
   },
   containerGroup: {
     alias: ['g', 'Group', 'group', 'containergroup'],
     type: 'string',
     default: '*',
-    desc: base.bundle.getText("containerGroup")
+    desc: baseLite.bundle.getText("containerGroup")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: base.bundle.getText("limit")
+    desc: baseLite.bundle.getText("limit")
   }
 })
 
 export let inputPrompts = {
   container: {
-    description: base.bundle.getText("container"),
+    description: baseLite.bundle.getText("container"),
     type: 'string',
     required: true
   },
   containerGroup: {
-    description: base.bundle.getText("containerGroup"),
+    description: baseLite.bundle.getText("containerGroup"),
     type: 'string',
     required: true
   },
   limit: {
-    description: base.bundle.getText("limit"),
+    description: baseLite.bundle.getText("limit"),
     type: 'number',
     required: true
   }
@@ -49,7 +49,8 @@ export let inputPrompts = {
  * @param {object} argv - Command line arguments from yargs
  * @returns {void}
  */
-export function handler(argv) {
+export async function handler(argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, getContainers, inputPrompts)
 }
 
@@ -59,12 +60,13 @@ export function handler(argv) {
  * @returns {Promise<Array>} - Array of container objects
  */
 export async function getContainers(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('getContainers')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
-    base.debug(`${base.bundle.getText("containerGroup")}: ${prompts.containerGroup}, ${base.bundle.getText("container")}: ${prompts.container}`)
+    base.debug(`${baseLite.bundle.getText("containerGroup")}: ${prompts.containerGroup}, ${baseLite.bundle.getText("container")}: ${prompts.container}`)
 
     let results = await getContainersInt(prompts.containerGroup, prompts.container, db, prompts.limit)
     base.outputTableFancy(results)
@@ -76,6 +78,7 @@ export async function getContainers(prompts) {
 }
 
 export async function getContainersInt(containerGroup, container, client, limit) {
+  const base = await import('../utils/base.js')
   base.debug('getContainersInt')
 
   let query =

@@ -2,7 +2,10 @@
 /**
  * @module Command Alias Tests - Tests for command aliases
  * 
- * This test suite validates that command aliases work identically to main commands:
+ * This test suite validates that command aliases work identically to main commands.
+ * Aliases are defined within the main command files and registered with yargs,
+ * so they are accessed through the main CLI entry point (bin/cli.js), not as separate files.
+ * 
  * - Short aliases (t, v, f, p, etc.)
  * - Descriptive aliases (listTables, inspectable, etc.)
  * - Consistency between alias and main command
@@ -19,7 +22,7 @@ describe('Command Alias Tests', function () {
         this.timeout(10000)
 
         it('should work with main command', function (done) {
-            child_process.exec('node bin/tables.js --limit 5 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/cli.js tables --limit 5 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -29,7 +32,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should work with "t" alias', function (done) {
-            child_process.exec('node bin/t.js --limit 5 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/cli.js t --limit 5 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -40,7 +43,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should work with "listTables" alias', function (done) {
-            child_process.exec('node bin/listTables.js --limit 5 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/cli.js listTables --limit 5 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -51,7 +54,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should work with "listtables" alias', function (done) {
-            child_process.exec('node bin/listtables.js --limit 5 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/cli.js listtables --limit 5 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -66,7 +69,7 @@ describe('Command Alias Tests', function () {
         this.timeout(10000)
 
         it('should work with main command', function (done) {
-            child_process.exec('node bin/views.js --limit 3 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/cli.js views --limit 3 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -76,7 +79,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should work with "v" alias', function (done) {
-            child_process.exec('node bin/v.js --limit 3 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/cli.js v --limit 3 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -91,7 +94,7 @@ describe('Command Alias Tests', function () {
         this.timeout(10000)
 
         it('should work with main command', function (done) {
-            child_process.exec('node bin/functions.js --limit 3 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/cli.js functions --limit 3 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -101,7 +104,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should work with "f" alias', function (done) {
-            child_process.exec('node bin/f.js --limit 3 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/cli.js f --limit 3 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -116,7 +119,7 @@ describe('Command Alias Tests', function () {
         this.timeout(10000)
 
         it('should work with main command', function (done) {
-            child_process.exec('node bin/procedures.js --limit 3 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/cli.js procedures --limit 3 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -126,7 +129,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should work with "p" alias', function (done) {
-            child_process.exec('node bin/p.js --limit 3 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/cli.js p --limit 3 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -137,7 +140,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should work with "sp" alias', function (done) {
-            child_process.exec('node bin/sp.js --limit 3 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/cli.js sp --limit 3 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -152,7 +155,7 @@ describe('Command Alias Tests', function () {
         this.timeout(10000)
 
         it('should work with main command', function (done) {
-            child_process.exec('node bin/schemas.js --limit 5 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/cli.js schemas --limit 5 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -162,7 +165,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should work with "s" alias', function (done) {
-            child_process.exec('node bin/s.js --limit 5 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/cli.js s --limit 5 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -177,7 +180,7 @@ describe('Command Alias Tests', function () {
         this.timeout(10000)
 
         it('should work with main command', function (done) {
-            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --quiet', 
+            child_process.exec('node bin/cli.js inspectTable --schema SYSTEM --table DUMMY --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -188,7 +191,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should work with "it" alias', function (done) {
-            child_process.exec('node bin/it.js --schema SYSTEM --table DUMMY --quiet', 
+            child_process.exec('node bin/cli.js it --schema SYSTEM --table DUMMY --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -200,7 +203,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should work with "table" alias', function (done) {
-            child_process.exec('node bin/table.js --schema SYSTEM --table DUMMY --quiet', 
+            child_process.exec('node bin/cli.js table --schema SYSTEM --table DUMMY --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -212,7 +215,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should work with "insTbl" alias', function (done) {
-            child_process.exec('node bin/insTbl.js --schema SYSTEM --table DUMMY --quiet', 
+            child_process.exec('node bin/cli.js insTbl --schema SYSTEM --table DUMMY --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -224,7 +227,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should work with "inspectable" alias', function (done) {
-            child_process.exec('node bin/inspectable.js --schema SYSTEM --table DUMMY --quiet', 
+            child_process.exec('node bin/cli.js inspectable --schema SYSTEM --table DUMMY --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -240,7 +243,7 @@ describe('Command Alias Tests', function () {
         this.timeout(10000)
 
         it('should work with "iv" alias', function (done) {
-            child_process.exec('node bin/iv.js --schema SYSTEM --view SYS.USERS --quiet', 
+            child_process.exec('node bin/cli.js iv --schema SYSTEM --view SYS.USERS --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -252,7 +255,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should work with "view" alias', function (done) {
-            child_process.exec('node bin/view.js --schema SYSTEM --view SYS.USERS --quiet', 
+            child_process.exec('node bin/cli.js view --schema SYSTEM --view SYS.USERS --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -268,7 +271,7 @@ describe('Command Alias Tests', function () {
         this.timeout(10000)
 
         it('should work with "ip" alias', function (done) {
-            child_process.exec('node bin/ip.js --help', 
+            child_process.exec('node bin/cli.js ip --help', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     
@@ -279,7 +282,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should work with "inspectprocedure" alias', function (done) {
-            child_process.exec('node bin/inspectprocedure.js --help', 
+            child_process.exec('node bin/cli.js inspectprocedure --help', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     
@@ -294,7 +297,7 @@ describe('Command Alias Tests', function () {
         this.timeout(10000)
 
         it('should work with "if" alias', function (done) {
-            child_process.exec('node bin/if.js --help', 
+            child_process.exec('node bin/cli.js if --help', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     
@@ -305,7 +308,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should work with "function" alias', function (done) {
-            child_process.exec('node bin/function.js --help', 
+            child_process.exec('node bin/cli.js function --help', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     
@@ -321,9 +324,9 @@ describe('Command Alias Tests', function () {
 
         it('should produce similar output for command and alias', function (done) {
             // Compare tables vs t command output
-            child_process.exec('node bin/tables.js --limit 3 --quiet', 
+            child_process.exec('node bin/cli.js tables --limit 3 --quiet', 
                 (error1, stdout1, stderr1) => {
-                    child_process.exec('node bin/t.js --limit 3 --quiet', 
+                    child_process.exec('node bin/cli.js t --limit 3 --quiet', 
                         (error2, stdout2, stderr2) => {
                             base.addContext(this, { title: 'Tables output', value: stdout1 })
                             base.addContext(this, { title: 'T alias output', value: stdout2 })
@@ -338,9 +341,9 @@ describe('Command Alias Tests', function () {
 
         it('should accept same flags for command and alias', function (done) {
             // Test that flags work the same way
-            child_process.exec('node bin/tables.js --schema SYSTEM --limit 5 --quiet', 
+            child_process.exec('node bin/cli.js tables --schema SYSTEM --limit 5 --quiet', 
                 (error1, stdout1, stderr1) => {
-                    child_process.exec('node bin/t.js --schema SYSTEM --limit 5 --quiet', 
+                    child_process.exec('node bin/cli.js t --schema SYSTEM --limit 5 --quiet', 
                         (error2, stdout2, stderr2) => {
                             base.addContext(this, { title: 'Tables with flags', value: stdout1 })
                             base.addContext(this, { title: 'T alias with flags', value: stdout2 })
@@ -357,7 +360,7 @@ describe('Command Alias Tests', function () {
         this.timeout(10000)
 
         it('should show help for table alias', function (done) {
-            child_process.exec('node bin/t.js --help', 
+            child_process.exec('node bin/cli.js t --help', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     
@@ -368,7 +371,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should show help for view alias', function (done) {
-            child_process.exec('node bin/v.js --help', 
+            child_process.exec('node bin/cli.js v --help', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     
@@ -379,7 +382,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should show help for function alias', function (done) {
-            child_process.exec('node bin/f.js --help', 
+            child_process.exec('node bin/cli.js f --help', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     
@@ -394,7 +397,7 @@ describe('Command Alias Tests', function () {
         this.timeout(10000)
 
         it('should handle lowercase aliases', function (done) {
-            child_process.exec('node bin/listtables.js --limit 3 --quiet', 
+            child_process.exec('node bin/cli.js listtables --limit 3 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -406,7 +409,7 @@ describe('Command Alias Tests', function () {
         })
 
         it('should handle camelCase aliases', function (done) {
-            child_process.exec('node bin/listTables.js --limit 3 --quiet', 
+            child_process.exec('node bin/cli.js listTables --limit 3 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })

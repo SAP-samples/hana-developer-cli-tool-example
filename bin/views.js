@@ -1,32 +1,33 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'views [schema] [view]'
 export const aliases = ['v', 'listViews', 'listviews']
-export const describe = base.bundle.getText("views")
+export const describe = baseLite.bundle.getText("views")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   view: {
     alias: ['v', 'View'],
     type: 'string',
     default: "*",
-    desc: base.bundle.getText("view")
+    desc: baseLite.bundle.getText("view")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: base.bundle.getText("limit")
+    desc: baseLite.bundle.getText("limit")
   }
 })
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, getViews, {
     view: {
       description: base.bundle.getText("view"),
@@ -52,12 +53,13 @@ export function handler (argv) {
  * @returns {Promise<Array>} - Array of view objects
  */
 export async function getViews(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('getViews')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
     let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("view")}: ${prompts.view}`)
+    base.debug(`${baseLite.bundle.getText("schema")}: ${schema}, ${baseLite.bundle.getText("view")}: ${prompts.view}`)
 
     let results = await getViewsInt(schema, prompts.view, db, prompts.limit)
     base.outputTableFancy(results)
@@ -77,6 +79,7 @@ export async function getViews(prompts) {
  * @returns {Promise<Array>} - Array of view objects
  */
 async function getViewsInt(schema, view, client, limit) {
+  const base = await import('../utils/base.js')
   base.debug(`getViewsInt ${schema} ${view} ${limit}`)
   view = base.dbClass.objectName(view)
   let query =

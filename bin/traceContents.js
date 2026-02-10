@@ -1,30 +1,31 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'traceContents [host] [file]'
 export const aliases = ['tc', 'traceContents', 'traceContent', 'tracecontent']
-export const describe = base.bundle.getText("traceContents")
+export const describe = baseLite.bundle.getText("traceContents")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   host: {
     alias: ['ho', 'Host'],
     type: 'string',
-    desc: base.bundle.getText("host")
+    desc: baseLite.bundle.getText("host")
   },
   file: {
     alias: ['f', 'File'],
     type: 'string',
-    desc: base.bundle.getText("file")
+    desc: baseLite.bundle.getText("file")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 2000,
-    desc: base.bundle.getText("limit")
+    desc: baseLite.bundle.getText("limit")
   }
 })
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, traceContents, {
     host: {
       description: base.bundle.getText("host"),
@@ -45,6 +46,7 @@ export function handler (argv) {
 }
 
 export async function traceContents(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('traceContents')
   try {
     base.setPrompts(prompts)

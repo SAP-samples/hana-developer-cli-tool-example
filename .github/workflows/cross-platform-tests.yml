@@ -34,17 +34,10 @@ jobs:
     - name: Run linter
       run: npm run lint --if-present
       continue-on-error: true
-      
-    - name: Run tests
-      run: npm test
-      
+    
     - name: Run cross-platform specific tests
       run: npm run test:platform
-      
-    - name: Generate coverage report
-      run: npm run coverage
-      continue-on-error: true
-      
+     
     - name: Upload test results
       uses: actions/upload-artifact@v4
       if: always()

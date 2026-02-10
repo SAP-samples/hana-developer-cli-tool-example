@@ -1,18 +1,18 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as btp from '../utils/btp.js'
 import { select } from '@inquirer/prompts'
-const colors = base.colors
+const colors = baseLite.colors
 
 export const command = 'btp [directory] [subaccount]'
 export const aliases = ['btpTarget', 'btptarget', 'btp']
-export const describe = base.bundle.getText("btpCmd")
+export const describe = baseLite.bundle.getText("btpCmd")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
     subaccount: {
         alias: ['sa'],
         type: 'string',
-        desc: base.bundle.getText("btpSa")
+        desc: baseLite.bundle.getText("btpSa")
     }
 }, false)
 
@@ -23,6 +23,7 @@ export const builder = base.getBuilder({
  * @returns {Promise<void>}
  */
 export async function handler(argv) {
+  const base = await import('../utils/base.js')
     let schema = {
         subaccount: {
             description: base.bundle.getText("btpSa"),
@@ -148,6 +149,7 @@ export async function handler(argv) {
 
 
 export async function callBTP(prompts) {
+  const base = await import('../utils/base.js')
     base.debug('callBTP')
     base.startSpinnerInt()
     base.debug(prompts)

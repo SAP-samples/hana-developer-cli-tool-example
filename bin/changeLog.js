@@ -1,5 +1,5 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as fs from 'fs'
 import * as path from 'path'
 import { fileURLToPath } from 'url'
@@ -8,9 +8,10 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 export const command = 'changes'
 export const aliases = ['chg', 'changeLog', 'changelog']
-export const describe = base.bundle.getText("changes")
+export const describe = baseLite.bundle.getText("changes")
 
-export function handler() {
+export async function handler() {
+  const base = await import('../utils/base.js')
   getChangeLog()
 }
 

@@ -1,28 +1,28 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'procedures [schema] [procedure]'
 export const aliases = ['p', 'listProcs', 'ListProc', 'listprocs', 'Listproc', "listProcedures", "listprocedures"]
-export const describe = base.bundle.getText("procedures")
+export const describe = baseLite.bundle.getText("procedures")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   procedure: {
     alias: ['p', 'Procedure'],
     type: 'string',
     default: "*",
-    desc: base.bundle.getText("procedure")
+    desc: baseLite.bundle.getText("procedure")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: base.bundle.getText("limit")
+    desc: baseLite.bundle.getText("limit")
   }
 })
 
@@ -31,7 +31,8 @@ export const builder = base.getBuilder({
  * @param {object} argv - Command line arguments from yargs
  * @returns {void}
  */
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, getProcedures, {
     procedure: {
       description: base.bundle.getText("procedure"),
@@ -57,13 +58,14 @@ export function handler (argv) {
  * @returns {Promise<Array>} - Array of procedure objects
  */
 export async function getProcedures(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('getProcedures')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
     let schema = await base.dbClass.schemaCalc(prompts, db);
-    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("procedure")}: ${prompts.procedure}`);
+    base.debug(`${baseLite.bundle.getText("schema")}: ${schema}, ${baseLite.bundle.getText("procedure")}: ${prompts.procedure}`);
 
     let results = await getProceduresInt(schema, prompts.procedure, db, prompts.limit)
     base.outputTableFancy(results)
@@ -83,6 +85,7 @@ export async function getProcedures(prompts) {
  * @returns {Promise<Array>} - Array of procedure objects
  */
 async function getProceduresInt(schema, procedure, client, limit) {
+  const base = await import('../utils/base.js')
   base.debug(`getProceduresInt ${schema} ${procedure} ${limit}`)
   procedure = base.dbClass.objectName(procedure)
   let query =

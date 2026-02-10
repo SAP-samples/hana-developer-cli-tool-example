@@ -1,44 +1,44 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'functions [schema] [function]'
 export const aliases = ['f', 'listFuncs', 'ListFunc', 'listfuncs', 'Listfunc', "listFunctions", "listfunctions"]
-export const describe = base.bundle.getText("functions")
+export const describe = baseLite.bundle.getText("functions")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   function: {
     alias: ['f', 'Function'],
     type: 'string',
     default: "*",
-    desc: base.bundle.getText("function")
+    desc: baseLite.bundle.getText("function")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: base.bundle.getText("limit")
+    desc: baseLite.bundle.getText("limit")
   }
 })
 
 export let inputPrompts = {
   function: {
-    description: base.bundle.getText("function"),
+    description: baseLite.bundle.getText("function"),
     type: 'string',
     required: true
   },
   schema: {
-    description: base.bundle.getText("schema"),
+    description: baseLite.bundle.getText("schema"),
     type: 'string',
     required: true
   },
   limit: {
-    description: base.bundle.getText("limit"),
+    description: baseLite.bundle.getText("limit"),
     type: 'number',
     required: true
   }
@@ -49,7 +49,8 @@ export let inputPrompts = {
  * @param {object} argv - Command line arguments from yargs
  * @returns {void}
  */
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, getFunctions, inputPrompts)
 }
 
@@ -59,6 +60,7 @@ export function handler (argv) {
  * @returns {Promise<Array>} - Array of function objects
  */
 export async function getFunctions(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('getFunctions')
   try {
     base.setPrompts(prompts)
@@ -87,6 +89,7 @@ export async function getFunctions(prompts) {
  * @returns {Promise<Array>} - Array of function objects
  */
 async function getFunctionsInt(schema, functionName, client, limit) {
+  const base = await import('../utils/base.js')
   base.debug(`getFunctionsInt ${schema} ${functionName} ${limit}`)
   functionName = base.dbClass.objectName(functionName)
 

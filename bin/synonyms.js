@@ -1,38 +1,39 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'synonyms [schema] [synonym] [target]'
 export const aliases = ['syn', 'listSynonyms', 'listsynonyms']
-export const describe = base.bundle.getText("synonyms")
+export const describe = baseLite.bundle.getText("synonyms")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   synonym: {
     alias: ['syn', 'Synonym'],
     type: 'string',
     default: "*",
-    desc: base.bundle.getText("synonym")
+    desc: baseLite.bundle.getText("synonym")
   },
   target: {
     alias: ['t', 'Target'],
     type: 'string',
     default: "*",
-    desc: base.bundle.getText("target")
+    desc: baseLite.bundle.getText("target")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: base.bundle.getText("limit")
+    desc: baseLite.bundle.getText("limit")
   }
 })
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, getSynonyms, {
     synonym: {
       description: base.bundle.getText("synonym"),
@@ -58,13 +59,14 @@ export function handler (argv) {
 }
 
 export async function getSynonyms(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('getSynonyms')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
     let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("synonym")}: ${prompts.synonym}, ${base.bundle.getText("target")}: ${prompts.target}`)
+    base.debug(`${baseLite.bundle.getText("schema")}: ${schema}, ${baseLite.bundle.getText("synonym")}: ${prompts.synonym}, ${baseLite.bundle.getText("target")}: ${prompts.target}`)
 
     let results = await getSynonymsInt(schema, prompts.synonym, prompts.target, db, prompts.limit)
     base.outputTableFancy(results)
@@ -76,6 +78,7 @@ export async function getSynonyms(prompts) {
 }
 
 async function getSynonymsInt(schema, synonym, target, client, limit) {
+  const base = await import('../utils/base.js')
   base.debug(`getSynonymsInt ${schema} ${synonym} ${target} ${limit}`)
   synonym = base.dbClass.objectName(synonym)
   target = base.dbClass.objectName(target)

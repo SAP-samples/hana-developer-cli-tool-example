@@ -1,18 +1,18 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as cf from '../utils/cf.js'
 import * as btp from '../utils/btp.js'
 
 export const command = 'hcStart [name]'
 export const aliases = ['hcstart', 'hc_start', 'start']
-export const describe = base.bundle.getText("hcStart")
+export const describe = baseLite.bundle.getText("hcStart")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
     name: {
         alias: ['n'],
         type: 'string',
         default: `**default**`,
-        desc: base.bundle.getText("hc_instance_name")
+        desc: baseLite.bundle.getText("hc_instance_name")
     }
 }, false)
 
@@ -21,7 +21,8 @@ export const builder = base.getBuilder({
  * @param {object} argv - Command line arguments from yargs
  * @returns {void}
  */
-export function handler(argv) {
+export async function handler(argv) {
+  const base = await import('../utils/base.js')
     base.promptHandler(argv, hcStart, {
         name: {
             description: base.bundle.getText("hc_instance_name"),
@@ -42,7 +43,7 @@ function suggestHanaCli(stdout, instanceName) {
 
     // Replace message 'Update in progress. Use 'cf services' or 'cf service dbhana-hana' to check operation status.'
     if (out[3]) {
-        out[3] = `${base.bundle.getText("hc.updateProgress")}. ${base.bundle.getText("hc.progress", [instanceName])}`
+        out[3] = `${baseLite.bundle.getText("hc.updateProgress")}. ${baseLite.bundle.getText("hc.progress", [instanceName])}`
     }
     return out.join("\n")
 }
@@ -56,7 +57,7 @@ function suggestBTPHanaCli(stdout, instanceName) {
     let out = stdout
     // Replace message 'Update in progress. Use 'cf services' or 'cf service dbhana-hana' to check operation status.'
     if (out) {
-        out = `${base.bundle.getText("hc.updateProgress")}. ${base.bundle.getText("hc.progress", [instanceName])}`
+        out = `${baseLite.bundle.getText("hc.updateProgress")}. ${baseLite.bundle.getText("hc.progress", [instanceName])}`
     }
     return out
 }
@@ -67,6 +68,7 @@ function suggestBTPHanaCli(stdout, instanceName) {
  * @returns {Promise<void>}
  */
 export async function hcStart(prompts) {
+  const base = await import('../utils/base.js')
     base.debug(`hcStart`)
     try {
 
@@ -100,7 +102,7 @@ export async function hcStart(prompts) {
                 }
                 // @ts-ignore
                 if (!results || !results.resources) {
-                    return base.error(new Error(base.bundle.getText("hc.error")))
+                    return base.error(new Error(baseLite.bundle.getText("hc.error")))
                 }
                 // @ts-ignore
                 for (let item of results.resources) {

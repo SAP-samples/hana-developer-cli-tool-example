@@ -1,28 +1,28 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'sequences [schema] [sequence]'
 export const aliases = ['seq', 'listSeqs', 'ListSeqs', 'listseqs', 'Listseq', "listSequences"]
-export const describe = base.bundle.getText("sequences")
+export const describe = baseLite.bundle.getText("sequences")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   sequence: {
     alias: ['seq', 'Sequence'],
     type: 'string',
     default: "*",
-    desc: base.bundle.getText("sequence")
+    desc: baseLite.bundle.getText("sequence")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: base.bundle.getText("limit")
+    desc: baseLite.bundle.getText("limit")
   }
 })
 
@@ -31,7 +31,8 @@ export const builder = base.getBuilder({
  * @param {object} argv - Command line arguments from yargs
  * @returns {void}
  */
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, getSequences, {
     sequence: {
       description: base.bundle.getText("sequence"),
@@ -57,13 +58,14 @@ export function handler (argv) {
  * @returns {Promise<Array>} - Array of sequence objects
  */
 export async function getSequences(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('getSequences')
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
     let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.debug(`${base.bundle.getText("schema")}: ${schema}, ${base.bundle.getText("sequence")}: ${prompts.sequence}`)
+    base.debug(`${baseLite.bundle.getText("schema")}: ${schema}, ${baseLite.bundle.getText("sequence")}: ${prompts.sequence}`)
 
     let results = await getSequencesInt(schema, prompts.sequence, db, prompts.limit)
     base.outputTableFancy(results)
@@ -83,6 +85,7 @@ export async function getSequences(prompts) {
  * @returns {Promise<Array>} - Array of sequence objects
  */
 async function getSequencesInt(schema, sequence, client, limit) {
+  const base = await import('../utils/base.js')
   base.debug(`getSequencesInt ${schema} ${sequence} ${limit}`)
   sequence = base.dbClass.objectName(sequence)
   let query =

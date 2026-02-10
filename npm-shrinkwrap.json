@@ -74,6 +74,7 @@
         "chai": "^6.2.2",
         "cross-env": "^10.1.0",
         "eslint": "^9.39.2",
+        "esmock": "^2.7.3",
         "mochawesome": "^7.1.3",
         "mock-fs": "^5.5.0",
         "nyc": "^17.1.0",
@@ -5567,6 +5568,16 @@
       },
       "engines": {
         "node": ">=8"
+      }
+    },
+    "node_modules/esmock": {
+      "version": "2.7.3",
+      "resolved": "https://registry.npmjs.org/esmock/-/esmock-2.7.3.tgz",
+      "integrity": "sha512-/M/YZOjgyLaVoY6K83pwCsGE1AJQnj4S4GyXLYgi/Y79KL8EeW6WU7Rmjc89UO7jv6ec8+j34rKeWOfiLeEu0A==",
+      "dev": true,
+      "license": "ISC",
+      "engines": {
+        "node": ">=14.16.0"
       }
     },
     "node_modules/espree": {

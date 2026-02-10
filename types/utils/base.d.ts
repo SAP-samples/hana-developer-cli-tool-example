@@ -198,8 +198,11 @@ export namespace tableOptions {
         let bgColor_1: string;
         export { bgColor_1 as bgColor };
     }
+    let width: number;
     let fit: boolean;
 }
+/** Maximum rows to display in terminal output before truncating */
+export const MAX_DISPLAY_ROWS: 100;
 /**
  * - instance of sap-hdbext-promisified module
  */

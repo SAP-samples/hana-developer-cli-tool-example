@@ -1,29 +1,30 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'createJWT [name]'
 export const aliases = ['cJWT', 'cjwt', 'cJwt']
-export const describe = base.bundle.getText("createJWT")
+export const describe = baseLite.bundle.getText("createJWT")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   name: {
     alias: ['c', 'Name'],
     type: 'string',
-    desc: base.bundle.getText("jwtName")
+    desc: baseLite.bundle.getText("jwtName")
   },
   certificate: {
     alias: ['c', 'Certificate'],
     type: 'string',
-    desc: base.bundle.getText("certificate")
+    desc: baseLite.bundle.getText("certificate")
   },
   issuer: {
     alias: ['i', 'Issuer'],
-    desc: base.bundle.getText("issuer"),
+    desc: baseLite.bundle.getText("issuer"),
     type: 'string'
   }
 })
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, activate, {
     name: {
       description: base.bundle.getText("jwtName"),
@@ -41,6 +42,7 @@ export function handler (argv) {
 }
 
 export async function activate(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('activate')
   try {
     base.setPrompts(prompts)

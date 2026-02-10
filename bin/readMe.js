@@ -1,10 +1,10 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'readMe'
 export const aliases = ['readme']
-export const describe = base.bundle.getText("readMe")
-export const builder = base.getBuilder({}, false)
+export const describe = baseLite.bundle.getText("readMe")
+export const builder = baseLite.getBuilder({}, false)
 
 export const handler = async function () {
 

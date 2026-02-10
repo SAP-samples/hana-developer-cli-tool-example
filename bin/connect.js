@@ -1,40 +1,40 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 export const command = 'connect [user] [password]'
 export const aliases = ['c', 'login']
-export const describe = base.bundle.getText("connect")
+export const describe = baseLite.bundle.getText("connect")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   connection: {
     alias: 'n',
-    desc: base.bundle.getText("connection")
+    desc: baseLite.bundle.getText("connection")
   },
   user: {
     alias: ['u', 'User'],
-    desc: base.bundle.getText("user")
+    desc: baseLite.bundle.getText("user")
   },
   password: {
     alias: ['p', 'Password'],
-    desc: base.bundle.getText("password")
+    desc: baseLite.bundle.getText("password")
   },
   userstorekey: {
     alias: ['U', 'UserStoreKey'],
-    desc: base.bundle.getText("userstorekey")
+    desc: baseLite.bundle.getText("userstorekey")
   },
   save: {
     alias: ['s', 'Save'],
-    desc: base.bundle.getText("save"),
+    desc: baseLite.bundle.getText("save"),
     type: 'boolean',
     default: true
   },
   encrypt: {
     alias: ['e', 'Encrypt', 'ssl'],
-    desc: base.bundle.getText("encrypt"),
+    desc: baseLite.bundle.getText("encrypt"),
     type: 'boolean'
   },
   trustStore: {
     alias: ['t', 'Trust', 'trust', 'truststore'],
-    desc: base.bundle.getText("trustStore")
+    desc: baseLite.bundle.getText("trustStore")
   }
 }, false)
 
@@ -44,7 +44,8 @@ export const builder = base.getBuilder({
  * @param {object} argv - Command line arguments from yargs
  * @returns {void}
  */
-export function handler(argv) {
+export async function handler(argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, dbConnect, {
     connection: {
       description: base.bundle.getText("connection"),
@@ -105,6 +106,7 @@ export function handler(argv) {
  * @returns {Promise<void>}
  */
 export async function dbConnect(input) {
+  const base = await import('../utils/base.js')
   base.debug(`dbConnect`)
   try {
     input.admin = true
@@ -147,6 +149,7 @@ export async function dbConnect(input) {
  * @returns {Promise<void>}
  */
 export async function saveEnv(options) {
+  const base = await import('../utils/base.js')
   base.debug('saveEnv')
   let parts = options.serverNode.split(':')
   let defaultEnv = {}
@@ -181,6 +184,6 @@ export async function saveEnv(options) {
   }
   const {default:fs} = await import('fs')
   fs.writeFileSync("default-env-admin.json", JSON.stringify(defaultEnv, null, '\t'))
-  console.log(base.bundle.getText("adminSaved"))
+  console.log(baseLite.bundle.getText("adminSaved"))
 
 }

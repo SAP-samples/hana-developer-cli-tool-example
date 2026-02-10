@@ -1,24 +1,25 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as btp from '../utils/btp.js'
-const colors = base.colors
+const colors = baseLite.colors
 
 export const command = 'btpInfo'
 export const aliases = ['btpinfo']
-export const describe = base.bundle.getText("btpInfo")
+export const describe = baseLite.bundle.getText("btpInfo")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
     output: {
         alias: ['o', 'Output'],
         choices: ["tbl", "json"],
         default: "tbl",
         type: 'string',
-        desc: base.bundle.getText("outputType")
+        desc: baseLite.bundle.getText("outputType")
       }
 }, false)
 
 
 export async function handler(argv) {
+  const base = await import('../utils/base.js')
     base.promptHandler(argv, getBTPInfo, {
         output: {
           description: base.bundle.getText("outputType"),
@@ -30,6 +31,7 @@ export async function handler(argv) {
 }
 
 export async function getBTPInfo(prompts) {
+    const base = await import('../utils/base.js')
     base.debug('getBTPInfo')
     base.startSpinnerInt()
     base.debug(prompts)
@@ -41,17 +43,17 @@ export async function getBTPInfo(prompts) {
         if(prompts.output === 'json'){
             console.log(data)
         }else{
-            console.log(`${base.bundle.getText("dbx.user")}: ${colors.green(data.UserName)}`)
-            console.log(`${base.bundle.getText("btp.ServerURL")}: ${colors.blue(data.ServerURL)}`)
-            console.log(`${base.bundle.getText("btp.version")}: ${colors.green(data.Version)}`)
+            console.log(`${baseLite.bundle.getText("dbx.user")}: ${colors.green(data.UserName)}`)
+            console.log(`${baseLite.bundle.getText("btp.ServerURL")}: ${colors.blue(data.ServerURL)}`)
+            console.log(`${baseLite.bundle.getText("btp.version")}: ${colors.green(data.Version)}`)
             for (let item of data.TargetHierarchy) {
                 let output = ''
                 if(item.Type === 'globalaccount'){
-                    output = base.bundle.getText("btp.globalaccount")
+                    output = baseLite.bundle.getText("btp.globalaccount")
                 }else if(item.Type === 'directory'){
-                    output = base.bundle.getText("btp.folder")
+                    output = baseLite.bundle.getText("btp.folder")
                 }else if(item.Type === 'subaccount'){
-                    output = base.bundle.getText("btp.subaccount")
+                    output = baseLite.bundle.getText("btp.subaccount")
                 }
                 console.log(`${output}: ${colors.green(item.DisplayName)} ${colors.red(item.ID)}`)
             }

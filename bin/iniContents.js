@@ -1,32 +1,33 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'iniContents [file] [section]'
 export const aliases = ['if', 'inifiles', 'ini']
-export const describe = base.bundle.getText("iniContents")
+export const describe = baseLite.bundle.getText("iniContents")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   file: {
     alias: ['f', 'File'],
     type: 'string',
     default: "*",
-    desc: base.bundle.getText("file")
+    desc: baseLite.bundle.getText("file")
   },
   section: {
     alias: ['s', 'Section'],
     type: 'string',
     default: "*",
-    desc: base.bundle.getText("section")
+    desc: baseLite.bundle.getText("section")
   },
   limit: {
     alias: ['l'],
     type: 'number',
     default: 200,
-    desc: base.bundle.getText("limit")
+    desc: baseLite.bundle.getText("limit")
   }
 })
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, iniContents, {
     file: {
       description: base.bundle.getText("file"),
@@ -47,6 +48,7 @@ export function handler (argv) {
 }
 
 export async function iniContents(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('iniContents')
   try {
     base.setPrompts(prompts)

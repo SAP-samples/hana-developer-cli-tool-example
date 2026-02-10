@@ -13,9 +13,11 @@ export const require = createRequire(import.meta.url)
 
 import * as path from 'path'
 
+// Database class is kept as eager load since it's only used in actual DB operations
 import dbClassDef from "sap-hdb-promisfied"
 /** @typedef {dbClassDef} dbClass - instance of sap-hdb-promisified module */
 export const dbClass = dbClassDef
+
 import * as conn from "../utils/connections.js"
 
 import * as sqlInjectionDef from "../utils/sqlInjection.js"
@@ -31,8 +33,14 @@ let dbClassInstance = null
 import chalk from 'chalk'
 export const colors = chalk
 
-/** @type {typeof import("@inquirer/prompts")} */
-import { input, password, confirm } from '@inquirer/prompts'
+// Lazy-load inquirer prompts (only needed for interactive prompts)
+let inquirerPrompts = null
+const getInquirer = async () => {
+    if (!inquirerPrompts) {
+        inquirerPrompts = await import('@inquirer/prompts')
+    }
+    return inquirerPrompts
+}
 
 /** @type typeof import("glob") */
 import { glob } from 'glob'
@@ -66,7 +74,14 @@ export const bundle = new TextBundle(path.join(__dirname, '..', '/_i18n/messages
 
 /** @typedef {typeof import("ora")} Ora*/
 /** @type Ora - Elegant terminal spinner */
-import ora from 'ora'
+let oraModule = null
+const getOra = async () => {
+    if (!oraModule) {
+        // @ts-ignore
+        oraModule = (await import('ora')).default
+    }
+    return oraModule
+}
 
 /** @typeof Ora.Options - Terminal spinner options */
 let oraOptions = { type: 'clock', text: '\n' }
@@ -75,7 +90,9 @@ let spinner = null
 /**
  * Start the Terminal Spinner
  */
-export function startSpinnerInt() {
+export async function startSpinnerInt() {
+    const ora = await getOra()
+    // @ts-ignore
     spinner = ora(oraOptions).start()
 }
 /**
@@ -87,8 +104,21 @@ export function stopSpinnerInt() {
     }
 }
 
-import terminalkit from 'terminal-kit'
-export const { terminal } = terminalkit
+// Lazy-load terminal-kit (only needed for fancy table output)
+let terminalkitModule = null
+const getTerminalKit = async () => {
+    if (!terminalkitModule) {
+        const module = await import('terminal-kit')
+        terminalkitModule = module.default
+    }
+    return terminalkitModule
+}
+
+export const getTerminal = async () => {
+    const tk = await getTerminalKit()
+    return tk.terminal
+}
+
 import jsonToTable from 'json-to-table'
 export const json2Table = jsonToTable
 export let tableOptions = {
@@ -616,6 +646,9 @@ export async function promptHandler(argv, processingFunction, inputSchema, iConn
                 continue
             }
 
+            // Lazy-load inquirer prompts only when needed
+            const { input, password, confirm } = await getInquirer()
+            
             let answer
             if (promptConfig.type === 'confirm') {
                 answer = await confirm({
@@ -858,14 +891,15 @@ export function outputTable(content) {
 /**
  * Output JSON content either as a table or as formatted JSON to console
  * @param {*} content - json content often a HANA result set
- * @returns {void}
+ * @returns {Promise<void>}
  */
-export function outputTableFancy(content) {
+export async function outputTableFancy(content) {
     if (content.length < 1) {
         console.log(bundle.getText('noData'))
     } else {
         if (verboseOutput(prompts)) {
             try {
+                const terminal = await getTerminal()
                 // Handle large datasets with pagination
                 if (content.length > MAX_DISPLAY_ROWS) {
                     console.log(colors.yellow(`\nShowing first ${MAX_DISPLAY_ROWS} of ${content.length} rows (use --output json with --filename to save all results)\n`))
@@ -990,13 +1024,13 @@ export async function webServerSetup(urlPath) {
 
     // Start the Server
     server.on("request", app)
-    server.listen(port, function () {
+    server.listen(port, async function () {
         // @ts-ignore
         let serverAddr = `http://localhost:${server.address().port}${urlPath}`
         debug(serverAddr)
         console.info(`HTTP Server: ${serverAddr}`)
         startSpinnerInt()
-        open(serverAddr)
+        await open(serverAddr, {wait: true})
     })
 
     return

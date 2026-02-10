@@ -1,14 +1,16 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'changesUI'
 export const aliases = ['chgUI', 'chgui', 'changeLogUI', 'changelogui']
-export const describe = base.bundle.getText("changes")
-export function handler (argv) {
+export const describe = baseLite.bundle.getText("changes")
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, getChangeLog, {})
 }
 
 export async function getChangeLog(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('changeLogUI')
   try {
     base.setPrompts(prompts)

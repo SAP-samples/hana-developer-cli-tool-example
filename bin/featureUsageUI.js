@@ -1,5 +1,5 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as featureUsage from './featureUsage.js'
 
 export const command = 'featureUsageUI'
@@ -7,10 +7,12 @@ export const aliases = ['fuui', 'featureusageui', 'FeaturesUsageUI', 'featuresus
 export const describe = featureUsage.describe
 export const builder = featureUsage.builder
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, dbStatus, {})
 }
 export async function dbStatus(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('getFeatureUsageUI')
   try {
     base.setPrompts(prompts)

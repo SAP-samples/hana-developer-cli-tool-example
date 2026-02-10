@@ -1,17 +1,19 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as  conn from '../utils/connections.js'
 import * as xsenv from '@sap/xsenv'
 import { spawn } from 'child_process'
 
 export const command = 'hdbsql'
-export const describe = base.bundle.getText("hdbsql")
-export const builder = base.getBuilder({})
-export function handler (argv) {
+export const describe = baseLite.bundle.getText("hdbsql")
+export const builder = baseLite.getBuilder({})
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, launchHdbsql, {})
 }
 
 export async function launchHdbsql(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('launchHdbsql')
   try {
     let envFile = conn.resolveEnv(prompts)

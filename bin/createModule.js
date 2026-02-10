@@ -1,28 +1,29 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as fs from 'fs'
 import latestVersion from 'latest-version'
 
 export const command = 'createModule'
 export const aliases = ['createDB', 'createDBModule']
-export const describe = base.bundle.getText("createModule")
+export const describe = baseLite.bundle.getText("createModule")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
     folder: {
         alias: ['f', 'Folder'],
         type: 'string',
         default: 'db',
-        desc: base.bundle.getText("folder")
+        desc: baseLite.bundle.getText("folder")
     },
     hanaCloud: {
         alias: ['hc', 'hana-cloud', 'hanacloud'],
         type: 'boolean',
         default: true,
-        desc: base.bundle.getText("hanaCloud")
+        desc: baseLite.bundle.getText("hanaCloud")
     }
 }, false)
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
     base.promptHandler(argv, save, {
         folder: {
             description: base.bundle.getText("folder"),
@@ -39,6 +40,7 @@ export function handler (argv) {
 }
 
 export async function save(prompts) {
+  const base = await import('../utils/base.js')
     base.debug('save')
     let dir = './' + prompts.folder
     !fs.existsSync(dir) && fs.mkdirSync(dir)

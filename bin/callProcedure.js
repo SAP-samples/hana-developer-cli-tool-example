@@ -1,28 +1,29 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as dbInspect from '../utils/dbInspect.js'
 import * as conn from '../utils/connections.js'
 
 export const command = 'callProcedure [schema] [procedure]'
 export const aliases = ['cp', 'callprocedure', 'callProc', 'callproc', 'callSP', 'callsp']
-export const describe = base.bundle.getText("callProcedure")
+export const describe = baseLite.bundle.getText("callProcedure")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   procedure: {
     alias: ['p', 'Procedure', 'sp'],
     type: 'string',
-    desc: base.bundle.getText("procedure")
+    desc: baseLite.bundle.getText("procedure")
   },
   schema: {
     alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
-    desc: base.bundle.getText("schema")
+    desc: baseLite.bundle.getText("schema")
   }
 })
 
 
 export async function handler(argv) {
+  const base = await import('../utils/base.js')
   let schema = {
     procedure: {
       description: base.bundle.getText("procedure"),
@@ -86,6 +87,7 @@ export async function handler(argv) {
 
 
 export async function callProc(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('callProc')
   try {
     base.setPrompts(prompts)

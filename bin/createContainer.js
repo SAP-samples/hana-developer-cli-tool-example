@@ -1,39 +1,40 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as conn from "../utils/connections.js"
 import * as xsenv from '@sap/xsenv'
 
 export const command = 'createContainer [container] [group]'
 export const aliases = ['cc', 'cCont']
-export const describe = base.bundle.getText("createContainer")
+export const describe = baseLite.bundle.getText("createContainer")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
   container: {
     alias: ['c', 'Container'],
     type: 'string',
-    desc: base.bundle.getText("container")
+    desc: baseLite.bundle.getText("container")
   },
   group: {
     alias: ['g', 'Group'],
     type: 'string',
     default: '',
-    desc: base.bundle.getText("group")
+    desc: baseLite.bundle.getText("group")
   },
   save: {
     alias: ['s', 'Save'],
-    desc: base.bundle.getText("saveHDI"),
+    desc: baseLite.bundle.getText("saveHDI"),
     type: 'boolean',
     default: true
   },
   encrypt: {
     alias: ['e', 'Encrypt', 'ssl'],
-    desc: base.bundle.getText("encrypt"),
+    desc: baseLite.bundle.getText("encrypt"),
     type: 'boolean',
     default: false
   }
 })
 
-export function handler (argv) {
+export async function handler (argv) {
+  const base = await import('../utils/base.js')
   base.promptHandler(argv, activate, {
     container: {
       description: base.bundle.getText("container"),
@@ -57,6 +58,7 @@ export function handler (argv) {
 }
 
 export async function activate(prompts) {
+  const base = await import('../utils/base.js')
   base.debug('activate')
   const { v4: uuidv4 } = base.require('uuid')
   try {
@@ -196,6 +198,7 @@ export async function activate(prompts) {
 
 
 export async function saveEnv(options, container, userDT, userRT, passwordDT, passwordRT, encrypt) {
+  const base = await import('../utils/base.js')
   base.debug('saveEnv')
   //  let parts = options.serverNode.split(':');
   let defaultEnv = {}
@@ -232,8 +235,8 @@ export async function saveEnv(options, container, userDT, userRT, passwordDT, pa
   const {default:fs} = await import('fs')
   fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), (err) => {
     if (err) {
-      throw new Error(`${base.bundle.getText('errDefaultEnv')}: ${JSON.stringify(err)}`)
+      throw new Error(`${baseLite.bundle.getText('errDefaultEnv')}: ${JSON.stringify(err)}`)
     }
-    console.log(base.bundle.getText("containerSaved"))
+    console.log(baseLite.bundle.getText("containerSaved"))
   })
 }

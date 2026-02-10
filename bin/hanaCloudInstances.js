@@ -1,20 +1,20 @@
 // @ts-check
-import * as base from '../utils/base.js'
+import * as baseLite from '../utils/base-lite.js'
 import * as cf from '../utils/cf.js'
 import * as btp from '../utils/btp.js'
 
-const colors = base.colors
+const colors = baseLite.colors
 
 export const command = 'hc [name]'
 export const aliases = ['hcInstances', 'instances', 'listHC', 'listhc', 'hcinstances']
-export const describe = base.bundle.getText("hcInstances")
+export const describe = baseLite.bundle.getText("hcInstances")
 
-export const builder = base.getBuilder({
+export const builder = baseLite.getBuilder({
     name: {
         alias: ['n'],
         type: 'string',
         default: `**default**`,
-        desc: base.bundle.getText("hc_instance_name")
+        desc: baseLite.bundle.getText("hc_instance_name")
     }
 }, false)
 
@@ -23,7 +23,8 @@ export const builder = base.getBuilder({
  * @param {object} argv - Command line arguments from yargs
  * @returns {void}
  */
-export function handler(argv) {
+export async function handler(argv) {
+  const base = await import('../utils/base.js')
     base.promptHandler(argv, listInstances, {
         name: {
             description: base.bundle.getText("hc_instance_name"),
@@ -40,12 +41,13 @@ export function handler(argv) {
  * @returns {Promise<void>}
  */
 export async function listInstances(prompts) {
+  const base = await import('../utils/base.js')
     base.debug(`listInstances`)
     try {
 
         //BTP Multi-Environment Instances
         if (base.verboseOutput) {
-            console.log(base.bundle.getText("hc.BTPCheck"))
+            console.log(baseLite.bundle.getText("hc.BTPCheck"))
         }
         let results = []
         try {
@@ -82,16 +84,16 @@ export async function listInstances(prompts) {
                 var url = new URL(outputItem.hana_cockpit)
                 outputItem.hana_central = `${url.protocol}//${url.host}/hcs/sap/hana/cloud/index.html#/org/${await cf.getCFOrgGUID()}/space/${await cf.getCFSpaceGUID()}/databases`
                 outputItem.db_explorer = `${url.protocol}//${url.host}/sap/hana/cst/catalog/index.html`
-                console.log(`${base.bundle.getText("hc.name")}: ${colors.green(outputItem.name)}`)
-                console.log(`${base.bundle.getText("hc.created")}: ${colors.green(outputItem.created_at)}`)
-                console.log(`${base.bundle.getText("hc.status")}: ${colors.green(outputItem.status)}`)
-                console.log(`${base.bundle.getText("hc.lastOperation")}: ${colors.green(outputItem.last_operation)}`)
-                console.log(`${base.bundle.getText("hc.version")}: ${colors.green(outputItem.version)}`)
-                console.log(`${base.bundle.getText("hc.enabledservices")}: ${colors.green(outputItem.enabledServices)}`)
-                console.log(`${base.bundle.getText("hc.resources")}: ${colors.green(outputItem.resources)}`)
-                console.log(`${base.bundle.getText("hc.cockpit")}: ${colors.blue(outputItem.hana_cockpit)}`)
-                console.log(`${base.bundle.getText("hc.central")}: ${colors.blue(outputItem.hana_central)}`)
-                console.log(`${base.bundle.getText("hc.dbx")}: ${colors.blue(outputItem.db_explorer)}`)
+                console.log(`${baseLite.bundle.getText("hc.name")}: ${colors.green(outputItem.name)}`)
+                console.log(`${baseLite.bundle.getText("hc.created")}: ${colors.green(outputItem.created_at)}`)
+                console.log(`${baseLite.bundle.getText("hc.status")}: ${colors.green(outputItem.status)}`)
+                console.log(`${baseLite.bundle.getText("hc.lastOperation")}: ${colors.green(outputItem.last_operation)}`)
+                console.log(`${baseLite.bundle.getText("hc.version")}: ${colors.green(outputItem.version)}`)
+                console.log(`${baseLite.bundle.getText("hc.enabledservices")}: ${colors.green(outputItem.enabledServices)}`)
+                console.log(`${baseLite.bundle.getText("hc.resources")}: ${colors.green(outputItem.resources)}`)
+                console.log(`${baseLite.bundle.getText("hc.cockpit")}: ${colors.blue(outputItem.hana_cockpit)}`)
+                console.log(`${baseLite.bundle.getText("hc.central")}: ${colors.blue(outputItem.hana_central)}`)
+                console.log(`${baseLite.bundle.getText("hc.dbx")}: ${colors.blue(outputItem.db_explorer)}`)
                 console.log(`\r\n`)
             }
         }
@@ -99,7 +101,7 @@ export async function listInstances(prompts) {
         //Cloud Foundry Specific Instances
         results = []
         if (base.verboseOutput) {
-            console.log(base.bundle.getText("hc.CFCheck"))
+            console.log(baseLite.bundle.getText("hc.CFCheck"))
         }
         try {
             if (prompts.name === '**default**') {
@@ -128,13 +130,13 @@ export async function listInstances(prompts) {
                 let url = new URL(outputItem.hana_cockpit)
                 outputItem.hana_central = `${url.protocol}//${url.host}/hcs/sap/hana/cloud/index.html#/org/${await cf.getCFOrgGUID()}/space/${await cf.getCFSpaceGUID()}/databases`
                 outputItem.db_explorer = `${url.protocol}//${url.host}/sap/hana/cst/catalog/index.html`
-                console.log(`${base.bundle.getText("hc.name")}: ${colors.green(outputItem.name)}`)
-                console.log(`${base.bundle.getText("hc.created")}: ${colors.green(outputItem.created_at)}`)
-                console.log(`${base.bundle.getText("hc.status")}: ${colors.green(outputItem.status)}`)
-                console.log(`${base.bundle.getText("hc.lastOperation")}: ${colors.green(outputItem.last_operation)}`)
-                console.log(`${base.bundle.getText("hc.cockpit")}: ${colors.blue(outputItem.hana_cockpit)}`)
-                console.log(`${base.bundle.getText("hc.central")}: ${colors.blue(outputItem.hana_central)}`)
-                console.log(`${base.bundle.getText("hc.dbx")}: ${colors.blue(outputItem.db_explorer)}`)
+                console.log(`${baseLite.bundle.getText("hc.name")}: ${colors.green(outputItem.name)}`)
+                console.log(`${baseLite.bundle.getText("hc.created")}: ${colors.green(outputItem.created_at)}`)
+                console.log(`${baseLite.bundle.getText("hc.status")}: ${colors.green(outputItem.status)}`)
+                console.log(`${baseLite.bundle.getText("hc.lastOperation")}: ${colors.green(outputItem.last_operation)}`)
+                console.log(`${baseLite.bundle.getText("hc.cockpit")}: ${colors.blue(outputItem.hana_cockpit)}`)
+                console.log(`${baseLite.bundle.getText("hc.central")}: ${colors.blue(outputItem.hana_central)}`)
+                console.log(`${baseLite.bundle.getText("hc.dbx")}: ${colors.blue(outputItem.db_explorer)}`)
                 console.log(`\r\n`)
             }
         }
