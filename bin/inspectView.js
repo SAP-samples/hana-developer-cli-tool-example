@@ -105,9 +105,9 @@ export function handler(argv) {
  */
 export async function viewInspect(prompts) {
   base.debug('viewInspect')
-  const [{ highlight }, YAML, { parse, convert }] = await Promise.all([
+  const [{ highlight }, yaml, { parse, convert }] = await Promise.all([
     import('cli-highlight'),
-    import('json-to-pretty-yaml'),
+    import('js-yaml'),
     import('odata2openapi')
   ])
   try {
@@ -134,7 +134,7 @@ export async function viewInspect(prompts) {
     }
 
     // @ts-ignore
-    Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => base.require('@sap/cds-dk/lib/compile/openapi') })
+    Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => base.require('@sap/cds-dk/lib/compile/to_openapi') })
 
     var results = {}
     switch (prompts.output) {
@@ -298,7 +298,7 @@ export async function viewInspect(prompts) {
             'openapi:diagram': true,
             to: 'openapi'
           })
-          let data = YAML.stringify(metadata)
+          let data = yaml.dump(metadata)
           var lines = data.split('\n')
           let output =
             '/**\n' +

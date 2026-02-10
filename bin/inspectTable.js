@@ -95,9 +95,9 @@ export function handler(argv) {
 
 export async function tableInspect(prompts) {
   base.debug('tableInspect')
-  const [{ highlight }, YAML, { parse, convert }] = await Promise.all([
+  const [{ highlight }, yaml, { parse, convert }] = await Promise.all([
     import('cli-highlight'),
-    import('json-to-pretty-yaml'),
+    import('js-yaml'),
     import('odata2openapi')
   ])
 
@@ -118,7 +118,7 @@ export async function tableInspect(prompts) {
     let constraints = await dbInspect.getConstraints(db, object)
 
     // @ts-ignore
-    Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => base.require('@sap/cds-dk/lib/compile/openapi') })
+    Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => base.require('@sap/cds-dk/lib/compile/to_openapi') })
 
     var results = {}
     switch (prompts.output) {
@@ -300,7 +300,7 @@ export async function tableInspect(prompts) {
             to: 'openapi'
           })
 
-          let data = YAML.stringify(metadata)
+          let data = yaml.dump(metadata)
           var lines = data.split('\n')
           let output =
             '/**\n' +

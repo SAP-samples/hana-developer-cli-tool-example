@@ -61,7 +61,7 @@
     "hdb": "2.27.1",
     "inquirer": "^13.2.2",
     "js-convert-case": "^4.2.0",
-    "json-to-pretty-yaml": "^1.2.2",
+    "js-yaml": "^4.1.0",
     "json-to-table": "^4.2.1",
     "latest-version": "^9.0",
     "lodash": "^4.17.23",

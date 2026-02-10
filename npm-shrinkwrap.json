@@ -40,7 +40,7 @@
         "hdb": "2.27.1",
         "inquirer": "^13.2.2",
         "js-convert-case": "^4.2.0",
-        "json-to-pretty-yaml": "^1.2.2",
+        "js-yaml": "^4.1.0",
         "json-to-table": "^4.2.1",
         "jszip": "^3.10.1",
         "latest-version": "^9.0",
@@ -6435,17 +6435,6 @@
       "dev": true,
       "license": "ISC"
     },
-    "node_modules/json-to-pretty-yaml": {
-      "version": "1.2.2",
-      "license": "Apache-2.0",
-      "dependencies": {
-        "remedial": "^1.0.7",
-        "remove-trailing-spaces": "^1.0.6"
-      },
-      "engines": {
-        "node": ">= 0.2.0"
-      }
-    },
     "node_modules/json-to-table": {
       "version": "4.2.1",
       "license": "ISC",
@@ -8195,17 +8184,6 @@
       "funding": {
         "url": "https://github.com/sponsors/sindresorhus"
       }
-    },
-    "node_modules/remedial": {
-      "version": "1.0.8",
-      "license": "(MIT OR Apache-2.0)",
-      "engines": {
-        "node": "*"
-      }
-    },
-    "node_modules/remove-trailing-spaces": {
-      "version": "1.0.9",
-      "license": "MIT"
     },
     "node_modules/require-directory": {
       "version": "2.1.1",
