@@ -50,7 +50,6 @@
         "odata2openapi": "^1.3.2",
         "open": "^11.0.0",
         "ora": "^9.3.0",
-        "prompt": "^1.3.0",
         "properties": "^1.2.1",
         "rxjs": "^7.8.1",
         "sap-hdb-promisfied": "2.202601.0",
@@ -4169,13 +4168,6 @@
         "simple-swizzle": "^0.2.2"
       }
     },
-    "node_modules/colors": {
-      "version": "1.0.3",
-      "license": "MIT",
-      "engines": {
-        "node": ">=0.1.90"
-      }
-    },
     "node_modules/combined-stream": {
       "version": "1.0.8",
       "license": "MIT",
@@ -4289,12 +4281,6 @@
       "license": "MIT",
       "dependencies": {
         "uniq": "^1.0.0"
-      }
-    },
-    "node_modules/cycle": {
-      "version": "1.0.3",
-      "engines": {
-        "node": ">=0.4.0"
       }
     },
     "node_modules/data-view-buffer": {
@@ -5035,12 +5021,6 @@
         "node >=0.6.0"
       ],
       "license": "MIT"
-    },
-    "node_modules/eyes": {
-      "version": "0.1.8",
-      "engines": {
-        "node": "> 0.1.90"
-      }
     },
     "node_modules/fast-deep-equal": {
       "version": "3.1.3",
@@ -6364,10 +6344,6 @@
       "engines": {
         "node": ">=0.10.0"
       }
-    },
-    "node_modules/isstream": {
-      "version": "0.1.2",
-      "license": "MIT"
     },
     "node_modules/jackspeak": {
       "version": "3.4.3",
@@ -7895,49 +7871,6 @@
         "node": ">=0.4.0"
       }
     },
-    "node_modules/prompt": {
-      "version": "1.3.0",
-      "license": "MIT",
-      "dependencies": {
-        "@colors/colors": "1.5.0",
-        "async": "3.2.3",
-        "read": "1.0.x",
-        "revalidator": "0.1.x",
-        "winston": "2.x"
-      },
-      "engines": {
-        "node": ">= 6.0.0"
-      }
-    },
-    "node_modules/prompt/node_modules/@colors/colors": {
-      "version": "1.5.0",
-      "license": "MIT",
-      "engines": {
-        "node": ">=0.1.90"
-      }
-    },
-    "node_modules/prompt/node_modules/winston": {
-      "version": "2.4.7",
-      "license": "MIT",
-      "dependencies": {
-        "async": "^2.6.4",
-        "colors": "1.0.x",
-        "cycle": "1.0.x",
-        "eyes": "0.1.x",
-        "isstream": "0.1.x",
-        "stack-trace": "0.0.x"
-      },
-      "engines": {
-        "node": ">= 0.10.0"
-      }
-    },
-    "node_modules/prompt/node_modules/winston/node_modules/async": {
-      "version": "2.6.4",
-      "license": "MIT",
-      "dependencies": {
-        "lodash": "^4.17.14"
-      }
-    },
     "node_modules/prop-types": {
       "version": "15.8.1",
       "dev": true,
@@ -8089,20 +8022,6 @@
       "version": "16.13.1",
       "dev": true,
       "license": "MIT"
-    },
-    "node_modules/read": {
-      "version": "1.0.7",
-      "license": "ISC",
-      "dependencies": {
-        "mute-stream": "~0.0.4"
-      },
-      "engines": {
-        "node": ">=0.8"
-      }
-    },
-    "node_modules/read/node_modules/mute-stream": {
-      "version": "0.0.8",
-      "license": "ISC"
     },
     "node_modules/readable-stream": {
       "version": "3.6.2",
@@ -8258,13 +8177,6 @@
       "license": "MIT",
       "engines": {
         "node": ">= 4"
-      }
-    },
-    "node_modules/revalidator": {
-      "version": "0.1.8",
-      "license": "Apache 2.0",
-      "engines": {
-        "node": ">= 0.4.0"
       }
     },
     "node_modules/router": {

@@ -49,13 +49,31 @@ Tests for version checking functionality covering:
 
 - `checkVersion()` - Node.js version validation
 
+#### 4. **base.Test.js** - 33 tests ⭐ NEW
+
+Tests for core base utility functions covering:
+
+- `isDebug()` - Debug flag detection and handling
+- `isGui()` - GUI mode detection
+- `getBuilder()` - Command option builder with debug/connection groups
+- `getPromptSchema()` - Prompt schema generation with flag injection
+- `askFalse()` - Helper function for non-prompted options
+- `debug()` - Debug logging function
+- `promptHandler()` - Critical path validation for argv value transfer
+- `colors` and `bundle` - Utility availability
+
 **Key Test Cases:**
 
-- Promise return validation
-- Successful resolution without errors
-- Performance within acceptable timeframe
+- Debug flag handling in various scenarios (true/false/missing/null/undefined)
+- GUI mode detection
+- Builder includes/excludes debug and connection options based on flags
+- Prompt schema includes/excludes properties based on flags
+- Correct group assignments and aliases for flags
+- **Critical fix validation:** Debug/admin/conn flags copied from argv even when `ask()` returns false
+- Prompt handler preserves all argv values in result object
+- Color and localization utilities availability
 
-#### 4. **database.Test.js** - 14 tests
+#### 5. **database.Test.js** - 14 tests
 
 Tests for database client class covering:
 
@@ -76,7 +94,7 @@ Tests for database client class covering:
 
 ### Routes Tests (`/tests/routes/`)
 
-#### 5. **index.Test.js** - 6 tests
+#### 6. **index.Test.js** - 6 tests
 
 Tests for the index route handler covering:
 
@@ -90,7 +108,7 @@ Tests for the index route handler covering:
 - Integration with fresh Express instances
 - Error-free setup process
 
-#### 6. **hanaList.Test.js** - 12 tests
+#### 7. **hanaList.Test.js** - 12 tests
 
 Tests for HANA list routes covering:
 
@@ -106,18 +124,73 @@ Tests for HANA list routes covering:
 - Error-free setup with Express
 - Idempotent route configuration
 
+### CLI Integration Tests (`/tests/`)
+
+#### 8. **genericFlags.Test.js** - 26 tests ⭐ NEW
+
+Comprehensive integration tests for generic command-line flags that are shared across ALL hana-cli commands. These tests ensure framework-level flags work consistently and catch issues early.
+
+**Flags Tested:**
+
+- `--debug` / `--Debug` - Enables debug output with detailed logging
+- `--quiet` / `--disableVerbose` - Suppresses verbose output
+- `--help` / `-h` - Displays command help
+- `--admin` / `-a` - Uses admin connection
+- `--conn` - Specifies connection file
+
+**Test Categories:**
+
+1. **Debug Flag Tests (5 tests)**
+   - Validates debug output appears in stdout/stderr when `--debug` is used
+   - Tests across multiple commands: tables, functions, views, procedures
+   - Validates the `--Debug` alias works correctly
+
+2. **Quiet Flag Tests (2 tests)**
+   - Ensures no debug output when `--quiet` or `--disableVerbose` is used
+   - Validates verbose suppression across commands
+
+3. **Help Flag Tests (3 tests)**
+   - Verifies help output contains usage and options information
+   - Tests `-h` alias functionality
+   - Ensures debug flag is documented in help
+
+4. **Flag Combination Tests (3 tests)**
+   - Validates `--debug` works with other flags (--limit, --schema)
+   - Ensures `--quiet` prevents debug output even with other flags
+
+5. **Admin and Connection Flag Tests (3 tests)**
+   - Validates `--admin` and `-a` alias are recognized
+   - Tests `--conn` accepts file path values
+   - Ensures no argument parsing errors
+
+6. **Cross-Command Persistence Tests (10 tests)**
+   - Validates `--debug` works consistently across 5 commands
+   - Validates `--quiet` works consistently across 5 commands
+   - Commands tested: tables, views, functions, procedures, schemas
+
+**Why These Tests Matter:**
+
+- **Framework-Level Validation:** These flags are injected by the base framework, not individual commands
+- **Regression Prevention:** Catches issues like the recent --debug flag bug early
+- **Consistency:** Ensures all commands behave the same way with generic flags
+- **Documentation:** Serves as living documentation for flag behavior
+
+**Test Execution Time:** ~1 minute (tests are slower as they spawn actual CLI processes)
+
 ## Test Statistics
 
-### Total New Tests Added: 83
+### Total New Tests Added: 142
 
-- Utils Tests: 65
+- Utils Tests: 98 (was 65, added 33 base.Test.js)
 - Routes Tests: 18
+- CLI Integration Tests: 26 (new)
 
 **Test Execution Time:**
 
-- Utils tests: ~2 seconds
+- Utils tests: ~2-3 seconds
 - Routes tests: <50ms
-- Total: ~2-3 seconds
+- CLI Integration tests (genericFlags): ~1 minute
+- Total: ~1-2 minutes
 
 ## Running the Tests
 
@@ -184,6 +257,14 @@ Open these files in a browser for detailed test results with:
 - Focus on setup and configuration (not runtime behavior)
 - Note: Full integration tests with mocked HTTP requests would require additional tooling
 
+### CLI Integration Tests
+
+- Execute actual CLI commands as subprocess
+- Validate flag parsing and behavior
+- Ensure consistent behavior across all commands
+- Test framework-level functionality (not command-specific logic)
+- Capture and validate stdout/stderr output
+
 ## Coverage Areas
 
 ### Well Covered
@@ -193,6 +274,9 @@ Open these files in a browser for detailed test results with:
 ✅ Version checking
 ✅ Database client factory
 ✅ Route structure and registration
+✅ **Base utility functions (isDebug, getBuilder, promptHandler)** ⭐ NEW
+✅ **Generic CLI flags (--debug, --quiet, --help, --admin, --conn)** ⭐ NEW
+✅ **Flag consistency across commands** ⭐ NEW
 
 ### Future Enhancements
 
@@ -206,4 +290,7 @@ Open these files in a browser for detailed test results with:
 - Route tests focus on structure and exports rather than runtime behavior due to ES Module stubbing limitations
 - For full route behavior testing, consider adding integration tests with tools like supertest
 - Database tests avoid actual database connections and focus on class structure and logic
-- Tests are designed to run quickly and not require external dependencies
+- Most tests are designed to run quickly and not require external dependencies
+- **CLI integration tests (genericFlags.Test.js) spawn actual CLI processes and take longer (~1 min)** ⭐ NEW
+- **base.Test.js includes critical regression tests for the --debug flag fix** ⭐ NEW
+- Generic flags tests help catch framework-level issues before they affect all commands

@@ -31,8 +31,8 @@ let dbClassInstance = null
 import chalk from 'chalk'
 export const colors = chalk
 
-/** @type typeof import("prompt") */
-import prompt from 'prompt'
+/** @type {typeof import("@inquirer/prompts")} */
+import { input, password, confirm } from '@inquirer/prompts'
 
 /** @type typeof import("glob") */
 import { glob } from 'glob'
@@ -360,7 +360,7 @@ export function getMassConvertBuilder(ui = false) {
 /**
  * Initialize Yargs builder for massConvert Command
  * @param {boolean} [ui=false] - Mass Convert via Browser-based UI
- * @returns {typeof import("prompt")} - prompts output
+ * @returns {object} - prompts schema object
  */
 export function getMassConvertPrompts(ui = false) {
     let parameters = {
@@ -458,25 +458,64 @@ export function getMassConvertPrompts(ui = false) {
 }
 
 /**
- * Get Prompts from the yargs current values and adjust
- * @param {import("yargs").CommandBuilder} argv - parameters for the command
- * @returns {typeof import("prompt")} - prompts output
+ * Transform prompt schema from old prompt format to inquirer format
+ * @param {string} name - prompt name/key
+ * @param {object} config - prompt configuration
+ * @param {import("yargs").CommandBuilder} argv - command line arguments for default values
+ * @returns {object|null} - inquirer prompt config or null if should be skipped
  */
-export function getPrompt(argv) {
-    prompt.override = argv
-    prompt.message = colors.green(bundle.getText("input"))
-    prompt.start()
-    return prompt
+function transformPromptConfig(name, config, argv) {
+    // Check if prompt should be asked
+    if (config.ask && typeof config.ask === 'function' && !config.ask()) {
+        return null
+    }
+
+    let promptConfig = {
+        name: name,
+        message: colors.green(bundle.getText("input")) + ' ' + (config.description || name)
+    }
+
+    // Set default value from argv override or config default
+    if (argv && argv[name] !== undefined) {
+        promptConfig.default = argv[name]
+    } else if (config.default !== undefined) {
+        promptConfig.default = config.default
+    }
+
+    // Determine prompt type
+    if (config.type === 'boolean') {
+        promptConfig.type = 'confirm'
+    } else if (config.hidden) {
+        promptConfig.type = 'password'
+        promptConfig.mask = config.replace || '*'
+    } else {
+        promptConfig.type = 'input'
+    }
+
+    // Add validation
+    if (config.required || config.pattern) {
+        promptConfig.validate = (value) => {
+            if (config.required && (!value || value === '')) {
+                return config.message || `${name} is required`
+            }
+            if (config.pattern && !config.pattern.test(value)) {
+                return config.message || `${name} does not match required pattern`
+            }
+            return true
+        }
+    }
+
+    return promptConfig
 }
 
 /**
  * Fill the prompts schema
- * @param {typeof import("prompt")} input - prompts current value
+ * @param {object} inputSchema - prompts current value
  * @param {boolean} [iConn=true] - Add Connection Group
  * @param {boolean} [iDebug=true] - Add Debug Group
  * @returns {any} prompts schema as json
  */
-export function getPromptSchema(input, iConn = true, iDebug = true) {
+export function getPromptSchema(inputSchema, iConn = true, iDebug = true) {
 
     let grpConn = {}
     let grpDebug = {}
@@ -517,7 +556,7 @@ export function getPromptSchema(input, iConn = true, iDebug = true) {
 
     let schema = {
         properties: {
-            ...input,
+            ...inputSchema,
             ...grpConn,
             ...grpDebug
         }
@@ -537,23 +576,68 @@ export function askFalse() {
  * Prompts handler function
  * @param {import("yargs").CommandBuilder} argv - parameters for the command
  * @param {function} processingFunction - Function to call after prompts to continue command processing
- * @param {typeof import("prompt")} input - prompts current value
+ * @param {object} inputSchema - prompts current value
  * @param {boolean} [iConn=true] - Add Connection Group
  * @param {boolean} [iDebug=true] - Add Debug Group
  */
-export function promptHandler(argv, processingFunction, input, iConn = true, iDebug = true) {
-    const prompt = getPrompt(argv)
-    let schema = getPromptSchema(input, iConn, iDebug)
+export async function promptHandler(argv, processingFunction, inputSchema, iConn = true, iDebug = true) {
+    try {
+        let schema = getPromptSchema(inputSchema, iConn, iDebug)
+        let result = {}
 
-    prompt.get(schema, (err, result) => {
-        if (err) {
-            return console.log(err.message)
+        // First, copy all values from argv that are defined in schema
+        if (schema.properties) {
+            for (const [name, config] of Object.entries(schema.properties)) {
+                if (argv && argv[name] !== undefined && argv[name] !== null && argv[name] !== '') {
+                    result[name] = argv[name]
+                }
+            }
+        }
+
+        // Transform schema and collect prompts
+        const prompts = []
+        if (schema.properties) {
+            for (const [name, config] of Object.entries(schema.properties)) {
+                const promptConfig = transformPromptConfig(name, config, argv)
+                if (promptConfig) {
+                    prompts.push({ name, config: promptConfig })
+                }
+            }
+        }
+
+        // Execute prompts based on type
+        for (const { name, config: promptConfig } of prompts) {
+            // Skip if already provided in argv
+            if (argv && argv[name] !== undefined && argv[name] !== null && argv[name] !== '') {
+                continue
+            }
+
+            let answer
+            if (promptConfig.type === 'confirm') {
+                answer = await confirm({
+                    message: promptConfig.message,
+                    default: promptConfig.default
+                })
+            } else if (promptConfig.type === 'password') {
+                answer = await password({
+                    message: promptConfig.message,
+                    mask: promptConfig.mask,
+                    validate: promptConfig.validate
+                })
+            } else {
+                answer = await input({
+                    message: promptConfig.message,
+                    default: promptConfig.default,
+                    validate: promptConfig.validate
+                })
+            }
+            result[name] = answer
         }
 
         if (isDebug(result)) {
             setDebug.enable('hana-cli, *')
             process.env['NO_TELEMETRY'] = 'false'
-        }else {
+        } else {
             process.env['NO_TELEMETRY'] = 'true'
         }
 
@@ -563,8 +647,14 @@ export function promptHandler(argv, processingFunction, input, iConn = true, iDe
         debug(result)
 
         //startSpinner(result)
-        processingFunction(result)
-    })
+        await processingFunction(result)
+    } catch (err) {
+        if (err && err.message) {
+            console.log(err.message)
+        } else {
+            console.log('Prompt cancelled')
+        }
+    }
 }
 
 /**

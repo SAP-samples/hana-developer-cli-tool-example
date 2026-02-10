@@ -48,23 +48,17 @@ export function getMassConvertBuilder(ui?: boolean): import("yargs").CommandBuil
 /**
  * Initialize Yargs builder for massConvert Command
  * @param {boolean} [ui=false] - Mass Convert via Browser-based UI
- * @returns {typeof import("prompt")} - prompts output
+ * @returns {object} - prompts schema object
  */
-export function getMassConvertPrompts(ui?: boolean): typeof import("prompt");
-/**
- * Get Prompts from the yargs current values and adjust
- * @param {import("yargs").CommandBuilder} argv - parameters for the command
- * @returns {typeof import("prompt")} - prompts output
- */
-export function getPrompt(argv: import("yargs").CommandBuilder): typeof import("prompt");
+export function getMassConvertPrompts(ui?: boolean): object;
 /**
  * Fill the prompts schema
- * @param {typeof import("prompt")} input - prompts current value
+ * @param {object} inputSchema - prompts current value
  * @param {boolean} [iConn=true] - Add Connection Group
  * @param {boolean} [iDebug=true] - Add Debug Group
  * @returns {any} prompts schema as json
  */
-export function getPromptSchema(input: typeof import("prompt"), iConn?: boolean, iDebug?: boolean): any;
+export function getPromptSchema(inputSchema: object, iConn?: boolean, iDebug?: boolean): any;
 /**
  * Function that always retruns false
  * @returns {boolean}
@@ -74,11 +68,11 @@ export function askFalse(): boolean;
  * Prompts handler function
  * @param {import("yargs").CommandBuilder} argv - parameters for the command
  * @param {function} processingFunction - Function to call after prompts to continue command processing
- * @param {typeof import("prompt")} input - prompts current value
+ * @param {object} inputSchema - prompts current value
  * @param {boolean} [iConn=true] - Add Connection Group
  * @param {boolean} [iDebug=true] - Add Debug Group
  */
-export function promptHandler(argv: import("yargs").CommandBuilder, processingFunction: Function, input: typeof import("prompt"), iConn?: boolean, iDebug?: boolean): void;
+export function promptHandler(argv: import("yargs").CommandBuilder, processingFunction: Function, inputSchema: object, iConn?: boolean, iDebug?: boolean): Promise<void>;
 /**
  * Handle Errors cleanup connections and decide how to alter the user
  * @param {*} error - Error Object
