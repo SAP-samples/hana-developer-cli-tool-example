@@ -20,7 +20,7 @@
     "test:windows": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json --grep \"@windows|@all\" \"./tests/**/*.Test.js\"",
     "test:unix": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json --grep \"@unix|@all\" \"./tests/**/*.Test.js\"",
     "test:report": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json --no-parallel --reporter mochawesome --reporter-options reportDir=mochawesome-report,reportFilename=test-report,overwrite=true,html=true,json=true \"./tests/**/*.Test.js\"",
-    "test:output": "npm test > test-output.txt 2>&1",
+    "test:output": "node scripts/run-test-output.js",
     "coverage": "cross-env NODE_ENV=test nyc npm test",
     "coverage:cli": "cross-env NODE_ENV=test nyc npm run test:cli",
     "coverage:utils": "cross-env NODE_ENV=test nyc npm run test:utils",

@@ -21,5 +21,6 @@
       "allowSyntheticDefaultImports": true,
       "resolveJsonModule": true,
       "types": ["node", "mocha"]
-    }
+    },
+    "exclude": ["node_modules", "types", "**/*.test.js"]
   }

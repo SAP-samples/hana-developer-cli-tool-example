@@ -3,6 +3,7 @@
     "parallel": true,
     "jobs": 16,
     "reporter": "spec",
+    "exit": true,
     "require": [
       "./tests/helper.js"
     ]
