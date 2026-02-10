@@ -5,7 +5,7 @@ describe('dropContainer', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli dropContainer --help", done)
+        localTest("node bin/dropContainer.js --help", done)
     })
 
 })

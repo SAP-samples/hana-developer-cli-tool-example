@@ -5,7 +5,7 @@ describe('dropGroup', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli dropGroup --help", done)
+        localTest("node bin/dropGroup.js --help", done)
     })
 
 })

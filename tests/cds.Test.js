@@ -5,7 +5,7 @@ describe('cds', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli cds --help", done)
+        localTest("node bin/cds.js --help", done)
     })
 
 })

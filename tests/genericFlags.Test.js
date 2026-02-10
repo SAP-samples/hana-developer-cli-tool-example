@@ -2,7 +2,7 @@
 /**
  * @module Generic Flags Tests - Tests for command-line flags that are shared across all commands
  * 
- * This test suite validates the core flags that are built into the hana-cli framework
+ * This test suite validates the core flags that are built into the node bin/framework.js
  * and should work consistently across all commands. These include:
  * - --debug: Enables debug output
  * - --disableVerbose/--quiet: Suppresses verbose output
@@ -34,7 +34,7 @@ describe('Generic Command Flags', function () {
         this.timeout(15000) // Debug output may take longer
 
         it('should enable debug output for tables command', function (done) {
-            child_process.exec('hana-cli tables --debug --limit 5', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --debug --limit 5', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -50,7 +50,7 @@ describe('Generic Command Flags', function () {
         })
 
         it('should enable debug output for functions command', function (done) {
-            child_process.exec('hana-cli functions --debug --limit 3', (error, stdout, stderr) => {
+            child_process.exec('node bin/functions.js --debug --limit 3', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -65,7 +65,7 @@ describe('Generic Command Flags', function () {
         })
 
         it('should enable debug output for views command', function (done) {
-            child_process.exec('hana-cli views --debug --limit 3', (error, stdout, stderr) => {
+            child_process.exec('node bin/views.js --debug --limit 3', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -80,7 +80,7 @@ describe('Generic Command Flags', function () {
         })
 
         it('should enable debug output for procedures command', function (done) {
-            child_process.exec('hana-cli procedures --debug --limit 3', (error, stdout, stderr) => {
+            child_process.exec('node bin/procedures.js --debug --limit 3', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -95,7 +95,7 @@ describe('Generic Command Flags', function () {
         })
 
         it('should work with Debug alias (capital D)', function (done) {
-            child_process.exec('hana-cli tables --Debug --limit 3', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --Debug --limit 3', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -114,7 +114,7 @@ describe('Generic Command Flags', function () {
         this.timeout(10000)
 
         it('should suppress verbose output for tables command', function (done) {
-            child_process.exec('hana-cli tables --quiet --limit 5', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --quiet --limit 5', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 
                 // With quiet flag, output should be minimal
@@ -127,7 +127,7 @@ describe('Generic Command Flags', function () {
         })
 
         it('should work with --disableVerbose flag', function (done) {
-            child_process.exec('hana-cli functions --disableVerbose --limit 3', (error, stdout, stderr) => {
+            child_process.exec('node bin/functions.js --disableVerbose --limit 3', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 
                 const hasDebugOutput = stdout.includes('[cli]') || stderr.includes('[cli]')
@@ -140,7 +140,7 @@ describe('Generic Command Flags', function () {
 
     describe('--help flag', function () {
         it('should display help for tables command', function (done) {
-            child_process.exec('hana-cli tables --help', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --help', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 
                 // Help output should contain usage information
@@ -156,7 +156,7 @@ describe('Generic Command Flags', function () {
         })
 
         it('should display help for functions command', function (done) {
-            child_process.exec('hana-cli functions --help', (error, stdout, stderr) => {
+            child_process.exec('node bin/functions.js --help', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 
                 base.assert.ok(stdout.includes('Usage') || stdout.includes('Options'), 
@@ -169,7 +169,7 @@ describe('Generic Command Flags', function () {
         })
 
         it('should use -h alias for help', function (done) {
-            child_process.exec('hana-cli views -h', (error, stdout, stderr) => {
+            child_process.exec('node bin/views.js -h', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 
                 base.assert.ok(stdout.includes('Usage') || stdout.includes('Options'), 
@@ -184,7 +184,7 @@ describe('Generic Command Flags', function () {
         this.timeout(15000)
 
         it('should handle --debug with --limit flag', function (done) {
-            child_process.exec('hana-cli tables --debug --limit 10', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --debug --limit 10', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -199,7 +199,7 @@ describe('Generic Command Flags', function () {
         })
 
         it('should handle --debug with --schema flag', function (done) {
-            child_process.exec('hana-cli tables --debug --schema SYSTEM --limit 5', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --debug --schema SYSTEM --limit 5', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -214,7 +214,7 @@ describe('Generic Command Flags', function () {
         })
 
         it('should not show debug output when only using --quiet', function (done) {
-            child_process.exec('hana-cli functions --quiet --limit 5', (error, stdout, stderr) => {
+            child_process.exec('node bin/functions.js --quiet --limit 5', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 
                 const hasDebugOutput = stdout.includes('[cli]') || stderr.includes('[cli]')
@@ -230,7 +230,7 @@ describe('Generic Command Flags', function () {
         // without throwing errors
 
         it('should accept --admin flag', function (done) {
-            child_process.exec('hana-cli tables --admin --quiet --limit 3', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --admin --quiet --limit 3', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 if (stderr && !stderr.includes('- \n\n')) {
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -248,7 +248,7 @@ describe('Generic Command Flags', function () {
         })
 
         it('should accept --conn flag with value', function (done) {
-            child_process.exec('hana-cli tables --conn default.env --quiet --limit 3', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --conn default.env --quiet --limit 3', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 if (stderr && !stderr.includes('- \n\n')) {
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -264,7 +264,7 @@ describe('Generic Command Flags', function () {
         })
 
         it('should accept -a alias for admin', function (done) {
-            child_process.exec('hana-cli tables -a --quiet --limit 3', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js -a --quiet --limit 3', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 if (stderr && !stderr.includes('- \n\n')) {
                     base.addContext(this, { title: 'Stderr', value: stderr })

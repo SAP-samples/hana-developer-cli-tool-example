@@ -5,17 +5,17 @@ describe('btpInfo', function () {
 
      it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli btpInfo --help", done)
+        localTest("node bin/btpInfo.js --help", done)
     }) 
 
     it("returns normal output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli btpInfo", done)
+        localTest("node bin/btpInfo.js", done)
     })
 
     it("returns output with json option", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli btpInfo -o json", done)
+        localTest("node bin/btpInfo.js -o json", done)
     })
 
 })

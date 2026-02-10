@@ -5,7 +5,7 @@ describe('traceContents', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli traceContents --help", done)
+        localTest("node bin/traceContents.js --help", done)
     })
 
 })

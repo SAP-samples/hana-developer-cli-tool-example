@@ -5,7 +5,7 @@ describe('issue', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli issue --help", done)
+        localTest("node bin/issue.js --help", done)
     })
 
 })

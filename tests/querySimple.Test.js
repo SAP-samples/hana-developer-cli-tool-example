@@ -10,18 +10,18 @@ describe('querySimple', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli querySimple --help", done)
+        localTest("node bin/querySimple.js --help", done)
     })
 
     it("returns normal output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli querySimple --query \"SELECT * FROM DUMMY\" --quiet", done)
+        localTest("node bin/querySimple.js --query \"SELECT * FROM DUMMY\" --quiet", done)
     })
 
     describe('Table Output Enhancements', function () {
         
         it("should display table format output with formatting", function (done) {
-            child_process.exec('hana-cli querySimple --query "SELECT CURRENT_USER, CURRENT_TIMESTAMP FROM DUMMY" --output table --quiet',
+            child_process.exec('node bin/querySimple.js --query "SELECT CURRENT_USER, CURRENT_TIMESTAMP FROM DUMMY" --output table --quiet',
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -43,7 +43,7 @@ describe('querySimple', function () {
             }
 
             const query = "SELECT CURRENT_USER AS USER_NAME, CURRENT_TIMESTAMP AS QUERY_TIME, 12345678.9012 AS NUMERIC_VALUE FROM DUMMY"
-            const cmd = `hana-cli querySimple --query "${query}" --output table --folder "${testDir}" --filename "${testFile}" --quiet`
+            const cmd = `node bin/querySimple.js --query "${query}" --output table --folder "${testDir}" --filename "${testFile}" --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
@@ -91,7 +91,7 @@ describe('querySimple', function () {
         })
 
         it("should handle JSON output format", function (done) {
-            child_process.exec('hana-cli querySimple --query "SELECT * FROM DUMMY" --output json --quiet',
+            child_process.exec('node bin/querySimple.js --query "SELECT * FROM DUMMY" --output json --quiet',
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -111,7 +111,7 @@ describe('querySimple', function () {
         })
 
         it("should handle CSV output format", function (done) {
-            child_process.exec('hana-cli querySimple --query "SELECT * FROM DUMMY" --output csv --quiet',
+            child_process.exec('node bin/querySimple.js --query "SELECT * FROM DUMMY" --output csv --quiet',
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -135,7 +135,7 @@ describe('querySimple', function () {
                 fs.unlinkSync(fullPath)
             }
 
-            const cmd = `hana-cli querySimple --query "SELECT * FROM DUMMY" --output json --folder "${testDir}" --filename "${testFile}" --quiet`
+            const cmd = `node bin/querySimple.js --query "SELECT * FROM DUMMY" --output json --folder "${testDir}" --filename "${testFile}" --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
@@ -172,7 +172,7 @@ describe('querySimple', function () {
 
         it("should handle queries with various data types", function (done) {
             const query = "SELECT 'text' AS TEXT_COL, 123 AS INT_COL, 456.789 AS DEC_COL, CURRENT_DATE AS DATE_COL FROM DUMMY"
-            const cmd = `hana-cli querySimple --query "${query}" --output table --quiet`
+            const cmd = `node bin/querySimple.js --query "${query}" --output table --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })

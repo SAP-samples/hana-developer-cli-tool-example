@@ -26,14 +26,17 @@ export function route(app, server) {
 			path: "/websockets"
 		})
 
-		server.on("upgrade", (request, socket, head) => {
-			//	const pathname = new URL(request.url).pathname 
-			//	if (pathname === "/websockets") {
-			wss.handleUpgrade(request, socket, head, (ws) => {
-				wss.emit("connection", ws, request)
+		// Only set up WebSocket upgrade handler if server is provided
+		if (server && typeof server.on === 'function') {
+			server.on("upgrade", (request, socket, head) => {
+				//	const pathname = new URL(request.url).pathname 
+				//	if (pathname === "/websockets") {
+				wss.handleUpgrade(request, socket, head, (ws) => {
+					wss.emit("connection", ws, request)
+				})
+				//	}
 			})
-			//	}
-		})
+		}
 
 		wss.broadcast = (data, progress) => {
 			var message = JSON.stringify({

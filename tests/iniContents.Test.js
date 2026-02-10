@@ -5,7 +5,7 @@ describe('iniContents', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli iniContents --help", done)
+        localTest("node bin/iniContents.js --help", done)
     })
 
 })

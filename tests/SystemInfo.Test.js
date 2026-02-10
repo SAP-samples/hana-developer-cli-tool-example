@@ -5,22 +5,22 @@ describe('systemInfo', function () {
 
      it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli systemInfo --help", done)
+        localTest("node bin/systemInfo.js --help", done)
     }) 
 
     it("returns normal output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli systemInfo --quiet", done)
+        localTest("node bin/systemInfo.js --quiet", done)
     })
 
     it("returns output with env option", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli systemInfo -o env", done)
+        localTest("node bin/systemInfo.js -o env", done)
     })
 
     it("returns output with dbx option", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli systemInfo -o dbx", done)
+        localTest("node bin/systemInfo.js -o dbx", done)
     })
 })
 

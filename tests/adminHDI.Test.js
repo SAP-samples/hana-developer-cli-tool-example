@@ -5,7 +5,7 @@ describe('adminHDI', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli adminHDI --help", done)
+        localTest("node bin/adminHDI.js --help", done)
     })
 
 })

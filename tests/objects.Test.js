@@ -5,17 +5,17 @@ describe('objects', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli objects --help", done)
+        localTest("node bin/objects.js --help", done)
     })
 
     it("returns normal output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli objects --quiet", done)
+        localTest("node bin/objects.js --quiet", done)
     })
 
     it("returns output with limit", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli objects -l 10 --quiet", done)
+        localTest("node bin/objects.js -l 10 --quiet", done)
     })
 
 })

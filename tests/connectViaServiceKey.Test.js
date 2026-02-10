@@ -5,7 +5,7 @@ describe('connectViaServiceKey', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli connectViaServiceKey --help", done)
+        localTest("node bin/connectViaServiceKey.js --help", done)
     })
 
 })

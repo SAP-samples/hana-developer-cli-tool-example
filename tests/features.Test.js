@@ -5,17 +5,17 @@ describe('features', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli features --help", done)
+        localTest("node bin/features.js --help", done)
     })
 
     it("returns normal output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli features --quiet", done)
+        localTest("node bin/features.js --quiet", done)
     })
 
     it("returns output with limit", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli features -l 10 --quiet", done)
+        localTest("node bin/features.js -l 10 --quiet", done)
     })
 
 })

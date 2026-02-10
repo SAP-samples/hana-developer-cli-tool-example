@@ -5,7 +5,7 @@ describe('createXSAAdmin', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli createXSAAdmin --help", done)
+        localTest("node bin/createXSAAdmin.js --help", done)
     })
 
 })

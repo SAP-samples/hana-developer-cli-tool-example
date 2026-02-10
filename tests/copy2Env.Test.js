@@ -5,7 +5,7 @@ describe('copy2Env', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli copy2Env --help", done)
+        localTest("node bin/copy2Env.js --help", done)
     })
 
 })

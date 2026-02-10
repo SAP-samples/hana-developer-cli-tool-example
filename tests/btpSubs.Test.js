@@ -5,12 +5,12 @@ describe('btpSubs', function () {
 
      it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli btpSubs --help", done)
+        localTest("node bin/btpSubs.js --help", done)
     }) 
 
     it("returns normal output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli btpSubs", done)
+        localTest("node bin/btpSubs.js", done)
     })
 
 })

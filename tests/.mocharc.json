@@ -1,16 +1,9 @@
 {
     "timeout": "10s",
-    "parallel": false,
-    "reporter": "mochawesome",
-    "reporter-options": [
-      "reportDir=mochawesome-report",
-      "reportFilename=test-report",
-      "overwrite=false",
-      "html=true",
-      "json=true"
-    ],
+    "parallel": true,
+    "jobs": 16,
+    "reporter": "spec",
     "require": [
-      "./tests/helper.js",
-      "mochawesome/register"
+      "./tests/helper.js"
     ]
   }

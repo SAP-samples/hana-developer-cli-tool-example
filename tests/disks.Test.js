@@ -5,12 +5,12 @@ describe('disks', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli disks --help", done)
+        localTest("node bin/disks.js --help", done)
     })
 
     it("returns normal output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli disks --quiet", done)
+        localTest("node bin/disks.js --quiet", done)
     })
 
 })

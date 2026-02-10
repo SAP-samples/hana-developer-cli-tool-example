@@ -5,12 +5,12 @@ describe('hostInformation', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli hostInformation --help", done)
+        localTest("node bin/hostInformation.js --help", done)
     })
 
     it("returns normal output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli hostInformation --quiet", done)
+        localTest("node bin/hostInformation.js --quiet", done)
     })
 
 })

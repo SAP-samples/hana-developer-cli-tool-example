@@ -5,7 +5,7 @@ describe('hanaCloudStop', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli hanaCloudStop --help", done)
+        localTest("node bin/hanaCloudStop.js --help", done)
     })
 
 })

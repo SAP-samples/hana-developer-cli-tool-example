@@ -5,7 +5,7 @@ describe('btp', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli btp --help", done)
+        localTest("node bin/btp.js --help", done)
     })
 
 })

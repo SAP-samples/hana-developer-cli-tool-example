@@ -2,7 +2,7 @@
 /**
  * @module Error Handling Tests - Tests for error scenarios and edge cases
  * 
- * This test suite validates that hana-cli commands handle errors gracefully:
+ * This test suite validates that node bin/commands.js handle errors gracefully:
  * - Invalid parameter values
  * - Connection failures
  * - Missing required parameters
@@ -24,7 +24,7 @@ describe('Error Handling Tests', function () {
         this.timeout(10000)
 
         it('should reject negative limit values', function (done) {
-            child_process.exec('hana-cli tables --limit -5 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --limit -5 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -42,7 +42,7 @@ describe('Error Handling Tests', function () {
         })
 
         it('should handle zero limit value appropriately', function (done) {
-            child_process.exec('hana-cli tables --limit 0 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --limit 0 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -54,7 +54,7 @@ describe('Error Handling Tests', function () {
         })
 
         it('should handle non-numeric limit value', function (done) {
-            child_process.exec('hana-cli tables --limit abc --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --limit abc --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -70,7 +70,7 @@ describe('Error Handling Tests', function () {
         })
 
         it('should handle excessively large limit value', function (done) {
-            child_process.exec('hana-cli tables --limit 999999999 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --limit 999999999 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -82,7 +82,7 @@ describe('Error Handling Tests', function () {
         })
 
         it('should handle invalid output format', function (done) {
-            child_process.exec('hana-cli inspectTable --table DUMMY --schema SYSTEM --output invalidformat --quiet', 
+            child_process.exec('node bin/inspectTable.js --table DUMMY --schema SYSTEM --output invalidformat --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -104,7 +104,7 @@ describe('Error Handling Tests', function () {
         this.timeout(10000)
 
         it('should handle missing connection file gracefully', function (done) {
-            child_process.exec('hana-cli tables --conn nonexistent-file-12345.env --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --conn nonexistent-file-12345.env --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -128,7 +128,7 @@ describe('Error Handling Tests', function () {
                 done() // Pass if command completes within timeout
             }, 8000)
 
-            child_process.exec('hana-cli tables --quiet --limit 1', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --quiet --limit 1', (error, stdout, stderr) => {
                 clearTimeout(timeout)
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
@@ -144,7 +144,7 @@ describe('Error Handling Tests', function () {
         this.timeout(10000)
 
         it('should handle empty schema name', function (done) {
-            child_process.exec('hana-cli tables --schema "" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --schema "" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -156,7 +156,7 @@ describe('Error Handling Tests', function () {
         })
 
         it('should handle special characters in schema name', function (done) {
-            child_process.exec('hana-cli tables --schema "TEST;DROP TABLE" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --schema "TEST;DROP TABLE" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -171,7 +171,7 @@ describe('Error Handling Tests', function () {
 
         it('should handle very long schema name', function (done) {
             const longName = 'A'.repeat(500)
-            child_process.exec(`hana-cli tables --schema "${longName}" --quiet --limit 3`, 
+            child_process.exec(`node bin/tables.js --schema "${longName}" --quiet --limit 3`, 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -183,7 +183,7 @@ describe('Error Handling Tests', function () {
         })
 
         it('should handle Unicode characters in names', function (done) {
-            child_process.exec('hana-cli tables --schema "测试" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --schema "测试" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -201,7 +201,7 @@ describe('Error Handling Tests', function () {
         it('should handle commands gracefully when optional dependencies missing', function (done) {
             // Test that commands don't crash if optional features are unavailable
             // For example, if a specific database driver is not installed
-            child_process.exec('hana-cli tables --profile pg --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --profile pg --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -218,7 +218,7 @@ describe('Error Handling Tests', function () {
 
         it('should handle flag without required value', function (done) {
             // Some flags require values, test what happens if value is missing
-            child_process.exec('hana-cli tables --schema --quiet', 
+            child_process.exec('node bin/tables.js --schema --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -230,7 +230,7 @@ describe('Error Handling Tests', function () {
         })
 
         it('should handle unknown flags gracefully', function (done) {
-            child_process.exec('hana-cli tables --unknownflag123 --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --unknownflag123 --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -247,7 +247,7 @@ describe('Error Handling Tests', function () {
         })
 
         it('should handle duplicate flags', function (done) {
-            child_process.exec('hana-cli tables --limit 5 --limit 10 --quiet', 
+            child_process.exec('node bin/tables.js --limit 5 --limit 10 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -263,7 +263,7 @@ describe('Error Handling Tests', function () {
         this.timeout(10000)
 
         it('should safely handle SQL injection in table parameter', function (done) {
-            child_process.exec('hana-cli tables --table "M_%\'; DROP TABLE USERS; --" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --table "M_%\'; DROP TABLE USERS; --" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -276,7 +276,7 @@ describe('Error Handling Tests', function () {
         })
 
         it('should safely handle SQL injection in schema parameter', function (done) {
-            child_process.exec('hana-cli tables --schema "SYSTEM\' OR \'1\'=\'1" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --schema "SYSTEM\' OR \'1\'=\'1" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -292,7 +292,7 @@ describe('Error Handling Tests', function () {
         this.timeout(10000)
 
         it('should provide helpful error message for invalid command', function (done) {
-            child_process.exec('hana-cli invalidcommand123 --quiet', 
+            child_process.exec('node bin/invalidcommand123.js --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -311,7 +311,7 @@ describe('Error Handling Tests', function () {
         })
 
         it('should show available commands on invalid command', function (done) {
-            child_process.exec('hana-cli invalidcommand123', 
+            child_process.exec('node bin/cli.js invalidcommand123', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -333,7 +333,7 @@ describe('Error Handling Tests', function () {
 
         it('should not leave connections open after error', function (done) {
             // This is a conceptual test - verify commands clean up properly
-            child_process.exec('hana-cli tables --limit abc --quiet', 
+            child_process.exec('node bin/tables.js --limit abc --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })

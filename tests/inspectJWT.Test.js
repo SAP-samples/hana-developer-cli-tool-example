@@ -5,7 +5,7 @@ describe('inspectJWT', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli inspectJWT --help", done)
+        localTest("node bin/inspectJWT.js --help", done)
     })
 
 })

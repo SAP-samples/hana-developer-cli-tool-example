@@ -5,12 +5,12 @@ describe('dataVolumes', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli dataVolumes --help", done)
+        localTest("node bin/dataVolumes.js --help", done)
     })
 
     it("returns normal output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli dataVolumes --quiet", done)
+        localTest("node bin/dataVolumes.js --quiet", done)
     })
 
 })

@@ -5,7 +5,7 @@ describe('hanaCloudUPSInstances', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli hanaCloudUPSInstances --help", done)
+        localTest("node bin/hanaCloudUPSInstances.js --help", done)
     })
 
 })

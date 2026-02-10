@@ -18,6 +18,14 @@ describe('WebSocket Route Integration Tests', function () {
         server = createServer(app)
     })
 
+    afterEach(function (done) {
+        if (server && server.listening) {
+            server.close(done)
+        } else {
+            done()
+        }
+    })
+
     describe('Route Registration', function () {
         it('should register WebSocket routes without errors', function () {
             assert.doesNotThrow(() => {
@@ -78,13 +86,20 @@ describe('WebSocket Route Integration Tests', function () {
     })
 
     describe('Integration', function () {
-        it('should work with fresh express instance', function () {
+        it('should work with fresh express instance', function (done) {
             const newApp = express()
             const newServer = createServer(newApp)
             
             assert.doesNotThrow(() => {
                 route(newApp, newServer)
             })
+            
+            // Clean up the server
+            if (newServer.listening) {
+                newServer.close(done)
+            } else {
+                done()
+            }
         })
 
         it('should not throw errors during setup', function () {
@@ -109,12 +124,19 @@ describe('WebSocket Route Integration Tests', function () {
     })
 
     describe('Server Configuration', function () {
-        it('should accept http server instance', function () {
+        it('should accept http server instance', function (done) {
             const httpServer = createServer(app)
             
             assert.doesNotThrow(() => {
                 route(app, httpServer)
             })
+            
+            // Clean up the server
+            if (httpServer.listening) {
+                httpServer.close(done)
+            } else {
+                done()
+            }
         })
 
         it('should configure upgrade handler', function () {

@@ -5,22 +5,22 @@ describe('triggers', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli triggers --help", done)
+        localTest("node bin/triggers.js --help", done)
     })
 
     it("returns normal output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli triggers --quiet", done)
+        localTest("node bin/triggers.js --quiet", done)
     })
 
     it("returns output with limit", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli triggers -l 10 --quiet", done)
+        localTest("node bin/triggers.js -l 10 --quiet", done)
     })
 
     it("returns output with specific schema", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli triggers -s SYS --quiet", done)
+        localTest("node bin/triggers.js -s SYS --quiet", done)
     })
 
 })

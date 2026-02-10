@@ -12,12 +12,15 @@
   },
   "scripts": {
     "test": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json \"./tests/**/*.Test.js\"",
+    "test:sequential": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json --no-parallel \"./tests/**/*.Test.js\"",
     "test:cli": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json \"./tests/*.Test.js\"",
     "test:utils": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json \"./tests/utils/*.Test.js\"",
     "test:routes": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json \"./tests/routes/*.Test.js\"",
     "test:platform": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json \"./tests/platform*.Test.js\"",
     "test:windows": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json --grep \"@windows|@all\" \"./tests/**/*.Test.js\"",
     "test:unix": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json --grep \"@unix|@all\" \"./tests/**/*.Test.js\"",
+    "test:report": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json --no-parallel --reporter mochawesome --reporter-options reportDir=mochawesome-report,reportFilename=test-report,overwrite=true,html=true,json=true \"./tests/**/*.Test.js\"",
+    "test:output": "npm test > test-output.txt 2>&1",
     "coverage": "cross-env NODE_ENV=test nyc npm test",
     "coverage:cli": "cross-env NODE_ENV=test nyc npm run test:cli",
     "coverage:utils": "cross-env NODE_ENV=test nyc npm run test:utils",
@@ -26,7 +29,7 @@
     "coverage:check": "nyc check-coverage --lines 80 --functions 80 --branches 80",
     "changelog": "node CHANGELOG",
     "types": "tsc  --declaration --allowJs --emitDeclarationOnly --outDir types --skipLibCheck",
-    "postinstall": "npm link @sap/cds-dk --local"
+    "postinstall": "node scripts/postinstall.js"
   },
   "repository": {
     "type": "git",

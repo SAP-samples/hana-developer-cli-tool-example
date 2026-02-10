@@ -5,12 +5,12 @@ describe('iniFiles', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli iniFiles --help", done)
+        localTest("node bin/iniFiles.js --help", done)
     })
 
     it("returns normal output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli iniFiles --quiet", done)
+        localTest("node bin/iniFiles.js --quiet", done)
     })
 
 })

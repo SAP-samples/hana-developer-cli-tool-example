@@ -5,22 +5,22 @@ describe('synonyms', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli synonyms --help", done)
+        localTest("node bin/synonyms.js --help", done)
     })
 
     it("returns normal output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli synonyms --quiet", done)
+        localTest("node bin/synonyms.js --quiet", done)
     })
 
     it("returns output with limit", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli synonyms -l 10 --quiet", done)
+        localTest("node bin/synonyms.js -l 10 --quiet", done)
     })
 
     it("returns output with specific schema", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli synonyms -s SYS --quiet", done)
+        localTest("node bin/synonyms.js -s SYS --quiet", done)
     })
 
 })

@@ -22,7 +22,7 @@ describe('Output Format Tests', function () {
         this.timeout(15000)
 
         it('should produce table format output', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output tbl --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output tbl --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -34,7 +34,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should produce valid SQL output', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output sql --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output sql --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -50,7 +50,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should produce valid JSON output', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output json --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output json --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -69,7 +69,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should produce YAML output', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output yaml --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output yaml --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -84,7 +84,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should produce CDS output', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output cds --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output cds --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -100,7 +100,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should produce CDL output', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output cdl --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output cdl --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -113,7 +113,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should produce hdbtable output', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output hdbtable --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output hdbtable --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -126,7 +126,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should produce hdbmigrationtable output', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output hdbmigrationtable --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output hdbmigrationtable --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -138,7 +138,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should produce edmx output', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output edmx --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output edmx --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -151,7 +151,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should produce openapi output', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output openapi --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output openapi --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -167,7 +167,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should produce postgres output', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output postgres --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output postgres --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -180,7 +180,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should produce graphql output', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output graphql --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output graphql --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -200,7 +200,7 @@ describe('Output Format Tests', function () {
         this.timeout(15000)
 
         it('should produce CDS output with HANA types', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output cds --useHanaTypes --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output cds --useHanaTypes --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -212,7 +212,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should produce output with --useExists flag', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output cds --useExists --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output cds --useExists --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -224,7 +224,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should produce output with quoted identifiers', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output sql --useQuoted --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output sql --useQuoted --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -237,7 +237,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should produce output with --alias for useQuoted', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output sql -q --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output sql -q --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -253,7 +253,7 @@ describe('Output Format Tests', function () {
         this.timeout(10000)
 
         it('should use default output format when not specified for inspectTable', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -265,7 +265,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should use table format for tables command by default', function (done) {
-            child_process.exec('hana-cli tables --limit 5 --quiet', 
+            child_process.exec('node bin/tables.js --limit 5 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -282,7 +282,7 @@ describe('Output Format Tests', function () {
 
         it('should produce consistent output format for same format across commands', function (done) {
             // Test that JSON format is consistent
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output json --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output json --quiet', 
                 (error1, stdout1, stderr1) => {
                     base.addContext(this, { title: 'Stdout', value: stdout1 })
                     
@@ -300,7 +300,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should handle -o alias consistently across commands', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY -o json --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY -o json --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -316,7 +316,7 @@ describe('Output Format Tests', function () {
         this.timeout(15000)
 
         it('should support hdbtable output format', function (done) {
-            child_process.exec('hana-cli massConvert --table "M_*" --limit 2 --output hdbtable --quiet', 
+            child_process.exec('node bin/massConvert.js --table "M_*" --limit 2 --output hdbtable --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -328,7 +328,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should support cds output format', function (done) {
-            child_process.exec('hana-cli massConvert --table "M_*" --limit 2 --output cds --quiet', 
+            child_process.exec('node bin/massConvert.js --table "M_*" --limit 2 --output cds --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -340,7 +340,7 @@ describe('Output Format Tests', function () {
         })
 
         it('should support hdbmigrationtable output format', function (done) {
-            child_process.exec('hana-cli massConvert --table "M_*" --limit 2 --output hdbmigrationtable --quiet', 
+            child_process.exec('node bin/massConvert.js --table "M_*" --limit 2 --output hdbmigrationtable --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })

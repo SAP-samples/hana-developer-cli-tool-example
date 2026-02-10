@@ -5,7 +5,7 @@ describe('hdbsql', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli hdbsql --help", done)
+        localTest("node bin/hdbsql.js --help", done)
     })
 
 })

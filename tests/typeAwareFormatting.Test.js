@@ -41,7 +41,7 @@ describe('Type-Aware Formatting in Text Tables', function () {
             const fullPath = path.join(testOutputDir, `${testFile}.txt`)
             
             const query = "SELECT CURRENT_TIMESTAMP AS QUERY_TIMESTAMP FROM DUMMY"
-            const cmd = `hana-cli querySimple --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
+            const cmd = `node bin/querySimple.js --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 try {
@@ -67,7 +67,7 @@ describe('Type-Aware Formatting in Text Tables', function () {
             const fullPath = path.join(testOutputDir, `${testFile}.txt`)
             
             const query = "SELECT CURRENT_DATE AS QUERY_DATE FROM DUMMY"
-            const cmd = `hana-cli querySimple --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
+            const cmd = `node bin/querySimple.js --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 try {
@@ -95,7 +95,7 @@ describe('Type-Aware Formatting in Text Tables', function () {
             const fullPath = path.join(testOutputDir, `${testFile}.txt`)
             
             const query = "SELECT 1234567890 AS LARGE_INTEGER FROM DUMMY"
-            const cmd = `hana-cli querySimple --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
+            const cmd = `node bin/querySimple.js --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 try {
@@ -123,7 +123,7 @@ describe('Type-Aware Formatting in Text Tables', function () {
             const fullPath = path.join(testOutputDir, `${testFile}.txt`)
             
             const query = "SELECT 12345.6789 AS DECIMAL_VALUE FROM DUMMY"
-            const cmd = `hana-cli querySimple --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
+            const cmd = `node bin/querySimple.js --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 try {
@@ -149,7 +149,7 @@ describe('Type-Aware Formatting in Text Tables', function () {
             const fullPath = path.join(testOutputDir, `${testFile}.txt`)
             
             const query = "SELECT 0.0001234 AS SMALL_DECIMAL FROM DUMMY"
-            const cmd = `hana-cli querySimple --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
+            const cmd = `node bin/querySimple.js --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 try {
@@ -174,7 +174,7 @@ describe('Type-Aware Formatting in Text Tables', function () {
             const fullPath = path.join(testOutputDir, `${testFile}.txt`)
             
             const query = "SELECT -99999.99 AS NEGATIVE_VALUE FROM DUMMY"
-            const cmd = `hana-cli querySimple --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
+            const cmd = `node bin/querySimple.js --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 try {
@@ -199,7 +199,7 @@ describe('Type-Aware Formatting in Text Tables', function () {
             const fullPath = path.join(testOutputDir, `${testFile}.txt`)
             
             const query = "SELECT 0 AS ZERO_VALUE FROM DUMMY"
-            const cmd = `hana-cli querySimple --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
+            const cmd = `node bin/querySimple.js --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 try {
@@ -228,7 +228,7 @@ describe('Type-Aware Formatting in Text Tables', function () {
             // Create a very long string (more than 50 chars)
             const longText = 'A'.repeat(100)
             const query = `SELECT '${longText}' AS LONG_TEXT FROM DUMMY`
-            const cmd = `hana-cli querySimple --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
+            const cmd = `node bin/querySimple.js --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 try {
@@ -253,7 +253,7 @@ describe('Type-Aware Formatting in Text Tables', function () {
             const fullPath = path.join(testOutputDir, `${testFile}.txt`)
             
             const query = "SELECT '' AS EMPTY_STRING FROM DUMMY"
-            const cmd = `hana-cli querySimple --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
+            const cmd = `node bin/querySimple.js --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 try {
@@ -277,7 +277,7 @@ describe('Type-Aware Formatting in Text Tables', function () {
             const fullPath = path.join(testOutputDir, `${testFile}.txt`)
             
             const query = "SELECT 'Test & Special > Characters < \"Quotes\"' AS SPECIAL_CHARS FROM DUMMY"
-            const cmd = `hana-cli querySimple --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
+            const cmd = `node bin/querySimple.js --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 try {
@@ -305,7 +305,7 @@ describe('Type-Aware Formatting in Text Tables', function () {
             const fullPath = path.join(testOutputDir, `${testFile}.txt`)
             
             const query = "SELECT NULL AS NULL_VALUE, 'NotNull' AS NORMAL_VALUE FROM DUMMY"
-            const cmd = `hana-cli querySimple --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
+            const cmd = `node bin/querySimple.js --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 try {
@@ -340,7 +340,7 @@ describe('Type-Aware Formatting in Text Tables', function () {
                 CURRENT_DATE AS DATE_COL,
                 CURRENT_TIMESTAMP AS TIMESTAMP_COL
                 FROM DUMMY`
-            const cmd = `hana-cli querySimple --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
+            const cmd = `node bin/querySimple.js --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 try {
@@ -377,7 +377,7 @@ describe('Type-Aware Formatting in Text Tables', function () {
             // Create a column with very long name and content
             const longText = 'X'.repeat(80)
             const query = `SELECT '${longText}' AS VERY_LONG_COLUMN_NAME_THAT_SHOULD_BE_HANDLED FROM DUMMY`
-            const cmd = `hana-cli querySimple --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
+            const cmd = `node bin/querySimple.js --query "${query}" --output table --folder "${testOutputDir}" --filename "${testFile}" --quiet`
 
             child_process.exec(cmd, (error, stdout, stderr) => {
                 try {

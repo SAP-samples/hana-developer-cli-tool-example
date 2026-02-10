@@ -5,7 +5,7 @@ describe('copy2Secrets', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli copy2Secrets --help", done)
+        localTest("node bin/copy2Secrets.js --help", done)
     })
 
 })

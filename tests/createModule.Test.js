@@ -5,7 +5,7 @@ describe('createModule', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli createModule --help", done)
+        localTest("node bin/createModule.js --help", done)
     })
 
 })

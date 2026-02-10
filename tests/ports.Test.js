@@ -5,12 +5,12 @@ describe('ports', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli ports --help", done)
+        localTest("node bin/ports.js --help", done)
     })
 
     it("returns normal output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli ports --quiet", done)
+        localTest("node bin/ports.js --quiet", done)
     })
 
 })

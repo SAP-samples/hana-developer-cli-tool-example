@@ -5,7 +5,7 @@ describe('massConvert', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli massConvert --help", done)
+        localTest("node bin/massConvert.js --help", done)
     })
 
 })

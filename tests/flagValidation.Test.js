@@ -2,7 +2,7 @@
 /**
  * @module Flag Validation Tests - Tests for command-line flag validation
  * 
- * This test suite validates that hana-cli commands properly validate flags:
+ * This test suite validates that node bin/commands.js properly validate flags:
  * - Type checking (string, number, boolean)
  * - Value ranges (limits, constraints)
  * - Required vs optional flags
@@ -21,7 +21,7 @@ describe('Flag Validation Tests', function () {
         this.timeout(10000)
 
         it('should accept positive limit values', function (done) {
-            child_process.exec('hana-cli tables --limit 10 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --limit 10 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -33,7 +33,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should handle limit of 1', function (done) {
-            child_process.exec('hana-cli tables --limit 1 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --limit 1 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -44,7 +44,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should use -l alias for limit', function (done) {
-            child_process.exec('hana-cli tables -l 5 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js -l 5 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -55,7 +55,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should handle very large limit values', function (done) {
-            child_process.exec('hana-cli tables --limit 10000 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --limit 10000 --quiet', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -70,7 +70,7 @@ describe('Flag Validation Tests', function () {
         this.timeout(10000)
 
         it('should accept valid schema names', function (done) {
-            child_process.exec('hana-cli tables --schema SYSTEM --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --schema SYSTEM --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -82,7 +82,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept -s alias for schema', function (done) {
-            child_process.exec('hana-cli tables -s SYSTEM --quiet --limit 3', 
+            child_process.exec('node bin/tables.js -s SYSTEM --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -94,7 +94,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept wildcard patterns in table names', function (done) {
-            child_process.exec('hana-cli tables --table "M_*" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --table "M_*" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -106,7 +106,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept -t alias for table', function (done) {
-            child_process.exec('hana-cli tables -t "M_*" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js -t "M_*" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -118,7 +118,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should handle lowercase schema names', function (done) {
-            child_process.exec('hana-cli tables --schema system --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --schema system --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -134,7 +134,7 @@ describe('Flag Validation Tests', function () {
         this.timeout(10000)
 
         it('should accept tbl output format', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output tbl --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output tbl --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -147,7 +147,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept sql output format', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output sql --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output sql --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -160,7 +160,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept json output format', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output json --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output json --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -173,7 +173,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept cds output format', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output cds --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output cds --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -186,7 +186,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept -o alias for output', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY -o yaml --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY -o yaml --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -199,7 +199,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should reject invalid output format', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --output invalidformat', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output invalidformat', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -219,7 +219,7 @@ describe('Flag Validation Tests', function () {
         this.timeout(10000)
 
         it('should accept --debug flag without value', function (done) {
-            child_process.exec('hana-cli tables --debug --limit 3', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --debug --limit 3', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -231,7 +231,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept --quiet flag without value', function (done) {
-            child_process.exec('hana-cli tables --quiet --limit 3', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --quiet --limit 3', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 
                 const hasParameterError = stderr && stderr.includes('Invalid') && stderr.includes('quiet')
@@ -241,7 +241,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept --admin flag without value', function (done) {
-            child_process.exec('hana-cli tables --admin --quiet --limit 3', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --admin --quiet --limit 3', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 base.addContext(this, { title: 'Stderr', value: stderr })
                 
@@ -252,7 +252,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept --useHanaTypes flag', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --useHanaTypes --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --useHanaTypes --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -264,7 +264,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept --hana alias for useHanaTypes', function (done) {
-            child_process.exec('hana-cli inspectTable --schema SYSTEM --table DUMMY --hana --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --hana --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -281,7 +281,7 @@ describe('Flag Validation Tests', function () {
         this.timeout(10000)
 
         it('should accept profile flag with value', function (done) {
-            child_process.exec('hana-cli tables --profile pg --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --profile pg --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -293,7 +293,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept -p alias for profile', function (done) {
-            child_process.exec('hana-cli tables -p sqlite --quiet --limit 3', 
+            child_process.exec('node bin/tables.js -p sqlite --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -309,7 +309,7 @@ describe('Flag Validation Tests', function () {
         this.timeout(10000)
 
         it('should accept conn flag with filename', function (done) {
-            child_process.exec('hana-cli tables --conn default-env.json --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --conn default-env.json --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -321,7 +321,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept conn flag with .env extension', function (done) {
-            child_process.exec('hana-cli tables --conn default.env --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --conn default.env --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -337,7 +337,7 @@ describe('Flag Validation Tests', function () {
         this.timeout(10000)
 
         it('should accept --Schema capitalized alias', function (done) {
-            child_process.exec('hana-cli tables --Schema SYSTEM --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --Schema SYSTEM --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -349,7 +349,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept --Table capitalized alias', function (done) {
-            child_process.exec('hana-cli tables --Table "M_*" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --Table "M_*" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -361,7 +361,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept --Debug capitalized alias', function (done) {
-            child_process.exec('hana-cli tables --Debug --limit 3', 
+            child_process.exec('node bin/tables.js --Debug --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -373,7 +373,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept --Admin capitalized alias', function (done) {
-            child_process.exec('hana-cli tables --Admin --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --Admin --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -389,7 +389,7 @@ describe('Flag Validation Tests', function () {
         this.timeout(10000)
 
         it('should accept multiple valid flags together', function (done) {
-            child_process.exec('hana-cli tables --schema SYSTEM --table "M_*" --limit 10 --quiet', 
+            child_process.exec('node bin/tables.js --schema SYSTEM --table "M_*" --limit 10 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -402,7 +402,7 @@ describe('Flag Validation Tests', function () {
 
         it('should handle --debug and --quiet together', function (done) {
             // These flags are somewhat contradictory but should not error
-            child_process.exec('hana-cli tables --debug --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --debug --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -416,7 +416,7 @@ describe('Flag Validation Tests', function () {
 
         it('should accept positional and flag-based parameters together', function (done) {
             // Some commands support positional args
-            child_process.exec('hana-cli tables SYSTEM "M_*" --limit 5 --quiet', 
+            child_process.exec('node bin/tables.js SYSTEM "M_*" --limit 5 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -432,7 +432,7 @@ describe('Flag Validation Tests', function () {
         this.timeout(5000)
 
         it('should show help with --help', function (done) {
-            child_process.exec('hana-cli tables --help', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --help', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 
                 const hasHelpOutput = stdout.includes('Usage') || stdout.includes('Options')
@@ -442,7 +442,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should show help with -h', function (done) {
-            child_process.exec('hana-cli tables -h', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js -h', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 
                 const hasHelpOutput = stdout.includes('Usage') || stdout.includes('Options')
@@ -453,7 +453,7 @@ describe('Flag Validation Tests', function () {
 
         it('should prioritize help over other flags', function (done) {
             // Help should display even with invalid flags
-            child_process.exec('hana-cli tables --help --invalidflag', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --help --invalidflag', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 
                 const hasHelpOutput = stdout.includes('Usage') || stdout.includes('Options')

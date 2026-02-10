@@ -339,7 +339,7 @@ describe('Profile Integration Tests', function () {
     describe('Profile-based Command Line Integration', function () {
         
         it('should accept postgres profile in tables command', function (done) {
-            exec('hana-cli tables --profile postgres --quiet --limit 3', 
+            exec('node bin/tables.js --profile postgres --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     addContext(this, { title: 'Stdout', value: stdout })
                     addContext(this, { title: 'Stderr', value: stderr })
@@ -368,7 +368,7 @@ describe('Profile Integration Tests', function () {
         })
 
         it('should accept sqlite profile in tables command', function (done) {
-            exec('hana-cli tables --profile sqlite --quiet --limit 3', 
+            exec('node bin/tables.js --profile sqlite --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     addContext(this, { title: 'Stdout', value: stdout })
                     addContext(this, { title: 'Stderr', value: stderr })
@@ -397,7 +397,7 @@ describe('Profile Integration Tests', function () {
         })
 
         it('should accept -p alias with postgres', function (done) {
-            exec('hana-cli tables -p postgres --quiet --limit 3', 
+            exec('node bin/tables.js -p postgres --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     addContext(this, { title: 'Stdout', value: stdout })
                     addContext(this, { title: 'Stderr', value: stderr })
@@ -409,7 +409,7 @@ describe('Profile Integration Tests', function () {
         })
 
         it('should accept -p alias with sqlite', function (done) {
-            exec('hana-cli tables -p sqlite --quiet --limit 3', 
+            exec('node bin/tables.js -p sqlite --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     addContext(this, { title: 'Stdout', value: stdout })
                     addContext(this, { title: 'Stderr', value: stderr })
@@ -421,7 +421,7 @@ describe('Profile Integration Tests', function () {
         })
 
         it('should handle pg as alias for postgres profile', function (done) {
-            exec('hana-cli tables --profile pg --quiet --limit 3', 
+            exec('node bin/tables.js --profile pg --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     addContext(this, { title: 'Stdout', value: stdout })
                     addContext(this, { title: 'Stderr', value: stderr })

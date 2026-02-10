@@ -5,7 +5,7 @@ describe('activateHDI', function () {
 
     it("returns help output", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("hana-cli activateHDI --help", done)
+        localTest("node bin/activateHDI.js --help", done)
     })
 
 })

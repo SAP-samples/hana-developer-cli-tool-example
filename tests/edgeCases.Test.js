@@ -2,7 +2,7 @@
 /**
  * @module Edge Case Tests - Tests for boundary conditions and edge cases
  * 
- * This test suite validates that hana-cli commands handle edge cases:
+ * This test suite validates that node bin/commands.js handle edge cases:
  * - Empty result sets
  * - Very large result sets
  * - Special characters in names
@@ -24,7 +24,7 @@ describe('Edge Case Tests', function () {
 
         it('should handle empty table list gracefully', function (done) {
             // Search for tables that don't exist
-            child_process.exec('hana-cli tables --table "NONEXISTENT_TABLE_9999" --quiet', 
+            child_process.exec('node bin/tables.js --table "NONEXISTENT_TABLE_9999" --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -36,7 +36,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle no matching schemas', function (done) {
-            child_process.exec('hana-cli schemas --schema "NONEXISTENT_SCHEMA_9999" --quiet', 
+            child_process.exec('node bin/schemas.js --schema "NONEXISTENT_SCHEMA_9999" --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -47,7 +47,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle no matching views', function (done) {
-            child_process.exec('hana-cli views --view "NONEXISTENT_VIEW_9999" --quiet --limit 3', 
+            child_process.exec('node bin/views.js --view "NONEXISTENT_VIEW_9999" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -58,7 +58,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle no matching functions', function (done) {
-            child_process.exec('hana-cli functions --function "NONEXISTENT_FUNC_9999" --quiet --limit 3', 
+            child_process.exec('node bin/functions.js --function "NONEXISTENT_FUNC_9999" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -73,7 +73,7 @@ describe('Edge Case Tests', function () {
         this.timeout(10000)
 
         it('should handle single asterisk wildcard', function (done) {
-            child_process.exec('hana-cli tables --table "*" --limit 10 --quiet', 
+            child_process.exec('node bin/tables.js --table "*" --limit 10 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -84,7 +84,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle prefix wildcard pattern', function (done) {
-            child_process.exec('hana-cli tables --table "M_*" --limit 10 --quiet', 
+            child_process.exec('node bin/tables.js --table "M_*" --limit 10 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -95,7 +95,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle suffix wildcard pattern', function (done) {
-            child_process.exec('hana-cli tables --table "*_COLUMNS" --limit 10 --quiet', 
+            child_process.exec('node bin/tables.js --table "*_COLUMNS" --limit 10 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -106,7 +106,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle middle wildcard pattern', function (done) {
-            child_process.exec('hana-cli tables --table "M_*_COLUMNS" --limit 10 --quiet', 
+            child_process.exec('node bin/tables.js --table "M_*_COLUMNS" --limit 10 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -118,7 +118,7 @@ describe('Edge Case Tests', function () {
 
         it('should handle percent sign wildcard', function (done) {
             // Some systems use % instead of *
-            child_process.exec('hana-cli tables --table "M_%" --limit 10 --quiet', 
+            child_process.exec('node bin/tables.js --table "M_%" --limit 10 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -130,7 +130,7 @@ describe('Edge Case Tests', function () {
 
         it('should handle underscore wildcard', function (done) {
             // Underscore might match single characters
-            child_process.exec('hana-cli schemas --schema "SYS_%" --limit 10 --quiet', 
+            child_process.exec('node bin/schemas.js --schema "SYS_%" --limit 10 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -145,7 +145,7 @@ describe('Edge Case Tests', function () {
         this.timeout(10000)
 
         it('should handle names with spaces (quoted)', function (done) {
-            child_process.exec('hana-cli tables --table "MY TABLE" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --table "MY TABLE" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -156,7 +156,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle names with dots', function (done) {
-            child_process.exec('hana-cli tables --table "SCHEMA.TABLE" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --table "SCHEMA.TABLE" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -167,7 +167,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle names with underscores', function (done) {
-            child_process.exec('hana-cli tables --table "MY_TABLE_NAME" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --table "MY_TABLE_NAME" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -178,7 +178,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle names with numbers', function (done) {
-            child_process.exec('hana-cli tables --table "TABLE123" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --table "TABLE123" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -189,7 +189,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle names with dollar signs', function (done) {
-            child_process.exec('hana-cli tables --table "$TABLE$" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --table "$TABLE$" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -200,7 +200,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle names with hash/pound signs', function (done) {
-            child_process.exec('hana-cli tables --table "#TABLE#" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --table "#TABLE#" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -215,7 +215,7 @@ describe('Edge Case Tests', function () {
         this.timeout(10000)
 
         it('should handle Chinese characters', function (done) {
-            child_process.exec('hana-cli tables --schema "测试" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --schema "测试" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -226,7 +226,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle German umlauts', function (done) {
-            child_process.exec('hana-cli tables --schema "ÄÖÜäöü" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --schema "ÄÖÜäöü" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -237,7 +237,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle Arabic characters', function (done) {
-            child_process.exec('hana-cli tables --schema "اختبار" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --schema "اختبار" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -248,7 +248,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle Cyrillic characters', function (done) {
-            child_process.exec('hana-cli tables --schema "ТЕСТ" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --schema "ТЕСТ" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -259,7 +259,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle emoji characters', function (done) {
-            child_process.exec('hana-cli tables --table "TABLE😀" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --table "TABLE😀" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -274,7 +274,7 @@ describe('Edge Case Tests', function () {
         this.timeout(10000)
 
         it('should handle uppercase schema names', function (done) {
-            child_process.exec('hana-cli tables --schema SYSTEM --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --schema SYSTEM --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -285,7 +285,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle lowercase schema names', function (done) {
-            child_process.exec('hana-cli tables --schema system --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --schema system --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -296,7 +296,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle mixed case schema names', function (done) {
-            child_process.exec('hana-cli tables --schema System --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --schema System --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -311,7 +311,7 @@ describe('Edge Case Tests', function () {
         this.timeout(10000)
 
         it('should handle limit of 1', function (done) {
-            child_process.exec('hana-cli tables --limit 1 --quiet', 
+            child_process.exec('node bin/tables.js --limit 1 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -322,7 +322,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle very large limit value', function (done) {
-            child_process.exec('hana-cli tables --limit 50000 --quiet', 
+            child_process.exec('node bin/tables.js --limit 50000 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -334,7 +334,7 @@ describe('Edge Case Tests', function () {
 
         it('should handle minimum valid table name', function (done) {
             // Single character table name
-            child_process.exec('hana-cli tables --table "A" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --table "A" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -347,7 +347,7 @@ describe('Edge Case Tests', function () {
         it('should handle very long table name', function (done) {
             // HANA max identifier length is typically 127 characters
             const longName = 'A'.repeat(127)
-            child_process.exec(`hana-cli tables --table "${longName}" --quiet --limit 3`, 
+            child_process.exec(`node bin/tables.js --table "${longName}" --quiet --limit 3`, 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -362,7 +362,7 @@ describe('Edge Case Tests', function () {
         this.timeout(10000)
 
         it('should handle double-quoted identifiers', function (done) {
-            child_process.exec('hana-cli tables --table "\\"MYTABLE\\"" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --table "\\"MYTABLE\\"" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -373,7 +373,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle single quotes in names', function (done) {
-            child_process.exec('hana-cli tables --table "O\'Brien" --quiet --limit 3', 
+            child_process.exec('node bin/tables.js --table "O\'Brien" --quiet --limit 3', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -388,7 +388,7 @@ describe('Edge Case Tests', function () {
         this.timeout(10000)
 
         it('should handle queries for M_ monitoring views', function (done) {
-            child_process.exec('hana-cli tables --schema SYSTEM --table "M_*" --limit 10 --quiet', 
+            child_process.exec('node bin/tables.js --schema SYSTEM --table "M_*" --limit 10 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -399,7 +399,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle queries for SYS schema', function (done) {
-            child_process.exec('hana-cli schemas --schema "SYS*" --limit 10 --quiet', 
+            child_process.exec('node bin/schemas.js --schema "SYS*" --limit 10 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -410,7 +410,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle queries for INFO schema', function (done) {
-            child_process.exec('hana-cli tables --schema "INFORMATION_SCHEMA" --limit 5 --quiet', 
+            child_process.exec('node bin/tables.js --schema "INFORMATION_SCHEMA" --limit 5 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -436,17 +436,17 @@ describe('Edge Case Tests', function () {
                 }
             }
             
-            child_process.exec('hana-cli tables --limit 3 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/tables.js --limit 3 --quiet', (error, stdout, stderr) => {
                 base.assert.ok(true, 'First command completed')
                 checkDone()
             })
             
-            child_process.exec('hana-cli views --limit 3 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/views.js --limit 3 --quiet', (error, stdout, stderr) => {
                 base.assert.ok(true, 'Second command completed')
                 checkDone()
             })
             
-            child_process.exec('hana-cli functions --limit 3 --quiet', (error, stdout, stderr) => {
+            child_process.exec('node bin/functions.js --limit 3 --quiet', (error, stdout, stderr) => {
                 base.assert.ok(true, 'Third command completed')
                 checkDone()
             })
@@ -457,7 +457,7 @@ describe('Edge Case Tests', function () {
         this.timeout(10000)
 
         it('should handle extra whitespace in parameters', function (done) {
-            child_process.exec('hana-cli tables --schema  SYSTEM  --limit  5  --quiet', 
+            child_process.exec('node bin/tables.js --schema  SYSTEM  --limit  5  --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -468,7 +468,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle leading/trailing whitespace', function (done) {
-            child_process.exec('hana-cli tables --schema " SYSTEM " --limit 5 --quiet', 
+            child_process.exec('node bin/tables.js --schema " SYSTEM " --limit 5 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -479,7 +479,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should handle tab characters', function (done) {
-            child_process.exec('hana-cli tables --schema\tSYSTEM --limit 5 --quiet', 
+            child_process.exec('node bin/tables.js --schema\tSYSTEM --limit 5 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -494,7 +494,7 @@ describe('Edge Case Tests', function () {
         this.timeout(10000)
 
         it('should use default schema when not specified', function (done) {
-            child_process.exec('hana-cli tables --limit 5 --quiet', 
+            child_process.exec('node bin/tables.js --limit 5 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -505,7 +505,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should use default limit when not specified', function (done) {
-            child_process.exec('hana-cli tables --quiet', 
+            child_process.exec('node bin/tables.js --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -516,7 +516,7 @@ describe('Edge Case Tests', function () {
         })
 
         it('should use default table pattern when not specified', function (done) {
-            child_process.exec('hana-cli tables --schema SYSTEM --limit 5 --quiet', 
+            child_process.exec('node bin/tables.js --schema SYSTEM --limit 5 --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
