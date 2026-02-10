@@ -8,7 +8,6 @@
 import express from 'express'
 import path from 'path'
 import { glob } from 'glob'
-import upath from 'upath'
 import { fileURLToPath } from 'url'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
@@ -38,8 +37,8 @@ export async function createApp(options = {}) {
 
     // Load routes if requested
     if (loadRoutes) {
-        const routesDir = path.join(__dirname, '..', 'routes', '**', '*.js')
-        const files = await glob(upath.normalize(routesDir))
+        const routesDir = path.posix.join(__dirname.split(path.sep).join(path.posix.sep), '..', 'routes', '**', '*.js')
+        const files = await glob(routesDir)
         
         if (files.length !== 0) {
             for (const file of files) {

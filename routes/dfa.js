@@ -6,8 +6,7 @@ import { fileURLToPath } from 'url'
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 import * as path from 'path'
 import * as fs from 'fs'
-import showdown from 'showdown'
-const {Converter} = showdown
+import { marked } from 'marked'
 
 export function route (app) {
     app.get('/sap/dfa/help/webassistant/catalogue', async (req, res, next) => {
@@ -47,7 +46,6 @@ export function route (app) {
             output.data = jsonData
             if (req.query.id === "Shell-home!whatsnew") {
                 output.data.tiles = []
-                const converter = new Converter()
 
                 let changelog = require("../CHANGELOG.json")
                 changelog.forEach(item => {
@@ -56,7 +54,7 @@ export function route (app) {
                     let dateString = date.toLocaleDateString()
                     let ChangedInfo = ""
                     item.Changed.forEach(changeItem => {
-                        let html = converter.makeHtml(changeItem)
+                        let html = marked.parse(changeItem)
                         ChangedInfo += html + "<br/>"
                     })
 

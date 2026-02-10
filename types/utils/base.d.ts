@@ -183,7 +183,7 @@ export let hanaBin: string;
 /** @typeof TextBundle - instance of sap/textbundle */
 export const bundle: TextBundle;
 export const terminal: any;
-export const json2Table: any;
+
 export namespace tableOptions {
     let hasBorder: boolean;
     let contentHasMarkup: boolean;

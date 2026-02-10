@@ -143,10 +143,10 @@ describe('DFA Route Integration Tests', function () {
             assert.ok(app, 'Route configured for changelog tiles')
         })
 
-        it('should integrate with showdown for markdown conversion', function () {
+        it('should integrate with marked for markdown conversion', function () {
             route(app)
             
-            // Route uses showdown.Converter for markdown to HTML
+            // Route uses marked.parse for markdown to HTML
             assert.ok(app, 'Route configured with markdown converter')
         })
 
@@ -197,7 +197,7 @@ describe('DFA Route Integration Tests', function () {
         it('should convert markdown to HTML for changelog items', function () {
             route(app)
             
-            // Route uses showdown to convert changelog markdown
+            // Route uses marked to convert changelog markdown
             assert.ok(app, 'Route configured for markdown conversion')
         })
 

@@ -6,7 +6,6 @@
 import { fileURLToPath } from 'url'
 import { URL } from 'url'
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
-import upath from 'upath'
 import { createRequire } from 'module'
 // @ts-ignore
 export const require = createRequire(import.meta.url)
@@ -119,8 +118,6 @@ export const getTerminal = async () => {
     return tk.terminal
 }
 
-import jsonToTable from 'json-to-table'
-export const json2Table = jsonToTable
 export let tableOptions = {
     hasBorder: true,
     contentHasMarkup: false,
@@ -889,6 +886,28 @@ export function outputTable(content) {
 }
 
 /**
+ * Convert JSON array to 2D array format for terminal-kit table
+ * @param {Array<Object>} jsonArray - Array of objects
+ * @returns {Array<Array>} 2D array with headers in first row
+ */
+function convertJsonToTableArray(jsonArray) {
+    if (!jsonArray || jsonArray.length === 0) return []
+    
+    // Get all unique keys from all objects
+    const keys = [...new Set(jsonArray.flatMap(obj => Object.keys(obj)))]
+    
+    // Create header row
+    const result = [keys]
+    
+    // Create data rows
+    for (const obj of jsonArray) {
+        result.push(keys.map(key => obj[key] ?? ''))
+    }
+    
+    return result
+}
+
+/**
  * Output JSON content either as a table or as formatted JSON to console
  * @param {*} content - json content often a HANA result set
  * @returns {Promise<void>}
@@ -903,9 +922,9 @@ export async function outputTableFancy(content) {
                 // Handle large datasets with pagination
                 if (content.length > MAX_DISPLAY_ROWS) {
                     console.log(colors.yellow(`\nShowing first ${MAX_DISPLAY_ROWS} of ${content.length} rows (use --output json with --filename to save all results)\n`))
-                    return terminal.table(json2Table(content.slice(0, MAX_DISPLAY_ROWS)), tableOptions)
+                    return terminal.table(convertJsonToTableArray(content.slice(0, MAX_DISPLAY_ROWS)), tableOptions)
                 } else {
-                    return terminal.table(json2Table(content), tableOptions)
+                    return terminal.table(convertJsonToTableArray(content), tableOptions)
                 }
             } catch (error) {
                 // Fallback to console.table if terminal.table fails (e.g., buffer allocation errors)
@@ -1006,8 +1025,8 @@ export async function webServerSetup(urlPath) {
     app.disable('etag') // Keep existing etag setting
     
     // Load routes
-    let routesDir = path.join(__dirname, '..', '/routes/**/*.js')
-    let files = await glob(upath.normalize(routesDir))
+    let routesDir = path.posix.join(__dirname.split(path.sep).join(path.posix.sep), '..', 'routes', '**', '*.js')
+    let files = await glob(routesDir)
     if (files.length !== 0) {
         for (let file of files) {
             debug(file)

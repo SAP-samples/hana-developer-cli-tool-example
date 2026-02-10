@@ -2029,14 +2029,6 @@ Options:
   -p, --password, --Password  Password
 ```
 
-### matrix
-
-```shell
-hana-cli matrix
-
-Blue or Red Pill?
-```
-
 ### objects
 
 ```shell

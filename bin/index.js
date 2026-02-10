@@ -16,7 +16,7 @@ const commandFiles = [
     './inspectFunction.js', './inspectIndex.js', './inspectJWT.js', './inspectLibMember.js',
     './inspectLibrary.js', './inspectProcedure.js', './inspectTable.js', './inspectTableUI.js',
     './inspectTrigger.js', './inspectUser.js', './inspectView.js', './issue.js', './libraries.js',
-    './massConvert.js', './massConvertUI.js', './massRename.js', './massUsers.js', './matrix.js',
+    './massConvert.js', './massConvertUI.js', './massRename.js', './massUsers.js',
     './objects.js', './openBAS.js', './openDBExplorer.js', './ports.js', './privilegeError.js',
     './procedures.js', './querySimple.js', './querySimpleUI.js', './readMe.js', './readMeUI.js',
     './openReadMe.js', './reclaim.js', './rick.js', './roles.js', './hanaCloudSBSSInstances.js',

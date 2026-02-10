@@ -50,7 +50,7 @@ export const debug             // Debug logging function
 export const terminal          // Terminal-kit instance
 export const bundle            // Text bundle for i18n
 export const sqlInjection      // SQL injection protection
-export const json2Table        // JSON to table converter
+
 export const tableOptions      // Default table rendering options
 ```
 
@@ -565,8 +565,7 @@ const data = [
     { name: 'Table1', rows: 100 },
     { name: 'Table2', rows: 200 }
 ]
-const table = base.json2Table(data)
-base.terminal.table(table, base.tableOptions)
+base.terminal.table(data, base.tableOptions)
 ```
 
 ### Checking BTP/CF Configuration

@@ -97,7 +97,6 @@ const commandMap = {
     'massConvertUI': './massConvertUI.js',
     'massRename': './massRename.js',
     'massUsers': './massUsers.js',
-    'matrix': './matrix.js',
     'objects': './objects.js',
     'openBAS': './openBAS.js',
     'openDBExplorer': './openDBExplorer.js',

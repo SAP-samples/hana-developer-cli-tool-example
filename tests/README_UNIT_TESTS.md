@@ -726,7 +726,7 @@ Integration tests for Digital Feedback Assistant (DFA) routes with mocked HTTP r
 - Catalogue data loading from JSON files
 - Context help with tile support
 - Changelog integration for whatsnew tiles
-- Markdown to HTML conversion with showdown
+- Markdown to HTML conversion with marked
 - URL query parameter parsing and decoding
 
 **Key Test Cases:**
@@ -753,7 +753,7 @@ Integration tests for Digital Feedback Assistant (DFA) routes with mocked HTTP r
 - Mock HTTP request/response objects with headers
 - Validate JSON response format
 - Test parameter validation and requirement checks
-- Verify integration with showdown for markdown conversion
+- Verify integration with marked for markdown conversion
 - Test file loading error handling
 - Ensure proper Express middleware configuration
 
