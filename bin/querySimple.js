@@ -103,11 +103,9 @@ export function removeNewlineCharacter(dataRow) {
  */
 export async function dbQuery(prompts) {
   base.debug('dbQuery')
-  const [{ highlight }, { AsyncParser }, { default: Table }]= await Promise.all([ //, { default: excel }, { default: Table }] = await Promise.all([
+  const [{ highlight }, { AsyncParser }] = await Promise.all([
     import('cli-highlight'),
-    import('@json2csv/node'),
-  //  import('node-xlsx'),
-    import('easy-table')
+    import('@json2csv/node')
   ])
 
   const opts = { delimiter: ";", transforms: [removeNewlineCharacter] }
@@ -177,7 +175,9 @@ export async function dbQuery(prompts) {
         break
       default:
         if (prompts.filename) {
-          await toFile(prompts.folder, prompts.filename, 'txt', Table.print(results))
+          // Format results as a simple text table for file output
+          const textTable = formatAsTextTable(results)
+          await toFile(prompts.folder, prompts.filename, 'txt', textTable)
         } else {
           base.outputTableFancy(results)
         }
@@ -202,4 +202,86 @@ async function toFile(folder, file, ext, content) {
   let fileLocal = path.join(dir, file)
   fs.writeFileSync(fileLocal, content)
   console.log(`${base.bundle.getText("contentWritten")}: ${fileLocal}`)
+}
+
+/**
+ * Format a value based on its type for text output
+ * @param {*} val - Value to format
+ * @returns {string} Formatted value
+ */
+function formatValue(val) {
+  if (val === null || val === undefined) {
+    return ''
+  }
+  // Handle Date objects and ISO date strings
+  if (val instanceof Date) {
+    return val.toISOString()
+  }
+  if (typeof val === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(val)) {
+    // ISO date string - format it nicely
+    return new Date(val).toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, '')
+  }
+  // Format numbers with locale-appropriate separators
+  if (typeof val === 'number') {
+    // Check if it's an integer or has decimals
+    return Number.isInteger(val) ? val.toLocaleString() : val.toLocaleString(undefined, { maximumFractionDigits: 4 })
+  }
+  // Handle boolean values
+  if (typeof val === 'boolean') {
+    return val ? 'true' : 'false'
+  }
+  // Handle objects and arrays by converting to JSON
+  if (typeof val === 'object') {
+    return JSON.stringify(val)
+  }
+  return String(val)
+}
+
+/**
+ * Format JSON results as a simple text table with type-aware formatting
+ * @param {Array<Object>} results - Array of objects to format
+ * @returns {string} Formatted table string
+ */
+function formatAsTextTable(results) {
+  if (!results || results.length === 0) {
+    return base.bundle.getText('noData')
+  }
+
+  // Get all unique column names
+  const columns = [...new Set(results.flatMap(row => Object.keys(row)))]
+  
+  // Calculate column widths with max width limit
+  const MAX_COL_WIDTH = 50
+  const widths = {}
+  columns.forEach(col => {
+    const maxContentWidth = Math.max(
+      col.length,
+      ...results.map(row => formatValue(row[col]).length)
+    )
+    // Limit column width to prevent overly wide tables
+    widths[col] = Math.min(maxContentWidth, MAX_COL_WIDTH)
+  })
+
+  // Build header
+  const header = columns.map(col => col.padEnd(widths[col])).join(' | ')
+  const separator = columns.map(col => '-'.repeat(widths[col])).join('-+-')
+  
+  // Build rows with type-aware formatting
+  const rows = results.map(row => 
+    columns.map(col => {
+      const formatted = formatValue(row[col])
+      // Truncate if exceeds max width
+      const truncated = formatted.length > MAX_COL_WIDTH 
+        ? formatted.substring(0, MAX_COL_WIDTH - 3) + '...'
+        : formatted
+      return truncated.padEnd(widths[col])
+    }).join(' | ')
+  )
+
+  // Add summary for large datasets
+  const summary = results.length > 1000 
+    ? `\n\n[Total rows: ${results.length.toLocaleString()}]`
+    : ''
+
+  return [header, separator, ...rows].join('\n') + summary
 }

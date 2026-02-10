@@ -98,8 +98,12 @@ export let tableOptions = {
     borderAttr: { color: 'blue' } ,
     textAttr: { bgColor: 'default' } ,
     firstRowTextAttr: { bgColor: 'blue' } ,
-    fit: false   // Disable auto-sizing to prevent buffer allocation errors
+    width: 150,  // Max table width to prevent overly wide output
+    fit: true    // Auto-fit columns within max width
 }
+
+/** Maximum rows to display in terminal output before truncating */
+export const MAX_DISPLAY_ROWS = 100
 
 /**
  * Output a blank line to the console
@@ -862,10 +866,20 @@ export function outputTableFancy(content) {
     } else {
         if (verboseOutput(prompts)) {
             try {
-                return terminal.table(json2Table(content), tableOptions)
+                // Handle large datasets with pagination
+                if (content.length > MAX_DISPLAY_ROWS) {
+                    console.log(colors.yellow(`\nShowing first ${MAX_DISPLAY_ROWS} of ${content.length} rows (use --output json with --filename to save all results)\n`))
+                    return terminal.table(json2Table(content.slice(0, MAX_DISPLAY_ROWS)), tableOptions)
+                } else {
+                    return terminal.table(json2Table(content), tableOptions)
+                }
             } catch (error) {
                 // Fallback to console.table if terminal.table fails (e.g., buffer allocation errors)
                 console.error(colors.yellow('Warning: terminal.table failed, falling back to console.table:'), error.message)
+                if (content.length > MAX_DISPLAY_ROWS) {
+                    console.log(colors.yellow(`Showing first ${MAX_DISPLAY_ROWS} of ${content.length} rows`))
+                    return console.table(content.slice(0, MAX_DISPLAY_ROWS))
+                }
                 return console.table(content)
             }
         } else {

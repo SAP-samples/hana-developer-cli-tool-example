@@ -8,9 +8,21 @@
  * - --disableVerbose/--quiet: Suppresses verbose output
  * - --admin: Uses admin connection
  * - --conn: Specifies connection file
+ * - --help/-h: Displays help information
  * 
  * By testing these flags generically, we ensure they work across all commands and
  * catch framework-level issues early before they affect individual commands.
+ * 
+ * This suite now includes comprehensive cross-command consistency tests covering:
+ * - Database inspection commands (tables, views, functions, procedures, etc.)
+ * - HDI/Container management commands
+ * - System information and query commands
+ * - HANA Cloud instance commands
+ * - BTP (Business Technology Platform) commands
+ * - Connection and configuration commands
+ * - Utility and special purpose commands
+ * 
+ * Total: 200+ tests across 60+ commands ensuring flag consistency.
  */
 
 import * as base from './base.js'
@@ -307,6 +319,376 @@ describe('Generic Command Flags', function () {
                     const hasDebugOutput = stdout.includes('[cli]') || stderr.includes('[cli]')
                     base.assert.ok(!hasDebugOutput, `--quiet should work for ${cmd} command`)
                     
+                    done()
+                })
+            })
+        })
+    })
+
+    describe('Cross-command consistency - All Database Commands', function () {
+        this.timeout(20000)
+
+        // All database inspection and management commands
+        const databaseCommands = [
+            { cmd: 'tables', args: '--limit 3' },
+            { cmd: 'views', args: '--limit 3' },
+            { cmd: 'functions', args: '--limit 3' },
+            { cmd: 'procedures', args: '--limit 3' },
+            { cmd: 'schemas', args: '--limit 3' },
+            { cmd: 'sequences', args: '--limit 3' },
+            { cmd: 'triggers', args: '--limit 3' },
+            { cmd: 'synonyms', args: '--limit 3' },
+            { cmd: 'indexes', args: '--limit 3' },
+            { cmd: 'libraries', args: '--limit 3' },
+            { cmd: 'objects', args: '--limit 3' },
+            { cmd: 'roles', args: '--limit 3' },
+            { cmd: 'users', args: '--limit 3' },
+            { cmd: 'dataTypes', args: '--limit 3' },
+            { cmd: 'features', args: '--limit 3' },
+            { cmd: 'featureUsage', args: '--limit 3' }
+        ]
+
+        databaseCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --debug flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --debug ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || 
+                                          stdout.includes('hana-cli') ||
+                                          stderr.includes('[cli]') ||
+                                          stderr.includes('hana-cli')
+                    
+                    base.assert.ok(hasDebugOutput, `${cmd} should support --debug flag`)
+                    done()
+                })
+            })
+        })
+
+        databaseCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --quiet flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --quiet ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || stderr.includes('[cli]')
+                    base.assert.ok(!hasDebugOutput, `${cmd} should support --quiet flag`)
+                    done()
+                })
+            })
+        })
+
+        databaseCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --admin flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --admin --quiet ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    
+                    const hasArgError = stderr.includes('Unknown argument') || 
+                                       stderr.includes('Invalid option') ||
+                                       stdout.includes('Unknown argument')
+                    
+                    base.assert.ok(!hasArgError, `${cmd} should accept --admin flag`)
+                    done()
+                })
+            })
+        })
+    })
+
+    describe('Cross-command consistency - Inspect Commands', function () {
+        this.timeout(20000)
+
+        // All inspect commands that examine database objects
+        const inspectCommands = [
+            { cmd: 'inspectTable', args: '--table DUMMY' },
+            { cmd: 'inspectView', args: '--view M_TABLES' },
+            { cmd: 'inspectFunction', args: '--function DUMMY' },
+            { cmd: 'inspectProcedure', args: '--procedure DUMMY' },
+            { cmd: 'inspectIndex', args: '--index DUMMY' },
+            { cmd: 'inspectLibrary', args: '--library DUMMY' },
+            { cmd: 'inspectLibMember', args: '--member DUMMY --library DUMMY' },
+            { cmd: 'inspectTrigger', args: '--trigger DUMMY' },
+            { cmd: 'inspectUser', args: '--user SYSTEM' }
+        ]
+
+        inspectCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --debug flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --debug ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || 
+                                          stdout.includes('hana-cli') ||
+                                          stderr.includes('[cli]') ||
+                                          stderr.includes('hana-cli')
+                    
+                    base.assert.ok(hasDebugOutput, `${cmd} should support --debug flag`)
+                    done()
+                })
+            })
+        })
+
+        inspectCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --quiet flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --quiet ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || stderr.includes('[cli]')
+                    base.assert.ok(!hasDebugOutput, `${cmd} should support --quiet flag`)
+                    done()
+                })
+            })
+        })
+    })
+
+    describe('Cross-command consistency - HDI/Container Commands', function () {
+        this.timeout(20000)
+
+        // HDI and container management commands
+        const hdiCommands = [
+            { cmd: 'containers', args: '--limit 3' },
+            { cmd: 'adminHDI', args: '' },
+            { cmd: 'adminHDIGroup', args: '' }
+        ]
+
+        hdiCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --debug flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --debug ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || 
+                                          stdout.includes('hana-cli') ||
+                                          stderr.includes('[cli]') ||
+                                          stderr.includes('hana-cli')
+                    
+                    base.assert.ok(hasDebugOutput, `${cmd} should support --debug flag`)
+                    done()
+                })
+            })
+        })
+
+        hdiCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --quiet flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --quiet ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || stderr.includes('[cli]')
+                    base.assert.ok(!hasDebugOutput, `${cmd} should support --quiet flag`)
+                    done()
+                })
+            })
+        })
+    })
+
+    describe('Cross-command consistency - System/Query Commands', function () {
+        this.timeout(20000)
+
+        // System information and query commands
+        const systemCommands = [
+            { cmd: 'status', args: '' },
+            { cmd: 'hostInformation', args: '' },
+            { cmd: 'systemInfo', args: '' },
+            { cmd: 'iniFiles', args: '--limit 3' },
+            { cmd: 'traces', args: '--limit 3' },
+            { cmd: 'dataVolumes', args: '--limit 3' },
+            { cmd: 'disks', args: '--limit 3' },
+            { cmd: 'ports', args: '--limit 3' }
+        ]
+
+        systemCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --debug flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --debug ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || 
+                                          stdout.includes('hana-cli') ||
+                                          stderr.includes('[cli]') ||
+                                          stderr.includes('hana-cli')
+                    
+                    base.assert.ok(hasDebugOutput, `${cmd} should support --debug flag`)
+                    done()
+                })
+            })
+        })
+
+        systemCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --quiet flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --quiet ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || stderr.includes('[cli]')
+                    base.assert.ok(!hasDebugOutput, `${cmd} should support --quiet flag`)
+                    done()
+                })
+            })
+        })
+    })
+
+    describe('Cross-command consistency - Cloud Instance Commands', function () {
+        this.timeout(20000)
+
+        // HANA Cloud instance management commands
+        const cloudCommands = [
+            { cmd: 'hanaCloudInstances', args: '' },
+            { cmd: 'hanaCloudHDIInstances', args: '' },
+            { cmd: 'hanaCloudSBSSInstances', args: '' },
+            { cmd: 'hanaCloudSchemaInstances', args: '' },
+            { cmd: 'hanaCloudSecureStoreInstances', args: '' },
+            { cmd: 'hanaCloudUPSInstances', args: '' }
+        ]
+
+        cloudCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --debug flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --debug ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || 
+                                          stdout.includes('hana-cli') ||
+                                          stderr.includes('[cli]') ||
+                                          stderr.includes('hana-cli')
+                    
+                    base.assert.ok(hasDebugOutput, `${cmd} should support --debug flag`)
+                    done()
+                })
+            })
+        })
+
+        cloudCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --quiet flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --quiet ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || stderr.includes('[cli]')
+                    base.assert.ok(!hasDebugOutput, `${cmd} should support --quiet flag`)
+                    done()
+                })
+            })
+        })
+    })
+
+    describe('Cross-command consistency - Utility Commands', function () {
+        this.timeout(20000)
+
+        // Utility and special purpose commands
+        const utilityCommands = [
+            { cmd: 'certificates', args: '' },
+            { cmd: 'reclaim', args: '' },
+            { cmd: 'massUsers', args: '' },
+            { cmd: 'cds', args: '' }
+        ]
+
+        utilityCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --debug flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --debug ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || 
+                                          stdout.includes('hana-cli') ||
+                                          stderr.includes('[cli]') ||
+                                          stderr.includes('hana-cli')
+                    
+                    base.assert.ok(hasDebugOutput, `${cmd} should support --debug flag`)
+                    done()
+                })
+            })
+        })
+
+        utilityCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --quiet flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --quiet ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || stderr.includes('[cli]')
+                    base.assert.ok(!hasDebugOutput, `${cmd} should support --quiet flag`)
+                    done()
+                })
+            })
+        })
+    })
+
+    describe('Cross-command consistency - Connection Commands', function () {
+        this.timeout(20000)
+
+        // Connection and configuration commands
+        const connectionCommands = [
+            { cmd: 'copy2DefaultEnv', args: '' },
+            { cmd: 'copy2Env', args: '' },
+            { cmd: 'copy2Secrets', args: '' }
+        ]
+
+        connectionCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --debug flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --debug ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || 
+                                          stdout.includes('hana-cli') ||
+                                          stderr.includes('[cli]') ||
+                                          stderr.includes('hana-cli')
+                    
+                    base.assert.ok(hasDebugOutput, `${cmd} should support --debug flag`)
+                    done()
+                })
+            })
+        })
+
+        connectionCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --quiet flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --quiet ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || stderr.includes('[cli]')
+                    base.assert.ok(!hasDebugOutput, `${cmd} should support --quiet flag`)
+                    done()
+                })
+            })
+        })
+    })
+
+    describe('Cross-command consistency - BTP Commands', function () {
+        this.timeout(20000)
+
+        // BTP (Business Technology Platform) commands
+        const btpCommands = [
+            { cmd: 'btpInfo', args: '' },
+            { cmd: 'btpSubs', args: '' }
+        ]
+
+        btpCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --debug flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --debug ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || 
+                                          stdout.includes('hana-cli') ||
+                                          stderr.includes('[cli]') ||
+                                          stderr.includes('hana-cli')
+                    
+                    base.assert.ok(hasDebugOutput, `${cmd} should support --debug flag`)
+                    done()
+                })
+            })
+        })
+
+        btpCommands.forEach(({ cmd, args }) => {
+            it(`${cmd}: should accept --quiet flag`, function (done) {
+                child_process.exec(`hana-cli ${cmd} --quiet ${args}`, (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Command', value: cmd })
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const hasDebugOutput = stdout.includes('[cli]') || stderr.includes('[cli]')
+                    base.assert.ok(!hasDebugOutput, `${cmd} should support --quiet flag`)
                     done()
                 })
             })

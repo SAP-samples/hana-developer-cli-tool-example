@@ -3092,11 +3092,49 @@ This project includes comprehensive unit tests to ensure code quality and reliab
 
 For detailed information about running tests, writing new tests, and understanding the test structure, please refer to the [Unit Testing Documentation](./tests/README_UNIT_TESTS.md).
 
+### Running Tests
+
 Quick start for running tests:
 
 ```shell
+# Run all tests
 npm test
+
+# Run specific test suites
+npm run test:cli      # CLI tests only
+npm run test:utils    # Utils tests only
+npm run test:routes   # Routes tests only
 ```
+
+### Code Coverage
+
+The project uses [nyc (Istanbul)](https://github.com/istanbuljs/nyc) for code coverage reporting. To generate code coverage reports:
+
+```shell
+# Run all tests with coverage
+npm run coverage
+
+# Run specific test suites with coverage
+npm run coverage:cli      # CLI tests with coverage
+npm run coverage:utils    # Utils tests with coverage
+npm run coverage:routes   # Routes tests with coverage
+
+# Generate detailed HTML coverage report
+npm run coverage:report
+
+# Check if coverage meets thresholds (80%)
+npm run coverage:check
+```
+
+After running coverage tests, open `./coverage/index.html` in your browser to view the detailed interactive coverage report.
+
+The project aims for 80% code coverage across:
+- Lines
+- Statements
+- Functions
+- Branches
+
+For more information about code coverage configuration and interpretation, see the [Coverage section in the Unit Testing Documentation](./tests/README_UNIT_TESTS.md#code-coverage).
 
 ## How to obtain support
 
