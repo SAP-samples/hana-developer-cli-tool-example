@@ -52,6 +52,52 @@ npm link
 
 [![asciicast](https://asciinema.org/a/301560.svg)](https://asciinema.org/a/301560)
 
+## BTP CLI Installation
+
+The hana-cli tool includes several commands that interact with SAP Business Technology Platform (BTP) services. All BTP-related functionality in this tool relies on the [SAP BTP Command Line Interface (btp CLI)](https://help.sap.com/docs/btp/sap-business-technology-platform/btp-cli-command-reference) being installed and available in your system's PATH.
+
+### About the BTP CLI
+
+The btp CLI is SAP's official command-line tool for managing resources and services on the SAP Business Technology Platform. It provides capabilities for managing global accounts, directories, subaccounts, entitlements, service instances, and more. The hana-cli tool wraps and extends many of these capabilities with developer-friendly commands.
+
+### Installing the BTP CLI with install-btp.sh
+
+For Linux and macOS users, this repository includes a convenient installation script [`install-btp.sh`](install-btp.sh) that automates the installation of the BTP CLI.
+
+The script performs the following actions:
+
+1. Downloads the latest BTP CLI installer from the official SAP samples repository
+2. Makes the installer executable and runs it with automatic confirmation
+3. Configures shell aliases for easier BTP CLI usage
+4. Adds the BTP CLI binary location to your PATH
+
+**To use the installation script:**
+
+```shell
+chmod +x install-btp.sh
+./install-btp.sh
+```
+
+After running the script, you may need to restart your terminal or run `source ~/.bashrc` to apply the PATH changes.
+
+**Note:** Windows users should refer to the [official BTP CLI installation documentation](https://help.sap.com/docs/btp/sap-business-technology-platform/download-and-start-using-btp-cli-client) for platform-specific installation instructions.
+
+### Verifying the Installation
+
+Once installed, you can verify the BTP CLI is available by running:
+
+```shell
+btp --version
+```
+
+You can also use the hana-cli tool itself to check your BTP CLI configuration:
+
+```shell
+hana-cli btp
+```
+
+This will display your current BTP target information including global account, directory, and subaccount if configured.
+
 ## Security
 
 This application primarily uses the default-env.json that is often used in local development for connectivity to a remote HANA DB (although it can of course be used with a local SAP HANA, express edition instance as well). For more details on how the default-env.json works, see the readme.md of the @sap/xsenv package or the @sap/hdi-deploy package.
