@@ -1387,10 +1387,7 @@ Open these files in a browser for detailed test results with:
 - ✅ **UI command tests (browser-based commands)** ⭐ DONE
 - ✅ **Profile flag integration tests with actual PostgreSQL/SQLite (COMPLETED)** ⭐ DONE
 - ✅ **End-to-end WebSocket message handling tests** ⭐ DONE
-
-### Future Improvements 🔄
-
-- 🔄 Real HTTP integration tests using supertest library
+- ✅ **Real HTTP integration tests using supertest library** ⭐ DONE
 
 ### Testing Notes and Best Practices 📝
 
@@ -1752,6 +1749,334 @@ These tests validate the removal of the unmaintained `easy-table` package and re
 - Graceful fallbacks when terminal.table fails
 
 **Total:** 48 new test cases covering table formatting, pagination, and type-aware output.
+
+---
+
+## HTTP Integration Tests
+
+In addition to unit tests using mock request/response objects, the project now includes comprehensive HTTP integration tests using the [supertest](https://github.com/visionmedia/supertest) library. These tests make real HTTP requests to the Express application to validate end-to-end behavior.
+
+### Test Infrastructure
+
+#### App Factory (`/tests/appFactory.js`)
+
+A dedicated application factory module that creates Express app instances for testing:
+
+**`createApp(options)`** - Creates a full Express app with all routes loaded
+
+- **Options:**
+  - `loadRoutes` (default: true) - Whether to load all routes from `/routes`
+  - `addErrorHandlers` (default: true) - Whether to add 404 and error handling middleware
+- **Returns:** Promise<express.Application>
+- **Use case:** Full application integration tests
+
+**`createMinimalApp(routeFunction)`** - Creates a minimal Express app with a single route
+
+- **Parameters:**
+  - `routeFunction` - Route function to load (e.g., from `routes/index.js`)
+- **Returns:** express.Application
+- **Use case:** Isolated route testing
+
+**Key Features:**
+
+- Automatically configures Express settings (disables x-powered-by, etag)
+- Adds body parser middleware (JSON and URL-encoded)
+- Dynamically loads all routes from the `/routes` directory
+- Configures 404 and global error handlers
+- Returns app without starting a server (suitable for supertest)
+
+### HTTP Integration Test Files
+
+#### 1. **index.http.Test.js** - 17 tests ⭐ NEW
+
+Integration tests for the index route (`/`) using real HTTP requests:
+
+**Routes Tested:**
+
+- `GET /` - Returns current prompts/configuration
+- `PUT /` - Updates prompts/configuration
+
+**Test Categories:**
+
+**GET / Tests:**
+
+- Returns 200 status code
+- Returns JSON content type
+- Returns prompts object
+- Handles errors gracefully
+
+**PUT / Tests:**
+
+- Accepts valid JSON body
+- Returns 200 status with success message
+- Sets `isGui` flag to true
+- Handles empty body
+- Handles complex configuration data
+
+**HTTP Method Tests:**
+
+- Returns 404 for unsupported methods (POST, DELETE, PATCH)
+
+**Content-Type Handling:**
+
+- Handles application/json content type
+- Handles missing content type
+
+**Error Handling:**
+
+- Handles malformed JSON
+- Does not crash on undefined routes
+
+**Key Features:**
+
+- Tests actual HTTP status codes
+- Validates response headers
+- Tests content type negotiation
+- Verifies error responses
+- Tests multiple HTTP methods
+
+#### 2. **docs.http.Test.js** - 26 tests ⭐ NEW
+
+Integration tests for documentation routes with real HTTP requests:
+
+**Routes Tested:**
+
+- `GET /docs/readme` - Returns README.md as HTML
+- `GET /docs/changelog` - Returns CHANGELOG.md as HTML
+
+**Test Categories:**
+
+**GET /docs/readme Tests:**
+
+- Returns 200 status code
+- Returns HTML content type
+- Returns converted markdown as HTML
+- Contains README content indicators (hana, cli, command, developer)
+- Returns substantial content (>100 characters)
+
+**GET /docs/changelog Tests:**
+
+- Returns 200 status code
+- Returns HTML content type
+- Returns converted markdown as HTML
+- Contains changelog content indicators (change, version, update, fix, feature)
+- Returns substantial content (>100 characters)
+
+**HTTP Method Tests:**
+
+- Returns 404 for unsupported methods (POST, PUT, DELETE)
+
+**Route Not Found:**
+
+- Returns 404 for invalid paths (/docs/invalid, /docs, /docs/)
+
+**Response Headers:**
+
+- Includes standard response headers
+- Validates content-type header
+
+**Multiple Requests:**
+
+- Handles sequential requests to same route
+- Handles alternating requests to different routes
+
+**Key Features:**
+
+- Tests markdown-to-HTML conversion
+- Validates content length
+- Tests route not found scenarios
+- Verifies response consistency
+
+#### 3. **static.http.Test.js** - 32 tests ⭐ NEW
+
+Integration tests for static file serving and configuration routes:
+
+**Routes Tested:**
+
+- `GET /appconfig/fioriSandboxConfig.json` - Returns Fiori sandbox configuration
+- Static file routes (`/ui`, `/sap/dfa/`, `/resources/sap/dfa/`, `/i18n`, `/favicon.ico`)
+
+**Test Categories:**
+
+**GET /appconfig/fioriSandboxConfig.json Tests:**
+
+- Returns 200 status code
+- Returns JSON content type
+- Returns valid JSON object structure
+- Contains `bootstrapPlugins` property
+- Contains `BootstrapXrayPlugin` configuration
+- Includes version in plugin config (dynamically set)
+- Returns consistent data across multiple requests
+
+**Static File Route Tests:**
+
+- `/ui` serves static files (or returns 404 if file not found)
+- `/sap/dfa/` serves DFA files
+- `/resources/sap/dfa/` serves DFA resource files
+- `/i18n` serves internationalization files (messages.properties, messages_de.properties)
+- `/favicon.ico` serves favicon
+
+**HTTP Method Tests:**
+
+- Returns 404 for unsupported methods (POST, PUT, DELETE)
+
+**Security Headers:**
+
+- Does not expose `x-powered-by` header
+- Includes standard response headers
+
+**Cache and Performance:**
+
+- Handles multiple rapid concurrent requests
+- Returns consistent content across requests
+- Supports burst of 5 concurrent requests
+
+**Key Features:**
+
+- Tests static file middleware configuration
+- Validates JSON configuration endpoints
+- Tests security headers
+- Performance testing with concurrent requests
+
+#### 4. **fullApp.http.Test.js** - 53 tests ⭐ NEW
+
+Comprehensive integration tests for the complete application with all routes loaded:
+
+**Test Categories:**
+
+**Routes Registration:**
+
+- Verifies index route is registered
+- Verifies docs routes are registered
+- Verifies static routes are registered
+
+**404 Handler:**
+
+- Returns 404 for non-existent routes
+- Returns JSON error response
+- Includes HTTP method and path in error message
+
+**Error Handler:**
+
+- Catches and handles errors
+- Returns JSON for errors
+- Does not crash server on errors
+
+**Multiple Routes:**
+
+- Handles sequential requests to different routes
+- Handles concurrent requests to multiple routes
+
+**HTTP Methods:**
+
+- Supports GET requests
+- Supports PUT requests
+- Returns 404 for unsupported methods
+
+**Content Types:**
+
+- Handles JSON requests
+- Returns appropriate content types (HTML, JSON)
+
+**App Configuration:**
+
+- Has `x-powered-by` disabled
+- Handles body parsing correctly
+
+**Stress Tests:**
+
+- Handles 10 sequential requests
+- Handles burst of 20 concurrent requests
+- Handles mixed request types concurrently (7 different requests)
+
+**Security Headers:**
+
+- Does not leak server information
+- Handles CORS appropriately
+
+**Edge Cases:**
+
+- Handles very long URLs (1000+ characters)
+- Handles special characters in URL
+- Handles empty body in PUT
+- Handles very large JSON body (10KB+)
+
+**App Initialization:**
+
+- Creates app instance successfully
+- Has all middleware loaded
+- Maintains state across requests
+
+**Key Features:**
+
+- Tests complete application behavior
+- Validates all middleware integration
+- Stress tests with concurrent requests
+- Tests edge cases and error scenarios
+- Validates security configuration
+
+### Running HTTP Integration Tests
+
+HTTP integration tests can be run using standard npm test scripts:
+
+```bash
+# Run all route tests (including HTTP integration tests)
+npm run test:routes
+
+# Run specific HTTP integration test files
+npx mocha --config=tests/.mocharc.json tests/routes/index.http.Test.js
+npx mocha --config=tests/.mocharc.json tests/routes/docs.http.Test.js
+npx mocha --config=tests/.mocharc.json tests/routes/static.http.Test.js
+npx mocha --config=tests/.mocharc.json tests/routes/fullApp.http.Test.js
+
+# Run all HTTP integration tests
+npx mocha --config=tests/.mocharc.json "tests/routes/*.http.Test.js"
+```
+
+### Benefits of HTTP Integration Tests
+
+1. **End-to-End Validation**: Tests actual HTTP request/response cycles
+2. **Real Middleware**: Tests with actual Express middleware stack
+3. **Status Code Validation**: Verifies correct HTTP status codes
+4. **Header Validation**: Tests response headers and content types
+5. **Error Handling**: Validates error responses and error handling middleware
+6. **Route Registration**: Ensures all routes are properly configured
+7. **Performance Testing**: Tests with concurrent requests
+8. **Security Testing**: Validates security headers and configurations
+
+### Supertest Library
+
+[Supertest](https://github.com/visionmedia/supertest) is a high-level abstraction for testing HTTP servers. It works by:
+
+1. Creating HTTP requests without starting a server
+2. Making requests to the Express app instance
+3. Providing chainable API for assertions
+4. Returning promises for async/await support
+
+**Example:**
+
+```javascript
+const response = await request(app)
+    .get('/api/endpoint')
+    .expect(200)
+    .expect('Content-Type', /json/)
+
+expect(response.body).to.have.property('data')
+```
+
+### Test Organization
+
+HTTP integration tests are located in `/tests/routes/` and follow the naming convention:
+
+- `<route-name>.http.Test.js` - HTTP integration tests
+- `<route-name>.Test.js` - Unit tests with mocks
+
+This allows for both approaches:
+
+- **Unit tests**: Fast, isolated tests with mocked req/res
+- **Integration tests**: Comprehensive end-to-end HTTP tests
+
+**Total:** 128 new HTTP integration test cases covering all major routes and application behavior.
 
 ---
 

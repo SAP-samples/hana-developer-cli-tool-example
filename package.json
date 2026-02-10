@@ -109,7 +109,8 @@
     "mochawesome": "^7.1.3",
     "nyc": "^17.1.0",
     "sinon": "^21.0.1",
-    "stringify-changelog": "^0.2.1"
+    "stringify-changelog": "^0.2.1",
+    "supertest": "^7.2.2"
   },
   "cds": {
     "preview": {
