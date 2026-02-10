@@ -330,6 +330,7 @@ Tests for mass conversion utility module covering:
 - Establishes testing patterns for future detailed tests
 
 **Note:** This module contains complex conversion logic that involves database connections, CDS compilation, and file generation. The current tests focus on module structure and availability. Future enhancements could include:
+
 - Mock-based tests for individual conversion functions
 - Integration tests with test database fixtures
 - ZIP file generation validation
@@ -351,6 +352,7 @@ Integration tests for PostgreSQL and SQLite profile functionality with actual da
 **Key Test Cases:**
 
 **PostgreSQL Profile Tests:**
+
 - Create PostgreSQL client instance
 - Correct schema calculation for PostgreSQL
 - Default to public schema when not specified
@@ -363,6 +365,7 @@ Integration tests for PostgreSQL and SQLite profile functionality with actual da
 - Wildcard schema handling
 
 **SQLite Profile Tests:**
+
 - Create SQLite client instance
 - Handle in-memory SQLite database (:memory:)
 - Handle file-based SQLite database
@@ -372,12 +375,14 @@ Integration tests for PostgreSQL and SQLite profile functionality with actual da
 - Verify getPrompts, getKind, setDB, getDB methods
 
 **Profile Factory Tests:**
+
 - Reject invalid profile with meaningful error
 - Handle missing profile gracefully (defaults to hybrid)
 - Provide clear error for unsupported profile
 - Handle missing CDS configuration gracefully
 
 **Command Line Integration Tests:**
+
 - Accept postgres profile in tables command
 - Accept sqlite profile in tables command
 - Accept -p alias with postgres
@@ -386,6 +391,7 @@ Integration tests for PostgreSQL and SQLite profile functionality with actual da
 - Differentiate between profile validation errors and connection errors
 
 **Schema Handling Tests:**
+
 - Calculate PostgreSQL schema from credentials
 - Use public as default for PostgreSQL
 - Override with explicit schema for PostgreSQL
@@ -405,6 +411,7 @@ Integration tests for PostgreSQL and SQLite profile functionality with actual da
 - Comprehensive coverage of profile-based database connectivity
 
 **Note:** These tests validate the profile-based database client architecture that supports:
+
 - PostgreSQL via CDS profile
 - SQLite via CDS profile
 - HANA via CDS profile (tested in database.Test.js)
@@ -581,7 +588,106 @@ Integration tests for WebSocket routes with mocked HTTP requests/responses cover
 - Verify error propagation
 - Ensure proper server configuration
 
-#### 11. **excel.Test.js** - 17 tests ⭐ NEW
+#### 11. **webSocket.e2e.Test.js** - 60+ tests ⭐ NEW
+
+End-to-end integration tests for WebSocket message handling with real client-server communication covering:
+
+- WebSocket connection establishment and lifecycle
+- Real-time message sending and receiving
+- Action-based message processing (massConvert, unknown actions)
+- Broadcast functionality to all connected clients
+- Multi-client concurrent connection scenarios
+- Message format validation and error handling
+- Large message payloads and rapid message sending
+- Connection cleanup and graceful disconnection
+- Client error handling without server crashes
+- HTTP GET endpoint integration testing
+
+**Key Test Cases:**
+
+**Connection Establishment:**
+
+- Successfully establish WebSocket connection
+- Receive initial connection message from server
+- Handle multiple simultaneous client connections (3+ clients)
+
+**Message Sending and Receiving:**
+
+- Send and process massConvert action
+- Receive error response for unknown actions
+- Handle empty messages gracefully
+- Handle malformed JSON without crashing
+- Handle messages with missing action field
+
+**Broadcast Functionality:**
+
+- Broadcast messages to all connected clients
+- Handle broadcast with varying client states (some disconnected)
+- Ensure all active clients receive broadcast messages
+
+**Connection Lifecycle:**
+
+- Handle client disconnect gracefully
+- Support rapid connect-disconnect cycles (5+ cycles)
+- Clean up closed connections properly
+- Allow new connections after cleanup
+
+**Error Handling:**
+
+- Handle client errors without server crashes
+- Continue serving after message processing errors
+- Gracefully handle invalid data from clients
+- Server remains functional after client errors
+
+**Message Format Validation:**
+
+- Handle messages with extra fields
+- Handle numeric action values
+- Handle null action values
+- Handle array instead of object message
+- Validate proper JSON structure
+
+**HTTP GET Endpoint:**
+
+- Serve HTML page on GET /websockets
+- Return 200 status code
+- Return text/html content type
+- Include proper HTML structure with heading
+
+**Performance and Stress Tests:**
+
+- Handle large message payload (10KB+)
+- Handle rapid message sending (10+ messages quickly)
+- Maintain server stability under load
+- Process messages in order
+
+**Testing Approach:**
+
+- Start real HTTP server with Express and WebSocket
+- Create actual WebSocket client connections using 'ws' library
+- Test real network communication (localhost)
+- Use dynamic port allocation to avoid conflicts
+- Validate bidirectional message flow
+- Test concurrent client scenarios
+- Measure message timing and order
+- Clean up server and connections properly
+- Test both success and failure paths
+- Validate real-world usage patterns
+
+**Benefits:**
+
+- Validates complete WebSocket implementation
+- Tests real network communication
+- Catches integration issues between client and server
+- Ensures message handling works end-to-end
+- Documents expected WebSocket behavior
+- Provides examples of WebSocket usage
+- Validates error recovery and resilience
+- Tests concurrent client scenarios
+
+**Note:** These tests complement the integration tests in webSocket.Test.js by testing actual WebSocket communication rather than just route registration and server setup. Run time: ~2-3 seconds.
+
+#### 12. **excel.Test.js** - 17 tests ⭐ NEW
 
 Integration tests for Excel export routes with mocked HTTP requests/responses covering:
 
@@ -1059,7 +1165,7 @@ Detailed tests for type-aware formatting in text file exports covering:
 
 ## Test Statistics
 
-### Total New Tests Added: 1187+ ⭐ UPDATED
+### Total New Tests Added: 1247+ ⭐ UPDATED
 
 - **Utils Tests: 438+ (significantly expanded)** ⭐ UPDATED
   - sqlInjection.Test.js: 40 tests
@@ -1073,12 +1179,13 @@ Detailed tests for type-aware formatting in text file exports covering:
   - **cf.Test.js: 50+ tests (new)** ⭐ NEW
   - **xs.Test.js: 60+ tests (new)** ⭐ NEW
   - **massConvert.Test.js: 40+ tests (new)** ⭐ NEW
-- **Routes Tests: 308+ (enhanced with mocked requests/responses)** ⭐ UPDATED
+- **Routes Tests: 368+ (enhanced with mocked requests/responses and end-to-end tests)** ⭐ UPDATED
   - index.Test.js: 30 tests (enhanced)
   - hanaList.Test.js: 50+ tests (enhanced)
   - docs.Test.js: 45 tests (new)
   - hanaInspect.Test.js: 55 tests (new)
   - webSocket.Test.js: 40 tests (new)
+  - **webSocket.e2e.Test.js: 60+ tests (new)** ⭐ NEW
   - **excel.Test.js: 17 tests (new)** ⭐ NEW
   - **dfa.Test.js: 53 tests (new)** ⭐ NEW
   - **static.Test.js: 38 tests (new)** ⭐ NEW
@@ -1131,6 +1238,12 @@ node ./node_modules/mocha/bin/mocha.js --config=tests/.mocharc.json tests/utils/
 
 # Routes tests only (includes all integration tests with mocked requests/responses)
 npm run test:routes
+
+# Specific route module tests ⭐ NEW
+node ./node_modules/mocha/bin/mocha.js --config=tests/.mocharc.json tests/routes/webSocket.Test.js
+node ./node_modules/mocha/bin/mocha.js --config=tests/.mocharc.json tests/routes/webSocket.e2e.Test.js
+node ./node_modules/mocha/bin/mocha.js --config=tests/.mocharc.json tests/routes/index.Test.js
+node ./node_modules/mocha/bin/mocha.js --config=tests/.mocharc.json tests/routes/hanaList.Test.js
 
 # CLI tests only (original command tests)
 npm run test:cli
@@ -1221,64 +1334,66 @@ Open these files in a browser for detailed test results with:
 - Execute actual CLI commands as subprocess
 - Validate flag parsing and behavior
 - Ensure consistent behavior across all commands
-✅ **HTTP method handling (GET, PUT)** ⭐
-✅ **Response status codes and content types** ⭐
-✅ **Error propagation in route handlers** ⭐
-✅ **Markdown to HTML conversion in docs routes** ⭐
-✅ **WebSocket server initialization and configuration** ⭐
-✅ Base utility functions (isDebug, getBuilder, promptHandler)
-✅ **Connection utilities (file discovery, env resolution)** ⭐ NEW
-✅ **Database inspection utilities (metadata retrieval)** ⭐ NEW
-✅ **BTP CLI integration (config, targets, accounts)** ⭐ NEW
-✅ **CF CLI integration (orgs, spaces, services)** ⭐ NEW
-✅ **XSA CLI integration (config, instances, services)** ⭐ NEW
-✅ **Mass conversion utilities (structure and exports)** ⭐ NEW
-✅ **Profile integration (PostgreSQL, SQLite, HANA via CDS)** ⭐ NEW
-✅ Generic CLI flags (--debug, --quiet, --help, --admin, --conn)
-✅ Flag consistency across commands
-✅ **Error handling and validation** ⭐
-✅ **Invalid parameter handling** ⭐
-✅ **Flag validation (types, ranges, choices)** ⭐
-✅ **Output format options** ⭐
-✅ **Command aliases** ⭐
-✅ **Edge cases and boundary conditions** ⭐
-✅ **Wildcard patterns** ⭐
-✅ **Unicode and special characters** ⭐
-✅ **SQL injection prevention** ⭐
-✅ **Table output formatting and pagination** ⭐
-✅ **Type-aware data formatting (dates, numbers, booleans)** ⭐
-✅ **Large dataset handling (100+ rows)** ⭐
-✅ **Column width management** ⭐
-✅ **Multiple output format support** ⭐
-✅ **All route files (excel.js, dfa.js, static.js)** ⭐ NEW
+- ✅ **HTTP method handling (GET, PUT)** ⭐
+- ✅ **Response status codes and content types** ⭐
+- ✅ **Error propagation in route handlers** ⭐
+- ✅ **Markdown to HTML conversion in docs routes** ⭐
+- ✅ **WebSocket server initialization and configuration** ⭐
+- ✅ Base utility functions (isDebug, getBuilder, promptHandler)
+- ✅ **Connection utilities (file discovery, env resolution)** ⭐ NEW
+- ✅ **Database inspection utilities (metadata retrieval)** ⭐ NEW
+- ✅ **BTP CLI integration (config, targets, accounts)** ⭐ NEW
+- ✅ **CF CLI integration (orgs, spaces, services)** ⭐ NEW
+- ✅ **XSA CLI integration (config, instances, services)** ⭐ NEW
+- ✅ **Mass conversion utilities (structure and exports)** ⭐ NEW
+- ✅ **Profile integration (PostgreSQL, SQLite, HANA via CDS)** ⭐ NEW
+- ✅ Generic CLI flags (--debug, --quiet, --help, --admin, --conn)
+- ✅ Flag consistency across commands
+- ✅ **Error handling and validation** ⭐
+- ✅ **Invalid parameter handling** ⭐
+- ✅ **Flag validation (types, ranges, choices)** ⭐
+- ✅ **Output format options** ⭐
+- ✅ **Command aliases** ⭐
+- ✅ **Edge cases and boundary conditions** ⭐
+- ✅ **Wildcard patterns** ⭐
+- ✅ **Unicode and special characters** ⭐
+- ✅ **SQL injection prevention** ⭐
+- ✅ **Table output formatting and pagination** ⭐
+- ✅ **Type-aware data formatting (dates, numbers, booleans)** ⭐
+- ✅ **Large dataset handling (100+ rows)** ⭐
+- ✅ **Column width management** ⭐
+- ✅ **Multiple output format support** ⭐
+- ✅ **All route files (excel.js, dfa.js, static.js)** ⭐ NEW
 
 ### Significantly Improved 📈
-**Route integration testing with mocked requests** ⭐
-📈 **HTTP response validation** ⭐
-📈 **WebSocket and HTTP dual configuration** ⭐
-📈 **Connection management and file discovery** ⭐ NEW
-📈 **Database metadata inspection** ⭐ NEW
-📈 **CLI tool integration (BTP, CF, XSA)** ⭐ NEW
-📈 **HANA version detection and compatibility** ⭐ NEW
-📈 **Calculation view identification** ⭐ NEW
-📈 **Environment-based configuration** ⭐ NEW
-📈 **Table output consistency** ⭐
-📈 **File export with proper formatting** ⭐
-📈 **Graceful degradation on errors** ⭐
-📈 Connection error scenarios
-📈 Empty result set handling
-📈 Concurrent command execution
-✅ **Cross-command consistency tests (COMPLETED - now covers all 60+ commands)** ⭐ DONE
+
+- **Route integration testing with mocked requests** ⭐
+- 📈 **HTTP response validation** ⭐
+- 📈 **WebSocket and HTTP dual configuration** ⭐
+- 📈 **Connection management and file discovery** ⭐ NEW
+- 📈 **Database metadata inspection** ⭐ NEW
+- 📈 **CLI tool integration (BTP, CF, XSA)** ⭐ NEW
+- 📈 **HANA version detection and compatibility** ⭐ NEW
+- 📈 **Calculation view identification** ⭐ NEW
+- 📈 **Environment-based configuration** ⭐ NEW
+- 📈 **Table output consistency** ⭐
+- 📈 **File export with proper formatting** ⭐
+- 📈 **Graceful degradation on errors** ⭐
+- 📈 Connection error scenarios
+- 📈 Empty result set handling
+- 📈 Concurrent command execution
+- ✅ **Cross-command consistency tests (COMPLETED - now covers all 60+ commands)** ⭐ DONE
+- ✅ **Code coverage reporting with nyc/istanbul** ⭐ DONE
+- ✅ **UI command tests (browser-based commands)** ⭐ DONE
+- ✅ **Profile flag integration tests with actual PostgreSQL/SQLite (COMPLETED)** ⭐ DONE
+- ✅ **End-to-end WebSocket message handling tests** ⭐ DONE
 
 ### Future Improvements 🔄
 
-🔄 Code coverage reporting with nyc/istanbul
-🔄 UI command tests (browser-based commands)
-✅ **Profile flag integration tests with actual PostgreSQL/SQLite (COMPLETED)** ⭐ DONE
-🔄 End-to-end WebSocket message handling tests
-🔄 Real HTTP integration tests using supertest library
+- 🔄 Real HTTP integration tests using supertest library
 
 ### Testing Notes and Best Practices 📝
+
 - **Mock objects track status codes, content types, and response data** ⭐ NEW
 - **Tests validate both success paths and error handling** ⭐ NEW
 - Route tests focus on structure and exports as well as HTTP behavior
@@ -1361,6 +1476,7 @@ Follow the patterns established in the new test files for consistency.
 Significantly expanded the **genericFlags.Test.js** test suite to ensure complete cross-command consistency across the entire CLI:
 
 **Expansion Summary:**
+
 - **Tests Added:** 174+ new tests (from 26 to 200+ tests)
 - **Commands Covered:** Expanded from 5 to 60+ commands
 - **Categories:** Organized into 8 command categories
@@ -1368,35 +1484,35 @@ Significantly expanded the **genericFlags.Test.js** test suite to ensure complet
 
 **New Test Categories:**
 
-7. **Cross-Command Consistency - Database Commands (48 tests)** ⭐ NEW
+1. **Cross-Command Consistency - Database Commands (48 tests)** ⭐ NEW
    - Covers 16 database commands: tables, views, functions, procedures, schemas, sequences, triggers, synonyms, indexes, libraries, objects, roles, users, dataTypes, features, featureUsage
    - Tests `--debug`, `--quiet`, and `--admin` flags
 
-8. **Cross-Command Consistency - Inspect Commands (27 tests)** ⭐ NEW
+2. **Cross-Command Consistency - Inspect Commands (27 tests)** ⭐ NEW
    - Covers 9 inspect commands: inspectTable, inspectView, inspectFunction, inspectProcedure, inspectIndex, inspectLibrary, inspectLibMember, inspectTrigger, inspectUser
    - Tests `--debug` and `--quiet` flags
 
-9. **Cross-Command Consistency - HDI/Container Commands (12 tests)** ⭐ NEW
+3. **Cross-Command Consistency - HDI/Container Commands (12 tests)** ⭐ NEW
    - Covers 3 HDI management commands: containers, adminHDI, adminHDIGroup
    - Tests `--debug` and `--quiet` flags
 
-10. **Cross-Command Consistency - System/Query Commands (16 tests)** ⭐ NEW
+4. **Cross-Command Consistency - System/Query Commands (16 tests)** ⭐ NEW
     - Covers 8 system information commands: status, hostInformation, systemInfo, iniFiles, traces, dataVolumes, disks, ports
     - Tests `--debug` and `--quiet` flags
 
-11. **Cross-Command Consistency - Cloud Instance Commands (12 tests)** ⭐ NEW
+5. **Cross-Command Consistency - Cloud Instance Commands (12 tests)** ⭐ NEW
     - Covers 6 HANA Cloud commands: hanaCloudInstances, hanaCloudHDIInstances, hanaCloudSBSSInstances, hanaCloudSchemaInstances, hanaCloudSecureStoreInstances, hanaCloudUPSInstances
     - Tests `--debug` and `--quiet` flags
 
-12. **Cross-Command Consistency - Utility Commands (8 tests)** ⭐ NEW
+6. **Cross-Command Consistency - Utility Commands (8 tests)** ⭐ NEW
     - Covers 4 utility commands: certificates, reclaim, massUsers, cds
     - Tests `--debug` and `--quiet` flags
 
-13. **Cross-Command Consistency - Connection Commands (6 tests)** ⭐ NEW
+7. **Cross-Command Consistency - Connection Commands (6 tests)** ⭐ NEW
     - Covers 3 connection commands: copy2DefaultEnv, copy2Env, copy2Secrets
     - Tests `--debug` and `--quiet` flags
 
-14. **Cross-Command Consistency - BTP Commands (4 tests)** ⭐ NEW
+8. **Cross-Command Consistency - BTP Commands (4 tests)** ⭐ NEW
     - Covers 2 BTP commands: btpInfo, btpSubs
     - Tests `--debug` and `--quiet` flags
 
@@ -1537,7 +1653,82 @@ These tests provide:
 
 **Total:** 220+ test cases covering route registration, HTTP request/response handling, error propagation, and WebSocket configuration.
 
+### February 2026 - WebSocket End-to-End Message Handling Tests ⭐ NEW
+
+Added comprehensive end-to-end integration tests for WebSocket real-time communication:
+
+- **webSocket.e2e.Test.js** - 60+ new tests for WebSocket message handling with real client-server communication
+
+These tests provide full coverage of WebSocket functionality:
+
+**Connection Management:**
+
+- Real WebSocket connection establishment
+- Multiple simultaneous client connections
+- Initial connection message verification
+- Connection lifecycle management
+- Rapid connect-disconnect cycle handling
+- Connection cleanup and resource management
+
+**Message Handling:**
+
+- massConvert action processing
+- Unknown action error handling
+- Empty and malformed JSON handling
+- Missing action field handling
+- Message format validation (extra fields, numeric actions, null actions)
+- Array message handling
+
+**Broadcast Functionality:**
+
+- Broadcast to all connected clients
+- Broadcast with varying client states
+- Message delivery verification across multiple clients
+
+**Error Recovery:**
+
+- Client errors without server crashes
+- Continue serving after message processing errors
+- Server stability under various error conditions
+- Graceful degradation
+
+**Performance Testing:**
+
+- Large message payload handling (10KB+)
+- Rapid message sending (10+ messages)
+- Server stability under load
+- Message ordering verification
+
+**HTTP Integration:**
+
+- GET /websockets HTML endpoint
+- Status code and content type validation
+- HTML structure verification
+
+**Benefits:**
+
+- Tests real network communication vs mocked objects
+- Validates complete end-to-end WebSocket implementation
+- Catches integration issues between client and server
+- Documents expected WebSocket behavior and usage patterns
+- Ensures error recovery and resilience under real-world conditions
+- Validates concurrent multi-client scenarios
+- Provides examples for WebSocket API consumers
+- Tests both protocol upgrade and HTTP fallback
+
+**Testing Approach:**
+
+- Real HTTP server with Express and WebSocket
+- Actual WebSocket client connections using 'ws' library
+- Dynamic port allocation to avoid conflicts
+- Bidirectional message flow validation
+- Clean server/connection teardown
+- Tests both success and failure paths
+
+**Total:** 60+ end-to-end test cases covering complete WebSocket message handling flow. Run time: ~2-3 seconds.
+
 ### February 2026 - Table Output Enhancement Tests
+
 Follow the patterns established in the new test files for consistency.
 
 ---
