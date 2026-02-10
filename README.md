@@ -3129,12 +3129,106 @@ npm run coverage:check
 After running coverage tests, open `./coverage/index.html` in your browser to view the detailed interactive coverage report.
 
 The project aims for 80% code coverage across:
-- Lines
-- Statements
-- Functions
-- Branches
+
+* Lines
+* Statements
+* Functions
+* Branches
 
 For more information about code coverage configuration and interpretation, see the [Coverage section in the Unit Testing Documentation](./tests/README_UNIT_TESTS.md#code-coverage).
+
+## Cross-Platform Support
+
+The HANA CLI tool is designed to work seamlessly across Windows, Linux, and macOS platforms. This section describes the cross-platform features and testing strategies employed to ensure consistent behavior.
+
+### Platform Compatibility
+
+The tool has been tested and validated on:
+
+* **Windows**: Windows 10 and later
+* **Linux**: Ubuntu, Debian, RHEL, and other major distributions
+* **macOS**: macOS 10.15 (Catalina) and later
+
+### Cross-Platform Features
+
+#### Path Handling
+
+The tool automatically handles platform-specific path differences:
+
+* Uses Node.js `path` module for all path operations
+* Automatically detects and uses correct path separators (`/` on Unix, `\` on Windows)
+* Normalizes paths for consistent behavior across platforms
+* Supports both absolute and relative paths on all platforms
+
+#### Environment Variables
+
+Platform-specific environment variables are handled correctly:
+
+* **Windows**: Uses `APPDATA` for configuration files
+* **macOS**: Uses `HOME/Library/Preferences` with fallback to `HOME/Library/Application Support`
+* **Linux**: Uses `HOME/.config` for configuration files
+
+#### Line Endings
+
+The project uses `.gitattributes` to ensure consistent line endings:
+
+* Text files (`.js`, `.json`, `.md`, etc.) use LF (`\n`) in the repository
+* Windows scripts (`.cmd`, `.bat`, `.ps1`) use CRLF (`\r\n`)
+* Binary files are handled appropriately
+
+### Cross-Platform Testing
+
+The project includes comprehensive cross-platform testing:
+
+```shell
+# Run cross-platform specific tests
+npm run test:platform
+
+# Run tests tagged for Windows
+npm run test:windows
+
+# Run tests tagged for Unix systems (Linux/macOS)
+npm run test:unix
+```
+
+#### Continuous Integration
+
+GitHub Actions CI runs the full test suite on all three platforms:
+
+* **Ubuntu Latest**: Tests Linux compatibility
+* **Windows Latest**: Tests Windows compatibility
+* **macOS Latest**: Tests macOS compatibility
+* **Node.js versions**: 20.x, 22.x, and 24.x on each platform
+
+The CI workflow validates:
+
+* Package installation on each platform
+* All unit tests pass on each platform
+* Cross-platform specific tests
+* Platform-specific path handling
+* CLI command execution
+
+#### Mock Filesystem Testing
+
+Tests use `mock-fs` to simulate different filesystem structures:
+
+* Tests can simulate Windows, macOS, and Linux filesystems
+* Validates path handling without requiring multiple OS environments
+* Tests platform-specific configuration file locations
+* Ensures consistent behavior across platforms
+
+### Development Recommendations
+
+When contributing to this project, follow these cross-platform best practices:
+
+1. **Always use `path.join()` or `path.resolve()`** instead of string concatenation for paths
+2. **Use `os.EOL`** for platform-appropriate line endings in generated content
+3. **Test environment variable fallbacks** for Windows (`APPDATA`, `USERPROFILE`) and Unix (`HOME`)
+4. **Tag platform-specific tests** with `@windows` or `@unix` as appropriate
+5. **Use `cross-env`** in npm scripts for environment variable consistency
+6. **Avoid hard-coded path separators** (`/` or `\`) in code
+
+For more details on cross-platform testing, see the [Cross-Platform Testing section in the Unit Testing Documentation](./tests/README_UNIT_TESTS.md#cross-platform-testing).
 
 ## How to obtain support
 

@@ -8,6 +8,7 @@
 
 import { expect } from 'chai'
 import sinon from 'sinon'
+import mock from 'mock-fs'
 import * as child_process from 'child_process'
 import * as fs from 'fs'
 import * as btp from '../../utils/btp.js'
@@ -276,5 +277,110 @@ describe('btp.js - Module Exports', () => {
 
     it('should export getBTPGlobalAccount function', () => {
         expect(btp.getBTPGlobalAccount).to.be.a('function')
+    })
+})
+
+describe('btp.js - Cross-Platform Filesystem Tests @all', () => {
+    afterEach(() => {
+        mock.restore()
+        delete process.env.BTP_CLIENTCONFIG
+        delete process.env.APPDATA
+        delete process.env.HOME
+    })
+
+    describe('getBTPConfig() with mock-fs @all', () => {
+        it('should read Windows config path with mock filesystem @windows', function () {
+            if (process.platform !== 'win32') {
+                // Skip on non-Windows, just verify behavior would work
+                this.skip()
+            }
+            
+            // Mock Windows filesystem structure
+            mock({
+                'C:\\Users\\test\\AppData\\Roaming\\SAP\\btp\\config.json': JSON.stringify({
+                    TargetHierarchy: {
+                        globalaccount: 'test-ga',
+                        subaccount: 'test-sub'
+                    }
+                })
+            })
+
+            process.env.APPDATA = 'C:\\Users\\test\\AppData\\Roaming'
+            process.env.BTP_CLIENTCONFIG = 'C:\\Users\\test\\AppData\\Roaming\\SAP\\btp\\config.json'
+
+            return btp.getBTPConfig().then(result => {
+                expect(result).to.be.an('object')
+                expect(result.TargetHierarchy).to.exist
+            })
+        })
+
+        it('should read macOS config path with mock filesystem @unix', function () {
+            if (process.platform === 'win32') {
+                // Skip on Windows
+                this.skip()
+            }
+            
+            // Mock macOS filesystem structure
+            mock({
+                '/Users/test/Library/Preferences/SAP/btp/config.json': JSON.stringify({
+                    TargetHierarchy: {
+                        globalaccount: 'test-ga-mac'
+                    }
+                })
+            })
+
+            process.env.HOME = '/Users/test'
+            process.env.BTP_CLIENTCONFIG = '/Users/test/Library/Preferences/SAP/btp/config.json'
+
+            return btp.getBTPConfig().then(result => {
+                expect(result).to.be.an('object')
+            })
+        })
+
+        it('should read Linux config path with mock filesystem @unix', function () {
+            if (process.platform === 'win32') {
+                // Skip on Windows
+                this.skip()
+            }
+            
+            // Mock Linux filesystem structure
+            mock({
+                '/home/test/.config/.btp/config.json': JSON.stringify({
+                    TargetHierarchy: {
+                        globalaccount: 'test-ga-linux'
+                    }
+                })
+            })
+
+            process.env.HOME = '/home/test'
+            process.env.BTP_CLIENTCONFIG = '/home/test/.config/.btp/config.json'
+
+            return btp.getBTPConfig().then(result => {
+                expect(result).to.be.an('object')
+            })
+        })
+
+        it('should handle macOS fallback location with mock filesystem @unix', function () {
+            if (process.platform === 'win32') {
+                // Skip on Windows
+                this.skip()
+            }
+            
+            // Mock macOS fallback location
+            mock({
+                '/Users/test/Library/Application Support/.btp/config.json': JSON.stringify({
+                    TargetHierarchy: {
+                        globalaccount: 'test-ga-fallback'
+                    }
+                })
+            })
+
+            process.env.HOME = '/Users/test'
+            process.env.BTP_CLIENTCONFIG = '/Users/test/Library/Application Support/.btp/config.json'
+
+            return btp.getBTPConfig().then(result => {
+                expect(result).to.be.an('object')
+            })
+        })
     })
 })

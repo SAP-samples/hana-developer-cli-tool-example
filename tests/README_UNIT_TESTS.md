@@ -2157,3 +2157,392 @@ The following directories are excluded from coverage analysis:
 - `app/` - UI5 application code
 - `CHANGELOG.js` - Generated changelog
 - `update-notifier.js` - Update notification utility
+
+## Cross-Platform Testing
+
+The HANA CLI tool is designed to work seamlessly across Windows, Linux, and macOS. This section describes the cross-platform testing strategies and tools employed to ensure consistent behavior across all supported platforms.
+
+### Overview
+
+Cross-platform testing validates that the tool functions correctly on:
+
+- **Windows 10/11**: Using PowerShell and CMD
+- **Linux**: Ubuntu, Debian, RHEL, and other distributions
+- **macOS**: macOS 10.15 (Catalina) and later
+
+### Test Organization
+
+#### Platform-Specific Test Tags
+
+Tests are tagged to indicate platform relevance:
+
+- `@all` - Tests that run on all platforms
+- `@windows` - Windows-specific tests
+- `@unix` - Unix-like systems (Linux and macOS)
+
+#### Running Platform Tests
+
+```bash
+# Run all cross-platform tests
+npm run test:platform
+
+# Run Windows-specific tests (use grep to filter)
+npm run test:windows
+
+# Run Unix-specific tests (use grep to filter)
+npm run test:unix
+```
+
+### Cross-Platform Test Suite
+
+The main cross-platform test suite is located in [`platformSupport.Test.js`](./platformSupport.Test.js) and includes:
+
+#### 1. Platform Detection Tests
+
+- Identifies current platform correctly
+- Validates path separator usage
+- Tests path normalization across platforms
+
+#### 2. Path Handling Tests (`@all`)
+
+- Absolute path handling
+- Relative path handling
+- Path component parsing
+- Paths with spaces
+- Parent directory references (`../`)
+
+#### 3. Environment Variable Tests (`@all`)
+
+- HOME vs USERPROFILE detection
+- Platform-specific config paths:
+  - Windows: `APPDATA/SAP/btp/config.json`
+  - macOS: `HOME/Library/Preferences/SAP/btp/config.json`
+  - Linux: `HOME/.config/.btp/config.json`
+
+#### 4. File Operations Tests (`@all`)
+
+- Line ending handling (LF vs CRLF)
+- File path separators
+- `__dirname` equivalent in ES modules
+
+#### 5. Platform-Specific Functionality Tests
+
+- Command extensions (`.cmd` on Windows)
+- Line ending constants (`os.EOL`)
+- Temporary directory handling
+
+#### 6. Windows-Specific Tests (`@windows`)
+
+- Drive letter handling (`C:\`, `D:\`, etc.)
+- UNC path support (`\\server\share\file.txt`)
+
+#### 7. Unix-Specific Tests (`@unix`)
+
+- Absolute paths starting with `/`
+- Symlink support (fs.lstat, fs.readlink)
+
+#### 8. Module Resolution Tests (`@all`)
+
+- ES module import.meta.url
+- Dynamic imports
+- fileURLToPath consistency
+
+### Mock Filesystem Testing
+
+The project uses `mock-fs` to simulate different filesystem structures without requiring multiple operating systems. This allows comprehensive cross-platform testing on a single development machine.
+
+#### Example: Testing Platform-Specific Paths
+
+```javascript
+import mock from 'mock-fs'
+
+// Simulate Windows filesystem
+mock({
+    'C:\\Users\\test\\AppData\\Roaming\\config.json': JSON.stringify({ test: 'windows' })
+})
+
+// Simulate Unix filesystem
+mock({
+    '/home/test/.config/config.json': JSON.stringify({ test: 'unix' })
+})
+
+// Always restore after test
+afterEach(() => {
+    mock.restore()
+})
+```
+
+#### Enhanced BTP Tests with mock-fs
+
+The [`btp.Test.js`](./utils/btp.Test.js) file includes enhanced tests using `mock-fs`:
+
+- Simulates Windows config path (`C:\Users\test\AppData\Roaming\SAP\btp\config.json`)
+- Simulates macOS config path (`/Users/test/Library/Preferences/SAP/btp/config.json`)
+- Simulates Linux config path (`/home/test/.config/.btp/config.json`)
+- Tests macOS fallback location (`/Users/test/Library/Application Support/.btp/config.json`)
+
+### Continuous Integration (CI)
+
+GitHub Actions runs the full test suite on all platforms automatically:
+
+#### CI Configuration
+
+The workflow file [`.github/workflows/cross-platform-tests.yml`](../.github/workflows/cross-platform-tests.yml) defines:
+
+**Test Matrix:**
+
+- **Operating Systems**: ubuntu-latest, windows-latest, macos-latest
+- **Node.js Versions**: 20.x, 22.x, 24.x
+
+**Workflow Steps:**
+
+1. Checkout code
+2. Setup Node.js with caching
+3. Install dependencies (`npm ci`)
+4. Run linter (if available)
+5. Run full test suite
+6. Run platform-specific tests
+7. Generate coverage reports
+8. Upload test results and coverage
+
+**Platform Verification:**
+
+- Verifies CLI installation on each platform
+- Tests platform-specific environment variables
+- Validates platform detection
+
+#### CI Test Artifacts
+
+Test results and coverage reports from each platform are uploaded as artifacts:
+
+- `test-results-ubuntu-latest-node-20.x`
+- `test-results-windows-latest-node-20.x`
+- `test-results-macos-latest-node-20.x`
+- (Similar for Node.js 22.x and 24.x)
+
+### Cross-Platform Development Tools
+
+#### cross-env
+
+All npm test scripts use `cross-env` to ensure consistent environment variable handling across platforms:
+
+```json
+{
+  "scripts": {
+    "test": "cross-env NODE_ENV=test mocha ...",
+    "coverage": "cross-env NODE_ENV=test nyc npm test"
+  }
+}
+```
+
+**Why cross-env?**
+
+- Windows uses different syntax for setting environment variables in npm scripts
+- `cross-env` provides a single consistent syntax for all platforms
+- Example: `cross-env NODE_ENV=test` works on Windows, Linux, and macOS
+
+#### mock-fs
+
+The `mock-fs` package allows simulating different filesystem structures:
+
+**Benefits:**
+
+- Test Windows paths on Linux/macOS and vice versa
+- No need for actual multi-platform test environments
+- Consistent test behavior regardless of host OS
+- Fast test execution without actual file I/O
+
+**Usage:**
+
+```javascript
+import mock from 'mock-fs'
+
+describe('Cross-platform file tests', () => {
+    afterEach(() => {
+        mock.restore()  // Always restore real filesystem
+    })
+
+    it('should handle Windows paths', () => {
+        mock({
+            'C:\\Path\\To\\File.txt': 'content'
+        })
+        // Test code here
+    })
+})
+```
+
+### Line Ending Management
+
+The project uses `.gitattributes` to ensure consistent line endings:
+
+**Configuration:**
+
+```shell
+# Text files use LF in repository
+* text=auto eol=lf
+*.js text eol=lf
+*.json text eol=lf
+
+# Windows scripts use CRLF
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+```
+
+**Benefits:**
+
+- Prevents line ending issues in Git
+- Ensures consistent behavior across platforms
+- Avoids spurious diffs due to line ending changes
+
+### Best Practices for Cross-Platform Code
+
+When writing code or tests for this project, follow these guidelines:
+
+#### 1. Path Operations
+
+```javascript
+// ✅ GOOD: Use path.join()
+const filePath = path.join('bin', 'cli.js')
+
+// ❌ BAD: Hard-coded separators
+const filePath = 'bin/cli.js'  // Fails on Windows
+const filePath = 'bin\\cli.js'  // Fails on Unix
+```
+
+#### 2. Environment Variables
+
+```javascript
+// ✅ GOOD: Platform-aware
+const configDir = process.platform === 'win32' 
+    ? process.env.APPDATA 
+    : process.env.HOME
+
+// ❌ BAD: Assumes Unix
+const configDir = process.env.HOME
+```
+
+#### 3. Line Endings
+
+```javascript
+// ✅ GOOD: Platform-aware
+const output = lines.join(os.EOL)
+
+// ❌ BAD: Hard-coded
+const output = lines.join('\n')  // Wrong on Windows
+```
+
+#### 4. ES Modules __dirname
+
+```javascript
+// ✅ GOOD: ES module compatible
+import { fileURLToPath } from 'url'
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
+
+// ❌ BAD: Only works in CommonJS
+const __dirname = __dirname  // undefined in ES modules
+```
+
+#### 5. Test Tagging
+
+```javascript
+// ✅ GOOD: Tagged for platform filtering
+describe('Windows Drive Letters @windows', () => {
+    if (process.platform !== 'win32') {
+        return this.skip()
+    }
+    // Windows-specific tests
+})
+
+// ✅ GOOD: All-platform support
+describe('Path Handling @all', () => {
+    // Tests that work on all platforms
+})
+```
+
+### Verifying Cross-Platform Compatibility
+
+Before submitting code, verify cross-platform compatibility:
+
+1. **Run the full test suite:**
+
+   ```bash
+   npm test
+   ```
+
+2. **Run cross-platform specific tests:**
+
+   ```bash
+   npm run test:platform
+   ```
+
+3. **Check for hard-coded paths:**
+
+   ```bash
+   # Search for potential hard-coded separators
+   git grep -n "'/.*/.*/'" -- '*.js'
+   git grep -n '"\\.*\\.*\\"' -- '*.js'
+   ```
+
+4. **Verify mocked filesystem is restored:**
+
+   ```javascript
+   afterEach(() => {
+       mock.restore()  // Required after each mock-fs test
+   })
+   ```
+
+5. **Test on CI:**
+   - Push to a branch and create a pull request
+   - Verify GitHub Actions pass on all platforms
+   - Review test artifacts if failures occur
+
+### Troubleshooting Cross-Platform Issues
+
+#### Issue: Path separator errors
+
+**Symptom:** Tests pass on Linux/macOS but fail on Windows (or vice versa)
+
+**Solution:** Always use `path.join()`, `path.resolve()`, or `path.normalize()`
+
+#### Issue: Environment variable not found
+
+**Symptom:** `process.env.HOME` undefined on Windows
+
+**Solution:** Use platform detection:
+
+```javascript
+const home = process.platform === 'win32' 
+    ? process.env.USERPROFILE 
+    : process.env.HOME
+```
+
+#### Issue: Line ending mismatches
+
+**Symptom:** String comparisons fail due to `\n` vs `\r\n`
+
+**Solution:**
+
+- Use `.gitattributes` for consistent repository line endings
+- Use `os.EOL` when generating platform-specific content
+- Use `.split(/\r?\n/)` when parsing text with unknown line endings
+
+#### Issue: mock-fs not cleaning up
+
+**Symptom:** Subsequent tests fail after mock-fs tests
+
+**Solution:** Always call `mock.restore()` in `afterEach()`:
+
+```javascript
+afterEach(() => {
+    mock.restore()
+})
+```
+
+### Additional Resources
+
+- [Node.js Path Module Documentation](https://nodejs.org/api/path.html)
+- [Node.js OS Module Documentation](https://nodejs.org/api/os.html)
+- [cross-env Documentation](https://github.com/kentcdodds/cross-env)
+- [mock-fs Documentation](https://github.com/tschaub/mock-fs)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)

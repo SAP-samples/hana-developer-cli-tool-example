@@ -1,0 +1,45 @@
+# Auto detect text files and normalize line endings to LF in repository
+* text=auto eol=lf
+
+# Explicitly declare text files
+*.js text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.properties text eol=lf
+*.xml text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Windows-specific files should use CRLF
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar binary
+*.gz binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+
+# Exclude files from exporting
+.gitattributes export-ignore
+.gitignore export-ignore
+.github/ export-ignore
+tests/ export-ignore
+mochawesome-report/ export-ignore
+coverage/ export-ignore
