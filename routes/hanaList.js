@@ -28,7 +28,7 @@ export function route (app) {
                .status(200)
                .json(hana)
         } catch (error) {
-            console.error(`${error}`)
+            console.error(base.colors.red(`${error}`))
             next(error) // Pass to centralized error handler
         }
     })

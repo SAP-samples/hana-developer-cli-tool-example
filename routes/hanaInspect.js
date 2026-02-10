@@ -94,7 +94,7 @@ export async function inspectViewHandler(res, lib, func) {
             sql = await targetLibrary[func](promptsSQL)
         } catch (error) {
             sql['sql'] = error.toString()
-            console.error(error.toString())
+            console.error(base.colors.red(error.toString()))
         }
         if (sql.sql) {
             results.sql = sql.sql
@@ -108,7 +108,7 @@ export async function inspectViewHandler(res, lib, func) {
 
         base.sendResults(res, results)
     } catch (error) {
-        console.error(`${error}`)
+        console.error(base.colors.red(`${error}`))
         throw error // Let it propagate to be caught by the outer try-catch
     }
 

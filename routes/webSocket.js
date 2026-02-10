@@ -44,12 +44,12 @@ export function route(app, server) {
 				try {
 					client.send(message, (error) => {
 						if (error !== null && typeof error !== "undefined") {
-							console.error(`${base.bundle.getText("sendError")}: ${error}`)
+							console.error(base.colors.red(`${base.bundle.getText("sendError")}: ${error}`))
 							base.debug(`${base.bundle.getText("sendError")}: ${error}`)
 						}
 					})
 				} catch (e) {
-					console.error(`${base.bundle.getText("broadcastError")}: ${e}`)
+					console.error(base.colors.red(`${base.bundle.getText("broadcastError")}: ${e}`))
 					base.debug(`${base.bundle.getText("broadcastError")}: ${e}`)
 				}
 			})
@@ -58,7 +58,7 @@ export function route(app, server) {
 
 
 		wss.on("error", (error) => {
-			console.error(`${base.bundle.getText("websocketError")}: ${error}`)
+			console.error(base.colors.red(`${base.bundle.getText("websocketError")}: ${error}`))
 			base.debug(`${base.bundle.getText("websocketError")}: ${error}`)
 		})
 
@@ -73,7 +73,7 @@ export function route(app, server) {
 						massConvertLib.convert(wss)
 						break
 					default:
-						console.error(`${base.bundle.getText("errorUndefinedAction")}: ${data.action}`)
+						console.error(base.colors.red(`${base.bundle.getText("errorUndefinedAction")}: ${data.action}`))
 						base.debug(`${base.bundle.getText("errorUndefinedAction")}: ${data.action}`)
 						wss.broadcast(`${base.bundle.getText("errorUndefinedAction")}: ${data.action}`)
 						break
@@ -85,7 +85,7 @@ export function route(app, server) {
 			})
 
 			ws.on("error", (error) => {
-				console.error(`${base.bundle.getText("websocketError")}: ${error}`)
+				console.error(base.colors.red(`${base.bundle.getText("websocketError")}: ${error}`))
 				base.debug(`${base.bundle.getText("websocketError")}: ${error}`)
 			})
 
@@ -93,7 +93,7 @@ export function route(app, server) {
 				text: base.bundle.getText("connectedToProcess")
 			}), (error) => {
 				if (error !== null && typeof error !== "undefined") {
-					console.error(`${base.bundle.getText("sendError")}: ${error}`)
+					console.error(base.colors.red(`${base.bundle.getText("sendError")}: ${error}`))
 					base.debug(`${base.bundle.getText("sendError")}: ${error}`)
 				}
 			})
@@ -101,7 +101,7 @@ export function route(app, server) {
 
 
 	} catch (e) {
-		console.error(`${base.bundle.getText("generalError")}: ${e}`)
+		console.error(base.colors.red(`${base.bundle.getText("generalError")}: ${e}`))
 		base.debug(`${base.bundle.getText("generalError")}: ${e}`)
 	}
 	return app

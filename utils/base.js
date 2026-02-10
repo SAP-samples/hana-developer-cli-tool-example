@@ -597,7 +597,7 @@ export async function error(error) {
     if (inDebug || inGui) {
         throw error
     } else {
-        console.error(`${error}`)
+        console.error(colors.red(`${error}`))
         // Exit process after error in CLI mode
         if (!inGui) {
             process.exit(1)
@@ -775,7 +775,7 @@ export function outputTableFancy(content) {
                 return terminal.table(json2Table(content), tableOptions)
             } catch (error) {
                 // Fallback to console.table if terminal.table fails (e.g., buffer allocation errors)
-                console.error('Warning: terminal.table failed, falling back to console.table:', error.message)
+                console.error(colors.yellow('Warning: terminal.table failed, falling back to console.table:'), error.message)
                 return console.table(content)
             }
         } else {
@@ -808,7 +808,7 @@ export function output(content) {
  */
 export function globalErrorHandler(err, req, res, next) {
     // Log error without calling base.error() which would exit the process in CLI mode
-    console.error(`Unhandled error: ${err.message}`)
+    console.error(colors.red(`Unhandled error: ${err.message}`))
     debug(`Unhandled error: ${err.message}`)
     debug(err.stack)
     

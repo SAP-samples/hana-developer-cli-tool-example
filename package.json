@@ -83,7 +83,6 @@
     "update-notifier": "^7.0.0",
     "uuid": "^13.0.0",
     "ws": "^8.19.0",
-    "yargonaut": "1.1.4",
     "yargs": "^18.0.0"
   },
   "peerDependencies": {
