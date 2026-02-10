@@ -31,7 +31,6 @@
         "check-node-version": "^4.2.1",
         "cli-cursor": "^5.0.0",
         "cli-highlight": "^2.1.11",
-        "console.table": "~0.10",
         "debug": "^4.3.4",
         "dotenv": "^17.2.4",
         "easy-table": "1.2.0",
@@ -4235,23 +4234,6 @@
       },
       "funding": {
         "url": "https://github.com/sponsors/sindresorhus"
-      }
-    },
-    "node_modules/console.table": {
-      "version": "0.10.0",
-      "license": "MIT",
-      "dependencies": {
-        "easy-table": "1.1.0"
-      },
-      "engines": {
-        "node": "> 0.10"
-      }
-    },
-    "node_modules/console.table/node_modules/easy-table": {
-      "version": "1.1.0",
-      "license": "MIT",
-      "optionalDependencies": {
-        "wcwidth": ">=1.0.1"
       }
     },
     "node_modules/content-disposition": {

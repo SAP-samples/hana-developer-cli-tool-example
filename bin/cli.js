@@ -8,7 +8,6 @@ import * as base from '../utils/base.js'
 
 // @ts-ignore
 //import updateNotifier from 'update-notifier'
-import 'console.table'
 //import setDebug from 'debug'
 
 base.require('yargonaut')
