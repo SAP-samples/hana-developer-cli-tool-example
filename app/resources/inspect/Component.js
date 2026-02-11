@@ -1,10 +1,8 @@
-/* eslint-disable no-undef */
-/*eslint-env es6 */
 sap.ui.define([
     "sap/hanacli/common/Component",
     "sap/base/util/UriParameters"
 ], function (UIComponent, UriParameters) {
-    "use strict"
+    "use strict";
 
     return UIComponent.extend("sap.hanacli.inspect.Component", {
 
@@ -12,36 +10,54 @@ sap.ui.define([
             manifest: "json"
         },
 
-
         createContent: function () {
-            // create root view
-            var oView = sap.ui.view({
-                id : "App",
-                viewName : `sap.hanacli.inspect.view.${this.getModel("config").getProperty("/cmd")}`,
-                type : "XML", 
+            const configModel = this.getModel("config");
+            const cmd = configModel?.getProperty("/cmd");
+
+            if (!cmd) {
+                console.error("Command not configured in Component initialization");
+                return null;
+            }
+
+            const view = sap.ui.view({
+                id: "App",
+                viewName: `sap.hanacli.inspect.view.${cmd}`,
+                type: "XML",
                 async: true,
-                viewData : {
-                    component : this
+                viewData: {
+                    component: this
                 }
-            })
+            });
 
-            return oView
-
+            return view;
         },
 
         init: function () {
-            let model = this.getModel("config")
-            let cmd = UriParameters.fromQuery(window.location.search).get("cmd")
-            let tbl = UriParameters.fromQuery(window.location.search).get("tbl")
-            let viewInput = UriParameters.fromQuery(window.location.search).get("viewInput")
+            const configModel = this.getModel("config");
+            const uriParams = UriParameters.fromQuery(window.location.search);
+
+            // Get command from query parameters or URL hash
+            let cmd = uriParams.get("cmd") || this.getCommandFromHash();
+            const tbl = uriParams.get("tbl");
+            const viewInput = uriParams.get("viewInput");
 
             if (!cmd) {
-                cmd = window.location.hash.substr(1)
+                console.error("No command provided via query parameters or URL hash");
             }
-            model.setData({cmd: cmd, tbl: tbl, viewInput: viewInput})
-            this.superInit()          
+
+            configModel.setData({
+                cmd: cmd,
+                tbl: tbl,
+                viewInput: viewInput
+            });
+
+            this.superInit();
+        },
+
+        getCommandFromHash: function () {
+            const hash = window.location.hash;
+            // Remove leading '#' from hash
+            return hash ? hash.substring(1) : null;
         }
-
-
-    })
-})
+    });
+});

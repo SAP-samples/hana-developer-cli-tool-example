@@ -1,11 +1,13 @@
 /*global history */
-/* eslint-disable no-undef */
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/routing/History",
     "sap/ui/core/Fragment",
     "sap/ui/core/syncStyleClass",
-], function (Controller, History, Fragment, syncStyleClass) {
+    "sap/ui/core/Item",
+    "sap/m/MessageBox",
+    "sap/m/library"
+], function (Controller, History, Fragment, syncStyleClass, Item, MessageBox, mobileLibrary) {
     "use strict";
 
     return Controller.extend("sap.hanacli.common.controller.BaseController", {
@@ -60,211 +62,261 @@ sap.ui.define([
             if (sPreviousHash !== undefined) {
                 history.go(-1);
             } else {
-                this.getRouter().navTo("master", {}, true)
+                this.getRouter().navTo("master", {}, true);
             }
         },
 
-        updatePrompts: function () {
-            return new Promise(resolve => {
-                let model = this.getModel("promptsModel")
-                let promptsData = model.getData()
-                let aUrl = "/"
+        updatePrompts: async function () {
+            try {
+                const model = this.getModel("promptsModel");
+                if (!model) {
+                    return;
+                }
+                const promptsData = model.getData();
+                const aUrl = "/";
 
-                jQuery.ajax({
-                    url: aUrl,
-                    contentType: 'application/json',
-                    method: "PUT",
-                    data: JSON.stringify(promptsData),
-                    dataType: "json",
-                    processData: false,
-                    async: false,
-                    error: this.onErrorCall
-                })
-                resolve()
-            })
+                await new Promise((resolve, reject) => {
+                    jQuery.ajax({
+                        url: aUrl,
+                        contentType: 'application/json',
+                        method: "PUT",
+                        data: JSON.stringify(promptsData),
+                        dataType: "json",
+                        success: resolve,
+                        error: reject
+                    });
+                });
+            } catch (error) {
+                this.onErrorCall(error);
+            }
         },
 
-        getPrompts: function () {
+        getPrompts: async function () {
+            try {
+                const model = this.getModel("promptsModel");
+                if (!model) {
+                    return;
+                }
+                const aUrl = "/";
 
-            let model = this.getModel("promptsModel")
-            let aUrl = "/"
-
-            model.setData(JSON.parse(
-                jQuery.ajax({
-                    url: aUrl,
-                    method: "GET",
-                    dataType: "json",
-                    async: false
-                }).responseText))
+                const response = await new Promise((resolve, reject) => {
+                    jQuery.ajax({
+                        url: aUrl,
+                        method: "GET",
+                        dataType: "json",
+                        success: resolve,
+                        error: reject
+                    });
+                });
+                model.setData(response);
+            } catch (error) {
+                this.onErrorCall(error);
+            }
         },
 
-        getHanaStatus: function () {
-            let oHanaModel = this.getModel("hanaModel")
-            let aHanaUrl = "/hana"
-            let oController = this
-            oHanaModel.setData(JSON.parse(
-                jQuery.ajax({
-                    url: aHanaUrl,
-                    method: "GET",
-                    dataType: "json",
-                    async: false,
-                    error: function (error) {
-                        oController.onErrorCall(error, oController)
-                    }
-                }).responseText))
+        getHanaStatus: async function () {
+            try {
+                const oHanaModel = this.getModel("hanaModel");
+                if (!oHanaModel) {
+                    return;
+                }
+                const aHanaUrl = "/hana";
+
+                const response = await new Promise((resolve, reject) => {
+                    jQuery.ajax({
+                        url: aHanaUrl,
+                        method: "GET",
+                        dataType: "json",
+                        success: resolve,
+                        error: reject
+                    });
+                });
+                oHanaModel.setData(response);
+            } catch (error) {
+                this.onErrorCall(error);
+            }
         },
 
-        refreshConnection: function () {
-            return new Promise(resolve => {
-                this.updatePrompts().then(() => {
-                    this.getPrompts()
-                    this.getHanaStatus()
-                    resolve()
-                })
-            })
+        refreshConnection: async function () {
+            try {
+                await this.updatePrompts();
+                await this.getPrompts();
+                await this.getHanaStatus();
+            } catch (error) {
+                this.onErrorCall(error);
+            }
         },
 
         openUrl: function (url, newTab) {
-            // Require the URLHelper and open the URL in a new window or tab (same as _blank):
-            sap.ui.require(["sap/m/library"], ({ URLHelper }) => URLHelper.redirect(url, newTab));
+            // Open the URL in a new window or tab (same as _blank):
+            mobileLibrary.URLHelper.redirect(url, newTab);
         },
 
         onSchemaLiveChange: function () {
-            let model = this.getModel("promptsModel")
-            model.refresh()
+            const model = this.getModel("promptsModel");
+            if (model) {
+                model.refresh();
+            }
         },
 
 
-        loadSchemaFilter: function () {
-            this.updatePrompts()
-            let oController = this
-            let aUrl = "/hana/schemas/"
-            jQuery.ajax({
-                url: aUrl,
-                method: "GET",
-                dataType: "json",
-                success: function (myJSON) {
-                    oController.onLoadSchemaFilter(myJSON, oController)
-                },
-                error: function (error) {
-                    oController.onErrorCall(error, oController)
-                }
-            })
+        loadSchemaFilter: async function () {
+            try {
+                await this.updatePrompts();
+                const aUrl = "/hana/schemas/";
+                
+                const myJSON = await new Promise((resolve, reject) => {
+                    jQuery.ajax({
+                        url: aUrl,
+                        method: "GET",
+                        dataType: "json",
+                        success: resolve,
+                        error: reject
+                    });
+                });
+                this.onLoadSchemaFilter(myJSON);
+            } catch (error) {
+                this.onErrorCall(error);
+            }
         },
 
-        onLoadSchemaFilter: function (myJSON, oController) {
-
-
-            let oSearchControl = oController.getView().byId("Schema")
-            oSearchControl.destroySuggestionItems()
+        onLoadSchemaFilter: function (myJSON) {
+            const oSearchControl = this.getView().byId("Schema");
+            if (!oSearchControl) {
+                return;
+            }
+            
+            oSearchControl.destroySuggestionItems();
             //**CURRENT_SCHEMA**
-            oSearchControl.addSuggestionItem(new sap.ui.core.Item({
+            oSearchControl.addSuggestionItem(new Item({
                 text: '**CURRENT_SCHEMA**'
-            }))
+            }));
             for (let i = 0; i < myJSON.length; i++) {
-                oSearchControl.addSuggestionItem(new sap.ui.core.Item({
+                oSearchControl.addSuggestionItem(new Item({
                     text: myJSON[i].SCHEMA_NAME
-                }))
+                }));
             }
         },
 
-        loadTableFilter: function () {
-            this.updatePrompts()
-            let oController = this
-            let aUrl = "/hana/tables/"
-            jQuery.ajax({
-                url: aUrl,
-                method: "GET",
-                dataType: "json",
-                success: function (myJSON) {
-                    oController.onLoadTableFilter(myJSON, oController)
-                },
-                error: function (error) {
-                    oController.onErrorCall(error, oController)
-                }
-            })
-
+        loadTableFilter: async function () {
+            try {
+                await this.updatePrompts();
+                const aUrl = "/hana/tables/";
+                
+                const myJSON = await new Promise((resolve, reject) => {
+                    jQuery.ajax({
+                        url: aUrl,
+                        method: "GET",
+                        dataType: "json",
+                        success: resolve,
+                        error: reject
+                    });
+                });
+                this.onLoadTableFilter(myJSON);
+            } catch (error) {
+                this.onErrorCall(error);
+            }
         },
 
-        onLoadTableFilter: function (myJSON, oController) {
-
-            let oSearchControl = oController.getView().byId("Table")
-            oSearchControl.destroySuggestionItems()
+        onLoadTableFilter: function (myJSON) {
+            const oSearchControl = this.getView().byId("Table");
+            if (!oSearchControl) {
+                return;
+            }
+            
+            oSearchControl.destroySuggestionItems();
             for (let i = 0; i < myJSON.length; i++) {
-                oSearchControl.addSuggestionItem(new sap.ui.core.Item({
+                oSearchControl.addSuggestionItem(new Item({
                     text: myJSON[i].TABLE_NAME
-                }))
+                }));
             }
         },
 
-        loadViewFilter: function () {
-            this.updatePrompts()
-            let oController = this
-            let aUrl = "/hana/views/"
-            jQuery.ajax({
-                url: aUrl,
-                method: "GET",
-                dataType: "json",
-                success: function (myJSON) {
-                    oController.onLoadViewFilter(myJSON, oController)
-                },
-                error: function (error) {
-                    oController.onErrorCall(error, oController)
-                }
-            })
-
+        loadViewFilter: async function () {
+            try {
+                await this.updatePrompts();
+                const aUrl = "/hana/views/";
+                
+                const myJSON = await new Promise((resolve, reject) => {
+                    jQuery.ajax({
+                        url: aUrl,
+                        method: "GET",
+                        dataType: "json",
+                        success: resolve,
+                        error: reject
+                    });
+                });
+                this.onLoadViewFilter(myJSON);
+            } catch (error) {
+                this.onErrorCall(error);
+            }
         },
 
-        onLoadViewFilter: function (myJSON, oController) {
-
-            let oSearchControl = oController.getView().byId("View")
-            oSearchControl.destroySuggestionItems()
+        onLoadViewFilter: function (myJSON) {
+            const oSearchControl = this.getView().byId("View");
+            if (!oSearchControl) {
+                return;
+            }
+            
+            oSearchControl.destroySuggestionItems();
             for (let i = 0; i < myJSON.length; i++) {
-                oSearchControl.addSuggestionItem(new sap.ui.core.Item({
+                oSearchControl.addSuggestionItem(new Item({
                     text: myJSON[i].VIEW_NAME
-                }))
+                }));
             }
         },
 
-        loadFunctionFilter: function () {
-            this.updatePrompts()
-            let oController = this
-            let aUrl = "/hana/functions/"
-            jQuery.ajax({
-                url: aUrl,
-                method: "GET",
-                dataType: "json",
-                success: function (myJSON) {
-                    oController.onLoadFunctionFilter(myJSON, oController)
-                },
-                error: function (error) {
-                    oController.onErrorCall(error, oController)
-                }
-            })
-
+        loadFunctionFilter: async function () {
+            try {
+                await this.updatePrompts();
+                const aUrl = "/hana/functions/";
+                
+                const myJSON = await new Promise((resolve, reject) => {
+                    jQuery.ajax({
+                        url: aUrl,
+                        method: "GET",
+                        dataType: "json",
+                        success: resolve,
+                        error: reject
+                    });
+                });
+                this.onLoadFunctionFilter(myJSON);
+            } catch (error) {
+                this.onErrorCall(error);
+            }
         },
 
-        onLoadFunctionFilter: function (myJSON, oController) {
-
-            let oSearchControl = oController.getView().byId("Function")
-            oSearchControl.destroySuggestionItems()
+        onLoadFunctionFilter: function (myJSON) {
+            const oSearchControl = this.getView().byId("Function");
+            if (!oSearchControl) {
+                return;
+            }
+            
+            oSearchControl.destroySuggestionItems();
             for (let i = 0; i < myJSON.length; i++) {
-                oSearchControl.addSuggestionItem(new sap.ui.core.Item({
+                oSearchControl.addSuggestionItem(new Item({
                     text: myJSON[i].FUNCTION_NAME
-                }))
+                }));
             }
         },
 
         setFilterAsContains: function (controlId) {
-            if (this.byId(controlId)) {
-                this.byId(controlId).setFilterFunction(function (sTerm, oItem) {
+            const control = this.byId(controlId);
+            if (control) {
+                control.setFilterFunction(function (sTerm, oItem) {
                     // A case-insensitive "string contains" style filter
                     if (sTerm === "*") {
-                        return oItem.getText()
+                        return oItem.getText();
                     } else {
-                        return oItem.getText().match(new RegExp(sTerm, "i"))
+                        try {
+                            // Escape special regex characters from user input
+                            const escapedTerm = sTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                            return oItem.getText().match(new RegExp(escapedTerm, "i"));
+                        } catch (e) {
+                            return false;
+                        }
                     }
-                })
+                });
             }
         },
 
@@ -274,66 +326,72 @@ sap.ui.define([
                     name: "sap.hanacli.common.view.BusyDialog",
                     controller: this
                 }).then(function (oBusyDialog) {
-                    this.getView().addDependent(oBusyDialog)
-                    syncStyleClass("sapUiSizeCompact", this.getView(), oBusyDialog)
-                    return oBusyDialog
-                }.bind(this))
+                    this.getView().addDependent(oBusyDialog);
+                    syncStyleClass("sapUiSizeCompact", this.getView(), oBusyDialog);
+                    return oBusyDialog;
+                }.bind(this));
             }
 
             this._pBusyDialog.then(function (oBusyDialog) {
-                oBusyDialog.open()
-            }.bind(this))
+                oBusyDialog.open();
+            }.bind(this));
         },
-        endBusy: function (oController) {
-            if (oController._pBusyDialog) {
-                oController._pBusyDialog.then(function (oBusyDialog) {
-                    oBusyDialog.close()
-                })
+        
+        endBusy: function () {
+            if (this._pBusyDialog) {
+                this._pBusyDialog.then(function (oBusyDialog) {
+                    oBusyDialog.close();
+                });
             }
         },
 
-        onErrorCall: function (oError, oController) {
-            if (oController) {
-                oController.endBusy(oController)
-            }
-            sap.ui.require(["sap/m/MessageBox"], (MessageBox) => {
-                console.log(oError)
+        onErrorCall: function (oError) {
+            this.endBusy();
+            
+            console.error(oError);
+            
+            let errorMessage = "";
+            const statusCode = oError.statusCode || oError.status;
+            
+            if (statusCode === 500 || statusCode === 400) {
+                const errorRes = oError.responseText;
                 
-                let errorMessage = ""
-                
-                if (oError.statusCode === 500 || oError.statusCode === 400 || oError.statusCode === "500" || oError.statusCode === "400" || oError.status === 500) {
-                    var errorRes = oError.responseText
-                    
-                    // Try to parse JSON error response
-                    try {
-                        var errorJson = JSON.parse(errorRes)
-                        // Extract message from JSON if available
-                        if (errorJson.message) {
-                            errorMessage = errorJson.message
-                        } else if (errorJson.error) {
-                            // Handle nested error object
-                            errorMessage = typeof errorJson.error === 'string' ? errorJson.error : errorJson.error.message || JSON.stringify(errorJson.error)
-                        } else {
-                            // If no standard message field, display formatted JSON
-                            errorMessage = errorRes
-                        }
-                    } catch (e) {
-                        // If not JSON, use the raw response text
-                        errorMessage = errorRes
+                // Try to parse JSON error response
+                try {
+                    const errorJson = JSON.parse(errorRes);
+                    // Extract message from JSON if available
+                    if (errorJson.message) {
+                        errorMessage = errorJson.message;
+                    } else if (errorJson.error) {
+                        // Handle nested error object
+                        errorMessage = typeof errorJson.error === 'string' 
+                            ? errorJson.error 
+                            : errorJson.error.message || JSON.stringify(errorJson.error);
+                    } else {
+                        // If no standard message field, display formatted JSON
+                        errorMessage = errorRes;
                     }
-                    
-                    MessageBox.alert(errorMessage)
-                    return
-                } else {
-                    MessageBox.alert(oError.statusText)
-                    return
+                } catch (e) {
+                    // If not JSON, use the raw response text
+                    errorMessage = errorRes || "An error occurred";
                 }
-            })
+            } else {
+                errorMessage = oError.statusText || oError.message || "An error occurred";
+            }
+            
+            MessageBox.alert(errorMessage);
         },
+        
         onExit: function () {
-            this.updatePrompts()
+            // Clean up resources
+            if (this._pBusyDialog) {
+                this._pBusyDialog.then(function (oBusyDialog) {
+                    oBusyDialog.destroy();
+                });
+                this._pBusyDialog = null;
+            }
+            this.updatePrompts();
         }
 
-    })
-}
-)
+    });
+});

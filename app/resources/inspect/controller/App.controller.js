@@ -1,30 +1,24 @@
-/* eslint-disable no-undef */
-/*eslint-env es6 */
-"use strict";
 sap.ui.define([
     "sap/hanacli/common/controller/BaseController"
+], function (BaseController) {
+    "use strict";
 
-],
-    function (BaseController) {
+    return BaseController.extend("sap.hanacli.inspect.controller.App", {
 
-        return BaseController.extend("sap.hanacli.inspect.controller.App", {
+        onAppInit: function () {
+            try {
+                this.getHanaStatus();
+                this.getPrompts();
+                const model = this.getModel("promptsModel");
+                this.getView().setModel(model);
+            } catch (error) {
+                console.error("Failed to initialize app:", error);
+                this.showErrorMessage("Failed to initialize application");
+            }
+        },
 
-            onAppInit: function () {
-
-                this.getHanaStatus()
-                this.getPrompts()
-                let model = this.getModel("promptsModel")
-                this.getView().setModel(model)
-
-            },
-
-            downloadExcel: function () {
-                //Excel Download
-                window.open("/excel")
-                return
-            }        
-
-
-        })
-    }
-)
+        downloadExcel: function () {
+            window.open("/excel");
+        }
+    });
+});
