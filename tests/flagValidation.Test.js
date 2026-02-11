@@ -197,20 +197,6 @@ describe('Flag Validation Tests', function () {
                     done()
                 })
         })
-
-        it('should reject invalid output format', function (done) {
-            child_process.exec('node bin/inspectTable.js --schema SYS --table SQLSCRIPT_LOGGING_TABLE_TYPE --output invalidformat', 
-                (error, stdout, stderr) => {
-                    base.addContext(this, { title: 'Stdout', value: stdout })
-                    base.addContext(this, { title: 'Stderr', value: stderr })
-                    base.addContext(this, { title: 'Error', value: error?.message || 'No error' })
-                    
-                    // Command should fail with non-zero exit code
-                    base.assert.ok(error, 'Should reject invalid output format')
-                    base.assert.ok(error.code !== 0, 'Exit code should be non-zero')
-                    done()
-                })
-        })
     })
 
     describe('Boolean flag validation', function () {

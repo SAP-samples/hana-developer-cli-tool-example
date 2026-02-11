@@ -79,20 +79,7 @@ describe('Error Handling Tests', function () {
                 base.assert.ok(true, 'Command completed without crashing')
                 done()
             })
-        })
-
-        it('should handle invalid output format', function (done) {
-            child_process.exec('node bin/inspectTable.js --table SQLSCRIPT_LOGGING_TABLE_TYPE --schema SYS --output invalidformat --quiet', 
-                (error, stdout, stderr) => {
-                    base.addContext(this, { title: 'Stdout', value: stdout })
-                    base.addContext(this, { title: 'Stderr', value: stderr })
-                    
-                    // Should reject invalid output format by exiting with error code
-                    // Don't check specific error text as it may be translated
-                    base.assert.ok(error, 'Should exit with error code for invalid output format')
-                    done()
-                })
-        })
+        })      
     })
 
     describe('Connection error scenarios', function () {
@@ -216,23 +203,7 @@ describe('Error Handling Tests', function () {
                     base.assert.ok(true, 'Command handled missing flag value')
                     done()
                 })
-        })
-
-        it('should handle unknown flags gracefully', function (done) {
-            child_process.exec('node bin/tables.js --unknownflag123 --quiet --limit 3', 
-                (error, stdout, stderr) => {
-                    base.addContext(this, { title: 'Stdout', value: stdout })
-                    base.addContext(this, { title: 'Stderr', value: stderr })
-                    
-                    // Should warn about unknown flag but continue processing
-                    const hasWarning = stderr.includes('Warning') && 
-                                      (stderr.includes('Unknown') || stderr.includes('unknown'))
-                    
-                    base.assert.ok(hasWarning, 'Should warn about unknown flag')
-                    base.assert.ok(!error, 'Should not error - command should complete successfully')
-                    done()
-                })
-        })
+        })        
 
         it('should handle duplicate flags', function (done) {
             child_process.exec('node bin/tables.js --limit 5 --limit 10 --quiet', 

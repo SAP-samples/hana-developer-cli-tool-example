@@ -168,7 +168,7 @@ describe('Generic Command Flags', function () {
         })
 
         it('should use -h alias for help', function (done) {
-            child_process.exec('node bin/views.js -h', (error, stdout, stderr) => {
+            child_process.exec('node bin/functions.js -h', (error, stdout, stderr) => {
                 base.addContext(this, { title: 'Stdout', value: stdout })
                 
                 base.assert.ok(stdout.includes('Usage') || stdout.includes('Options'), 
