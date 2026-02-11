@@ -131,9 +131,14 @@ try {
 	if (process.env.NODE_ENV !== 'test') {
 		_terminal = terminalKit.terminal
 	} else {
-		// Provide stub terminal for test environment
+		// Provide stub terminal for test environment that outputs to console
 		_terminal = {
-			table: () => {},
+			table: (data) => {
+				// In test mode, use console.table to ensure output is captured
+				if (data && Array.isArray(data) && data.length > 0) {
+					console.table(data)
+				}
+			},
 			progressBar: () => ({
 				startItem: () => {},
 				itemDone: () => {},
@@ -143,9 +148,14 @@ try {
 	}
 } catch (error) {
 	console.warn('Failed to initialize terminal-kit:', error.message)
-	// Provide stub terminal
+	// Provide stub terminal that outputs to console
 	_terminal = {
-		table: () => {},
+		table: (data) => {
+			// Fallback: use console.table to ensure output
+			if (data && Array.isArray(data) && data.length > 0) {
+				console.table(data)
+			}
+		},
 		progressBar: () => ({
 			startItem: () => {},
 			itemDone: () => {},
