@@ -494,7 +494,7 @@ async function cdsServerSetup(prompts, cdsSource) {
 }
 
 export function getIndex(odataURL, entity) {
-  base.debug('getIndex')
+  // base.debug('getIndex') // Removed: base is not in scope here
   return `
   <html>
       <head>
