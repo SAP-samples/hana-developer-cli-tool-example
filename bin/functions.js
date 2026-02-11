@@ -90,6 +90,7 @@ export async function getFunctions(prompts) {
  */
 async function getFunctionsInt(schema, functionName, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getFunctionsInt ${schema} ${functionName} ${limit}`)
   functionName = base.dbClass.objectName(functionName)
 

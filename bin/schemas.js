@@ -2,7 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'schemas [schema]'
-export const aliases = ['sch', 'getSchemas', 'listSchemas']
+export const aliases = ['sch', 'getSchemas', 'listSchemas', 's']
 export const describe = baseLite.bundle.getText("schemas")
 
 export const builder = baseLite.getBuilder({
@@ -89,6 +89,7 @@ export async function getSchemas(prompts) {
  */
 async function getSchemasInt(schema, client, limit, all) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getSchemasInt ${schema} ${limit} ${all}`)
   schema = base.dbClass.objectName(schema)
   let hasPrivileges = 'FALSE'

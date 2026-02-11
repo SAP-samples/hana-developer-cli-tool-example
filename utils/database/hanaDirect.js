@@ -47,6 +47,7 @@ export default class extends DBClientClass {
         const db = super.getDB()
         const prompts = super.getPrompts()
 
+        prompts.limit = base.validateLimit(prompts.limit)
         this.#schema = await base.dbClass.schemaCalc(prompts, db)
         const table = super.adjustWildcard(prompts.table)
         base.debug(`${base.bundle.getText("schema")}: ${this.#schema}, ${base.bundle.getText("table")}: ${table}`)

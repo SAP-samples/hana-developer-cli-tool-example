@@ -72,6 +72,7 @@ export async function getUsers(prompts) {
  */
 async function getUsersInt(user, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getUsersInt ${user} ${limit}`)
   user = base.dbClass.objectName(user)
   let query =

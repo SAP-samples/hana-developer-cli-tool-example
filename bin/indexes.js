@@ -71,6 +71,7 @@ export async function getIndexes(prompts) {
 
 async function getIndexesInt(schema, indexes, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getIndexesInt ${schema} ${indexes} ${limit}`)
   indexes = base.dbClass.objectName(indexes)
 

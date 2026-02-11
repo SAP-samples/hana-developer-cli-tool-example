@@ -143,6 +143,36 @@ export const MAX_DISPLAY_ROWS = 100
 export function blankLine(){
     console.log(`                                                                                        `)
 }
+
+/**
+ * Validate that a limit parameter is a valid positive number
+ * @param {any} limit - The limit value to validate
+ * @param {string} [paramName='limit'] - Parameter name for error messages
+ * @throws {Error} If limit is not a valid positive number
+ * @returns {number} The validated limit as a number
+ */
+export function validateLimit(limit, paramName = 'limit') {
+    // Check if limit is undefined or null
+    if (limit === undefined || limit === null) {
+        throw new Error(`${paramName} parameter is required`)
+    }
+    
+    // Convert to number if it's a string
+    const numLimit = typeof limit === 'string' ? Number(limit) : limit
+    
+    // Check if it's NaN or not a number
+    if (typeof numLimit !== 'number' || isNaN(numLimit)) {
+        throw new Error(`${paramName} parameter must be a valid number, received: ${limit}`)
+    }
+    
+    // Check if it's a positive integer
+    if (numLimit <= 0 || !Number.isInteger(numLimit)) {
+        throw new Error(`${paramName} parameter must be a positive integer, received: ${limit}`)
+    }
+    
+    return numLimit
+}
+
 /** type {object} - processed input prompts*/
 let prompts = {}
 /**

@@ -85,6 +85,7 @@ export async function getLibraries(prompts) {
  */
 async function getLibrariesInt(schema, library, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getLibrariesInt ${schema} ${library} ${limit}`)
   library = base.dbClass.objectName(library)
   let query =

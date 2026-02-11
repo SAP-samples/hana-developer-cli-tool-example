@@ -80,6 +80,7 @@ export async function getViews(prompts) {
  */
 async function getViewsInt(schema, view, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getViewsInt ${schema} ${view} ${limit}`)
   view = base.dbClass.objectName(view)
   let query =

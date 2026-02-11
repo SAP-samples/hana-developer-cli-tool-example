@@ -86,6 +86,7 @@ export async function getSequences(prompts) {
  */
 async function getSequencesInt(schema, sequence, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getSequencesInt ${schema} ${sequence} ${limit}`)
   sequence = base.dbClass.objectName(sequence)
   let query =

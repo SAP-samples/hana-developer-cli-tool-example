@@ -79,6 +79,7 @@ export async function getSynonyms(prompts) {
 
 async function getSynonymsInt(schema, synonym, target, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getSynonymsInt ${schema} ${synonym} ${target} ${limit}`)
   synonym = base.dbClass.objectName(synonym)
   target = base.dbClass.objectName(target)

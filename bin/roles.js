@@ -87,6 +87,7 @@ export async function getRoles(prompts) {
  */
 async function getRolesInt(schema, role, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getRolesInt ${schema} ${role} ${limit}`)
   role = base.dbClass.objectName(role)
   let query = ''

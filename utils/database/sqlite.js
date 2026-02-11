@@ -23,12 +23,14 @@ export default class extends DBClientClass {
      */
     async listTables() {
         base.debug(`listTables for for ${this.#clientType}`)
-        const tableName = super.adjustWildcard(super.getPrompts().table)
+        const prompts = super.getPrompts()
+        prompts.limit = base.validateLimit(prompts.limit)
+        const tableName = super.adjustWildcard(prompts.table)
         let dbQuery = SELECT
             .columns({ref:["name"],as:'TABLE_NAME'})
             .from("sqlite_schema")
             .where({ type: 'table', name: { like: tableName } })
-            .limit(super.getPrompts().limit)
+            .limit(prompts.limit)
         base.debug(JSON.stringify(dbQuery))
         let results = await this.getDB().run(dbQuery)
         return results

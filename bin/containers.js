@@ -79,6 +79,7 @@ export async function getContainers(prompts) {
 
 export async function getContainersInt(containerGroup, container, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug('getContainersInt')
 
   let query =

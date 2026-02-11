@@ -2,7 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'procedures [schema] [procedure]'
-export const aliases = ['p', 'listProcs', 'ListProc', 'listprocs', 'Listproc', "listProcedures", "listprocedures"]
+export const aliases = ['p', 'listProcs', 'ListProc', 'listprocs', 'Listproc', "listProcedures", "listprocedures", 'sp']
 export const describe = baseLite.bundle.getText("procedures")
 
 export const builder = baseLite.getBuilder({
@@ -86,6 +86,7 @@ export async function getProcedures(prompts) {
  */
 async function getProceduresInt(schema, procedure, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getProceduresInt ${schema} ${procedure} ${limit}`)
   procedure = base.dbClass.objectName(procedure)
   let query =

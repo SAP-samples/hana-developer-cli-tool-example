@@ -25,7 +25,9 @@ export default class extends DBClientClass {
      */
     async listTables() {
         base.debug(`listTables for ${this.#clientType}`)
-        const tableName = super.adjustWildcard(super.getPrompts().table)
+        const prompts = super.getPrompts()
+        prompts.limit = base.validateLimit(prompts.limit)
+        const tableName = super.adjustWildcard(prompts.table)
 
         await this.getDB().run(`SET search_path TO ${this.#schema}, information_schema`)
         let dbQuery = SELECT
@@ -34,7 +36,7 @@ export default class extends DBClientClass {
                 {ref:["table_name"],as:'TABLE_NAME'} )
             .from("tables")
             .where({ table_schema: this.#schema, table_name: { like: tableName }, table_type: 'BASE TABLE' })
-            .limit(super.getPrompts().limit)
+            .limit(prompts.limit)
 
             base.debug(JSON.stringify(dbQuery))
         let results = await this.getDB().run(dbQuery)

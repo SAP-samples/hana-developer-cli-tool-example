@@ -98,6 +98,7 @@ export async function getTriggers(prompts) {
  */
 async function getTriggersInt(schema, trigger, target, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getTriggersInt ${schema} ${trigger} ${target} ${limit}`)
   trigger = base.dbClass.objectName(trigger)
   target = base.dbClass.objectName(target)

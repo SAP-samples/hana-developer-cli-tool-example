@@ -52,6 +52,7 @@ export async function traceContents(prompts) {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
+    prompts.limit = base.validateLimit(prompts.limit)
     let query =
       `SELECT MAX(OFFSET) AS OFFSET FROM  M_TRACEFILE_CONTENTS WHERE HOST = ?
       AND FILE_NAME = ?`

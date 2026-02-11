@@ -54,6 +54,7 @@ export async function iniContents(prompts) {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
+    prompts.limit = base.validateLimit(prompts.limit)
     let iniFile = base.dbClass.objectName(prompts.file)
     let section = base.dbClass.objectName(prompts.section)
 

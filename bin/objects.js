@@ -68,6 +68,7 @@ export async function getObjects(prompts) {
 
 async function getObjectsInt(schema, object, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getObjectsInt ${schema} ${object} ${limit}`)
   object = base.dbClass.objectName(object)
 
