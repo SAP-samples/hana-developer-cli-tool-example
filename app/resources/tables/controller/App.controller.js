@@ -67,6 +67,13 @@ sap.ui.define([
                         oTable.bindColumns("resultsModel>/columns", function (sId, oContext) {
                             var sColumnId = oContext.getObject().property;
                             let template = new Text({ text: { path: "resultsModel>" + sColumnId } });
+                            if (cmd === "btpSubs-ui" && /url/i.test(sColumnId)) {
+                                template = new Link({
+                                    text: { path: "resultsModel>" + sColumnId },
+                                    target: "_blank",
+                                    href: { path: "resultsModel>" + sColumnId }
+                                });
+                            }
                             if (cmd === "tables-ui" && sColumnId === "TABLE_NAME") {
                                 template = new Link({
                                     text: { path: "resultsModel>" + sColumnId },

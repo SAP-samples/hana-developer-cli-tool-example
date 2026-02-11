@@ -240,6 +240,31 @@ export function route (app) {
 
     /**
      * @swagger
+     * /hana/btpSubs:
+     *   get:
+     *     tags: [BTP System]
+     *     summary: List BTP subscriptions
+     *     description: Retrieves BTP subscriptions and their subscription URLs
+     *     responses:
+     *       200:
+     *         description: List of BTP subscriptions
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
+    app.get(['/hana/btpSubs', '/hana/btpSubs-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/btpSubs", 'getSubsUI')
+        } catch (error) {
+            next(error)
+        }
+    })
+
+    /**
+     * @swagger
      * /hana/dataTypes:
      *   get:
      *     tags: [HANA System]

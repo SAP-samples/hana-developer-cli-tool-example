@@ -197,6 +197,20 @@ curl http://localhost:3010/hana/btpInfo
 
 **Response**: Array containing BTP configuration details and target hierarchy information
 
+#### GET /hana/btpSubs
+
+#### GET /hana/btpSubs-ui
+
+Lists BTP subscriptions and their subscription URLs.
+
+**Example**:
+
+```bash
+curl http://localhost:3010/hana/btpSubs
+```
+
+**Response**: Array of BTP subscription objects
+
 #### GET /hana/dataTypes
 
 #### GET /hana/dataTypes-ui

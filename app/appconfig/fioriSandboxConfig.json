@@ -402,6 +402,22 @@
                                         "icon": "sap-icon://sys-monitor",
                                         "navigationMode": "embedded"
                                     }
+                                },
+                                {
+                                    "id": "btpSubs-ui",
+                                    "title": "i18n.tile.btpSubs_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.btpSubs_ui.info",
+                                        "title": "i18n.tile.btpSubs_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#btpSubs-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://cloud",
+                                        "navigationMode": "embedded"
+                                    }
                                 }
                             ]
                         },
@@ -516,6 +532,14 @@
         "btpInfo-ui": {
             "title": "i18n.app.btpInfo_ui.title",
             "description": "i18n.app.btpInfo_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "btpSubs-ui": {
+            "title": "i18n.app.btpSubs_ui.title",
+            "description": "i18n.app.btpSubs_ui.description",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
             "url": "./tables",
