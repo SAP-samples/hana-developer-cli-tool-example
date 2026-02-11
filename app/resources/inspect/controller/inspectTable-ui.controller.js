@@ -14,15 +14,25 @@ sap.ui.define([
 
                 this.onAppInit()                
                 this.setFilterAsContains("Schema")
-                this.setFilterAsContains("Table")
+                this.setFilterAsContains("TableInspectTable")
                 let tbl = this.getModel("config").getProperty("/tbl")
                 if(tbl){
                     this.getModel("promptsModel").setProperty("/table", tbl)
+                    //let editor = this.getView().byId("aCodeEditor")
+                   // editor.session.setMode("/ace/hanasql1")
+                    this.executeCmd()
                 }
-                //let editor = this.getView().byId("aCodeEditor")
-               // editor.session.setMode("/ace/hanasql1")
-                this.executeCmd()
 
+            },
+
+            onLoadTableFilter: function (myJSON, oController) {
+                let oSearchControl = oController.getView().byId("TableInspectTable")
+                oSearchControl.destroySuggestionItems()
+                for (let i = 0; i < myJSON.length; i++) {
+                    oSearchControl.addSuggestionItem(new sap.ui.core.Item({
+                        text: myJSON[i].TABLE_NAME
+                    }))
+                }
             },
 
             executeCmd: async function () {
@@ -53,7 +63,7 @@ sap.ui.define([
                             let data = { rows: myJSON, fieldsColumns: fieldsMetaData, constraintsColumns: constraintsMetaData}
                             model.setData(data)
 
-                            let oTable = oController.getView().byId("fieldsTable")
+                            let oTable = oController.getView().byId("fieldsTableInspectTable")
 
                             oTable.bindColumns('resultsModel>/fieldsColumns', function (sId, oContext) {
                                 var sColumnId = oContext.getObject().property
@@ -67,7 +77,7 @@ sap.ui.define([
                                 })
                             })
 
-                            let oTable2 = oController.getView().byId("constraintsTable")
+                            let oTable2 = oController.getView().byId("constraintsTableInspectTable")
 
                             oTable2.bindColumns('resultsModel>/constraintsColumns', function (sId, oContext) {
                                 var sColumnId = oContext.getObject().property

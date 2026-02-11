@@ -1,0 +1,19 @@
+{
+    "id": "querySimple-ui",
+    "appUrl": "querySimple-ui",
+    "product": "HANA_CLI",
+    "version": "Cloud",
+    "locale": "en-US",
+    "language": "en-US",
+    "state": "PRODUCTION",
+    "system": "",
+    "environment": "",
+    "loio": "",
+    "contextType": "HELP",
+    "_standalone": true,
+    "title": "Execute SQL Queries",
+    "shortDescription": "Execute SQL Queries",
+    "alias": "",
+    "editable": "true",
+    "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000"
+}

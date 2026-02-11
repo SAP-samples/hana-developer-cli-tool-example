@@ -1,0 +1,19 @@
+<body>
+    <div class="body conbody">
+        <p class="shortdesc">Cache Configuration</p>
+        <p class="p">
+            This field indicates whether the view has result caching enabled. The value will be <span class="ph uicontrol">TRUE</span> 
+            if caching is active, or <span class="ph uicontrol">FALSE</span> if results are not cached.
+        </p>
+        <p class="p">
+            View caching stores query results in memory, allowing subsequent queries to retrieve data from the cache 
+            rather than re-executing the view's underlying logic. This can significantly improve performance for frequently 
+            accessed views with expensive computations or complex joins.
+        </p>
+        <p class="p">
+            Cached results are automatically invalidated when underlying data changes, ensuring data freshness. However, 
+            there may be a brief delay between data updates and cache refresh, so caching is best suited for views where 
+            slightly delayed updates are acceptable.
+        </p>
+    </div>
+</body>

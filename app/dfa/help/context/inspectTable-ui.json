@@ -1,0 +1,483 @@
+{
+    "id": "inspectTable-ui",
+    "appUrl": "inspectTable-ui",
+    "product": "HANA_CLI",
+    "version": "Cloud",
+    "locale": "en-US",
+    "state": "PRODUCTION",
+    "system": "",
+    "environment": "",
+    "loio": "",
+    "contextType": "HELP",
+    "title": "Inspect Table Details and Metadata",
+    "shortDescription": "",
+    "alias": "",
+    "editable": "true",
+    "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+    "tiles": [
+        {
+            "id": "1",
+            "loio": "",
+            "title": "About This Screen",
+            "summaryText": "General information related to this screen.",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": null,
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"unknown\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"CIRCLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 1,
+            "pageUrl": null
+        },
+        {
+            "id": "TableInspectTable",
+            "loio": "",
+            "title": "Table Name",
+            "summaryText": "Target Table to Inspect",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tVGFibGVJbnNwZWN0VGFibGUlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 2,
+            "pageUrl": null
+        },
+        {
+            "id": "iconTabFilterBasicInfoInspectTable",
+            "loio": "",
+            "title": "Basic Info Tab",
+            "summaryText": "Basic Table Information",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taWNvblRhYkZpbHRlckJhc2ljSW5mb0luc3BlY3RUYWJsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 3,
+            "pageUrl": null
+        },
+        {
+            "id": "iconTabFilterFieldsInspectTable",
+            "loio": "",
+            "title": "Fields Tab",
+            "summaryText": "Table Column Definitions",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taWNvblRhYkZpbHRlckZpZWxkc0luc3BlY3RUYWJsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 4,
+            "pageUrl": null
+        },
+        {
+            "id": "iconTabFilterConstraintsInspectTable",
+            "loio": "",
+            "title": "Constraints Tab",
+            "summaryText": "Table Constraints",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taWNvblRhYkZpbHRlckNvbnN0cmFpbnRzSW5zcGVjdFRhYmxlJTI3JTVkJTIyJTJjJTIycnVsZSUyMiUzYSUyMklkU2VsZWN0b3JVSTUlMjIlMmMlMjJvZmZzZXQlMjIlM2ElN2IlMjJ4JTIyJTNhMC41JTJjJTIyeSUyMiUzYTAuMjgxMiU3ZCU3ZA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 5,
+            "pageUrl": null
+        },
+        {
+            "id": "iconTabFilterSQLInspectTable",
+            "loio": "",
+            "title": "SQL Tab",
+            "summaryText": "SQL DDL CREATE Statement",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taWNvblRhYkZpbHRlclNRTEluc3BlY3RUYWJsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 6,
+            "pageUrl": null
+        },
+        {
+            "id": "iconTabFilterCDSInspectTable",
+            "loio": "",
+            "title": "CDS Tab",
+            "summaryText": "CDS Definition Format",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taWNvblRhYkZpbHRlckNEU0luc3BlY3RUYWJsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 7,
+            "pageUrl": null
+        },
+        {
+            "id": "iconTabFilterHDBTableInspectTable",
+            "loio": "",
+            "title": "HDBTable Tab",
+            "summaryText": "HDBTable Format",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taWNvblRhYkZpbHRlckhEQlRhYmxlSW5zcGVjdFRhYmxlJTI3JTVkJTIyJTJjJTIycnVsZSUyMiUzYSUyMklkU2VsZWN0b3JVSTUlMjIlMmMlMjJvZmZzZXQlMjIlM2ElN2IlMjJ4JTIyJTNhMC41JTJjJTIyeSUyMiUzYTAuMjgxMiU3ZCU3ZA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 8,
+            "pageUrl": null
+        },
+        {
+            "id": "Schema",
+            "loio": "",
+            "title": "Schema Input",
+            "summaryText": "Target Schema Selection",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tU2NoZW1hJTI3JTVkJTIyJTJjJTIycnVsZSUyMiUzYSUyMklkU2VsZWN0b3JVSTUlMjIlMmMlMjJvZmZzZXQlMjIlM2ElN2IlMjJ4JTIyJTNhMC41JTJjJTIyeSUyMiUzYTAuMjgxMiU3ZCU3ZA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 9,
+            "pageUrl": null
+        },
+        {
+            "id": "schemaInnerInput",
+            "loio": "",
+            "title": "Current Schema Display",
+            "summaryText": "Shows Current Schema Value",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tc2NoZW1hSW5uZXJJbnB1dCUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 10,
+            "pageUrl": null
+        },
+        {
+            "id": "settingsButtonInspectTable",
+            "loio": "",
+            "title": "Settings Button",
+            "summaryText": "View System Information",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tc2V0dGluZ3NCdXR0b25JbnNwZWN0VGFibGUlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 11,
+            "pageUrl": null
+        },
+        {
+            "id": "chkAdmin",
+            "loio": "",
+            "title": "Admin Connection",
+            "summaryText": "Use Admin Privileges",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tY2hrQWRtaW4lMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 12,
+            "pageUrl": null
+        },
+        {
+            "id": "inputConnFile",
+            "loio": "",
+            "title": "Connection File",
+            "summaryText": "Database Connection Profile",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRDb25uRmlsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 13,
+            "pageUrl": null
+        },
+        {
+            "id": "connRefresh",
+            "loio": "",
+            "title": "Refresh Connection",
+            "summaryText": "Reload Connection Settings",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tY29ublJlZnJlc2glMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 14,
+            "pageUrl": null
+        },
+        {
+            "id": "disableVerbose",
+            "loio": "",
+            "title": "Quiet Mode",
+            "summaryText": "Disable Verbose Output",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tZGlzYWJsZVZlcmJvc2UlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 15,
+            "pageUrl": null
+        },
+        {
+            "id": "debug",
+            "loio": "",
+            "title": "Debug Mode",
+            "summaryText": "Enable Debug Output",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tZGVidWclMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 16,
+            "pageUrl": null
+        },
+        {
+            "id": "inputSchemaInspectTable",
+            "loio": "",
+            "title": "Schema Name (Basic Info)",
+            "summaryText": "Table's Schema Name",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRTY2hlbWFJbnNwZWN0VGFibGUlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 17,
+            "pageUrl": null
+        },
+        {
+            "id": "inputTableInspectTable",
+            "loio": "",
+            "title": "Table Name (Basic Info)",
+            "summaryText": "Database Table Name",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRUYWJsZUluc3BlY3RUYWJsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 18,
+            "pageUrl": null
+        },
+        {
+            "id": "inputTableTypeInspectTable",
+            "loio": "",
+            "title": "Table Type",
+            "summaryText": "Table Storage Type",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRUYWJsZVR5cGVJbnNwZWN0VGFibGUlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 19,
+            "pageUrl": null
+        },
+        {
+            "id": "inputTableOIDInspectTable",
+            "loio": "",
+            "title": "Table OID",
+            "summaryText": "Table Object Identifier",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRUYWJsZU9JREluc3BlY3RUYWJsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 20,
+            "pageUrl": null
+        },
+        {
+            "id": "inputHasPrimaryKeyInspectTable",
+            "loio": "",
+            "title": "Has Primary Key",
+            "summaryText": "Primary Key Indicator",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRIYXNQcmltYXJ5S2V5SW5zcGVjdFRhYmxlJTI3JTVkJTIyJTJjJTIycnVsZSUyMiUzYSUyMklkU2VsZWN0b3JVSTUlMjIlMmMlMjJvZmZzZXQlMjIlM2ElN2IlMjJ4JTIyJTNhMC41JTJjJTIyeSUyMiUzYTAuMjgxMiU3ZCU3ZA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 21,
+            "pageUrl": null
+        },
+        {
+            "id": "inputIsPreloadInspectTable",
+            "loio": "",
+            "title": "Is Preload",
+            "summaryText": "Preload Configuration",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRJc1ByZWxvYWRJbnNwZWN0VGFibGUlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 22,
+            "pageUrl": null
+        },
+        {
+            "id": "inputUnloadPriorityInspectTable",
+            "loio": "",
+            "title": "Unload Priority",
+            "summaryText": "Memory Unload Priority",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRVbmxvYWRQcmlvcml0eUluc3BlY3RUYWJsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 23,
+            "pageUrl": null
+        },
+        {
+            "id": "inputCreatedInspectTable",
+            "loio": "",
+            "title": "Created Timestamp",
+            "summaryText": "Table Creation Time",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRDcmVhdGVkSW5zcGVjdFRhYmxlJTI3JTVkJTIyJTJjJTIycnVsZSUyMiUzYSUyMklkU2VsZWN0b3JVSTUlMjIlMmMlMjJvZmZzZXQlMjIlM2ElN2IlMjJ4JTIyJTNhMC41JTJjJTIyeSUyMiUzYTAuMjgxMiU3ZCU3ZA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 24,
+            "pageUrl": null
+        },
+        {
+            "id": "fieldsTableInspectTable",
+            "loio": "",
+            "title": "Fields Table",
+            "summaryText": "Table Column Listing",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tZmllbGRzVGFibGVJbnNwZWN0VGFibGUlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 25,
+            "pageUrl": null
+        },
+        {
+            "id": "constraintsTableInspectTable",
+            "loio": "",
+            "title": "Constraints Table",
+            "summaryText": "Table Constraint Listing",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tY29uc3RyYWludHNUYWJsZUluc3BlY3RUYWJsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 26,
+            "pageUrl": null
+        },
+        {
+            "id": "aCodeEditorSQLInspectTable",
+            "loio": "",
+            "title": "SQL Code Editor",
+            "summaryText": "SQL DDL Display",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tYUNvZGVFZGl0b3JTUUxJbnNwZWN0VGFibGUlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 27,
+            "pageUrl": null
+        },
+        {
+            "id": "aCodeEditorCDSInspectTable",
+            "loio": "",
+            "title": "CDS Code Editor",
+            "summaryText": "CDS Definition Display",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tYUNvZGVFZGl0b3JDRFNJbnNwZWN0VGFibGUlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 28,
+            "pageUrl": null
+        },
+        {
+            "id": "aCodeEditorHDBTableInspectTable",
+            "loio": "",
+            "title": "HDBTable Code Editor",
+            "summaryText": "HDBTable Format Display",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tYUNvZGVFZGl0b3JIREJUYWJsZUluc3BlY3RUYWJsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 29,
+            "pageUrl": null
+        }
+    ]
+}

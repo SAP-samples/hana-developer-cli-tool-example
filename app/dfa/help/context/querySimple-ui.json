@@ -1,0 +1,195 @@
+{
+    "id": "querySimple-ui",
+    "appUrl": "querySimple-ui",
+    "product": "HANA_CLI",
+    "version": "Cloud",
+    "locale": "en-US",
+    "state": "PRODUCTION",
+    "system": "",
+    "environment": "",
+    "loio": "",
+    "contextType": "HELP",
+    "title": "Execute SQL Queries",
+    "shortDescription": "",
+    "alias": "",
+    "editable": "true",
+    "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+    "tiles": [
+        {
+            "id": "1",
+            "loio": "",
+            "title": "About This Screen",
+            "summaryText": "General information related to this screen.",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": null,
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"unknown\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"CIRCLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 1,
+            "pageUrl": null
+        },
+        {
+            "id": "FolderQuerySimple",
+            "loio": "",
+            "title": "Target Folder",
+            "summaryText": "Output Folder Location",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tRm9sZGVyUXVlcnlTaW1wbGUlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 2,
+            "pageUrl": null
+        },
+        {
+            "id": "FilenameQuerySimple",
+            "loio": "",
+            "title": "Filename",
+            "summaryText": "Output Filename",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tRmlsZW5hbWVRdWVyeVNpbXBsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 3,
+            "pageUrl": null
+        },
+        {
+            "id": "outputFormatQuerySimple",
+            "loio": "",
+            "title": "Output Type",
+            "summaryText": "Output Format Selection",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tb3V0cHV0Rm9ybWF0UXVlcnlTaW1wbGUlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 4,
+            "pageUrl": null
+        },
+        {
+            "id": "aCodeEditorSQL",
+            "loio": "",
+            "title": "SQL Query Editor",
+            "summaryText": "SQL Statement Input",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tYUNvZGVFZGl0b3JTUUwlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 5,
+            "pageUrl": null
+        },
+        {
+            "id": "settingsButtonQuerySimple",
+            "loio": "",
+            "title": "Settings Button",
+            "summaryText": "View System Information",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tc2V0dGluZ3NCdXR0b25RdWVyeVNpbXBsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 6,
+            "pageUrl": null
+        },
+        {
+            "id": "chkAdmin",
+            "loio": "",
+            "title": "Admin Connection",
+            "summaryText": "Use Admin Privileges",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tY2hrQWRtaW4lMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 7,
+            "pageUrl": null
+        },
+        {
+            "id": "inputConnFile",
+            "loio": "",
+            "title": "Connection File",
+            "summaryText": "Database Connection Profile",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRDb25uRmlsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 8,
+            "pageUrl": null
+        },
+        {
+            "id": "connRefresh",
+            "loio": "",
+            "title": "Refresh Connection",
+            "summaryText": "Reload Connection Settings",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tY29ublJlZnJlc2glMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 9,
+            "pageUrl": null
+        },
+        {
+            "id": "disableVerbose",
+            "loio": "",
+            "title": "Quiet Mode",
+            "summaryText": "Disable Verbose Output",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tZGlzYWJsZVZlcmJvc2UlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 10,
+            "pageUrl": null
+        },
+        {
+            "id": "debug",
+            "loio": "",
+            "title": "Debug Mode",
+            "summaryText": "Enable Debug Output",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tZGVidWclMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 11,
+            "pageUrl": null
+        }
+    ]
+}

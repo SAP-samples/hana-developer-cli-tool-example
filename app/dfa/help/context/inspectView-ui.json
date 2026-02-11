@@ -1,0 +1,451 @@
+{
+    "id": "inspectView-ui",
+    "appUrl": "inspectView-ui",
+    "product": "HANA_CLI",
+    "version": "Cloud",
+    "locale": "en-US",
+    "state": "PRODUCTION",
+    "system": "",
+    "environment": "",
+    "loio": "",
+    "contextType": "HELP",
+    "title": "Inspect View Details and Metadata",
+    "shortDescription": "",
+    "alias": "",
+    "editable": "true",
+    "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+    "tiles": [
+        {
+            "id": "1",
+            "loio": "",
+            "title": "About This Screen",
+            "summaryText": "General information related to this screen.",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": null,
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"unknown\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"CIRCLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 1,
+            "pageUrl": null
+        },
+        {
+            "id": "ViewInspectView",
+            "loio": "",
+            "title": "View Name",
+            "summaryText": "Target View to Inspect",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tVmlld0luc3BlY3RWaWV3JTI3JTVkJTIyJTJjJTIycnVsZSUyMiUzYSUyMklkU2VsZWN0b3JVSTUlMjIlMmMlMjJvZmZzZXQlMjIlM2ElN2IlMjJ4JTIyJTNhMC41JTJjJTIyeSUyMiUzYTAuMjgxMiU3ZCU3ZA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 2,
+            "pageUrl": null
+        },
+        {
+            "id": "iconTabFilterBasicInfoInspectView",
+            "loio": "",
+            "title": "Basic Info Tab",
+            "summaryText": "Basic View Information",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taWNvblRhYkZpbHRlckJhc2ljSW5mb0luc3BlY3RWaWV3JTI3JTVkJTIyJTJjJTIycnVsZSUyMiUzYSUyMklkU2VsZWN0b3JVSTUlMjIlMmMlMjJvZmZzZXQlMjIlM2ElN2IlMjJ4JTIyJTNhMC41JTJjJTIyeSUyMiUzYTAuMjgxMiU3ZCU3ZA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 3,
+            "pageUrl": null
+        },
+        {
+            "id": "iconTabFilterFieldsInspectView",
+            "loio": "",
+            "title": "Fields Tab",
+            "summaryText": "View Column Definitions",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taWNvblRhYkZpbHRlckZpZWxkc0luc3BlY3RWaWV3JTI3JTVkJTIyJTJjJTIycnVsZSUyMiUzYSUyMklkU2VsZWN0b3JVSTUlMjIlMmMlMjJvZmZzZXQlMjIlM2ElN2IlMjJ4JTIyJTNhMC41JTJjJTIyeSUyMiUzYTAuMjgxMiU3ZCU3ZA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 4,
+            "pageUrl": null
+        },
+        {
+            "id": "iconTabFilterSQLInspectView",
+            "loio": "",
+            "title": "SQL Tab",
+            "summaryText": "SQL DDL CREATE Statement",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taWNvblRhYkZpbHRlclNRTEluc3BlY3RWaWV3JTI3JTVkJTIyJTJjJTIycnVsZSUyMiUzYSUyMklkU2VsZWN0b3JVSTUlMjIlMmMlMjJvZmZzZXQlMjIlM2ElN2IlMjJ4JTIyJTNhMC41JTJjJTIyeSUyMiUzYTAuMjgxMiU3ZCU3ZA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 5,
+            "pageUrl": null
+        },
+        {
+            "id": "iconTabFilterCDSInspectView",
+            "loio": "",
+            "title": "CDS Tab",
+            "summaryText": "CDS Definition Format",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taWNvblRhYkZpbHRlckNEU0luc3BlY3RWaWV3JTI3JTVkJTIyJTJjJTIycnVsZSUyMiUzYSUyMklkU2VsZWN0b3JVSTUlMjIlMmMlMjJvZmZzZXQlMjIlM2ElN2IlMjJ4JTIyJTNhMC41JTJjJTIyeSUyMiUzYTAuMjgxMiU3ZCU3ZA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 6,
+            "pageUrl": null
+        },
+        {
+            "id": "iconTabFilterHDBTableInspectView",
+            "loio": "",
+            "title": "HDBTable Tab",
+            "summaryText": "HDBTable Format",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taWNvblRhYkZpbHRlckhEQlRhYmxlSW5zcGVjdFZpZXclMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 7,
+            "pageUrl": null
+        },
+        {
+            "id": "Schema",
+            "loio": "",
+            "title": "Schema Input",
+            "summaryText": "Target Schema Selection",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tU2NoZW1hJTI3JTVkJTIyJTJjJTIycnVsZSUyMiUzYSUyMklkU2VsZWN0b3JVSTUlMjIlMmMlMjJvZmZzZXQlMjIlM2ElN2IlMjJ4JTIyJTNhMC41JTJjJTIyeSUyMiUzYTAuMjgxMiU3ZCU3ZA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 8,
+            "pageUrl": null
+        },
+        {
+            "id": "schemaInnerInput",
+            "loio": "",
+            "title": "Current Schema Display",
+            "summaryText": "Shows Current Schema Value",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tc2NoZW1hSW5uZXJJbnB1dCUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 9,
+            "pageUrl": null
+        },
+        {
+            "id": "settingsButtonInspectView",
+            "loio": "",
+            "title": "Settings Button",
+            "summaryText": "View System Information",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tc2V0dGluZ3NCdXR0b25JbnNwZWN0VmlldyUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 10,
+            "pageUrl": null
+        },
+        {
+            "id": "chkAdmin",
+            "loio": "",
+            "title": "Admin Connection",
+            "summaryText": "Use Admin Privileges",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tY2hrQWRtaW4lMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 11,
+            "pageUrl": null
+        },
+        {
+            "id": "inputConnFile",
+            "loio": "",
+            "title": "Connection File",
+            "summaryText": "Database Connection Profile",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRDb25uRmlsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 12,
+            "pageUrl": null
+        },
+        {
+            "id": "connRefresh",
+            "loio": "",
+            "title": "Refresh Connection",
+            "summaryText": "Reload Connection Settings",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tY29ublJlZnJlc2glMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 13,
+            "pageUrl": null
+        },
+        {
+            "id": "disableVerbose",
+            "loio": "",
+            "title": "Quiet Mode",
+            "summaryText": "Disable Verbose Output",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tZGlzYWJsZVZlcmJvc2UlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 14,
+            "pageUrl": null
+        },
+        {
+            "id": "debug",
+            "loio": "",
+            "title": "Debug Mode",
+            "summaryText": "Enable Debug Output",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tZGVidWclMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 15,
+            "pageUrl": null
+        },
+        {
+            "id": "inputSchemaInspectView",
+            "loio": "",
+            "title": "Schema Name (Basic Info)",
+            "summaryText": "View's Schema Name",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRTY2hlbWFJbnNwZWN0VmlldyUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 16,
+            "pageUrl": null
+        },
+        {
+            "id": "inputViewInspectView",
+            "loio": "",
+            "title": "View Name (Basic Info)",
+            "summaryText": "Database View Name",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRWaWV3SW5zcGVjdFZpZXclMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 17,
+            "pageUrl": null
+        },
+        {
+            "id": "inputViewTypeInspectView",
+            "loio": "",
+            "title": "View Type",
+            "summaryText": "View Classification",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRWaWV3VHlwZUluc3BlY3RWaWV3JTI3JTVkJTIyJTJjJTIycnVsZSUyMiUzYSUyMklkU2VsZWN0b3JVSTUlMjIlMmMlMjJvZmZzZXQlMjIlM2ElN2IlMjJ4JTIyJTNhMC41JTJjJTIyeSUyMiUzYTAuMjgxMiU3ZCU3ZA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 18,
+            "pageUrl": null
+        },
+        {
+            "id": "inputViewOIDInspectView",
+            "loio": "",
+            "title": "View OID",
+            "summaryText": "View Object Identifier",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRWaWV3T0lESW5zcGVjdFZpZXclMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 19,
+            "pageUrl": null
+        },
+        {
+            "id": "inputHasParametersInspectView",
+            "loio": "",
+            "title": "Has Parameters",
+            "summaryText": "Parameters Indicator",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRIYXNQYXJhbWV0ZXJzSW5zcGVjdFZpZXclMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 20,
+            "pageUrl": null
+        },
+        {
+            "id": "inputHasCheckInspectView",
+            "loio": "",
+            "title": "Has Structured Privilege Check",
+            "summaryText": "Security Check Indicator",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRIYXNDaGVja0luc3BlY3RWaWV3JTI3JTVkJTIyJTJjJTIycnVsZSUyMiUzYSUyMklkU2VsZWN0b3JVSTUlMjIlMmMlMjJvZmZzZXQlMjIlM2ElN2IlMjJ4JTIyJTNhMC41JTJjJTIyeSUyMiUzYTAuMjgxMiU3ZCU3ZA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 21,
+            "pageUrl": null
+        },
+        {
+            "id": "inputHasCacheInspectView",
+            "loio": "",
+            "title": "Has Cache",
+            "summaryText": "Cache Configuration",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRIYXNDYWNoZUluc3BlY3RWaWV3JTI3JTVkJTIyJTJjJTIycnVsZSUyMiUzYSUyMklkU2VsZWN0b3JVSTUlMjIlMmMlMjJvZmZzZXQlMjIlM2ElN2IlMjJ4JTIyJTNhMC41JTJjJTIyeSUyMiUzYTAuMjgxMiU3ZCU3ZA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 22,
+            "pageUrl": null
+        },
+        {
+            "id": "inputCreatedInspectView",
+            "loio": "",
+            "title": "Created Timestamp",
+            "summaryText": "View Creation Time",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRDcmVhdGVkSW5zcGVjdFZpZXclMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 23,
+            "pageUrl": null
+        },
+        {
+            "id": "fieldsTableInspectView",
+            "loio": "",
+            "title": "Fields Table",
+            "summaryText": "View Column Listing",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tZmllbGRzVGFibGVJbnNwZWN0VmlldyUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 24,
+            "pageUrl": null
+        },
+        {
+            "id": "aCodeEditorSQLInspectView",
+            "loio": "",
+            "title": "SQL Code Editor",
+            "summaryText": "SQL DDL Display",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tYUNvZGVFZGl0b3JTUUxJbnNwZWN0VmlldyUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 25,
+            "pageUrl": null
+        },
+        {
+            "id": "aCodeEditorCDSInspectView",
+            "loio": "",
+            "title": "CDS Code Editor",
+            "summaryText": "CDS Definition Display",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tYUNvZGVFZGl0b3JDRFNJbnNwZWN0VmlldyUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 26,
+            "pageUrl": null
+        },
+        {
+            "id": "aCodeEditorHDBTableInspectView",
+            "loio": "",
+            "title": "HDBTable Code Editor",
+            "summaryText": "HDBTable Format Display",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tYUNvZGVFZGl0b3JIREJUYWJsZUluc3BlY3RWaWV3JTI3JTVkJTIyJTJjJTIycnVsZSUyMiUzYSUyMklkU2VsZWN0b3JVSTUlMjIlMmMlMjJvZmZzZXQlMjIlM2ElN2IlMjJ4JTIyJTNhMC41JTJjJTIyeSUyMiUzYTAuMjgxMiU3ZCU3ZA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 27,
+            "pageUrl": null
+        }
+    ]
+}
