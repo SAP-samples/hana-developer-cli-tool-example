@@ -21,7 +21,8 @@ export async function certs(prompts) {
 
     let results = await db.execSQL(`SELECT TOP 100 * FROM "CERTIFICATES"`)
     base.outputTableFancy(results)
-    return base.end()
+    base.end()
+    return results
   } catch (error) {
     await base.error(error)
   }

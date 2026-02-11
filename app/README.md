@@ -216,6 +216,7 @@ The primary application for browsing and listing all types of database objects:
 - `#views-ui` - List all views
 - `#schemas-ui` - List all schemas
 - `#containers-ui` - List HDI containers
+- `#certificates-ui` - List system certificates
 - `#dataTypes-ui` - List HANA data types
 - `#functions-ui` - List database functions
 - `#indexes-ui` - List database indexes

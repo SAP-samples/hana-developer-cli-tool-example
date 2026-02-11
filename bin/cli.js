@@ -33,6 +33,7 @@ const commandMap = {
     'callProcedure': './callProcedure.js',
     'call': './callProcedure.js',
     'certificates': './certificates.js',
+    'certificatesUI': './certificatesUI.js',
     'cds': './cds.js',
     'openChangeLog': './openChangeLog.js',
     'changeLog': './changeLog.js',

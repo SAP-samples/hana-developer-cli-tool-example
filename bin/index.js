@@ -6,6 +6,7 @@ const commandFiles = [
     './activateHDI.js', './adminHDI.js', './adminHDIGroup.js', './btp.js', './btpSubs.js',
     './btpInfo.js', './callProcedure.js', './certificates.js', './cds.js', './openChangeLog.js',
     './changeLog.js', './changeLogUI.js', './connect.js', './containers.js', './containersUI.js',
+    './certificatesUI.js',
     './copy2DefaultEnv.js', './copy2Env.js', './copy2Secrets.js', './createGroup.js', './createContainer.js',
     './createContainerUsers.js', './createJWT.js', './createModule.js', './createXSAAdmin.js',
     './dataTypes.js', './dataTypesUI.js', './dataVolumes.js', './disks.js', './dropGroup.js',

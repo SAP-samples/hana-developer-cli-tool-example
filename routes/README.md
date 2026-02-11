@@ -169,6 +169,20 @@ curl http://localhost:3010/hana/containers
 
 **Response**: Array of container objects
 
+#### GET /hana/certificates
+
+#### GET /hana/certificates-ui
+
+Lists all system certificates.
+
+**Example**:
+
+```bash
+curl http://localhost:3010/hana/certificates
+```
+
+**Response**: Array of certificate objects
+
 #### GET /hana/dataTypes
 
 #### GET /hana/dataTypes-ui

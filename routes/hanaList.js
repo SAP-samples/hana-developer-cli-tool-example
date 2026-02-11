@@ -181,6 +181,31 @@ export function route (app) {
 
     /**
      * @swagger
+     * /hana/certificates:
+     *   get:
+     *     tags: [HANA System]
+     *     summary: List system certificates
+     *     description: Retrieves a list of system certificates
+     *     responses:
+     *       200:
+     *         description: List of certificates
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
+    app.get(['/hana/certificates', '/hana/certificates-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/certificates", 'certs')
+        } catch (error) {
+            next(error)
+        }
+    })
+
+    /**
+     * @swagger
      * /hana/dataTypes:
      *   get:
      *     tags: [HANA System]

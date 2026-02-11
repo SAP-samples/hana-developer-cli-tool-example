@@ -98,6 +98,22 @@
                                     }
                                 },
                                 {
+                                    "id": "certificates-ui",
+                                    "title": "i18n.tile.certificates_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.certificates_ui.info",
+                                        "title": "i18n.tile.certificates_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#certificates-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://certificate",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
                                     "id": "dataTypes-ui",
                                     "title": "i18n.tile.dataTypes_ui.title",
                                     "size": "1x1",
@@ -468,6 +484,14 @@
         "containers-ui": {
             "title": "i18n.app.containers_ui.title",
             "description": "i18n.app.containers_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "certificates-ui": {
+            "title": "i18n.app.certificates_ui.title",
+            "description": "i18n.app.certificates_ui.description",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
             "url": "./tables",
