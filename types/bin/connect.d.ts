@@ -1,9 +1,9 @@
 /**
  * Command handler function
  * @param {object} argv - Command line arguments from yargs
- * @returns {void}
+ * @returns {Promise<void>}
  */
-export function handler(argv: object): void;
+export function handler(argv: object): Promise<void>;
 /**
  * Connect to HANA database with provided credentials
  * @param {object} input - Input prompts with connection details
@@ -19,4 +19,4 @@ export function saveEnv(options: object): Promise<void>;
 export const command: "connect [user] [password]";
 export const aliases: string[];
 export const describe: string;
-export const builder: import("yargs").CommandBuilder<{}, {}>;
+export const builder: any;

@@ -1,4 +1,4 @@
-export function handler(argv: any): void;
+export function handler(argv: any): Promise<void>;
 export function listInstances(prompts: any): Promise<({
     name: any;
     created_at: any;
@@ -9,7 +9,7 @@ export function listInstances(prompts: any): Promise<({
 export const command: "ups";
 export const aliases: string[];
 export const describe: string;
-export const builder: import("yargs").CommandBuilder<{}, {}>;
+export const builder: any;
 export namespace inputPrompts {
     namespace cf {
         export let description: string;

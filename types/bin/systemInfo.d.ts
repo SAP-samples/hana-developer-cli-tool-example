@@ -1,9 +1,9 @@
 /**
  * Command handler function
  * @param {object} argv - Command line arguments from yargs
- * @returns {void}
+ * @returns {Promise<void>}
  */
-export function handler(argv: object): void;
+export function handler(argv: object): Promise<void>;
 /**
  * Display system information in various formats
  * @param {object} prompts - Input prompts with output format selection
@@ -30,7 +30,7 @@ export function dbxOutput(prompts: object): Promise<void>;
 export const command: "systemInfo";
 export const aliases: string[];
 export const describe: string;
-export const builder: import("yargs").CommandBuilder<{}, {}>;
+export const builder: any;
 export namespace inputPrompts {
     namespace output {
         let description: string;

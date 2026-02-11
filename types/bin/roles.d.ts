@@ -1,9 +1,9 @@
 /**
  * Command handler function
  * @param {object} argv - Command line arguments from yargs
- * @returns {void}
+ * @returns {Promise<void>}
  */
-export function handler(argv: object): void;
+export function handler(argv: object): Promise<void>;
 /**
  * Get list of database roles
  * @param {object} prompts - Input prompts with schema, role pattern, and limit
@@ -13,4 +13,4 @@ export function getRoles(prompts: object): Promise<any[]>;
 export const command: "roles [schema] [role]";
 export const aliases: string[];
 export const describe: string;
-export const builder: import("yargs").CommandBuilder<{}, {}>;
+export const builder: any;

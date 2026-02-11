@@ -1,4 +1,4 @@
-export function handler(argv: any): void;
+export function handler(argv: any): Promise<void>;
 export function tableInspect(prompts: any): Promise<{
     basic: any;
     fields: any;
@@ -10,7 +10,7 @@ export function tableInspect(prompts: any): Promise<{
 export const command: "inspectTable [schema] [table]";
 export const aliases: string[];
 export const describe: string;
-export const builder: import("yargs").CommandBuilder<{}, {}>;
+export const builder: any;
 export namespace inputPrompts {
     namespace table {
         let description: string;

@@ -4,4 +4,4 @@ export function getIndex(odataURL: any, entity: any): string;
 export const command: "cds [schema] [table]";
 export const aliases: string[];
 export const describe: string;
-export const builder: import("yargs").CommandBuilder<{}, {}>;
+export const builder: any;

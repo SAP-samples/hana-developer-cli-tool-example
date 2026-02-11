@@ -1,9 +1,9 @@
 /**
  * Command handler function
  * @param {object} argv - Command line arguments from yargs
- * @returns {void}
+ * @returns {Promise<void>}
  */
-export function handler(argv: object): void;
+export function handler(argv: object): Promise<void>;
 /**
  * Inspect a view and display its metadata, columns, and definition in various formats
  * @param {object} prompts - Input prompts with schema, view name, and output format
@@ -13,7 +13,7 @@ export function viewInspect(prompts: object): Promise<any>;
 export const command: "inspectView [schema] [view]";
 export const aliases: string[];
 export const describe: string;
-export const builder: import("yargs").CommandBuilder<{}, {}>;
+export const builder: any;
 export namespace inputPrompts {
     namespace view {
         let description: string;

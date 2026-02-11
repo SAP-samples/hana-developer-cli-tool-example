@@ -23,7 +23,7 @@ export const builder = baseLite.getBuilder({
 /**
  * Command handler function
  * @param {object} argv - Command line arguments from yargs
- * @returns {void}
+ * @returns {Promise<void>}
  */
 export async function handler (argv) {
   const base = await import('../utils/base.js')

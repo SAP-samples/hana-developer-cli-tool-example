@@ -1,8 +1,8 @@
-export function handler(argv: any): void;
+export function handler(argv: any): Promise<void>;
 export const command: "tablesSQLite [table]";
 export const aliases: string[];
 export const describe: string;
-export const builder: import("yargs").CommandBuilder<{}, {}>;
+export const builder: any;
 export namespace inputPrompts {
     namespace table {
         let description: string;

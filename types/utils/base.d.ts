@@ -1,7 +1,7 @@
 /**
  * Start the Terminal Spinner
  */
-export function startSpinnerInt(): void;
+export function startSpinnerInt(): Promise<void>;
 /**
  * Stop the Terminal Spinner
  */
@@ -119,9 +119,9 @@ export function outputTable(content: any): void;
 /**
  * Output JSON content either as a table or as formatted JSON to console
  * @param {*} content - json content often a HANA result set
- * @returns {void}
+ * @returns {Promise<void>}
  */
-export function outputTableFancy(content: any): void;
+export function outputTableFancy(content: any): Promise<void>;
 /**
  * Only output this content to console if in verbose mode
  * @param {*} content - json content often a HANA result set
@@ -182,8 +182,8 @@ export const debug: any;
 export let hanaBin: string;
 /** @typeof TextBundle - instance of sap/textbundle */
 export const bundle: TextBundle;
+export function getTerminal(): Promise<any>;
 export const terminal: any;
-
 export namespace tableOptions {
     let hasBorder: boolean;
     let contentHasMarkup: boolean;

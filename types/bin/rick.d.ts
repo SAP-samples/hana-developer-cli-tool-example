@@ -1,4 +1,5 @@
+export function handler(argv: any): Promise<void>;
+export function getRick(): Promise<void>;
 export const command: "rick";
 export const describe: string;
-export const builder: import("yargs").CommandBuilder<{}, {}>;
-export function handler(): Promise<void>;
+export const builder: any;

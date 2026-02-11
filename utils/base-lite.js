@@ -27,7 +27,7 @@ export const bundle = new TextBundle(path.join(__dirname, '..', '/_i18n/messages
 /**
  * Output an error to the console
  * @param {Error} err - Error object or error message
- * @returns {void}
+ * @returns {Promise<void>}
  */
 export async function error(err) {
     console.error(colors.red(`ERROR: ${err.toString()}`))

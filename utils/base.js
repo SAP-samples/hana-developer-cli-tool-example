@@ -118,6 +118,10 @@ export const getTerminal = async () => {
     return tk.terminal
 }
 
+// Import terminal-kit synchronously for backward compatibility with existing code
+import terminalKit from 'terminal-kit'
+export const terminal = terminalKit.terminal
+
 export let tableOptions = {
     hasBorder: true,
     contentHasMarkup: false,

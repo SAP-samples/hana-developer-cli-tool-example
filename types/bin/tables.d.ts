@@ -13,7 +13,7 @@ export function getTables(prompts: object): Promise<any[]>;
 export const command: "tables [schema] [table]";
 export const aliases: string[];
 export const describe: string;
-export const builder: import("yargs").CommandBuilder<{}, {}>;
+export const builder: any;
 export namespace inputPrompts {
     namespace table {
         let description: string;

@@ -1,9 +1,9 @@
-export function handler(argv: any): void;
+export function handler(argv: any): Promise<void>;
 export function getIndexes(prompts: any): Promise<any>;
 export const command: "indexes [schema] [indexes]";
 export const aliases: string[];
 export const describe: string;
-export const builder: import("yargs").CommandBuilder<{}, {}>;
+export const builder: any;
 export namespace inputPrompts {
     namespace indexes {
         let description: string;

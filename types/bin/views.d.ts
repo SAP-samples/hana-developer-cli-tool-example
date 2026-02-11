@@ -1,4 +1,4 @@
-export function handler(argv: any): void;
+export function handler(argv: any): Promise<void>;
 /**
  * Get list of views from database
  * @param {object} prompts - Input prompts with schema, view, and limit
@@ -8,4 +8,4 @@ export function getViews(prompts: object): Promise<any[]>;
 export const command: "views [schema] [view]";
 export const aliases: string[];
 export const describe: string;
-export const builder: import("yargs").CommandBuilder<{}, {}>;
+export const builder: any;
