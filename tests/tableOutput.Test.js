@@ -46,7 +46,7 @@ describe('Table Output Enhancement Tests', function () {
             assert.strictEqual(base.MAX_DISPLAY_ROWS, 100, 'MAX_DISPLAY_ROWS should be 100')
         })
 
-        it('should display message for large datasets', function () {
+        it('should display message for large datasets', async function () {
             // Create a dataset with more than 100 rows
             const largeDataset = Array.from({ length: 150 }, (_, i) => ({
                 ID: i + 1,
@@ -61,7 +61,7 @@ describe('Table Output Enhancement Tests', function () {
             const consoleLogSpy = sinon.spy(console, 'log')
 
             try {
-                base.outputTableFancy(largeDataset)
+                await base.outputTableFancy(largeDataset)
                 
                 // Check if warning message was displayed
                 const warningCalls = consoleLogSpy.getCalls().filter(call => 
@@ -79,7 +79,7 @@ describe('Table Output Enhancement Tests', function () {
             }
         })
 
-        it('should not display pagination message for small datasets', function () {
+        it('should not display pagination message for small datasets', async function () {
             // Create a dataset with less than 100 rows
             const smallDataset = Array.from({ length: 50 }, (_, i) => ({
                 ID: i + 1,
@@ -93,7 +93,7 @@ describe('Table Output Enhancement Tests', function () {
             const consoleLogSpy = sinon.spy(console, 'log')
 
             try {
-                base.outputTableFancy(smallDataset)
+                await base.outputTableFancy(smallDataset)
                 
                 // Check that no pagination warning was displayed
                 const warningCalls = consoleLogSpy.getCalls().filter(call => 
@@ -106,7 +106,7 @@ describe('Table Output Enhancement Tests', function () {
             }
         })
 
-        it('should display no data message for empty datasets', function () {
+        it('should display no data message for empty datasets', async function () {
             const emptyDataset = []
 
             // Set up prompts for verbose output
@@ -116,7 +116,7 @@ describe('Table Output Enhancement Tests', function () {
             const consoleLogSpy = sinon.spy(console, 'log')
 
             try {
-                base.outputTableFancy(emptyDataset)
+                await base.outputTableFancy(emptyDataset)
                 
                 // Check that "no data" message was displayed
                 const noDataCalls = consoleLogSpy.getCalls().filter(call => 
@@ -194,8 +194,8 @@ describe('Table Output Enhancement Tests', function () {
 
     describe('Fallback to console.table on Error', function () {
         
-        it('should catch errors from terminal.table and fallback to console.table', function () {
-            const testData = [{ ID: 1, NAME: 'Test' }]
+        it('should fallback to console.table on terminal.table error', async function () {
+            const testData = [{ ID: 1, VALUE: 100 }]
             
             // Set up prompts for verbose output
             base.setPrompts({ verbose: true })
@@ -208,7 +208,7 @@ describe('Table Output Enhancement Tests', function () {
             const terminalTableStub = sinon.stub(base.terminal, 'table').throws(new Error('Buffer allocation error'))
 
             try {
-                base.outputTableFancy(testData)
+                await base.outputTableFancy(testData)
                 
                 // Verify error was logged
                 assert.ok(consoleErrorSpy.called, 'Error should be logged to console.error')
@@ -222,7 +222,7 @@ describe('Table Output Enhancement Tests', function () {
             }
         })
 
-        it('should handle large datasets in fallback mode', function () {
+        it('should handle large datasets in fallback mode', async function () {
             const largeDataset = Array.from({ length: 150 }, (_, i) => ({
                 ID: i + 1,
                 VALUE: i * 10
@@ -240,7 +240,7 @@ describe('Table Output Enhancement Tests', function () {
             const terminalTableStub = sinon.stub(base.terminal, 'table').throws(new Error('Error'))
 
             try {
-                base.outputTableFancy(largeDataset)
+                await base.outputTableFancy(largeDataset)
                 
                 // Should show pagination warning even in fallback mode
                 const warningCalls = consoleLogSpy.getCalls().filter(call => 
@@ -290,7 +290,7 @@ describe('Table Output Enhancement Tests', function () {
 
     describe('Non-Verbose Mode', function () {
         
-        it('should use inspect for non-verbose output', function () {
+        it('should use inspect for non-verbose output', async function () {
             const testData = [{ ID: 1, NAME: 'Test' }]
             
             // Set up prompts for non-verbose output (disableVerbose: true means no fancy output)
@@ -300,7 +300,7 @@ describe('Table Output Enhancement Tests', function () {
             const consoleLogSpy = sinon.spy(console, 'log')
 
             try {
-                base.outputTableFancy(testData)
+                await base.outputTableFancy(testData)
                 
                 // Should call console.log (not terminal.table)
                 assert.ok(consoleLogSpy.called, 'Should use console.log for non-verbose mode')
