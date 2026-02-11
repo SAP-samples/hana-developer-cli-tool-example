@@ -63,3 +63,45 @@ export async function getBTPInfo(prompts) {
         base.error(error)
     }
 }
+
+export async function getBTPInfoUI(prompts) {
+    const base = await import('../utils/base.js')
+    base.debug('getBTPInfoUI')
+    try {
+        base.setPrompts(prompts)
+        let data = await btp.getBTPConfig()
+        
+        // Transform data for UI
+        let result = {
+            UserName: data.UserName,
+            ServerURL: data.ServerURL,
+            Version: data.Version,
+            GlobalAccount: '',
+            GlobalAccountID: '',
+            Directory: '',
+            DirectoryID: '',
+            SubAccount: '',
+            SubAccountID: ''
+        }
+        
+        // Extract target hierarchy items
+        if (data.TargetHierarchy) {
+            for (let item of data.TargetHierarchy) {
+                if (item.Type === 'globalaccount') {
+                    result.GlobalAccount = item.DisplayName
+                    result.GlobalAccountID = item.ID
+                } else if (item.Type === 'directory') {
+                    result.Directory = item.DisplayName
+                    result.DirectoryID = item.ID
+                } else if (item.Type === 'subaccount') {
+                    result.SubAccount = item.DisplayName
+                    result.SubAccountID = item.ID
+                }
+            }
+        }
+        
+        return result
+    } catch (error) {
+        base.error(error)
+    }
+}

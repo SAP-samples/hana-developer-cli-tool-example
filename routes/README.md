@@ -183,6 +183,20 @@ curl http://localhost:3010/hana/certificates
 
 **Response**: Array of certificate objects
 
+#### GET /hana/btpInfo
+
+#### GET /hana/btpInfo-ui
+
+Retrieves BTP CLI configuration information including user, server URL, version, and target hierarchy.
+
+**Example**:
+
+```bash
+curl http://localhost:3010/hana/btpInfo
+```
+
+**Response**: Array containing BTP configuration details and target hierarchy information
+
 #### GET /hana/dataTypes
 
 #### GET /hana/dataTypes-ui

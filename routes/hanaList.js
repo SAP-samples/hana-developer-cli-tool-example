@@ -206,6 +206,40 @@ export function route (app) {
 
     /**
      * @swagger
+     * /hana/btpInfo:
+     *   get:
+     *     tags: [BTP System]
+     *     summary: Get BTP configuration information
+     *     description: Retrieves BTP CLI configuration including user, server URL, version, and target hierarchy
+     *     responses:
+     *       200:
+     *         description: BTP configuration information
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 UserName:
+     *                   type: string
+     *                 ServerURL:
+     *                   type: string
+     *                 Version:
+     *                   type: string
+     *                 TargetHierarchy:
+     *                   type: array
+     *                   items:
+     *                     type: object
+     */
+    app.get(['/hana/btpInfo', '/hana/btpInfo-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/btpInfo", 'getBTPInfoUI')
+        } catch (error) {
+            next(error)
+        }
+    })
+
+    /**
+     * @swagger
      * /hana/dataTypes:
      *   get:
      *     tags: [HANA System]

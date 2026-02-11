@@ -1,0 +1,80 @@
+<mvc:View controllerName="sap.hanacli.tables.controller.btpInfo-ui" height="100%" width="100%"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+	<ScrollContainer id="scrollContainerBtpInfo" height="100%" width="100%" vertical="true" focusable="true">
+		<f:SimpleForm id="SimpleFormBtpInfo" editable="false" layout="ResponsiveGridLayout" 
+			labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" 
+			adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" 
+			columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false" ariaLabelledBy="Title1BtpInfo">
+			<f:toolbar>
+				<Toolbar id="TB1BtpInfo">
+					<Title id="Title1BtpInfo" text="BTP Configuration"/>
+					<ToolbarSpacer id="spacer1BtpInfo" />
+					<Button id="refreshButtonBtpInfo" icon="sap-icon://refresh" tooltip="Refresh" press="refreshBTPInfo" />
+				</Toolbar>
+			</f:toolbar>
+			<f:content>
+
+				<Toolbar id="TB2BtpInfo" ariaLabelledBy="Title2BtpInfo">
+					<Title id="Title2BtpInfo" text="BTP CLI Information"/>
+					<ToolbarSpacer id="spacer2BtpInfo" />
+				</Toolbar>
+
+				<Label id="labelUserName" text="User Name" />
+				<Input id="inputUserName" value="{btpModel>/UserName}" editable="false" />
+
+				<Label id="labelServerURL" text="Server URL" />
+				<Link id="linkServerURL" text="{btpModel>/ServerURL}" href="{btpModel>/ServerURL}" target="_blank" />
+
+				<Label id="labelVersion" text="CLI Version" />
+				<Input id="inputVersion" value="{btpModel>/Version}" editable="false" />
+
+				<Toolbar id="TB3BtpInfo" ariaLabelledBy="Title3BtpInfo">
+					<Title id="Title3BtpInfo" text="Target Hierarchy"/>
+					<ToolbarSpacer id="spacer3BtpInfo" />
+				</Toolbar>
+
+				<Label id="labelGlobalAccount" text="Global Account" />
+				<Input id="inputGlobalAccount" value="{btpModel>/GlobalAccount}" editable="false">
+					<layoutData>
+						<l:GridData id="gridDataGlobalAccount" span="XL6 L6 M8 S12" />
+					</layoutData>
+				</Input>
+				<Input id="inputGlobalAccountID" value="{btpModel>/GlobalAccountID}" editable="false">
+					<layoutData>
+						<l:GridData id="gridDataGlobalAccountID" span="XL6 L6 M8 S12" />
+					</layoutData>
+				</Input>
+
+				<Label id="labelDirectory" text="Directory (Folder)" />
+				<Input id="inputDirectory" value="{btpModel>/Directory}" editable="false">
+					<layoutData>
+						<l:GridData id="gridDataDirectory" span="XL6 L6 M8 S12" />
+					</layoutData>
+				</Input>
+				<Input id="inputDirectoryID" value="{btpModel>/DirectoryID}" editable="false">
+					<layoutData>
+						<l:GridData id="gridDataDirectoryID" span="XL6 L6 M8 S12" />
+					</layoutData>
+				</Input>
+
+				<Label id="labelSubAccount" text="Sub Account" />
+				<Input id="inputSubAccount" value="{btpModel>/SubAccount}" editable="false">
+					<layoutData>
+						<l:GridData id="gridDataSubAccount" span="XL6 L6 M8 S12" />
+					</layoutData>
+				</Input>
+				<Input id="inputSubAccountID" value="{btpModel>/SubAccountID}" editable="false">
+					<layoutData>
+						<l:GridData id="gridDataSubAccountID" span="XL6 L6 M8 S12" />
+					</layoutData>
+				</Input>
+
+			</f:content>
+		</f:SimpleForm>
+		<core:Fragment fragmentName="sap.hanacli.common.view.BusyDialog" type="XML"/>
+	</ScrollContainer>
+</mvc:View>
