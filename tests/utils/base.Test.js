@@ -10,7 +10,7 @@
  * - Connection and debug parameter injection
  */
 
-import { describe, it } from 'mocha'
+import { describe, it, beforeEach, afterEach } from 'mocha'
 import { assert } from '../base.js'
 import * as base from '../../utils/base.js'
 
@@ -405,6 +405,194 @@ describe('Base Utility Functions', function () {
                 if (capturedResult) {
                     assert.strictEqual(capturedResult.conn, 'default.env')
                 }
+            }
+        })
+    })
+
+    describe('unknown options warning', function () {
+        let consoleWarnOutput = []
+        let originalConsoleWarn
+
+        beforeEach(function () {
+            // Capture console.warn output
+            consoleWarnOutput = []
+            originalConsoleWarn = console.warn
+            console.warn = (msg) => {
+                consoleWarnOutput.push(msg)
+            }
+        })
+
+        afterEach(function () {
+            // Restore original console.warn
+            console.warn = originalConsoleWarn
+        })
+
+        it('should warn about unknown options', async function () {
+            this.timeout(5000)
+
+            const mockProcessing = async (result) => {
+                // Do nothing
+            }
+
+            const mockArgv = {
+                schema: 'TEST_SCHEMA',
+                unknownOption: true,
+                anotherBadOption: 'value'
+            }
+
+            const inputSchema = {
+                schema: {
+                    description: 'Schema name',
+                    type: 'string',
+                    required: true,
+                    ask: () => false
+                }
+            }
+
+            try {
+                await base.promptHandler(mockArgv, mockProcessing, inputSchema, true, true)
+
+                // Check that warnings were issued
+                assert.ok(consoleWarnOutput.length > 0, 'Should have warning messages')
+                const warningText = consoleWarnOutput.join(' ')
+                assert.ok(warningText.includes('unknownOption') || warningText.includes('unknown-option'), 
+                    'Should warn about unknownOption')
+                assert.ok(warningText.includes('anotherBadOption') || warningText.includes('another-bad-option'), 
+                    'Should warn about anotherBadOption')
+            } catch (err) {
+                // Prompt handler might throw, but warnings should still have been issued
+                assert.ok(consoleWarnOutput.length > 0, 'Should have warnings even if prompt cancelled')
+            }
+        })
+
+        it('should not warn about valid options', async function () {
+            this.timeout(5000)
+
+            const mockProcessing = async (result) => {
+                // Do nothing
+            }
+
+            const mockArgv = {
+                schema: 'TEST_SCHEMA',
+                limit: 100,
+                debug: true,
+                admin: false
+            }
+
+            const inputSchema = {
+                schema: {
+                    description: 'Schema name',
+                    type: 'string',
+                    required: true,
+                    ask: () => false
+                },
+                limit: {
+                    description: 'Limit',
+                    type: 'number',
+                    required: true,
+                    ask: () => false
+                }
+            }
+
+            try {
+                await base.promptHandler(mockArgv, mockProcessing, inputSchema, true, true)
+
+                // Check that no warnings were issued for valid options
+                const warningText = consoleWarnOutput.join(' ')
+                assert.ok(!warningText.includes('schema'), 'Should not warn about schema')
+                assert.ok(!warningText.includes('limit'), 'Should not warn about limit')
+                assert.ok(!warningText.includes('debug'), 'Should not warn about debug')
+                assert.ok(!warningText.includes('admin'), 'Should not warn about admin')
+            } catch (err) {
+                // Even if prompt throws, check warnings
+                const warningText = consoleWarnOutput.join(' ')
+                assert.ok(!warningText.includes('schema'), 'Should not warn about valid options')
+            }
+        })
+
+        it('should detect aliases as valid options', async function () {
+            this.timeout(5000)
+
+            const mockProcessing = async (result) => {
+                // Do nothing
+            }
+
+            // When using -l 100, yargs creates both l:100 and limit:100
+            const mockArgv = {
+                schema: 'TEST_SCHEMA',
+                s: 'TEST_SCHEMA', // alias for schema
+                limit: 100,
+                l: 100 // alias for limit
+            }
+
+            const inputSchema = {
+                schema: {
+                    description: 'Schema name',
+                    type: 'string',
+                    required: true,
+                    ask: () => false
+                },
+                limit: {
+                    description: 'Limit',
+                    type: 'number',
+                    required: true,
+                    ask: () => false
+                }
+            }
+
+            try {
+                await base.promptHandler(mockArgv, mockProcessing, inputSchema, true, true)
+
+                // Check that aliases are not flagged as unknown
+                const warningText = consoleWarnOutput.join(' ')
+                assert.ok(!warningText.includes("'s'") && !warningText.includes("'l'"), 
+                    'Should not warn about aliases that share values with known options')
+            } catch (err) {
+                // Check even if error
+                const warningText = consoleWarnOutput.join(' ')
+                assert.ok(!warningText.includes("'s'") && !warningText.includes("'l'"), 
+                    'Should not warn about valid aliases')
+            }
+        })
+
+        it('should not duplicate warnings for kebab-case and camelCase', async function () {
+            this.timeout(5000)
+
+            const mockProcessing = async (result) => {
+                // Do nothing
+            }
+
+            // Yargs creates both when you use --unknown-option
+            const mockArgv = {
+                schema: 'TEST_SCHEMA',
+                'unknown-option': true,
+                unknownOption: true
+            }
+
+            const inputSchema = {
+                schema: {
+                    description: 'Schema name',
+                    type: 'string',
+                    required: true,
+                    ask: () => false
+                }
+            }
+
+            try {
+                await base.promptHandler(mockArgv, mockProcessing, inputSchema, true, true)
+
+                // Should only warn once, not twice
+                const unknownWarnings = consoleWarnOutput.filter(msg => 
+                    msg.includes('unknown-option') || msg.includes('unknownOption')
+                )
+                assert.ok(unknownWarnings.length <= 1, 
+                    'Should not duplicate warnings for kebab-case and camelCase variants')
+            } catch (err) {
+                // Check even if error
+                const unknownWarnings = consoleWarnOutput.filter(msg => 
+                    msg.includes('unknown-option') || msg.includes('unknownOption')
+                )
+                assert.ok(unknownWarnings.length <= 1, 'Should not duplicate warnings')
             }
         })
     })

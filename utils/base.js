@@ -638,6 +638,123 @@ export function askFalse() {
 }
 
 /**
+ * Check for unknown command-line options and warn the user
+ * @param {object} argv - Command line arguments from yargs
+ * @param {object} inputSchema - Command's input schema
+ * @param {boolean} iConn - Whether connection options are included
+ * @param {boolean} iDebug - Whether debug options are included
+ */
+function checkUnknownOptions(argv, inputSchema, iConn, iDebug) {
+    if (!argv || typeof argv !== 'object') {
+        return
+    }
+
+    /**
+     * Convert camelCase to kebab-case
+     * @param {string} str 
+     * @returns {string}
+     */
+    const toKebabCase = (str) => {
+        return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+    }
+
+    // Build set of known options
+    const knownOptions = new Set()
+    
+    /**
+     * Add an option and its kebab-case variant
+     * @param {string} opt 
+     */
+    const addOption = (opt) => {
+        knownOptions.add(opt)
+        const kebab = toKebabCase(opt)
+        if (kebab !== opt) {
+            knownOptions.add(kebab)
+        }
+    }
+    
+    // Standard yargs options that should always be allowed
+    const standardYargsOptions = ['$0', '_', 'help', 'h', 'version', 'V']
+    standardYargsOptions.forEach(opt => addOption(opt))
+    
+    // Add options from inputSchema
+    if (inputSchema && typeof inputSchema === 'object') {
+        Object.keys(inputSchema).forEach(key => {
+            addOption(key)
+        })
+    }
+    
+    // Add connection options if included
+    if (iConn) {
+        addOption('admin')
+        addOption('a')
+        addOption('Admin')
+        addOption('conn')
+    }
+    
+    // Add debug options if included
+    if (iDebug) {
+        addOption('disableVerbose')
+        addOption('quiet')
+        addOption('debug')
+        addOption('Debug')
+    }
+    
+    // Build a map of values to option names to detect aliases
+    // Aliases will have the same value as the primary option
+    const valueToOptions = new Map()
+    for (const key in argv) {
+        const value = argv[key]
+        // Create a unique key for the value (handle objects/arrays)
+        const valueKey = typeof value === 'object' ? JSON.stringify(value) : String(value)
+        if (!valueToOptions.has(valueKey)) {
+            valueToOptions.set(valueKey, [])
+        }
+        valueToOptions.get(valueKey).push(key)
+    }
+    
+    // An option is likely an alias if it shares a value with a known option
+    const likelyAliases = new Set()
+    for (const options of valueToOptions.values()) {
+        if (options.length > 1) {
+            // Multiple options with same value - some might be aliases
+            const hasKnownOption = options.some(opt => knownOptions.has(opt))
+            if (hasKnownOption) {
+                // If at least one is known, consider all others as aliases
+                options.forEach(opt => likelyAliases.add(opt))
+            }
+        }
+    }
+    
+    // Check argv for unknown options
+    const unknownOptions = []
+    const unknownSet = new Set()
+    
+    for (const key in argv) {
+        if (!knownOptions.has(key) && !likelyAliases.has(key)) {
+            // Check if we already added the camelCase/kebab-case equivalent
+            const kebab = toKebabCase(key)
+            const hasDuplicate = unknownSet.has(key) || unknownSet.has(kebab)
+            
+            if (!hasDuplicate) {
+                unknownOptions.push(key)
+                unknownSet.add(key)
+                if (kebab !== key) {
+                    unknownSet.add(kebab)
+                }
+            }
+        }
+    }
+    
+    // Warn about unknown options
+    if (unknownOptions.length > 0) {
+        unknownOptions.forEach(opt => {
+            console.warn(colors.yellow(`Warning: Unknown option '--${opt}'`))
+        })
+    }
+}
+
+/**
  * Prompts handler function
  * @param {import("yargs").CommandBuilder} argv - parameters for the command
  * @param {function} processingFunction - Function to call after prompts to continue command processing
@@ -647,6 +764,9 @@ export function askFalse() {
  */
 export async function promptHandler(argv, processingFunction, inputSchema, iConn = true, iDebug = true) {
     try {
+        // Check for unknown options and warn user
+        checkUnknownOptions(argv, inputSchema, iConn, iDebug)
+        
         let schema = getPromptSchema(inputSchema, iConn, iDebug)
         let result = {}
 

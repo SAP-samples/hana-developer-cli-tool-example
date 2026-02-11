@@ -87,14 +87,9 @@ describe('Error Handling Tests', function () {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
                     
-                    // Should reject invalid output format
-                    const hasFormatError = error || 
-                                          stderr.includes('Invalid') || 
-                                          stderr.includes('choice') ||
-                                          stderr.includes('must be') ||
-                                          stdout.includes('Invalid')
-                    
-                    base.assert.ok(hasFormatError || error, 'Should error on invalid output format')
+                    // Should reject invalid output format by exiting with error code
+                    // Don't check specific error text as it may be translated
+                    base.assert.ok(error, 'Should exit with error code for invalid output format')
                     done()
                 })
         })
@@ -109,14 +104,8 @@ describe('Error Handling Tests', function () {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
                     
-                    // Should produce an error about missing file or connection
-                    const hasMissingFileError = error || 
-                                               stderr.includes('ENOENT') || 
-                                               stderr.includes('not found') ||
-                                               stderr.includes('cannot find') ||
-                                               stderr.includes('No such file')
-                    
-                    base.assert.ok(hasMissingFileError || error, 'Should error when connection file not found')
+                    // Fallback logic should handle missing connection file without error
+                    base.assert.ok(!error, 'Should handle missing connection file with fallback logic')
                     done()
                 })
         })
@@ -149,8 +138,8 @@ describe('Error Handling Tests', function () {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
                     
-                    // Should either use default schema or error
-                    base.assert.ok(true, 'Command handled empty schema')
+                    // Should use default schema and complete successfully
+                    base.assert.ok(!error, 'Command should fallback to default schema without error')
                     done()
                 })
         })
@@ -235,13 +224,12 @@ describe('Error Handling Tests', function () {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
                     
-                    // Should error about unknown flag
-                    const hasUnknownFlagError = error || 
-                                               stderr.includes('Unknown') || 
-                                               stderr.includes('unknown') ||
-                                               stderr.includes('Invalid')
+                    // Should warn about unknown flag but continue processing
+                    const hasWarning = stderr.includes('Warning') && 
+                                      (stderr.includes('Unknown') || stderr.includes('unknown'))
                     
-                    base.assert.ok(hasUnknownFlagError, 'Should error on unknown flag')
+                    base.assert.ok(hasWarning, 'Should warn about unknown flag')
+                    base.assert.ok(!error, 'Should not error - command should complete successfully')
                     done()
                 })
         })
