@@ -372,6 +372,51 @@
                                     }
                                 }
                             ]
+                        },
+                        {
+                            "id": "developer_tools_group",
+                            "title": "Developer Tools",
+                            "isPreset": true,
+                            "isVisible": true,
+                            "isGroupLocked": false,
+                            "tiles": [
+                                {
+                                    "id": "swagger-api-docs",
+                                    "title": "API Documentation",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "Swagger/OpenAPI documentation for all REST API endpoints",
+                                        "title": "API Documentation",
+                                        "targetURL": "/api-docs",
+                                        "icon": "sap-icon://document-text"
+                                    }
+                                },
+                                {
+                                    "id": "docs-readme-tile",
+                                    "title": "ReadMe",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "hana-cli Documentation",
+                                        "title": "ReadMe",
+                                        "targetURL": "/docs/readme",
+                                        "icon": "sap-icon://syntax"
+                                    }
+                                },
+                                {
+                                    "id": "docs-changelog-tile",
+                                    "title": "Change Log",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "hana-cli Change Log",
+                                        "title": "Change Log",
+                                        "targetURL": "/docs/changelog",
+                                        "icon": "sap-icon://history"
+                                    }
+                                }
+                            ]
                         }
                     ]
                 }

@@ -237,6 +237,34 @@ The hana-cli tool includes a built-in web server that exposes all CLI functional
 
 The web server is automatically started when using certain CLI commands with the `-w` or `--web` flag, making all hana-cli functionality accessible via HTTP requests at `http://localhost:3010` (configurable port).
 
+### Swagger/OpenAPI Documentation
+
+The hana-cli web server now includes comprehensive Swagger/OpenAPI 3.0 documentation for all REST API endpoints. This provides an interactive interface for exploring and testing all HTTP APIs, making it easier to integrate hana-cli functionality into your own applications.
+
+**Key Features:**
+
+* **Interactive API Documentation**: Browse all 27+ documented endpoints with full request/response schemas
+* **Try-It-Out Functionality**: Test any API endpoint directly from the browser
+* **Auto-Generated Specification**: Documentation automatically generated from JSDoc comments in route files
+* **OpenAPI 3.0 Standard**: Industry-standard specification for maximum compatibility
+* **Organized Categories**: Endpoints grouped into 10 logical categories (Configuration, HANA System, HANA Objects, HDI, Cloud Services, etc.)
+* **Export Support**: Download the raw OpenAPI JSON specification for client SDK generation
+
+**Accessing Swagger UI:**
+
+```shell
+# Start the UI server
+hana-cli ui
+
+# Open browser to Swagger UI
+http://localhost:3010/api-docs
+
+# Get raw OpenAPI JSON specification
+http://localhost:3010/api-docs.json
+```
+
+For complete implementation details, usage examples, and customization options, see the [SWAGGER_IMPLEMENTATION.md](SWAGGER_IMPLEMENTATION.md) documentation.
+
 ### Web Applications (Fiori Launchpad UI)
 
 The hana-cli tool includes a complete browser-based interface built with SAP UI5 and the Fiori Launchpad, providing a graphical alternative to the command-line interface. This web interface offers an intuitive, tile-based navigation system for all database operations.

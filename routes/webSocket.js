@@ -7,6 +7,21 @@ import * as massConvertLib from '../utils/massConvert.js'
 
 export function route(app, server) {
 	base.debug('WebSockets Route')
+	/**
+	 * @swagger
+	 * /websockets:
+	 *   get:
+	 *     tags: [WebSockets]
+	 *     summary: WebSocket information endpoint
+	 *     description: Returns information about the WebSocket connection endpoint
+	 *     responses:
+	 *       200:
+	 *         description: WebSocket information
+	 *         content:
+	 *           text/html:
+	 *             schema:
+	 *               type: string
+	 */
 	app.get('/websockets', (req, res, next) => {
 		try {
 			let output =

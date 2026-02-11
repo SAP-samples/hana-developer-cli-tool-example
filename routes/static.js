@@ -12,12 +12,35 @@ import * as version from '../bin/version.js'
 
 export function route (app) {
      base.debug('Static Route')
+    /**
+     * Static file routes - these serve UI resources and are not included in Swagger docs
+     * - /ui - Main UI resources
+     * - /sap/dfa/ - Digital First Adoption resources
+     * - /resources/sap/dfa/ - Alternate DFA path
+     * - /i18n - Internationalization files
+     * - /favicon.ico - Site favicon
+     */
     app.use('/ui', express.static(path.join(__dirname, '../app/resources')))
     app.use('/sap/dfa/', express.static(path.join(__dirname, '../app/dfa')))
     app.use('/resources/sap/dfa/', express.static(path.join(__dirname, '../app/dfa')))
     app.use('/i18n', express.static(path.join(__dirname, '../_i18n')))
     app.use('/favicon.ico', express.static(path.join(__dirname, '../app/resources/favicon.ico')))
    
+    /**
+     * @swagger
+     * /appconfig/fioriSandboxConfig.json:
+     *   get:
+     *     tags: [Configuration]
+     *     summary: Get Fiori Launchpad sandbox configuration
+     *     description: Returns the Fiori Launchpad sandbox configuration with version info
+     *     responses:
+     *       200:
+     *         description: Fiori sandbox configuration
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     */
     app.get('/appconfig/fioriSandboxConfig.json', async (req, res, next) => {
         try {
             let jsonData = require('../app/appconfig/fioriSandboxConfig.json')

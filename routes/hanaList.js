@@ -4,6 +4,45 @@ import * as dbInspect from '../utils/dbInspect.js'
 
 export function route (app) {
     base.debug('hanaList Route')
+    
+    /**
+     * @swagger
+     * /hana:
+     *   get:
+     *     tags: [HANA System]
+     *     summary: Get HANA database system information
+     *     description: Returns comprehensive system information including session context, user details, system overview, services, and version information
+     *     responses:
+     *       200:
+     *         description: HANA system information
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 CURRENT_USER:
+     *                   type: string
+     *                 session:
+     *                   type: array
+     *                   items:
+     *                     type: object
+     *                 user:
+     *                   type: array
+     *                   items:
+     *                     type: object
+     *                 overview:
+     *                   type: array
+     *                   items:
+     *                     type: object
+     *                 services:
+     *                   type: array
+     *                   items:
+     *                     type: object
+     *                 version:
+     *                   type: object
+     *       500:
+     *         description: Database connection or query error
+     */
     app.get('/hana', async (req, res, next) => {
         try {
             await base.clearConnection()
@@ -33,6 +72,30 @@ export function route (app) {
         }
     })
 
+    /**
+     * @swagger
+     * /hana/tables:
+     *   get:
+     *     tags: [HANA Objects]
+     *     summary: List all database tables
+     *     description: Retrieves a list of all tables in the database schema
+     *     responses:
+     *       200:
+     *         description: List of database tables
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     *                 properties:
+     *                   SCHEMA_NAME:
+     *                     type: string
+     *                   TABLE_NAME:
+     *                     type: string
+     *                   TABLE_TYPE:
+     *                     type: string
+     */
     app.get(['/hana/tables', '/hana/tables-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/tables", 'getTables')
@@ -41,6 +104,23 @@ export function route (app) {
         }
     })
 
+    /**
+     * @swagger
+     * /hana/views:
+     *   get:
+     *     tags: [HANA Objects]
+     *     summary: List all database views
+     *     description: Retrieves a list of all views in the database schema
+     *     responses:
+     *       200:
+     *         description: List of database views
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
     app.get(['/hana/views', '/hana/views-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/views", 'getViews')
@@ -49,6 +129,23 @@ export function route (app) {
         }
     })
 
+    /**
+     * @swagger
+     * /hana/schemas:
+     *   get:
+     *     tags: [HANA Objects]
+     *     summary: List all database schemas
+     *     description: Retrieves a list of all schemas in the database
+     *     responses:
+     *       200:
+     *         description: List of database schemas
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
     app.get(['/hana/schemas', '/hana/schemas-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/schemas", 'getSchemas')
@@ -57,6 +154,23 @@ export function route (app) {
         }
     })
 
+    /**
+     * @swagger
+     * /hana/containers:
+     *   get:
+     *     tags: [HDI]
+     *     summary: List HDI containers
+     *     description: Retrieves a list of all HDI containers
+     *     responses:
+     *       200:
+     *         description: List of HDI containers
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
     app.get(['/hana/containers', '/hana/containers-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/containers", 'getContainers')
@@ -65,6 +179,23 @@ export function route (app) {
         }
     })
 
+    /**
+     * @swagger
+     * /hana/dataTypes:
+     *   get:
+     *     tags: [HANA System]
+     *     summary: List database data types
+     *     description: Retrieves information about available data types in the database
+     *     responses:
+     *       200:
+     *         description: List of data types
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
     app.get(['/hana/dataTypes', '/hana/dataTypes-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/dataTypes", 'dbStatus')
@@ -73,6 +204,23 @@ export function route (app) {
         }
     })
 
+    /**
+     * @swagger
+     * /hana/features:
+     *   get:
+     *     tags: [HANA System]
+     *     summary: List database features
+     *     description: Retrieves information about database features and their status
+     *     responses:
+     *       200:
+     *         description: List of database features
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
     app.get(['/hana/features', '/hana/features-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/features", 'dbStatus')
@@ -81,6 +229,23 @@ export function route (app) {
         }
     })
     
+    /**
+     * @swagger
+     * /hana/featureUsage:
+     *   get:
+     *     tags: [HANA System]
+     *     summary: Get database feature usage statistics
+     *     description: Retrieves usage statistics for database features
+     *     responses:
+     *       200:
+     *         description: Feature usage statistics
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
     app.get(['/hana/featureUsage', '/hana/featureUsage-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/featureUsage", 'dbStatus')
@@ -89,6 +254,23 @@ export function route (app) {
         }
     })
 
+    /**
+     * @swagger
+     * /hana/functions:
+     *   get:
+     *     tags: [HANA Objects]
+     *     summary: List database functions
+     *     description: Retrieves a list of all functions in the database
+     *     responses:
+     *       200:
+     *         description: List of database functions
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
     app.get(['/hana/functions', '/hana/functions-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/functions", 'getFunctions')
@@ -97,6 +279,23 @@ export function route (app) {
         }
     })
     
+    /**
+     * @swagger
+     * /hana/hdi:
+     *   get:
+     *     tags: [Cloud Services]
+     *     summary: List HANA Cloud HDI instances
+     *     description: Retrieves a list of all HANA Cloud HDI service instances
+     *     responses:
+     *       200:
+     *         description: List of HDI instances
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
     app.get(['/hana/hdi', '/hana/hdi-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/hanaCloudHDIInstances", 'listInstances')
@@ -105,6 +304,23 @@ export function route (app) {
         }
     })
 
+    /**
+     * @swagger
+     * /hana/sbss:
+     *   get:
+     *     tags: [Cloud Services]
+     *     summary: List HANA Cloud Schema and Broker Shared Service instances
+     *     description: Retrieves a list of all SBSS service instances
+     *     responses:
+     *       200:
+     *         description: List of SBSS instances
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
     app.get(['/hana/sbss', '/hana/sbss-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/hanaCloudSBSSInstances", 'listInstances')
@@ -113,6 +329,23 @@ export function route (app) {
         }
     })
 
+    /**
+     * @swagger
+     * /hana/schemaInstances:
+     *   get:
+     *     tags: [Cloud Services]
+     *     summary: List HANA Cloud Schema service instances
+     *     description: Retrieves a list of all HANA Cloud Schema service instances
+     *     responses:
+     *       200:
+     *         description: List of schema service instances
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
     app.get(['/hana/schemaInstances', '/hana/schemaInstances-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/hanaCloudSchemaInstances", 'listInstances')
@@ -121,6 +354,23 @@ export function route (app) {
         }
     })
 
+    /**
+     * @swagger
+     * /hana/securestore:
+     *   get:
+     *     tags: [Cloud Services]
+     *     summary: List HANA Cloud Secure Store instances
+     *     description: Retrieves a list of all HANA Cloud Secure Store service instances
+     *     responses:
+     *       200:
+     *         description: List of secure store instances
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
     app.get(['/hana/securestore', '/hana/securestore-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/hanaCloudSecureStoreInstances", 'listInstances')
@@ -129,6 +379,23 @@ export function route (app) {
         }
     })
 
+    /**
+     * @swagger
+     * /hana/ups:
+     *   get:
+     *     tags: [Cloud Services]
+     *     summary: List User-Provided Service instances
+     *     description: Retrieves a list of all User-Provided Service (UPS) instances
+     *     responses:
+     *       200:
+     *         description: List of UPS instances
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
     app.get(['/hana/ups', '/hana/ups-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/hanaCloudUPSInstances", 'listInstances')
@@ -137,7 +404,23 @@ export function route (app) {
         }
     })
 
-    
+    /**
+     * @swagger
+     * /hana/indexes:
+     *   get:
+     *     tags: [HANA Objects]
+     *     summary: List database indexes
+     *     description: Retrieves a list of all indexes in the database
+     *     responses:
+     *       200:
+     *         description: List of database indexes
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
     app.get(['/hana/indexes', '/hana/indexes-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/indexes", 'getIndexes')

@@ -9,6 +9,34 @@ import * as fs from 'fs'
 import { marked } from 'marked'
 
 export function route (app) {
+    /**
+     * @swagger
+     * /sap/dfa/help/webassistant/catalogue:
+     *   get:
+     *     tags: [Digital First Adoption]
+     *     summary: Get DFA help catalogue
+     *     description: Returns the Digital First Adoption help catalogue for specified applications
+     *     parameters:
+     *       - in: query
+     *         name: appUrl
+     *         schema:
+     *           type: array
+     *           items:
+     *             type: string
+     *         description: Array of application URLs to get catalogue for
+     *     responses:
+     *       200:
+     *         description: DFA catalogue data
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 status:
+     *                   type: string
+     *                 data:
+     *                   type: array
+     */
     app.get('/sap/dfa/help/webassistant/catalogue', async (req, res, next) => {
         try {
             let input = JSON.parse(getURLQuery(req))
@@ -33,6 +61,36 @@ export function route (app) {
         }
     })
 
+    /**
+     * @swagger
+     * /sap/dfa/help/webassistant/context:
+     *   get:
+     *     tags: [Digital First Adoption]
+     *     summary: Get DFA context help
+     *     description: Returns contextual help information for a specific DFA context ID
+     *     parameters:
+     *       - in: query
+     *         name: id
+     *         required: true
+     *         schema:
+     *           type: string
+     *         description: Context ID to retrieve help for
+     *     responses:
+     *       200:
+     *         description: DFA context data with tiles
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 status:
+     *                   type: string
+     *                 data:
+     *                   type: object
+     *                   properties:
+     *                     tiles:
+     *                       type: array
+     */
     app.get('/sap/dfa/help/webassistant/context', async (req, res, next) => {
         try {
             if (!req.query.id) {
