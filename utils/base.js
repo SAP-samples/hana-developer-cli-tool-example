@@ -120,7 +120,36 @@ export const getTerminal = async () => {
 
 // Import terminal-kit synchronously for backward compatibility with existing code
 import terminalKit from 'terminal-kit'
-export const terminal = terminalKit.terminal
+
+// Wrap terminal access to handle test environments where terminal may not be available
+let _terminal = null
+try {
+	if (process.env.NODE_ENV !== 'test') {
+		_terminal = terminalKit.terminal
+	} else {
+		// Provide stub terminal for test environment
+		_terminal = {
+			table: () => {},
+			progressBar: () => ({
+				startItem: () => {},
+				itemDone: () => {},
+				stop: () => {}
+			})
+		}
+	}
+} catch (error) {
+	console.warn('Failed to initialize terminal-kit:', error.message)
+	// Provide stub terminal
+	_terminal = {
+		table: () => {},
+		progressBar: () => ({
+			startItem: () => {},
+			itemDone: () => {},
+			stop: () => {}
+		})
+	}
+}
+export const terminal = _terminal
 
 export let tableOptions = {
     hasBorder: true,
