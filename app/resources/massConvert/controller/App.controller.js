@@ -1,104 +1,146 @@
-/* eslint-disable no-undef */
-/*eslint-env es6 */
-"use strict";
 sap.ui.define([
     "sap/hanacli/common/controller/BaseController",
     "sap/ui/core/ws/WebSocket",
     "sap/m/MessageToast"
-],
-    function (BaseController, WebSocket, MessageToast) {
+], function (BaseController, WebSocket, MessageToast) {
+    "use strict";
 
-        var connection = new WebSocket("/websockets")
+    const I18N_KEYS = {
+        CONNECTION_OPENED: "connection.opened",
+        CONNECTION_ERROR: "connection.error",
+        CONNECTION_CLOSED: "connection.close",
+        OUTPUT_CDS: "types.cds",
+        OUTPUT_MIGRATION_TABLE: "types.hdbmigrationtable",
+        OUTPUT_TABLE: "types.hdbtable"
+    };
 
+    const FILTERS = ["Schema", "Table", "View"];
+    const WEBSOCKET_URL = "/websockets";
 
-        return BaseController.extend("sap.hanacli.massConvert.controller.App", {
+    return BaseController.extend("sap.hanacli.massConvert.controller.App", {
 
-            onInit: function () {
-                var connOpenedMsg = this.getResourceBundle().getText("connection.opened")
-                var connErrorMsg = this.getResourceBundle().getText("connection.error")
-                var connClosedMsg = this.getResourceBundle().getText("connection.close")
+        onInit: function () {
+            // Initialize WebSocket as instance property
+            this.connection = new WebSocket(WEBSOCKET_URL);
 
-                this.getHanaStatus()
-                this.getPrompts()
-                this.initOutputTypes()
-                let model = this.getModel("promptsModel")
-                this.getView().setModel(model)
+            this.getHanaStatus();
+            this.getPrompts();
+            this.initOutputTypes();
 
-                this.setFilterAsContains("Schema")
-                this.setFilterAsContains("Table")
-                this.setFilterAsContains("View")
+            const model = this.getModel("promptsModel");
+            this.getView().setModel(model);
 
-                // webSocket connection opened 
-                connection.attachOpen(() => {
-                    MessageToast.show(connOpenedMsg)
-                })
+            // Apply filters
+            FILTERS.forEach(filter => {
+                this.setFilterAsContains(filter);
+            });
 
-                // server messages
-                connection.attachMessage(function (oControlEvent) {
-                    let oModel = this.getModel("logModel")
-                    let eventData = oControlEvent.getParameter("data")
-                    let result = oModel.getData()
+            this.setupWebSocketHandlers();
+        },
 
-                    let data = jQuery.parseJSON(eventData)
-                    let msg = data.text,
-                        lastInfo = result.log
-                    var progress = result.progress
+        setupWebSocketHandlers: function () {
+            const resourceBundle = this.getResourceBundle();
+            const connOpenedMsg = resourceBundle.getText(I18N_KEYS.CONNECTION_OPENED);
+            const connErrorMsg = resourceBundle.getText(I18N_KEYS.CONNECTION_ERROR);
+            const connClosedMsg = resourceBundle.getText(I18N_KEYS.CONNECTION_CLOSED);
+
+            // WebSocket connection opened
+            this.connection.attachOpen(() => {
+                MessageToast.show(connOpenedMsg);
+            });
+
+            // Server messages
+            this.connection.attachMessage((oControlEvent) => {
+                try {
+                    const logModel = this.getModel("logModel");
+                    if (!logModel) {
+                        console.error("Log model not found");
+                        return;
+                    }
+
+                    const eventData = oControlEvent.getParameter("data");
+                    const result = logModel.getData();
+
+                    const data = JSON.parse(eventData);
+                    const msg = data.text || "";
+                    const lastInfo = result.log || "";
+                    let progress = result.progress || 0;
+
                     if (data.progress) {
-                        progress = data.progress
+                        progress = data.progress;
                     }
 
+                    const newLog = lastInfo
+                        ? `${msg}\r\n${lastInfo}`
+                        : msg;
 
-                    if (lastInfo.length > 0) {
-                        lastInfo += "\r\n"
-                    }
-                    oModel.setData({
-                        log: msg + "\r\n" + lastInfo,
+                    logModel.setData({
+                        log: newLog,
                         progress: progress
-                    }, true)
-                }, this)
+                    }, true);
+                } catch (error) {
+                    console.error("Error processing WebSocket message:", error);
+                }
+            }, this);
 
-                // error handling
-                connection.attachError(() => {
-                    MessageToast.show(connErrorMsg)
-                })
-                // onConnectionClose
-                connection.attachClose(() => {
-                    MessageToast.show(connClosedMsg)
-                })
+            // Error handling
+            this.connection.attachError(() => {
+                MessageToast.show(connErrorMsg);
+            });
 
-            },
+            // Connection close
+            this.connection.attachClose(() => {
+                MessageToast.show(connClosedMsg);
+            });
+        },
 
-            onBeginConvert: function () {
+        onBeginConvert: function () {
+            this.refreshConnection().then(() => {
+                const logModel = this.getOwnerComponent().getModel("logModel");
+                if (!logModel) {
+                    console.error("Log model not found");
+                    return;
+                }
 
-                this.refreshConnection().then(() => {
-                    let oModel = this.getOwnerComponent().getModel("logModel")
-                    oModel.setData({
-                        log: "",
-                        progress: 0
-                    }, true)
-                    connection.send(JSON.stringify({
-                        action: "massConvert"
-                    }))
-                })
-            },
+                logModel.setData({
+                    log: "",
+                    progress: 0
+                }, true);
 
-            initOutputTypes: function () {
-                let oOutput = this.getModel("outputModel")
-                oOutput.setData({
-                    outputTypes: [{
-                        text: this.getResourceBundle().getText("types.cds"),//"CAP Core Data Services (.cds)",
-                        key: "cds"
-                    }, {
-                        text: this.getResourceBundle().getText("types.hdbmigrationtable"), //"Migration Tables (.hdbmigrationtable)",
-                        key: "hdbmigrationtable"
-                    }, {
-                        text: this.getResourceBundle().getText("types.hdbtable"), //"Tables (.hdbtable)",
-                        key: "hdbtable"
-                    }]
-                })
+                this.connection.send(JSON.stringify({
+                    action: "massConvert"
+                }));
+            }).catch((error) => {
+                console.error("Failed to refresh connection:", error);
+                MessageToast.show("Failed to establish connection");
+            });
+        },
+
+        initOutputTypes: function () {
+            const outputModel = this.getModel("outputModel");
+            if (!outputModel) {
+                console.error("Output model not found");
+                return;
             }
 
+            const resourceBundle = this.getResourceBundle();
 
-        })
-    }
-)
+            outputModel.setData({
+                outputTypes: [
+                    {
+                        text: resourceBundle.getText(I18N_KEYS.OUTPUT_CDS),
+                        key: "cds"
+                    },
+                    {
+                        text: resourceBundle.getText(I18N_KEYS.OUTPUT_MIGRATION_TABLE),
+                        key: "hdbmigrationtable"
+                    },
+                    {
+                        text: resourceBundle.getText(I18N_KEYS.OUTPUT_TABLE),
+                        key: "hdbtable"
+                    }
+                ]
+            });
+        }
+    });
+});
