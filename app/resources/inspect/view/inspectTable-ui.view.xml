@@ -6,23 +6,23 @@
 	xmlns:table="sap.ui.table"
 	xmlns:ce="sap.ui.codeeditor"
 	xmlns="sap.m">
-	<ScrollContainer height="100%" width="100%" vertical="true" focusable="true">
-		<f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+	<ScrollContainer id="scrollContainerInspectTable" height="100%" width="100%" vertical="true" focusable="true">
+		<f:SimpleForm id="SimpleFormToolbarInspectTable" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
 			<f:toolbar>
 				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.toolbar" type="XML"/>
 			</f:toolbar>
 			<f:content>
 
-				<Toolbar ariaLabelledBy="Title2">
-					<Title id="Title2" text="{i18nReuse>gui.target}"/>
-					<ToolbarSpacer />
-					<Button icon="sap-icon://settings" tooltip="{i18nReuse>gui.targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
+				<Toolbar id="targetToolbarInspectTable" ariaLabelledBy="Title2InspectTable">
+					<Title id="Title2InspectTable" text="{i18nReuse>gui.target}"/>
+					<ToolbarSpacer id="spacerInspectTable" />
+					<Button id="settingsButtonInspectTable" icon="sap-icon://settings" tooltip="{i18nReuse>gui.targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
 				</Toolbar>
 
 				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.schema" type="XML"/>
 
-				<Label text="{i18nReuse>table}" required="true"/>
-				<Input id="Table" value="{/table}" showSuggestion="true" suggest="loadTableFilter">
+				<Label id="labelTableInspectTable" text="{i18nReuse>table}" required="true"/>
+				<Input id="TableInspectTable" value="{/table}" showSuggestion="true" suggest="loadTableFilter">
 				</Input>
 
 				<core:Fragment fragmentName="sap.hanacli.common.view.Connection" type="XML"/>
@@ -31,66 +31,66 @@
 			</f:content>
 		</f:SimpleForm>
 
-		<IconTabBar id="idIconTabBarNoIcons" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
+		<IconTabBar id="idIconTabBarNoIconsInspectTable" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
 			<items>
-				<IconTabFilter text="Basic Info" key="info">
-					<f:SimpleForm id="infoForm" editable="false" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+				<IconTabFilter id="iconTabFilterBasicInfoInspectTable" text="Basic Info" key="info">
+					<f:SimpleForm id="infoFormInspectTable" editable="false" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
 						<f:content>
-							<Label text="{i18nReuse>scheam}" />
-							<Input value="{resultsModel>/rows/basic/SCHEMA_NAME}" editable="false" />
+							<Label id="labelSchemaInspectTable" text="{i18nReuse>scheam}" />
+							<Input id="inputSchemaInspectTable" value="{resultsModel>/rows/basic/SCHEMA_NAME}" editable="false" />
 
-							<Label text="{i18nReuse>table}" />
-							<Input value="{resultsModel>/rows/basic/TABLE_NAME}" editable="false" />
+							<Label id="labelTableBasicInfoInspectTable" text="{i18nReuse>table}" />
+							<Input id="inputTableInspectTable" value="{resultsModel>/rows/basic/TABLE_NAME}" editable="false" />
 
-							<Label text="{i18nReuse>gui.tableType}" />
-							<Input value="{resultsModel>/rows/basic/TABLE_TYPE}" editable="false" />
+							<Label id="labelTableTypeInspectTable" text="{i18nReuse>gui.tableType}" />
+							<Input id="inputTableTypeInspectTable" value="{resultsModel>/rows/basic/TABLE_TYPE}" editable="false" />
 
-							<Label text="{i18nReuse>gui.tableOID}" />
-							<Input value="{resultsModel>/rows/basic/TABLE_OID}" editable="false" />
+							<Label id="labelTableOIDInspectTable" text="{i18nReuse>gui.tableOID}" />
+							<Input id="inputTableOIDInspectTable" value="{resultsModel>/rows/basic/TABLE_OID}" editable="false" />
 
-							<Label text="{i18nReuse>gui.hasPrimaryKey}" />
-							<Input value="{resultsModel>/rows/basic/HAS_PRIMARY_KEY}" editable="false" />
+							<Label id="labelHasPrimaryKeyInspectTable" text="{i18nReuse>gui.hasPrimaryKey}" />
+							<Input id="inputHasPrimaryKeyInspectTable" value="{resultsModel>/rows/basic/HAS_PRIMARY_KEY}" editable="false" />
 
-							<Label text="{i18nReuse>gui.isPreload}" />
-							<Input value="{resultsModel>/rows/basic/IS_PRELOAD}" editable="false" />
+							<Label id="labelIsPreloadInspectTable" text="{i18nReuse>gui.isPreload}" />
+							<Input id="inputIsPreloadInspectTable" value="{resultsModel>/rows/basic/IS_PRELOAD}" editable="false" />
 
-							<Label text="{i18nReuse>gui.unloadPriority}" />
-							<Input value="{resultsModel>/rows/basic/UNLOAD_PRIORITY}" editable="false" />
+							<Label id="labelUnloadPriorityInspectTable" text="{i18nReuse>gui.unloadPriority}" />
+							<Input id="inputUnloadPriorityInspectTable" value="{resultsModel>/rows/basic/UNLOAD_PRIORITY}" editable="false" />
 
-							<Label text="{i18nReuse>gui.created}" />
-							<Input value="{resultsModel>/rows/basic/CREATE_TIME}" editable="false" />
+							<Label id="labelCreatedInspectTable" text="{i18nReuse>gui.created}" />
+							<Input id="inputCreatedInspectTable" value="{resultsModel>/rows/basic/CREATE_TIME}" editable="false" />
 
 
 						</f:content>
 					</f:SimpleForm>
 
 				</IconTabFilter>
-				<IconTabFilter text="{i18nReuse>gui.fields}" key="fields">
-					<table:Table id="fieldsTable" selectionMode="MultiToggle" visibleRowCount="10" enableSelectAll="false" rows="{resultsModel>/rows/fields}" threshold="15" enableBusyIndicator="true">
+				<IconTabFilter id="iconTabFilterFieldsInspectTable" text="{i18nReuse>gui.fields}" key="fields">
+					<table:Table id="fieldsTableInspectTable" selectionMode="MultiToggle" visibleRowCount="10" enableSelectAll="false" rows="{resultsModel>/rows/fields}" threshold="15" enableBusyIndicator="true">
 						<table:noData>
-							<BusyIndicator class="sapUiMediumMargin"/>
+							<BusyIndicator id="busyIndicatorFieldsInspectTable" class="sapUiMediumMargin"/>
 						</table:noData>
 					</table:Table>
 				</IconTabFilter>
 
-				<IconTabFilter text="{i18nReuse>gui.constraints}" key="constraints">
-					<table:Table id="constraintsTable" selectionMode="MultiToggle" visibleRowCount="10" enableSelectAll="false" rows="{resultsModel>/rows/constraints}" threshold="15" enableBusyIndicator="true">
+				<IconTabFilter id="iconTabFilterConstraintsInspectTable" text="{i18nReuse>gui.constraints}" key="constraints">
+					<table:Table id="constraintsTableInspectTable" selectionMode="MultiToggle" visibleRowCount="10" enableSelectAll="false" rows="{resultsModel>/rows/constraints}" threshold="15" enableBusyIndicator="true">
 						<table:noData>
-							<BusyIndicator class="sapUiMediumMargin"/>
+							<BusyIndicator id="busyIndicatorConstraintsInspectTable" class="sapUiMediumMargin"/>
 						</table:noData>
 					</table:Table>
 				</IconTabFilter>
 
-				<IconTabFilter text="{i18nReuse>gui.sql}" key="sql">
-					<ce:CodeEditor id="aCodeEditorSQL" type="sql" value="{resultsModel>/rows/sql}" editable="false" height="auto" maxLines="25" />
+				<IconTabFilter id="iconTabFilterSQLInspectTable" text="{i18nReuse>gui.sql}" key="sql">
+					<ce:CodeEditor id="aCodeEditorSQLInspectTable" type="sql" value="{resultsModel>/rows/sql}" editable="false" height="auto" maxLines="25" />
 				</IconTabFilter>
 
-				<IconTabFilter text="{i18nReuse>gui.cds}" key="cds">
-					<ce:CodeEditor id="aCodeEditorCDS" type="javascript" value="{resultsModel>/rows/cds}" syntaxHints="false" editable="false" height="auto" maxLines="25" />
+				<IconTabFilter id="iconTabFilterCDSInspectTable" text="{i18nReuse>gui.cds}" key="cds">
+					<ce:CodeEditor id="aCodeEditorCDSInspectTable" type="javascript" value="{resultsModel>/rows/cds}" syntaxHints="false" editable="false" height="auto" maxLines="25" />
 				</IconTabFilter>
 
-				<IconTabFilter text="{i18nReuse>gui.hdbtable}" key="hdbtable">
-					<ce:CodeEditor id="aCodeEditorHDBTable" type="sql" value="{resultsModel>/rows/hdbtable}" editable="false" height="auto" maxLines="25" />
+				<IconTabFilter id="iconTabFilterHDBTableInspectTable" text="{i18nReuse>gui.hdbtable}" key="hdbtable">
+					<ce:CodeEditor id="aCodeEditorHDBTableInspectTable" type="sql" value="{resultsModel>/rows/hdbtable}" editable="false" height="auto" maxLines="25" />
 
 				</IconTabFilter>
 			</items>

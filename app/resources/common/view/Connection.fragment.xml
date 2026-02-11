@@ -4,14 +4,14 @@
     xmlns:core="sap.ui.core">
 
 
-    <Toolbar ariaLabelledBy="Title3">
+    <Toolbar id="toolbarConnection" ariaLabelledBy="Title3">
         <Title id="Title3" text="{i18nReuse>gui.conn}"/>
         <Button id="connRefresh" icon="sap-icon://refresh" tooltip="{i18nReuse>gui.refreshConn}" press="refreshConnection" />
-        <ToolbarSpacer />
+        <ToolbarSpacer id="spacerConnection" />
     </Toolbar>
-    <Label text="{i18nReuse>gui.admin}" tooltip="{i18nReuse>admin}"/>
+    <Label id="labelAdmin" text="{i18nReuse>gui.admin}" tooltip="{i18nReuse>admin}"/>
     <CheckBox id="chkAdmin" selected="{/admin}" tooltip="{i18nReuse>admin}" select="refreshConnection"/>
-    <Label text="{i18nReuse>gui.connFile}" tooltip="{i18nReuse>connFile}" />
+    <Label id="labelConnFile" text="{i18nReuse>gui.connFile}" tooltip="{i18nReuse>connFile}" />
     <Input id="inputConnFile" value="{/conn}" tooltip="{i18nReuse>connFile}"/>
 
 </core:FragmentDefinition>    

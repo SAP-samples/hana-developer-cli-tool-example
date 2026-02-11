@@ -6,34 +6,34 @@
     xmlns:table="sap.ui.table"
     xmlns:ce="sap.ui.codeeditor"
     xmlns="sap.m">
-    <ScrollContainer height="100%" width="100%" vertical="true" focusable="true">
-        <f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+    <ScrollContainer id="scrollContainerQuerySimple" height="100%" width="100%" vertical="true" focusable="true">
+        <f:SimpleForm id="SimpleFormToolbarQuerySimple" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
             <f:toolbar>
                 <core:Fragment fragmentName="sap.hanacli.tables.view.reuse.toolbar" type="XML"/>
             </f:toolbar>
             <f:content>
 
-                <Toolbar ariaLabelledBy="Title2">
-                    <Title id="Title2" text="{i18nReuse>gui.target}"/>
-                    <ToolbarSpacer />
-                    <Button icon="sap-icon://settings" tooltip="{i18nReuse>gui.targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
+                <Toolbar id="targetToolbarQuerySimple" ariaLabelledBy="Title2QuerySimple">
+                    <Title id="Title2QuerySimple" text="{i18nReuse>gui.target}"/>
+                    <ToolbarSpacer id="spacerQuerySimple" />
+                    <Button id="settingsButtonQuerySimple" icon="sap-icon://settings" tooltip="{i18nReuse>gui.targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
                 </Toolbar>
-                <Label text="{i18n>folder}" required="true"/>
-                <Input id="Folder" value="{/folder}">
+                <Label id="labelFolderQuerySimple" text="{i18n>folder}" required="true"/>
+                <Input id="FolderQuerySimple" value="{/folder}">
                 </Input>
-                <Label text="{i18nReuse>filename}" required="false"/>
-                <Input id="Filename" value="{/filename}">
+                <Label id="labelFilenameQuerySimple" text="{i18nReuse>filename}" required="false"/>
+                <Input id="FilenameQuerySimple" value="{/filename}">
                 </Input>
-                <Label text="{i18n>outputType}" required="true"/>
-                <ComboBox id="outputFormat" selectedKey="{/output}" items="{outputModel>/outputTypes}">
-                    <core:Item key="{outputModel>key}" text="{outputModel>text}" />
+                <Label id="labelOutputTypeQuerySimple" text="{i18n>outputType}" required="true"/>
+                <ComboBox id="outputFormatQuerySimple" selectedKey="{/output}" items="{outputModel>/outputTypes}">
+                    <core:Item id="outputFormatQuerySimpleItem" key="{outputModel>key}" text="{outputModel>text}" />
                 </ComboBox>
 
                 <core:Fragment fragmentName="sap.hanacli.common.view.Connection" type="XML"/>
                 <core:Fragment fragmentName="sap.hanacli.common.view.Debug" type="XML"/>
 
 
-                <Toolbar ariaLabelledBy="TitleEditor">
+                <Toolbar id="toolbarQuerySimple" ariaLabelledBy="TitleEditor">
                     <Title id="TitleEditor" text="{i18nReuse>query}"/>
                 </Toolbar>
                 <ce:CodeEditor id="aCodeEditorSQL" type="sql" value="{/query}" editable="true" height="auto" maxLines="5" />

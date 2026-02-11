@@ -4,14 +4,14 @@
 
     <table:Table id="table" selectionMode="MultiToggle" visibleRowCount="10" enableSelectAll="false" rows="{resultsModel>/rows}" threshold="15" enableBusyIndicator="true" ariaLabelledBy="TableTitle">
         <table:extension>
-            <OverflowToolbar style="Clear">
+            <OverflowToolbar id="toolbar" style="Clear">
                 <Title id="TableTitle" text="{i18nReuse>gui.cmdResults}"/>
-                <ToolbarSpacer/>
-                <Button icon="sap-icon://excel-attachment" tooltip="{i18nReuse>gui.DownloadExcel}" press="downloadExcel" />
+                <ToolbarSpacer id="spacer"/>
+                <Button id="downloadExcelButton" icon="sap-icon://excel-attachment" tooltip="{i18nReuse>gui.DownloadExcel}" press="downloadExcel" />
             </OverflowToolbar>
         </table:extension>
         <table:noData>
-            <BusyIndicator class="sapUiMediumMargin"/>
+            <BusyIndicator id="busyIndicator" class="sapUiMediumMargin"/>
         </table:noData>
     </table:Table>
 
