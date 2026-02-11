@@ -15,12 +15,16 @@ sap.ui.define([
             this.setFilterAsContains("TableInspectTable");
 
             const configModel = this.getModel("config");
-            const tableParam = configModel?.getProperty("/tbl");
+            const tableParam = configModel.getProperty("/tbl");
 
             if (tableParam) {
                 const promptsModel = this.getModel("promptsModel");
-                promptsModel?.setProperty("/table", tableParam);
-                this.executeCmd();
+                promptsModel.setProperty("/table", tableParam);
+                
+                // Wait for updatePrompts to complete before executing command
+                this.updatePrompts().then(() => {
+                    this.executeCmd();
+                });
             }
         },
 
@@ -46,9 +50,7 @@ sap.ui.define([
         executeCmd: function () {
             this.startBusy();
             
-            this.updatePrompts();
-            
-            const cmd = this.getModel("config")?.getProperty("/cmd");
+            const cmd = this.getModel("config").getProperty("/cmd");
             if (!cmd) {
                 this.onErrorCall(new Error("Command not configured"), this);
                 this.endBusy();

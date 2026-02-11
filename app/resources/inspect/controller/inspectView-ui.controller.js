@@ -15,12 +15,16 @@ sap.ui.define([
             this.setFilterAsContains("ViewInspectView");
 
             const configModel = this.getModel("config");
-            const viewInput = configModel?.getProperty("/viewInput");
+            const viewInput = configModel.getProperty("/viewInput");
 
             if (viewInput) {
                 const promptsModel = this.getModel("promptsModel");
-                promptsModel?.setProperty("/view", viewInput);
-                this.executeCmd();
+                promptsModel.setProperty("/view", viewInput);
+                
+                // Wait for updatePrompts to complete before executing command
+                this.updatePrompts().then(() => {
+                    this.executeCmd();
+                });
             }
         },
 
@@ -46,9 +50,7 @@ sap.ui.define([
         executeCmd: function () {
             this.startBusy();
 
-            this.updatePrompts();
-
-            const cmd = this.getModel("config")?.getProperty("/cmd");
+            const cmd = this.getModel("config").getProperty("/cmd");
             if (!cmd) {
                 this.onErrorCall(new Error("Command not configured"), this);
                 this.endBusy();
