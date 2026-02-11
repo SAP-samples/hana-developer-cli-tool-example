@@ -145,7 +145,7 @@ export async function getConnOptions(prompts) {
         //No Admin option or no default-env-admin.json file found - try for .env 
         if (!cdsrcPrivate) {
             let dotEnvFile = getEnv()
-            dotenv.config({ path: dotEnvFile })
+            dotenv.config({ path: dotEnvFile, quiet: true })
         } else {
             try {
                 const data = fs.readFileSync(cdsrcPrivate,

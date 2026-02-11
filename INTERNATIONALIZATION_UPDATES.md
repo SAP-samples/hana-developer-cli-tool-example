@@ -29,6 +29,15 @@ Added 14 new error-related translation keys:
 
 Added German translations for all 14 new error-related keys above.
 
+### 3. UI Bundle Files (English and German)
+
+Centralized UI5 application bundles were added under `_i18n` and served via `/i18n`:
+
+- `systemInfo.properties` and `systemInfo_de.properties`
+- `tables.properties` and `tables_de.properties`
+- `inspect.properties` and `inspect_de.properties`
+- `massConvert.properties` and `massConvert_de.properties`
+
 ## Code Files Updated
 
 ### 1. `app/resources/common/controller/handler.js`

@@ -98,7 +98,8 @@ This UI5 application provides detailed inspection capabilities for database obje
 - `index.html` - Standalone app entry point
 - `/controller` - Controller logic for inspection views
 - `/view` - XML views for inspection interfaces
-- `/i18n` - Internationalization resource bundles
+- `/i18n/inspect.properties` - Localized text strings
+- `/i18n/inspect_de.properties` - German translations
 
 **Routes:**
 
@@ -138,7 +139,8 @@ This application enables mass conversion of database tables to different formats
 - `index.html` - Standalone entry point
 - `/controller` - Conversion logic and UI controllers
 - `/view` - UI layouts and forms
-- `/i18n/i18n.properties` - Localized text strings
+- `/i18n/massConvert.properties` - Localized text strings
+- `/i18n/massConvert_de.properties` - German translations
 
 **Routes:**
 
@@ -168,7 +170,8 @@ Provides comprehensive system information about the connected HANA database:
 - `index.html` - Entry point
 - `/controller` - System info display logic
 - `/view` - System information views
-- `/i18n/i18n.properties` - Text resources
+- `/i18n/systemInfo.properties` - Text resources
+- `/i18n/systemInfo_de.properties` - German translations
 
 **Routes:**
 
@@ -204,7 +207,8 @@ The primary application for browsing and listing all types of database objects:
 - `index.html` - Entry point
 - `/controller` - List display controllers
 - `/view` - Table and list views
-- `/i18n/i18n.properties` - Translations
+- `/i18n/tables.properties` - Translations
+- `/i18n/tables_de.properties` - German translations
 
 **Routes:**
 
@@ -222,6 +226,10 @@ The primary application for browsing and listing all types of database objects:
 - `#schemaInstances-ui` - List Schema service instances
 - `#securestore-ui` - List SecureStore service instances
 - `#ups-ui` - List user-provided service instances
+
+### `/i18n`
+
+Internationalization resource bundles served from `/_i18n`.
 
 ### `/appconfig`
 
