@@ -7,10 +7,12 @@ A comprehensive Swagger/OpenAPI 3.0 documentation system has been successfully i
 ## 📋 What Was Implemented
 
 ### 1. Dependencies
+
 - ✅ **swagger-jsdoc** (v6.2.8) - Already in package.json
 - ✅ **swagger-ui-express** (v5.0.0) - Already in package.json
 
 ### 2. Core Swagger Route
+
 - ✅ Created **routes/swagger.js** with:
   - OpenAPI 3.0 specification configuration
   - Auto-generation from JSDoc comments
@@ -23,10 +25,12 @@ A comprehensive Swagger/OpenAPI 3.0 documentation system has been successfully i
 ### 3. JSDoc Annotations Added to All Routes
 
 #### routes/index.js
+
 - ✅ `GET /` - Get configuration
 - ✅ `PUT /` - Update configuration
 
 #### routes/hanaList.js (13 endpoints)
+
 - ✅ `GET /hana` - System information
 - ✅ `GET /hana/tables` - List tables
 - ✅ `GET /hana/views` - List views
@@ -44,29 +48,36 @@ A comprehensive Swagger/OpenAPI 3.0 documentation system has been successfully i
 - ✅ `GET /hana/indexes` - List indexes
 
 #### routes/hanaInspect.js (3 endpoints)
+
 - ✅ `GET /hana/inspectTable` - Inspect table (SQL, CDS, hdbtable formats)
 - ✅ `GET /hana/inspectView` - Inspect view
 - ✅ `GET /hana/querySimple` - Execute SQL query
 
 #### routes/docs.js (2 endpoints)
+
 - ✅ `GET /docs/readme` - README as HTML
 - ✅ `GET /docs/changelog` - CHANGELOG as HTML
 
 #### routes/excel.js (1 endpoint)
+
 - ✅ `GET /excel` - Export to Excel
 
 #### routes/dfa.js (2 endpoints)
+
 - ✅ `GET /sap/dfa/help/webassistant/catalogue` - DFA catalogue
 - ✅ `GET /sap/dfa/help/webassistant/context` - DFA context help
 
 #### routes/static.js (1 documented endpoint)
+
 - ✅ `GET /appconfig/fioriSandboxConfig.json` - Fiori sandbox config
 - ✅ Static file routes documented (not in Swagger)
 
 #### routes/webSocket.js (1 endpoint)
+
 - ✅ `GET /websockets` - WebSocket info
 
 ### 4. Documentation
+
 - ✅ Created **docs/SWAGGER.md** - Comprehensive documentation
 - ✅ Created **test-swagger.js** - Quick test helper script
 - ✅ Created **tests/routes/swagger.Test.js** - Automated tests
@@ -74,6 +85,7 @@ A comprehensive Swagger/OpenAPI 3.0 documentation system has been successfully i
 ## 🎯 Total API Endpoints Documented
 
 **27 REST API endpoints** fully documented with:
+
 - Endpoint paths
 - HTTP methods
 - Request parameters
@@ -85,6 +97,7 @@ A comprehensive Swagger/OpenAPI 3.0 documentation system has been successfully i
 ## 🚀 How to Use
 
 ### Start the Server
+
 ```bash
 node bin/cli.js ui
 # or
@@ -92,12 +105,15 @@ hana-cli ui
 ```
 
 ### Access Swagger UI
-Open browser to: **http://localhost:3010/api-docs**
+
+Open browser to: **<http://localhost:3010/api-docs>**
 
 ### Get OpenAPI Spec
-Access: **http://localhost:3010/api-docs.json**
+
+Access: **<http://localhost:3010/api-docs.json>**
 
 ### Test Info
+
 ```bash
 node test-swagger.js
 ```
@@ -140,12 +156,14 @@ node test-swagger.js
 ## 📁 Files Modified/Created
 
 ### Created
+
 - ✅ routes/swagger.js (239 lines)
 - ✅ docs/SWAGGER.md (comprehensive guide)
 - ✅ test-swagger.js (test helper)
 - ✅ tests/routes/swagger.Test.js (automated tests)
 
 ### Modified
+
 - ✅ routes/index.js (added JSDoc annotations)
 - ✅ routes/hanaList.js (added JSDoc annotations)
 - ✅ routes/hanaInspect.js (added JSDoc annotations)

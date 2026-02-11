@@ -6,6 +6,7 @@
 	xmlns="sap.m">
 	
 	<ScrollContainer
+		id="scrollContainer"
 		height="100%"
 		width="100%"
 		vertical="true"
@@ -14,76 +15,76 @@
 		<f:toolbar>
 			<Toolbar id="TB1">
 				<Title id="Title1" text="{i18n>appTitle}"/>
-				<ToolbarSpacer />
+				<ToolbarSpacer id="spacer1" />
 			</Toolbar>
 		</f:toolbar>
 		<f:content>
 
-			<Toolbar ariaLabelledBy="Title2">
+			<Toolbar id="TB2" ariaLabelledBy="Title2">
 				<Title id="Title2" text="{i18n>currentSession}"/>
-				<ToolbarSpacer />
+				<ToolbarSpacer id="spacer2" />
 			</Toolbar>
 
-			<Label text="{i18nReuse>user}" />
-			<Input value="{/user/0/CURRENT_USER}" />
-			<Label text="{i18nReuse>scheam}" />
-			<Input value="{/user/0/CURRENT_SCHEMA}">
+			<Label id="labelUser" text="{i18nReuse>user}" />
+			<Input id="inputCurrentUser" value="{/user/0/CURRENT_USER}" />
+			<Label id="labelSchema" text="{i18nReuse>scheam}" />
+			<Input id="inputCurrentSchema" value="{/user/0/CURRENT_SCHEMA}">
 			</Input>
 
 
 
 			<Toolbar id="TB3">
 				<Title id="Title3" text="{i18n>versionInfo}"/>
-				<ToolbarSpacer />
+				<ToolbarSpacer id="spacer3" />
 			</Toolbar>
 
 
-			<Label text="{i18n>system} / {i18n>databaseName}" />
-			<Input value="{/version/SYSTEM_ID}">
+			<Label id="labelSystemDb" text="{i18n>system} / {i18n>databaseName}" />
+			<Input id="inputSystemId" value="{/version/SYSTEM_ID}">
 				<layoutData>
-					<l:GridData span="XL2 L1 M3 S4" />
+					<l:GridData id="gridDataSystemId" span="XL2 L1 M3 S4" />
 				</layoutData>
 			</Input>
-			<Input value="{/version/DATABASE_NAME}">
+			<Input id="inputDatabaseName" value="{/version/DATABASE_NAME}">
 			</Input>
 
-			<Label text="{i18nReuse>host}" />
-			<Input value="{/version/HOST}" />
+			<Label id="labelHost" text="{i18nReuse>host}" />
+			<Input id="inputHost" value="{/version/HOST}" />
 
-			<Label text="{i18n>startTime}" />
-			<Input value="{/version/START_TIME}" />
+			<Label id="labelStartTime" text="{i18n>startTime}" />
+			<Input id="inputStartTime" value="{/version/START_TIME}" />
 
-			<Label text="{i18nReuse>version}" />
-			<Input value="{/version/VERSION}" />
+			<Label id="labelVersion" text="{i18nReuse>version}" />
+			<Input id="inputVersion" value="{/version/VERSION}" />
 
 		</f:content>
 	</f:SimpleForm>
 
 		<Table id="overviewTable" items="{/overview}">
 			<headerToolbar>
-				<OverflowToolbar>
-					<Title text="{i18n>systemOverview}" level="H2"/>
-					<ToolbarSpacer/>
+				<OverflowToolbar id="overviewToolbar">
+					<Title id="titleSystemOverview" text="{i18n>systemOverview}" level="H2"/>
+					<ToolbarSpacer id="spacer4"/>
 				</OverflowToolbar>
 			</headerToolbar>
 			<columns>
 				<Column id="SECTION" width="12em">
-					<Text text="{i18nReuse>section}" />
+					<Text id="textHeaderSection" text="{i18nReuse>section}" />
 				</Column>
 				<Column id="Value" minScreenWidth="Tablet" demandPopin="true">
-					<Text text="{i18n>name}" />
+					<Text id="textHeaderName" text="{i18n>name}" />
 				</Column>
 				<Column id="STATUS" minScreenWidth="Tablet" demandPopin="true">
-					<Text text="{i18n>status}" />
+					<Text id="textHeaderStatus" text="{i18n>status}" />
 				</Column>
 
 			</columns>
 			<items>
-				<ColumnListItem>
+				<ColumnListItem id="overviewListItem">
 					<cells>
-						<Text text="{SECTION}" />
-						<ObjectIdentifier title="{NAME}" text="{VALUE}" class="sapUiTinyMarginTopBottom" />
-						<Text text="{STATUS}" />
+						<Text id="textSection" text="{SECTION}" />
+						<ObjectIdentifier id="objIdentifier" title="{NAME}" text="{VALUE}" class="sapUiTinyMarginTopBottom" />
+						<Text id="textStatus" text="{STATUS}" />
 					</cells>
 				</ColumnListItem>
 			</items>

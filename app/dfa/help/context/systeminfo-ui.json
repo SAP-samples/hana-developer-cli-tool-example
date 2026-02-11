@@ -1,0 +1,163 @@
+{
+    "id": "systeminfo-ui",
+    "appUrl": "systeminfo-ui",
+    "product": "HANA_CLI",
+    "version": "Cloud",
+    "locale": "en-US",
+    "state": "PRODUCTION",
+    "system": "",
+    "environment": "",
+    "loio": "",
+    "contextType": "HELP",
+    "title": "Display HANA Database System Information",
+    "shortDescription": "",
+    "alias": "",
+    "editable": "true",
+    "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+    "tiles": [
+        {
+            "id": "1",
+            "loio": "",
+            "title": "About This Screen",
+            "summaryText": "General information related to this screen.",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": null,
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"unknown\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"CIRCLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 1,
+            "pageUrl": null
+        },
+        {
+            "id": "currentUser",
+            "loio": "",
+            "title": "Current User",
+            "summaryText": "Current Database User Connected",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1zeXN0ZW1pbmZvLXVpLWNvbXBvbmVudC0tLUFwcC0taW5wdXRDdXJyZW50VXNlciclNUQlMjIlMkMlMjJydWxlJTIyJTNBJTIySWRTZWxlY3RvclVJNSUyMiUyQyUyMm9mZnNldCUyMiUzQSU3QiUyMnglMjIlM0EwLjUlMkMlMjJ5JTIyJTNBMC4yODEyJTdEJTdE",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 2,
+            "pageUrl": null
+        },
+        {
+            "id": "currentSchema",
+            "loio": "",
+            "title": "Current Schema",
+            "summaryText": "Current Database Schema Context",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1zeXN0ZW1pbmZvLXVpLWNvbXBvbmVudC0tLUFwcC0taW5wdXRDdXJyZW50U2NoZW1hJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 3,
+            "pageUrl": null
+        },
+        {
+            "id": "systemId",
+            "loio": "",
+            "title": "System ID",
+            "summaryText": "SAP HANA System Identifier",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1zeXN0ZW1pbmZvLXVpLWNvbXBvbmVudC0tLUFwcC0taW5wdXRTeXN0ZW1JZCclNUQlMjIlMkMlMjJydWxlJTIyJTNBJTIySWRTZWxlY3RvclVJNSUyMiUyQyUyMm9mZnNldCUyMiUzQSU3QiUyMnglMjIlM0EwLjUlMkMlMjJ5JTIyJTNBMC4yODEyJTdEJTdE",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 4,
+            "pageUrl": null
+        },
+        {
+            "id": "databaseName",
+            "loio": "",
+            "title": "Database Name",
+            "summaryText": "SAP HANA Database Name",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1zeXN0ZW1pbmZvLXVpLWNvbXBvbmVudC0tLUFwcC0taW5wdXREYXRhYmFzZU5hbWUnJTVEJTIyJTJDJTIycnVsZSUyMiUzQSUyMklkU2VsZWN0b3JVSTUlMjIlMkMlMjJvZmZzZXQlMjIlM0ElN0IlMjJ4JTIyJTNBMC41JTJDJTIyeSUyMiUzQTAuMjgxMiU3RCU3RA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 5,
+            "pageUrl": null
+        },
+        {
+            "id": "host",
+            "loio": "",
+            "title": "Host",
+            "summaryText": "Database Server Host Name",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1zeXN0ZW1pbmZvLXVpLWNvbXBvbmVudC0tLUFwcC0taW5wdXRIb3N0JyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 6,
+            "pageUrl": null
+        },
+        {
+            "id": "startTime",
+            "loio": "",
+            "title": "Start Time",
+            "summaryText": "Database Server Start Time",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1zeXN0ZW1pbmZvLXVpLWNvbXBvbmVudC0tLUFwcC0taW5wdXRTdGFydFRpbWUnJTVEJTIyJTJDJTIycnVsZSUyMiUzQSUyMklkU2VsZWN0b3JVSTUlMjIlMkMlMjJvZmZzZXQlMjIlM0ElN0IlMjJ4JTIyJTNBMC41JTJDJTIyeSUyMiUzQTAuMjgxMiU3RCU3RA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 7,
+            "pageUrl": null
+        },
+        {
+            "id": "version",
+            "loio": "",
+            "title": "Version",
+            "summaryText": "SAP HANA Database Version",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1zeXN0ZW1pbmZvLXVpLWNvbXBvbmVudC0tLUFwcC0taW5wdXRWZXJzaW9uJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 8,
+            "pageUrl": null
+        },
+        {
+            "id": "overviewTable",
+            "loio": "",
+            "title": "System Overview",
+            "summaryText": "Detailed System Configuration Overview",
+            "content": "",
+            "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1zeXN0ZW1pbmZvLXVpLWNvbXBvbmVudC0tLUFwcC0tb3ZlcnZpZXdUYWJsZSclNUQlMjIlMkMlMjJydWxlJTIyJTNBJTIySWRTZWxlY3RvclVJNSUyMiUyQyUyMm9mZnNldCUyMiUzQSU3QiUyMnglMjIlM0EwLjUlMkMlMjJ5JTIyJTNBMC4yODEyJTdEJTdE",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 9,
+            "pageUrl": null
+        }
+    ]
+}

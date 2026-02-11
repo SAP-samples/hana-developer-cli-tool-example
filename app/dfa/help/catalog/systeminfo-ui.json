@@ -1,0 +1,19 @@
+{
+    "id": "systeminfo-ui",
+    "appUrl": "systeminfo-ui",
+    "product": "HANA_CLI",
+    "version": "Cloud",
+    "locale": "en-US",
+    "language": "en-US",
+    "state": "PRODUCTION",
+    "system": "",
+    "environment": "",
+    "loio": "",
+    "contextType": "HELP",
+    "_standalone": true,
+    "title": "Display HANA Database System Information",
+    "shortDescription": "Display HANA Database System Information",
+    "alias": "",
+    "editable": "true",
+    "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000"
+}

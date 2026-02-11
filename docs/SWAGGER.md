@@ -10,8 +10,8 @@ The HANA CLI now includes full Swagger/OpenAPI 3.0 documentation for all REST AP
 
 When you run the HANA CLI UI server, the Swagger documentation is available at:
 
-- **Swagger UI**: http://localhost:3010/api-docs
-- **OpenAPI JSON Spec**: http://localhost:3010/api-docs.json
+- **Swagger UI**: <http://localhost:3010/api-docs>
+- **OpenAPI JSON Spec**: <http://localhost:3010/api-docs.json>
 
 ### Starting the Server
 
@@ -55,12 +55,14 @@ The implementation consists of:
 The generated specification includes:
 
 #### API Information
+
 - Title: HANA CLI API
 - Version: 3.202602.0
 - Description: RESTful API for HANA Developer CLI Tool
 - License: Apache 2.0
 
 #### Tags/Categories
+
 - **Configuration**: Application configuration and settings
 - **HANA System**: Database system information and features
 - **HANA Objects**: Database objects (tables, views, functions, indexes, schemas)
@@ -75,16 +77,19 @@ The generated specification includes:
 ## Documented Endpoints
 
 ### Configuration
+
 - `GET /` - Get current prompts/configuration
 - `PUT /` - Update prompts/configuration
 
 ### HANA System
+
 - `GET /hana` - Get system information (session, user, overview, services, version)
 - `GET /hana/dataTypes` - List database data types
 - `GET /hana/features` - List database features
 - `GET /hana/featureUsage` - Get feature usage statistics
 
 ### HANA Objects
+
 - `GET /hana/tables` - List all database tables
 - `GET /hana/views` - List all database views
 - `GET /hana/schemas` - List all database schemas
@@ -92,14 +97,17 @@ The generated specification includes:
 - `GET /hana/indexes` - List all database indexes
 
 ### HANA Inspect
+
 - `GET /hana/inspectTable` - Inspect table structure (returns SQL, CDS, hdbtable formats)
 - `GET /hana/inspectView` - Inspect view structure
 - `GET /hana/querySimple` - Execute simple SQL query
 
 ### HDI
+
 - `GET /hana/containers` - List HDI containers
 
 ### Cloud Services
+
 - `GET /hana/hdi` - List HANA Cloud HDI instances
 - `GET /hana/sbss` - List HANA Cloud SBSS instances
 - `GET /hana/schemaInstances` - List HANA Cloud Schema instances
@@ -107,20 +115,25 @@ The generated specification includes:
 - `GET /hana/ups` - List User-Provided Service instances
 
 ### Documentation
+
 - `GET /docs/readme` - Get README as HTML
 - `GET /docs/changelog` - Get CHANGELOG as HTML
 
 ### Export
+
 - `GET /excel` - Export last query results to Excel (currently disabled)
 
 ### Digital First Adoption
+
 - `GET /sap/dfa/help/webassistant/catalogue` - Get DFA help catalogue
 - `GET /sap/dfa/help/webassistant/context` - Get DFA context help
 
 ### WebSockets
+
 - `GET /websockets` - WebSocket information endpoint
 
 ### Static Files
+
 - `GET /appconfig/fioriSandboxConfig.json` - Fiori Launchpad sandbox configuration
 
 ## JSDoc Annotation Format
@@ -163,6 +176,7 @@ app.get('/endpoint/path', async (req, res, next) => {
 ## Swagger UI Features
 
 The Swagger UI includes:
+
 - Interactive API documentation
 - Try-it-out functionality for testing endpoints
 - Request/response examples
@@ -175,6 +189,7 @@ The Swagger UI includes:
 ## Customization
 
 The Swagger UI has been customized with:
+
 - Monokai syntax highlighting theme
 - Hidden top bar (customCss)
 - Custom site title: "HANA CLI API Documentation"
@@ -236,6 +251,7 @@ If Swagger UI doesn't load:
 ## Dependencies
 
 The following npm packages are required:
+
 - `swagger-jsdoc: ^6.2.8` - OpenAPI specification generator
 - `swagger-ui-express: ^5.0.0` - Swagger UI middleware (already installed)
 
