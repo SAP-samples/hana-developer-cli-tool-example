@@ -134,7 +134,7 @@ describe('Flag Validation Tests', function () {
         this.timeout(10000)
 
         it('should accept tbl output format', function (done) {
-            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output tbl --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYS --table SQLSCRIPT_LOGGING_TABLE_TYPE --output tbl --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -147,7 +147,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept sql output format', function (done) {
-            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output sql --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYS --table SQLSCRIPT_LOGGING_TABLE_TYPE --output sql --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -160,7 +160,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept json output format', function (done) {
-            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output json --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYS --table SQLSCRIPT_LOGGING_TABLE_TYPE --output json --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -173,7 +173,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept cds output format', function (done) {
-            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output cds --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYS --table SQLSCRIPT_LOGGING_TABLE_TYPE --output cds --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -186,7 +186,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should accept -o alias for output', function (done) {
-            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY -o yaml --quiet', 
+            child_process.exec('node bin/inspectTable.js --schema SYS --table SQLSCRIPT_LOGGING_TABLE_TYPE -o yaml --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
@@ -199,7 +199,7 @@ describe('Flag Validation Tests', function () {
         })
 
         it('should reject invalid output format', function (done) {
-            child_process.exec('node bin/inspectTable.js --schema SYSTEM --table DUMMY --output invalidformat', 
+            child_process.exec('node bin/inspectTable.js --schema SYS --table SQLSCRIPT_LOGGING_TABLE_TYPE --output invalidformat', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
