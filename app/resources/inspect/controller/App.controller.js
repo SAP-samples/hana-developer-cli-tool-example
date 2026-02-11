@@ -3,6 +3,10 @@ sap.ui.define([
 ], function (BaseController) {
     "use strict";
 
+    const I18N_KEYS = {
+        INIT_FAILED: "error.appInitFailed"
+    };
+
     return BaseController.extend("sap.hanacli.inspect.controller.App", {
 
         onAppInit: function () {
@@ -12,8 +16,10 @@ sap.ui.define([
                 const model = this.getModel("promptsModel");
                 this.getView().setModel(model);
             } catch (error) {
-                console.error("Failed to initialize app:", error);
-                this.showErrorMessage("Failed to initialize application");
+                const resourceBundle = this.getResourceBundle();
+                const errorMsg = resourceBundle.getText(I18N_KEYS.INIT_FAILED);
+                console.error(errorMsg + ":", error);
+                this.showErrorMessage(errorMsg);
             }
         },
 

@@ -11,7 +11,11 @@ sap.ui.define([
         CONNECTION_CLOSED: "connection.close",
         OUTPUT_CDS: "types.cds",
         OUTPUT_MIGRATION_TABLE: "types.hdbmigrationtable",
-        OUTPUT_TABLE: "types.hdbtable"
+        OUTPUT_TABLE: "types.hdbtable",
+        ERROR_LOG_MODEL_NOT_FOUND: "error.logModelNotFound",
+        ERROR_PROCESSING_MESSAGE: "error.processingMessage",
+        ERROR_CONNECTION_FAILED: "error.connectionFailed",
+        ERROR_MODEL_NOT_FOUND: "error.modelNotFound"
     };
 
     const FILTERS = ["Schema", "Table", "View"];
@@ -43,6 +47,8 @@ sap.ui.define([
             const connOpenedMsg = resourceBundle.getText(I18N_KEYS.CONNECTION_OPENED);
             const connErrorMsg = resourceBundle.getText(I18N_KEYS.CONNECTION_ERROR);
             const connClosedMsg = resourceBundle.getText(I18N_KEYS.CONNECTION_CLOSED);
+            const logModelNotFoundMsg = resourceBundle.getText(I18N_KEYS.ERROR_LOG_MODEL_NOT_FOUND);
+            const processingErrorMsg = resourceBundle.getText(I18N_KEYS.ERROR_PROCESSING_MESSAGE);
 
             // WebSocket connection opened
             this.connection.attachOpen(() => {
@@ -54,7 +60,7 @@ sap.ui.define([
                 try {
                     const logModel = this.getModel("logModel");
                     if (!logModel) {
-                        console.error("Log model not found");
+                        console.error(logModelNotFoundMsg);
                         return;
                     }
 
@@ -79,7 +85,7 @@ sap.ui.define([
                         progress: progress
                     }, true);
                 } catch (error) {
-                    console.error("Error processing WebSocket message:", error);
+                    console.error(processingErrorMsg, error);
                 }
             }, this);
 
@@ -95,10 +101,13 @@ sap.ui.define([
         },
 
         onBeginConvert: function () {
+            const resourceBundle = this.getResourceBundle();
+            const connFailedMsg = resourceBundle.getText(I18N_KEYS.ERROR_CONNECTION_FAILED);
+            
             this.refreshConnection().then(() => {
                 const logModel = this.getOwnerComponent().getModel("logModel");
                 if (!logModel) {
-                    console.error("Log model not found");
+                    console.error(resourceBundle.getText(I18N_KEYS.ERROR_LOG_MODEL_NOT_FOUND));
                     return;
                 }
 
@@ -112,14 +121,15 @@ sap.ui.define([
                 }));
             }).catch((error) => {
                 console.error("Failed to refresh connection:", error);
-                MessageToast.show("Failed to establish connection");
+                MessageToast.show(connFailedMsg);
             });
         },
 
         initOutputTypes: function () {
             const outputModel = this.getModel("outputModel");
             if (!outputModel) {
-                console.error("Output model not found");
+                const resourceBundle = this.getResourceBundle();
+                console.error(resourceBundle.getText(I18N_KEYS.ERROR_MODEL_NOT_FOUND));
                 return;
             }
 

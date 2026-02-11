@@ -10,18 +10,30 @@ sap.ui.define([
      */
     return function(controller) {
         if (!controller) {
-            MessageToast.show("Handler called without a valid controller");
+            // For the initial validation check, we try to get resourceBundle but fall back to English
+            const bundle = controller ? (controller.getResourceBundle ? controller.getResourceBundle() : null) : null;
+            const msg = bundle ? bundle.getText("error.handlerInvalid") : "Handler called without a valid controller";
+            MessageToast.show(msg);
             return;
         }
 
         try {
+            const resourceBundle = controller.getResourceBundle ? controller.getResourceBundle() : null;
             const metadata = controller.getMetadata();
             const controllerName = metadata ? metadata.getName() : "Unknown Controller";
-            const message = `Pressed from ${controllerName}`;
+            
+            let message;
+            if (resourceBundle) {
+                message = resourceBundle.getText("error.handlerAction", [controllerName]);
+            } else {
+                message = `Pressed from ${controllerName}`;
+            }
             MessageToast.show(message);
         } catch (error) {
             console.error("Error in handler:", error);
-            MessageToast.show("An error occurred while processing the action");
+            const resourceBundle = controller.getResourceBundle ? controller.getResourceBundle() : null;
+            const errorMsg = resourceBundle ? resourceBundle.getText("error.handlerException") : "An error occurred while processing the action";
+            MessageToast.show(errorMsg);
         }
     };
 });

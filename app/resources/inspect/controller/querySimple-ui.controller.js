@@ -7,6 +7,11 @@ sap.ui.define([
 
     const API_BASE_URL = "/hana/";
 
+    const I18N_KEYS = {
+        ERROR_COMMAND_NOT_CONFIGURED: "error.commandNotConfigured",
+        ERROR_HTTP: "error.httpError"
+    };
+
     return AppController.extend("sap.hanacli.inspect.controller.querySimple-ui", {
 
         onInit: function () {
@@ -44,8 +49,10 @@ sap.ui.define([
             this.updatePrompts();
 
             const cmd = this.getModel("config")?.getProperty("/cmd");
+            const resourceBundle = this.getResourceBundle();
             if (!cmd) {
-                this.onErrorCall(new Error("Command not configured"), this);
+                const errorMsg = resourceBundle.getText(I18N_KEYS.ERROR_COMMAND_NOT_CONFIGURED);
+                this.onErrorCall(new Error(errorMsg), this);
                 this.endBusy();
                 return;
             }
@@ -63,7 +70,8 @@ sap.ui.define([
                 })
                 .then(result => {
                     if (!result.ok) {
-                        const error = new Error(result.body.message || `HTTP ${result.status}: Internal Server Error`);
+                        const errorMsg = result.body.message || resourceBundle.getText(I18N_KEYS.ERROR_HTTP, [result.status]);
+                        const error = new Error(errorMsg);
                         error.response = result.body;
                         throw error;
                     }

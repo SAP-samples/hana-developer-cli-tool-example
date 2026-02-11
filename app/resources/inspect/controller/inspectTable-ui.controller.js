@@ -7,6 +7,11 @@ sap.ui.define([
 
     const API_BASE_URL = "/hana/";
 
+    const I18N_KEYS = {
+        CONTROL_NOT_FOUND: "error.controlNotFound",
+        COMMAND_NOT_CONFIGURED: "error.commandNotConfigured"
+    };
+
     return AppController.extend("sap.hanacli.inspect.controller.inspectTable-ui", {
 
         onInit: function () {
@@ -34,7 +39,9 @@ sap.ui.define([
             const searchControl = controller.getView().byId("TableInspectTable");
             
             if (!searchControl) {
-                console.error("TableInspectTable control not found");
+                const resourceBundle = controller.getResourceBundle();
+                const errorMsg = resourceBundle.getText(I18N_KEYS.CONTROL_NOT_FOUND, ["TableInspectTable"]);
+                console.error(errorMsg);
                 return;
             }
             
@@ -52,7 +59,9 @@ sap.ui.define([
             
             const cmd = this.getModel("config").getProperty("/cmd");
             if (!cmd) {
-                this.onErrorCall(new Error("Command not configured"), this);
+                const resourceBundle = this.getResourceBundle();
+                const errorMsg = resourceBundle.getText(I18N_KEYS.COMMAND_NOT_CONFIGURED);
+                this.onErrorCall(new Error(errorMsg), this);
                 this.endBusy();
                 return;
             }
@@ -70,7 +79,9 @@ sap.ui.define([
                 })
                 .then(result => {
                     if (!result.ok) {
-                        const error = new Error(result.body.message || `HTTP ${result.status}: Internal Server Error`);
+                        const resourceBundle = oController.getResourceBundle();
+                        const errorMsg = result.body.message || resourceBundle.getText("error.httpError", [result.status]);
+                        const error = new Error(errorMsg);
                         error.response = result.body;
                         throw error;
                     }

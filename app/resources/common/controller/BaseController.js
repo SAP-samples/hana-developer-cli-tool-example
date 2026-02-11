@@ -373,10 +373,12 @@ sap.ui.define([
                     }
                 } catch (e) {
                     // If not JSON, use the raw response text
-                    errorMessage = errorRes || "An error occurred";
+                    const resourceBundle = this.getResourceBundle();
+                    errorMessage = errorRes || resourceBundle.getText("error.generic");
                 }
             } else {
-                errorMessage = oError.statusText || oError.message || "An error occurred";
+                const resourceBundle = this.getResourceBundle();
+                errorMessage = oError.statusText || oError.message || resourceBundle.getText("error.generic");
             }
             
             MessageBox.alert(errorMessage);

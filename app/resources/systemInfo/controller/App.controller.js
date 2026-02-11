@@ -11,13 +11,16 @@ sap.ui.define([
 
                 const hanaModel = this.getModel("hanaModel");
                 if (!hanaModel) {
-                    console.error("HANA model not found");
+                    const resourceBundle = this.getResourceBundle();
+                    console.error(resourceBundle.getText("error.hanaModelNotFound"));
                     return;
                 }
 
                 this.getView().setModel(hanaModel);
             } catch (error) {
-                console.error("Failed to initialize systemInfo controller:", error);
+                const resourceBundle = this.getResourceBundle();
+                const errorMsg = resourceBundle.getText("error.initializationFailed", ["systemInfo"]);
+                console.error(errorMsg + ":", error);
             }
         }
     });

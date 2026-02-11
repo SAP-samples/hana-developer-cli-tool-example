@@ -8,6 +8,10 @@ sap.ui.define([
     "sap/ui/table/Column"
 ], function (BaseController, Text, Link, Column) {
 
+    const I18N_KEYS = {
+        ERROR_HTTP: "error.httpError"
+    };
+
     return BaseController.extend("sap.hanacli.tables.controller.App", {
 
         onAppInit: function () {
@@ -29,6 +33,8 @@ sap.ui.define([
                 let aUrl = `/hana/${cmd}/`;
 
                 let oController = this;
+                const resourceBundle = this.getResourceBundle();
+                
                 fetch(aUrl)
                     .then(response => {
                         return response.json().then(data => ({
@@ -39,7 +45,8 @@ sap.ui.define([
                     })
                     .then(result => {
                         if (!result.ok) {
-                            const error = new Error(result.body.message || `HTTP ${result.status}: Internal Server Error`);
+                            const errorMsg = result.body.message || resourceBundle.getText(I18N_KEYS.ERROR_HTTP, [result.status]);
+                            const error = new Error(errorMsg);
                             error.response = result.body;
                             throw error;
                         }

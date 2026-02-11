@@ -18,7 +18,10 @@ sap.ui.define([
             const logModel = this.getModel("logModel");
 
             if (!logModel) {
-                console.error("Log model not found in Component initialization");
+                const i18nModel = this.getModel("i18n");
+                const resourceBundle = i18nModel ? i18nModel.getResourceBundle() : null;
+                const errorMsg = resourceBundle ? resourceBundle.getText("error.logModelNotFound") : "Log model not found in Component initialization";
+                console.error(errorMsg);
                 return;
             }
 
