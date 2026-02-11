@@ -159,7 +159,7 @@ if (requestedCommand && commandMap[requestedCommand]) {
     
     base.debug(`Before Yargs`)
     // @ts-ignore
-    yargs(args)
+    const yargsInstance = yargs(args)
         .scriptName(base.colors.blue('hana-cli'))
         .usage(base.colors.blue(base.bundle.getText("usage")))
         .demandCommand(1, "")
@@ -174,6 +174,40 @@ if (requestedCommand && commandMap[requestedCommand]) {
         .epilog(base.colors.blue(base.bundle.getText("epilog")))
         .version(pkg.version).alias('version', 'V')
         .completion()
+        .check((argv) => {
+            // Get builder options from command module
+            const builder = typeof commandModule.builder === 'function' 
+                ? {} 
+                : (commandModule.builder || {})
+            
+            // Helper to convert camelCase to kebab-case
+            const toKebab = (str) => str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+            
+            // Collect all known option keys and their aliases
+            const knownKeys = new Set(['_', '$0', 'help', 'h', 'version', 'V'])
+            Object.entries(builder).forEach(([key, value]) => {
+                knownKeys.add(key)
+                knownKeys.add(toKebab(key)) // Add kebab-case version
+                if (value && typeof value === 'object' && value.alias) {
+                    const aliases = Array.isArray(value.alias) ? value.alias : [value.alias]
+                    aliases.forEach(a => {
+                        knownKeys.add(a)
+                        knownKeys.add(toKebab(a))
+                    })
+                }
+            })
+            
+            // Check for unknown options in argv
+            const unknownOptions = Object.keys(argv).filter(key => !knownKeys.has(key))
+            
+            if (unknownOptions.length > 0) {
+                unknownOptions.forEach(opt => {
+                    console.warn(base.colors.yellow(`Warning: Unknown option '--${opt}' will be ignored`))
+                })
+            }
+            
+            return true // Allow execution to continue
+        })
         .fail((msg, err) => {
             if (err) {
                 console.error(base.colors.red(err.message))
@@ -182,7 +216,8 @@ if (requestedCommand && commandMap[requestedCommand]) {
             }
             process.exit(1)
         })
-        .argv
+    
+    await yargsInstance.argv
     base.debug(`After Yargs`)
 } else {
     // For help, version, or unknown commands, load all commands
@@ -191,7 +226,7 @@ if (requestedCommand && commandMap[requestedCommand]) {
     
     base.debug(`Before Yargs`)
     // @ts-ignore
-    yargs(hideBin(process.argv))
+    const yargsInstance = yargs(hideBin(process.argv))
         .scriptName(base.colors.blue('hana-cli'))
         .usage(base.colors.blue(base.bundle.getText("usage")))
         .demandCommand(1, "")
@@ -206,6 +241,11 @@ if (requestedCommand && commandMap[requestedCommand]) {
         .epilog(base.colors.blue(base.bundle.getText("epilog")))
         .version(pkg.version).alias('version', 'V')
         .completion()
+        .check((argv) => {
+            // For load-all path, we rely on yargs strict mode behavior
+            // This path is only used for help/version/discovery, not regular commands
+            return true
+        })
         .fail((msg, err) => {
             if (err) {
                 console.error(base.colors.red(err.message))
@@ -214,7 +254,8 @@ if (requestedCommand && commandMap[requestedCommand]) {
             }
             process.exit(1)
         })
-        .argv
+    
+    await yargsInstance.argv
     base.debug(`After Yargs`)
 }
 

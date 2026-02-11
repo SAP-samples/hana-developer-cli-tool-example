@@ -48,8 +48,10 @@ import { glob } from 'glob'
 import open from 'open'
 
 /** @type {typeof import("debug") } */
+// @ts-ignore
 import debugModule from 'debug'
 export const debug = new debugModule('hana-cli')
+// @ts-ignore
 import setDebug from 'debug'
 
 import { inspect } from 'util'
@@ -107,6 +109,7 @@ export function stopSpinnerInt() {
 let terminalkitModule = null
 const getTerminalKit = async () => {
     if (!terminalkitModule) {
+        // @ts-ignore
         const module = await import('terminal-kit')
         terminalkitModule = module.default
     }
@@ -119,6 +122,7 @@ export const getTerminal = async () => {
 }
 
 // Import terminal-kit synchronously for backward compatibility with existing code
+// @ts-ignore
 import terminalKit from 'terminal-kit'
 
 // Wrap terminal access to handle test environments where terminal may not be available
@@ -799,18 +803,25 @@ export async function promptHandler(argv, processingFunction, inputSchema, iConn
         let schema = getPromptSchema(inputSchema, iConn, iDebug)
         let result = {}
 
+        // Check if we're in quiet mode (disableVerbose)
+        // @ts-ignore
+        const isQuietMode = argv && (argv.disableVerbose || argv.quiet)
+
         // First, copy all values from argv that are defined in schema
         if (schema.properties) {
             for (const [name, config] of Object.entries(schema.properties)) {
                 if (argv && argv[name] !== undefined && argv[name] !== null && argv[name] !== '') {
                     result[name] = argv[name]
+                } else if (isQuietMode && config.default !== undefined) {
+                    // In quiet mode, use defaults for empty/missing values
+                    result[name] = config.default
                 }
             }
         }
 
         // Transform schema and collect prompts
         const prompts = []
-        if (schema.properties) {
+        if (schema.properties && !isQuietMode) {
             for (const [name, config] of Object.entries(schema.properties)) {
                 const promptConfig = transformPromptConfig(name, config, argv)
                 if (promptConfig) {
@@ -819,7 +830,7 @@ export async function promptHandler(argv, processingFunction, inputSchema, iConn
             }
         }
 
-        // Execute prompts based on type
+        // Execute prompts based on type (skip if in quiet mode)
         for (const { name, config: promptConfig } of prompts) {
             // Skip if already provided in argv
             if (argv && argv[name] !== undefined && argv[name] !== null && argv[name] !== '') {
@@ -1146,6 +1157,7 @@ export function output(content) {
  * @param {Object} res - Express response object
  * @param {Function} next - Express next middleware function
  */
+// @ts-ignore
 export function globalErrorHandler(err, req, res, next) {
     // Log error without calling base.error() which would exit the process in CLI mode
     console.error(colors.red(`Unhandled error: ${err.message}`))
@@ -1188,6 +1200,7 @@ export function notFoundHandler(req, res) {
  */
 export async function webServerSetup(urlPath) {
     const path = await import('path')
+    // @ts-ignore
     const expressModule = await import('express')
     const express = expressModule.default
     const http = await import('http')

@@ -82,7 +82,7 @@ describe('Error Handling Tests', function () {
         })
 
         it('should handle invalid output format', function (done) {
-            child_process.exec('node bin/inspectTable.js --table DUMMY --schema SYSTEM --output invalidformat --quiet', 
+            child_process.exec('node bin/inspectTable.js --table SQLSCRIPT_LOGGING_TABLE_TYPE --schema SYS --output invalidformat --quiet', 
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
