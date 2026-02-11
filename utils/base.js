@@ -1122,7 +1122,6 @@ export async function outputTableFancy(content) {
     } else {
         if (verboseOutput(prompts)) {
             try {
-                const terminal = await getTerminal()
                 // Handle large datasets with pagination
                 if (content.length > MAX_DISPLAY_ROWS) {
                     console.log(colors.yellow(`\nShowing first ${MAX_DISPLAY_ROWS} of ${content.length} rows (use --output json with --filename to save all results)\n`))
