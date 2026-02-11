@@ -57,6 +57,13 @@ sap.ui.define([
          */
         refreshBTPInfo: function () {
             this.getBTPInfo();
+        },
+
+        /**
+         * Navigate to BTP Target Selection UI
+         */
+        navigateToBtpTarget: function () {
+            window.location.hash = "btp-ui";
         }
     });
 });

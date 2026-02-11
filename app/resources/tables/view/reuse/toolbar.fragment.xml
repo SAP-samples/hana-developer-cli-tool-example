@@ -4,6 +4,7 @@
     <Toolbar id="TB1">
         <Title id="Title1" text="{i18n>appTitle}: {config>/cmd}"/>
         <ToolbarSpacer id="spacer1"/>
+        <Button id="btnSetTargetReuse" icon="sap-icon://target-group" tooltip="{i18n>btp.setTargetTooltip}" text="{i18n>btp.setTarget}" press="navigateToBtpTarget" />
         <Button id="refreshButton" icon="sap-icon://refresh" tooltip="{i18nReuse>gui.execute}" press="executeCmd" />
     </Toolbar>
 </core:FragmentDefinition>    

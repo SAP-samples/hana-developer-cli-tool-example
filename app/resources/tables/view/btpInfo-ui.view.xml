@@ -13,6 +13,7 @@
 				<Toolbar id="TB1BtpInfo">
 					<Title id="Title1BtpInfo" text="BTP Configuration"/>
 					<ToolbarSpacer id="spacer1BtpInfo" />
+					<Button id="btnSetTarget2" icon="sap-icon://target-group" tooltip="{i18n>btp.setTargetTooltip}" text="{i18n>btp.setTarget}" press="navigateToBtpTarget" />
 					<Button id="refreshButtonBtpInfo" icon="sap-icon://refresh" tooltip="Refresh" press="refreshBTPInfo" />
 				</Toolbar>
 			</f:toolbar>

@@ -1,6 +1,9 @@
 // @ts-check
 import * as base from '../utils/base.js'
 import * as dbInspect from '../utils/dbInspect.js'
+import express from 'express'
+
+const jsonParser = express.json()
 
 export function route (app) {
     base.debug('hanaList Route')
@@ -258,6 +261,96 @@ export function route (app) {
     app.get(['/hana/btpSubs', '/hana/btpSubs-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/btpSubs", 'getSubsUI')
+        } catch (error) {
+            next(error)
+        }
+    })
+
+    /**
+     * @swagger
+     * /hana/btp-ui:
+     *   get:
+     *     tags: [BTP System]
+     *     summary: Get BTP hierarchy for target selection
+     *     description: Retrieves BTP global account, hierarchy with folders/directories and subaccounts for target selection
+     *     responses:
+     *       200:
+     *         description: BTP hierarchy and current target
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 globalAccount:
+     *                   type: object
+     *                   properties:
+     *                     guid:
+     *                       type: string
+     *                     displayName:
+     *                       type: string
+     *                 hierarchy:
+     *                   type: object
+     *                 currentTarget:
+     *                   type: string
+     */
+    app.get('/hana/btp-ui', async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/btpTarget", 'getBTPTargetUI')
+        } catch (error) {
+            next(error)
+        }
+    })
+
+    /**
+     * @swagger
+     * /hana/btp-ui/setTarget:
+     *   post:
+     *     tags: [BTP System]
+     *     summary: Set BTP subaccount target
+     *     description: Sets the target subaccount for BTP CLI operations
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             properties:
+     *               subaccount:
+     *                 type: string
+     *                 description: The GUID of the subaccount to target
+     *     responses:
+     *       200:
+     *         description: Target set successfully
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 success:
+     *                   type: boolean
+     *                 message:
+     *                   type: string
+     */
+    app.post('/hana/btp-ui/setTarget', jsonParser, async (req, res, next) => {
+        try {
+            const btpUtils = await import('../utils/btp.js')
+            const subaccount = req.body.subaccount
+            
+            if (!subaccount) {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: 'Subaccount GUID is required' 
+                })
+            }
+            
+            const result = await btpUtils.setBTPSubAccount(subaccount)
+            
+            res.type("application/json")
+               .status(200)
+               .json({ 
+                   success: true, 
+                   message: result 
+               })
         } catch (error) {
             next(error)
         }

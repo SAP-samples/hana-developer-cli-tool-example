@@ -102,6 +102,13 @@ sap.ui.define([
                         oController.endBusy();
                     });
             });
+        },
+
+        /**
+         * Navigate to BTP Target Selection UI
+         */
+        navigateToBtpTarget: function () {
+            window.location.hash = "btp-ui";
         }
     });
 });
