@@ -386,7 +386,16 @@
                                         "icon": "sap-icon://cloud",
                                         "navigationMode": "embedded"
                                     }
-                                },
+                                }
+                            ]
+                        },
+                        {
+                            "id": "btp_group",
+                            "title": "i18n.group.btp_group.title",
+                            "isPreset": true,
+                            "isVisible": true,
+                            "isGroupLocked": false,
+                            "tiles": [
                                 {
                                     "id": "btpInfo-ui",
                                     "title": "i18n.tile.btpInfo_ui.title",
