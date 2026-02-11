@@ -104,3 +104,27 @@ async function getFunctionsInt(schema, functionName, client, limit) {
   }
   return await client.statementExecPromisified(await client.preparePromisified(query), [schema, functionName])
 }
+
+// Support direct execution (for testing and standalone use)
+if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith('functions.js')) {
+  const yargs = (await import('yargs')).default
+  const { hideBin } = await import('yargs/helpers')
+  
+  yargs(hideBin(process.argv))
+    .usage(`Usage: ${command}\n\n${describe}`)
+    .options(builder)
+    .help('help').alias('help', 'h')
+    .wrap(null)
+    .parse(process.argv.slice(2), {}, (err, argv, output) => {
+      if (output) {
+        console.log(output)
+      }
+      if (err) {
+        console.error(err.message)
+        process.exit(1)
+      }
+      if (!argv.help && !argv.h) {
+        handler(argv)
+      }
+    })
+}
