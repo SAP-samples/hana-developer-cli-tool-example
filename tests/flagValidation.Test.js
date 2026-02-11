@@ -203,13 +203,11 @@ describe('Flag Validation Tests', function () {
                 (error, stdout, stderr) => {
                     base.addContext(this, { title: 'Stdout', value: stdout })
                     base.addContext(this, { title: 'Stderr', value: stderr })
+                    base.addContext(this, { title: 'Error', value: error?.message || 'No error' })
                     
-                    const hasFormatError = error || 
-                                          stderr.includes('Invalid') || 
-                                          stderr.includes('choice') ||
-                                          stderr.includes('must be')
-                    
-                    base.assert.ok(hasFormatError, 'Should reject invalid output format')
+                    // Command should fail with non-zero exit code
+                    base.assert.ok(error, 'Should reject invalid output format')
+                    base.assert.ok(error.code !== 0, 'Exit code should be non-zero')
                     done()
                 })
         })
