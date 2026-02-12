@@ -605,6 +605,31 @@ export function route (app) {
             next(error)
         }
     })
+
+    /**
+     * @swagger
+     * /hana/procedures:
+     *   get:
+     *     tags: [HANA Objects]
+     *     summary: List database procedures
+     *     description: Retrieves a list of all stored procedures in the database
+     *     responses:
+     *       200:
+     *         description: List of database procedures
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
+    app.get('/hana/procedures/', async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/procedures", 'getProcedures')
+        } catch (error) {
+            next(error)
+        }
+    })
 }
 
 export async function listHandler(res, lib, func) {

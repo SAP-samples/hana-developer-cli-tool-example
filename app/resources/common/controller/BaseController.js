@@ -300,6 +300,40 @@ sap.ui.define([
             }
         },
 
+        loadProcedureFilter: async function () {
+            try {
+                await this.updatePrompts();
+                const aUrl = "/hana/procedures/";
+                
+                const myJSON = await new Promise((resolve, reject) => {
+                    jQuery.ajax({
+                        url: aUrl,
+                        method: "GET",
+                        dataType: "json",
+                        success: resolve,
+                        error: reject
+                    });
+                });
+                this.onLoadProcedureFilter(myJSON);
+            } catch (error) {
+                this.onErrorCall(error);
+            }
+        },
+
+        onLoadProcedureFilter: function (myJSON) {
+            const oSearchControl = this.getView().byId("Procedure") || this.getView().byId("ProcedureCallProcedure");
+            if (!oSearchControl) {
+                return;
+            }
+            
+            oSearchControl.destroySuggestionItems();
+            for (let i = 0; i < myJSON.length; i++) {
+                oSearchControl.addSuggestionItem(new Item({
+                    text: myJSON[i].PROCEDURE_NAME
+                }));
+            }
+        },
+
         setFilterAsContains: function (controlId) {
             const control = this.byId(controlId);
             if (control) {

@@ -297,6 +297,22 @@
                                         "icon": "sap-icon://search",
                                         "navigationMode": "embedded"
                                     }
+                                },
+                                {
+                                    "id": "callProcedure-ui",
+                                    "title": "i18n.tile.callProcedure_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.callProcedure_ui.info",
+                                        "title": "i18n.tile.callProcedure_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
+                                        "applicationType": "URL",
+                                        "targetURL": "#callProcedure-ui",
+                                        "url": "./inspect",
+                                        "icon": "sap-icon://play",
+                                        "navigationMode": "embedded"
+                                    }
                                 }
                             ]
                         },
@@ -701,6 +717,14 @@
         "querySimple-ui": {
             "title": "i18n.app.querySimple_ui.title",
             "description": "i18n.app.querySimple_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
+            "applicationType": "URL",
+            "url": "./inspect",
+            "navigationMode": "embedded"
+        },
+        "callProcedure-ui": {
+            "title": "i18n.app.callProcedure_ui.title",
+            "description": "i18n.app.callProcedure_ui.description",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
             "applicationType": "URL",
             "url": "./inspect",
