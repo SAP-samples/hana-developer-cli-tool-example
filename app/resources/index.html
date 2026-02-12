@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta charset="utf-8">
+	<meta http-equiv="Content-Security-Policy"
+		content="default-src 'self' https://ui5.sap.com; script-src 'self' https://ui5.sap.com 'unsafe-inline' 'unsafe-eval'; style-src 'self' https://ui5.sap.com 'unsafe-inline'; img-src 'self' data: https://ui5.sap.com; font-src 'self' https://ui5.sap.com; connect-src 'self' https://ui5.sap.com; frame-ancestors 'self'">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>hana-cli LaunchPad</title>
 	<script src="https://ui5.sap.com/1.144.1/test-resources/sap/ushell/bootstrap/sandbox.js"></script>
 	<script src="https://ui5.sap.com/1.144.1/resources/sap-ui-core.js"
 		data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration, sap.ui.layout, sap.ui.rta, sap.dfa.help,sap.uxap"
 		data-sap-ui-compatVersion="edge" data-sap-ui-theme="sap_horizon" data-sap-ui-async="true"
-		data-sap-ui-frameOptions="trusted" data-sap-ui-bindingSyntax="complex" data-sap-ui-xx-bindingSyntax="complex"
-		data-sap-ui-resourceroots='{"sap.hanacli.common": "./common", "sap.dfa.help": "/sap/dfa/help/"}'
-		data-sap-ui-frameOptions="allow"></script>
+		data-sap-ui-frameOptions="trusted" data-sap-ui-bindingSyntax="complex"
+		data-sap-ui-resourceroots='{"sap.hanacli.common": "./common", "sap.dfa.help": "/sap/dfa/help/"}'></script>
 
 	<style>
 		html,
@@ -30,12 +30,18 @@
 			vertical-align: middle !important;
 		}
 	</style>
+	<!-- Extended help system requires absolute /sap/dfa/help/ path. -->
 	<!-- <script src="./WebAssistant.js"></script> -->
 	<script>
-		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-			sap.ui.getCore().applyTheme("sap_horizon_dark")
-		}
 		sap.ui.getCore().attachInit(() => {
+			const allowedThemes = new Set(["sap_horizon", "sap_horizon_dark"])
+			const urlTheme = new URLSearchParams(window.location.search).get("theme")
+			const resolvedTheme = allowedThemes.has(urlTheme) ? urlTheme : null
+			if (resolvedTheme) {
+				sap.ui.getCore().applyTheme(resolvedTheme)
+			} else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+				sap.ui.getCore().applyTheme("sap_horizon_dark")
+			}
 			sap.ushell.Container.createRenderer().placeAt("content")
 			sap.ui.getCore().getConfiguration()
 				.setFlexibilityServices([{
@@ -43,7 +49,6 @@
 				}])
 		})
 	</script>
-	</body>
 </head>
 
 <body class="sapUiBody" id="content"></body>
