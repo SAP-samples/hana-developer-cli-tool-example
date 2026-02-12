@@ -5,9 +5,14 @@
 	xmlns:core="sap.ui.core"
 	xmlns="sap.m">
 	<ScrollContainer id="scrollContainerBtpSubs" height="100%" width="100%" vertical="true" focusable="true">
-		<f:SimpleForm id="SimpleFormToolbarBtpSubs" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+		<f:SimpleForm id="SimpleFormToolbarBtpSubs" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1BtpSubs">
 			<f:toolbar>
-				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.toolbar" type="XML"/>
+				<Toolbar id="TB1BtpSubs">
+					<Title id="Title1BtpSubs" text="{i18n>appTitle}: {config>/cmd}"/>
+					<ToolbarSpacer id="spacer1BtpSubs"/>
+					<Button id="btnSetTargetBtpSubs" icon="sap-icon://target-group" tooltip="{i18n>btp.setTargetTooltip}" text="{i18n>btp.setTarget}" press="navigateToBtpTarget" />
+					<Button id="refreshButtonBtpSubs" icon="sap-icon://refresh" tooltip="{i18nReuse>gui.execute}" press="executeCmd" />
+				</Toolbar>
 			</f:toolbar>
 			<f:content>
 			</f:content>

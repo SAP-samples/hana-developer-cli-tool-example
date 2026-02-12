@@ -1,6 +1,6 @@
 // @ts-check
 import * as base from '../utils/base.js'
-//import * as excel from 'node-xlsx'
+import ExcelJS from 'exceljs'
 
 export function route (app) {
     /**
@@ -9,55 +9,45 @@ export function route (app) {
      *   get:
      *     tags: [Export]
      *     summary: Export last query results to Excel
-     *     description: Exports the last query results to Excel format (currently disabled)
+     *     description: Exports the last query results to Excel format
      *     responses:
-     *       503:
-     *         description: Service temporarily unavailable
-     *         content:
-     *           application/json:
-     *             schema:
-     *               type: object
-     *               properties:
-     *                 error:
-     *                   type: string
+     *       200:
+     *         description: Excel file exported successfully
+     *       400:
+     *         description: No results available
+     *       500:
+     *         description: Internal server error
      */
     app.get('/excel', async (req, res, next) => {
         try {
             const results = base.getLastResults()
-            let out = []
 
             if(!results){
                 throw(base.bundle.getText("noResults"))
             }
-            //Column Headers
-            let header = []
-            for (const [key] of Object.entries(results[0])) {
-              header.push(key)
-            }
-            out.push(header)
-  
-            for (let item of results) {
-              let innerItem = []
-              for (const [key] of Object.entries(item)) {
-                innerItem.push(item[key])
-              }
-              out.push(innerItem)
-            }
-            // @ts-ignore
-            let excelOutput = ``
-            // Excel export is temporarily disabled
-            const disabledError = new Error('Excel Export temporarily disabled due to issue with install of required module in Business Application Studio')
-            // @ts-ignore
-            disabledError.statusCode = 503
-            throw disabledError
-            
-            /*excel.build([{
-              name: base.bundle.getText("gui.Results"),
-              data: out
-            }]) */
 
-			//res.header("Content-Disposition", "attachment; filename=Excel.xlsx")
-			//return res.type("application/vnd.ms-excel").status(200).send(excelOutput)
+            const workbook = new ExcelJS.Workbook()
+            const worksheet = workbook.addWorksheet(base.bundle.getText("gui.Results"))
+
+            // Add header row with bold formatting
+            const headers = Object.keys(results[0])
+            const headerRow = worksheet.addRow(headers)
+            headerRow.font = { bold: true }
+
+            // Add data rows
+            for (let item of results) {
+              const rowData = headers.map(key => item[key])
+              worksheet.addRow(rowData)
+            }
+
+            // Freeze the header row
+            worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+
+            // Generate Excel buffer
+            const excelBuffer = await workbook.xlsx.writeBuffer()
+
+			res.header("Content-Disposition", "attachment; filename=Excel.xlsx")
+			return res.type("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet").status(200).send(excelBuffer)
 
         } catch (error) {
             next(error) // Pass to error handler
