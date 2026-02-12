@@ -1,0 +1,93 @@
+<mvc:View controllerName="sap.hanacli.version.controller.App" height="100%" width="100%"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+	
+	<ScrollContainer
+		id="scrollContainer"
+		height="100%"
+		width="100%"
+		vertical="true"
+		focusable="true">
+ 	<f:SimpleForm id="SimpleFormToolbar" editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false" ariaLabelledBy="Title1">
+		<f:toolbar>
+			<Toolbar id="TB1">
+				<Title id="Title1" text="{i18n>appTitle}"/>
+				<ToolbarSpacer id="spacer1" />
+			</Toolbar>
+		</f:toolbar>
+		<f:content>
+
+			<Toolbar id="TB2" ariaLabelledBy="Title2">
+				<Title id="Title2" text="{i18n>coreVersions}"/>
+				<ToolbarSpacer id="spacer2" />
+			</Toolbar>
+
+			<Label id="labelHanaCli" text="{i18n>hanaCli}" />
+			<Input id="inputHanaCli" value="{/hana-cli}" />
+
+			<Label id="labelNodeJs" text="{i18n>nodeJs}" />
+			<Input id="inputNodeJs" value="{/Node.js}" />
+
+			<Label id="labelCfCli" text="{i18n>cfCli}" />
+			<Input id="inputCfCli" value="{/cf-cli}" />
+
+			<Label id="labelBtpCli" text="{i18n>btpCli}" />
+			<Input id="inputBtpCli" value="{/btp-cli}" />
+
+			<Label id="labelHanaHome" text="{i18n>hanaHome}" />
+			<Input id="inputHanaHome" value="{/hana-cli home}" />
+
+			<Toolbar id="TB4" ariaLabelledBy="Title4">
+				<Title id="Title4" text="{i18n>resources}"/>
+				<ToolbarSpacer id="spacer4" />
+			</Toolbar>
+
+			<Label id="labelChangelog" text="{i18n>changelog}" />
+			<Link id="linkChangelog" 
+				text="https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/CHANGELOG.md" 
+				href="https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/CHANGELOG.md"
+				target="_blank" />
+
+			<Label id="labelLatestVersion" text="{i18n>latestVersion}" />
+			<Input id="inputLatestVersion" value="{/latestVersion}" />
+
+			<Toolbar id="TB3" ariaLabelledBy="Title3">
+				<Title id="Title3" text="{i18n>sapPackages}"/>
+				<ToolbarSpacer id="spacer3" />
+			</Toolbar>
+
+		</f:content>
+	</f:SimpleForm>
+
+		<Table id="packagesTable" items="{/packages}">
+			<headerToolbar>
+				<OverflowToolbar id="packagesToolbar">
+					<Title id="titlePackages" text="{i18n>installedPackages}" level="H2"/>
+					<ToolbarSpacer id="spacer5"/>
+				</OverflowToolbar>
+			</headerToolbar>
+			<columns>
+				<Column id="packageName" width="18em">
+					<Text id="textHeaderPackageName" text="{i18n>packageName}" />
+				</Column>
+				<Column id="packageVersion">
+					<Text id="textHeaderPackageVersion" text="{i18nReuse>version}" />
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem id="packageListItem">
+					<cells>
+						<Link id="linkPackageName" 
+							text="{name}" 
+							href="https://www.npmjs.com/package/{name}"
+							target="_blank" />
+						<Text id="textPackageVersion" text="{version}" />
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+	</ScrollContainer>
+</mvc:View>

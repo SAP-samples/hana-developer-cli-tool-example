@@ -148,6 +148,22 @@
                                         "icon": "sap-icon://search",
                                         "navigationMode": "embedded"
                                     }
+                                },
+                                {
+                                    "id": "version-ui",
+                                    "title": "i18n.tile.version_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.version_ui.info",
+                                        "title": "i18n.tile.version_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.version",
+                                        "applicationType": "URL",
+                                        "targetURL": "#version-ui",
+                                        "url": "./version",
+                                        "icon": "sap-icon://information",
+                                        "navigationMode": "embedded"
+                                    }
                                 }
                             ]
                         },
@@ -809,6 +825,14 @@
             "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
             "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "version-ui": {
+            "title": "i18n.app.version_ui.title",
+            "description": "i18n.app.version_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.version",
+            "applicationType": "URL",
+            "url": "./version",
             "navigationMode": "embedded"
         },
         "views-ui": {

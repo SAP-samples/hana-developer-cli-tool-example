@@ -92,3 +92,21 @@ export async function getVersion() {
 
   return info
 }
+
+export async function getVersionUI() {
+  const info = await getVersion()
+  const { default: latestVersion } = await import('latest-version')
+  
+  // Add Node.js version
+  info['Node.js'] = process.version
+  
+  // Add latest version
+  try {
+    let selfVersion = await latestVersion('hana-cli')
+    info['latestVersion'] = selfVersion
+  } catch (error) {
+    info['latestVersion'] = 'Unable to fetch'
+  }
+  
+  return info
+}

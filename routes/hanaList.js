@@ -77,6 +77,40 @@ export function route (app) {
 
     /**
      * @swagger
+     * /hana/version-ui:
+     *   get:
+     *     tags: [HANA System]
+     *     summary: Get hana-cli version information
+     *     description: Returns version information for hana-cli, Node.js, CLI tools, and SAP packages
+     *     responses:
+     *       200:
+     *         description: Version information
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 hana-cli:
+     *                   type: string
+     *                 Node.js:
+     *                   type: string
+     *                 cf-cli:
+     *                   type: string
+     *                 btp-cli:
+     *                   type: string
+     *                 latestVersion:
+     *                   type: string
+     */
+    app.get('/hana/version-ui', async (req, res, next) => {
+        try {
+            await listHandlerNoConnection(res, "../bin/version", 'getVersionUI')
+        } catch (error) {
+            next(error)
+        }
+    })
+
+    /**
+     * @swagger
      * /hana/tables:
      *   get:
      *     tags: [HANA Objects]
@@ -661,5 +695,11 @@ export async function listHandler(res, lib, func) {
     await base.clearConnection()
     const targetLibrary = await import(`${lib}.js`)
     let results = await targetLibrary[func](base.getPrompts())
+    base.sendResults(res, results)
+}
+
+export async function listHandlerNoConnection(res, lib, func) {
+    const targetLibrary = await import(`${lib}.js`)
+    let results = await targetLibrary[func]()
     base.sendResults(res, results)
 }
