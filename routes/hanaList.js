@@ -608,6 +608,31 @@ export function route (app) {
 
     /**
      * @swagger
+     * /hana/users:
+     *   get:
+     *     tags: [HANA Objects]
+     *     summary: List database users
+     *     description: Retrieves a list of all database users
+     *     responses:
+     *       200:
+     *         description: List of database users
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     */
+    app.get(['/hana/users', '/hana/users-ui'], async (req, res, next) => {
+        try {
+            await listHandler(res, "../bin/users", 'getUsers')
+        } catch (error) {
+            next(error)
+        }
+    })
+
+    /**
+     * @swagger
      * /hana/procedures:
      *   get:
      *     tags: [HANA Objects]

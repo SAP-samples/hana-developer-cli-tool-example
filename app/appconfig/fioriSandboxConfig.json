@@ -415,6 +415,22 @@
                                         "icon": "sap-icon://sys-monitor",
                                         "navigationMode": "embedded"
                                     }
+                                },
+                                {
+                                    "id": "users-ui",
+                                    "title": "i18n.tile.users_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.users_ui.info",
+                                        "title": "i18n.tile.users_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#users-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://employee",
+                                        "navigationMode": "embedded"
+                                    }
                                 }
                             ]
                         },
@@ -774,6 +790,14 @@
         "tables-ui": {
             "title": "i18n.app.tables_ui.title",
             "description": "i18n.app.tables_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "users-ui": {
+            "title": "i18n.app.users_ui.title",
+            "description": "i18n.app.users_ui.description",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
             "url": "./tables",

@@ -351,6 +351,20 @@ curl http://localhost:3010/hana/indexes
 
 **Response**: Array of index metadata objects
 
+#### GET /hana/users
+
+#### GET /hana/users-ui
+
+Lists all database users.
+
+**Example**:
+
+```bash
+curl http://localhost:3010/hana/users
+```
+
+**Response**: Array of user metadata objects
+
 ### HANA Inspect Operations
 
 All inspect endpoints support two URL patterns and return detailed metadata including SQL, CDS, and HDI artifact definitions.

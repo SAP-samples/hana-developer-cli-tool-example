@@ -243,6 +243,8 @@ export function getPrompts() {
     // @ts-ignore
     if (!prompts.view) { prompts.view = "*" }
     // @ts-ignore
+    if (!prompts.user) { prompts.user = "*" }
+    // @ts-ignore
     if (!prompts.limit) { prompts.limit = 200 }
     // @ts-ignore
     if (!prompts.folder) { prompts.folder = "./" }

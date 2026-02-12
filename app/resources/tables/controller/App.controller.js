@@ -16,7 +16,27 @@ sap.ui.define([
 
         onAppInit: function () {
             this.getHanaStatus();
-            this.getPrompts();
+            this.getPrompts().then(() => {
+                const promptsModel = this.getModel("promptsModel");
+                if (!promptsModel) {
+                    return;
+                }
+                if (!promptsModel.getProperty("/schema")) {
+                    promptsModel.setProperty("/schema", "**CURRENT_SCHEMA**");
+                }
+                if (!promptsModel.getProperty("/table")) {
+                    promptsModel.setProperty("/table", "*");
+                }
+                if (!promptsModel.getProperty("/view")) {
+                    promptsModel.setProperty("/view", "*");
+                }
+                if (!promptsModel.getProperty("/user")) {
+                    promptsModel.setProperty("/user", "*");
+                }
+                if (!promptsModel.getProperty("/limit")) {
+                    promptsModel.setProperty("/limit", 200);
+                }
+            });
             let model = this.getModel("promptsModel");
             this.getView().setModel(model);
         },

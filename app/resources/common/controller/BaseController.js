@@ -108,6 +108,9 @@ sap.ui.define([
                         error: reject
                     });
                 });
+                if (typeof response.user === "undefined" || response.user === null || response.user === "") {
+                    response.user = "*";
+                }
                 model.setData(response);
             } catch (error) {
                 this.onErrorCall(error);
@@ -286,6 +289,26 @@ sap.ui.define([
             }
         },
 
+        loadUserFilter: async function () {
+            try {
+                await this.updatePrompts();
+                const aUrl = "/hana/users/";
+
+                const myJSON = await new Promise((resolve, reject) => {
+                    jQuery.ajax({
+                        url: aUrl,
+                        method: "GET",
+                        dataType: "json",
+                        success: resolve,
+                        error: reject
+                    });
+                });
+                this.onLoadUserFilter(myJSON);
+            } catch (error) {
+                this.onErrorCall(error);
+            }
+        },
+
         onLoadFunctionFilter: function (myJSON) {
             const oSearchControl = this.getView().byId("Function");
             if (!oSearchControl) {
@@ -296,6 +319,23 @@ sap.ui.define([
             for (let i = 0; i < myJSON.length; i++) {
                 oSearchControl.addSuggestionItem(new Item({
                     text: myJSON[i].FUNCTION_NAME
+                }));
+            }
+        },
+
+        onLoadUserFilter: function (myJSON) {
+            const oSearchControl = this.getView().byId("User");
+            if (!oSearchControl) {
+                return;
+            }
+
+            oSearchControl.destroySuggestionItems();
+            oSearchControl.addSuggestionItem(new Item({
+                text: "*"
+            }));
+            for (let i = 0; i < myJSON.length; i++) {
+                oSearchControl.addSuggestionItem(new Item({
+                    text: myJSON[i].USER_NAME
                 }));
             }
         },
