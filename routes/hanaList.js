@@ -623,7 +623,7 @@ export function route (app) {
      *               items:
      *                 type: object
      */
-    app.get('/hana/procedures/', async (req, res, next) => {
+    app.get(['/hana/procedures', '/hana/procedures-ui'], async (req, res, next) => {
         try {
             await listHandler(res, "../bin/procedures", 'getProcedures')
         } catch (error) {

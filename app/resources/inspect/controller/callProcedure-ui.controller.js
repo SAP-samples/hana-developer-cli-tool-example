@@ -31,16 +31,27 @@ sap.ui.define([
 
             const configModel = this.getModel("config");
             const procedureParam = configModel.getProperty("/proc");
+            const schemaParam = configModel.getProperty("/schema");
 
-            if (procedureParam) {
+            this.getPrompts().then(() => {
                 const promptsModel = this.getModel("promptsModel");
-                promptsModel.setProperty("/procedure", procedureParam);
-                
-                // Wait for updatePrompts to complete before loading parameters
-                this.updatePrompts().then(() => {
-                    this.onLoadParameters();
-                });
-            }
+                if (!promptsModel) {
+                    return;
+                }
+
+                if (schemaParam) {
+                    promptsModel.setProperty("/schema", schemaParam);
+                }
+
+                if (procedureParam) {
+                    promptsModel.setProperty("/procedure", procedureParam);
+
+                    // Wait for updatePrompts to complete before loading parameters
+                    this.updatePrompts().then(() => {
+                        this.onLoadParameters();
+                    });
+                }
+            });
 
             // Initialize results model
             const resultsModel = this.getModel("resultsModel");

@@ -88,6 +88,26 @@ sap.ui.define([
                                     href: { path: "resultsModel>" + sColumnId, formatter: function(value) { return "/ui/?viewInput=" + value + "#inspectView-ui"; } }
                                 });
                             }
+                            if (cmd === "procedures-ui" && sColumnId === "PROCEDURE_NAME") {
+                                template = new Link({
+                                    text: { path: "resultsModel>" + sColumnId },
+                                    target: "_blank",
+                                    href: {
+                                        parts: [
+                                            { path: "resultsModel>PROCEDURE_NAME" },
+                                            { path: "resultsModel>SCHEMA_NAME" }
+                                        ],
+                                        formatter: function (procedureName, schemaName) {
+                                            if (!procedureName) {
+                                                return "";
+                                            }
+                                            const proc = encodeURIComponent(procedureName);
+                                            const schema = schemaName ? "&schema=" + encodeURIComponent(schemaName) : "";
+                                            return "/ui/?proc=" + proc + schema + "#callProcedure-ui";
+                                        }
+                                    }
+                                });
+                            }
                             return new Column({
                                 id: sColumnId,
                                 label: sColumnId,

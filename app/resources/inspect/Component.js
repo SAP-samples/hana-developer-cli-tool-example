@@ -32,11 +32,13 @@ sap.ui.define([
             let cmd = UriParameters.fromQuery(window.location.search).get("cmd");
             let tbl = UriParameters.fromQuery(window.location.search).get("tbl");
             let viewInput = UriParameters.fromQuery(window.location.search).get("viewInput");
+            let proc = UriParameters.fromQuery(window.location.search).get("proc");
+            let schema = UriParameters.fromQuery(window.location.search).get("schema");
 
             if (!cmd) {
                 cmd = window.location.hash.substr(1);
             }
-            model.setData({ cmd: cmd, tbl: tbl, viewInput: viewInput });
+            model.setData({ cmd: cmd, tbl: tbl, viewInput: viewInput, proc: proc, schema: schema });
             this.superInit();
         }
     });

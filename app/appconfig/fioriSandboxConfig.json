@@ -146,6 +146,22 @@
                                     }
                                 },
                                 {
+                                    "id": "procedures-ui",
+                                    "title": "i18n.tile.procedures_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.procedures_ui.info",
+                                        "title": "i18n.tile.procedures_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#procedures-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://table-view",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
                                     "id": "indexes-ui",
                                     "title": "i18n.tile.indexes_ui.title",
                                     "size": "1x1",
@@ -621,6 +637,14 @@
         "functions-ui": {
             "title": "i18n.app.functions_ui.title",
             "description": "i18n.app.functions_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "procedures-ui": {
+            "title": "i18n.app.procedures_ui.title",
+            "description": "i18n.app.procedures_ui.description",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
             "url": "./tables",

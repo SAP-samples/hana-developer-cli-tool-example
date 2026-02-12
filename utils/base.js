@@ -255,6 +255,8 @@ export function getPrompts() {
     // @ts-ignore
     if (!prompts.function) { prompts.function = "*" }
     // @ts-ignore
+    if (!prompts.procedure) { prompts.procedure = "*" }
+    // @ts-ignore
     if (!prompts.indexes) { prompts.indexes = "*" }
     // @ts-ignore
     if (!prompts.output) { prompts.output = "tbl" }
