@@ -64,7 +64,7 @@ export async function activate(prompts) {
       console.table(results)
     }
     else
-      base.debug('do not create a new database user')
+      base.debug(base.bundle.getText("debug.adminHDI.skipCreate"))
 
     let resultsGrant = await dbStatus.execSQL(
       `CREATE LOCAL TEMPORARY TABLE #PRIVILEGES LIKE _SYS_DI.TT_API_PRIVILEGES;`)
@@ -89,7 +89,7 @@ export async function activate(prompts) {
       console.table(resultsGrant)
     }
     else
-      base.debug('Do not grant privieges to ' + prompts.user)
+      base.debug(base.bundle.getText("debug.adminHDI.skipGrant", [prompts.user]))
 
     return base.end()
 

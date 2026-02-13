@@ -36,7 +36,7 @@ export async function getBTPTargetUI() {
             }
         } catch (e) {
             // No current target set
-            base.debug('No current subaccount target')
+            base.debug(base.bundle.getText("debug.btpTarget.noCurrent"))
         }
         
         return {
@@ -60,7 +60,7 @@ export async function getBTPTargetUI() {
  */
 export async function handler(argv) {
     const base = await import('../utils/base.js')
-    base.debug('btpTarget handler')
+    base.debug(base.bundle.getText("debug.btpTarget.handler"))
     
     try {
         const data = await getBTPTargetUI()

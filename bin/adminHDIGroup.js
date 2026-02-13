@@ -75,7 +75,7 @@ export async function activate(prompts) {
       console.table(resultsGrant)
     }
     else
-      base.debug('Do not grant privileges to ' + prompts.user)
+      base.debug(base.bundle.getText("debug.adminHDIGroup.skipGrant", [prompts.user]))
 
     return base.end()
   } catch (error) {

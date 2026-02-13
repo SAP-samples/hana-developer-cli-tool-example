@@ -32,10 +32,10 @@ export async function handler(argv) {
         }
     }
 
-    base.debug(`build inquirer prompts`)
+    base.debug(base.bundle.getText("debug.btp.buildPrompts"))
 
     try {
-        base.debug(`GetBTPGlobalAccount`)
+        base.debug(base.bundle.getText("debug.btp.getGlobalAccount"))
         base.startSpinnerInt()
         var account = await btp.getBTPGlobalAccount()
         base.debug(account)
@@ -150,7 +150,7 @@ export async function handler(argv) {
 
 export async function callBTP(prompts) {
   const base = await import('../utils/base.js')
-    base.debug('callBTP')
+        base.debug(base.bundle.getText("debug.btp.callBTP"))
     base.startSpinnerInt()
     base.debug(prompts)
     try {

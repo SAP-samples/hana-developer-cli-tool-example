@@ -155,10 +155,10 @@ const requestedCommand = args[0]
 
 // If a known command is requested, load only that command
 if (requestedCommand && commandMap[requestedCommand]) {
-    base.debug(`Lazy loading command: ${requestedCommand}`)
+    base.debug(base.bundle.getText("debug.cli.lazyLoad", [requestedCommand]))
     const commandModule = await import(commandMap[requestedCommand])
     
-    base.debug(`Before Yargs`)
+    base.debug(base.bundle.getText("debug.cli.beforeYargs"))
     // @ts-ignore
     const yargsInstance = yargs(args)
         .scriptName(base.colors.blue('hana-cli'))
@@ -219,13 +219,13 @@ if (requestedCommand && commandMap[requestedCommand]) {
         })
     
     await yargsInstance.argv
-    base.debug(`After Yargs`)
+    base.debug(base.bundle.getText("debug.cli.afterYargs"))
 } else {
     // For help, version, or unknown commands, load all commands
-    base.debug(`Loading all commands for help/discovery`)
+    base.debug(base.bundle.getText("debug.cli.loadAll"))
     const index = await import('./index.js')
     
-    base.debug(`Before Yargs`)
+    base.debug(base.bundle.getText("debug.cli.beforeYargs"))
     // @ts-ignore
     const yargsInstance = yargs(hideBin(process.argv))
         .scriptName(base.colors.blue('hana-cli'))
@@ -257,7 +257,7 @@ if (requestedCommand && commandMap[requestedCommand]) {
         })
     
     await yargsInstance.argv
-    base.debug(`After Yargs`)
+    base.debug(base.bundle.getText("debug.cli.afterYargs"))
 }
 
 //versionCheck.checkVersion().then(async () => {

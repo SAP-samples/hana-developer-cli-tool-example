@@ -36,7 +36,7 @@ export async function handler (argv) {
 export async function makeSecrets({ envFile, secretsFolder, filter }) {
   const base = await import('../utils/base.js')
 
-    base.debug(`makeSecrets ${envFile} ${secretsFolder} ${filter}`)
+        base.debug(base.bundle.getText("debug.copy2Secrets.makeSecrets", [envFile, secretsFolder, filter]))
     xsenv.loadEnv(envFile)
 
     const VCAP_SERVICES = JSON.parse(process.env.VCAP_SERVICES)

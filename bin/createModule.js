@@ -69,7 +69,7 @@ if (fs.existsSync('../package.json')) {
 
  
     let hdiVersion = await latestVersion('@sap/hdi-deploy')
-    base.debug(`HDI Version ${hdiVersion}`)
+    base.debug(base.bundle.getText("debug.createModule.hdiVersion", [hdiVersion]))
     var packageContent = ``
     if (prompts.hanaCloud) {
         packageContent = `

@@ -251,13 +251,13 @@ async function cdsServerSetup(prompts, cdsSource) {
 
   // Handle server-level errors gracefully
   server.on('error', (err) => {
-    base.debug(`Server Error: ${err.message}`)
+    base.debug(baseLite.bundle.getText("debug.cds.serverError", [err.message]))
     console.error(t("cds.server.error", [err.message]))
   })
 
   // Handle any unhandled promise rejections in the server context
   process.on('unhandledRejection', (reason, promise) => {
-    base.debug(`Unhandled Rejection: ${reason}`)
+    base.debug(baseLite.bundle.getText("debug.cds.unhandledRejection", [reason]))
     console.error(t("cds.unhandledRejection"), reason)
   })
 
@@ -306,12 +306,12 @@ async function cdsServerSetup(prompts, cdsSource) {
   cds.connect()
 
   let entity = prompts.table
-  base.debug(`Entity Before ${entity}`)
+  base.debug(baseLite.bundle.getText("debug.cds.entityBefore", [entity]))
   entity = entity.replace(/\./g, "_")
   entity = entity.replace(/::/g, "_")
   let graphQLEntity = entity.replace(/_/g, ".")
-  base.debug(`GraphQL Entity After ${graphQLEntity}`)
-  base.debug('CDS Source:')
+  base.debug(baseLite.bundle.getText("debug.cds.graphqlEntityAfter", [graphQLEntity]))
+  base.debug(baseLite.bundle.getText("debug.cds.sourceLabel"))
   base.debug(cdsSource)
   console.log(t("cds.entity.routes", [entity]))
   console.log(t("cds.source.preview"))
@@ -348,7 +348,7 @@ async function cdsServerSetup(prompts, cdsSource) {
       .with(srv => {
         // Log the actual entity names in the service for debugging
         const entityNames = Object.keys(srv.entities || {})
-        base.debug(`Service entities: ${entityNames.join(', ')}`)
+        base.debug(baseLite.bundle.getText("debug.cds.serviceEntities", [entityNames.join(', ')]))
         console.log(t("cds.service.entities", [entityNames.join(', ')]))
         
         // Use the actual entity name from the service (first entity)
@@ -359,7 +359,7 @@ async function cdsServerSetup(prompts, cdsSource) {
         // @ts-ignore
         srv.on(['READ'], [actualEntityName], async (req) => {
 
-          base.debug(`In Read Exit ${prompts.table}`)
+          base.debug(baseLite.bundle.getText("debug.cds.readExit", [prompts.table]))
 
           // Build a new query targeting the actual HANA table
           let query1 = await cds.parse.cql(`SELECT from ${prompts.table}`)
@@ -462,12 +462,12 @@ async function cdsServerSetup(prompts, cdsSource) {
       const swaggerUi = await import('swagger-ui-express')
       app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(metadata, serveOptions))
     } catch (swaggerErr) {
-      base.debug(`Swagger setup skipped: ${swaggerErr.message}`)
+      base.debug(baseLite.bundle.getText("debug.cds.swaggerSkipped", [swaggerErr.message]))
     }
 
     // Add error handling middleware
     app.use((err, req, res, next) => {
-      base.debug(`Express Error Handler: ${err.message}`)
+      base.debug(baseLite.bundle.getText("debug.cds.expressErrorHandler", [err.message]))
       console.error(t("cds.request.error", [err.message]))
       if (!res.headersSent) {
         res.status(500).json({ error: baseLite.bundle.getText("error.internalServerError"), message: err.message })
@@ -485,7 +485,7 @@ async function cdsServerSetup(prompts, cdsSource) {
     })
   }
   catch (err) {
-    base.debug(`CDS Setup Error: ${err.code} - ${err.message}`)
+    base.debug(baseLite.bundle.getText("debug.cds.setupError", [err.code, err.message]))
     console.log(err)
     if (err.code === 'MODULE_NOT_FOUND') {
       throw baseLite.bundle.getText("cds-dk")
