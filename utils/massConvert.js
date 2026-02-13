@@ -116,7 +116,7 @@ async function hdbtableViewsSQL(prompts, viewResults, wss, db, schema, replacer,
         }
         catch (error) {
             if (prompts.log) {
-                progressBar.itemDone(view.VIEW_NAME)
+                viewProgressBar.itemDone(view.VIEW_NAME)
                 logOutput.push({ object: view.VIEW_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 viewProgressBar.stop()

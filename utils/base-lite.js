@@ -16,8 +16,21 @@ import chalk from 'chalk'
 export const colors = chalk
 
 /** @type {typeof import("debug") } */
-import debugModule from 'debug'
-export const debug = new debugModule('hana-cli')
+// Lazy-load debug module only if DEBUG env var is set (saves ~8ms on startup)
+let _debug = null
+export const debug = (...args) => {
+    if (!_debug) {
+        // Only load debug module if DEBUG is enabled
+        if (process.env.DEBUG) {
+            const debugModule = require('debug')
+            _debug = debugModule('hana-cli')
+        } else {
+            // No-op function when debug is disabled
+            _debug = () => {}
+        }
+    }
+    return _debug(...args)
+}
 
 import * as locale from "./locale.js"
 const TextBundle = require('@sap/textbundle').TextBundle
