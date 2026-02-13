@@ -5,7 +5,7 @@
 
 import { describe, it } from 'mocha'
 import { assert } from '../base.js'
-import { getLocale } from '../../utils/locale.js'
+import { getLocale, normalizeLocale } from '../../utils/locale.js'
 
 describe('Locale Utilities', function () {
     
@@ -65,6 +65,48 @@ describe('Locale Utilities', function () {
             const testEnv = {}
             const result = getLocale(testEnv)
             assert.strictEqual(result, undefined)
+        })
+    })
+
+    describe('normalizeLocale', function () {
+        it('should remove UTF-8 encoding suffix', function () {
+            const result = normalizeLocale('de_DE.UTF-8')
+            assert.strictEqual(result, 'de_DE')
+        })
+
+        it('should remove ISO-8859-1 encoding suffix', function () {
+            const result = normalizeLocale('en_US.ISO-8859-1')
+            assert.strictEqual(result, 'en_US')
+        })
+
+        it('should remove iso88591 encoding suffix', function () {
+            const result = normalizeLocale('fr_FR.iso88591')
+            assert.strictEqual(result, 'fr_FR')
+        })
+
+        it('should handle locale without encoding suffix', function () {
+            const result = normalizeLocale('de_DE')
+            assert.strictEqual(result, 'de_DE')
+        })
+
+        it('should handle simple locale code', function () {
+            const result = normalizeLocale('de')
+            assert.strictEqual(result, 'de')
+        })
+
+        it('should handle undefined locale', function () {
+            const result = normalizeLocale(undefined)
+            assert.strictEqual(result, undefined)
+        })
+
+        it('should handle null locale', function () {
+            const result = normalizeLocale(null)
+            assert.strictEqual(result, null)
+        })
+
+        it('should handle empty string', function () {
+            const result = normalizeLocale('')
+            assert.strictEqual(result, '')
         })
     })
 })

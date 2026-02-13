@@ -22,7 +22,7 @@ export const debug = new debugModule('hana-cli')
 import * as locale from "./locale.js"
 const TextBundle = require('@sap/textbundle').TextBundle
 /** @typeof TextBundle - instance of sap/textbundle */
-export const bundle = new TextBundle(path.join(__dirname, '..', '/_i18n/messages'), locale.getLocale())
+export const bundle = new TextBundle(path.join(__dirname, '..', '/_i18n/messages'), locale.normalizeLocale(locale.getLocale()))
 
 /**
  * Output an error to the console
