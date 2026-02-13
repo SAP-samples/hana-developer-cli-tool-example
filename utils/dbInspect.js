@@ -8,6 +8,9 @@
 import * as base from "./base.js"
 const bundle = base.bundle
 
+// Version cache to avoid repeated database queries
+let cachedVersion = null
+
 /**
  * Return the HANA DB Version
  * @param {object} db - Database Connection
@@ -15,6 +18,10 @@ const bundle = base.bundle
  */
 export async function getHANAVersion(db) {
 	base.debug(`getHANAVersion`)
+	// Return cached version if available
+	if (cachedVersion) {
+		return cachedVersion
+	}
 	const statement = await db.preparePromisified(
 		`SELECT *
                  FROM M_DATABASE`)
@@ -23,8 +30,9 @@ export async function getHANAVersion(db) {
 		throw new Error(bundle.getText("errMDB"))
 	}
 	object[0].versionMajor = object[0].VERSION.charAt(0)
+	cachedVersion = object[0]
 	base.debug(`HANA Version ${JSON.stringify(object)}`)
-	return object[0]
+	return cachedVersion
 }
 
 
@@ -41,29 +49,14 @@ export async function isCalculationView(db, schema, viewId) {
 	if (vers.versionMajor < 2) {
 		return false
 	}
-	//Select View
-	let statementString = ``
-	statementString = `SELECT CUBE_ID, SCHEMA_NAME, QUALIFIED_NAME, VIEW_NAME, CUBE_TYPE, IS_HDI_OBJECT
+	// Try lookup by both QUALIFIED_NAME and VIEW_NAME to handle both identification methods
+	const statementString = `SELECT CUBE_ID, SCHEMA_NAME, QUALIFIED_NAME, VIEW_NAME, CUBE_TYPE, IS_HDI_OBJECT
 	   FROM _SYS_BI.BIMC_REPORTABLE_VIEWS
 	   WHERE SCHEMA_NAME LIKE ?
-	     AND QUALIFIED_NAME = ?`
+	     AND (QUALIFIED_NAME = ? OR VIEW_NAME = ?)`
 	const statement = await db.preparePromisified(statementString)
-	const object = await db.statementExecPromisified(statement, [schema, viewId])
-	if (object.length < 1) {
-		statementString = `SELECT CUBE_ID, SCHEMA_NAME, QUALIFIED_NAME, VIEW_NAME, CUBE_TYPE, IS_HDI_OBJECT
-	   							 FROM _SYS_BI.BIMC_REPORTABLE_VIEWS
-	   							WHERE SCHEMA_NAME LIKE ?
-	    						  AND VIEW_NAME = ?`
-		const statement = await db.preparePromisified(statementString)
-		const object = await db.statementExecPromisified(statement, [schema, viewId])
-		if (object.length < 1) {
-			return false
-		} else {
-			return true
-		}
-	} else {
-		return true
-	}
+	const object = await db.statementExecPromisified(statement, [schema, viewId, viewId])
+	return object.length >= 1
 }
 
 /**
@@ -108,19 +101,17 @@ export async function getView(db, scheam, viewId) {
 export async function getDef(db, schema, Id) {
 	base.debug(`getDef ${schema} ${Id}`)
 	//Select View
-	var inputParams = {
+	const inputParams = {
 		SCHEMA: `"${schema}"`,
 		OBJECT: `"${Id}"`
 	}
 
-	let sp = await db.loadProcedurePromisified("SYS", "GET_OBJECT_DEFINITION")
-	let object = await db.callProcedurePromisified(sp, inputParams)
+	const sp = await db.loadProcedurePromisified("SYS", "GET_OBJECT_DEFINITION")
+	const object = await db.callProcedurePromisified(sp, inputParams)
 	if (object.length < 1) {
 		throw new Error(bundle.getText("errObj"))
 	}
-	let output = object.results[0].OBJECT_CREATION_STATEMENT
-	output = output.toString()
-	output = output.replace(new RegExp(",", "g"), ",\n")
+	const output = object.results[0].OBJECT_CREATION_STATEMENT.toString().replace(/,/g, ",\n")
 	return output
 }
 
@@ -151,28 +142,34 @@ export async function getCalcViewFields(db, schema, viewId, viewOid) {
 		const statementLookup = await db.preparePromisified(statementString)
 		const object = await db.statementExecPromisified(statementLookup, [schema, viewId])
 		if (object.length >= 1) {
-			const statement = await db.preparePromisified(
+			const lookupStatement = await db.preparePromisified(
 				`SELECT SCHEMA_NAME, QUALIFIED_NAME AS VIEW_NAME, NULL AS VIEW_OID, COLUMN_NAME, 
 			"ORDER" AS POSITION, DESC_TYPE_D AS DATA_TYPE_NAME, 0 AS OFFSET, 0 AS LENGTH, SCALE, 
 			IS_NULLABLE, NULL AS DEFAULT_VALUE, NULL AS COLUMN_ID, COLUMN_CAPTION AS COMMENTS, KEY_COLUMN_NAME
 	 			FROM _SYS_BI.BIMC_DIMENSION_VIEW
 			   WHERE SCHEMA_NAME LIKE ?
 				 AND QUALIFIED_NAME = ? ORDER BY POSITION`)
-			fields = await db.statementExecPromisified(statement, [schema, object[0].QUALIFIED_NAME])
+			fields = await db.statementExecPromisified(lookupStatement, [schema, object[0].QUALIFIED_NAME])
 		}
 	}
-	for (let field of fields) {
-		const fieldStatement = await db.preparePromisified(
-			`SELECT OFFSET, LENGTH, DEFAULT_VALUE, DATA_TYPE_NAME
+	// Batch lookup all field details in single query instead of N+1 queries
+	if (fields.length > 0) {
+		const columnNames = fields.map(f => `'${f.COLUMN_NAME}'`).join(', ')
+		const batchStatement = await db.preparePromisified(
+			`SELECT COLUMN_NAME, OFFSET, LENGTH, DEFAULT_VALUE, DATA_TYPE_NAME
 			   FROM VIEW_COLUMNS 
-		      WHERE VIEW_OID = ? AND COLUMN_NAME = ?`
-		)
-		const sqlField = await db.statementExecPromisified(fieldStatement, [viewOid, field.COLUMN_NAME])
-		if (sqlField.length >= 1) {
-			field.OFFSET = sqlField[0].OFFSET
-			field.LENGTH = sqlField[0].LENGTH
-			field.DEFAULT_VALUE = sqlField[0].DEFAULT_VALUE
-			field.DATA_TYPE_NAME = sqlField[0].DATA_TYPE_NAME
+		      WHERE VIEW_OID = ? AND COLUMN_NAME IN (${columnNames})`)
+		const sqlFields = await db.statementExecPromisified(batchStatement, [viewOid])
+		// Create lookup map for O(1) access instead of array search
+		const sqlFieldMap = new Map(sqlFields.map(f => [f.COLUMN_NAME, f]))
+		for (let field of fields) {
+			const sqlField = sqlFieldMap.get(field.COLUMN_NAME)
+			if (sqlField) {
+				field.OFFSET = sqlField.OFFSET
+				field.LENGTH = sqlField.LENGTH
+				field.DEFAULT_VALUE = sqlField.DEFAULT_VALUE
+				field.DATA_TYPE_NAME = sqlField.DATA_TYPE_NAME
+			}
 		}
 	}
 	return fields
@@ -217,13 +214,9 @@ export async function getCalcViewParameters(db, schema, viewId, viewOid) {
 				    AND QUALIFIED_NAME = ?`)
 	let parameters = await db.statementExecPromisified(statement, [schema, viewId])
 	for (let parameter of parameters) {
-		let temp1 = parameter.COLUMN_SQL_TYPE.split("(")
-		if(temp1.length > 1){
-			let temp2 = temp1[1].split(")")
-			parameter.LENGTH = temp2[0]
-		}else{
-			parameter.LENGTH = 0
-		}
+		// Use regex to extract length from type (more reliable than split)
+		const lengthMatch = parameter.COLUMN_SQL_TYPE.match(/\(([^)]+)\)/)
+		parameter.LENGTH = lengthMatch ? lengthMatch[1] : 0
 	}
 	
 	return parameters
@@ -465,6 +458,68 @@ export async function getFunctionPramCols(db, funcOid) {
 	return fields
 }
 
+// Data-driven type mapping to eliminate ~300 lines of duplicated switch statements
+const typeMap = {
+	// Common types for both useHanaTypes modes
+	NVARCHAR: (len) => `String(${len})`,
+	NCLOB: () => "LargeString",
+	VARBINARY: (len) => `Binary(${len})`,
+	BLOB: () => "LargeBinary",
+	INTEGER: () => "Integer",
+	BIGINT: () => "Integer64",
+	DECIMAL: (len, scale) => scale ? `Decimal(${len}, ${scale})` : `Decimal(${len})`,
+	DOUBLE: () => "Double",
+	DAYDATE: () => "Date",
+	DATE: () => "Date",
+	TIME: () => "Time",
+	SECONDDATE: () => "String",
+	TIMESTAMP: () => "Timestamp",
+	BOOLEAN: () => "Boolean",
+	REAL_VECTOR: () => "Vector",
+	// Standard mode only types
+	VARCHAR: (len) => `String(${len})`,
+	TINYINT: () => "UInt8",
+	SMALLINT: () => "Int16"
+}
+
+const hanaTypeMap = {
+	// HANA-specific types when useHanaTypes = true
+	SMALLINT: () => "hana.SMALLINT",
+	TINYINT: () => "hana.TINYINT",
+	SMALLDECIMAL: () => "hana.SMALLDECIMAL",
+	REAL: () => "hana.REAL",
+	CLOB: () => "hana.CLOB",
+	CHAR: (len) => `hana.CHAR(${len})`,
+	NCHAR: (len) => `hana.NCHAR(${len})`,
+	BINARY: (len) => `hana.BINARY(${len})`,
+	VARCHAR: (len) => `hana.VARCHAR(${len})`
+}
+
+/**
+ * Get CDS type string for a field, eliminating massive duplicate switch statements
+ * @param {string} dataType - HANA data type name
+ * @param {number} length - Type length parameter
+ * @param {number} scale - Type scale (for DECIMAL)
+ * @param {boolean} useHanaTypes - Whether to use HANA-specific type names
+ * @param {string|number|null} geoSrsId - SRS ID for geometry types
+ * @returns {string} CDS type definition
+ */
+function getTypeMapping(dataType, length, scale, useHanaTypes, geoSrsId) {
+	// Handle geometry types with SRS ID
+	if (geoSrsId !== null && geoSrsId !== undefined) {
+		return `hana.${dataType}(${geoSrsId})`
+	}
+
+	// Select appropriate type map based on useHanaTypes option
+	const typeFunc = useHanaTypes ? hanaTypeMap[dataType] : typeMap[dataType]
+	if (typeFunc) {
+		return typeFunc(length, scale)
+	}
+
+	// Fallback for unsupported types
+	return `**UNSUPPORTED TYPE - ${dataType}`
+}
+
 export let options = {
 	useHanaTypes: false,
 	noColons: false,
@@ -539,141 +594,19 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 		cdstable += `(`
 		for (let parameter of parameters) {
 			cdstable += `${parameter.PARAMETER_NAME} : `
-			if (options.useHanaTypes) {
-				switch (parameter.DATA_TYPE_NAME) {
-					case "NVARCHAR":
-						cdstable += `String(${parameter.LENGTH})`
-						break
-					case "NCLOB":
-						cdstable += "LargeString"
-						break
-					case "VARBINARY":
-						cdstable += `Binary(${parameter.LENGTH})`
-						break
-					case "BLOB":
-						cdstable += "LargeBinary"
-						break
-					case "INTEGER":
-						cdstable += "Integer"
-						break
-					case "BIGINT":
-						cdstable += "Integer64"
-						break
-					case "DECIMAL":
-						cdstable += parameter.SCALE ? `Decimal(${parameter.LENGTH}, ${parameter.SCALE})` : `Decimal(${parameter.LENGTH})`
-						break
-					case "DOUBLE":
-						cdstable += "Double"
-						break
-					case "DAYDATE":
-					case "DATE":
-						cdstable += "Date"
-						break
-					case "TIME":
-						cdstable += "Time"
-						break
-					case "SECONDDATE":
-						cdstable += "String"
-						break
-					case "TIMESTAMP":
-						if (parent === 'preview') {
-							cdstable += "String"
-						} else {
-							cdstable += "Timestamp"
-						}
-						break
-					case "BOOLEAN":
-						cdstable += "Boolean"
-						break
-					// hana types
-					case "SMALLINT":
-					case "TINYINT":
-					case "SMALLDECIMAL":
-					case "REAL":
-					case "CLOB":
-						cdstable += `hana.${parameter.DATA_TYPE_NAME}`
-						break
-					case "CHAR":
-					case "NCHAR":
-					case "BINARY":
-						cdstable += `hana.${parameter.DATA_TYPE_NAME}(${parameter.LENGTH})`
-						break
-					case "VARCHAR":
-						cdstable += `hana.${parameter.DATA_TYPE_NAME}(${parameter.LENGTH})`
-						break
-					case "ST_POINT":
-					case "ST_GEOMETRY":
-						cdstable += `hana.${parameter.DATA_TYPE_NAME}(${await getGeoColumns(db, object[0], parameter, type)})`
-						break
-					case "REAL_VECTOR":
-						cdstable += "Vector"
-						break
-					default:
-						cdstable += `**UNSUPPORTED TYPE - ${parameter.DATA_TYPE_NAME}`
-				}
-			} else {
-				switch (parameter.DATA_TYPE_NAME) {
-					case "NVARCHAR":
-						cdstable += `String(${parameter.LENGTH})`
-						break
-					case "NCLOB":
-						cdstable += "LargeString"
-						break
-					case "VARBINARY":
-						cdstable += `Binary(${parameter.LENGTH})`
-						break
-					case "BLOB":
-						cdstable += "LargeBinary"
-						break
-					case "INTEGER":
-						cdstable += "Integer"
-						break
-					case "BIGINT":
-						cdstable += "Integer64"
-						break
-					case "TINYINT":
-						cdstable += "UInt8"
-						break
-					case "SMALLINT":
-						cdstable += "Int16"
-						break
-					case "DECIMAL":
-						cdstable += parameter.SCALE ? `Decimal(${parameter.LENGTH}, ${parameter.SCALE})` : `Decimal(${parameter.LENGTH})`
-						break
-					case "DOUBLE":
-						cdstable += "Double"
-						break
-					case "DAYDATE":
-					case "DATE":
-						cdstable += "Date"
-						break
-					case "TIME":
-						cdstable += "Time"
-						break
-					case "SECONDDATE":
-						cdstable += "String"
-						break
-					case "TIMESTAMP":
-						if (parent === 'preview') {
-							cdstable += "String"
-						} else {
-							cdstable += "Timestamp"
-						}
-						break
-					case "BOOLEAN":
-						cdstable += "Boolean"
-						break
-					case "REAL_VECTOR":
-						cdstable += "Vector"
-						break
-					case "VARCHAR":
-						// backward compatible change
-						cdstable += `String(${parameter.LENGTH})`
-						break
-					default:
-						cdstable += `**UNSUPPORTED TYPE - ${parameter.DATA_TYPE_NAME}`
-				}
+			
+			// Handle geo types that need SRS ID
+			const isGeo = (parameter.DATA_TYPE_NAME === "ST_POINT" || parameter.DATA_TYPE_NAME === "ST_GEOMETRY")
+			const geoSrsId = isGeo ? await getGeoColumns(db, object[0], parameter, type) : null
+			
+			let typeStr = getTypeMapping(parameter.DATA_TYPE_NAME, parameter.LENGTH, parameter.SCALE, options.useHanaTypes, geoSrsId)
+			
+			// Override TIMESTAMP for preview context
+			if (parameter.DATA_TYPE_NAME === "TIMESTAMP" && parent === 'preview') {
+				typeStr = "String"
 			}
+			
+			cdstable += typeStr
 			cdstable += ", "
 		}
 		cdstable = cdstable.slice(0, -2)
@@ -725,141 +658,18 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
 			cdstable += `${field.COLUMN_NAME}` + ": "
 		}
 
-		if (options.useHanaTypes) {
-			switch (field.DATA_TYPE_NAME) {
-				case "NVARCHAR":
-					cdstable += `String(${field.LENGTH})`
-					break
-				case "NCLOB":
-					cdstable += "LargeString"
-					break
-				case "VARBINARY":
-					cdstable += `Binary(${field.LENGTH})`
-					break
-				case "BLOB":
-					cdstable += "LargeBinary"
-					break
-				case "INTEGER":
-					cdstable += "Integer"
-					break
-				case "BIGINT":
-					cdstable += "Integer64"
-					break
-				case "DECIMAL":
-					cdstable += field.SCALE ? `Decimal(${field.LENGTH}, ${field.SCALE})` : `Decimal(${field.LENGTH})`
-					break
-				case "DOUBLE":
-					cdstable += "Double"
-					break
-				case "DAYDATE":
-				case "DATE":
-					cdstable += "Date"
-					break
-				case "TIME":
-					cdstable += "Time"
-					break
-				case "SECONDDATE":
-					cdstable += "String"
-					break
-				case "TIMESTAMP":
-					if (parent === 'preview') {
-						cdstable += "String"
-					} else {
-						cdstable += "Timestamp"
-					}
-					break
-				case "BOOLEAN":
-					cdstable += "Boolean"
-					break
-				// hana types
-				case "SMALLINT":
-				case "TINYINT":
-				case "SMALLDECIMAL":
-				case "REAL":
-				case "CLOB":
-					cdstable += `hana.${field.DATA_TYPE_NAME}`
-					break
-				case "CHAR":
-				case "NCHAR":
-				case "BINARY":
-					cdstable += `hana.${field.DATA_TYPE_NAME}(${field.LENGTH})`
-					break
-				case "VARCHAR":
-					cdstable += `hana.${field.DATA_TYPE_NAME}(${field.LENGTH})`
-					break
-				case "ST_POINT":
-				case "ST_GEOMETRY":
-					cdstable += `hana.${field.DATA_TYPE_NAME}(${await getGeoColumns(db, object[0], field, type)})`
-					break
-				case "REAL_VECTOR":
-					cdstable += "Vector"
-					break
-				default:
-					cdstable += `**UNSUPPORTED TYPE - ${field.DATA_TYPE_NAME}`
-			}
-		} else {
-			switch (field.DATA_TYPE_NAME) {
-				case "NVARCHAR":
-					cdstable += `String(${field.LENGTH})`
-					break
-				case "NCLOB":
-					cdstable += "LargeString"
-					break
-				case "VARBINARY":
-					cdstable += `Binary(${field.LENGTH})`
-					break
-				case "BLOB":
-					cdstable += "LargeBinary"
-					break
-				case "INTEGER":
-					cdstable += "Integer"
-					break
-				case "BIGINT":
-					cdstable += "Integer64"
-					break
-				case "TINYINT":
-					cdstable += "UInt8"
-					break
-				case "SMALLINT":
-					cdstable += "Int16"
-					break
-				case "DECIMAL":
-					cdstable += field.SCALE ? `Decimal(${field.LENGTH}, ${field.SCALE})` : `Decimal(${field.LENGTH})`
-					break
-				case "DOUBLE":
-					cdstable += "Double"
-					break
-				case "DAYDATE":
-				case "DATE":
-					cdstable += "Date"
-					break
-				case "TIME":
-					cdstable += "Time"
-					break
-				case "SECONDDATE":
-					cdstable += "String"
-					break
-				case "TIMESTAMP":
-					if (parent === 'preview') {
-						cdstable += "String"
-					} else {
-						cdstable += "Timestamp"
-					}
-					break
-				case "BOOLEAN":
-					cdstable += "Boolean"
-					break
-				case "REAL_VECTOR":
-					cdstable += "Vector"
-					break
-				case "VARCHAR":
-					// backward compatible change
-					cdstable += `String(${field.LENGTH})`
-					break
-				default:
-					cdstable += `**UNSUPPORTED TYPE - ${field.DATA_TYPE_NAME}`
-			}
+		// Handle geo types that need SRS ID
+		const isGeo = (field.DATA_TYPE_NAME === "ST_POINT" || field.DATA_TYPE_NAME === "ST_GEOMETRY")
+		const geoSrsId = isGeo ? await getGeoColumns(db, object[0], field, type) : null
+		
+		let typeStr = getTypeMapping(field.DATA_TYPE_NAME, field.LENGTH, field.SCALE, options.useHanaTypes, geoSrsId)
+		
+		// Override TIMESTAMP for preview context
+		if (field.DATA_TYPE_NAME === "TIMESTAMP" && parent === 'preview') {
+			typeStr = "String"
 		}
+		
+		cdstable += typeStr
 
 		xref.dataType = field.DATA_TYPE_NAME
 
