@@ -14,8 +14,76 @@ const hanaPlanName = "hana"
 
 import { homedir } from 'os'
 import * as fs from 'fs'
+import * as path from 'path'
 import { promisify } from 'util'
 import * as child_process from 'child_process'
+import { tmpdir } from 'os'
+
+/**
+ * Execute BTP CLI command with error handling
+ * @param {string} command - BTP command to execute (without 'btp' prefix)
+ * @param {Object} options - Command options
+ * @param {boolean} [options.json=false] - Parse output as JSON
+ * @returns {Promise<any>}
+ * @private
+ */
+async function executeBTPCommand(command, options = { json: false }) {
+    base.debug(`executeBTPCommand: ${command}`)
+    
+    try {
+        const exec = promisify(child_process.exec)
+        const jsonFormat = options.json ? '--format json ' : ''
+        const script = `btp ${jsonFormat}${command}`
+        
+        const { stdout } = await exec(script)
+        
+        if (!stdout) {
+            return options.json ? null : ''
+        }
+        
+        if (options.json) {
+            try {
+                return JSON.parse(stdout)
+            } catch (e) {
+                base.debug(`Failed to parse JSON output: ${e.message}`)
+                return null
+            }
+        }
+        
+        return stdout
+    } catch (error) {
+        base.debug(`executeBTPCommand error: ${error.message}`)
+        throw error
+    }
+}
+
+/**
+ * Find item in array matching predicate
+ * @param {Array} array - Array to search
+ * @param {Function} predicate - Test function
+ * @param {any} defaultValue - Default value if not found (default: null)
+ * @returns {any}
+ * @private
+ */
+function findInArray(array, predicate, defaultValue = null) {
+    if (!array || !Array.isArray(array)) {
+        return defaultValue
+    }
+    const found = array.find(item => predicate(item))
+    return found || defaultValue
+}
+
+/**
+ * Write parameters to temporary file
+ * @param {Object} data - Data to write
+ * @returns {string} - Path to temporary file
+ * @private
+ */
+function writeTempParameterFile(data) {
+    const fileName = path.join(tmpdir(), `btp-params-${Date.now()}.json`)
+    fs.writeFileSync(fileName, JSON.stringify(data))
+    return fileName
+}
 
 /**
  * Get btp CLI version
@@ -24,22 +92,11 @@ import * as child_process from 'child_process'
 export async function getVersion() {
     base.debug('getVersion')
     try {
-        const exec = promisify(child_process.exec)
-        let script = `btp --version`
-
-        const { stdout } = await exec(script)
-        if (stdout) {
-            try {
-                return stdout
-            } catch (e) {
-                return
-            }
-        }
-        return
-
+        const result = await executeBTPCommand('--version')
+        return result || ''
     } catch (error) {
-        base.debug(error)
-        throw (error)
+        base.debug(`getVersion error: ${error.message}`)
+        throw error
     }
 }
 
@@ -50,42 +107,33 @@ export async function getVersion() {
 export async function getInfo() {
     base.debug('getInfo')
     try {
-        const exec = promisify(child_process.exec)
-        let script = `btp --info`
-
-        const { stdout } = await exec(script)
-        if (stdout) {
-            try {
-                let infoOut = {}
-                let result = stdout.split("\n")
-                if (result[6]) {
-                    let config = result[6]
-                    let configOut = config.split(/:(.*)/s)
-                    infoOut.Configuration = configOut[1].trim()
-                }
-
-                if (result[4]) {
-                    let url = result[4]
-                    let urlOut = url.split(/:(.*)/s)
-                    infoOut.serverURL = urlOut[1].trim()
-                }
-
-                if (result[5]) {
-                    let user = result[5]
-                    let userOut = user.split(/:(.*)/s)
-                    infoOut.user = userOut[1].trim()
-                }
-
-                return infoOut
-            } catch (e) {
-                return
+        const output = await executeBTPCommand('--info')
+        const infoOut = {}
+        
+        if (!output) {
+            return infoOut
+        }
+        
+        const lines = output.split("\n")
+        
+        // Parse output more robustly by searching for key patterns
+        for (const line of lines) {
+            if (line.includes('Configuration')) {
+                const parts = line.split(/:(.*)/s)
+                if (parts[1]) infoOut.Configuration = parts[1].trim()
+            } else if (line.includes('URL') || line.includes('url')) {
+                const parts = line.split(/:(.*)/s)
+                if (parts[1]) infoOut.serverURL = parts[1].trim()
+            } else if (line.includes('User') || line.includes('user')) {
+                const parts = line.split(/:(.*)/s)
+                if (parts[1]) infoOut.user = parts[1].trim()
             }
         }
-        return
-
+        
+        return infoOut
     } catch (error) {
-        base.debug(error)
-        throw (error)
+        base.debug(`getInfo error: ${error.message}`)
+        throw error
     }
 }
 
@@ -150,18 +198,14 @@ export async function getBTPTarget() {
 export async function getBTPGlobalAccount() {
     base.debug('getBTPGlobalAccount')
     const target = await getBTPTarget()
-    let globalAccountDetails = ''
-    for (let item of target) {
-        if (item.Type === globalAccount) {
-            globalAccountDetails = item
-        }
-    }
-    if (globalAccountDetails) {
-        base.debug(globalAccountDetails)
-        return globalAccountDetails
-    } else {
+    const globalAccountDetails = findInArray(target, item => item.Type === globalAccount)
+    
+    if (!globalAccountDetails) {
         throw new Error(bundle.getText("err.BTPNoGlobalAccount"))
     }
+    
+    base.debug(globalAccountDetails)
+    return globalAccountDetails
 }
 
 /**
@@ -171,18 +215,14 @@ export async function getBTPGlobalAccount() {
 export async function getBTPSubAccount() {
     base.debug('getBTPSubaccount')
     const target = await getBTPTarget()
-    let subAccountDetails = ''
-    for (let item of target) {
-        if (item.Type === subAccount) {
-            subAccountDetails = item
-        }
-    }
-    if (subAccountDetails) {
-        base.debug(subAccountDetails)
-        return subAccountDetails
-    } else {
+    const subAccountDetails = findInArray(target, item => item.Type === subAccount)
+    
+    if (!subAccountDetails) {
         throw new Error(bundle.getText("err.BTPNoSubAccount"))
     }
+    
+    base.debug(subAccountDetails)
+    return subAccountDetails
 }
 
 /**
@@ -191,31 +231,25 @@ export async function getBTPSubAccount() {
  */
 export async function getBTPSubscriptions() {
     base.debug('getBTPSubscriptions')
-
     try {
-
         const exec = promisify(child_process.exec)
-        let script = `btp --format json list accounts/subscriptions`
-
-        const { stdout, stderr } = await exec(script)
-
+        const { stdout, stderr } = await exec('btp --format json list accounts/subscriptions')
+        
         if (stderr) {
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            if (stdout) {
-                try {
-                    return JSON.parse(stdout)
-                } catch (e) {
-                    return
-                }
-            }
-            return
         }
-
-
+        
+        if (stdout) {
+            try {
+                return JSON.parse(stdout)
+            } catch (e) {
+                return null
+            }
+        }
+        return null
     } catch (error) {
-        base.debug(error)
-        throw (error)
+        base.debug(`getBTPSubscriptions error: ${error.message}`)
+        throw error
     }
 }
 
@@ -226,12 +260,10 @@ export async function getBTPSubscriptions() {
 export async function getHANACloudSub() {
     base.debug('getHANACloudSub')
     const subs = await getBTPSubscriptions()
-    let hanaCloudSub = ''
-    for (let item of subs.applications) {
-        if (item.appName === hanaCloudTools) {
-            hanaCloudSub = item
-        }
+    if (!subs || !subs.applications) {
+        return null
     }
+    const hanaCloudSub = findInArray(subs.applications, item => item.appName === hanaCloudTools)
     base.debug(hanaCloudSub)
     return hanaCloudSub
 }
@@ -254,12 +286,11 @@ export async function getHANACloudSubURL() {
 export async function getBASSub() {
     base.debug('getBASSub')
     const subs = await getBTPSubscriptions()
-    let basSub = ''
-    for (let item of subs.applications) {
-        if ((item.appName === applicationStudio || item.appName === 'build-code') && item.state === 'SUBSCRIBED') {
-            basSub = item
-        }
+    if (!subs || !subs.applications) {
+        return null
     }
+    const basSub = findInArray(subs.applications, 
+        item => (item.appName === applicationStudio || item.appName === 'build-code') && item.state === 'SUBSCRIBED')
     base.debug(basSub)
     return basSub
 }
@@ -281,28 +312,25 @@ export async function getBASSubURL() {
  */
 export async function getBTPHierarchy() {
     base.debug('getBTPHierarchy')
-
     try {
         const exec = promisify(child_process.exec)
-        let script = `btp --format json get accounts/global-account --show-hierarchy`
-
-        const { stdout, stderr } = await exec(script)
-
+        const { stdout, stderr } = await exec('btp --format json get accounts/global-account --show-hierarchy')
+        
         if (stderr) {
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            if (stdout) {
-                try {
-                    return JSON.parse(stdout)
-                } catch (e) {
-                    return
-                }
-            }
-            return
         }
+        
+        if (stdout) {
+            try {
+                return JSON.parse(stdout)
+            } catch (e) {
+                return null
+            }
+        }
+        return null
     } catch (error) {
-        base.debug(error)
-        throw (error)
+        base.debug(`getBTPHierarchy error: ${error.message}`)
+        throw error
     }
 }
 
@@ -313,62 +341,53 @@ export async function getBTPHierarchy() {
  */
 export async function getBTPSubAccounts() {
     base.debug('getBTPSubAccounts')
-
     try {
         const exec = promisify(child_process.exec)
-        let script = `btp --format json list accounts/subaccount`
-
-        const { stdout, stderr } = await exec(script)
-
+        const { stdout, stderr } = await exec('btp --format json list accounts/subaccount')
+        
         if (stderr) {
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            if (stdout) {
-                try {
-                    return JSON.parse(stdout)
-                } catch (e) {
-                    return
-                }
-            }
-            return
         }
+        
+        if (stdout) {
+            try {
+                return JSON.parse(stdout)
+            } catch (e) {
+                return null
+            }
+        }
+        return null
     } catch (error) {
-        base.debug(error)
-        throw (error)
+        base.debug(`getBTPSubAccounts error: ${error.message}`)
+        throw error
     }
 }
 
 /**
- * Get all Subscriptions
+ * Get all Service Plans
  * @returns {Promise<object>}
  */
 export async function getBTPPlans() {
     base.debug('getBTPPlans')
-
     try {
-
         const exec = promisify(child_process.exec)
-        let script = `btp --format json list services/plan`
-
-        const { stdout, stderr } = await exec(script)
-
+        const { stdout, stderr } = await exec('btp --format json list services/plan')
+        
         if (stderr) {
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            if (stdout) {
-                try {
-                    return JSON.parse(stdout)
-                } catch (e) {
-                    return
-                }
-            }
-            return
         }
-
-
+        
+        if (stdout) {
+            try {
+                return JSON.parse(stdout)
+            } catch (e) {
+                return null
+            }
+        }
+        return null
     } catch (error) {
-        base.debug(error)
-        throw (error)
+        base.debug(`getBTPPlans error: ${error.message}`)
+        throw error
     }
 }
 
@@ -378,13 +397,11 @@ export async function getBTPPlans() {
  */
 export async function getHANAPlan() {
     base.debug('getHANAPlan')
-    const subs = await getBTPPlans()
-    let hanaPlan = ''
-    for (let item of subs) {
-        if (item.catalog_name == hanaPlanName) {
-            hanaPlan = item
-        }
+    const plans = await getBTPPlans()
+    if (!plans) {
+        return null
     }
+    const hanaPlan = findInArray(plans, item => item.catalog_name === hanaPlanName)
     base.debug(hanaPlan)
     return hanaPlan
 }
@@ -395,31 +412,25 @@ export async function getHANAPlan() {
  */
 export async function getBTPServiceInstances() {
     base.debug('getBTPServiceInstances')
-
     try {
-
         const exec = promisify(child_process.exec)
-        let script = `btp --format json list services/instance`
-
-        const { stdout, stderr } = await exec(script)
-
+        const { stdout, stderr } = await exec('btp --format json list services/instance')
+        
         if (stderr) {
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            if (stdout) {
-                try {
-                    return JSON.parse(stdout)
-                } catch (e) {
-                    return
-                }
-            }
-            return
         }
-
-
+        
+        if (stdout) {
+            try {
+                return JSON.parse(stdout)
+            } catch (e) {
+                return null
+            }
+        }
+        return null
     } catch (error) {
-        base.debug(error)
-        throw (error)
+        base.debug(`getBTPServiceInstances error: ${error.message}`)
+        throw error
     }
 }
 
@@ -430,31 +441,30 @@ export async function getBTPServiceInstances() {
  */
 export async function getBTPServiceInstanceDetails(id) {
     base.debug('getBTPServiceInstanceDetails')
-
+    
+    if (!id || typeof id !== 'string') {
+        throw new Error('Service instance ID is required and must be a string')
+    }
+    
     try {
-
         const exec = promisify(child_process.exec)
-        let script = `btp --format json get services/instance ${id}`
-
-        const { stdout, stderr } = await exec(script)
-
+        const { stdout, stderr } = await exec(`btp --format json get services/instance ${id}`)
+        
         if (stderr) {
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            if (stdout) {
-                try {
-                    return JSON.parse(stdout)
-                } catch (e) {
-                    return
-                }
-            }
-            return
         }
-
-
+        
+        if (stdout) {
+            try {
+                return JSON.parse(stdout)
+            } catch (e) {
+                return null
+            }
+        }
+        return null
     } catch (error) {
-        base.debug(error)
-        throw (error)
+        base.debug(`getBTPServiceInstanceDetails error: ${error.message}`)
+        throw error
     }
 }
 
@@ -465,52 +475,49 @@ export async function getBTPServiceInstanceDetails(id) {
  */
 export async function setBTPSubAccount(subAccount) {
     base.debug('setBTPSubAccount')
-
+    
+    if (!subAccount || typeof subAccount !== 'string') {
+        throw new Error('Sub-account ID is required and must be a string')
+    }
+    
     try {
-
-        const exec = promisify(child_process.exec)
-        let script = `btp target --subaccount ${subAccount}`
-
-        const { stdout } = await exec(script)
-        return stdout
-
+        return await executeBTPCommand(`target --subaccount ${subAccount}`)
     } catch (error) {
-        base.debug(error)
-        throw (error)
+        base.debug(`setBTPSubAccount error: ${error.message}`)
+        throw error
     }
 }
 /**
- * Get all Service Instances Parameters
+ * Get Service Instance Parameters
  * @param {string} id - service instance id 
  * @returns {Promise<object>}
  */
 export async function getBTPServiceInstanceParameters(id) {
     base.debug('getBTPServiceInstanceParameters')
-
+    
+    if (!id || typeof id !== 'string') {
+        throw new Error('Service instance ID is required and must be a string')
+    }
+    
     try {
-
         const exec = promisify(child_process.exec)
-        let script = `btp --format json get services/instance ${id} --show-parameters`
-
-        const { stdout, stderr } = await exec(script)
-
+        const { stdout, stderr } = await exec(`btp --format json get services/instance ${id} --show-parameters`)
+        
         if (stderr) {
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            if (stdout) {
-                try {
-                    return JSON.parse(stdout)
-                } catch (e) {
-                    return
-                }
-            }
-            return
         }
-
-
+        
+        if (stdout) {
+            try {
+                return JSON.parse(stdout)
+            } catch (e) {
+                return null
+            }
+        }
+        return null
     } catch (error) {
-        base.debug(error)
-        throw (error)
+        base.debug(`getBTPServiceInstanceParameters error: ${error.message}`)
+        throw error
     }
 }
 
@@ -520,25 +527,43 @@ export async function getBTPServiceInstanceParameters(id) {
  */
 export async function getHANAServiceInstances() {
     base.debug('getHANAServiceInstances')
-    const subs = await getBTPServiceInstances()
-    const hanaPlan = await getHANAPlan()
-    let hanaInstances = []
-    for (let item of subs) {
-        // @ts-ignore
-        if (item.service_plan_id === hanaPlan.id) {
-            try {
-                let details = await getBTPServiceInstanceDetails(item.id)
-                let parameters = await getBTPServiceInstanceParameters(item.id)
-                item.last_operation = details.last_operation
-                item.parameters = parameters
-                hanaInstances.push(item)
-            } catch (error) {
-
-            }
+    try {
+        const subs = await getBTPServiceInstances()
+        const hanaPlan = await getHANAPlan()
+        
+        if (!subs || !hanaPlan) {
+            return []
         }
+        
+        // Filter for HANA instances first
+        const hanaInstanceItems = subs.filter(item => item.service_plan_id === hanaPlan.id)
+        
+        // Fetch details and parameters in parallel for all instances
+        const enrichedInstances = await Promise.all(
+            hanaInstanceItems.map(async (item) => {
+                try {
+                    const [details, parameters] = await Promise.all([
+                        getBTPServiceInstanceDetails(item.id),
+                        getBTPServiceInstanceParameters(item.id)
+                    ])
+                    item.last_operation = details.last_operation
+                    item.parameters = parameters
+                    return item
+                } catch (error) {
+                    base.debug(`Error enriching instance ${item.id}: ${error.message}`)
+                    return null
+                }
+            })
+        )
+        
+        // Filter out failed enrichments
+        const hanaInstances = enrichedInstances.filter(item => item !== null)
+        base.debug(hanaInstances)
+        return hanaInstances
+    } catch (error) {
+        base.debug(`getHANAServiceInstances error: ${error.message}`)
+        throw error
     }
-    base.debug(hanaInstances)
-    return hanaInstances
 }
 
 /**
@@ -570,14 +595,14 @@ export async function getHANAInstanceStatus(serviceParameters) {
  */
 export async function getHANAInstanceByName(name) {
     base.debug(`getHANAInstanceByName ${name}`)
-    const instances = await getHANAServiceInstances()
-    let hanaInstance = []
-    for (let item of instances) {
-        // @ts-ignore
-        if (item.name === name) {
-            hanaInstance.push(item)
-        }
+    
+    if (!name || typeof name !== 'string') {
+        throw new Error('Instance name is required and must be a string')
     }
+    
+    const instances = await getHANAServiceInstances()
+    // @ts-ignore
+    const hanaInstance = instances.filter(item => item.name === name)
     base.debug(hanaInstance)
     return hanaInstance
 }
@@ -585,50 +610,65 @@ export async function getHANAInstanceByName(name) {
 /**
  * Start HANA Cloud Instance
  * @param {string} name - HANA Cloud instance name 
- * @returns any
+ * @returns {Promise<string>}
  */
 export async function startHana(name) {
     base.debug(`startHana ${name}`)
+    
+    if (!name || typeof name !== 'string') {
+        throw new Error('Instance name is required and must be a string')
+    }
+    
+    let fileName = null
     try {
-        const exec = promisify(child_process.exec)
         const data = { "data": { "serviceStopped": false } }
-        const fileName = `${homedir}/hana_start.json`
-        fs.writeFileSync(fileName, JSON.stringify(data))
-
-
-        let script = `btp update services/instance --name ${name} --parameters ${homedir}/hana_start.json`
-        base.debug(script)
-        const { stdout } = await exec(script)
-        fs.unlinkSync(fileName)
-        return stdout
-
+        fileName = writeTempParameterFile(data)
+        
+        const result = await executeBTPCommand(`update services/instance --name ${name} --parameters ${fileName}`)
+        return result
     } catch (error) {
-        base.debug(error)
-        throw (error)
+        base.debug(`startHana error: ${error.message}`)
+        throw error
+    } finally {
+        if (fileName && fs.existsSync(fileName)) {
+            try {
+                fs.unlinkSync(fileName)
+            } catch (cleanupError) {
+                base.debug(`Failed to clean up temp file: ${cleanupError.message}`)
+            }
+        }
     }
 }
 
 /**
  * Stop HANA Cloud Instance
  * @param {string} name - HANA Cloud instance name
- * @returns any
+ * @returns {Promise<string>}
  */
 export async function stopHana(name) {
     base.debug(`stopHana ${name}`)
+    
+    if (!name || typeof name !== 'string') {
+        throw new Error('Instance name is required and must be a string')
+    }
+    
+    let fileName = null
     try {
-        const exec = promisify(child_process.exec)
         const data = { "data": { "serviceStopped": true } }
-        const fileName = `${homedir}/hana_stop.json`
-        fs.writeFileSync(fileName, JSON.stringify(data))
-
-        let script = `btp update services/instance --name ${name} --parameters ${homedir}/hana_stop.json`
-        base.debug(script)
-        const { stdout } = await exec(script)
-        fs.unlinkSync(fileName)
-        return stdout
-
+        fileName = writeTempParameterFile(data)
+        
+        const result = await executeBTPCommand(`update services/instance --name ${name} --parameters ${fileName}`)
+        return result
     } catch (error) {
-        base.debug(error)
-        throw (error)
+        base.debug(`stopHana error: ${error.message}`)
+        throw error
+    } finally {
+        if (fileName && fs.existsSync(fileName)) {
+            try {
+                fs.unlinkSync(fileName)
+            } catch (cleanupError) {
+                base.debug(`Failed to clean up temp file: ${cleanupError.message}`)
+            }
+        }
     }
 }
