@@ -23,7 +23,9 @@ export default class extends DBClientClass {
             .orderBy("SCHEMA_NAME", "TABLE_NAME")
             .limit(prompts.limit)
 
-        base.debug(JSON.stringify(dbQuery))
+        if (prompts.debug) {
+            base.debug(JSON.stringify(dbQuery))
+        }
         let db = this.getDB()
         let results = await db.run(dbQuery)
         return results

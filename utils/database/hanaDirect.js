@@ -58,7 +58,7 @@ export default class extends DBClientClass {
               WHERE SCHEMA_NAME LIKE ? 
                 AND TABLE_NAME LIKE ? 
               ORDER BY SCHEMA_NAME, TABLE_NAME `
-        if (prompts.limit | base.sqlInjectionUtils.isAcceptableParameter(prompts.limit)) {
+                if (prompts.limit || base.sqlInjectionUtils.isAcceptableParameter(prompts.limit)) {
             dbQuery += `LIMIT ${prompts.limit.toString()}`
         }
         base.debug(dbQuery)

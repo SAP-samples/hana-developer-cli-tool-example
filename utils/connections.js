@@ -13,6 +13,9 @@ import { homedir } from 'os'
 import * as xsenv from '@sap/xsenv'
 import cds from '@sap/cds'
 
+const fileCheckCache = new Map()
+const cdsrcPrivateCache = new Map()
+
 //import cds from '@sap/cds'
 // @ts-ignore
 //const LOG = cds.log('bind')
@@ -29,14 +32,23 @@ import cds from '@sap/cds'
 export function getFileCheckParents(filename, maxDepth = 5) {
     base.debug(`getFileCheckParents ${filename}`)
     try {
+        const cacheKey = `${process.cwd()}|${filename}|${maxDepth}`
+        if (fileCheckCache.has(cacheKey)) {
+            const cachedPath = fileCheckCache.get(cacheKey)
+            return cachedPath || undefined
+        }
         let currentPath = '.'
         
         for (let i = 0; i < maxDepth; i++) {
             const fullPath = path.join(currentPath, filename)
-            if (fs.existsSync(fullPath)) return fullPath
+            if (fs.existsSync(fullPath)) {
+                fileCheckCache.set(cacheKey, fullPath)
+                return fullPath
+            }
             currentPath = path.join(currentPath, '..')
         }
         
+        fileCheckCache.set(cacheKey, null)
         return undefined
     }
     catch (error) {
@@ -106,8 +118,12 @@ export async function getConnOptions(prompts) {
     const cdsrcPrivate = prompts?.admin ? undefined : getCdsrcPrivate()
     if (cdsrcPrivate) {
         try {
-            const data = fs.readFileSync(cdsrcPrivate, { encoding: 'utf8', flag: 'r' })
-            const object = JSON.parse(data)
+            let object = cdsrcPrivateCache.get(cdsrcPrivate)
+            if (!object) {
+                const data = fs.readFileSync(cdsrcPrivate, { encoding: 'utf8', flag: 'r' })
+                object = JSON.parse(data)
+                cdsrcPrivateCache.set(cdsrcPrivate, object)
+            }
             const resolveBinding = require('@sap/cds-dk/lib/bind/cf')
             const resolvedService = await resolveBinding.resolve(null, object.requires['[hybrid]'].db.binding)
             const options = { hana: resolvedService.credentials }

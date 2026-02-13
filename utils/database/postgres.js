@@ -8,6 +8,7 @@ import * as base from '../base.js'
 export default class extends DBClientClass {
     #clientType = 'postgres'
     #schema
+    #searchPathSet = false
     /**
      * Create an instance of the PostgreSQL database client
      * @param {typeof import("prompt")} prompts - input prompts current value
@@ -29,7 +30,10 @@ export default class extends DBClientClass {
         prompts.limit = base.validateLimit(prompts.limit)
         const tableName = super.adjustWildcard(prompts.table)
 
-        await this.getDB().run(`SET search_path TO ${this.#schema}, information_schema`)
+        if (!this.#searchPathSet) {
+            await this.getDB().run(`SET search_path TO ${this.#schema}, information_schema`)
+            this.#searchPathSet = true
+        }
         let dbQuery = SELECT
             .columns(
                 {ref:["table_schema"],as: `"SCHEMA_NAME"` },
@@ -38,7 +42,9 @@ export default class extends DBClientClass {
             .where({ table_schema: this.#schema, table_name: { like: tableName }, table_type: 'BASE TABLE' })
             .limit(prompts.limit)
 
+        if (prompts.debug) {
             base.debug(JSON.stringify(dbQuery))
+        }
         let results = await this.getDB().run(dbQuery)
         return results
     }

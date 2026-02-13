@@ -31,7 +31,9 @@ export default class extends DBClientClass {
             .from("sqlite_schema")
             .where({ type: 'table', name: { like: tableName } })
             .limit(prompts.limit)
-        base.debug(JSON.stringify(dbQuery))
+        if (prompts.debug) {
+            base.debug(JSON.stringify(dbQuery))
+        }
         let results = await this.getDB().run(dbQuery)
         return results
 
