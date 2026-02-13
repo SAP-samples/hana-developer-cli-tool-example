@@ -17,7 +17,7 @@ let cachedVersion = null
  * @returns {Promise<object>}
  */
 export async function getHANAVersion(db) {
-	base.debug(`getHANAVersion`)
+	base.debug(bundle.getText("debug.call", ["getHANAVersion"]))
 	// Return cached version if available
 	if (cachedVersion) {
 		return cachedVersion
@@ -31,7 +31,7 @@ export async function getHANAVersion(db) {
 	}
 	object[0].versionMajor = object[0].VERSION.charAt(0)
 	cachedVersion = object[0]
-	base.debug(`HANA Version ${JSON.stringify(object)}`)
+	base.debug(bundle.getText("debug.hanaVersion", [JSON.stringify(object)]))
 	return cachedVersion
 }
 
@@ -44,7 +44,7 @@ export async function getHANAVersion(db) {
  * @returns {Promise<boolean>}
  */
 export async function isCalculationView(db, schema, viewId) {
-	base.debug(`isCalculationView ${schema} ${viewId}`)
+	base.debug(bundle.getText("debug.callWithParams", ["isCalculationView", `${schema} ${viewId}`]))
 	const vers = await getHANAVersion(db)
 	if (vers.versionMajor < 2) {
 		return false
@@ -67,7 +67,7 @@ export async function isCalculationView(db, schema, viewId) {
  * @returns {Promise<object>}
  */
 export async function getView(db, scheam, viewId) {
-	base.debug(`getView ${scheam} ${viewId}`)
+	base.debug(bundle.getText("debug.callWithParams", ["getView", `${scheam} ${viewId}`]))
 	//Select View
 	let statementString = ``
 	const vers = await getHANAVersion(db)
@@ -99,7 +99,7 @@ export async function getView(db, scheam, viewId) {
  * @returns {Promise<string>}
  */
 export async function getDef(db, schema, Id) {
-	base.debug(`getDef ${schema} ${Id}`)
+	base.debug(bundle.getText("debug.callWithParams", ["getDef", `${schema} ${Id}`]))
 	//Select View
 	const inputParams = {
 		SCHEMA: `"${schema}"`,
@@ -124,7 +124,7 @@ export async function getDef(db, schema, Id) {
  * @returns {Promise<object>}
  */
 export async function getCalcViewFields(db, schema, viewId, viewOid) {
-	base.debug(`getCalcViewFields ${schema} ${viewId}`)
+	base.debug(bundle.getText("debug.callWithParams", ["getCalcViewFields", `${schema} ${viewId}`]))
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT SCHEMA_NAME, QUALIFIED_NAME AS VIEW_NAME, NULL AS VIEW_OID, COLUMN_NAME, 
@@ -182,7 +182,7 @@ export async function getCalcViewFields(db, schema, viewId, viewOid) {
  * @returns {Promise<object>}
  */
 export async function getViewFields(db, viewOid) {
-	base.debug(`getViewFields ${viewOid}`)
+	base.debug(bundle.getText("debug.callWithParams", ["getViewFields", viewOid]))
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT SCHEMA_NAME, VIEW_NAME, VIEW_OID, COLUMN_NAME, POSITION, DATA_TYPE_NAME, OFFSET, LENGTH, SCALE, IS_NULLABLE, DEFAULT_VALUE, COLUMN_ID, COMMENTS, NULL as KEY_COLUMN_NAME
@@ -201,7 +201,7 @@ export async function getViewFields(db, viewOid) {
  * @returns {Promise<object>}
  */
 export async function getCalcViewParameters(db, schema, viewId, viewOid) {
-	base.debug(`getCalcViewParameters ${schema} ${viewId}`)
+	base.debug(bundle.getText("debug.callWithParams", ["getCalcViewParameters", `${schema} ${viewId}`]))
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT SCHEMA_NAME, QUALIFIED_NAME as "VIEW_NAME", VARIABLE_NAME AS "PARAMETER_NAME",
@@ -229,7 +229,7 @@ export async function getCalcViewParameters(db, schema, viewId, viewOid) {
  * @returns {Promise<object>}
  */
 export async function getViewParameters(db, viewOid) {
-	base.debug(`getViewParameters ${viewOid}`)
+	base.debug(bundle.getText("debug.callWithParams", ["getViewParameters", viewOid]))
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT SCHEMA_NAME, VIEW_NAME, VIEW_OID, PARAMETER_NAME, DATA_TYPE_ID, DATA_TYPE_NAME,
@@ -248,7 +248,7 @@ export async function getViewParameters(db, viewOid) {
  * @returns {Promise<object>}
  */
 export async function getTable(db, schema, tableId) {
-	base.debug(`getTable ${schema} ${tableId}`)
+	base.debug(bundle.getText("debug.callWithParams", ["getTable", `${schema} ${tableId}`]))
 	//Select Table
 	let statementString = ``
 		const vers = await getHANAVersion(db)
@@ -278,7 +278,7 @@ export async function getTable(db, schema, tableId) {
  * @returns {Promise<object>}
  */
 export async function getTableFields(db, tableOid) {
-	base.debug(`getTableFields ${tableOid}`)
+	base.debug(bundle.getText("debug.callWithParams", ["getTableFields", tableOid]))
 	//Select Fields
 	let statementString = ``
 	const vers = await getHANAVersion(db)
@@ -306,7 +306,7 @@ export async function getTableFields(db, tableOid) {
  * @returns 
  */
 export async function getConstraints(db, object) {
-	base.debug(`getConstraints ${JSON.stringify(object)}`)
+	base.debug(bundle.getText("debug.callWithParams", ["getConstraints", JSON.stringify(object)]))
 	//Select Constraints
 	const statement = await db.preparePromisified(
 		`SELECT * from CONSTRAINTS 
@@ -327,7 +327,7 @@ export async function getConstraints(db, object) {
  * @returns {Promise<object>}
  */
 export async function getProcedure(db, schema, procedure) {
-	base.debug(`getProcedure ${schema} ${procedure}`)
+	base.debug(bundle.getText("debug.callWithParams", ["getProcedure", `${schema} ${procedure}`]))
 	//Select View
 	let statementString = ``
 	const vers = await getHANAVersion(db)
@@ -362,7 +362,7 @@ export async function getProcedure(db, schema, procedure) {
  * @returns {Promise<object>}
  */
 export async function getProcedurePrams(db, procOid) {
-	base.debug(`getProcedurePrams ${procOid}`)
+	base.debug(bundle.getText("debug.callWithParams", ["getProcedurePrams", procOid]))
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT PARAMETER_NAME, DATA_TYPE_NAME, LENGTH, SCALE, POSITION, TABLE_TYPE_NAME, PARAMETER_TYPE, HAS_DEFAULT_VALUE, IS_NULLABLE
@@ -375,7 +375,7 @@ export async function getProcedurePrams(db, procOid) {
 
 
 export async function getProcedurePramCols(db, procOid) {
-	base.debug(`getProcedurePramCols ${procOid}`)
+	base.debug(bundle.getText("debug.callWithParams", ["getProcedurePramCols", procOid]))
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT PARAMETER_NAME, PARAMETER_POSITION, COLUMN_NAME, POSITION, DATA_TYPE_NAME, LENGTH, SCALE, IS_NULLABLE 
@@ -394,7 +394,7 @@ export async function getProcedurePramCols(db, procOid) {
  * @returns {Promise<object>}
  */
 export async function getFunction(db, schema, functionName) {
-	base.debug(`getFunction ${schema} ${functionName}`)
+	base.debug(bundle.getText("debug.callWithParams", ["getFunction", `${schema} ${functionName}`]))
 	//Select Functions
 	let statementString = ``
 	const vers = await getHANAVersion(db)
@@ -429,7 +429,7 @@ export async function getFunction(db, schema, functionName) {
  * @returns {Promise<object>}
  */
 export async function getFunctionPrams(db, funcOid) {
-	base.debug(`getFunctionPrams ${funcOid}`)
+	base.debug(bundle.getText("debug.callWithParams", ["getFunctionPrams", funcOid]))
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT PARAMETER_NAME, DATA_TYPE_NAME, LENGTH, SCALE, POSITION, TABLE_TYPE_NAME, PARAMETER_TYPE, HAS_DEFAULT_VALUE, IS_NULLABLE
@@ -447,7 +447,7 @@ export async function getFunctionPrams(db, funcOid) {
  * @returns {Promise<object>}
  */
 export async function getFunctionPramCols(db, funcOid) {
-	base.debug(`getFunctionPramCols ${funcOid}`)
+	base.debug(bundle.getText("debug.callWithParams", ["getFunctionPramCols", funcOid]))
 	//Select Fields
 	const statement = await db.preparePromisified(
 		`SELECT PARAMETER_NAME, PARAMETER_POSITION, COLUMN_NAME, POSITION, DATA_TYPE_NAME, LENGTH, SCALE, IS_NULLABLE 
@@ -553,7 +553,7 @@ export let results = {
  * @returns {Promise<string>}
  */
 export async function formatCDS(db, object, fields, constraints, type, schema, parent, parameters) {
-	base.debug(`formatCDS ${type}`)
+	base.debug(bundle.getText("debug.callWithParams", ["formatCDS", type]))
 	let cdstable = ""
 	let originalName
 
@@ -726,7 +726,7 @@ export async function formatCDS(db, object, fields, constraints, type, schema, p
  * @returns {Promise<string>} GEO SRS ID
  */
 export async function getGeoColumns(db, object, field, type) {
-	base.debug(`getGeoColumns`)
+	base.debug(bundle.getText("debug.call", ["getGeoColumns"]))
 	const statementString = `SELECT SRS_ID FROM ST_GEOMETRY_COLUMNS WHERE SCHEMA_NAME = ? AND TABLE_NAME = ? AND COLUMN_NAME = ?`
 	const statement = await db.preparePromisified(statementString)
 	let name = ''

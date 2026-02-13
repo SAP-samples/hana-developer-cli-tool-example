@@ -629,7 +629,7 @@ export async function convert(wss) {
  * @returns {Promise<any>} - Array of Table Info 
  */
 async function getTablesInt(schema, table, client, limit) {
-    base.debug(`getTablesInt ${schema} ${table} ${limit}`)
+    base.debug(base.bundle.getText("debug.callWithParams", ["getTablesInt", `${schema} ${table} ${limit}`]))
     table = base.dbClass.objectName(table)
     //            AND IS_USER_DEFINED_TYPE = 'FALSE'
     let query =
@@ -654,7 +654,7 @@ async function getTablesInt(schema, table, client, limit) {
  * @returns {Promise<any>} - Array of View Info 
  */
 async function getViewsInt(schema, view, client, limit) {
-    base.debug(`getViewsInt ${schema} ${view} ${limit}`)
+    base.debug(base.bundle.getText("debug.callWithParams", ["getViewsInt", `${schema} ${view} ${limit}`]))
     view = base.dbClass.objectName(view)
     let query =
         `SELECT SCHEMA_NAME, VIEW_NAME, TO_NVARCHAR(VIEW_OID) AS VIEW_OID, COMMENTS  from VIEWS 
@@ -716,7 +716,7 @@ let cachedCSTypes = null
  */
 async function removeCSTypes(client, output) {
     try {
-        base.debug(`removeCSTypes}`)
+        base.debug(base.bundle.getText("debug.call", ["removeCSTypes"]))
         if (!cachedCSTypes) {
             let query =
                 `SELECT DISTINCT CS_DATA_TYPE_NAME from TABLE_COLUMNS ORDER BY LENGTH(CS_DATA_TYPE_NAME) DESC`
@@ -745,7 +745,7 @@ async function removeCSTypes(client, output) {
  */
 async function addAssociations(client, schema, table, output) {
     try {
-        base.debug(`addAssociations}`)
+        base.debug(base.bundle.getText("debug.call", ["addAssociations"]))
         let query =
             `SELECT * FROM ASSOCIATIONS WHERE SCHEMA_NAME = ? and OBJECT_NAME = ?`
         let results = await client.statementExecPromisified(await client.preparePromisified(query), [schema, table])

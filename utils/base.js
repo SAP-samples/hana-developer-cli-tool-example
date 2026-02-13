@@ -223,7 +223,7 @@ let prompts = {}
  * @param {object} newPrompts - processed input prompts
  */
 export function setPrompts(newPrompts) {
-    debug('Set Prompts')
+    debug(bundle.getText("debug.setPrompts"))
     prompts = newPrompts
     isDebug(prompts)
     isGui(prompts)
@@ -234,7 +234,7 @@ export function setPrompts(newPrompts) {
  * @returns {object} newPrompts - processed input prompts
  */
 export function getPrompts() {
-    debug('Get Prompts')
+    debug(bundle.getText("debug.getPrompts"))
 
     // @ts-ignore
     if (!prompts.schema) { prompts.schema = "**CURRENT_SCHEMA**" }
@@ -302,7 +302,7 @@ export async function createDBConnection(options) {
                 rawClient = await conn.createConnection(prompts, false)
             }
             if (!rawClient) {
-                throw new Error(bundle.getText("error.connectionFailed") || "Failed to create database connection")
+                throw new Error(bundle.getText("error.connectionFailed"))
             }
             dbClassInstance = new dbClass(rawClient)
             dbConnection = dbClassInstance  // Store the wrapped instance
@@ -910,12 +910,12 @@ export async function promptHandler(argv, processingFunction, inputSchema, iConn
  * @param {*} error - Error Object
  */
 export async function error(error) {
-    debug(`Error`)
+    debug(bundle.getText("debug.errorHandler"))
     try {
         // Attempt clean disconnect
         await disconnectOnly()
     } catch (disconnectErr) {
-        debug(`Disconnect Exception during error handler: ${disconnectErr}`)
+        debug(bundle.getText("debug.errorHandlerDisconnectException", [disconnectErr]))
     }
     if (inDebug || inGui) {
         throw error
@@ -933,13 +933,13 @@ export async function error(error) {
  * @returns {Promise<void>}
  */
 export async function disconnectOnly() {
-    debug(`Disconnect Only`)
+    debug(bundle.getText("debug.disconnectOnly"))
     try {
         if (dbConnection && dbConnection.client && dbConnection.client._settings) {
-            debug(`HANA Disconnect Started`)
+            debug(bundle.getText("debug.hanaDisconnectStarted"))
             return new Promise((resolve, reject) => {
                 const timeout = setTimeout(() => {
-                    debug(`Disconnect timeout exceeded`)
+                    debug(bundle.getText("debug.disconnectTimeoutExceeded"))
                     dbConnection = null
                     stopSpinner()
                     resolve()
@@ -948,9 +948,9 @@ export async function disconnectOnly() {
                 dbConnection.client.disconnect((err) => {
                     clearTimeout(timeout)
                     if (err) {
-                        debug(`Disconnect Error: ${err}`)
+                        debug(bundle.getText("debug.disconnectError", [err]))
                     } else {
-                        debug(`HANA Disconnect Completed`)
+                        debug(bundle.getText("debug.hanaDisconnectCompleted"))
                     }
                     dbConnection = null
                     stopSpinner()
@@ -962,12 +962,12 @@ export async function disconnectOnly() {
                 })
             })
         } else {
-            debug(`No connection to disconnect`)
+            debug(bundle.getText("debug.noConnectionToDisconnect"))
             stopSpinner()
             return Promise.resolve()
         }
     } catch (disconnectErr) {
-        debug(`Disconnect Exception: ${disconnectErr}`)
+        debug(bundle.getText("debug.disconnectException", [disconnectErr]))
         dbConnection = null
         stopSpinner()
         throw disconnectErr
@@ -983,7 +983,7 @@ function stopSpinner() {
         try {
             spinner.stop()
         } catch (err) {
-            debug(`Error stopping spinner: ${err}`)
+            debug(bundle.getText("debug.spinnerStopError", [err]))
         } finally {
             spinner = null
         }
@@ -994,7 +994,7 @@ function stopSpinner() {
  * Normal processing end and cleanup for single command
  */
 export async function end() {
-    debug(`Natural End`)
+    debug(bundle.getText("debug.normalEnd"))
     try {
         await disconnectOnly()
         // Only exit the process when running from CLI (not from MCP/programmatic contexts)
@@ -1002,7 +1002,7 @@ export async function end() {
             process.exit(0)
         }
     } catch (err) {
-        debug(`Error during end cleanup: ${err}`)
+        debug(bundle.getText("debug.endCleanupError", [err]))
         // Only exit the process when running from CLI
         if (!inGui) {
             process.exit(1)
@@ -1205,7 +1205,7 @@ export async function webServerSetup(urlPath) {
     const express = expressModule.default
     const http = await import('http')
     
-    debug('serverSetup')
+    debug(bundle.getText("debug.serverSetup"))
     // @ts-ignore
     const port = process.env.PORT || prompts.port || 3010
 
@@ -1281,10 +1281,10 @@ export async function getUserName() {
         const options = await conn.getConnOptions(prompts)
         if (options && options.hana && options.hana.user) {
             userName = options.hana.user
-            debug('Username of db connection: ' + userName)
+            debug(bundle.getText("debug.dbUserName", [userName]))
         }
     } catch (error) {
-        debug('Could not retrieve username: ' + error.message)
+        debug(bundle.getText("debug.dbUserNameError", [error.message]))
     }
 
     return userName

@@ -28,7 +28,7 @@ async function executeCFCurl(endpoint) {
         const { stdout, stderr } = await exec(script)
         
         if (stderr) {
-            base.debug(`CF curl error on ${endpoint}: ${stderr}`)
+            base.debug(bundle.getText("debug.cf.curlError", [endpoint, stderr]))
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
         }
         
@@ -38,7 +38,7 @@ async function executeCFCurl(endpoint) {
             base.debug(error)
             throw error
         }
-        throw new Error(`${bundle.getText("error")} JSON parse error`)
+        throw new Error(`${bundle.getText("error")} ${bundle.getText("error.jsonParseError")}`)
     }
 }
 
@@ -53,14 +53,14 @@ async function executeCFCurl(endpoint) {
  */
 async function getServiceInstancesByPlan(servicePlans, options = {}) {
     if (!servicePlans) {
-        throw new Error('Service plan(s) must be specified')
+        throw new Error(bundle.getText("error.cfServicePlansRequired"))
     }
 
     const space = await getCFSpace()
     const org = await getCFOrg()
 
     if (!space?.GUID || !org?.GUID) {
-        throw new Error('Unable to determine current space or organization')
+        throw new Error(bundle.getText("error.cfTargetUnavailable"))
     }
 
     const spaceGUID = space.GUID
@@ -87,7 +87,7 @@ async function getServiceInstancesByPlan(servicePlans, options = {}) {
  * @returns {Promise<String>}
  */
 export async function getVersion() {
-    base.debug('getVersion')
+    base.debug(bundle.getText("debug.call", ["getVersion"]))
 
     try {
         const exec = promisify(child_process.exec)
@@ -110,7 +110,7 @@ export async function getVersion() {
  * @returns {Promise<object>}
  */
 export async function getCFConfig() {
-    base.debug('getCFConfig')
+    base.debug(bundle.getText("debug.call", ["getCFConfig"]))
     
     // Return cached config if available
     if (cfConfigCache) {
@@ -141,7 +141,7 @@ export function clearCFConfigCache() {
  * @returns {Promise<object>}
  */
 export async function getCFOrg() {
-    base.debug('getCFOrg')
+    base.debug(bundle.getText("debug.call", ["getCFOrg"]))
     const config = await getCFConfig()
     return config.OrganizationFields
 }
@@ -151,7 +151,7 @@ export async function getCFOrg() {
  * @returns {Promise<string>}
  */
 export async function getCFOrgName() {
-    base.debug('getCFOrgName')
+    base.debug(bundle.getText("debug.call", ["getCFOrgName"]))
     const org = await getCFOrg()
     return org.Name
 }
@@ -161,7 +161,7 @@ export async function getCFOrgName() {
  * @returns {Promise<string>}
  */
 export async function getCFOrgGUID() {
-    base.debug('getCFOrgGUID')
+    base.debug(bundle.getText("debug.call", ["getCFOrgGUID"]))
     const org = await getCFOrg()
     return org.GUID
 }
@@ -171,7 +171,7 @@ export async function getCFOrgGUID() {
  * @returns {Promise<object>}
  */
 export async function getCFSpace() {
-    base.debug('getCFSpace')
+    base.debug(bundle.getText("debug.call", ["getCFSpace"]))
     const config = await getCFConfig()
     return config.SpaceFields
 }
@@ -181,7 +181,7 @@ export async function getCFSpace() {
  * @returns {Promise<string>}
  */
 export async function getCFSpaceName() {
-    base.debug('getCFSpaceName')
+    base.debug(bundle.getText("debug.call", ["getCFSpaceName"]))
     const space = await getCFSpace()
     return space.Name
 }
@@ -191,7 +191,7 @@ export async function getCFSpaceName() {
  * @returns {Promise<string>}
  */
 export async function getCFSpaceGUID() {
-    base.debug('getCFSpaceGUID')
+    base.debug(bundle.getText("debug.call", ["getCFSpaceGUID"]))
     const space = await getCFSpace()
     return space.GUID
 }
@@ -201,7 +201,7 @@ export async function getCFSpaceGUID() {
  * @returns {Promise<object>}
  */
 export async function getCFTarget() {
-    base.debug('getCFTarget')
+    base.debug(bundle.getText("debug.call", ["getCFTarget"]))
     const config = await getCFConfig()
     return config.Target
 }
@@ -211,7 +211,7 @@ export async function getCFTarget() {
  * @returns {Promise<object>}
  */
 export async function getHANAInstances() {
-    base.debug('getHANAInstances')
+    base.debug(bundle.getText("debug.call", ["getHANAInstances"]))
     return getServiceInstancesByPlan('hana,hana-free')
 }
 
@@ -222,10 +222,10 @@ export async function getHANAInstances() {
  */
 export async function getHANAInstanceByName(name) {
     if (!name || typeof name !== 'string') {
-        throw new Error('Service instance name must be a non-empty string')
+        throw new Error(bundle.getText("error.cfServiceInstanceNameRequired"))
     }
     
-    base.debug(`getHANAInstanceByName ${name}`)
+    base.debug(bundle.getText("debug.callWithParams", ["getHANAInstanceByName", name]))
     return getServiceInstancesByPlan('hana,hana-free', { name })
 }
 
@@ -236,10 +236,10 @@ export async function getHANAInstanceByName(name) {
  */
 export async function getHANAInstanceStatus(hanaInstanceGUID) {
     if (!hanaInstanceGUID || typeof hanaInstanceGUID !== 'string') {
-        throw new Error('HANA instance GUID must be a non-empty string')
+        throw new Error(bundle.getText("error.cfHanaInstanceGuidRequired"))
     }
     
-    base.debug(`getHANAInstanceStatus ${hanaInstanceGUID}`)
+    base.debug(bundle.getText("debug.callWithParams", ["getHANAInstanceStatus", hanaInstanceGUID]))
 
     const serviceParameters = await getCFServiceInstanceParameters(hanaInstanceGUID)
 
@@ -262,7 +262,7 @@ export async function getHANAInstanceStatus(hanaInstanceGUID) {
  * @returns {Promise<object>}
  */
 export async function getHDIInstances() {
-    base.debug('getHDIInstances')
+    base.debug(bundle.getText("debug.call", ["getHDIInstances"]))
     return getServiceInstancesByPlan('hdi-shared')
 }
 
@@ -271,7 +271,7 @@ export async function getHDIInstances() {
  * @returns {Promise<object>}
  */
 export async function getSbssInstances() {
-    base.debug('getSbssInstances')
+    base.debug(bundle.getText("debug.call", ["getSbssInstances"]))
     return getServiceInstancesByPlan('sbss')
 }
 
@@ -280,7 +280,7 @@ export async function getSbssInstances() {
  * @returns {Promise<object>}
  */
 export async function getSecureStoreInstances() {
-    base.debug('getSecureStoreInstances')
+    base.debug(bundle.getText("debug.call", ["getSecureStoreInstances"]))
     return getServiceInstancesByPlan('securestore')
 }
 
@@ -289,7 +289,7 @@ export async function getSecureStoreInstances() {
  * @returns {Promise<object>}
  */
 export async function getSchemaInstances() {
-    base.debug('getSchemaInstances')
+    base.debug(bundle.getText("debug.call", ["getSchemaInstances"]))
     return getServiceInstancesByPlan('schema')
 }
 
@@ -298,7 +298,7 @@ export async function getSchemaInstances() {
  * @returns {Promise<object>}
  */
 export async function getUpsInstances() {
-    base.debug('getUpsInstances')
+    base.debug(bundle.getText("debug.call", ["getUpsInstances"]))
     return getServiceInstancesByPlan(null, { type: 'user-provided' })
 }
 
@@ -310,10 +310,10 @@ export async function getUpsInstances() {
  */
 export async function startHana(name) {
     if (!name || typeof name !== 'string') {
-        throw new Error('HANA instance name must be a non-empty string')
+        throw new Error(bundle.getText("error.cfHanaInstanceNameRequired"))
     }
     
-    base.debug(`startHana ${name}`)
+    base.debug(bundle.getText("debug.callWithParams", ["startHana", name]))
     
     const fileName = `${homedir()}/hana_start.json`
     
@@ -341,7 +341,7 @@ export async function startHana(name) {
             await fs.promises.unlink(fileName)
         } catch (unlinkError) {
             // Log but don't throw if cleanup fails
-            base.debug(`Failed to clean up temp file ${fileName}: ${unlinkError}`)
+            base.debug(bundle.getText("debug.cf.cleanupTempFileFailed", [fileName, unlinkError]))
         }
     }
 }
@@ -353,10 +353,10 @@ export async function startHana(name) {
  */
 export async function stopHana(name) {
     if (!name || typeof name !== 'string') {
-        throw new Error('HANA instance name must be a non-empty string')
+        throw new Error(bundle.getText("error.cfHanaInstanceNameRequired"))
     }
     
-    base.debug(`stopHana ${name}`)
+    base.debug(bundle.getText("debug.callWithParams", ["stopHana", name]))
     
     const fileName = `${homedir()}/hana_stop.json`
     
@@ -384,7 +384,7 @@ export async function stopHana(name) {
             await fs.promises.unlink(fileName)
         } catch (unlinkError) {
             // Log but don't throw if cleanup fails
-            base.debug(`Failed to clean up temp file ${fileName}: ${unlinkError}`)
+            base.debug(bundle.getText("debug.cf.cleanupTempFileFailed", [fileName, unlinkError]))
         }
     }
 }
@@ -396,9 +396,9 @@ export async function stopHana(name) {
  */
 export async function getCFServiceInstanceParameters(serviceInstanceGUID) {
     if (!serviceInstanceGUID || typeof serviceInstanceGUID !== 'string') {
-        throw new Error('Service instance GUID must be a non-empty string')
+        throw new Error(bundle.getText("error.cfServiceInstanceGuidRequired"))
     }
     
-    base.debug(`getCFServiceInstanceParameters ${serviceInstanceGUID}`)
+    base.debug(bundle.getText("debug.callWithParams", ["getCFServiceInstanceParameters", serviceInstanceGUID]))
     return executeCFCurl(`/v3/service_instances/${serviceInstanceGUID}/parameters`)
 }

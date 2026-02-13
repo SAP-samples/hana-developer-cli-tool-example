@@ -6,12 +6,12 @@ export default class extends DBClientClass {
     #schema
     constructor(prompts, optionsCDS) {
         super(prompts, optionsCDS)
-        base.debug(`Database client specific class for profile: ${prompts.profile}`)
+        base.debug(base.bundle.getText("debug.dbClientSpecificProfile", [prompts.profile]))
         this.#schema = super.schemaCalculation(prompts, optionsCDS)
     }
 
     async listTables() {
-        base.debug(`listTables for ${this.#clientType}`)
+        base.debug(base.bundle.getText("debug.dbListTablesForClient", [this.#clientType]))
         const prompts = super.getPrompts()
         prompts.limit = base.validateLimit(prompts.limit)
         const tableName = super.adjustWildcard(prompts.table)

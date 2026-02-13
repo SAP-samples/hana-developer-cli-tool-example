@@ -30,7 +30,7 @@ const cdsrcPrivateCache = new Map()
  * @returns {string|undefined} - the file path if found 
  */
 export function getFileCheckParents(filename, maxDepth = 5) {
-    base.debug(`getFileCheckParents ${filename}`)
+    base.debug(base.bundle.getText("debug.callWithParams", ["getFileCheckParents", filename]))
     try {
         const cacheKey = `${process.cwd()}|${filename}|${maxDepth}`
         if (fileCheckCache.has(cacheKey)) {
@@ -99,7 +99,7 @@ export const getCdsrcPrivate = () => getFileCheckParents('.cdsrc-private.json')
  * @returns {string} - the file path if found 
  */
 export function resolveEnv(options) {
-    base.debug(`resolveEnv ${options}`)
+    base.debug(base.bundle.getText("debug.callWithParams", ["resolveEnv", options]))
     const file = options?.admin ? 'default-env-admin.json' : 'default-env.json'
     return path.resolve(process.cwd(), file)
 }
@@ -111,7 +111,7 @@ export function resolveEnv(options) {
  * @returns {Promise<object>} connection options
  */
 export async function getConnOptions(prompts) {
-    base.debug('getConnOptions')
+    base.debug(base.bundle.getText("debug.call", ["getConnOptions"]))
     delete process.env.VCAP_SERVICES
 
     // Try .cdsrc-private.json with CDS binding first
@@ -196,12 +196,12 @@ export async function getConnOptions(prompts) {
  * @returns {Promise<object>} HANA DB connection of type hdb
  */
 export async function createConnection(prompts, directConnect = false) {
-    base.debug('createConnection')
+    base.debug(base.bundle.getText("debug.call", ["createConnection"]))
 
     const options = directConnect 
         ? { hana: prompts }
         : await getConnOptions(prompts)
 
-    base.debug('In Create Connection')
+    base.debug(base.bundle.getText("debug.connectionCreateStart"))
     return base.dbClass.createConnection(options)
 }

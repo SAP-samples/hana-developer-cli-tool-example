@@ -29,7 +29,7 @@ async function executeXSCurl(endpoint) {
         const { stdout, stderr } = await exec(script)
         
         if (stderr) {
-            base.debug(`XS curl error on ${endpoint}: ${stderr}`)
+            base.debug(bundle.getText("debug.xs.curlError", [endpoint, stderr]))
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
         }
         
@@ -39,7 +39,7 @@ async function executeXSCurl(endpoint) {
             base.debug(error)
             throw error
         }
-        throw new Error(`${bundle.getText("error")} JSON parse error`)
+        throw new Error(`${bundle.getText("error")} ${bundle.getText("error.jsonParseError")}`)
     }
 }
 
@@ -51,7 +51,7 @@ async function executeXSCurl(endpoint) {
  */
 async function getServiceInstancesByPlan(planName) {
     if (!planName || typeof planName !== 'string') {
-        throw new Error('Service plan name must be a non-empty string')
+        throw new Error(bundle.getText("error.xsServicePlanNameRequired"))
     }
     
     const spaceGUID = await getCFSpaceGUID()
@@ -69,7 +69,7 @@ async function getServiceInstancesByPlan(planName) {
  * @returns {Promise<object>}
  */
 export async function getCFConfig() {
-    base.debug('getCFConfig')
+    base.debug(bundle.getText("debug.call", ["getCFConfig"]))
     
     // Return cached config if available
     if (xsConfigCache) {
@@ -100,7 +100,7 @@ export function clearXSConfigCache() {
  * @returns {Promise<object>}
  */
 export async function getCFOrg() {
-    base.debug('getCFOrg')
+    base.debug(bundle.getText("debug.call", ["getCFOrg"]))
     const config = await getCFConfig()
     return config
 }
@@ -110,7 +110,7 @@ export async function getCFOrg() {
  * @returns {Promise<string>}
  */
 export async function getCFOrgName() {
-    base.debug('getCFOrgName')
+    base.debug(bundle.getText("debug.call", ["getCFOrgName"]))
     const org = await getCFOrg()
     return org.org
 }
@@ -120,7 +120,7 @@ export async function getCFOrgName() {
  * @returns {Promise<string>}
  */
 export async function getCFOrgGUID() {
-    base.debug('getCFOrgGUID')
+    base.debug(bundle.getText("debug.call", ["getCFOrgGUID"]))
     const org = await getCFOrg()
     return org.orgGuid
 }
@@ -130,7 +130,7 @@ export async function getCFOrgGUID() {
  * @returns {Promise<object>}
  */
 export async function getCFSpace() {
-    base.debug('getCFSpace')
+    base.debug(bundle.getText("debug.call", ["getCFSpace"]))
     const config = await getCFConfig()
     return config
 }
@@ -140,7 +140,7 @@ export async function getCFSpace() {
  * @returns {Promise<string>}
  */
 export async function getCFSpaceName() {
-    base.debug('getCFSpaceName')
+    base.debug(bundle.getText("debug.call", ["getCFSpaceName"]))
     const space = await getCFSpace()
     return space.space
 }
@@ -150,7 +150,7 @@ export async function getCFSpaceName() {
  * @returns {Promise<string>}
  */
 export async function getCFSpaceGUID() {
-    base.debug('getCFSpaceGUID')
+    base.debug(bundle.getText("debug.call", ["getCFSpaceGUID"]))
     const space = await getCFSpace()
     return space.spaceGuid
 }
@@ -160,7 +160,7 @@ export async function getCFSpaceGUID() {
  * @returns {Promise<string>}
  */
 export async function getCFTarget() {
-    base.debug('getCFTarget')
+    base.debug(bundle.getText("debug.call", ["getCFTarget"]))
     const config = await getCFConfig()
     return config.api?.replace(/\\:/g, ':') || ''
 }
@@ -170,7 +170,7 @@ export async function getCFTarget() {
  * @returns {Promise<object[]>}
  */
 export async function getHANAInstances() {
-    base.debug('getHANAInstances')
+    base.debug(bundle.getText("debug.call", ["getHANAInstances"]))
 
     try {
         const spaceGUID = await getCFSpaceGUID()
@@ -190,10 +190,10 @@ export async function getHANAInstances() {
  */
 export async function getHANAInstanceByName(name) {
     if (!name || typeof name !== 'string') {
-        throw new Error('Service instance name must be a non-empty string')
+        throw new Error(bundle.getText("error.xsServiceInstanceNameRequired"))
     }
     
-    base.debug(`getHANAInstanceByName ${name}`)
+    base.debug(bundle.getText("debug.callWithParams", ["getHANAInstanceByName", name]))
 
     try {
         const spaceGUID = await getCFSpaceGUID()
@@ -211,13 +211,13 @@ export async function getHANAInstanceByName(name) {
  * @returns {Promise<object[]>}
  */
 export async function getServices() {
-    base.debug('getServices')
+    base.debug(bundle.getText("debug.call", ["getServices"]))
     
     try {
         const result = await executeXSCurl('/v2/services')
         return result?.services || []
     } catch (error) {
-        base.debug(`getServices Error: ${error}`)
+        base.debug(bundle.getText("debug.callError", ["getServices", error]))
         throw error
     }
 }
@@ -229,10 +229,10 @@ export async function getServices() {
  */
 export async function getServicePlans(serviceGUID) {
     if (!serviceGUID || typeof serviceGUID !== 'string') {
-        throw new Error('Service GUID must be a non-empty string')
+        throw new Error(bundle.getText("error.xsServiceGuidRequired"))
     }
     
-    base.debug(`getServicePlans ${serviceGUID}`)
+    base.debug(bundle.getText("debug.callWithParams", ["getServicePlans", serviceGUID]))
     
     try {
         const endpoint = `/v2/services/${serviceGUID}/service_plans`
@@ -251,17 +251,17 @@ export async function getServicePlans(serviceGUID) {
  */
 export async function getServiceGUID(service) {
     if (!service || typeof service !== 'string') {
-        throw new Error('Service name must be a non-empty string')
+        throw new Error(bundle.getText("error.xsServiceNameRequired"))
     }
     
-    base.debug(`getServiceGUID ${service}`)
+    base.debug(bundle.getText("debug.callWithParams", ["getServiceGUID", service]))
     
     try {
         const services = await getServices()
         const item = services.find(x => x.serviceEntity?.label === service)
         
         if (!item) {
-            throw new Error(`Service '${service}' not found`)
+            throw new Error(bundle.getText("error.xsServiceNotFound", [service]))
         }
         
         return item.metadata.guid
@@ -279,20 +279,20 @@ export async function getServiceGUID(service) {
  */
 export async function getServicePlanGUID(serviceGUID, servicePlan) {
     if (!serviceGUID || typeof serviceGUID !== 'string') {
-        throw new Error('Service GUID must be a non-empty string')
+        throw new Error(bundle.getText("error.xsServiceGuidRequired"))
     }
     if (!servicePlan || typeof servicePlan !== 'string') {
-        throw new Error('Service plan name must be a non-empty string')
+        throw new Error(bundle.getText("error.xsServicePlanNameRequired"))
     }
     
-    base.debug(`getServicePlanGUID ${serviceGUID} ${servicePlan}`)
+    base.debug(bundle.getText("debug.callWithParams", ["getServicePlanGUID", `${serviceGUID} ${servicePlan}`]))
     
     try {
         const servicePlans = await getServicePlans(serviceGUID)
         const item = servicePlans.find(x => x.servicePlanEntity?.name === servicePlan)
         
         if (!item) {
-            throw new Error(`Service plan '${servicePlan}' not found`)
+            throw new Error(bundle.getText("error.xsServicePlanNotFound", [servicePlan]))
         }
         
         return item.metadata.guid
@@ -307,7 +307,7 @@ export async function getServicePlanGUID(serviceGUID, servicePlan) {
  * @returns {Promise<object[]>}
  */
 export async function getHDIInstances() {
-    base.debug('getHDIInstances')
+    base.debug(bundle.getText("debug.call", ["getHDIInstances"]))
     return getServiceInstancesByPlan('hdi-shared')
 }
 
@@ -316,7 +316,7 @@ export async function getHDIInstances() {
  * @returns {Promise<object[]>}
  */
 export async function getSbssInstances() {
-    base.debug('getSbssInstances')
+    base.debug(bundle.getText("debug.call", ["getSbssInstances"]))
     return getServiceInstancesByPlan('sbss')
 }
 
@@ -325,7 +325,7 @@ export async function getSbssInstances() {
  * @returns {Promise<object[]>}
  */
 export async function getSecureStoreInstances() {
-    base.debug('getSecureStoreInstances')
+    base.debug(bundle.getText("debug.call", ["getSecureStoreInstances"]))
     return getServiceInstancesByPlan('securestore')
 }
 
@@ -334,7 +334,7 @@ export async function getSecureStoreInstances() {
  * @returns {Promise<object[]>}
  */
 export async function getSchemaInstances() {
-    base.debug('getSchemaInstances')
+    base.debug(bundle.getText("debug.call", ["getSchemaInstances"]))
     return getServiceInstancesByPlan('schema')
 }
 
@@ -343,7 +343,7 @@ export async function getSchemaInstances() {
  * @returns {Promise<object[]>}
  */
 export async function getUpsInstances() {
-    base.debug('getUpsInstances')
+    base.debug(bundle.getText("debug.call", ["getUpsInstances"]))
     
     try {
         const endpoint = '/v2/user_provided_service_instances/?results-per-page=5000'

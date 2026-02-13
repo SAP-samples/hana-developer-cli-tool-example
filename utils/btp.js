@@ -28,7 +28,7 @@ import { tmpdir } from 'os'
  * @private
  */
 async function executeBTPCommand(command, options = { json: false }) {
-    base.debug(`executeBTPCommand: ${command}`)
+    base.debug(bundle.getText("debug.btp.executeCommand", [command]))
     
     try {
         const exec = promisify(child_process.exec)
@@ -45,14 +45,14 @@ async function executeBTPCommand(command, options = { json: false }) {
             try {
                 return JSON.parse(stdout)
             } catch (e) {
-                base.debug(`Failed to parse JSON output: ${e.message}`)
+                base.debug(bundle.getText("debug.jsonParseFailed", [e.message]))
                 return null
             }
         }
         
         return stdout
     } catch (error) {
-        base.debug(`executeBTPCommand error: ${error.message}`)
+        base.debug(bundle.getText("debug.btp.executeCommandError", [error.message]))
         throw error
     }
 }
@@ -90,12 +90,12 @@ function writeTempParameterFile(data) {
  * @returns {Promise<String>}
  */
 export async function getVersion() {
-    base.debug('getVersion')
+    base.debug(bundle.getText("debug.call", ["getVersion"]))
     try {
         const result = await executeBTPCommand('--version')
         return result || ''
     } catch (error) {
-        base.debug(`getVersion error: ${error.message}`)
+        base.debug(bundle.getText("debug.callError", ["getVersion", error.message]))
         throw error
     }
 }
@@ -105,7 +105,7 @@ export async function getVersion() {
  * @returns {Promise<Object>}
  */
 export async function getInfo() {
-    base.debug('getInfo')
+    base.debug(bundle.getText("debug.call", ["getInfo"]))
     try {
         const output = await executeBTPCommand('--info')
         const infoOut = {}
@@ -132,7 +132,7 @@ export async function getInfo() {
         
         return infoOut
     } catch (error) {
-        base.debug(`getInfo error: ${error.message}`)
+        base.debug(bundle.getText("debug.callError", ["getInfo", error.message]))
         throw error
     }
 }
@@ -142,7 +142,7 @@ export async function getInfo() {
  * @returns {Promise<object>}
  */
 export async function getBTPConfig() {
-    base.debug('getBTPConfig')
+    base.debug(bundle.getText("debug.call", ["getBTPConfig"]))
 
     let localDir = process.env.BTP_CLIENTCONFIG
     if (!localDir) {
@@ -181,7 +181,7 @@ export async function getBTPConfig() {
  * @returns {Promise<object>}
  */
 export async function getBTPTarget() {
-    base.debug('getBTPTarget')
+    base.debug(bundle.getText("debug.call", ["getBTPTarget"]))
     const config = await getBTPConfig()
     if (config) {
         base.debug(config)
@@ -196,7 +196,7 @@ export async function getBTPTarget() {
  * @returns {Promise<object>}
  */
 export async function getBTPGlobalAccount() {
-    base.debug('getBTPGlobalAccount')
+    base.debug(bundle.getText("debug.call", ["getBTPGlobalAccount"]))
     const target = await getBTPTarget()
     const globalAccountDetails = findInArray(target, item => item.Type === globalAccount)
     
@@ -213,7 +213,7 @@ export async function getBTPGlobalAccount() {
  * @returns {Promise<string>}
  */
 export async function getBTPSubAccount() {
-    base.debug('getBTPSubaccount')
+    base.debug(bundle.getText("debug.call", ["getBTPSubaccount"]))
     const target = await getBTPTarget()
     const subAccountDetails = findInArray(target, item => item.Type === subAccount)
     
@@ -230,7 +230,7 @@ export async function getBTPSubAccount() {
  * @returns {Promise<object>}
  */
 export async function getBTPSubscriptions() {
-    base.debug('getBTPSubscriptions')
+    base.debug(bundle.getText("debug.call", ["getBTPSubscriptions"]))
     try {
         const exec = promisify(child_process.exec)
         const { stdout, stderr } = await exec('btp --format json list accounts/subscriptions')
@@ -248,7 +248,7 @@ export async function getBTPSubscriptions() {
         }
         return null
     } catch (error) {
-        base.debug(`getBTPSubscriptions error: ${error.message}`)
+        base.debug(bundle.getText("debug.callError", ["getBTPSubscriptions", error.message]))
         throw error
     }
 }
@@ -258,7 +258,7 @@ export async function getBTPSubscriptions() {
  * @returns {Promise<object>}
  */
 export async function getHANACloudSub() {
-    base.debug('getHANACloudSub')
+    base.debug(bundle.getText("debug.call", ["getHANACloudSub"]))
     const subs = await getBTPSubscriptions()
     if (!subs || !subs.applications) {
         return null
@@ -273,7 +273,7 @@ export async function getHANACloudSub() {
  * @returns {Promise<string>}
  */
 export async function getHANACloudSubURL() {
-    base.debug('getHANACloudSubURL')
+    base.debug(bundle.getText("debug.call", ["getHANACloudSubURL"]))
     const hanaCloudSub = await getHANACloudSub()
     base.debug(hanaCloudSub.subscriptionUrl)
     return hanaCloudSub.subscriptionUrl
@@ -284,7 +284,7 @@ export async function getHANACloudSubURL() {
  * @returns {Promise<object>}
  */
 export async function getBASSub() {
-    base.debug('getBASSub')
+    base.debug(bundle.getText("debug.call", ["getBASSub"]))
     const subs = await getBTPSubscriptions()
     if (!subs || !subs.applications) {
         return null
@@ -300,7 +300,7 @@ export async function getBASSub() {
  * @returns {Promise<string>}
  */
 export async function getBASSubURL() {
-    base.debug('getBASSubURL')
+    base.debug(bundle.getText("debug.call", ["getBASSubURL"]))
     const basSub = await getBASSub()
     base.debug(basSub.subscriptionUrl)
     return basSub.subscriptionUrl
@@ -311,7 +311,7 @@ export async function getBASSubURL() {
  * @returns {Promise<object>}
  */
 export async function getBTPHierarchy() {
-    base.debug('getBTPHierarchy')
+    base.debug(bundle.getText("debug.call", ["getBTPHierarchy"]))
     try {
         const exec = promisify(child_process.exec)
         const { stdout, stderr } = await exec('btp --format json get accounts/global-account --show-hierarchy')
@@ -329,7 +329,7 @@ export async function getBTPHierarchy() {
         }
         return null
     } catch (error) {
-        base.debug(`getBTPHierarchy error: ${error.message}`)
+        base.debug(bundle.getText("debug.callError", ["getBTPHierarchy", error.message]))
         throw error
     }
 }
@@ -340,7 +340,7 @@ export async function getBTPHierarchy() {
  * @returns {Promise<object>}
  */
 export async function getBTPSubAccounts() {
-    base.debug('getBTPSubAccounts')
+    base.debug(bundle.getText("debug.call", ["getBTPSubAccounts"]))
     try {
         const exec = promisify(child_process.exec)
         const { stdout, stderr } = await exec('btp --format json list accounts/subaccount')
@@ -358,7 +358,7 @@ export async function getBTPSubAccounts() {
         }
         return null
     } catch (error) {
-        base.debug(`getBTPSubAccounts error: ${error.message}`)
+        base.debug(bundle.getText("debug.callError", ["getBTPSubAccounts", error.message]))
         throw error
     }
 }
@@ -368,7 +368,7 @@ export async function getBTPSubAccounts() {
  * @returns {Promise<object>}
  */
 export async function getBTPPlans() {
-    base.debug('getBTPPlans')
+    base.debug(bundle.getText("debug.call", ["getBTPPlans"]))
     try {
         const exec = promisify(child_process.exec)
         const { stdout, stderr } = await exec('btp --format json list services/plan')
@@ -386,7 +386,7 @@ export async function getBTPPlans() {
         }
         return null
     } catch (error) {
-        base.debug(`getBTPPlans error: ${error.message}`)
+        base.debug(bundle.getText("debug.callError", ["getBTPPlans", error.message]))
         throw error
     }
 }
@@ -396,7 +396,7 @@ export async function getBTPPlans() {
  * @returns {Promise<object>}
  */
 export async function getHANAPlan() {
-    base.debug('getHANAPlan')
+    base.debug(bundle.getText("debug.call", ["getHANAPlan"]))
     const plans = await getBTPPlans()
     if (!plans) {
         return null
@@ -411,7 +411,7 @@ export async function getHANAPlan() {
  * @returns {Promise<object>}
  */
 export async function getBTPServiceInstances() {
-    base.debug('getBTPServiceInstances')
+    base.debug(bundle.getText("debug.call", ["getBTPServiceInstances"]))
     try {
         const exec = promisify(child_process.exec)
         const { stdout, stderr } = await exec('btp --format json list services/instance')
@@ -429,7 +429,7 @@ export async function getBTPServiceInstances() {
         }
         return null
     } catch (error) {
-        base.debug(`getBTPServiceInstances error: ${error.message}`)
+        base.debug(bundle.getText("debug.callError", ["getBTPServiceInstances", error.message]))
         throw error
     }
 }
@@ -440,10 +440,10 @@ export async function getBTPServiceInstances() {
  * @returns {Promise<object>}
  */
 export async function getBTPServiceInstanceDetails(id) {
-    base.debug('getBTPServiceInstanceDetails')
+    base.debug(bundle.getText("debug.call", ["getBTPServiceInstanceDetails"]))
     
     if (!id || typeof id !== 'string') {
-        throw new Error('Service instance ID is required and must be a string')
+        throw new Error(bundle.getText("error.btpServiceInstanceIdRequired"))
     }
     
     try {
@@ -463,7 +463,7 @@ export async function getBTPServiceInstanceDetails(id) {
         }
         return null
     } catch (error) {
-        base.debug(`getBTPServiceInstanceDetails error: ${error.message}`)
+        base.debug(bundle.getText("debug.callError", ["getBTPServiceInstanceDetails", error.message]))
         throw error
     }
 }
@@ -474,16 +474,16 @@ export async function getBTPServiceInstanceDetails(id) {
  * @returns {Promise<object>}
  */
 export async function setBTPSubAccount(subAccount) {
-    base.debug('setBTPSubAccount')
+    base.debug(bundle.getText("debug.call", ["setBTPSubAccount"]))
     
     if (!subAccount || typeof subAccount !== 'string') {
-        throw new Error('Sub-account ID is required and must be a string')
+        throw new Error(bundle.getText("error.btpSubaccountIdRequired"))
     }
     
     try {
         return await executeBTPCommand(`target --subaccount ${subAccount}`)
     } catch (error) {
-        base.debug(`setBTPSubAccount error: ${error.message}`)
+        base.debug(bundle.getText("debug.callError", ["setBTPSubAccount", error.message]))
         throw error
     }
 }
@@ -493,10 +493,10 @@ export async function setBTPSubAccount(subAccount) {
  * @returns {Promise<object>}
  */
 export async function getBTPServiceInstanceParameters(id) {
-    base.debug('getBTPServiceInstanceParameters')
+    base.debug(bundle.getText("debug.call", ["getBTPServiceInstanceParameters"]))
     
     if (!id || typeof id !== 'string') {
-        throw new Error('Service instance ID is required and must be a string')
+        throw new Error(bundle.getText("error.btpServiceInstanceIdRequired"))
     }
     
     try {
@@ -516,7 +516,7 @@ export async function getBTPServiceInstanceParameters(id) {
         }
         return null
     } catch (error) {
-        base.debug(`getBTPServiceInstanceParameters error: ${error.message}`)
+        base.debug(bundle.getText("debug.callError", ["getBTPServiceInstanceParameters", error.message]))
         throw error
     }
 }
@@ -526,7 +526,7 @@ export async function getBTPServiceInstanceParameters(id) {
  * @returns {Promise<object>}
  */
 export async function getHANAServiceInstances() {
-    base.debug('getHANAServiceInstances')
+    base.debug(bundle.getText("debug.call", ["getHANAServiceInstances"]))
     try {
         const subs = await getBTPServiceInstances()
         const hanaPlan = await getHANAPlan()
@@ -550,7 +550,7 @@ export async function getHANAServiceInstances() {
                     item.parameters = parameters
                     return item
                 } catch (error) {
-                    base.debug(`Error enriching instance ${item.id}: ${error.message}`)
+                    base.debug(bundle.getText("debug.btp.enrichInstanceError", [item.id, error.message]))
                     return null
                 }
             })
@@ -561,7 +561,7 @@ export async function getHANAServiceInstances() {
         base.debug(hanaInstances)
         return hanaInstances
     } catch (error) {
-        base.debug(`getHANAServiceInstances error: ${error.message}`)
+        base.debug(bundle.getText("debug.callError", ["getHANAServiceInstances", error.message]))
         throw error
     }
 }
@@ -572,7 +572,7 @@ export async function getHANAServiceInstances() {
  * @returns {Promise<string>}
  */
 export async function getHANAInstanceStatus(serviceParameters) {
-    base.debug('getHANAInstanceStatus')
+    base.debug(bundle.getText("debug.call", ["getHANAInstanceStatus"]))
     if (serviceParameters.errors) {
         return bundle.getText("hc.updateProgress")
     }
@@ -594,10 +594,10 @@ export async function getHANAInstanceStatus(serviceParameters) {
  * @returns {Promise<object>}
  */
 export async function getHANAInstanceByName(name) {
-    base.debug(`getHANAInstanceByName ${name}`)
+    base.debug(bundle.getText("debug.callWithParams", ["getHANAInstanceByName", name]))
     
     if (!name || typeof name !== 'string') {
-        throw new Error('Instance name is required and must be a string')
+        throw new Error(bundle.getText("error.btpInstanceNameRequired"))
     }
     
     const instances = await getHANAServiceInstances()
@@ -613,10 +613,10 @@ export async function getHANAInstanceByName(name) {
  * @returns {Promise<string>}
  */
 export async function startHana(name) {
-    base.debug(`startHana ${name}`)
+    base.debug(bundle.getText("debug.callWithParams", ["startHana", name]))
     
     if (!name || typeof name !== 'string') {
-        throw new Error('Instance name is required and must be a string')
+        throw new Error(bundle.getText("error.btpInstanceNameRequired"))
     }
     
     let fileName = null
@@ -627,14 +627,14 @@ export async function startHana(name) {
         const result = await executeBTPCommand(`update services/instance --name ${name} --parameters ${fileName}`)
         return result
     } catch (error) {
-        base.debug(`startHana error: ${error.message}`)
+        base.debug(bundle.getText("debug.callError", ["startHana", error.message]))
         throw error
     } finally {
         if (fileName && fs.existsSync(fileName)) {
             try {
                 fs.unlinkSync(fileName)
             } catch (cleanupError) {
-                base.debug(`Failed to clean up temp file: ${cleanupError.message}`)
+                base.debug(bundle.getText("debug.btp.cleanupTempFileFailed", [cleanupError.message]))
             }
         }
     }
@@ -646,10 +646,10 @@ export async function startHana(name) {
  * @returns {Promise<string>}
  */
 export async function stopHana(name) {
-    base.debug(`stopHana ${name}`)
+    base.debug(bundle.getText("debug.callWithParams", ["stopHana", name]))
     
     if (!name || typeof name !== 'string') {
-        throw new Error('Instance name is required and must be a string')
+        throw new Error(bundle.getText("error.btpInstanceNameRequired"))
     }
     
     let fileName = null
@@ -660,14 +660,14 @@ export async function stopHana(name) {
         const result = await executeBTPCommand(`update services/instance --name ${name} --parameters ${fileName}`)
         return result
     } catch (error) {
-        base.debug(`stopHana error: ${error.message}`)
+        base.debug(bundle.getText("debug.callError", ["stopHana", error.message]))
         throw error
     } finally {
         if (fileName && fs.existsSync(fileName)) {
             try {
                 fs.unlinkSync(fileName)
             } catch (cleanupError) {
-                base.debug(`Failed to clean up temp file: ${cleanupError.message}`)
+                base.debug(bundle.getText("debug.btp.cleanupTempFileFailed", [cleanupError.message]))
             }
         }
     }
