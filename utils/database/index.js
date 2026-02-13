@@ -59,7 +59,7 @@ export default class dbClientClass {
             process.env.NODE_ENV = prompts.profile
             let optionsCDS = cds.env.requires.db
             if(!optionsCDS || !optionsCDS.kind){
-                throw new Error(`No CAP/CDS Project Configuration Found. Commands via Profiles can only be performed in CAP projects`)
+                throw new Error(base.bundle.getText("error.cdsProjectMissing"))
             }
             if (optionsCDS.kind === 'sqlite') {  //SQLite CDS
                 // Load actual SQLite credentials and merge them into optionsCDS if needed
@@ -92,7 +92,7 @@ export default class dbClientClass {
                 childClass = new classAccess(prompts, optionsCDS)
             }
             else {
-                throw new Error(`Unknown or Unsupported database client type: ${optionsCDS.kind}`)
+                throw new Error(base.bundle.getText("error.unsupportedDbClient", [optionsCDS.kind]))
             }
         }
         return childClass

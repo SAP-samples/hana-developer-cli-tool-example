@@ -47,7 +47,7 @@
 
 			<Label id="labelChangelog" text="{i18n>changelog}" />
 			<Link id="linkChangelog" 
-				text="https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/CHANGELOG.md" 
+				text="{i18n>link.changelog}" 
 				href="https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/CHANGELOG.md"
 				target="_blank" />
 

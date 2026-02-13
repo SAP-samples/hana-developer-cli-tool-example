@@ -66,12 +66,12 @@ async function hdbtableTablesSQL(prompts, results, wss, db, schema, replacer, zi
             output = await removeCSTypes(db, output)
             await zip.file(table.TABLE_NAME.toString() + ".hdbtable", output + "\n\n")
             progressBar.itemDone(table.TABLE_NAME)
-            logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
+            logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
                 progressBar.itemDone(table.TABLE_NAME)
-                logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
+                logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 progressBar.stop()
                 base.error(error)
@@ -112,12 +112,12 @@ async function hdbtableViewsSQL(prompts, viewResults, wss, db, schema, replacer,
             output = await removeCSTypes(db, output)
             await zip.file(view.VIEW_NAME.toString() + ".hdbview", output + "\n\n")
             viewProgressBar.itemDone(view.VIEW_NAME)
-            logOutput.push({ object: view.VIEW_NAME, status: 'Success' })
+            logOutput.push({ object: view.VIEW_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
-                viewProgressBar.itemDone(view.VIEW_NAME)
-                logOutput.push({ object: view.VIEW_NAME, status: 'Error', message: error })
+                progressBar.itemDone(view.VIEW_NAME)
+                logOutput.push({ object: view.VIEW_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 viewProgressBar.stop()
                 base.error(error)
@@ -163,12 +163,12 @@ async function hdbtableTables(prompts, results, wss, db, schema, replacer, zip, 
             }
             await zip.file(table.TABLE_NAME.toString() + ".hdbtable", output + "\n\n")
             progressBar.itemDone(table.TABLE_NAME)
-            logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
+            logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
                 progressBar.itemDone(table.TABLE_NAME)
-                logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
+                logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 progressBar.stop()
                 base.error(error)
@@ -218,12 +218,12 @@ async function hdbtableViews(prompts, viewResults, wss, db, schema, replacer, zi
             }
             await zip.file(view.VIEW_NAME.toString() + ".hdbtable", output + "\n\n")
             viewProgressBar.itemDone(view.VIEW_NAME)
-            logOutput.push({ object: view.VIEW_NAME, status: 'Success' })
+            logOutput.push({ object: view.VIEW_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
                 viewProgressBar.itemDone(view.VIEW_NAME)
-                logOutput.push({ object: view.VIEW_NAME, status: 'Error', message: error })
+                logOutput.push({ object: view.VIEW_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 viewProgressBar.stop()
                 base.error(error)
@@ -263,12 +263,12 @@ async function hdbmigrationtableTablesSQL(prompts, results, wss, db, schema, rep
             output = await removeCSTypes(db, output)
             await zip.file(table.TABLE_NAME.toString() + ".hdbmigrationtable", output + "\n\n")
             progressBar.itemDone(table.TABLE_NAME)
-            logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
+            logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
                 progressBar.itemDone(table.TABLE_NAME)
-                logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
+                logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 progressBar.stop()
                 base.error(error)
@@ -315,12 +315,12 @@ async function hdbmigrationtableTables(prompts, results, wss, db, schema, replac
             }
             await zip.file(table.TABLE_NAME.toString() + ".hdbmigrationtable", output + "\n\n")
             progressBar.itemDone(table.TABLE_NAME)
-            logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
+            logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
                 progressBar.itemDone(table.TABLE_NAME)
-                logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
+                logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 progressBar.stop()
                 base.error(error)
@@ -363,12 +363,12 @@ async function cdsTables(prompts, results, wss, db, schema, cdsSource, logOutput
             }
             cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table", schema, null) + '\n'
             progressBar.itemDone(table.TABLE_NAME)
-            logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
+            logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
                 progressBar.itemDone(table.TABLE_NAME)
-                logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
+                logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 progressBar.stop()
                 base.error(error)
@@ -414,12 +414,12 @@ async function cdsViews(prompts, viewResults, wss, db, schema, cdsSource, logOut
             cdsSource += await dbInspect.formatCDS(db, object, fields, null, "view", schema, null, parameters)
 
             viewProgressBar.itemDone(view.VIEW_NAME)
-            logOutput.push({ object: view.VIEW_NAME, status: 'Success' })
+            logOutput.push({ object: view.VIEW_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
                 viewProgressBar.itemDone(view.VIEW_NAME)
-                logOutput.push({ object: view.VIEW_NAME, status: 'Error', message: error })
+                logOutput.push({ object: view.VIEW_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 viewProgressBar.stop()
                 base.error(error)
@@ -503,7 +503,7 @@ async function writeSynonyms(prompts, wss) {
             prompts.synonyms,
             JSON.stringify(dbInspect.results.synonyms, null, '\t')
         )
-        let finishMessage2 = `Synonyms are written to ${prompts.synonyms} file`
+        let finishMessage2 = base.bundle.getText('massConvert.synonymsWritten', [prompts.synonyms])
         console.log(finishMessage2)
         broadcast(wss, finishMessage2, 100)
         return

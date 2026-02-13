@@ -70,11 +70,11 @@ export async function activate(prompts) {
 
     const testChars = ["!", `"`, "$", "%", "'", "(", ")", "*", "+", ",", ".", "/", ":", ";", "<", "=", ">", "?", "@", "[", "]", "\\", "^", "`", "{", "}", "|", "~"]
     if (testChars.some(r=> prompts.container.includes(r))){
-      base.error(`Illegal Characters in input name ${prompts.container}`)
+      base.error(base.bundle.getText("error.illegalCharsInContainerName", [prompts.container]))
       return
     }
     if (testChars.some(r=> prompts.group.includes(r))){
-      base.error(`Illegal Characters in input name ${prompts.group}`)
+      base.error(base.bundle.getText("error.illegalCharsInGroupName", [prompts.group]))
       return
     }
 

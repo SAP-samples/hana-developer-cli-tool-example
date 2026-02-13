@@ -30,7 +30,7 @@ export const bundle = new TextBundle(path.join(__dirname, '..', '/_i18n/messages
  * @returns {Promise<void>}
  */
 export async function error(err) {
-    console.error(colors.red(`ERROR: ${err.toString()}`))
+    console.error(colors.red(`${bundle.getText("error")} ${err.toString()}`))
     if (err.stack) {
         console.error(colors.red(err.stack))
     }

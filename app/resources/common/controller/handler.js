@@ -30,8 +30,9 @@ sap.ui.define([
             }
             MessageToast.show(message);
         } catch (error) {
-            console.error("Error in handler:", error);
             const resourceBundle = controller.getResourceBundle ? controller.getResourceBundle() : null;
+            const handlerLogMsg = resourceBundle ? resourceBundle.getText("error.handlerLog") : "Error in handler:";
+            console.error(handlerLogMsg, error);
             const errorMsg = resourceBundle ? resourceBundle.getText("error.handlerException") : "An error occurred while processing the action";
             MessageToast.show(errorMsg);
         }

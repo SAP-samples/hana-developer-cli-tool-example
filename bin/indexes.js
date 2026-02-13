@@ -57,7 +57,7 @@ export async function getIndexes(prompts) {
     const db = await base.createDBConnection()
 
     let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.output(`Schema: ${schema}, Index: ${prompts.indexes}`)
+    base.output(base.bundle.getText("log.schemaIndex", [schema, prompts.indexes]))
 
     let results = await getIndexesInt(schema, prompts.indexes, db, prompts.limit)
     base.outputTableFancy(results)

@@ -417,6 +417,6 @@ if (fs.existsSync('../package.json')) {
     fs.writeFile(dir + '/src/.hdiconfig', hdiconfig, (err) => {
         if (err) throw err
     })
-    console.log('Module Updated')
+    console.log(baseLite.bundle.getText("createModule.updated"))
     return base.end()
 }

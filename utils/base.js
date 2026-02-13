@@ -147,7 +147,7 @@ try {
 		}
 	}
 } catch (error) {
-	console.warn('Failed to initialize terminal-kit:', error.message)
+    console.warn(bundle.getText("warning.terminalKitInitFail", [error.message]))
 	// Provide stub terminal that outputs to console
 	_terminal = {
 		table: (data) => {
@@ -197,7 +197,7 @@ export function blankLine(){
 export function validateLimit(limit, paramName = 'limit') {
     // Check if limit is undefined or null
     if (limit === undefined || limit === null) {
-        throw new Error(`${paramName} parameter is required`)
+        throw new Error(bundle.getText("validation.requiredParam", [paramName]))
     }
     
     // Convert to number if it's a string
@@ -205,12 +205,12 @@ export function validateLimit(limit, paramName = 'limit') {
     
     // Check if it's NaN or not a number
     if (typeof numLimit !== 'number' || isNaN(numLimit)) {
-        throw new Error(`${paramName} parameter must be a valid number, received: ${limit}`)
+        throw new Error(bundle.getText("validation.invalidNumber", [paramName, limit]))
     }
     
     // Check if it's a positive integer
     if (numLimit <= 0 || !Number.isInteger(numLimit)) {
-        throw new Error(`${paramName} parameter must be a positive integer, received: ${limit}`)
+        throw new Error(bundle.getText("validation.positiveInteger", [paramName, limit]))
     }
     
     return numLimit
@@ -608,10 +608,10 @@ function transformPromptConfig(name, config, argv) {
     if (config.required || config.pattern) {
         promptConfig.validate = (value) => {
             if (config.required && (!value || value === '')) {
-                return config.message || `${name} is required`
+                return config.message || bundle.getText("validation.promptRequired", [name])
             }
             if (config.pattern && !config.pattern.test(value)) {
-                return config.message || `${name} does not match required pattern`
+                return config.message || bundle.getText("validation.promptPattern", [name])
             }
             return true
         }
@@ -796,7 +796,7 @@ function checkUnknownOptions(argv, inputSchema, iConn, iDebug) {
     // Warn about unknown options
     if (unknownOptions.length > 0) {
         unknownOptions.forEach(opt => {
-            console.warn(colors.yellow(`Warning: Unknown option '--${opt}'`))
+            console.warn(colors.yellow(bundle.getText("warning.unknownOption", [opt])))
         })
     }
 }
@@ -894,7 +894,7 @@ export async function promptHandler(argv, processingFunction, inputSchema, iConn
         if (err && err.message) {
             console.log(err.message)
         } else {
-            console.log('Prompt cancelled')
+            console.log(bundle.getText("prompt.cancelled"))
         }
     }
 }
@@ -1128,16 +1128,16 @@ export async function outputTableFancy(content) {
             try {
                 // Handle large datasets with pagination
                 if (content.length > MAX_DISPLAY_ROWS) {
-                    console.log(colors.yellow(`\nShowing first ${MAX_DISPLAY_ROWS} of ${content.length} rows (use --output json with --filename to save all results)\n`))
+                    console.log(colors.yellow(`\n${bundle.getText("output.truncatedWithHint", [MAX_DISPLAY_ROWS, content.length])}\n`))
                     return terminal.table(convertJsonToTableArray(content.slice(0, MAX_DISPLAY_ROWS)), tableOptions)
                 } else {
                     return terminal.table(convertJsonToTableArray(content), tableOptions)
                 }
             } catch (error) {
                 // Fallback to console.table if terminal.table fails (e.g., buffer allocation errors)
-                console.error(colors.yellow('Warning: terminal.table failed, falling back to console.table:'), error.message)
+                console.error(colors.yellow(bundle.getText("warning.terminalTableFallback")), error.message)
                 if (content.length > MAX_DISPLAY_ROWS) {
-                    console.log(colors.yellow(`Showing first ${MAX_DISPLAY_ROWS} of ${content.length} rows`))
+                    console.log(colors.yellow(bundle.getText("output.truncated", [MAX_DISPLAY_ROWS, content.length])))
                     return console.table(content.slice(0, MAX_DISPLAY_ROWS))
                 }
                 return console.table(content)
@@ -1173,14 +1173,14 @@ export function output(content) {
 // @ts-ignore
 export function globalErrorHandler(err, req, res, next) {
     // Log error without calling base.error() which would exit the process in CLI mode
-    console.error(colors.red(`Unhandled error: ${err.message}`))
-    debug(`Unhandled error: ${err.message}`)
+    console.error(colors.red(bundle.getText("error.unhandled", [err && err.message ? err.message : bundle.getText("error.internalServerError")]) ))
+    debug(bundle.getText("error.unhandled", [err && err.message ? err.message : bundle.getText("error.internalServerError")]))
     debug(err.stack)
     
     // @ts-ignore
     const statusCode = err.statusCode || err.status || 500
     // Always send the actual error message to help users diagnose issues
-    const message = err.message || 'Internal Server Error'
+    const message = err.message || bundle.getText("error.internalServerError")
     
     // Don't call next() after sending response (Express 5 requirement)
     res.status(statusCode).json({
@@ -1199,7 +1199,7 @@ export function globalErrorHandler(err, req, res, next) {
 export function notFoundHandler(req, res) {
     res.status(404).json({
         error: {
-            message: 'Route not found',
+            message: bundle.getText("error.routeNotFound"),
             status: 404,
             path: req.path
         }
@@ -1256,7 +1256,7 @@ export async function webServerSetup(urlPath) {
         // @ts-ignore
         let serverAddr = `http://localhost:${server.address().port}${urlPath}`
         debug(serverAddr)
-        console.info(`HTTP Server: ${serverAddr}`)
+        console.info(bundle.getText("server.httpServer", [serverAddr]))
         startSpinnerInt()
         await open(serverAddr, {wait: true})
     })

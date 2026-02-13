@@ -373,7 +373,7 @@ export function route (app) {
             if (!subaccount) {
                 return res.status(400).json({ 
                     success: false, 
-                    message: 'Subaccount GUID is required' 
+                    message: base.bundle.getText("error.btp.subaccountRequired")
                 })
             }
             

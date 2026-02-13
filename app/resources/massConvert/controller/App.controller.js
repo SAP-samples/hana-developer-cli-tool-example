@@ -15,7 +15,8 @@ sap.ui.define([
         ERROR_LOG_MODEL_NOT_FOUND: "error.logModelNotFound",
         ERROR_PROCESSING_MESSAGE: "error.processingMessage",
         ERROR_CONNECTION_FAILED: "error.connectionFailed",
-        ERROR_MODEL_NOT_FOUND: "error.modelNotFound"
+        ERROR_MODEL_NOT_FOUND: "error.modelNotFound",
+        ERROR_REFRESH_CONNECTION: "error.refreshConnection"
     };
 
     const FILTERS = ["Schema", "Table", "View"];
@@ -120,7 +121,7 @@ sap.ui.define([
                     action: "massConvert"
                 }));
             }).catch((error) => {
-                console.error("Failed to refresh connection:", error);
+                console.error(resourceBundle.getText(I18N_KEYS.ERROR_REFRESH_CONNECTION), error);
                 MessageToast.show(connFailedMsg);
             });
         },

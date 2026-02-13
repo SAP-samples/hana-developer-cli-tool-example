@@ -11,34 +11,34 @@
 			columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false" ariaLabelledBy="Title1BtpInfo">
 			<f:toolbar>
 				<Toolbar id="TB1BtpInfo">
-					<Title id="Title1BtpInfo" text="BTP Configuration"/>
+					<Title id="Title1BtpInfo" text="{i18n>btpInfo.title}"/>
 					<ToolbarSpacer id="spacer1BtpInfo" />
 					<Button id="btnSetTarget2" icon="sap-icon://target-group" tooltip="{i18n>btp.setTargetTooltip}" text="{i18n>btp.setTarget}" press="navigateToBtpTarget" />
-					<Button id="refreshButtonBtpInfo" icon="sap-icon://refresh" tooltip="Refresh" press="refreshBTPInfo" />
+					<Button id="refreshButtonBtpInfo" icon="sap-icon://refresh" tooltip="{i18n>btpInfo.refresh}" press="refreshBTPInfo" />
 				</Toolbar>
 			</f:toolbar>
 			<f:content>
 
 				<Toolbar id="TB2BtpInfo" ariaLabelledBy="Title2BtpInfo">
-					<Title id="Title2BtpInfo" text="BTP CLI Information"/>
+					<Title id="Title2BtpInfo" text="{i18n>btpInfo.section.cliInfo}"/>
 					<ToolbarSpacer id="spacer2BtpInfo" />
 				</Toolbar>
 
-				<Label id="labelUserName" text="User Name" />
+				<Label id="labelUserName" text="{i18n>btpInfo.userName}" />
 				<Input id="inputUserName" value="{btpModel>/UserName}" editable="false" />
 
-				<Label id="labelServerURL" text="Server URL" />
+				<Label id="labelServerURL" text="{i18n>btpInfo.serverUrl}" />
 				<Link id="linkServerURL" text="{btpModel>/ServerURL}" href="{btpModel>/ServerURL}" target="_blank" />
 
-				<Label id="labelVersion" text="CLI Version" />
+				<Label id="labelVersion" text="{i18n>btpInfo.cliVersion}" />
 				<Input id="inputVersion" value="{btpModel>/Version}" editable="false" />
 
 				<Toolbar id="TB3BtpInfo" ariaLabelledBy="Title3BtpInfo">
-					<Title id="Title3BtpInfo" text="Target Hierarchy"/>
+					<Title id="Title3BtpInfo" text="{i18n>btpInfo.section.targetHierarchy}"/>
 					<ToolbarSpacer id="spacer3BtpInfo" />
 				</Toolbar>
 
-				<Label id="labelGlobalAccount" text="Global Account" />
+				<Label id="labelGlobalAccount" text="{i18n>btpInfo.globalAccount}" />
 				<Input id="inputGlobalAccount" value="{btpModel>/GlobalAccount}" editable="false">
 					<layoutData>
 						<l:GridData id="gridDataGlobalAccount" span="XL6 L6 M8 S12" />
@@ -50,7 +50,7 @@
 					</layoutData>
 				</Input>
 
-				<Label id="labelDirectory" text="Directory (Folder)" />
+				<Label id="labelDirectory" text="{i18n>btpInfo.directory}" />
 				<Input id="inputDirectory" value="{btpModel>/Directory}" editable="false">
 					<layoutData>
 						<l:GridData id="gridDataDirectory" span="XL6 L6 M8 S12" />
@@ -62,7 +62,7 @@
 					</layoutData>
 				</Input>
 
-				<Label id="labelSubAccount" text="Sub Account" />
+				<Label id="labelSubAccount" text="{i18n>btpInfo.subAccount}" />
 				<Input id="inputSubAccount" value="{btpModel>/SubAccount}" editable="false">
 					<layoutData>
 						<l:GridData id="gridDataSubAccount" span="XL6 L6 M8 S12" />

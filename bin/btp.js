@@ -96,7 +96,7 @@ export async function handler(argv) {
 
                 const firstSelection = await select({
                     message: folders.length > 0 && rootSubaccounts.length > 0 
-                        ? 'Select a folder or subaccount:' 
+                        ? base.bundle.getText("btp.selectFolderOrSubaccount") 
                         : base.bundle.getText("btpSa"),
                     choices: choices.map(choice => ({
                         name: choice.name,
@@ -116,7 +116,7 @@ export async function handler(argv) {
                         }))
 
                         selectedSubaccountGuid = await select({
-                            message: `Select subaccount from ${selectedFolder.name.replace('📁 ', '')}:`,
+                            message: base.bundle.getText("btp.selectSubaccountFromFolder", [selectedFolder.name.replace('📁 ', '')]),
                             choices: subaccountChoices
                         })
                     }
@@ -137,7 +137,7 @@ export async function handler(argv) {
                 base.debug(schema)
                 base.promptHandler(argv, callBTP, schema)
             } else {
-                base.error('No subaccount selected')
+                base.error(base.bundle.getText("btp.noSubaccountSelected"))
             }
         } catch (error) {
             base.error(error)

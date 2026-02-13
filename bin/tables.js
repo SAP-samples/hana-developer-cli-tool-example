@@ -110,7 +110,7 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
   const { hideBin } = await import('yargs/helpers')
   
   yargs(hideBin(process.argv))
-    .usage(`Usage: ${command}\n\n${describe}`)
+    .usage(baseLite.bundle.getText("cli.usage", [command, describe]))
     .options(builder)
     .help('help').alias('help', 'h')
     .wrap(null)

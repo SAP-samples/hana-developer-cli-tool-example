@@ -97,7 +97,7 @@ export async function setKeyDetails(input) {
       if (err) {
         return base.error(err)
       } 
-      console.log(`Service Key ${input.key} created`)
+      console.log(baseLite.bundle.getText("serviceKey.created", [input.key]))
       let script = ''
       if (input.cf) {
         script = `cf service-key ${input.instance} ${input.key}`

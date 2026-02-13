@@ -68,7 +68,7 @@ export async function getFunctions(prompts) {
     const db = await base.createDBConnection()
 
     let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.output(`Schema: ${schema}, Function: ${prompts.function}`)
+    base.output(base.bundle.getText("log.schemaFunction", [schema, prompts.function]))
 
     let results = await getFunctionsInt(schema, prompts.function, db, prompts.limit)
     base.outputTableFancy(results)
@@ -111,7 +111,7 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
   const { hideBin } = await import('yargs/helpers')
   
   yargs(hideBin(process.argv))
-    .usage(`Usage: ${command}\n\n${describe}`)
+    .usage(`${baseLite.bundle.getText("cli.usage")}${command}\n\n${describe}`)
     .options(builder)
     .help('help').alias('help', 'h')
     .wrap(null)

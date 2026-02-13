@@ -37,10 +37,11 @@ sap.ui.define([
                 // Iterate through all properties in data
                 for (const key in data) {
                     if (data.hasOwnProperty(key) && !coreFields.includes(key)) {
+                        const resourceBundle = this.getResourceBundle();
                         // This is a package - add it to the packages array
                         packages.push({
                             name: key,
-                            version: data[key] || "Not installed"
+                            version: data[key] || resourceBundle.getText("version.notInstalled")
                         });
                     }
                 }
@@ -62,7 +63,8 @@ sap.ui.define([
                 const hanaModel = this.getModel("hanaModel");
                 hanaModel.setData(transformedData);
             } catch (error) {
-                console.error("Error loading version info:", error);
+                const resourceBundle = this.getResourceBundle();
+                console.error(resourceBundle.getText("version.error.loadFailed"), error);
             }
         }
     });

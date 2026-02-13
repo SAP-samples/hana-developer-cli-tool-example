@@ -33,7 +33,7 @@
 
 		<IconTabBar id="idIconTabBarNoIconsInspectTable" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
 			<items>
-				<IconTabFilter id="iconTabFilterBasicInfoInspectTable" text="Basic Info" key="info">
+				<IconTabFilter id="iconTabFilterBasicInfoInspectTable" text="{i18n>inspect.basicInfo}" key="info">
 					<f:SimpleForm id="infoFormInspectTable" editable="false" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
 						<f:content>
 							<Label id="labelSchemaInspectTable" text="{i18nReuse>scheam}" />

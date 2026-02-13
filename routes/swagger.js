@@ -13,96 +13,80 @@ const __dirname = dirname(__filename)
  * Auto-generates API documentation from JSDoc comments in route files
  */
 export function route(app) {
-    base.debug('Swagger Route')
+    base.debug(base.bundle.getText("swagger.routeInit"))
 
     // Swagger definition using OpenAPI 3.0
     const swaggerDefinition = {
         openapi: '3.0.0',
         info: {
-            title: 'HANA CLI API',
+            title: base.bundle.getText("swagger.info.title"),
             version: '3.202602.0',
-            description: `
-                RESTful API for HANA Developer CLI Tool
-                
-                This API provides programmatic access to HANA database operations, 
-                including schema inspection, table/view management, HDI container operations,
-                and HANA Cloud service instance management.
-                
-                ## Features
-                - Database object inspection (tables, views, functions, indexes)
-                - HDI container management
-                - HANA Cloud service instance listing
-                - System information and feature queries
-                - Configuration management
-                
-                ## Authentication
-                Database connections use the configuration set via PUT / endpoint.
-            `,
+            description: base.bundle.getText("swagger.info.description"),
             contact: {
-                name: 'HANA Developer CLI Tool',
-                url: 'https://github.com/SAP-samples/hana-developer-cli-tool-example'
+                name: base.bundle.getText("swagger.info.contactName"),
+                url: base.bundle.getText("swagger.info.contactUrl")
             },
             license: {
-                name: 'Apache 2.0',
-                url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+                name: base.bundle.getText("swagger.info.licenseName"),
+                url: base.bundle.getText("swagger.info.licenseUrl")
             }
         },
         servers: [
             {
                 url: 'http://localhost:3010',
-                description: 'Development server (default port)'
+                description: base.bundle.getText("swagger.server.defaultDesc")
             },
             {
                 url: 'http://localhost:{port}',
-                description: 'Development server (custom port)',
+                description: base.bundle.getText("swagger.server.customDesc"),
                 variables: {
                     port: {
                         default: '3010',
-                        description: 'Server port number'
+                        description: base.bundle.getText("swagger.server.portDescription")
                     }
                 }
             }
         ],
         tags: [
             {
-                name: 'Configuration',
-                description: 'Application configuration and settings management'
+                name: base.bundle.getText("swagger.tag.configuration.name"),
+                description: base.bundle.getText("swagger.tag.configuration.description")
             },
             {
-                name: 'HANA System',
-                description: 'HANA database system information and features'
+                name: base.bundle.getText("swagger.tag.hanaSystem.name"),
+                description: base.bundle.getText("swagger.tag.hanaSystem.description")
             },
             {
-                name: 'HANA Objects',
-                description: 'Database objects (tables, views, functions, indexes, schemas)'
+                name: base.bundle.getText("swagger.tag.hanaObjects.name"),
+                description: base.bundle.getText("swagger.tag.hanaObjects.description")
             },
             {
-                name: 'HANA Inspect',
-                description: 'Detailed inspection of database objects with multiple output formats'
+                name: base.bundle.getText("swagger.tag.hanaInspect.name"),
+                description: base.bundle.getText("swagger.tag.hanaInspect.description")
             },
             {
-                name: 'HDI',
-                description: 'HANA Deployment Infrastructure container management'
+                name: base.bundle.getText("swagger.tag.hdi.name"),
+                description: base.bundle.getText("swagger.tag.hdi.description")
             },
             {
-                name: 'Cloud Services',
-                description: 'HANA Cloud service instance management'
+                name: base.bundle.getText("swagger.tag.cloudServices.name"),
+                description: base.bundle.getText("swagger.tag.cloudServices.description")
             },
             {
-                name: 'Documentation',
-                description: 'Project documentation and changelog'
+                name: base.bundle.getText("swagger.tag.documentation.name"),
+                description: base.bundle.getText("swagger.tag.documentation.description")
             },
             {
-                name: 'Export',
-                description: 'Data export functionality'
+                name: base.bundle.getText("swagger.tag.export.name"),
+                description: base.bundle.getText("swagger.tag.export.description")
             },
             {
-                name: 'Digital First Adoption',
-                description: 'DFA help and context assistance'
+                name: base.bundle.getText("swagger.tag.dfa.name"),
+                description: base.bundle.getText("swagger.tag.dfa.description")
             },
             {
-                name: 'WebSockets',
-                description: 'WebSocket connections for real-time operations'
+                name: base.bundle.getText("swagger.tag.websockets.name"),
+                description: base.bundle.getText("swagger.tag.websockets.description")
             }
         ],
         components: {
@@ -112,11 +96,11 @@ export function route(app) {
                     properties: {
                         error: {
                             type: 'string',
-                            description: 'Error message'
+                            description: base.bundle.getText("swagger.schema.error.message")
                         },
                         message: {
                             type: 'string',
-                            description: 'Detailed error message'
+                            description: base.bundle.getText("swagger.schema.error.details")
                         }
                     }
                 },
@@ -132,7 +116,7 @@ export function route(app) {
             },
             responses: {
                 BadRequest: {
-                    description: 'Bad request - invalid parameters',
+                    description: base.bundle.getText("swagger.response.badRequest"),
                     content: {
                         'application/json': {
                             schema: {
@@ -142,7 +126,7 @@ export function route(app) {
                     }
                 },
                 InternalError: {
-                    description: 'Internal server error',
+                    description: base.bundle.getText("swagger.response.internalError"),
                     content: {
                         'application/json': {
                             schema: {
@@ -152,7 +136,7 @@ export function route(app) {
                     }
                 },
                 Unauthorized: {
-                    description: 'Unauthorized - authentication required',
+                    description: base.bundle.getText("swagger.response.unauthorized"),
                     content: {
                         'application/json': {
                             schema: {
@@ -194,7 +178,7 @@ export function route(app) {
                 }
             },
             customCss: '.swagger-ui .topbar { display: none }',
-            customSiteTitle: 'HANA CLI API Documentation'
+            customSiteTitle: base.bundle.getText("swagger.ui.siteTitle")
         }
 
         // Serve Swagger UI at /api-docs
@@ -222,22 +206,22 @@ export function route(app) {
             res.send(swaggerSpec)
         })
 
-        base.debug('Swagger UI configured at /api-docs')
-        console.log('Swagger UI available at /api-docs')
+        base.debug(base.bundle.getText("swagger.ui.configured", ["/api-docs"]))
+        console.log(base.bundle.getText("swagger.ui.available", ["/api-docs"]))
         
     } catch (error) {
-        console.error(base.colors.red(`Swagger setup error: ${error.message}`))
-        base.debug(`Swagger setup error: ${error.stack}`)
+        console.error(base.colors.red(base.bundle.getText("swagger.error.setup", [error.message])))
+        base.debug(base.bundle.getText("swagger.error.setupDebug", [error.stack]))
         
         // Provide a fallback error page
         app.get('/api-docs', (req, res) => {
             res.status(500).send(`
                 <html>
-                    <head><title>Swagger Error</title></head>
+                    <head><title>${base.bundle.getText("swagger.fallback.title")}</title></head>
                     <body>
-                        <h1>Swagger UI Setup Error</h1>
-                        <p>Unable to load API documentation: ${error.message}</p>
-                        <p>Check server logs for details.</p>
+                        <h1>${base.bundle.getText("swagger.fallback.heading")}</h1>
+                        <p>${base.bundle.getText("swagger.fallback.message", [error.message])}</p>
+                        <p>${base.bundle.getText("swagger.fallback.details")}</p>
                     </body>
                 </html>
             `)

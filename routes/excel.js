@@ -46,7 +46,7 @@ export function route (app) {
             // Generate Excel buffer
             const excelBuffer = await workbook.xlsx.writeBuffer()
 
-			res.header("Content-Disposition", "attachment; filename=Excel.xlsx")
+res.header("Content-Disposition", `attachment; filename=${base.bundle.getText("excel.filename")}`)
 			return res.type("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet").status(200).send(excelBuffer)
 
         } catch (error) {

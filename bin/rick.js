@@ -15,20 +15,20 @@ export async function getRick() {
   const { confirm } = await import('@inquirer/prompts')
   
   const firstAnswer = await confirm({
-    message: 'Are you sure?',
+    message: baseLite.bundle.getText("rick.confirm.first"),
     default: false
   })
 
   if (firstAnswer) {
     const secondAnswer = await confirm({
-      message: 'Are you REALLY sure?',
+      message: baseLite.bundle.getText("rick.confirm.second"),
       default: false
     })
 
     if (secondAnswer) {
       try {
         const { default: open } = await import('open')
-        const helpVideoURL = `https://www.youtube.com/watch?v=j5a0jTc9S10&list=PL3KnTfyhrIlcudeMemKd6rZFGDWy`
+        const helpVideoURL = baseLite.bundle.getText("rick.helpVideoURL")
         await open(helpVideoURL, {wait: true})
       } catch (err) {
         console.error(err)

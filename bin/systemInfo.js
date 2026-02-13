@@ -117,9 +117,9 @@ export async function dbxOutput(prompts) {
   const unknown = baseLite.bundle.getText("hc.unknown")
 
   if (dbVersion.versionMajor > 2) {
-    console.log(`${baseLite.bundle.getText("dbx.dbType")}:${colors.red('*')} ${colors.red(`SAP HANA Cloud`)}`)
+    console.log(`${baseLite.bundle.getText("dbx.dbType")}:${colors.red('*')} ${colors.red(baseLite.bundle.getText("dbx.product.hanaCloud"))}`)
   } else {
-    console.log(`${baseLite.bundle.getText("dbx.dbType")}:${colors.red('*')} ${colors.red(`SAP HANA`)}`)
+    console.log(`${baseLite.bundle.getText("dbx.dbType")}:${colors.red('*')} ${colors.red(baseLite.bundle.getText("dbx.product.hana"))}`)
   }
   console.log(`  ${baseLite.bundle.getText("dbx.hostPort")}:${colors.red('*')} ${colors.red(connDetails.hana?.host ?? unknown)} - ${colors.red(connDetails.hana?.port ?? unknown)}`)
   console.log(`         ${baseLite.bundle.getText("dbx.user")}:${colors.red('*')} ${colors.red(connDetails.hana?.user ?? unknown)}`)

@@ -81,7 +81,7 @@ export function route (app) {
             body.isGui = true
             await base.setPrompts(body)
             return res.status(200)
-                      .json({ status: 'ok' })
+                      .json({ status: base.bundle.getText("api.status.ok") })
         } catch (error) {
             next(error) // Pass to error handler
         }

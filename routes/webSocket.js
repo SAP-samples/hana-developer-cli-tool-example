@@ -91,10 +91,10 @@ export function route(app, server) {
 						case "massConvert":
 							// Skip massConvert in test environment to avoid terminal output issues
 							if (process.env.NODE_ENV === 'test') {
-								console.log('[TEST MODE] Skipping massConvert execution')
+								console.log(base.bundle.getText("test.skipMassConvert"))
 								try {
 									ws.send(JSON.stringify({
-										text: 'massConvert skipped in test environment'
+										text: base.bundle.getText("test.massConvertSkipped")
 									}))
 								} catch (sendError) {
 									// Ignore send errors
@@ -107,7 +107,7 @@ export function route(app, server) {
 									console.error(base.colors.red(`${base.bundle.getText("generalError")}: ${error}`))
 									base.debug(`${base.bundle.getText("generalError")}: ${error}`)
 									try {
-										wss.broadcast(`Error in massConvert: ${error.message || error}`)
+										wss.broadcast(base.bundle.getText("error.massConvertFailed", [error.message || error]))
 									} catch (broadcastError) {
 										// Ignore broadcast errors
 									}
@@ -116,7 +116,7 @@ export function route(app, server) {
 								console.error(base.colors.red(`${base.bundle.getText("generalError")}: ${syncError}`))
 								base.debug(`${base.bundle.getText("generalError")}: ${syncError}`)
 								try {
-									wss.broadcast(`Error in massConvert: ${syncError.message || syncError}`)
+									wss.broadcast(base.bundle.getText("error.massConvertFailed", [syncError.message || syncError]))
 								} catch (broadcastError) {
 									// Ignore broadcast errors
 								}
@@ -133,7 +133,7 @@ export function route(app, server) {
 					base.debug(`${base.bundle.getText("generalError")}: ${parseError.message}`)
 					try {
 						ws.send(JSON.stringify({
-							text: `Error: ${parseError.message}`
+							text: base.bundle.getText("error.parseError", [parseError.message])
 						}))
 					} catch (sendError) {
 						// Ignore send errors

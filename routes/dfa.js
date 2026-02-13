@@ -7,6 +7,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url))
 import * as path from 'path'
 import * as fs from 'fs'
 import { marked } from 'marked'
+import * as base from '../utils/base.js'
 
 export function route (app) {
     /**
@@ -41,10 +42,10 @@ export function route (app) {
         try {
             let input = JSON.parse(getURLQuery(req))
             if (!input.appUrl) {
-                throw new Error("Missing parameter: appUrl")
+                throw new Error(base.bundle.getText("error.missingParam.appUrl"))
             }
             let output = {}
-            output.status = "OK"
+            output.status = base.bundle.getText("status.ok")
             output.data = []
             input.appUrl.forEach(app => {
                 try {
@@ -57,7 +58,7 @@ export function route (app) {
             res.type("application/json").status(200).send(output)
         } catch (error) {
             // Return empty OK response for missing catalogs
-            res.status(200).json({ status: "OK", data: [] })
+            res.status(200).json({ status: base.bundle.getText("status.ok"), data: [] })
         }
     })
 
@@ -94,11 +95,11 @@ export function route (app) {
     app.get('/sap/dfa/help/webassistant/context', async (req, res, next) => {
         try {
             if (!req.query.id) {
-                throw new Error("Missing parameter: id")
+                throw new Error(base.bundle.getText("error.missingParam.id"))
             }
 
             let output = {}
-            output.status = "OK"
+            output.status = base.bundle.getText("status.ok")
             output.data = []
             let jsonData = require(`../app/dfa/help/context/${req.query.id}.json`)
             output.data = jsonData

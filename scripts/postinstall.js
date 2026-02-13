@@ -1,8 +1,17 @@
 #!/usr/bin/env node
 
+import { TextBundle } from '@sap/textbundle';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const bundle = new TextBundle(join(__dirname, '..', '_i18n', 'messages.properties'));
+
 // Skip postinstall in CI environments
 if (process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true') {
-  console.log('Skipping postinstall in CI environment');
+  console.log(bundle.getText('scripts.postinstall.skippingCI'));
   process.exit(0);
 }
 
@@ -11,11 +20,11 @@ import { exec } from 'node:child_process';
 
 exec('npm link @sap/cds-dk --local', (error, stdout, stderr) => {
   if (error) {
-    console.log('Note: Could not link @sap/cds-dk (this is optional for development)');
+    console.log(bundle.getText('scripts.postinstall.linkFailed'));
     // Don't fail the install
     process.exit(0);
   } else {
-    console.log('Successfully linked @sap/cds-dk');
+    console.log(bundle.getText('scripts.postinstall.linkSuccess'));
     process.exit(0);
   }
 });

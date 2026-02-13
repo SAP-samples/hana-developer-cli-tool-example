@@ -11,8 +11,8 @@
     "loio": "",
     "contextType": "HELP",
     "_standalone": true,
-    "title": "Inspect Table Details and Metadata",
-    "shortDescription": "Inspect Table Details and Metadata",
+    "title": "{i18n>dfa.inspectTable.title}",
+    "shortDescription": "{i18n>dfa.inspectTable.description}",
     "alias": "",
     "editable": "true",
     "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000"

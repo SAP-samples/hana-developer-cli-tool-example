@@ -203,7 +203,7 @@ if (requestedCommand && commandMap[requestedCommand]) {
             
             if (unknownOptions.length > 0) {
                 unknownOptions.forEach(opt => {
-                    console.warn(base.colors.yellow(`Warning: Unknown option '--${opt}' will be ignored`))
+                    console.warn(base.colors.yellow(base.bundle.getText("cli.unknownOptionWarning", [opt])))
                 })
             }
             

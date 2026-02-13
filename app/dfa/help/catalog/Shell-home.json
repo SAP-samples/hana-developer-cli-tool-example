@@ -11,7 +11,7 @@
     "loio": "",
     "contextType": "HELP",
     "_standalone": true,
-    "title": "Static Help: hana-cli Landing Page",
+    "title": "{i18n>dfa.shell.title}",
     "shortDescription": "",
     "alias": "",
     "editable": "true",

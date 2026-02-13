@@ -7,7 +7,18 @@
 	<meta http-equiv="Content-Security-Policy"
 		content="default-src 'self' https://ui5.sap.com; script-src 'self' https://ui5.sap.com 'unsafe-inline' 'unsafe-eval'; style-src 'self' https://ui5.sap.com 'unsafe-inline'; img-src 'self' data: https://ui5.sap.com; font-src 'self' https://ui5.sap.com; connect-src 'self' https://ui5.sap.com; frame-ancestors 'self'">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>hana-cli LaunchPad</title>
+	<title data-i18n-key="html.title.main">hana-cli LaunchPad</title>
+	<script>
+		document.addEventListener('sap-ui-core-init', function() {
+			if (window.sap && sap.ui && sap.ui.getCore()) {
+				const core = sap.ui.getCore();
+				if (core._oLinkMetadata && core._oLinkMetadata.getResourceBundle) {
+					const bundle = core._oLinkMetadata.getResourceBundle();
+					if (bundle) document.title = bundle.getText('html.title.main');
+				}
+			}
+		});
+	</script>
 	<script src="https://ui5.sap.com/1.144.1/test-resources/sap/ushell/bootstrap/sandbox.js"></script>
 	<script src="https://ui5.sap.com/1.144.1/resources/sap-ui-core.js"
 		data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration, sap.ui.layout, sap.ui.rta, sap.dfa.help,sap.uxap"

@@ -27,14 +27,14 @@ export async function verOutput() {
   const info = await getVersion()
   base.stopSpinnerInt()
   Object.keys(info).forEach(key => log(highlight(`${key}: ${info[key]}`)))
-  console.log(`Node.js: ${colors.green(process.version)}`)
-  console.log(`Change Log: ${colors.blue('https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/CHANGELOG.md')}`)
+  console.log(baseLite.bundle.getText("version.node", [colors.green(process.version)]))
+  console.log(baseLite.bundle.getText("version.changelog", [colors.blue('https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/CHANGELOG.md')]))
 
 
   let selfVersion = await latestVersion('hana-cli')
-  console.log(`Latest hana-cli version available on npmjs.com: ${colors.green(selfVersion)}`)
+  console.log(baseLite.bundle.getText("version.latestAvailable", [colors.green(selfVersion)]))
   if (info['hana-cli'] < selfVersion) {
-    console.log(`${colors.red('Local version of hana-cli is out of date.')} Consider upgrading with "${colors.green('npm upgrade -g hana-cli')}"`)
+    console.log(`${colors.red(baseLite.bundle.getText("version.outOfDate"))} ${baseLite.bundle.getText("version.upgradeHint", [colors.green('npm upgrade -g hana-cli')])}`)
   }
   // No need to call base.end() as there's no DB connection to clean up
   // Let the process exit naturally to avoid Windows libuv assertion errors
@@ -76,14 +76,14 @@ export async function getVersion() {
     cfVer = cfVer.replace(/(\r\n|\n|\r)/gm, "")
     info['cf-cli'] = cfVer
   } catch (error) {
-    info['cf-cli'] = `Cloud Foundry CLI not installed`
+    info['cf-cli'] = baseLite.bundle.getText("version.cfCliMissing")
   }
   try {
     let btpVer = await btp.getVersion()
     btpVer = btpVer.replace(/(\r\n|\n|\r)/gm, "")
     info['btp-cli'] = btpVer
   } catch (error) {
-    info['btp-cli'] = `btp CLI not installed`
+    info['btp-cli'] = baseLite.bundle.getText("version.btpCliMissing")
   }
   Object.defineProperty(info, 'home', { value: __dirname })
   info['hana-cli home'] = info.home
@@ -105,7 +105,7 @@ export async function getVersionUI() {
     let selfVersion = await latestVersion('hana-cli')
     info['latestVersion'] = selfVersion
   } catch (error) {
-    info['latestVersion'] = 'Unable to fetch'
+    info['latestVersion'] = baseLite.bundle.getText("version.latestUnavailable")
   }
   
   return info

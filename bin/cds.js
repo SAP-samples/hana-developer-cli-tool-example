@@ -10,6 +10,7 @@ global.__xRef = []
 export const command = 'cds [schema] [table]'
 export const aliases = ['cdsPreview']
 export const describe = baseLite.bundle.getText("cds")
+const t = (key, params = []) => baseLite.bundle.getText(key, params)
 export const builder = baseLite.getBuilder({
   table: {
     alias: ['t', 'Table'],
@@ -191,7 +192,7 @@ export async function cdsBuild(prompts) {
 
 
     if (!prompts.view) {
-      console.log(`Schema: ${schema}, Table: ${prompts.table}`)
+      console.log(t("cds.log.schemaTable", [schema, prompts.table]))
       object = await dbInspect.getTable(db, schema, prompts.table)
       fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
       constraints = await dbInspect.getConstraints(db, object)
@@ -200,7 +201,7 @@ export async function cdsBuild(prompts) {
 
         `@cds.persistence.skip\n ${tableSource} \n }`
     } else {
-      console.log(`Schema: ${schema}, View: ${prompts.table}`)
+      console.log(t("cds.log.schemaView", [schema, prompts.table]))
       object = await dbInspect.getView(db, schema, prompts.table)
       fields = await dbInspect.getViewFields(db, object[0].VIEW_OID)
       let viewSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema, "preview")
@@ -238,26 +239,26 @@ async function cdsServerSetup(prompts, cdsSource) {
   // This bridges the ES module / CommonJS gap
   try {
     const require = createRequire(import.meta.url)
-    console.log('✓ Loading @sap/cds-fiori plugin via CommonJS require...')
+    console.log(t("cds.plugin.loading"))
     
     // Get the plugin's preview functionality
     const preview = require('@sap/cds-fiori/app/preview')
-    console.log('✓ @sap/cds-fiori plugin loaded successfully')
-    console.log('✓ Preview module:', typeof preview)
+    console.log(t("cds.plugin.loaded"))
+    console.log(t("cds.plugin.previewModule"), typeof preview)
   } catch (pluginErr) {
-    console.warn(`Warning: Failed to load @sap/cds-fiori plugin: ${pluginErr.message}`)
+    console.warn(t("cds.plugin.loadFailed", [pluginErr.message]))
   }
 
   // Handle server-level errors gracefully
   server.on('error', (err) => {
     base.debug(`Server Error: ${err.message}`)
-    console.error(`Server Error: ${err.message}`)
+    console.error(t("cds.server.error", [err.message]))
   })
 
   // Handle any unhandled promise rejections in the server context
   process.on('unhandledRejection', (reason, promise) => {
     base.debug(`Unhandled Rejection: ${reason}`)
-    console.error(`Unhandled Rejection:`, reason)
+    console.error(t("cds.unhandledRejection"), reason)
   })
 
   //CDS OData Service
@@ -279,24 +280,24 @@ async function cdsServerSetup(prompts, cdsSource) {
     cds.env.fiori = {}
   }
   cds.env.fiori.preview = true
-  console.log('✓ CDS Fiori preview enabled: cds.env.fiori.preview =', cds.env.fiori.preview)
+  console.log(t("cds.preview.enabled"), cds.env.fiori.preview)
 
   // Listen for the 'served' event to verify it fires
   cds.on('served', (services) => {
-    console.log('✓ CDS "served" event fired')
-    console.log('  Services:', Object.keys(services))
-    console.log('  cds.env.fiori:', JSON.stringify(cds.env.fiori, null, 2))
+    console.log(t("cds.served.fired"))
+    console.log(t("cds.served.services"), Object.keys(services))
+    console.log(t("cds.served.fiori"), JSON.stringify(cds.env.fiori, null, 2))
     
     // Check if Fiori preview routes were registered
     if (app._router && app._router.stack) {
       const fioriRoutes = app._router.stack.filter(layer => 
         layer.route && layer.route.path && layer.route.path.includes('$fiori-preview')
       )
-      console.log('  Fiori preview routes found:', fioriRoutes.length)
+      console.log(t("cds.preview.routesFound", [fioriRoutes.length]))
       if (fioriRoutes.length > 0) {
-        console.log('  Route paths:', fioriRoutes.map(r => r.route.path))
+        console.log(t("cds.preview.routePaths"), fioriRoutes.map(r => r.route.path))
       } else {
-        console.warn('  WARNING: No $fiori-preview routes found in Express app')
+        console.warn(t("cds.preview.routesMissing"))
       }
     }
   })
@@ -312,8 +313,8 @@ async function cdsServerSetup(prompts, cdsSource) {
   base.debug(`GraphQL Entity After ${graphQLEntity}`)
   base.debug('CDS Source:')
   base.debug(cdsSource)
-  console.log(`✓ Entity name for routes: ${entity}`)
-  console.log('✓ CDS Source preview:')
+  console.log(t("cds.entity.routes", [entity]))
+  console.log(t("cds.source.preview"))
   console.log(cdsSource.substring(0, 500) + '...')
 
   // @ts-ignore
@@ -326,9 +327,9 @@ async function cdsServerSetup(prompts, cdsSource) {
     compiledModel = cds.compile(parsedModel)
     
     // Debug: show what's in the compiled model
-    console.log('✓ Compiled model definitions:')
+    console.log(t("cds.model.compiledDefinitions"))
     Object.keys(compiledModel.definitions || {}).forEach(key => {
-      console.log(`  - ${key}`)
+      console.log(t("cds.listItemPrefix") + key)
     })
 
     // Ensure model is properly registered in CDS
@@ -348,12 +349,12 @@ async function cdsServerSetup(prompts, cdsSource) {
         // Log the actual entity names in the service for debugging
         const entityNames = Object.keys(srv.entities || {})
         base.debug(`Service entities: ${entityNames.join(', ')}`)
-        console.log(`✓ Service entities: ${entityNames.join(', ')}`)
+        console.log(t("cds.service.entities", [entityNames.join(', ')]))
         
         // Use the actual entity name from the service (first entity)
         // This ensures we match what CDS actually registered
         actualEntityName = entityNames.length > 0 ? entityNames[0] : entity
-        console.log(`✓ Using entity name: ${actualEntityName}`)
+        console.log(t("cds.service.entityUsing", [actualEntityName]))
         
         // @ts-ignore
         srv.on(['READ'], [actualEntityName], async (req) => {
@@ -436,7 +437,7 @@ async function cdsServerSetup(prompts, cdsSource) {
 
     // Manually emit the 'served' event since it's not firing automatically
     // The @sap/cds-fiori plugin listens for this event to register its routes
-    console.log('✓ Manually emitting CDS "served" event...')
+    console.log(t("cds.served.emit"))
     cds.emit('served', services)
 
     // CDS OData - add homepage for preview
@@ -467,9 +468,9 @@ async function cdsServerSetup(prompts, cdsSource) {
     // Add error handling middleware
     app.use((err, req, res, next) => {
       base.debug(`Express Error Handler: ${err.message}`)
-      console.error(`Request Error: ${err.message}`)
+      console.error(t("cds.request.error", [err.message]))
       if (!res.headersSent) {
-        res.status(500).json({ error: 'Internal Server Error', message: err.message })
+        res.status(500).json({ error: baseLite.bundle.getText("error.internalServerError"), message: err.message })
       }
     })
 
@@ -478,7 +479,7 @@ async function cdsServerSetup(prompts, cdsSource) {
     server.listen(port, async () => {
       // @ts-ignore
       let serverAddr = `http://localhost:${server.address().port}`
-      console.info(`HTTP Server: ${serverAddr}`)
+      console.info(t("server.httpServer", [serverAddr]))
       const { default: open } = await import('open')
       await open(serverAddr, {wait: true})
     })
@@ -554,13 +555,13 @@ export function getIndex(odataURL, entity) {
       </head>
       <body>
           <h1>${baseLite.bundle.getText("cdsIndex")}</h1>
-          <p class="subtitle"> These are the paths currently served ...
+          <p class="subtitle"> ${baseLite.bundle.getText("cds.index.subtitle")}
 
-          <h2> Web Applications: </h2>
-          <h3><a href="/api-docs/">Swagger UI</a></h3>
-          <h3><a href="/$fiori-preview/HanaCli/${entity}">Fiori Preview</a></h3>
+          <h2> ${baseLite.bundle.getText("cds.index.webApps")} </h2>
+          <h3><a href="/api-docs/">${baseLite.bundle.getText("cds.index.swaggerUi")}</a></h3>
+          <h3><a href="/$fiori-preview/HanaCli/${entity}">${baseLite.bundle.getText("cds.index.fioriPreview")}</a></h3>
 
-          <h2> Service Endpoints: </h2>
+          <h2> ${baseLite.bundle.getText("cds.index.serviceEndpoints")} </h2>
               <h3>
                   <a href="${odataURL}">${odataURL}</a> /
                   <a href="${odataURL}/$metadata">$metadata</a>
