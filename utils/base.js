@@ -287,17 +287,30 @@ export async function clearConnection() {
 /**
  * @param {object} [options] - override the already set parameters with new connection options
  * @returns {Promise<hdbextPromiseInstance>} - hdbext instanced promisfied
+ * @throws {Error} If connection creation fails
  */
 export async function createDBConnection(options) {
     if (!dbConnection) {
-        let rawClient
-        if (options) {
-            rawClient = await conn.createConnection(options, true)
-        } else {
-            rawClient = await conn.createConnection(prompts, false)
+        try {
+            let rawClient
+            if (options) {
+                if (typeof options !== 'object') {
+                    throw new Error(bundle.getText("validation.invalidNumber", ["options", typeof options]))
+                }
+                rawClient = await conn.createConnection(options, true)
+            } else {
+                rawClient = await conn.createConnection(prompts, false)
+            }
+            if (!rawClient) {
+                throw new Error(bundle.getText("error.connectionFailed") || "Failed to create database connection")
+            }
+            dbClassInstance = new dbClass(rawClient)
+            dbConnection = dbClassInstance  // Store the wrapped instance
+        } catch (err) {
+            dbConnection = null
+            dbClassInstance = null
+            throw err
         }
-        dbClassInstance = new dbClass(rawClient)
-        dbConnection = dbClassInstance  // Store the wrapped instance
     }
     return dbConnection
 }
@@ -708,88 +721,73 @@ function checkUnknownOptions(argv, inputSchema, iConn, iDebug) {
     // Build set of known options
     const knownOptions = new Set()
     
-    /**
-     * Add an option and its kebab-case variant
-     * @param {string} opt 
-     */
-    const addOption = (opt) => {
-        knownOptions.add(opt)
-        const kebab = toKebabCase(opt)
-        if (kebab !== opt) {
-            knownOptions.add(kebab)
-        }
-    }
-    
     // Standard yargs options that should always be allowed
     const standardYargsOptions = ['$0', '_', 'help', 'h', 'version', 'V']
-    standardYargsOptions.forEach(opt => addOption(opt))
+    standardYargsOptions.forEach(opt => knownOptions.add(opt))
     
     // Add options from inputSchema
     if (inputSchema && typeof inputSchema === 'object') {
         Object.keys(inputSchema).forEach(key => {
-            addOption(key)
+            knownOptions.add(key)
+            knownOptions.add(toKebabCase(key))
         })
     }
     
     // Add connection options if included
     if (iConn) {
-        addOption('admin')
-        addOption('a')
-        addOption('Admin')
-        addOption('conn')
+        ['admin', 'a', 'Admin', 'conn'].forEach(opt => knownOptions.add(opt))
     }
     
     // Add debug options if included
     if (iDebug) {
-        addOption('disableVerbose')
-        addOption('quiet')
-        addOption('debug')
-        addOption('Debug')
+        ['disableVerbose', 'quiet', 'debug', 'Debug'].forEach(opt => knownOptions.add(opt))
     }
     
     // Build a map of values to option names to detect aliases
-    // Aliases will have the same value as the primary option
+    // When yargs creates aliases, multiple keys will have the same value in argv
     const valueToOptions = new Map()
     for (const key in argv) {
         const value = argv[key]
-        // Create a unique key for the value (handle objects/arrays)
-        const valueKey = typeof value === 'object' ? JSON.stringify(value) : String(value)
+        // Create a string key for the value (primitive values and simple objects)
+        let valueKey
+        if (value === null || value === undefined) {
+            valueKey = String(value)
+        } else if (typeof value === 'object') {
+            // For objects/arrays, convert to JSON string - cleaner than stringify
+            try {
+                valueKey = JSON.stringify(value)
+            } catch {
+                // If stringify fails, use toString
+                valueKey = Object.prototype.toString.call(value)
+            }
+        } else {
+            valueKey = String(value)
+        }
+        
         if (!valueToOptions.has(valueKey)) {
             valueToOptions.set(valueKey, [])
         }
         valueToOptions.get(valueKey).push(key)
     }
     
-    // An option is likely an alias if it shares a value with a known option
+    // Options are likely aliases if they share a value with a known option
     const likelyAliases = new Set()
     for (const options of valueToOptions.values()) {
         if (options.length > 1) {
-            // Multiple options with same value - some might be aliases
+            // Multiple keys with same value - likely aliases
             const hasKnownOption = options.some(opt => knownOptions.has(opt))
             if (hasKnownOption) {
-                // If at least one is known, consider all others as aliases
+                // If at least one is known, treat all as valid (aliases)
                 options.forEach(opt => likelyAliases.add(opt))
             }
         }
     }
     
-    // Check argv for unknown options
+    // Check for unknown options
     const unknownOptions = []
-    const unknownSet = new Set()
-    
     for (const key in argv) {
         if (!knownOptions.has(key) && !likelyAliases.has(key)) {
-            // Check if we already added the camelCase/kebab-case equivalent
-            const kebab = toKebabCase(key)
-            const hasDuplicate = unknownSet.has(key) || unknownSet.has(kebab)
-            
-            if (!hasDuplicate) {
-                unknownOptions.push(key)
-                unknownSet.add(key)
-                if (kebab !== key) {
-                    unknownSet.add(kebab)
-                }
-            }
+            unknownOptions.push(key)
         }
     }
     
@@ -808,8 +806,16 @@ function checkUnknownOptions(argv, inputSchema, iConn, iDebug) {
  * @param {object} inputSchema - prompts current value
  * @param {boolean} [iConn=true] - Add Connection Group
  * @param {boolean} [iDebug=true] - Add Debug Group
+ * @throws {Error} If required parameters are missing or invalid
  */
 export async function promptHandler(argv, processingFunction, inputSchema, iConn = true, iDebug = true) {
+    // Input validation
+    if (!processingFunction || typeof processingFunction !== 'function') {
+        throw new Error(bundle.getText("validation.invalidNumber", ["processingFunction", typeof processingFunction]))
+    }
+    if (!inputSchema || typeof inputSchema !== 'object') {
+        throw new Error(bundle.getText("validation.invalidNumber", ["inputSchema", typeof inputSchema]))
+    }
     try {
         // Check for unknown options and warn user
         checkUnknownOptions(argv, inputSchema, iConn, iDebug)
@@ -905,26 +911,11 @@ export async function promptHandler(argv, processingFunction, inputSchema, iConn
  */
 export async function error(error) {
     debug(`Error`)
-    if (dbConnection && dbConnection.client && dbConnection.client._settings) {
-        debug(`HANA Disconnect Started`)
-        try {
-            await new Promise((resolve) => {
-                dbConnection.client.disconnect((err) => {
-                    if (err) {
-                        debug(`Disconnect Error: ${err}`)
-                    }
-                    debug(`HANA Disconnect Completed`)
-                    dbConnection = null
-                    resolve()
-                })
-            })
-        } catch (disconnectErr) {
-            debug(`Disconnect Exception: ${disconnectErr}`)
-            dbConnection = null
-        }
-    }
-    if (spinner) {
-        spinner.stop()
+    try {
+        // Attempt clean disconnect
+        await disconnectOnly()
+    } catch (disconnectErr) {
+        debug(`Disconnect Exception during error handler: ${disconnectErr}`)
     }
     if (inDebug || inGui) {
         throw error
@@ -943,39 +934,59 @@ export async function error(error) {
  */
 export async function disconnectOnly() {
     debug(`Disconnect Only`)
-    if (dbConnection && dbConnection.client && dbConnection.client._settings) {
-        debug(`HANA Disconnect Started`)
-        return new Promise((resolve, reject) => {
-            try {
+    try {
+        if (dbConnection && dbConnection.client && dbConnection.client._settings) {
+            debug(`HANA Disconnect Started`)
+            return new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    debug(`Disconnect timeout exceeded`)
+                    dbConnection = null
+                    stopSpinner()
+                    resolve()
+                }, 5000)
+
                 dbConnection.client.disconnect((err) => {
+                    clearTimeout(timeout)
                     if (err) {
                         debug(`Disconnect Error: ${err}`)
-                        dbConnection = null
-                        reject(err)
                     } else {
                         debug(`HANA Disconnect Completed`)
-                        dbConnection = null
-                        if (spinner) {
-                            spinner.stop()
-                        }
+                    }
+                    dbConnection = null
+                    stopSpinner()
+                    if (err) {
+                        reject(err)
+                    } else {
                         resolve()
                     }
                 })
-            } catch (disconnectErr) {
-                debug(`Disconnect Exception: ${disconnectErr}`)
-                if (spinner) {
-                    spinner.stop()
-                }
-                dbConnection = null
-                reject(disconnectErr)
-            }
-        })
-    } else {
-        debug(`No connection to disconnect`)
-        if (spinner) {
-            spinner.stop()
+            })
+        } else {
+            debug(`No connection to disconnect`)
+            stopSpinner()
+            return Promise.resolve()
         }
-        return Promise.resolve()
+    } catch (disconnectErr) {
+        debug(`Disconnect Exception: ${disconnectErr}`)
+        dbConnection = null
+        stopSpinner()
+        throw disconnectErr
+    }
+}
+
+/**
+ * Stop the spinner safely
+ * @returns {void}
+ */
+function stopSpinner() {
+    if (spinner) {
+        try {
+            spinner.stop()
+        } catch (err) {
+            debug(`Error stopping spinner: ${err}`)
+        } finally {
+            spinner = null
+        }
     }
 }
 
@@ -984,42 +995,17 @@ export async function disconnectOnly() {
  */
 export async function end() {
     debug(`Natural End`)
-    if (dbConnection && dbConnection.client && dbConnection.client._settings) {
-        debug(`HANA Disconnect Started`)
-        try {
-            dbConnection.client.disconnect((err) => {
-                if (err) {
-                    dbConnection = null
-                    debug(`Disconnect Error: ${err}`)
-                }
-                debug(`HANA Disconnect Completed`)
-                dbConnection = null
-                if (spinner) {
-                    spinner.stop()
-                }
-                // Only exit the process when running from CLI (not from MCP/programmatic contexts)
-                if (!inGui) {
-                    process.exit(0)
-                }
-            })
-        } catch (disconnectErr) {
-            debug(`Disconnect Exception: ${disconnectErr}`)
-            if (spinner) {
-                spinner.stop()
-            }
-            // Only exit the process when running from CLI
-            if (!inGui) {
-                process.exit(1)
-            }
-        }
-    } else {
-        // No connection to clean up, just stop spinner and exit if needed
-        if (spinner) {
-            spinner.stop()
-        }
-        // Only exit the process when running from CLI
+    try {
+        await disconnectOnly()
+        // Only exit the process when running from CLI (not from MCP/programmatic contexts)
         if (!inGui) {
             process.exit(0)
+        }
+    } catch (err) {
+        debug(`Error during end cleanup: ${err}`)
+        // Only exit the process when running from CLI
+        if (!inGui) {
+            process.exit(1)
         }
     }
 }
@@ -1121,30 +1107,31 @@ function convertJsonToTableArray(jsonArray) {
  * @returns {Promise<void>}
  */
 export async function outputTableFancy(content) {
-    if (content.length < 1) {
+    if (!content || !Array.isArray(content) || content.length < 1) {
         console.log(bundle.getText('noData'))
-    } else {
-        if (verboseOutput(prompts)) {
-            try {
-                // Handle large datasets with pagination
-                if (content.length > MAX_DISPLAY_ROWS) {
-                    console.log(colors.yellow(`\n${bundle.getText("output.truncatedWithHint", [MAX_DISPLAY_ROWS, content.length])}\n`))
-                    return terminal.table(convertJsonToTableArray(content.slice(0, MAX_DISPLAY_ROWS)), tableOptions)
-                } else {
-                    return terminal.table(convertJsonToTableArray(content), tableOptions)
-                }
-            } catch (error) {
-                // Fallback to console.table if terminal.table fails (e.g., buffer allocation errors)
-                console.error(colors.yellow(bundle.getText("warning.terminalTableFallback")), error.message)
-                if (content.length > MAX_DISPLAY_ROWS) {
-                    console.log(colors.yellow(bundle.getText("output.truncated", [MAX_DISPLAY_ROWS, content.length])))
-                    return console.table(content.slice(0, MAX_DISPLAY_ROWS))
-                }
-                return console.table(content)
+        return
+    }
+
+    if (verboseOutput(prompts)) {
+        try {
+            // Handle large datasets with pagination
+            if (content.length > MAX_DISPLAY_ROWS) {
+                console.log(colors.yellow(`\n${bundle.getText("output.truncatedWithHint", [MAX_DISPLAY_ROWS, content.length])}\n`))
+                return terminal.table(convertJsonToTableArray(content.slice(0, MAX_DISPLAY_ROWS)), tableOptions)
+            } else {
+                return terminal.table(convertJsonToTableArray(content), tableOptions)
             }
-        } else {
-            return console.log(inspect(content, { maxArrayLength: null }))
+        } catch (error) {
+            // Fallback to console.table if terminal.table fails (e.g., buffer allocation errors)
+            console.error(colors.yellow(bundle.getText("warning.terminalTableFallback")), error.message)
+            if (content.length > MAX_DISPLAY_ROWS) {
+                console.log(colors.yellow(bundle.getText("output.truncated", [MAX_DISPLAY_ROWS, content.length])))
+                return console.table(content.slice(0, MAX_DISPLAY_ROWS))
+            }
+            return console.table(content)
         }
+    } else {
+        return console.log(inspect(content, { maxArrayLength: null }))
     }
 }
 
