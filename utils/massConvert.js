@@ -9,6 +9,7 @@ import * as dbInspect from '../utils/dbInspect.js'
 import * as fs from 'fs'
 import JSZip from 'jszip'
 
+/** @type {any} */
 const progressBarOptionsTemplate = {
     // width: 80,
     eta: true,
@@ -22,7 +23,7 @@ const progressBarOptionsTemplate = {
  * @param {number} length
  */
 function getProcessBarTableOptions(prompts, length) {
-    let progressBarOptions = progressBarOptionsTemplate
+    let progressBarOptions = { ...progressBarOptionsTemplate }
     progressBarOptions.title = base.bundle.getText('mass.tblupd', [prompts.output])
     progressBarOptions.items = length
     return progressBarOptions
@@ -33,7 +34,7 @@ function getProcessBarTableOptions(prompts, length) {
  * @param {number} length
  */
 function getProcessBarViewOptions(prompts, length) {
-    let progressBarOptions = progressBarOptionsTemplate
+    let progressBarOptions = { ...progressBarOptionsTemplate }
     progressBarOptions.title = base.bundle.getText('mass.viewupd', [prompts.output])
     progressBarOptions.items = length
     return progressBarOptions
@@ -216,7 +217,7 @@ async function hdbtableViews(prompts, viewResults, wss, db, schema, replacer, zi
                 output = src
                 output = await addAssociations(db, schema, view.VIEW_NAME, output)
             }
-            await zip.file(view.VIEW_NAME.toString() + ".hdbtable", output + "\n\n")
+            await zip.file(view.VIEW_NAME.toString() + ".hdbview", output + "\n\n")
             viewProgressBar.itemDone(view.VIEW_NAME)
             logOutput.push({ object: view.VIEW_NAME, status: base.bundle.getText('status.success') })
         }
@@ -443,15 +444,13 @@ async function cdsViews(prompts, viewResults, wss, db, schema, cdsSource, logOut
 async function writeZip(prompts, wss, zip, logOutput) {
     base.blankLine()
     let dir = prompts.folder
-    !fs.existsSync(dir) && fs.mkdirSync(dir)
+    await fsp.mkdir(dir, { recursive: true })
     let data = await zip.generateAsync({
         type: 'nodebuffer',
         compression: "DEFLATE"
     })
-    let filename = prompts.filename || dir + 'export.zip'
-    fs.writeFile(filename, data, 'binary', (err) => {
-        if (err) throw err
-    })
+    let filename = prompts.filename || path.join(dir, 'export.zip')
+    await fsp.writeFile(filename, data)
     let finishMessage = `${base.bundle.getText("contentWritten")}: ${filename}`
     if (prompts.log) {
         await writeLog(prompts, wss, dir, logOutput)
@@ -472,11 +471,9 @@ async function writeZip(prompts, wss, zip, logOutput) {
 async function writeCDS(prompts, wss, cdsSource, logOutput) {
     base.blankLine()
     let dir = prompts.folder
-    !fs.existsSync(dir) && fs.mkdirSync(dir)
-    let filename = prompts.filename || dir + 'export.cds'
-    fs.writeFile(filename, cdsSource, (err) => {
-        if (err) throw err
-    })
+    await fsp.mkdir(dir, { recursive: true })
+    let filename = prompts.filename || path.join(dir, 'export.cds')
+    await fsp.writeFile(filename, cdsSource)
     let finishMessage = `${base.bundle.getText("contentWritten")}: ${filename}`
     if (prompts.log) {
         await writeLog(prompts, wss, dir, logOutput)
@@ -520,11 +517,9 @@ async function writeSynonyms(prompts, wss) {
  */
 async function writeLog(prompts, wss, dir, logOutput) {
     base.outputTableFancy(logOutput)
-    let logFilename = prompts.filename || dir + 'log'
+    let logFilename = prompts.filename || path.join(dir, 'log')
     logFilename = `${logFilename}.json`
-    fs.writeFile(logFilename, JSON.stringify(logOutput), (err) => {
-        if (err) throw err
-    })
+    await fsp.writeFile(logFilename, JSON.stringify(logOutput))
     let logMessage = `${base.bundle.getText("logWritten")}: ${logFilename}`
     console.log(logMessage)
     broadcast(wss, logMessage, 100)
@@ -642,8 +637,9 @@ async function getTablesInt(schema, table, client, limit) {
             WHERE SCHEMA_NAME LIKE ? 
             AND TABLE_NAME LIKE ? 
             ORDER BY SCHEMA_NAME, TABLE_NAME `
-    if (limit || base.sqlInjectionUtils.isAcceptableParameter(limit.toString())) {
-        query += `LIMIT ${limit.toString()}`
+    const safeLimit = getSafeLimit(limit)
+    if (safeLimit !== undefined) {
+        query += `LIMIT ${safeLimit}`
     }
     let results = await client.statementExecPromisified(await client.preparePromisified(query), [schema, table])
     return results
@@ -665,11 +661,24 @@ async function getViewsInt(schema, view, client, limit) {
             WHERE SCHEMA_NAME LIKE ? 
             AND VIEW_NAME LIKE ? 
             ORDER BY SCHEMA_NAME, VIEW_NAME `
-    if (limit || base.sqlInjectionUtils.isAcceptableParameter(limit.toString())) {
-        query += `LIMIT ${limit.toString()}`
+    const safeLimit = getSafeLimit(limit)
+    if (safeLimit !== undefined) {
+        query += `LIMIT ${safeLimit}`
     }
     let results = await client.statementExecPromisified(await client.preparePromisified(query), [schema, view])
     return results
+}
+
+/**
+ * Validate and normalize limit values to avoid SQL injection
+ * @param {any} limit
+ * @returns {number|undefined}
+ */
+function getSafeLimit(limit) {
+    if (limit === undefined || limit === null || limit === '') {
+        return undefined
+    }
+    return base.validateLimit(limit, 'limit')
 }
 
 /**
@@ -689,13 +698,15 @@ async function escapeRegExp(string) {
  */
 function broadcast(wss, msg, progress) {
     if (wss) {
-        if (progress) {
+        if (progress !== undefined && progress !== null) {
             wss.broadcast(msg, progress)
         } else {
             wss.broadcast(msg)
         }
     }
 }
+
+let cachedCSTypes = null
 
 /**
  * Remove the HANA Column Store Types 
@@ -706,13 +717,15 @@ function broadcast(wss, msg, progress) {
 async function removeCSTypes(client, output) {
     try {
         base.debug(`removeCSTypes}`)
-        let query =
-            `SELECT DISTINCT CS_DATA_TYPE_NAME from TABLE_COLUMNS ORDER BY LENGTH(CS_DATA_TYPE_NAME) DESC`
-        let results = await client.statementExecPromisified(await client.preparePromisified(query))
-        for (let type of results) {
-            const search = `CS_${type.CS_DATA_TYPE_NAME}`
-            const replacer =
-                new RegExp(await escapeRegExp(search), 'g')
+        if (!cachedCSTypes) {
+            let query =
+                `SELECT DISTINCT CS_DATA_TYPE_NAME from TABLE_COLUMNS ORDER BY LENGTH(CS_DATA_TYPE_NAME) DESC`
+            let results = await client.statementExecPromisified(await client.preparePromisified(query))
+            cachedCSTypes = results.map(result => result.CS_DATA_TYPE_NAME)
+        }
+        for (let type of cachedCSTypes) {
+            const search = `CS_${type}`
+            const replacer = new RegExp(await escapeRegExp(search), 'g')
             output = output.replace(replacer, '')
         }
         return output

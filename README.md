@@ -1957,6 +1957,12 @@ Options:
                                            dot        [boolean] [default: false]
 ```
 
+  Notes:
+
+* `--limit` must be a positive integer when provided.
+* For `-o hdbtable`, views are exported as `.hdbview` artifacts inside the ZIP.
+* The output folder is created automatically if it does not exist.
+
 ### massConvertUI
 
 ```shell
