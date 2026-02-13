@@ -11,6 +11,77 @@ import { homedir } from 'os'
 import { promisify } from 'util'
 import * as child_process from 'child_process'
 
+// Cache for CF configuration to avoid repeated file reads
+let cfConfigCache = null
+
+/**
+ * Helper function to execute cf curl commands with consistent error handling
+ * @param {string} endpoint - CF API endpoint
+ * @returns {Promise<object>}
+ * @private
+ */
+async function executeCFCurl(endpoint) {
+    const exec = promisify(child_process.exec)
+    const script = `cf curl "${endpoint}"`
+    
+    try {
+        const { stdout, stderr } = await exec(script)
+        
+        if (stderr) {
+            base.debug(`CF curl error on ${endpoint}: ${stderr}`)
+            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
+        }
+        
+        return stdout ? JSON.parse(stdout) : null
+    } catch (error) {
+        if (!(error instanceof SyntaxError)) {
+            base.debug(error)
+            throw error
+        }
+        throw new Error(`${bundle.getText("error")} JSON parse error`)
+    }
+}
+
+/**
+ * Helper function to get service instances by plan names or type
+ * @param {string|string[]} servicePlans - Service plan name(s) (comma-separated string or array)
+ * @param {Object} options - Query options
+ * @param {string} [options.name] - Filter by instance name
+ * @param {string} [options.type] - Filter by instance type (e.g., 'user-provided')
+ * @returns {Promise<object>}
+ * @private
+ */
+async function getServiceInstancesByPlan(servicePlans, options = {}) {
+    if (!servicePlans) {
+        throw new Error('Service plan(s) must be specified')
+    }
+
+    const space = await getCFSpace()
+    const org = await getCFOrg()
+
+    if (!space?.GUID || !org?.GUID) {
+        throw new Error('Unable to determine current space or organization')
+    }
+
+    const spaceGUID = space.GUID
+    const orgGUID = org.GUID
+    
+    let endpoint = `/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&per_page=5000`
+    
+    if (options.type) {
+        endpoint += `&type=${options.type}`
+    } else if (servicePlans) {
+        const plans = Array.isArray(servicePlans) ? servicePlans.join(',') : servicePlans
+        endpoint += `&service_plan_names=${plans}`
+    }
+    
+    if (options.name) {
+        endpoint += `&names=${options.name}`
+    }
+    
+    return executeCFCurl(endpoint)
+}
+
 /**
  * Get cf cli version
  * @returns {Promise<String>}
@@ -20,25 +91,17 @@ export async function getVersion() {
 
     try {
         const exec = promisify(child_process.exec)
-        let script = `cf -v`
-
+        const script = `cf -v`
         const { stdout, stderr } = await exec(script)
 
         if (stderr) {
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            if(stdout){
-                try {
-               return stdout
-            } catch(e) {
-                return
-            }
-            }
-            return
         }
+        
+        return stdout?.trim() || ''
     } catch (error) {
         base.debug(error)
-        throw (error)
+        throw error
     }
 }
 
@@ -48,18 +111,30 @@ export async function getVersion() {
  */
 export async function getCFConfig() {
     base.debug('getCFConfig')
-    try {
-
-        const data = fs.readFileSync(`${homedir}/.cf/config.json`,
-            { encoding: 'utf8', flag: 'r' })
-        const object = JSON.parse(data)
-        return object
+    
+    // Return cached config if available
+    if (cfConfigCache) {
+        return cfConfigCache
     }
-    catch (error) {
+
+    try {
+        const configPath = `${homedir()}/.cf/config.json`
+        const data = await fs.promises.readFile(configPath, { encoding: 'utf8' })
+        cfConfigCache = JSON.parse(data)
+        return cfConfigCache
+    } catch (error) {
+        base.debug(error)
         throw new Error(bundle.getText("errCFConfig"))
     }
 }
 
+/**
+ * Clear CF config cache (useful for testing or forced refresh)
+ * @returns {void}
+ */
+export function clearCFConfigCache() {
+    cfConfigCache = null
+}
 
 /**
  * Get target organization
@@ -68,7 +143,6 @@ export async function getCFConfig() {
 export async function getCFOrg() {
     base.debug('getCFOrg')
     const config = await getCFConfig()
-    base.debug(config)
     return config.OrganizationFields
 }
 
@@ -79,7 +153,6 @@ export async function getCFOrg() {
 export async function getCFOrgName() {
     base.debug('getCFOrgName')
     const org = await getCFOrg()
-    base.debug(org)
     return org.Name
 }
 
@@ -90,10 +163,8 @@ export async function getCFOrgName() {
 export async function getCFOrgGUID() {
     base.debug('getCFOrgGUID')
     const org = await getCFOrg()
-    base.debug(org)
     return org.GUID
 }
-
 
 /**
  * Get target space details
@@ -102,7 +173,6 @@ export async function getCFOrgGUID() {
 export async function getCFSpace() {
     base.debug('getCFSpace')
     const config = await getCFConfig()
-    base.debug(config)
     return config.SpaceFields
 }
 
@@ -113,7 +183,6 @@ export async function getCFSpace() {
 export async function getCFSpaceName() {
     base.debug('getCFSpaceName')
     const space = await getCFSpace()
-    base.debug(space)
     return space.Name
 }
 
@@ -124,7 +193,6 @@ export async function getCFSpaceName() {
 export async function getCFSpaceGUID() {
     base.debug('getCFSpaceGUID')
     const space = await getCFSpace()
-    base.debug(space)
     return space.GUID
 }
 
@@ -135,7 +203,6 @@ export async function getCFSpaceGUID() {
 export async function getCFTarget() {
     base.debug('getCFTarget')
     const config = await getCFConfig()
-    base.debug(config)
     return config.Target
 }
 
@@ -145,37 +212,7 @@ export async function getCFTarget() {
  */
 export async function getHANAInstances() {
     base.debug('getHANAInstances')
-
-    try {
-        const space = await getCFSpace()
-        const org = await getCFOrg()
-
-        const spaceGUID = space.GUID
-        const orgGUID = org.GUID
-
-        const exec = promisify(child_process.exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hana,hana-free&per_page=5000"`
-
-        const { stdout, stderr } = await exec(script)
-
-        if (stderr) {
-            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            if(stdout){
-                try {
-               return JSON.parse(stdout)
-            } catch(e) {
-                return
-            }
-            }
-            return
-        }
-
-
-    } catch (error) {
-        base.debug(error)
-        throw (error)
-    }
+    return getServiceInstancesByPlan('hana,hana-free')
 }
 
 /**
@@ -184,31 +221,12 @@ export async function getHANAInstances() {
  * @returns {Promise<object>}
  */
 export async function getHANAInstanceByName(name) {
-    base.debug(`getHANAInstanceByName ${name}`)
-
-    try {
-        const space = await getCFSpace()
-        const org = await getCFOrg()
-
-        const spaceGUID = space.GUID
-        const orgGUID = org.GUID
-        const exec = promisify(child_process.exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hana,hana-free&names=${name}&per_page=5000"`
-
-        const { stdout, stderr } = await exec(script)
-
-        if (stderr) {
-            console.log(stdout)
-            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            return JSON.parse(stdout)
-        }
-
-
-    } catch (error) {
-        base.debug(error)
-        throw (error)
+    if (!name || typeof name !== 'string') {
+        throw new Error('Service instance name must be a non-empty string')
     }
+    
+    base.debug(`getHANAInstanceByName ${name}`)
+    return getServiceInstancesByPlan('hana,hana-free', { name })
 }
 
 /**
@@ -216,8 +234,12 @@ export async function getHANAInstanceByName(name) {
  * @param {string} hanaInstanceGUID - HANA Service instance GUID
  * @returns {Promise<string>}
  */
- export async function getHANAInstanceStatus(hanaInstanceGUID) {
-    base.debug('getHANAInstanceStatus')
+export async function getHANAInstanceStatus(hanaInstanceGUID) {
+    if (!hanaInstanceGUID || typeof hanaInstanceGUID !== 'string') {
+        throw new Error('HANA instance GUID must be a non-empty string')
+    }
+    
+    base.debug(`getHANAInstanceStatus ${hanaInstanceGUID}`)
 
     const serviceParameters = await getCFServiceInstanceParameters(hanaInstanceGUID)
 
@@ -225,7 +247,7 @@ export async function getHANAInstanceByName(name) {
         return bundle.getText("hc.updateProgress")
     }
 
-    switch (serviceParameters.data.serviceStopped) {
+    switch (serviceParameters.data?.serviceStopped) {
         case false:
             return bundle.getText("hc.running")
         case true:
@@ -233,7 +255,6 @@ export async function getHANAInstanceByName(name) {
         default:
             return bundle.getText("hc.unknown")
     }
-
 }
 
 /**
@@ -241,30 +262,8 @@ export async function getHANAInstanceByName(name) {
  * @returns {Promise<object>}
  */
 export async function getHDIInstances() {
-    base.debug(`getHDIInstances`)
-    try {
-        const space = await getCFSpace()
-        const org = await getCFOrg()
-
-        const spaceGUID = space.GUID
-        const orgGUID = org.GUID
-
-        const exec = promisify(child_process.exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=hdi-shared&per_page=5000"`
-
-        const { stdout, stderr } = await exec(script)
-
-        if (stderr) {
-            console.log(stdout)
-            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            return JSON.parse(stdout)
-        }
-
-    } catch (error) {
-        base.debug(error)
-        throw (error)
-    }
+    base.debug('getHDIInstances')
+    return getServiceInstancesByPlan('hdi-shared')
 }
 
 /**
@@ -272,30 +271,8 @@ export async function getHDIInstances() {
  * @returns {Promise<object>}
  */
 export async function getSbssInstances() {
-    base.debug(`getSbssInstances`)
-    try {
-        const space = await getCFSpace()
-        const org = await getCFOrg()
-
-        const spaceGUID = space.GUID
-        const orgGUID = org.GUID
-
-        const exec = promisify(child_process.exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=sbss&per_page=5000"`
-
-        const { stdout, stderr } = await exec(script)
-
-        if (stderr) {
-            console.log(stdout)
-            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            return JSON.parse(stdout)
-        }
-
-    } catch (error) {
-        base.debug(error)
-        throw (error)
-    }
+    base.debug('getSbssInstances')
+    return getServiceInstancesByPlan('sbss')
 }
 
 /**
@@ -303,61 +280,17 @@ export async function getSbssInstances() {
  * @returns {Promise<object>}
  */
 export async function getSecureStoreInstances() {
-    base.debug(`getSecureStoreInstances`)
-    try {
-        const space = await getCFSpace()
-        const org = await getCFOrg()
-
-        const spaceGUID = space.GUID
-        const orgGUID = org.GUID
-
-        const exec = promisify(child_process.exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=securestore&per_page=5000"`
-
-        const { stdout, stderr } = await exec(script)
-
-        if (stderr) {
-            console.log(stdout)
-            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            return JSON.parse(stdout)
-        }
-
-    } catch (error) {
-        base.debug(error)
-        throw (error)
-    }
+    base.debug('getSecureStoreInstances')
+    return getServiceInstancesByPlan('securestore')
 }
 
 /**
- * Get all SecureStore service instances 
+ * Get all Schema service instances 
  * @returns {Promise<object>}
  */
 export async function getSchemaInstances() {
-    base.debug(`getSchemaInstances`)
-    try {
-        const space = await getCFSpace()
-        const org = await getCFOrg()
-
-        const spaceGUID = space.GUID
-        const orgGUID = org.GUID
-
-        const exec = promisify(child_process.exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&service_plan_names=schema&per_page=5000"`
-
-        const { stdout, stderr } = await exec(script)
-
-        if (stderr) {
-            console.log(stdout)
-            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            return JSON.parse(stdout)
-        }
-
-    } catch (error) {
-        base.debug(error)
-        throw (error)
-    }
+    base.debug('getSchemaInstances')
+    return getServiceInstancesByPlan('schema')
 }
 
 /**
@@ -365,120 +298,107 @@ export async function getSchemaInstances() {
  * @returns {Promise<object>}
  */
 export async function getUpsInstances() {
-    base.debug(`getUpsInstances`)
-
-    try {
-        const space = await getCFSpace()
-        const org = await getCFOrg()
-
-        const spaceGUID = space.GUID
-        const orgGUID = org.GUID
-
-        const exec = promisify(child_process.exec)
-        let script = `cf curl "/v3/service_instances?space_guids=${spaceGUID}&organization_guids=${orgGUID}&type=user-provided&per_page=5000"`
-
-        const { stdout, stderr } = await exec(script)
-
-        if (stderr) {
-            console.log(stdout)
-            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            return JSON.parse(stdout)
-        }
-
-
-    } catch (error) {
-        base.debug(error)
-        throw (error)
-    }
+    base.debug('getUpsInstances')
+    return getServiceInstancesByPlan(null, { type: 'user-provided' })
 }
 
 
 /**
  * Start HANA Cloud Instance
  * @param {string} name - HANA Cloud instance name 
- * @returns any
+ * @returns {Promise<string>}
  */
 export async function startHana(name) {
+    if (!name || typeof name !== 'string') {
+        throw new Error('HANA instance name must be a non-empty string')
+    }
+    
     base.debug(`startHana ${name}`)
+    
+    const fileName = `${homedir()}/hana_start.json`
+    
     try {
         await getCFSpace()
+        
         const exec = promisify(child_process.exec)
         const data = { "data": { "serviceStopped": false } }
-        const fileName = `${homedir}/hana_start.json`
-        fs.writeFileSync(fileName, JSON.stringify(data))
-
-        let script = `cf update-service ${name} -c ${homedir}/hana_start.json`
-
+        
+        await fs.promises.writeFile(fileName, JSON.stringify(data))
+        
+        const script = `cf update-service ${name} -c ${fileName}`
         const { stdout, stderr } = await exec(script)
-
+        
         if (stderr) {
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            fs.unlinkSync(fileName)
-            return stdout
         }
-
+        
+        return stdout
     } catch (error) {
         base.debug(error)
-        throw (error)
+        throw error
+    } finally {
+        try {
+            await fs.promises.unlink(fileName)
+        } catch (unlinkError) {
+            // Log but don't throw if cleanup fails
+            base.debug(`Failed to clean up temp file ${fileName}: ${unlinkError}`)
+        }
     }
 }
 
 /**
  * Stop HANA Cloud Instance
  * @param {string} name - HANA Cloud instance name
- * @returns any
+ * @returns {Promise<string>}
  */
 export async function stopHana(name) {
+    if (!name || typeof name !== 'string') {
+        throw new Error('HANA instance name must be a non-empty string')
+    }
+    
     base.debug(`stopHana ${name}`)
+    
+    const fileName = `${homedir()}/hana_stop.json`
+    
     try {
         await getCFSpace()
+        
         const exec = promisify(child_process.exec)
         const data = { "data": { "serviceStopped": true } }
-        const fileName = `${homedir}/hana_stop.json`
-        fs.writeFileSync(fileName, JSON.stringify(data))
-
-        let script = `cf update-service ${name} -c ${homedir}/hana_stop.json`
-
+        
+        await fs.promises.writeFile(fileName, JSON.stringify(data))
+        
+        const script = `cf update-service ${name} -c ${fileName}`
         const { stdout, stderr } = await exec(script)
-
+        
         if (stderr) {
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            fs.unlinkSync(fileName)
-            return stdout
         }
-
+        
+        return stdout
     } catch (error) {
         base.debug(error)
-        throw (error)
+        throw error
+    } finally {
+        try {
+            await fs.promises.unlink(fileName)
+        } catch (unlinkError) {
+            // Log but don't throw if cleanup fails
+            base.debug(`Failed to clean up temp file ${fileName}: ${unlinkError}`)
+        }
     }
 }
 
 /**
  * Get Cloud Foundry service instance parameters
  * @param {string} serviceInstanceGUID - Service instance GUID
- * @returns object
+ * @returns {Promise<object>}
  */
 export async function getCFServiceInstanceParameters(serviceInstanceGUID) {
-    base.debug('getCFServiceInstanceParameters')
-
-    try {
-        const exec = promisify(child_process.exec)
-        let script = `cf curl "/v3/service_instances/${serviceInstanceGUID}/parameters"`
-
-        const { stdout, stderr } = await exec(script)
-
-        if (stderr) {
-            console.log(stdout)
-            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
-        } else {
-            return JSON.parse(stdout)
-        }
-
-    } catch (error) {
-        base.debug(error)
-        throw (error)
+    if (!serviceInstanceGUID || typeof serviceInstanceGUID !== 'string') {
+        throw new Error('Service instance GUID must be a non-empty string')
     }
+    
+    base.debug(`getCFServiceInstanceParameters ${serviceInstanceGUID}`)
+    return executeCFCurl(`/v3/service_instances/${serviceInstanceGUID}/parameters`)
 }
