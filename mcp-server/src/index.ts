@@ -31,10 +31,20 @@ class HanaCliMcpServer {
   private commands: Map<string, any> = new Map();
 
   constructor() {
+    const iconPngDataUri =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAM0SURBVFhHxZLfT5JhFMf5E/wPdCRkhWLXXXWvN93VHRVG1szNdVFtaUUta5mhVFKrtF+WAgFmzkz7AWrJfFADMU0gimyllGnLuvg2nhce3vd9rFgXb2f7jHO+5znnfAeoAKj+J5ygNJygNJygNJygNJygNJygNJygNCqN+z0yFLr4vNCVEGmJNOJcINsXz4o14VOiu+eIquBODCny0580b8/mf+rlt0d/+06ip9+JZ9V3YqSgM56nym+dRoY9XXFKpSfOtPzWGVE+jQJZLfRX06S5eE7dNkMKbszm0Z9A3RLCJe8HJJd+Qh4D4S9QtwSx6UpY0m/oT2CNLYTKzlnJ+0xMJr6h0h5BandqXm0LMQptk0R9OUyPUwNHPFH5PItHEwvQnAvgiDsi0UPxJWgtAZhuvZLo4kh+/YHyy0FoLAH6NoWmaYxorePsODXQF/jEhm48SWBbyzhqbobhHJpDuTUAzakXeD71WbI8FWXNAZiuhVjtHJ6j9XA4ybSLvXE6rz01grWnR4jmjF9ynBroHf3IBhYWV9DW/xblZ/1Yax6E1jyIsgY/64uj9VEcu2zjrD7fHYH22CBqWrOmLnRH6Y4i8xApOjHMHacGjNZRNiAO38t5bG30o74j+zU3u16zPPp+GRXnCasHg/Owemapnon6u1PQHn5KNHXeVY9TA+sO9MPY+ALj0/zXHEssUzJRZvaiZyjB6mbnNMvlsfBlBZvrnpL1hx7/9jg1oKvpRYatx7246pmR72LhG/uI6LslVovzTCx8XkFHXwxbjj4jG/Y//ONxwUBVN13U1D4J40kfqs8+l+/MKSy3Q9BVPRCo7iG66p6/HqcGDjaPyHetGs/8c4z55Hd5G5abQegqu1C8p4vo9t7P6Tg1sK/eh7HQvHwfIm8WJXnxLjdKTAInbPwf13J9AsUmDynZ7cn5ODWgN95DBmPtAHbWDtC8RKRLqHAJ8G9ISYUrT2+wl5YaHDmbUG3c4USK0hTbHUK+3ZEl3WM6rbP99CzR73TmfFRiILVEb7ALCw0CrKY9kRlRznSDg+gN9n86Tg3IBaXhBKXhBKXhBKXhBKXhBKXhBKXhBKX5BUtWC46LA416AAAAAElFTkSuQmCC';
+
     this.server = new Server(
       {
         name: 'hana-cli-mcp-server',
         version: '1.0.0',
+        icons: [
+          {
+            src: iconPngDataUri,
+            mimeType: 'image/png',
+            sizes: ['any'],
+          },
+        ],
       },
       {
         capabilities: {

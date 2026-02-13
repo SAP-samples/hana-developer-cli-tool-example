@@ -26,6 +26,10 @@ To use this MCP server with Cline/Claude Dev, add the following to your MCP sett
 }
 ```
 
+## Server Icon
+
+This MCP server publishes an icon via the MCP `serverInfo.icons` metadata. For compatibility, the icon is embedded as a PNG data URI derived from `../app/resources/favicon.ico`. If you want to swap the logo, replace the PNG data URI in `src/index.ts` with a new PNG or SVG data URI and update the `mimeType` accordingly.
+
 ## Available Commands
 
 The server exposes all hana-cli commands with the `hana_` prefix. For example:
