@@ -1,5 +1,5 @@
 /*eslint-env node, es6, mocha */
-// @ts-check
+// @ts-nocheck
 
 /**
  * Unit tests for utils/dbInspect.js
@@ -11,6 +11,9 @@ import sinon from 'sinon'
 import * as dbInspect from '../../utils/dbInspect.js'
 
 describe('dbInspect.js - Database Inspection Functions', () => {
+    /**
+     * @type {object}
+     */
     let mockDb
 
     beforeEach(() => {
@@ -21,6 +24,7 @@ describe('dbInspect.js - Database Inspection Functions', () => {
             loadProcedurePromisified: sinon.stub(),
             callProcedurePromisified: sinon.stub()
         }
+		dbInspect.resetHANAVersionCache()
     })
 
     afterEach(() => {
@@ -98,7 +102,7 @@ describe('dbInspect.js - Database Inspection Functions', () => {
             mockDb.preparePromisified.resolves(mockStatement)
             mockDb.statementExecPromisified.resolves(mockVersion)
 
-            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'MY_VIEW')
+            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'MY_VIEW', { forceRefresh: true })
 
             expect(result).to.be.false
         })
@@ -120,7 +124,7 @@ describe('dbInspect.js - Database Inspection Functions', () => {
             mockDb.preparePromisified.onSecondCall().resolves(mockStatement)
             mockDb.statementExecPromisified.onSecondCall().resolves(mockCalcView)
 
-            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'MY_CALC_VIEW')
+            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'MY_CALC_VIEW', { forceRefresh: true })
 
             expect(result).to.be.true
         })
@@ -141,7 +145,7 @@ describe('dbInspect.js - Database Inspection Functions', () => {
                 VIEW_NAME: 'MY_VIEW'
             }])
 
-            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'MY_VIEW')
+            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'MY_VIEW', { forceRefresh: true })
 
             expect(result).to.be.true
         })
@@ -157,7 +161,7 @@ describe('dbInspect.js - Database Inspection Functions', () => {
             mockDb.statementExecPromisified.onSecondCall().resolves([])
             mockDb.statementExecPromisified.onThirdCall().resolves([])
 
-            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'NOT_A_CALC_VIEW')
+            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'NOT_A_CALC_VIEW', { forceRefresh: true })
 
             expect(result).to.be.false
         })

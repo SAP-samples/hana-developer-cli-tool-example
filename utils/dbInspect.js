@@ -10,16 +10,23 @@ const bundle = base.bundle
 
 // Version cache to avoid repeated database queries
 let cachedVersion = null
+// Calculation view cache keyed by schema and view id
+let cachedCalculationView = new Map()
+
+export function resetHANAVersionCache() {
+	cachedVersion = null
+}
 
 /**
  * Return the HANA DB Version
  * @param {object} db - Database Connection
  * @returns {Promise<object>}
  */
-export async function getHANAVersion(db) {
+export async function getHANAVersion(db, options = {}) {
 	base.debug(bundle.getText("debug.call", ["getHANAVersion"]))
 	// Return cached version if available
-	if (cachedVersion) {
+	const { forceRefresh = false } = options
+	if (cachedVersion && !forceRefresh) {
 		return cachedVersion
 	}
 	const statement = await db.preparePromisified(
@@ -43,20 +50,36 @@ export async function getHANAVersion(db) {
  * @param {string} viewId - View Unique ID
  * @returns {Promise<boolean>}
  */
-export async function isCalculationView(db, schema, viewId) {
+export async function isCalculationView(db, schema, viewId, options = {}) {
 	base.debug(bundle.getText("debug.callWithParams", ["isCalculationView", `${schema} ${viewId}`]))
-	const vers = await getHANAVersion(db)
+	const cacheKey = `${schema}::${viewId}`
+	const { forceRefresh = false } = options
+	if (!forceRefresh && cachedCalculationView.has(cacheKey)) {
+		return cachedCalculationView.get(cacheKey)
+	}
+	const vers = await getHANAVersion(db, options)
 	if (vers.versionMajor < 2) {
+		cachedCalculationView.set(cacheKey, false)
 		return false
 	}
-	// Try lookup by both QUALIFIED_NAME and VIEW_NAME to handle both identification methods
-	const statementString = `SELECT CUBE_ID, SCHEMA_NAME, QUALIFIED_NAME, VIEW_NAME, CUBE_TYPE, IS_HDI_OBJECT
+	// Try lookup by QUALIFIED_NAME first, then fallback to VIEW_NAME
+	const qualifiedStatementString = `SELECT CUBE_ID, SCHEMA_NAME, QUALIFIED_NAME, VIEW_NAME, CUBE_TYPE, IS_HDI_OBJECT
 	   FROM _SYS_BI.BIMC_REPORTABLE_VIEWS
 	   WHERE SCHEMA_NAME LIKE ?
-	     AND (QUALIFIED_NAME = ? OR VIEW_NAME = ?)`
-	const statement = await db.preparePromisified(statementString)
-	const object = await db.statementExecPromisified(statement, [schema, viewId, viewId])
-	return object.length >= 1
+	     AND QUALIFIED_NAME = ?`
+	const qualifiedStatement = await db.preparePromisified(qualifiedStatementString)
+	let object = await db.statementExecPromisified(qualifiedStatement, [schema, viewId])
+	if (object.length < 1) {
+		const viewNameStatementString = `SELECT CUBE_ID, SCHEMA_NAME, QUALIFIED_NAME, VIEW_NAME, CUBE_TYPE, IS_HDI_OBJECT
+	   FROM _SYS_BI.BIMC_REPORTABLE_VIEWS
+	   WHERE SCHEMA_NAME LIKE ?
+	     AND VIEW_NAME = ?`
+		const viewNameStatement = await db.preparePromisified(viewNameStatementString)
+		object = await db.statementExecPromisified(viewNameStatement, [schema, viewId])
+	}
+	const isCalcView = object.length >= 1
+	cachedCalculationView.set(cacheKey, isCalcView)
+	return isCalcView
 }
 
 /**
