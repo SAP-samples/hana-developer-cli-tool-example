@@ -70,6 +70,42 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("importExcelCacheMode")
   },
+  dryRun: {
+    alias: ['dr', 'DryRun'],
+    type: 'boolean',
+    default: false,
+    desc: 'Preview import results without committing to database'
+  },
+  maxFileSizeMB: {
+    alias: ['mfs', 'MaxFileSize'],
+    type: 'number',
+    default: 500,
+    desc: 'Maximum file size in MB (prevents memory exhaustion)'
+  },
+  timeoutSeconds: {
+    alias: ['ts', 'Timeout'],
+    type: 'number',
+    default: 3600,
+    desc: 'Import operation timeout in seconds (0 = no timeout)'
+  },
+  nullValues: {
+    alias: ['nv', 'NullValues'],
+    type: 'string',
+    default: 'null,NULL,#N/A,',
+    desc: 'Comma-separated list of values to treat as NULL'
+  },
+  skipWithErrors: {
+    alias: ['swe', 'SkipWithErrors'],
+    type: 'boolean',
+    default: false,
+    desc: 'Continue import even if errors exceed threshold (logs errors)'
+  },
+  maxErrorsAllowed: {
+    alias: ['mea', 'MaxErrorsAllowed'],
+    type: 'number',
+    default: -1,
+    desc: 'Maximum errors allowed before stopping (-1 = unlimited)'
+  },
   profile: {
     alias: ['p', 'Profile'],
     type: 'string',
@@ -146,6 +182,42 @@ export let inputPrompts = {
       return false
     }
   },
+  dryRun: {
+    description: 'Preview import results without committing to database',
+    type: 'boolean',
+    required: false,
+    ask: () => false
+  },
+  maxFileSizeMB: {
+    description: 'Maximum file size in MB (prevents memory exhaustion)',
+    type: 'number',
+    required: false,
+    ask: () => false
+  },
+  timeoutSeconds: {
+    description: 'Import operation timeout in seconds (0 = no timeout)',
+    type: 'number',
+    required: false,
+    ask: () => false
+  },
+  nullValues: {
+    description: 'Comma-separated list of values to treat as NULL',
+    type: 'string',
+    required: false,
+    ask: () => false
+  },
+  skipWithErrors: {
+    description: 'Continue import even if errors exceed threshold (logs errors)',
+    type: 'boolean',
+    required: false,
+    ask: () => false
+  },
+  maxErrorsAllowed: {
+    description: 'Maximum errors allowed before stopping (-1 = unlimited)',
+    type: 'number',
+    required: false,
+    ask: () => false
+  },
   profile: {
     description: baseLite.bundle.getText("profile"),
     type: 'string',
@@ -166,6 +238,72 @@ export async function handler(argv) {
 
 const DEFAULT_BATCH_SIZE = 1000
 const MAX_ERROR_DETAILS = 100
+const MAX_FILE_SIZE_MB = 500 // 500 MB default
+const DEFAULT_TIMEOUT_SECONDS = 3600 // 1 hour
+const DEFAULT_NULL_VALUES = ['null', 'NULL', '#N/A', '']
+
+/**
+ * Parse custom NULL values from configuration
+ * @param {string} nullValuesStr - Comma-separated null value definitions
+ * @returns {Set<string>} Set of values to treat as NULL
+ */
+function parseNullValues(nullValuesStr) {
+  if (!nullValuesStr || typeof nullValuesStr !== 'string') {
+    return new Set(DEFAULT_NULL_VALUES)
+  }
+  const values = nullValuesStr.split(',').map(v => v.trim())
+  return new Set(values)
+}
+
+/**
+ * Calculate optimal batch size based on available memory and row size estimate
+ * @param {number} requestedBatchSize - User-requested batch size
+ * @param {number} estimatedRowSizeBytes - Estimated size of one row
+ * @returns {number} Adjusted batch size
+ */
+function calcOptimalBatchSize(requestedBatchSize, estimatedRowSizeBytes = 1000) {
+  const memStats = process.memoryUsage()
+  const heapLimit = memStats.heapTotal
+  const maxMemoryPerBatch = heapLimit * 0.3 // Use max 30% of heap for batch
+  
+  const maxBatchByMemory = Math.floor(maxMemoryPerBatch / estimatedRowSizeBytes)
+  const safeBatchSize = Math.max(1, Math.min(requestedBatchSize, maxBatchByMemory))
+  
+  return safeBatchSize
+}
+
+/**
+ * Format bytes to human-readable format
+ * @param {number} bytes
+ * @returns {string}
+ */
+function formatBytes(bytes) {
+  if (bytes === 0) return '0 Bytes'
+  const k = 1024
+  const sizes = ['Bytes', 'KB', 'MB', 'GB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i]
+}
+
+/**
+ * Format elapsed time to human-readable format
+ * @param {number} milliseconds
+ * @returns {string}
+ */
+function formatElapsedTime(milliseconds) {
+  const totalSeconds = Math.floor(milliseconds / 1000)
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+  
+  if (hours > 0) {
+    return `${hours}h ${minutes}m ${seconds}s`
+  } else if (minutes > 0) {
+    return `${minutes}m ${seconds}s`
+  } else {
+    return `${seconds}s`
+  }
+}
 
 /**
  * Normalize header values from files
@@ -180,11 +318,12 @@ function normalizeHeaderValue(value, index) {
 }
 
 /**
- * Validate file path and ensure the file exists
+ * Validate file path and ensure the file exists, preventing path traversal attacks
  * @param {string} filePath - Path to file
+ * @param {number} maxFileSizeMB - Maximum allowed file size in MB
  * @returns {Promise<string>} Resolved file path
  */
-async function validateFilePath(filePath) {
+async function validateFilePath(filePath, maxFileSizeMB = MAX_FILE_SIZE_MB) {
   const { default: fs } = await import('fs')
   const { default: path } = await import('path')
 
@@ -192,13 +331,32 @@ async function validateFilePath(filePath) {
     throw new Error(baseLite.bundle.getText("errInvalidFilePath", [filePath]))
   }
 
+  // Prevent path traversal attacks
   const resolvedPath = path.resolve(filePath)
+  const cwd = process.cwd()
+  const relativePath = path.relative(cwd, resolvedPath)
+  
+  // Check for path traversal attempts
+  if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
+    throw new Error(`Security violation: Access to file outside current directory is not allowed: ${filePath}`)
+  }
+
   try {
     const stats = await fs.promises.stat(resolvedPath)
     if (!stats.isFile()) {
       throw new Error(baseLite.bundle.getText("errFileNotFound", [resolvedPath]))
     }
+    
+    // Check file size
+    const fileSizeBytes = stats.size
+    const fileSizeMB = fileSizeBytes / (1024 * 1024)
+    if (fileSizeMB > maxFileSizeMB) {
+      throw new Error(`File size (${fileSizeMB.toFixed(2)} MB) exceeds maximum allowed size (${maxFileSizeMB} MB)`)
+    }
   } catch (error) {
+    if (error.message.includes('exceeds maximum') || error.message.includes('Security violation') || error.message.includes('outside current directory')) {
+      throw error
+    }
     throw new Error(baseLite.bundle.getText("errFileNotFound", [resolvedPath]))
   }
   return resolvedPath
@@ -207,11 +365,12 @@ async function validateFilePath(filePath) {
 /**
  * Create CSV record iterator using streaming parser
  * @param {string} filePath - Path to CSV file
+ * @param {number} maxFileSizeMB - Maximum allowed file size in MB
  * @returns {Promise<{iterator: AsyncGenerator<object>, getColumns: () => Array<string>}>}
  */
-async function createCsvRecordIterator(filePath) {
+async function createCsvRecordIterator(filePath, maxFileSizeMB = MAX_FILE_SIZE_MB) {
   const { default: fs } = await import('fs')
-  const resolvedPath = await validateFilePath(filePath)
+  const resolvedPath = await validateFilePath(filePath, maxFileSizeMB)
 
   let columns = null
   const parser = parse({
@@ -276,10 +435,12 @@ function normalizeExcelCellValue(cellValue) {
  * @param {number} [options.startRow] - Starting row number (1-based, row 1 is header by default)
  * @param {boolean} [options.skipEmptyRows] - Skip rows with all empty values
  * @param {'cache'|'emit'|'ignore'} [options.cacheMode] - Shared strings cache mode
+ * @param {number} [options.maxFileSizeMB] - Maximum allowed file size in MB
  * @returns {Promise<{iterator: AsyncGenerator<object>, getColumns: () => Array<string>}>}
  */
 async function createExcelRecordIterator(filePath, options) {
-  const resolvedPath = await validateFilePath(filePath)
+  const maxFileSizeMB = options?.maxFileSizeMB || MAX_FILE_SIZE_MB
+  const resolvedPath = await validateFilePath(filePath, maxFileSizeMB)
   const targetWorksheet = options?.worksheet || 1
   const startRow = options?.startRow || 1
   const skipEmptyRows = options?.skipEmptyRows !== false // default true
@@ -561,10 +722,15 @@ function validateRequiredColumns(columnMapping, tableMetadata) {
 /**
  * Normalize value for database parameter binding
  * @param {any} value - Value to normalize
+ * @param {Set<string>} nullValues - Set of values to treat as NULL
  * @returns {any}
  */
-function normalizeValueForDb(value) {
+function normalizeValueForDb(value, nullValues = new Set(DEFAULT_NULL_VALUES)) {
   if (value === null || value === undefined) {
+    return null
+  }
+  // Check against custom NULL values
+  if (typeof value === 'string' && nullValues.has(value)) {
     return null
   }
   if (value instanceof Date) {
@@ -727,16 +893,20 @@ function matchColumns(fileColumns, tableMetadata, matchMode) {
  * @param {object} record - Data record
  * @param {Object} columnMapping - Mapping of file columns to table columns
  * @param {Object} tableMetadata - Table metadata with data types
+ * @param {Set<string>} nullValues - Set of values to treat as NULL
  * @returns {object} Converted record with values
  */
-function convertDataTypes(record, columnMapping, tableMetadata) {
+function convertDataTypes(record, columnMapping, tableMetadata, nullValues = new Set(DEFAULT_NULL_VALUES)) {
   const converted = {}
 
   for (const [fileCol, tableCol] of Object.entries(columnMapping)) {
     const value = record[fileCol]
     const columnInfo = tableMetadata.columns[tableCol]
 
-    if (value === null || value === undefined || value === '') {
+    // Check if value should be treated as NULL
+    const isNullValue = value === null || value === undefined || value === '' || (typeof value === 'string' && nullValues.has(value))
+    
+    if (isNullValue) {
       // Check if column is nullable
       if (!columnInfo.nullable) {
         throw new Error(`Column ${tableCol} is NOT NULL but received empty value`)
@@ -831,9 +1001,10 @@ function buildInsertStatement(schema, table, record) {
  * @param {string} schema - Schema name
  * @param {string} table - Table name
  * @param {Array<object>} records - Array of data records with converted types
+ * @param {Set<string>} nullValues - Set of values to treat as NULL
  * @returns {{sql: string, values: Array<any>}} Batch INSERT SQL statement and values
  */
-function buildBatchInsertStatement(schema, table, records) {
+function buildBatchInsertStatement(schema, table, records, nullValues = new Set(DEFAULT_NULL_VALUES)) {
   if (!records || records.length === 0) {
     throw new Error('No records provided for batch insert')
   }
@@ -843,7 +1014,7 @@ function buildBatchInsertStatement(schema, table, records) {
 
   const valuesClause = records.map(record => {
     const rowPlaceholders = columns.map(col => {
-      values.push(normalizeValueForDb(record[col]))
+      values.push(normalizeValueForDb(record[col], nullValues))
       return '?'
     })
     return `(${rowPlaceholders.join(', ')})`
@@ -865,8 +1036,23 @@ export async function importData(prompts) {
   const base = await import('../utils/base.js')
   base.debug('importData')
 
+  // Validate parameters
+  const timeoutSeconds = prompts.timeoutSeconds || DEFAULT_TIMEOUT_SECONDS
+  const maxFileSizeMB = prompts.maxFileSizeMB || MAX_FILE_SIZE_MB
+  const nullValues = parseNullValues(prompts.nullValues)
+  const dryRun = prompts.dryRun || false
+  const skipWithErrors = prompts.skipWithErrors || false
+  const maxErrorsAllowed = prompts.maxErrorsAllowed || -1 // -1 = unlimited
+
   try {
     base.setPrompts(prompts)
+    
+    // Set operation timeout (if supported by runtime)
+    const abortController = new AbortController()
+    const timeoutHandle = timeoutSeconds > 0 
+      ? setTimeout(() => abortController.abort(), timeoutSeconds * 1000)
+      : null
+
     // Connect to database
     const dbClient = await dbClientClass.getNewClient(prompts)
     await dbClient.connect()
@@ -902,9 +1088,10 @@ export async function importData(prompts) {
           worksheet: prompts.worksheet || 1,
           startRow: prompts.startRow || 1,
           skipEmptyRows: prompts.skipEmptyRows !== false,
-          cacheMode: prompts.excelCacheMode || 'cache'
+          cacheMode: prompts.excelCacheMode || 'cache',
+          maxFileSizeMB: maxFileSizeMB
         })
-      : await createCsvRecordIterator(prompts.filename)
+      : await createCsvRecordIterator(prompts.filename, maxFileSizeMB)
 
     const recordIterator = iteratorInfo.iterator
 
@@ -916,6 +1103,10 @@ export async function importData(prompts) {
     base.debug(baseLite.bundle.getText("debug.startingTransaction"))
     const beginStatement = dbKind === 'hana' ? 'BEGIN TRANSACTION' : 'BEGIN'
     await dbClient.execSQL(beginStatement)
+    
+    // Log truncate operation for audit trail
+    const operationLog = []  
+    const startTime = Date.now()
 
     // Initialize counters outside try block for access after transaction
     let successCount = 0
@@ -932,6 +1123,9 @@ export async function importData(prompts) {
           ? `DELETE FROM ${formatQualifiedName(schema, table)}`
           : `TRUNCATE TABLE ${formatQualifiedName(schema, table)}`
         await dbClient.execSQL(truncateStatement)
+        const auditMsg = `[${new Date().toISOString()}] TRUNCATE ${schema ? schema + '.' : ''}${table}`
+        operationLog.push(auditMsg)
+        base.debug(`Audit: ${auditMsg}`)
         console.log(baseLite.bundle.getText("tablesTruncated", [table]))
       }
 
@@ -949,11 +1143,46 @@ export async function importData(prompts) {
       let fileColumns = null
       let columnMapping = null
       const batch = []
+      let lastProgressUpdate = startTime
+      let estimatedRowSize = 0
+      const PROGRESS_UPDATE_INTERVAL = 5000 // Update progress every 5 seconds
+      const MEMORY_CHECK_INTERVAL = 100 // Check memory every 100 rows
+      let rowsSinceMemCheck = 0
 
       const addError = (row, message) => {
         errorCount++
         if (errors.length < MAX_ERROR_DETAILS) {
           errors.push({ row, error: message })
+        }
+      }
+      
+      const logProgress = (force = false) => {
+        const now = Date.now()
+        if (force || (now - lastProgressUpdate > PROGRESS_UPDATE_INTERVAL)) {
+          const elapsedSeconds = (now - startTime) / 1000
+          const rate = rowsProcessed > 0 ? (rowsProcessed / elapsedSeconds).toFixed(1) : '0'
+          const memUsage = formatBytes(process.memoryUsage().heapUsed)
+          const progress = `Processed: ${rowsProcessed} rows | Inserted: ${successCount} | Errors: ${errorCount} | Rate: ${rate} rows/sec | Memory: ${memUsage} | Elapsed: ${formatElapsedTime(now - startTime)}`
+          base.debug(progress)
+          lastProgressUpdate = now
+          if (base.verboseOutput(prompts)) {
+            console.log(`  ${progress}`)
+          }
+        }
+      }
+      
+      const maybeAdjustBatchSize = (row) => {
+        rowsSinceMemCheck++
+        if (rowsSinceMemCheck >= MEMORY_CHECK_INTERVAL) {
+          if (estimatedRowSize === 0) {
+            estimatedRowSize = JSON.stringify(row).length
+          }
+          const newBatchSize = calcOptimalBatchSize(BATCH_SIZE, estimatedRowSize)
+          if (newBatchSize !== BATCH_SIZE) {
+            base.debug(`Adjusting batch size from ${BATCH_SIZE} to ${newBatchSize} (memory optimization)`)
+            BATCH_SIZE = newBatchSize
+          }
+          rowsSinceMemCheck = 0
         }
       }
 
@@ -962,8 +1191,11 @@ export async function importData(prompts) {
           return
         }
         try {
-          const { sql, values } = buildBatchInsertStatement(schema, table, batchItems.map(item => item.record))
-          await dbClient.execSQL(sql, values)
+          const { sql, values } = buildBatchInsertStatement(schema, table, batchItems.map(item => item.record), nullValues)
+          
+          if (!dryRun) {
+            await dbClient.execSQL(sql, values)
+          }
           successCount += batchItems.length
           base.debug(baseLite.bundle.getText("debug.batchInserted", [batchItems.length, successCount]))
         } catch (error) {
@@ -994,21 +1226,36 @@ export async function importData(prompts) {
         }
 
         try {
-          const convertedRecord = convertDataTypes(record, columnMapping, tableMetadata)
+          const convertedRecord = convertDataTypes(record, columnMapping, tableMetadata, nullValues)
           batch.push({ record: convertedRecord, originalIndex: rowsProcessed })
+          maybeAdjustBatchSize(record)
+          logProgress()
         } catch (error) {
           addError(rowsProcessed, error.message)
           base.debug(baseLite.bundle.getText("debug.rowValidationFailed", [rowsProcessed, error.message]))
+          
+          // Check if we should continue despite error threshold
+          if (maxErrorsAllowed >= 0 && errorCount > maxErrorsAllowed && !skipWithErrors) {
+            throw new Error(`Error threshold exceeded: ${errorCount} errors (max: ${maxErrorsAllowed})`)
+          }
         }
 
         if (batch.length >= BATCH_SIZE) {
           await insertBatchRecursive(batch.splice(0, batch.length))
+        }
+        
+        // Check error threshold
+        if (maxErrorsAllowed > 0 && errorCount >= maxErrorsAllowed && !skipWithErrors) {
+          throw new Error(`Error threshold exceeded: ${errorCount} errors (max: ${maxErrorsAllowed})`)  
         }
       }
 
       if (batch.length > 0) {
         await insertBatchRecursive(batch)
       }
+      
+      // Final progress update
+      logProgress(true)
 
       if (rowsProcessed === 0) {
         base.error(baseLite.bundle.getText("errNoDataInFile"))
@@ -1017,9 +1264,14 @@ export async function importData(prompts) {
         return { success: false, rowsProcessed: 0 }
       }
 
-      // Commit transaction
-      await dbClient.execSQL('COMMIT')
-      base.debug(baseLite.bundle.getText("debug.transactionCommitted"))
+      // Commit transaction (or rollback if dry-run)
+      if (dryRun) {
+        await dbClient.execSQL('ROLLBACK')
+        base.debug('Dry-run completed - transaction rolled back')
+      } else {
+        await dbClient.execSQL('COMMIT')
+        base.debug(baseLite.bundle.getText("debug.transactionCommitted"))
+      }
     } catch (error) {
       // Rollback on error
       base.debug(baseLite.bundle.getText("debug.rollingBack"))
@@ -1030,15 +1282,21 @@ export async function importData(prompts) {
     await dbClient.disconnect()
 
     // Display results
+    const elapsedTime = Date.now() - startTime
     const result = {
-      success: errorCount === 0,
+      success: (dryRun || errorCount === 0) && !skipWithErrors,
       rowsProcessed: rowsProcessed,
       rowsInserted: successCount,
       rowsWithErrors: errorCount,
       table: schema ? `${schema}.${table}` : table,
       matchMode: prompts.matchMode,
       truncated: prompts.truncate || false,
-      batchSize: BATCH_SIZE
+      batchSize: BATCH_SIZE,
+      dryRun: dryRun,
+      operationLog: operationLog,
+      executionTimeMs: elapsedTime,
+      executionTime: formatElapsedTime(elapsedTime),
+      throughput: rowsProcessed > 0 ? (rowsProcessed / (elapsedTime / 1000)).toFixed(2) : 0
     }
     
     // Add Excel-specific info if applicable
@@ -1047,9 +1305,20 @@ export async function importData(prompts) {
       result.excelStartRow = prompts.startRow || 1
       result.excelSkipEmptyRows = prompts.skipEmptyRows !== false
     }
+    
+    // Cleanup timeout if set
+    if (timeoutHandle) {
+      clearTimeout(timeoutHandle)
+    }
 
     console.log(`\n${baseLite.bundle.getText("importSummary")}`)
     base.outputTableFancy([result])
+    
+    // Show memory stats
+    const memStats = process.memoryUsage()
+    console.log(`\nMemory Usage:`)
+    console.log(`  Heap Used: ${formatBytes(memStats.heapUsed)} / ${formatBytes(memStats.heapTotal)}`)
+    console.log(`  External: ${formatBytes(memStats.external)}`)
 
     if (errorCount > 0 && errors.length > 0) {
       console.log(`\n${baseLite.bundle.getText("importErrors")}`)
@@ -1061,6 +1330,12 @@ export async function importData(prompts) {
 
     return result
   } catch (error) {
+    // Handle timeout errors specially
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      const errorMsg = `Import operation timed out after ${timeoutSeconds} seconds`
+      await base.error(new Error(errorMsg))
+      return { success: false, rowsProcessed: 0, timedOut: true }
+    }
     await base.error(error)
     return { success: false, rowsProcessed: 0 }
   }

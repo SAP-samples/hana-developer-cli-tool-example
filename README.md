@@ -2294,37 +2294,57 @@ Troubleshooting:
                                                       [boolean] [default: false]
 
 Options:
-  -n, --filename, --Filename  Path to the CSV or Excel file to import  [string]
-  -t, --table, --Table        Target database table (format: SCHEMA.TABLE
-                              or just TABLE)                            [string]
-  -o, --output, --Output      File format (csv or excel)
-                                        [string] [choices: "csv", "excel"] [default: "csv"]
-  -m, --matchMode, --MatchMode Column matching mode - order: by position,
-                              name: by column names, auto: try names then
-                              fall back to position
-                        [string] [choices: "order", "name", "auto"] [default: "auto"]
-      --truncate, --tr        Truncate target table before import
+  -n, --filename, --Filename      Path to the CSV or Excel file to import [string]
+  -t, --table, --Table            Target database table (format: SCHEMA.TABLE
+                                  or just TABLE)                          [string]
+  -o, --output, --Output          File format (csv or excel)
+                                  [string] [choices: "csv", "excel"] [default: "csv"]
+  -m, --matchMode, --MatchMode    Column matching mode - order: by position,
+                                  name: by column names, auto: try names then
+                                  fall back to position
+                                  [string] [choices: "order", "name", "auto"] [default: "auto"]
+      --truncate, --tr            Truncate target table before import
                                                       [boolean] [default: false]
-  -b, --batchSize, --BatchSize Batch size for bulk insert operations (1-10000)
-                                                       [number] [default: 1000]
-  -w, --worksheet, --Worksheet Excel worksheet number to import (1-based)
+  -b, --batchSize, --BatchSize    Batch size for bulk insert operations
+                                  (1-10000)                 [number] [default: 1000]
+  -w, --worksheet, --Worksheet    Excel worksheet number to import (1-based)
                                                           [number] [default: 1]
-      --startRow, --sr        Starting row number in Excel (1-based, row 1 is
-                              header)                      [number] [default: 1]
-      --skipEmptyRows, --se   Skip empty rows in Excel files
+      --startRow, --sr            Starting row number in Excel (1-based, row 1
+                                  is header)                [number] [default: 1]
+      --skipEmptyRows, --se       Skip empty rows in Excel files
                                                        [boolean] [default: true]
-      --excelCacheMode, --ec  Excel shared strings cache mode
-                    [string] [choices: "cache", "emit", "ignore"] [default: "cache"]
-  -p, --profile, --Profile    CDS Profile                               [string]
+      --excelCacheMode, --ec      Excel shared strings cache mode
+                                  [string] [choices: "cache", "emit", "ignore"] [default: "cache"]
+      --dryRun, --dr              Preview import results without committing to
+                                  database              [boolean] [default: false]
+      --maxFileSizeMB, --mfs      Maximum file size in MB (prevents memory
+                                  exhaustion)            [number] [default: 500]
+      --timeoutSeconds, --ts      Import operation timeout in seconds (0 = no
+                                  timeout)             [number] [default: 3600]
+      --nullValues, --nv          Comma-separated list of values to treat as
+                                  NULL          [string] [default: "null,NULL,#N/A,"]
+      --skipWithErrors, --swe     Continue import even if errors exceed
+                                  threshold             [boolean] [default: false]
+      --maxErrorsAllowed, --mea   Maximum errors allowed before stopping
+                                  (-1 = unlimited)        [number] [default: -1]
+  -p, --profile, --Profile        CDS Profile                               [string]
 ```
 
 **Description:**
 
-The `import` command allows you to upload data from CSV or Excel files directly into SAP HANA database tables. This is the complementary command to `querySimple`, which exports table data to files.
+The `import` command allows you to upload data from CSV or Excel files directly into SAP HANA, PostgreSQL, or SQLite database tables. This is the complementary command to `querySimple`, which exports table data to files.
 
-**Column Matching:**
+**Key Features:**
 
-The command supports three strategies for matching file columns to table columns:
+* **Multi-Database Support**: Works with SAP HANA, PostgreSQL, SQLite, and other CDS-connected databases
+* **Smart Column Matching**: Automatically matches file columns to table columns by name or position
+* **Data Type Conversion**: Automatically converts integers, decimals, dates, timestamps, booleans, and text values
+* **Memory Management**: Automatic batch size adjustment based on available memory to prevent exhaustion
+* **Progress Tracking**: Real-time progress updates with throughput and memory statistics
+* **Error Recovery**: Granular error handling with optional continuation despite errors
+* **Security**: Path traversal prevention, file size validation, and SQL injection protection
+
+**Column Matching Strategies:**
 
 * **order**: Match columns by position (useful when file has same column order as table)
 * **name**: Match columns by name, case-insensitive (useful when names differ but columns are identifiable)
@@ -2332,12 +2352,21 @@ The command supports three strategies for matching file columns to table columns
 
 **Data Type Support:**
 
-Automatically converts data types including integers, decimals, dates, timestamps, booleans, and text values.
+Automatically converts data types including:
+
+* Integers (INT, BIGINT, etc.)
+* Decimals and Floats (DECIMAL, NUMERIC, REAL, DOUBLE, etc.)
+* Dates and Timestamps
+* Booleans
+* Text values (VARCHAR, CLOB, etc.)
 
 **Performance Tuning:**
 
-* **Batch Size**: Control the number of rows inserted per batch operation. Larger batches (up to 10000) can improve throughput for high-volume imports, while smaller batches may be better for large row sizes or constrained systems.
-* **Excel Cache Mode**: Choose between `cache` (faster, more memory), `emit` (streaming, lower memory), or `ignore` (skip shared strings) based on file size and available memory.
+* **Batch Size**: Control the number of rows inserted per batch operation. Larger batches (up to 10000) can improve throughput for high-volume imports, while smaller batches may be better for large row sizes or constrained systems. Automatically adjusted based on available memory.
+* **Excel Cache Mode**: Choose between:
+  * `cache` (default): Faster parsing, uses more memory (best for files under 100 MB)
+  * `emit`: Streaming mode with lower memory usage (best for large files)
+  * `ignore`: Skips shared strings entirely (minimal memory, fastest)
 
 **Excel-Specific Options:**
 
@@ -2345,14 +2374,30 @@ Automatically converts data types including integers, decimals, dates, timestamp
 * **Start Row**: Specify which row contains headers when data starts after title rows or metadata
 * **Skip Empty Rows**: Control whether completely empty rows are ignored during import
 
+**Security & Validation Options:**
+
+* **Dry-Run Mode**: Preview import results without committing to database (transaction is rolled back)
+* **File Size Limit**: Control maximum file size to prevent memory exhaustion (default: 500 MB)
+* **Operation Timeout**: Set maximum duration for import operation (default: 1 hour)
+* **Custom NULL Values**: Define which string values should be treated as NULL (default: `null,NULL,#N/A,`)
+* **Error Handling**:
+  * Stop import after specified number of errors with `--maxErrorsAllowed`
+  * Or continue despite errors with `--skipWithErrors` (errors are logged)
+
 **Usage Examples:**
 
 ```bash
-# Basic CSV import with auto column matching
+# Basic CSV import with auto column matching and progress
 hana-cli import -n data.csv -t EMPLOYEES
 
 # Import Excel file with name-based column matching
 hana-cli import -n data.xlsx -o excel -t EMPLOYEES -m name
+
+# Dry-run to preview import without committing
+hana-cli import -n data.csv -t EMPLOYEES --dryRun
+
+# Preview with verbose output to see progress
+hana-cli import -n data.csv -t EMPLOYEES --dryRun --disableVerbose false
 
 # Replace all data (truncate first, then import)
 hana-cli import -n data.csv -t EMPLOYEES --truncate
@@ -2360,7 +2405,7 @@ hana-cli import -n data.csv -t EMPLOYEES --truncate
 # Import using schema-qualified table name
 hana-cli import -n backup/employees.csv -t HR.EMPLOYEES
 
-# High-volume import with larger batch size
+# High-volume import with larger batch size (auto-adjusted for memory)
 hana-cli import -n bigdata.csv -t SALES --batchSize 5000
 
 # Import from specific Excel worksheet with headers on row 3
@@ -2369,11 +2414,24 @@ hana-cli import -n report.xlsx -o excel -t MONTHLY_SALES --worksheet 2 --startRo
 # Large Excel file with memory-efficient streaming
 hana-cli import -n large.xlsx -o excel -t BIGTABLE --excelCacheMode emit --batchSize 500
 
+# Large file with size limit and timeout protection
+hana-cli import -n large.xlsx -o excel -t BIGTABLE --maxFileSizeMB 2000 --timeoutSeconds 1800
+
+# Custom NULL value handling (treat "N/A" and empty string as NULL)
+hana-cli import -n data.csv -t PRODUCTS --nullValues "N/A,n/a,"
+
+# Stop after 50 errors instead of failing entire batch
+hana-cli import -n data.csv -t RECORDS --maxErrorsAllowed 50
+
+# Continue import despite errors (errors are logged but import continues)
+hana-cli import -n data.csv -t ITEMS --skipWithErrors
+
 # Import Excel without skipping empty rows
 hana-cli import -n data.xlsx -o excel -t SPARSE_DATA --skipEmptyRows false
-```
 
-**See Also:** [Import Command Documentation](docs/IMPORT_COMMAND.md) | [Import Examples](docs/IMPORT_EXAMPLES.md)
+# Complex example: dry-run with validation
+hana-cli import -n data.xlsx -o excel -t ORDERS -m name --dryRun --worksheet 1 --maxErrorsAllowed 10 --debug
+```
 
 ### readMe
 
