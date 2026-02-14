@@ -40,7 +40,7 @@
             "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
             "hotspotAssignments": [
                 {
-                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tRm9sZGVyUXVlcnlTaW1wbGUlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1xdWVyeVNpbXBsZS11aS1jb21wb25lbnQtLS1BcHAtLUZvbGRlclF1ZXJ5U2ltcGxlJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
                     "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
                 }
             ],
@@ -56,7 +56,7 @@
             "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
             "hotspotAssignments": [
                 {
-                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tRmlsZW5hbWVRdWVyeVNpbXBsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1xdWVyeVNpbXBsZS11aS1jb21wb25lbnQtLS1BcHAtLUZpbGVuYW1lUXVlcnlTaW1wbGUnJTVEJTIyJTJDJTIycnVsZSUyMiUzQSUyMklkU2VsZWN0b3JVSTUlMjIlMkMlMjJvZmZzZXQlMjIlM0ElN0IlMjJ4JTIyJTNBMC41JTJDJTIyeSUyMiUzQTAuMjgxMiU3RCU3RA==",
                     "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
                 }
             ],
@@ -72,7 +72,7 @@
             "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
             "hotspotAssignments": [
                 {
-                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tb3V0cHV0Rm9ybWF0UXVlcnlTaW1wbGUlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1xdWVyeVNpbXBsZS11aS1jb21wb25lbnQtLS1BcHAtLW91dHB1dEZvcm1hdFF1ZXJ5U2ltcGxlJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
                     "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
                 }
             ],
@@ -88,7 +88,7 @@
             "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
             "hotspotAssignments": [
                 {
-                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tYUNvZGVFZGl0b3JTUUwlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1xdWVyeVNpbXBsZS11aS1jb21wb25lbnQtLS1BcHAtLWFDb2RlRWRpdG9yU1FMJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
                     "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
                 }
             ],
@@ -104,7 +104,7 @@
             "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
             "hotspotAssignments": [
                 {
-                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tc2V0dGluZ3NCdXR0b25RdWVyeVNpbXBsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1xdWVyeVNpbXBsZS11aS1jb21wb25lbnQtLS1BcHAtLXNldHRpbmdzQnV0dG9uUXVlcnlTaW1wbGUnJTVEJTIyJTJDJTIycnVsZSUyMiUzQSUyMklkU2VsZWN0b3JVSTUlMjIlMkMlMjJvZmZzZXQlMjIlM0ElN0IlMjJ4JTIyJTNBMC41JTJDJTIyeSUyMiUzQTAuMjgxMiU3RCU3RA==",
                     "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
                 }
             ],
@@ -120,7 +120,7 @@
             "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
             "hotspotAssignments": [
                 {
-                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tY2hrQWRtaW4lMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1xdWVyeVNpbXBsZS11aS1jb21wb25lbnQtLS1BcHAtLWNoa0FkbWluJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
                     "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
                 }
             ],
@@ -136,7 +136,7 @@
             "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
             "hotspotAssignments": [
                 {
-                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0taW5wdXRDb25uRmlsZSUyNyU1ZCUyMiUyYyUyMnJ1bGUlMjIlM2ElMjJJZFNlbGVjdG9yVUk1JTIyJTJjJTIyb2Zmc2V0JTIyJTNhJTdiJTIyeCUyMiUzYTAuNSUyYyUyMnklMjIlM2EwLjI4MTIlN2QlN2Q=",
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1xdWVyeVNpbXBsZS11aS1jb21wb25lbnQtLS1BcHAtLWlucHV0Q29ubkZpbGUnJTVEJTIyJTJDJTIycnVsZSUyMiUzQSUyMklkU2VsZWN0b3JVSTUlMjIlMkMlMjJvZmZzZXQlMjIlM0ElN0IlMjJ4JTIyJTNBMC41JTJDJTIyeSUyMiUzQTAuMjgxMiU3RCU3RA==",
                     "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
                 }
             ],
@@ -152,7 +152,7 @@
             "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
             "hotspotAssignments": [
                 {
-                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tY29ublJlZnJlc2glMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1xdWVyeVNpbXBsZS11aS1jb21wb25lbnQtLS1BcHAtLWNvbm5SZWZyZXNoJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
                     "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
                 }
             ],
@@ -168,7 +168,7 @@
             "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
             "hotspotAssignments": [
                 {
-                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tZGlzYWJsZVZlcmJvc2UlMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1xdWVyeVNpbXBsZS11aS1jb21wb25lbnQtLS1BcHAtLWRpc2FibGVWZXJib3NlJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
                     "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
                 }
             ],
@@ -184,7 +184,7 @@
             "lastModifiedDate": "2026-02-11 00:00:00 GMT+0000",
             "hotspotAssignments": [
                 {
-                    "hotspotAnchor": "WA#2#JTdiJTIydmFsdWUlMjIlM2ElMjJESVYlNWJpZCUyNCUzZCUyN0FwcC0tZGVidWclMjclNWQlMjIlMmMlMjJydWxlJTIyJTNhJTIySWRTZWxlY3RvclVJNSUyMiUyYyUyMm9mZnNldCUyMiUzYSU3YiUyMnglMjIlM2EwLjUlMmMlMjJ5JTIyJTNhMC4yODEyJTdkJTdk",
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1xdWVyeVNpbXBsZS11aS1jb21wb25lbnQtLS1BcHAtLWRlYnVnJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
                     "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
                 }
             ],

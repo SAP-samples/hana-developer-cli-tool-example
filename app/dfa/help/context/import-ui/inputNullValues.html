@@ -1,0 +1,24 @@
+<body>
+	<div class="body conbody">
+		<p class="shortdesc">Define which values should be treated as NULL (comma-separated)</p>
+		<p class="p">
+			Specify values that should be converted to NULL/empty during import. This is useful when your source 
+			data contains specific strings (like "NA", "N/A", "#N/A") that should represent NULL values.
+		</p>
+		<p class="p">
+			<strong>Examples:</strong>
+		</p>
+		<ul>
+			<li>null,NULL,#N/A,,N/A</li>
+			<li>NA,N/A,UNKNOWN</li>
+			<li>#N/A</li>
+		</ul>
+		<p class="p">
+			<strong>Default:</strong> null,NULL,#N/A,
+		</p>
+		<p class="p">
+			<strong>Use Case:</strong> Ensure consistent NULL handling across your imported data, especially when 
+			converting from spreadsheets where various formats may represent missing values.
+		</p>
+	</div>
+</body>

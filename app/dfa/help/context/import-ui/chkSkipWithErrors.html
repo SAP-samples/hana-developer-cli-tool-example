@@ -1,0 +1,23 @@
+<body>
+	<div class="body conbody">
+		<p class="shortdesc">Continue import even if some rows have errors</p>
+		<p class="p">
+			When enabled, the import will continue processing remaining rows even if some rows fail to import 
+			due to validation errors or constraint violations. Failed rows will be logged but the import won't stop.
+		</p>
+		<p class="p">
+			<strong>Default:</strong> Unchecked (false)
+		</p>
+		<p class="p">
+			<strong>Use Cases:</strong>
+		</p>
+		<ul>
+			<li>Large imports where a few bad rows are acceptable</li>
+			<li>When you want to import as much data as possible</li>
+			<li>For data cleaning scenarios</li>
+		</ul>
+		<p class="p">
+			<strong>Caution:</strong> Enable with care to avoid silently skipping important data.
+		</p>
+	</div>
+</body>

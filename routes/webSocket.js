@@ -4,6 +4,7 @@
 import * as base from '../utils/base.js'
 import { WebSocketServer } from 'ws'
 import * as massConvertLib from '../utils/massConvert.js'
+import * as importLib from '../bin/import.js'
 
 export function route(app, server) {
 	base.debug('WebSockets Route')
@@ -117,6 +118,42 @@ export function route(app, server) {
 								base.debug(`${base.bundle.getText("generalError")}: ${syncError}`)
 								try {
 									wss.broadcast(base.bundle.getText("error.massConvertFailed", [syncError.message || syncError]))
+								} catch (broadcastError) {
+									// Ignore broadcast errors
+								}
+							}
+							break
+						case "import":
+							// Skip import in test environment to avoid terminal output issues
+							if (process.env.NODE_ENV === 'test') {
+								console.log(base.bundle.getText("test.skipImport"))
+								try {
+									ws.send(JSON.stringify({
+										text: base.bundle.getText("test.importSkipped")
+									}))
+								} catch (sendError) {
+									// Ignore send errors
+								}
+								break
+							}
+							// Run import async, catch any errors
+							try {
+								importLib.importData(base.getPrompts()).then(() => {
+									wss.broadcast(base.bundle.getText("success.importComplete"))
+								}).catch((error) => {
+									console.error(base.colors.red(`${base.bundle.getText("generalError")}: ${error}`))
+									base.debug(`${base.bundle.getText("generalError")}: ${error}`)
+									try {
+										wss.broadcast(base.bundle.getText("error.import", [error.message || error]))
+									} catch (broadcastError) {
+										// Ignore broadcast errors
+									}
+								})
+							} catch (syncError) {
+								console.error(base.colors.red(`${base.bundle.getText("generalError")}: ${syncError}`))
+								base.debug(`${base.bundle.getText("generalError")}: ${syncError}`)
+								try {
+									wss.broadcast(base.bundle.getText("error.import", [syncError.message || syncError]))
 								} catch (broadcastError) {
 									// Ignore broadcast errors
 								}

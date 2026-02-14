@@ -1,0 +1,23 @@
+<body>
+	<div class="body conbody">
+		<p class="shortdesc">Number of rows to process in each batch</p>
+		<p class="p">
+			Batch size controls how many rows are processed together during import. Larger batches are faster 
+			but consume more memory. Smaller batches are slower but use less memory.
+		</p>
+		<p class="p">
+			<strong>Recommended Values:</strong>
+		</p>
+		<ul>
+			<li>Small datasets (&lt;10,000 rows): 5000-10000</li>
+			<li>Medium datasets (10K-1M rows): 1000-5000</li>
+			<li>Large datasets (&gt;1M rows): 100-1000</li>
+		</ul>
+		<p class="p">
+			<strong>Default:</strong> 1000
+		</p>
+		<p class="p">
+			<strong>Performance Tip:</strong> Increase batch size for faster imports on systems with sufficient memory.
+		</p>
+	</div>
+</body>

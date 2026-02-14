@@ -1,0 +1,20 @@
+<body>
+	<div class="body conbody">
+		<p class="shortdesc">Maximum time to allow for import process (in seconds)</p>
+		<p class="p">
+			Sets a timeout limit for the entire import operation. If the import takes longer than this time, 
+			it will be automatically terminated to prevent indefinite hanging.
+		</p>
+		<p class="p">
+			<strong>Recommended Values:</strong>
+		</p>
+		<ul>
+			<li>Small datasets: 60-300 seconds</li>
+			<li>Medium datasets: 300-1800 seconds (5-30 minutes)</li>
+			<li>Large datasets: 1800-3600 seconds (30-60 minutes)</li>
+		</ul>
+		<p class="p">
+			<strong>Default:</strong> 3600 seconds (1 hour)
+		</p>
+	</div>
+</body>

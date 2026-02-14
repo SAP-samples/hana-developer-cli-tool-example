@@ -134,6 +134,22 @@
                                     }
                                 },
                                 {
+                                    "id": "import-ui",
+                                    "title": "i18n.tile.import_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.import_ui.info",
+                                        "title": "i18n.tile.import_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.import",
+                                        "applicationType": "URL",
+                                        "targetURL": "#import-ui",
+                                        "url": "./import",
+                                        "icon": "sap-icon://upload",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
                                     "id": "querySimple-ui",
                                     "title": "i18n.tile.querySimple_ui.title",
                                     "size": "1x1",
@@ -745,6 +761,14 @@
             "additionalInformation": "SAPUI5.Component=sap.hanacli.massConvert",
             "applicationType": "URL",
             "url": "./massConvert",
+            "navigationMode": "embedded"
+        },
+        "import-ui": {
+            "title": "i18n.app.import_ui.title",
+            "description": "i18n.app.import_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.import",
+            "applicationType": "URL",
+            "url": "./import",
             "navigationMode": "embedded"
         },
         "procedures-ui": {

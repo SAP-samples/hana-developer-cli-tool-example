@@ -1,0 +1,105 @@
+<mvc:View controllerName="sap.hanacli.import.controller.App" height="100%" width="100%"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+	<ScrollContainer id="_IDGenScrollContainer1" height="100%" width="100%" vertical="true" focusable="true">
+		<f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+			<f:toolbar>
+				<Toolbar id="TB1">
+					<Title id="Title1" text="{i18n>appTitle} - {i18n>appDescription}"/>
+					<ToolbarSpacer id="_IDGenToolbarSpacer1" />
+					<Button id="btnBeginImport" icon="sap-icon://upload" tooltip="{i18n>import}" press="onBeginImport" />
+				</Toolbar>
+			</f:toolbar>
+			<f:content>
+
+				<Toolbar id="_IDGenToolbar1" ariaLabelledBy="Title2">
+					<Title id="Title2" text="{i18n>target}"/>
+					<ToolbarSpacer id="_IDGenToolbarSpacer2" />
+					<Button id="_IDGenButton1" icon="sap-icon://settings" tooltip="{i18n>targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
+				</Toolbar>
+
+				<Label id="_IDGenLabel1" text="{i18n>filename}" required="true" />
+				<Input id="Filename" value="{/filename}" placeholder="path/to/file.csv or path/to/file.xlsx" tooltip="{i18n>help.filename}">
+				</Input>
+
+				<Label id="_IDGenLabel2" text="{i18n>table}" required="true"/>
+				<Input id="Table" value="{/table}" showSuggestion="true" suggest="loadTableFilter" placeholder="SCHEMA.TABLE" tooltip="{i18n>help.table}">
+				</Input>
+
+				<Label id="_IDGenLabel3" text="{i18n>outputFormat}" required="true"/>
+				<ComboBox id="outputFormat" selectedKey="{/output}" items="{outputModel>/outputTypes}" tooltip="{i18n>help.outputFormat}">
+					<core:Item id="_IDGenItem1" key="{outputModel>key}" text="{outputModel>text}" />
+				</ComboBox>
+
+				<Label id="_IDGenLabel4" text="{i18n>matchMode}" required="true"/>
+				<ComboBox id="matchMode" selectedKey="{/matchMode}" items="{matchModeModel>/matchModes}" tooltip="{i18n>help.matchMode}">
+					<core:Item id="_IDGenItem2" key="{matchModeModel>key}" text="{matchModeModel>text}" />
+				</ComboBox>
+
+				<core:Fragment fragmentName="sap.hanacli.common.view.Connection" type="XML"/>
+
+				<Toolbar id="_IDGenToolbar2" ariaLabelledBy="Title4">
+					<Title id="Title4" text="{i18nReuse>gui.execute}"/>
+				</Toolbar>
+
+				<Label id="_IDGenLabel5" text="{i18n>truncate}" tooltip="{i18n>help.truncate}"/>
+				<CheckBox id="chkTruncate" selected="{/truncate}" tooltip="{i18n>help.truncate}"/>
+
+				<Label id="_IDGenLabel6" text="{i18n>batchSize}" required="true" tooltip="{i18n>help.batchSize}"/>
+				<Input id="inputBatchSize" value="{/batchSize}" type="Number" tooltip="{i18n>help.batchSize}"/>
+
+				<Label id="_IDGenLabel7" text="{i18n>worksheet}" required="false" tooltip="{i18n>help.worksheet}"/>
+				<Input id="inputWorksheet" value="{/worksheet}" type="Number" tooltip="{i18n>help.worksheet}"/>
+
+				<Label id="_IDGenLabel8" text="{i18n>startRow}" required="false" tooltip="{i18n>help.startRow}"/>
+				<Input id="inputStartRow" value="{/startRow}" type="Number" tooltip="{i18n>help.startRow}"/>
+
+				<Label id="_IDGenLabel9" text="{i18n>skipEmptyRows}" tooltip="{i18n>help.skipEmptyRows}"/>
+				<CheckBox id="chkSkipEmptyRows" selected="{/skipEmptyRows}" tooltip="{i18n>help.skipEmptyRows}"/>
+
+				<Label id="_IDGenLabel10" text="{i18n>excelCacheMode}" required="false" tooltip="{i18n>help.excelCacheMode}"/>
+				<ComboBox id="excelCacheMode" selectedKey="{/excelCacheMode}" items="{cacheModeModel>/cacheModes}" tooltip="{i18n>help.excelCacheMode}">
+					<core:Item id="_IDGenItem3" key="{cacheModeModel>key}" text="{cacheModeModel>text}" />
+				</ComboBox>
+
+				<Label id="_IDGenLabel11" text="{i18n>dryRun}" tooltip="{i18n>help.dryRun}"/>
+				<CheckBox id="chkDryRun" selected="{/dryRun}" tooltip="{i18n>help.dryRun}"/>
+
+				<Label id="_IDGenLabel12" text="{i18n>maxFileSizeMB}" required="false" tooltip="{i18n>help.maxFileSizeMB}"/>
+				<Input id="inputMaxFileSizeMB" value="{/maxFileSizeMB}" type="Number" tooltip="{i18n>help.maxFileSizeMB}"/>
+
+				<Label id="_IDGenLabel13" text="{i18n>timeoutSeconds}" required="false" tooltip="{i18n>help.timeoutSeconds}"/>
+				<Input id="inputTimeoutSeconds" value="{/timeoutSeconds}" type="Number" tooltip="{i18n>help.timeoutSeconds}"/>
+
+				<Label id="_IDGenLabel14" text="{i18n>nullValues}" required="false" tooltip="{i18n>help.nullValues}"/>
+				<Input id="inputNullValues" value="{/nullValues}" tooltip="{i18n>help.nullValues}"/>
+
+				<Label id="_IDGenLabel15" text="{i18n>skipWithErrors}" tooltip="{i18n>help.skipWithErrors}"/>
+				<CheckBox id="chkSkipWithErrors" selected="{/skipWithErrors}" tooltip="{i18n>help.skipWithErrors}"/>
+
+				<Label id="_IDGenLabel16" text="{i18n>maxErrorsAllowed}" required="false" tooltip="{i18n>help.maxErrorsAllowed}"/>
+				<Input id="inputMaxErrorsAllowed" value="{/maxErrorsAllowed}" type="Number" tooltip="{i18n>help.maxErrorsAllowed}"/>
+
+				<core:Fragment fragmentName="sap.hanacli.common.view.Debug" type="XML"/>
+
+			</f:content>
+		</f:SimpleForm>
+
+		<f:SimpleForm id="SimpleFormToolbar2" editable="false" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title6">
+			<f:toolbar>
+				<Toolbar id="_IDGenToolbar3" ariaLabelledBy="Title6">
+					<Title id="Title6" text="{i18nReuse>log}"/>
+				</Toolbar>
+			</f:toolbar>
+			<f:content>
+				<Label id="_IDGenLabel17" text="{i18n>progress}" />
+				<ProgressIndicator id="_IDGenProgressIndicator1" percentValue="{logModel>/progress}" showValue="true" state="Information" />
+				<Label id="_IDGenLabel18" text="{i18n>log}" />
+				<TextArea id="logInfo" value="{logModel>/log}" cols="60" rows="8" editable="false"/>
+			</f:content>
+		</f:SimpleForm>
+	</ScrollContainer>
+</mvc:View>

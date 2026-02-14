@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>Test</title></head>
+<body>
+<script>
+setTimeout(() => {
+  fetch('http://localhost:3010/ui/')
+    .then(r => r.text())
+    .then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const inputs = Array.from(doc.querySelectorAll('[id*="Filename"]'));
+      console.log('Found elements:', inputs.map(el => el.id));
+    });
+}, 1000);
+</script>
+</body>
+</html>

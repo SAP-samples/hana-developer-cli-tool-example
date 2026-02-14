@@ -1,0 +1,31 @@
+{
+    "id": "import-ui",
+    "appUrl": "import-ui",
+    "product": "HANA_CLI",
+    "version": "Cloud",
+    "locale": "en-US",
+    "state": "PRODUCTION",
+    "title": "Import Data from Files",
+    "contextType": "HELP",
+    "tiles": [
+        {
+            "id": "beginImport",
+            "title": "Begin Import",
+            "summaryText": "Start the import process",
+            "content": "",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": null,
+                    "displayProperties": "{\"misc\":{\"hidden\":false}}"
+                }
+            ]
+        }
+    ],
+    "contextItems": [
+        {
+            "id": "Filename",
+            "title": "Filename",
+            "content": ""
+        }
+    ]
+}
