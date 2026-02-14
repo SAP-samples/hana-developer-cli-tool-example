@@ -10,6 +10,14 @@ import { expect } from 'chai'
 import esmock from 'esmock'
 
 describe('cf.js - Cloud Foundry CLI Functions', () => {
+    
+    afterEach(async () => {
+        // Clear cache between tests
+        const cf = await import('../../utils/cf.js')
+        if (cf.clearCFConfigCache) {
+            cf.clearCFConfigCache()
+        }
+    })
 
     describe('getVersion()', () => {
         it('should return CF CLI version', async () => {
@@ -80,17 +88,19 @@ describe('cf.js - Cloud Foundry CLI Functions', () => {
         it('should read CF config.json from home directory', async () => {
             const cf = await esmock('../../utils/cf.js', {
                 fs: {
-                    readFileSync: () => JSON.stringify({
-                        Target: 'https://api.cf.eu10.hana.ondemand.com',
-                        OrganizationFields: {
-                            Name: 'my-org',
-                            GUID: 'org-guid-123'
-                        },
-                        SpaceFields: {
-                            Name: 'dev',
-                            GUID: 'space-guid-456'
-                        }
-                    })
+                    promises: {
+                        readFile: () => Promise.resolve(JSON.stringify({
+                            Target: 'https://api.cf.eu10.hana.ondemand.com',
+                            OrganizationFields: {
+                                Name: 'my-org',
+                                GUID: 'org-guid-123'
+                            },
+                            SpaceFields: {
+                                Name: 'dev',
+                                GUID: 'space-guid-456'
+                            }
+                        }))
+                    }
                 },
                 os: { homedir: () => '/home/testuser' }
             })
@@ -105,7 +115,9 @@ describe('cf.js - Cloud Foundry CLI Functions', () => {
         it('should throw error if config file not found', async () => {
             const cf = await esmock('../../utils/cf.js', {
                 fs: {
-                    readFileSync: () => { throw new Error('ENOENT: no such file') }
+                    promises: {
+                        readFile: () => Promise.reject(new Error('ENOENT: no such file'))
+                    }
                 },
                 os: { homedir: () => '/home/testuser' }
             })
@@ -120,7 +132,11 @@ describe('cf.js - Cloud Foundry CLI Functions', () => {
 
         it('should throw error on invalid JSON', async () => {
             const cf = await esmock('../../utils/cf.js', {
-                fs: { readFileSync: () => 'invalid json{' },
+                fs: {
+                    promises: {
+                        readFile: () => Promise.resolve('invalid json{')
+                    }
+                },
                 os: { homedir: () => '/home/testuser' }
             })
 
@@ -137,12 +153,14 @@ describe('cf.js - Cloud Foundry CLI Functions', () => {
         it('should return organization fields from config', async () => {
             const cf = await esmock('../../utils/cf.js', {
                 fs: {
-                    readFileSync: () => JSON.stringify({
-                        OrganizationFields: {
-                            Name: 'test-org',
-                            GUID: 'org-guid-789'
-                        }
-                    })
+                    promises: {
+                        readFile: () => Promise.resolve(JSON.stringify({
+                            OrganizationFields: {
+                                Name: 'test-org',
+                                GUID: 'org-guid-789'
+                            }
+                        }))
+                    }
                 },
                 os: { homedir: () => '/home/testuser' }
             })
@@ -159,12 +177,14 @@ describe('cf.js - Cloud Foundry CLI Functions', () => {
         it('should return organization name', async () => {
             const cf = await esmock('../../utils/cf.js', {
                 fs: {
-                    readFileSync: () => JSON.stringify({
-                        OrganizationFields: {
-                            Name: 'production-org',
-                            GUID: 'org-guid-999'
-                        }
-                    })
+                    promises: {
+                        readFile: () => Promise.resolve(JSON.stringify({
+                            OrganizationFields: {
+                                Name: 'production-org',
+                                GUID: 'org-guid-999'
+                            }
+                        }))
+                    }
                 },
                 os: { homedir: () => '/home/testuser' }
             })
@@ -179,12 +199,14 @@ describe('cf.js - Cloud Foundry CLI Functions', () => {
         it('should return organization GUID', async () => {
             const cf = await esmock('../../utils/cf.js', {
                 fs: {
-                    readFileSync: () => JSON.stringify({
-                        OrganizationFields: {
-                            Name: 'my-org',
-                            GUID: 'unique-org-guid-123'
-                        }
-                    })
+                    promises: {
+                        readFile: () => Promise.resolve(JSON.stringify({
+                            OrganizationFields: {
+                                Name: 'my-org',
+                                GUID: 'unique-org-guid-123'
+                            }
+                        }))
+                    }
                 },
                 os: { homedir: () => '/home/testuser' }
             })
@@ -199,12 +221,14 @@ describe('cf.js - Cloud Foundry CLI Functions', () => {
         it('should return space fields from config', async () => {
             const cf = await esmock('../../utils/cf.js', {
                 fs: {
-                    readFileSync: () => JSON.stringify({
-                        SpaceFields: {
-                            Name: 'test-space',
-                            GUID: 'space-guid-abc'
-                        }
-                    })
+                    promises: {
+                        readFile: () => Promise.resolve(JSON.stringify({
+                            SpaceFields: {
+                                Name: 'test-space',
+                                GUID: 'space-guid-abc'
+                            }
+                        }))
+                    }
                 },
                 os: { homedir: () => '/home/testuser' }
             })
@@ -221,12 +245,14 @@ describe('cf.js - Cloud Foundry CLI Functions', () => {
         it('should return space name', async () => {
             const cf = await esmock('../../utils/cf.js', {
                 fs: {
-                    readFileSync: () => JSON.stringify({
-                        SpaceFields: {
-                            Name: 'development',
-                            GUID: 'space-guid-dev'
-                        }
-                    })
+                    promises: {
+                        readFile: () => Promise.resolve(JSON.stringify({
+                            SpaceFields: {
+                                Name: 'development',
+                                GUID: 'space-guid-dev'
+                            }
+                        }))
+                    }
                 },
                 os: { homedir: () => '/home/testuser' }
             })
@@ -241,12 +267,14 @@ describe('cf.js - Cloud Foundry CLI Functions', () => {
         it('should return space GUID', async () => {
             const cf = await esmock('../../utils/cf.js', {
                 fs: {
-                    readFileSync: () => JSON.stringify({
-                        SpaceFields: {
-                            Name: 'prod',
-                            GUID: 'unique-space-guid-456'
-                        }
-                    })
+                    promises: {
+                        readFile: () => Promise.resolve(JSON.stringify({
+                            SpaceFields: {
+                                Name: 'prod',
+                                GUID: 'unique-space-guid-456'
+                            }
+                        }))
+                    }
                 },
                 os: { homedir: () => '/home/testuser' }
             })
@@ -261,9 +289,11 @@ describe('cf.js - Cloud Foundry CLI Functions', () => {
         it('should return target URL from config', async () => {
             const cf = await esmock('../../utils/cf.js', {
                 fs: {
-                    readFileSync: () => JSON.stringify({
-                        Target: 'https://api.cf.us10.hana.ondemand.com'
-                    })
+                    promises: {
+                        readFile: () => Promise.resolve(JSON.stringify({
+                            Target: 'https://api.cf.us10.hana.ondemand.com'
+                        }))
+                    }
                 },
                 os: { homedir: () => '/home/testuser' }
             })
@@ -289,14 +319,16 @@ describe('cf.js - Cloud Foundry CLI Functions', () => {
             
             const cf = await esmock('../../utils/cf.js', {
                 fs: {
-                    readFileSync: () => JSON.stringify({
-                        SpaceFields: {
-                            GUID: 'space-123'
-                        },
-                        OrganizationFields: {
-                            GUID: 'org-123'
-                        }
-                    })
+                    promises: {
+                        readFile: () => Promise.resolve(JSON.stringify({
+                            SpaceFields: {
+                                GUID: 'space-123'
+                            },
+                            OrganizationFields: {
+                                GUID: 'org-123'
+                            }
+                        }))
+                    }
                 },
                 os: { homedir: () => '/home/testuser' },
                 child_process: {
@@ -315,14 +347,16 @@ describe('cf.js - Cloud Foundry CLI Functions', () => {
         it('should handle empty HANA instances', async () => {
             const cf = await esmock('../../utils/cf.js', {
                 fs: {
-                    readFileSync: () => JSON.stringify({
-                        SpaceFields: {
-                            GUID: 'space-456'
-                        },
-                        OrganizationFields: {
-                            GUID: 'org-456'
-                        }
-                    })
+                    promises: {
+                        readFile: () => Promise.resolve(JSON.stringify({
+                            SpaceFields: {
+                                GUID: 'space-456'
+                            },
+                            OrganizationFields: {
+                                GUID: 'org-456'
+                            }
+                        }))
+                    }
                 },
                 os: { homedir: () => '/home/testuser' },
                 child_process: {

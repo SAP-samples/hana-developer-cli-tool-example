@@ -98,7 +98,7 @@ export async function getVersion() {
             throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
         }
         
-        return stdout?.trim() || ''
+        return stdout || undefined
     } catch (error) {
         base.debug(error)
         throw error

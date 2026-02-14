@@ -1,0 +1,474 @@
+{
+  "stats": {
+    "suites": 9,
+    "tests": 25,
+    "passes": 21,
+    "pending": 3,
+    "failures": 1,
+    "start": "2026-02-14T14:13:36.483Z",
+    "end": "2026-02-14T14:13:37.721Z",
+    "duration": 1238
+  },
+  "tests": [
+    {
+      "title": "should return BTP CLI version",
+      "fullTitle": "btp.js - BTP CLI Functions getVersion() should return BTP CLI version",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 406,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return undefined if no version output",
+      "fullTitle": "btp.js - BTP CLI Functions getVersion() should return undefined if no version output",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 7,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should throw error on execution failure",
+      "fullTitle": "btp.js - BTP CLI Functions getVersion() should throw error on execution failure",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 7,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should parse BTP CLI info output",
+      "fullTitle": "btp.js - BTP CLI Functions getInfo() should parse BTP CLI info output",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 6,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should handle missing info fields gracefully",
+      "fullTitle": "btp.js - BTP CLI Functions getInfo() should handle missing info fields gracefully",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 6,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should return undefined if no stdout",
+      "fullTitle": "btp.js - BTP CLI Functions getInfo() should return undefined if no stdout",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 5,
+      "currentRetry": 0,
+      "err": {
+        "stack": "AssertionError: expected {} to be undefined\n    at Context.<anonymous> (file:///D:/projects/hana-developer-cli-tool-example/tests/utils/btp.Test.js:114:33)",
+        "message": "expected {} to be undefined",
+        "actual": {},
+        "showDiff": false,
+        "operator": "strictEqual"
+      }
+    },
+    {
+      "title": "should throw error on execution failure",
+      "fullTitle": "btp.js - BTP CLI Functions getInfo() should throw error on execution failure",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 5,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should read config from BTP_CLIENTCONFIG env var",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPConfig() should read config from BTP_CLIENTCONFIG env var",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 9,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should read config from getInfo() if BTP_CLIENTCONFIG not set",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPConfig() should read config from getInfo() if BTP_CLIENTCONFIG not set",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 11,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should use APPDATA path on Windows",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPConfig() should use APPDATA path on Windows",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 12,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should use HOME path on macOS",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPConfig() should use HOME path on macOS",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 13,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should throw error if config file not found",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPConfig() should throw error if config file not found",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 383,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should throw error on invalid JSON",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPConfig() should throw error on invalid JSON",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 320,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return target hierarchy from config",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPTarget() should return target hierarchy from config",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 11,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should throw error if config has no target hierarchy",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPTarget() should throw error if config has no target hierarchy",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 12,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should return global account from target",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPGlobalAccount() should return global account from target",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 10,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should export getVersion function",
+      "fullTitle": "btp.js - Module Exports should export getVersion function",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should export getInfo function",
+      "fullTitle": "btp.js - Module Exports should export getInfo function",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should export getBTPConfig function",
+      "fullTitle": "btp.js - Module Exports should export getBTPConfig function",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should export getBTPTarget function",
+      "fullTitle": "btp.js - Module Exports should export getBTPTarget function",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should export getBTPGlobalAccount function",
+      "fullTitle": "btp.js - Module Exports should export getBTPGlobalAccount function",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should read Windows config path with mock filesystem @windows",
+      "fullTitle": "btp.js - Cross-Platform Filesystem Tests @all getBTPConfig() with mock-fs @all should read Windows config path with mock filesystem @windows",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 2,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should read macOS config path with mock filesystem @unix",
+      "fullTitle": "btp.js - Cross-Platform Filesystem Tests @all getBTPConfig() with mock-fs @all should read macOS config path with mock filesystem @unix",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "err": {}
+    },
+    {
+      "title": "should read Linux config path with mock filesystem @unix",
+      "fullTitle": "btp.js - Cross-Platform Filesystem Tests @all getBTPConfig() with mock-fs @all should read Linux config path with mock filesystem @unix",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "err": {}
+    },
+    {
+      "title": "should handle macOS fallback location with mock filesystem @unix",
+      "fullTitle": "btp.js - Cross-Platform Filesystem Tests @all getBTPConfig() with mock-fs @all should handle macOS fallback location with mock filesystem @unix",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "err": {}
+    }
+  ],
+  "pending": [
+    {
+      "title": "should read macOS config path with mock filesystem @unix",
+      "fullTitle": "btp.js - Cross-Platform Filesystem Tests @all getBTPConfig() with mock-fs @all should read macOS config path with mock filesystem @unix",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "err": {}
+    },
+    {
+      "title": "should read Linux config path with mock filesystem @unix",
+      "fullTitle": "btp.js - Cross-Platform Filesystem Tests @all getBTPConfig() with mock-fs @all should read Linux config path with mock filesystem @unix",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "err": {}
+    },
+    {
+      "title": "should handle macOS fallback location with mock filesystem @unix",
+      "fullTitle": "btp.js - Cross-Platform Filesystem Tests @all getBTPConfig() with mock-fs @all should handle macOS fallback location with mock filesystem @unix",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "err": {}
+    }
+  ],
+  "failures": [
+    {
+      "title": "should return undefined if no stdout",
+      "fullTitle": "btp.js - BTP CLI Functions getInfo() should return undefined if no stdout",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 5,
+      "currentRetry": 0,
+      "err": {
+        "stack": "AssertionError: expected {} to be undefined\n    at Context.<anonymous> (file:///D:/projects/hana-developer-cli-tool-example/tests/utils/btp.Test.js:114:33)",
+        "message": "expected {} to be undefined",
+        "actual": {},
+        "showDiff": false,
+        "operator": "strictEqual"
+      }
+    }
+  ],
+  "passes": [
+    {
+      "title": "should return BTP CLI version",
+      "fullTitle": "btp.js - BTP CLI Functions getVersion() should return BTP CLI version",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 406,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return undefined if no version output",
+      "fullTitle": "btp.js - BTP CLI Functions getVersion() should return undefined if no version output",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 7,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should throw error on execution failure",
+      "fullTitle": "btp.js - BTP CLI Functions getVersion() should throw error on execution failure",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 7,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should parse BTP CLI info output",
+      "fullTitle": "btp.js - BTP CLI Functions getInfo() should parse BTP CLI info output",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 6,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should handle missing info fields gracefully",
+      "fullTitle": "btp.js - BTP CLI Functions getInfo() should handle missing info fields gracefully",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 6,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should throw error on execution failure",
+      "fullTitle": "btp.js - BTP CLI Functions getInfo() should throw error on execution failure",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 5,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should read config from BTP_CLIENTCONFIG env var",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPConfig() should read config from BTP_CLIENTCONFIG env var",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 9,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should read config from getInfo() if BTP_CLIENTCONFIG not set",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPConfig() should read config from getInfo() if BTP_CLIENTCONFIG not set",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 11,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should use APPDATA path on Windows",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPConfig() should use APPDATA path on Windows",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 12,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should use HOME path on macOS",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPConfig() should use HOME path on macOS",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 13,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should throw error if config file not found",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPConfig() should throw error if config file not found",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 383,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should throw error on invalid JSON",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPConfig() should throw error on invalid JSON",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 320,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should return target hierarchy from config",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPTarget() should return target hierarchy from config",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 11,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should throw error if config has no target hierarchy",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPTarget() should throw error if config has no target hierarchy",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 12,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should return global account from target",
+      "fullTitle": "btp.js - BTP CLI Functions getBTPGlobalAccount() should return global account from target",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 10,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should export getVersion function",
+      "fullTitle": "btp.js - Module Exports should export getVersion function",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should export getInfo function",
+      "fullTitle": "btp.js - Module Exports should export getInfo function",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should export getBTPConfig function",
+      "fullTitle": "btp.js - Module Exports should export getBTPConfig function",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should export getBTPTarget function",
+      "fullTitle": "btp.js - Module Exports should export getBTPTarget function",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should export getBTPGlobalAccount function",
+      "fullTitle": "btp.js - Module Exports should export getBTPGlobalAccount function",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should read Windows config path with mock filesystem @windows",
+      "fullTitle": "btp.js - Cross-Platform Filesystem Tests @all getBTPConfig() with mock-fs @all should read Windows config path with mock filesystem @windows",
+      "file": "D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js",
+      "duration": 2,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    }
+  ]
+}

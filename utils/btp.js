@@ -38,7 +38,7 @@ async function executeBTPCommand(command, options = { json: false }) {
         const { stdout } = await exec(script)
         
         if (!stdout) {
-            return options.json ? null : ''
+            return undefined
         }
         
         if (options.json) {
@@ -93,7 +93,7 @@ export async function getVersion() {
     base.debug(bundle.getText("debug.call", ["getVersion"]))
     try {
         const result = await executeBTPCommand('--version')
-        return result || ''
+        return result
     } catch (error) {
         base.debug(bundle.getText("debug.callError", ["getVersion", error.message]))
         throw error
@@ -111,7 +111,7 @@ export async function getInfo() {
         const infoOut = {}
         
         if (!output) {
-            return infoOut
+            return undefined
         }
         
         const lines = output.split("\n")
