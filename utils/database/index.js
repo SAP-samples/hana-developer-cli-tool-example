@@ -182,11 +182,15 @@ export default class dbClientClass {
 
     /**
      * Execute single SQL Statement and directly return result set
-     * @param {string} sql - SQL Statement
+     * @param {string} query - SQL Statement
+     * @param {Array<any>} [params] - Optional parameter bindings
      * @returns {Promise<any>} - result set object
      */
-    async execSQL(query){
+    async execSQL(query, params){
         base.debug(base.bundle.getText("debug.dbExecSqlForClient", [this.#clientType]))
+        if (params && Array.isArray(params) && params.length > 0) {
+            return await this.#db.run(query, params)
+        }
         let results = await this.#db.run(query)
         return results
     }

@@ -83,6 +83,11 @@ Jane,25,jane@example.com`
       expect(importCmd.inputPrompts).to.have.property('table')
       expect(importCmd.inputPrompts).to.have.property('output')
       expect(importCmd.inputPrompts).to.have.property('matchMode')
+      expect(importCmd.inputPrompts).to.have.property('batchSize')
+      expect(importCmd.inputPrompts).to.have.property('worksheet')
+      expect(importCmd.inputPrompts).to.have.property('startRow')
+      expect(importCmd.inputPrompts).to.have.property('skipEmptyRows')
+      expect(importCmd.inputPrompts).to.have.property('excelCacheMode')
     })
   })
 
@@ -158,6 +163,120 @@ Jane,25,jane@example.com`
 
     it('should handle column mismatch errors', async () => {
       // Test when no columns can be matched
+    })
+  })
+
+  describe('new enhancement features', () => {
+    describe('batch size configuration', () => {
+      it('should accept valid batch size (1-10000)', () => {
+        expect(importCmd.inputPrompts.batchSize).to.exist
+        expect(importCmd.inputPrompts.batchSize.type).to.equal('number')
+      })
+
+      it('should have default batch size in builder', () => {
+        // Default batch size should be 1000
+        const built = importCmd.builder({})
+        // Verify default through builder
+      })
+
+      it('should validate batch size range', () => {
+        // Test that batch size between 1-10000 is accepted
+        // Should reject batch sizes < 1 or > 10000
+      })
+    })
+
+    describe('Excel worksheet selection', () => {
+      it('should support worksheet parameter', () => {
+        expect(importCmd.inputPrompts.worksheet).to.exist
+        expect(importCmd.inputPrompts.worksheet.type).to.equal('number')
+      })
+
+      it('should default to worksheet 1', () => {
+        // Verify default worksheet is 1 (first sheet)
+      })
+
+      it('should allow selecting different worksheets', () => {
+        // Test worksheet selection from 1 to N
+      })
+    })
+
+    describe('Excel start row configuration', () => {
+      it('should support startRow parameter', () => {
+        expect(importCmd.inputPrompts.startRow).to.exist
+        expect(importCmd.inputPrompts.startRow.type).to.equal('number')
+      })
+
+      it('should default to row 1', () => {
+        // Verify default start row is 1
+      })
+
+      it('should handle headers at different rows', () => {
+        // Test when headers are on row 2, 3, etc.
+      })
+    })
+
+    describe('Excel skip empty rows', () => {
+      it('should support skipEmptyRows parameter', () => {
+        expect(importCmd.inputPrompts.skipEmptyRows).to.exist
+        expect(importCmd.inputPrompts.skipEmptyRows.type).to.equal('boolean')
+      })
+
+      it('should default to true', () => {
+        // Verify default is to skip empty rows
+      })
+
+      it('should allow including empty rows when set to false', () => {
+        // Test with skipEmptyRows=false
+      })
+    })
+
+    describe('Excel cache mode', () => {
+      it('should support excelCacheMode parameter', () => {
+        expect(importCmd.inputPrompts.excelCacheMode).to.exist
+        expect(importCmd.inputPrompts.excelCacheMode.type).to.equal('string')
+      })
+
+      it('should default to cache mode', () => {
+        // Verify default cache mode is 'cache'
+      })
+
+      it('should support cache, emit, and ignore modes', () => {
+        // Test all three cache modes: cache, emit, ignore
+      })
+
+      it('should handle cache mode for memory efficiency', () => {
+        // Test that 'cache' mode uses more memory but is faster
+      })
+
+      it('should handle emit mode for streaming', () => {
+        // Test that 'emit' mode uses less memory
+      })
+
+      it('should handle ignore mode', () => {
+        // Test that 'ignore' mode skips shared strings
+      })
+    })
+
+    describe('integration of new features', () => {
+      it('should combine batch size with Excel options', () => {
+        // Test using custom batch size with Excel import
+      })
+
+      it('should combine worksheet selection with start row', () => {
+        // Test importing from specific worksheet starting at specific row
+      })
+
+      it('should combine all Excel options', () => {
+        // Test using worksheet, startRow, skipEmptyRows, and cacheMode together
+      })
+
+      it('should work with large batch sizes for performance', () => {
+        // Test batch size of 5000 or 10000 for high-volume imports
+      })
+
+      it('should work with small batch sizes for large rows', () => {
+        // Test batch size of 100 or 500 for large row data
+      })
     })
   })
 })

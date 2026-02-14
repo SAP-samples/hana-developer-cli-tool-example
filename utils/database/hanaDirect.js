@@ -69,13 +69,26 @@ export default class extends DBClientClass {
     /**
      * Execute SQL query directly on HANA
      * @param {string} query - SQL query string
+     * @param {Array<any>} [params] - Optional parameter bindings
      * @returns {Promise<any>} - query results
      */
-    async execSQL(query){
+    async execSQL(query, params){
         base.debug(base.bundle.getText("debug.dbExecSqlForClient", [this.#clientType]))
         const db = super.getDB()
+        if (params && Array.isArray(params) && params.length > 0) {
+            const statement = await db.preparePromisified(query)
+            return await db.statementExecPromisified(statement, params)
+        }
         let results = await db.execSQL(query)
         return results
+    }
+
+    /**
+     * Report database kind for direct HANA connections
+     * @returns {string}
+     */
+    getKind() {
+        return 'hana'
     }
 
 }

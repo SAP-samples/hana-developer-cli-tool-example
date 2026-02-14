@@ -436,7 +436,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - Add node.js engines version check on startup and output a warning if there is a mismatch based upon the engines specification in package.json
 - Add busy indicator in browser based UI
 - massConvert to HDBTABLE or HDBMIGRATIONTABLE with the useCatalogPure option now removes CS_* Types from the output for compatibility with target SAP HANA Cloud systems
-- massConvert to HDBTABLE or HDBMIGRATIONTABLE without the useCatalogPure option also includes associations now. However when coming from HDBCDS based sources the column names contain dots which are incompatible with CAP CDS. The associations will still have the old column names while the rest of the table defition must replace the dot with underscore or recieve CDS Compiler errors.  I will leave this functionality in place, although imperfect. If you have associations in your source system, strongly consider using the useCatalogPure option instead. 
+- massConvert to HDBTABLE or HDBMIGRATIONTABLE without the useCatalogPure option also includes associations now. However when coming from HDBCDS based sources the column names contain dots which are incompatible with CAP CDS. The associations will still have the old column names while the rest of the table defition must replace the dot with underscore or recieve CDS Compiler errors.  I will leave this functionality in place, although imperfect. If you have associations in your source system, strongly consider using the useCatalogPure option instead.
 - Added new commands featuresUI, featureUsageUI, functionsUI, hdiUI, sbssUI, schemaInstancesUI, schemaInstancesUI, securestoreUI, and upsUI
 
 ## [2.202107.4] - 2021-07-27
@@ -487,7 +487,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 **Changed**
 
-- Merge [mass rename](https://gist.github.com/ThePlenkov/2fc31e05a43a4ec395c9a4d8f6c8276a#gistcomment-3759807) from [@ThePlenkov](https://github.com/ThePlenkov) 
+- Merge [mass rename](https://gist.github.com/ThePlenkov/2fc31e05a43a4ec395c9a4d8f6c8276a#gistcomment-3759807) from [@ThePlenkov](https://github.com/ThePlenkov)
 - Fix [Issue with connecting to XS Advance Database #53](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues/53)
 - Remove warning during HDI deploy from db module created with createModule due to reference to afllangprocedure in the generated .hdiconfig
 
@@ -567,7 +567,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - New parameter --quiet that disables extra output and human readable formatting for when you want to script commands and get pure results output
 - New parameter --debug - for troubleshooting of the hana-cli tool itself. It will produce a LOT of detailed output. Nice if you are curious what queries are being sent to SAP to fullfill a command
 - Options in the help are now grouped by Conneciton Parameters, Troubleshooting, and Options
-- New order of processing for making connections as follows: 
+- New order of processing for making connections as follows:
 - First we look for the Admin option and use a default-env-admin.json - this overrides all other parameters
 - If no admin option or if there was an admin option but no default-env-admin.json could be found in this directory or 5 parent directories then look for a .env file in this directory or up to 5 parent directories
 - No .env file found or it doesn't contain a VCAP_SERVICES section, then check to see if the --conn parameter was specified. If so check for that file in the current directory or up to 5 parent directories
@@ -630,7 +630,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - Updated @sap/textbundle
 - Add readme command that opens ReadMe Documentation in your browser
 - Add changelog command that opens Change Log in your browser
-- Formatting of output copy2DefaultEnv improved for compatibility to CAP cds run 
+- Formatting of output copy2DefaultEnv improved for compatibility to CAP cds run
 - New command copy2Env - copy default-env.json to .env and reformat contents
 - Support for HANA Cloud Instance Administration - requires cf cli to be installed and you must be logged into cf with a target org and space
 - Added Command: hdi to list all SAP HANA Cloud HDI container instances in your target space

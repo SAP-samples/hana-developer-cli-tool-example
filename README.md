@@ -2305,6 +2305,16 @@ Options:
                         [string] [choices: "order", "name", "auto"] [default: "auto"]
       --truncate, --tr        Truncate target table before import
                                                       [boolean] [default: false]
+  -b, --batchSize, --BatchSize Batch size for bulk insert operations (1-10000)
+                                                       [number] [default: 1000]
+  -w, --worksheet, --Worksheet Excel worksheet number to import (1-based)
+                                                          [number] [default: 1]
+      --startRow, --sr        Starting row number in Excel (1-based, row 1 is
+                              header)                      [number] [default: 1]
+      --skipEmptyRows, --se   Skip empty rows in Excel files
+                                                       [boolean] [default: true]
+      --excelCacheMode, --ec  Excel shared strings cache mode
+                    [string] [choices: "cache", "emit", "ignore"] [default: "cache"]
   -p, --profile, --Profile    CDS Profile                               [string]
 ```
 
@@ -2324,6 +2334,17 @@ The command supports three strategies for matching file columns to table columns
 
 Automatically converts data types including integers, decimals, dates, timestamps, booleans, and text values.
 
+**Performance Tuning:**
+
+* **Batch Size**: Control the number of rows inserted per batch operation. Larger batches (up to 10000) can improve throughput for high-volume imports, while smaller batches may be better for large row sizes or constrained systems.
+* **Excel Cache Mode**: Choose between `cache` (faster, more memory), `emit` (streaming, lower memory), or `ignore` (skip shared strings) based on file size and available memory.
+
+**Excel-Specific Options:**
+
+* **Worksheet Selection**: Import from a specific worksheet by number (e.g., `--worksheet 2` for the second sheet)
+* **Start Row**: Specify which row contains headers when data starts after title rows or metadata
+* **Skip Empty Rows**: Control whether completely empty rows are ignored during import
+
 **Usage Examples:**
 
 ```bash
@@ -2338,6 +2359,18 @@ hana-cli import -n data.csv -t EMPLOYEES --truncate
 
 # Import using schema-qualified table name
 hana-cli import -n backup/employees.csv -t HR.EMPLOYEES
+
+# High-volume import with larger batch size
+hana-cli import -n bigdata.csv -t SALES --batchSize 5000
+
+# Import from specific Excel worksheet with headers on row 3
+hana-cli import -n report.xlsx -o excel -t MONTHLY_SALES --worksheet 2 --startRow 3
+
+# Large Excel file with memory-efficient streaming
+hana-cli import -n large.xlsx -o excel -t BIGTABLE --excelCacheMode emit --batchSize 500
+
+# Import Excel without skipping empty rows
+hana-cli import -n data.xlsx -o excel -t SPARSE_DATA --skipEmptyRows false
 ```
 
 **See Also:** [Import Command Documentation](docs/IMPORT_COMMAND.md) | [Import Examples](docs/IMPORT_EXAMPLES.md)
