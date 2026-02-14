@@ -393,6 +393,150 @@ Options:
   -g, --group, --Group  HDI Group       [string] [default: "SYS_XS_HANA_BROKER"]
 ```
 
+### backup
+
+```shell
+hana-cli backup [target] [name]
+[aliases: bkp, createBackup]
+Create backups of tables, schemas, or databases
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                  [boolean] [default: false]
+  --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+  --disableVerbose, --quiet  Disable Verbose output - removes all extra
+             output that is only helpful to human readable
+             interface. Useful for scripting commands.
+                  [boolean] [default: false]
+  --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+             of intermediate details
+                  [boolean] [default: false]
+
+Options:
+  --target, --tgt, --Target        Target object to backup (table, schema,
+              or database)                      [string]
+  -n, --name, --Name                    Backup name (auto-generated if omitted)
+                          [string]
+  --type, --backupType, --Type      Backup type
+     [string] [choices: "table", "schema", "database"] [default: "table"]
+  -f, --format, --Format                Backup file format
+       [string] [choices: "csv", "binary", "parquet"] [default: "csv"]
+  --destination, --dest, --Destination  Backup destination directory
+                          [string]
+  -c, --compress, --Compress            Compress backup files
+                  [boolean] [default: true]
+  -s, --schema, --Schema                Schema
+                [string] [default: "**CURRENT_SCHEMA**"]
+  --withData, --wd, --WithData      Include data in backup
+                  [boolean] [default: true]
+  --overwrite, --ow, --Overwrite    Overwrite existing backup
+                     [boolean] [default: false]
+```
+
+### backupList
+
+```shell
+hana-cli backupList [directory]
+[aliases: blist, listBackups, backups]
+List available backups
+
+Troubleshooting:
+  --disableVerbose, --quiet  Disable Verbose output - removes all extra
+             output that is only helpful to human readable
+             interface. Useful for scripting commands.
+                  [boolean] [default: false]
+  --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+             of intermediate details
+                  [boolean] [default: false]
+
+Options:
+  --directory, --dir, --Directory   Directory to scan for backups  [string]
+  --type, --backupType, --Type      Backup type filter
+       [string] [choices: "table", "schema", "database", "all"] [default: "all"]
+  --sortBy, --sort, --Sort          Sort backups by
+       [string] [choices: "name", "date", "size", "type"] [default: "date"]
+  -o, --order, --Order                  Sort order
+          [string] [choices: "asc", "desc"] [default: "desc"]
+  -l, --limit, --Limit                  Limit results   [number] [default: 50]
+  --showDetails, --details, --Details  Show detailed backup information
+                     [boolean] [default: false]
+```
+
+### backupStatus
+
+```shell
+hana-cli backupStatus
+[aliases: bstatus, backupstate, bkpstatus]
+Check backup/recovery operation status
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                  [boolean] [default: false]
+  --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+  --disableVerbose, --quiet  Disable Verbose output - removes all extra
+             output that is only helpful to human readable
+             interface. Useful for scripting commands.
+                  [boolean] [default: false]
+  --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+             of intermediate details
+                  [boolean] [default: false]
+
+Options:
+  --catalogOnly, --co, --CatalogOnly  Show only backup catalog
+                     [boolean] [default: false]
+  -l, --limit, --Limit                    Limit results [number] [default: 20]
+  --type, --backupType, --Type        Filter by backup type
+  [string] [choices: "complete", "data", "log", "incremental", "differential", "all"]
+                       [default: "all"]
+  --status, --st, --Status            Filter by backup status
+     [string] [choices: "successful", "running", "failed", "canceled", "all"]
+                       [default: "all"]
+  -d, --days, --Days                      Show backups from last N days
+                   [number] [default: 7]
+```
+
+### restore
+
+```shell
+hana-cli restore [backupFile]
+[aliases: rst, restoreBackup]
+Restore database object(s) from backup
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                  [boolean] [default: false]
+  --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+  --disableVerbose, --quiet  Disable Verbose output - removes all extra
+             output that is only helpful to human readable
+             interface. Useful for scripting commands.
+                  [boolean] [default: false]
+  --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+             of intermediate details
+                  [boolean] [default: false]
+
+Options:
+  --backupFile, --bf, --BackupFile    Path to backup file          [string]
+  --target, --tgt, --Target           Target object name (table or schema)
+                          [string]
+  -s, --schema, --Schema                  Schema                       [string]
+  --overwrite, --ow, --Overwrite      Overwrite existing data
+                     [boolean] [default: false]
+  --dropExisting, --de, --DropExisting  Drop existing table before restore
+                     [boolean] [default: false]
+  --continueOnError, --coe, --ContinueOnError  Continue on errors
+                     [boolean] [default: false]
+  -b, --batchSize, --BatchSize            Batch size for inserts
+                     [number] [default: 1000]
+  --dryRun, --dr, --DryRun            Dry run (no changes)
+                     [boolean] [default: false]
+```
+
 ### btp
 
 ```shell

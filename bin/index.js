@@ -3,7 +3,8 @@ import * as baseLite from '../utils/base-lite.js'
 
 // Command file paths for lazy loading
 const commandFiles = [
-    './activateHDI.js', './adminHDI.js', './adminHDIGroup.js', './btp.js', './btpSubs.js',
+    './activateHDI.js', './adminHDI.js', './adminHDIGroup.js', './backup.js', './backupList.js',
+    './backupStatus.js', './restore.js', './btp.js', './btpSubs.js',
     './btpInfo.js', './btpInfoUI.js', './callProcedure.js', './certificates.js', './cds.js', './openChangeLog.js',
     './changeLog.js', './changeLogUI.js', './connect.js', './containers.js', './containersUI.js',
     './certificatesUI.js',
