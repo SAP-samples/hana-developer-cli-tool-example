@@ -65,7 +65,7 @@
     "cli-cursor": "^5.0.0",
     "cli-highlight": "^2.1.11",
     "debug": "^4.3.4",
-    "dotenv": "^17.3.0",
+    "dotenv": "^17.3.1",
     "exceljs": "^4.4.0",
     "express": "^5.2.1",
     "figures": "^6.1.0",
@@ -93,7 +93,7 @@
     "yargs": "^18.0.0"
   },
   "peerDependencies": {
-    "@sap/cds-dk": ">=9.7.1"
+    "@sap/cds-dk": ">=9.7.2"
   },
   "author": "SAP",
   "license": "SEE LICENSE IN LICENSE",

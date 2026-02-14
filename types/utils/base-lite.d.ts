@@ -14,7 +14,7 @@ export function error(err: Error): Promise<void>;
 export function getBuilder(input: object, iConn?: boolean, iDebug?: boolean): object;
 export const require: NodeJS.Require;
 export const colors: import("chalk").ChalkInstance;
-export const debug: any;
+export function debug(...args: any[]): any;
 /** @typeof TextBundle - instance of sap/textbundle */
 export const bundle: TextBundle;
 import TextBundle_1 = require("@sap/textbundle");

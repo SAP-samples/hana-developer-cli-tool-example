@@ -1,0 +1,3948 @@
+
+> hana-cli@4.202602.0 test
+> cross-env NODE_ENV=test mocha --config=tests/.mocharc.json "./tests/**/*.Test.js"
+
+
+
+  activateHDI
+    Γ£ö returns help output (757ms)
+
+
+  adminHDI
+    Γ£ö returns help output (860ms)
+
+
+  adminHDIGroup
+    Γ£ö returns help output (938ms)
+
+
+  connect
+    Γ£ö returns help output (830ms)
+
+
+  copy2Secrets
+    Γ£ö returns help output (957ms)
+
+
+  containers
+    Γ£ö returns help output (855ms)
+
+
+  connectViaServiceKey
+    Γ£ö returns help output (841ms)
+
+
+  copy2DefaultEnv
+    Γ£ö returns help output (909ms)
+
+
+  certificates
+    Γ£ö returns help output (778ms)
+    Γ£ö returns normal output (656ms)
+
+
+  changeLog
+    Γ£ö returns help output (772ms)
+    Γ£ö returns normal output (736ms)
+
+
+  createJWT
+    Γ£ö returns help output (646ms)
+
+
+  createGroup
+    Γ£ö returns help output (717ms)
+
+
+  createXSAAdmin
+    Γ£ö returns help output (652ms)
+
+
+  cds
+    Γ£ö returns help output (2236ms)
+
+
+  createModule
+    Γ£ö returns help output (1272ms)
+
+
+  Excel Export Functionality
+    Excel Data Transformation - Basic
+      Γ£ö should transform simple query results to Excel format
+      Γ£ö should preserve data values in Excel format
+      Γ£ö should handle single record correctly
+      Γ£ö should handle multiple columns correctly
+    Excel Data Type Handling
+      Γ£ö should preserve numeric values
+      Γ£ö should preserve string values
+      Γ£ö should handle boolean values
+      Γ£ö should handle null and undefined values
+      Γ£ö should handle dates in ISO format
+    Excel Format Validation
+      Γ£ö should produce valid Excel format output
+      Γ£ö should validate consistent column count across all rows
+      Γ£ö should handle empty results array
+      Γ£ö should handle null results
+    Excel Column Organization
+      Γ£ö should maintain column order from first result object
+      Γ£ö should extract headers from first object only
+    Excel Row Count
+      Γ£ö should have correct number of rows including header
+    Excel Data Integrity
+      Γ£ö should not modify original results array
+      Γ£ö should handle special characters in string values
+      Γ£ö should handle very long strings
+    Real-world Data Scenarios
+      Γ£ö should handle database query results with mixed types
+      Γ£ö should handle large datasets
+      Γ£ö should handle SAP-specific data types and formats
+    Error Cases
+      Γ£ö should not throw when transforming empty array
+      Γ£ö should not throw when transforming null
+      Γ£ö should not throw when transforming undefined
+
+
+  btp
+    Γ£ö returns help output (2858ms)
+
+
+  createContainerUsers
+    Γ£ö returns help output (2047ms)
+
+
+  createContainer
+    Γ£ö returns help output (2223ms)
+
+
+  copy2Env
+    Γ£ö returns help output (2120ms)
+
+
+  dropGroup
+    Γ£ö returns help output (1256ms)
+
+
+  dataVolumes
+    Γ£ö returns help output (1326ms)
+    Γ£ö returns normal output (837ms)
+
+
+  disks
+    Γ£ö returns help output (1291ms)
+    Γ£ö returns normal output (791ms)
+
+
+  hanaCloudHDIInstances
+    Γ£ö returns help output (845ms)
+
+
+  dataTypes
+    Γ£ö returns help output (606ms)
+    Γ£ö returns normal output (1359ms)
+    Γ£ö returns output with limit (825ms)
+
+
+  dropContainer
+    Γ£ö returns help output (2841ms)
+
+
+  hanaCloudSBSSInstances
+    Γ£ö returns help output (857ms)
+
+
+  callProcedure
+    Γ£ö returns help output (2265ms)
+    Γ£ö returns normal output (2445ms)
+
+
+  hanaCloudSchemaInstances
+    Γ£ö returns help output (853ms)
+
+
+  hanaCloudSecureStoreInstances
+    Γ£ö returns help output (691ms)
+
+
+  features
+    Γ£ö returns help output (846ms)
+    Γ£ö returns normal output (799ms)
+    Γ£ö returns output with limit (672ms)
+
+
+  featureUsage
+    Γ£ö returns help output (909ms)
+    Γ£ö returns normal output (783ms)
+    Γ£ö returns output with limit (689ms)
+
+
+  btpSubs
+    Γ£ö returns help output (2343ms)
+    Γ£ö returns normal output (3113ms)
+
+
+  hanaCloudUPSInstances
+    Γ£ö returns help output (768ms)
+
+
+  iniContents
+    Γ£ö returns help output (739ms)
+
+
+  hostInformation
+    Γ£ö returns help output (722ms)
+    Γ£ö returns normal output (757ms)
+
+
+  hanaCloudInstances
+    Γ£ö returns help output (2725ms)
+
+
+  iniFiles
+    Γ£ö returns help output (793ms)
+    Γ£ö returns normal output (814ms)
+
+
+  inspectJWT
+    Γ£ö returns help output (808ms)
+
+
+  inspectLibMember
+    Γ£ö returns help output (735ms)
+
+
+  inspectIndex
+    Γ£ö returns help output (749ms)
+    Γ£ö returns normal output with quiet (746ms)
+
+
+  hanaCloudStop
+    Γ£ö returns help output (2870ms)
+
+
+  hanaCloudStart
+    Γ£ö returns help output (2996ms)
+
+
+  hdbsql
+    Γ£ö returns help output (2916ms)
+
+
+  inspectLibrary
+    Γ£ö returns help output (916ms)
+
+
+  indexes
+    Γ£ö returns help output (772ms)
+    Γ£ö returns normal output (737ms)
+    Γ£ö returns output with limit (768ms)
+    Γ£ö returns output with specific schema (798ms)
+
+
+  inspectTrigger
+    Γ£ö returns help output (920ms)
+
+
+  issue
+    Γ£ö returns help output (1008ms)
+
+
+  btpInfo
+    Γ£ö returns help output (2317ms)
+    Γ£ö returns normal output (3264ms)
+    Γ£ö returns output with json option (3437ms)
+
+
+  inspectUser
+    Γ£ö returns help output (839ms)
+    Γ£ö returns normal output for SYSTEM user (856ms)
+
+
+  massUsers
+    Γ£ö returns help output (802ms)
+
+
+  massRename
+    Γ£ö returns help output (960ms)
+
+
+  Cross-Platform Support Tests @all
+    Platform Detection
+      Γ£ö should correctly identify the current platform
+      Γ£ö should have consistent path separator usage
+      Γ£ö should normalize paths correctly across platforms
+    Path Handling @all
+      Γ£ö should handle absolute paths correctly
+      Γ£ö should handle relative paths correctly
+      Γ£ö should parse path components correctly
+      Γ£ö should handle paths with spaces correctly
+    Environment Variables @all
+      Γ£ö should access HOME or USERPROFILE environment variable
+      Γ£ö should handle platform-specific config paths
+    File Operations @all
+      Γ£ö should read files with correct line endings
+      Γ£ö should handle file paths with correct separators
+      Γ£ö should work with __dirname equivalent in ES modules
+    Platform-Specific Functionality @all
+      Γ£ö should handle platform-specific command extensions
+      Γ£ö should use correct line ending for the platform
+      Γ£ö should get temp directory correctly on all platforms
+    Windows-Specific Tests @windows
+      Γ£ö should handle Windows drive letters
+      Γ£ö should handle Windows UNC paths
+    Unix-Specific Tests @unix
+      - should handle Unix absolute paths starting with /
+      - should handle symlinks (Unix/Mac)
+    Path Resolution @all
+      Γ£ö should resolve relative paths from different working directories
+      Γ£ö should handle parent directory references correctly
+      Γ£ö should create platform-appropriate file URLs
+    Module Resolution @all
+      Γ£ö should resolve ES module imports correctly
+      Γ£ö should handle dynamic imports consistently
+
+  Mock Filesystem Tests @all
+    Γ£ö should mock filesystem for cross-platform testing
+    Γ£ö should simulate Windows paths on any platform
+    Γ£ö should simulate Unix paths on any platform
+
+
+  Limit Parameter Validation
+    validateLimit function
+      Γ£ö should accept valid positive integers
+      Γ£ö should accept numeric strings and convert them to numbers
+      Γ£ö should throw error for non-numeric strings
+      Γ£ö should throw error for negative numbers
+      Γ£ö should throw error for zero
+      Γ£ö should throw error for decimal numbers
+      Γ£ö should throw error for NaN
+      Γ£ö should throw error for undefined
+      Γ£ö should throw error for null
+      Γ£ö should use custom parameter name in error messages
+      Γ£ö should throw error for objects and arrays
+      Γ£ö should throw error for boolean values
+      Γ£ö should throw error for special strings like Infinity
+
+
+  ports
+    Γ£ö returns help output (903ms)
+    Γ£ö returns normal output (1186ms)
+
+
+  libraries
+    Γ£ö returns help output (910ms)
+    Γ£ö returns normal output (683ms)
+    Γ£ö returns output with limit (1491ms)
+    Γ£ö returns output with specific schema (1050ms)
+
+
+  massConvert
+    Γ£ö returns help output (3797ms)
+
+
+  readMe
+    Γ£ö returns help output (847ms)
+
+
+  objects
+    Γ£ö returns help output (1510ms)
+    Γ£ö returns normal output (1090ms)
+    Γ£ö returns output with limit (852ms)
+
+
+  reclaim
+    Γ£ö returns help output (875ms)
+
+
+  procedures
+    Γ£ö returns help output (903ms)
+    Γ£ö returns normal output (1076ms)
+    Γ£ö returns output with limit (932ms)
+    Γ£ö returns output with specific schema (852ms)
+
+
+  roles
+    Γ£ö returns help output (1024ms)
+    Γ£ö returns normal output (885ms)
+    Γ£ö returns output with limit (873ms)
+
+
+  inspectFunction
+    Γ£ö returns help output (3575ms)
+    Γ£ö returns normal output (4366ms)
+    Γ£ö returns output in SQL format (2908ms)
+
+
+  Docs Route Integration Tests
+    Route Registration
+      Γ£ö should register docs routes without errors
+      Γ£ö should export a route function
+    GET /docs/readme
+      Γ£ö should handle readme request successfully
+      Γ£ö should set correct content type for readme
+      Γ£ö should convert markdown to HTML
+      Γ£ö should call next on error
+    GET /docs/changelog
+      Γ£ö should handle changelog request successfully
+      Γ£ö should set correct content type for changelog
+      Γ£ö should convert changelog markdown to HTML
+      Γ£ö should handle missing changelog file gracefully
+    Error Handling
+      Γ£ö should propagate errors to next middleware
+    Response Format
+      Γ£ö should return text/html content type for both routes
+      Γ£ö should handle concurrent requests
+
+
+  DFA Route Integration Tests
+    Route Registration
+      Γ£ö should register DFA routes without errors
+      Γ£ö should export a route function
+      Γ£ö should accept app parameter
+    GET /sap/dfa/help/webassistant/catalogue
+      Γ£ö should configure catalogue route
+      Γ£ö should handle async route handler
+      Γ£ö should support JSON response format
+      Γ£ö should handle appUrl parameter parsing
+      Γ£ö should return empty OK response for errors
+    GET /sap/dfa/help/webassistant/context
+      Γ£ö should configure context route
+      Γ£ö should handle id parameter requirement
+      Γ£ö should support JSON response format
+      Γ£ö should support special handling for Shell-home!whatsnew
+      Γ£ö should integrate with marked for markdown conversion
+      Γ£ö should load context data from JSON files
+      Γ£ö should load tile content from HTML files
+      Γ£ö should handle missing context files gracefully
+      Γ£ö should pass errors to next middleware
+    Changelog Integration
+      Γ£ö should load CHANGELOG.json for whatsnew tiles
+      Γ£ö should format changelog dates
+      Γ£ö should convert markdown to HTML for changelog items
+      Γ£ö should build tile structure for changelog entries
+    Error Handling
+      Γ£ö should handle missing appUrl parameter
+      Γ£ö should handle missing id parameter
+      Γ£ö should handle missing catalog files
+      Γ£ö should handle missing context files
+      Γ£ö should handle missing tile HTML files
+      Γ£ö should return 200 status even on catalogue errors
+    Integration
+      Γ£ö should work with fresh express instance
+      Γ£ö should not throw errors during setup
+      Γ£ö should configure multiple DFA routes
+      Γ£ö should maintain route configuration
+    Route Structure
+      Γ£ö should validate route function signature
+      Γ£ö should configure routes without side effects
+      Γ£ö should support async middleware handlers
+    URL Query Parsing
+      Γ£ö should parse URL query parameters
+      Γ£ö should decode URL encoded parameters
+      Γ£ö should handle host header in URL construction
+
+
+  HANA List Routes Integration Tests
+    Route Function
+      Γ£ö should export a route function
+      Γ£ö should accept an express app parameter
+      Γ£ö should configure routes on the app
+    listHandler Function
+      Γ£ö should export a listHandler function
+      Γ£ö should be an async function
+      Γ£ö should accept res, lib, and func parameters
+    Module Exports
+      Γ£ö should export route and listHandler as named exports
+    GET /hana
+      Γ£ö should register /hana route without errors
+      Γ£ö should configure HTTP endpoint
+    List Routes
+      Γ£ö should register tables routes without errors
+      Γ£ö should register views routes without errors
+      Γ£ö should register schemas routes without errors
+      Γ£ö should register containers routes without errors
+      Γ£ö should register dataTypes routes without errors
+      Γ£ö should register features routes without errors
+      Γ£ö should register functions routes without errors
+    Route Variants
+      Γ£ö should support multiple route configurations
+    Integration
+      Γ£ö should work with fresh express instance
+      Γ£ö should not throw errors during setup
+      Γ£ö should handle multiple route() calls
+    Route Configuration
+      Γ£ö should configure routes without modifying app prototype
+      Γ£ö should be idempotent for basic setup
+      Γ£ö should complete route registration
+    Error Handling
+      Γ£ö should setup error handling structure
+      Γ£ö should not throw during route registration
+    Handler Execution
+      Γ£ö should configure async handlers
+      Γ£ö should export listHandler for use by routes
+    Route Paths
+      Γ£ö should follow correct path structure
+
+
+  Index Route Integration Tests
+    Route Function
+      Γ£ö should export a route function
+      Γ£ö should accept an express app parameter
+      Γ£ö should configure routes on the app
+    Module Exports
+      Γ£ö should export route function as named export
+    GET /
+      Γ£ö should register GET route without errors
+      Γ£ö should configure JSON response handling
+      Γ£ö should setup status code handling
+      Γ£ö should configure data response
+      Γ£ö should setup error handling
+    PUT /
+      Γ£ö should register PUT route without errors
+      Γ£ö should handle PUT requests
+      Γ£ö should return success status
+      Γ£ö should return JSON response
+      Γ£ö should process request body
+      Γ£ö should handle PUT errors
+    Integration
+      Γ£ö should work with fresh express instance
+      Γ£ö should not throw errors during setup
+      Γ£ö should handle multiple operations
+    Error Handling
+      Γ£ö should have error propagation mechanism
+      Γ£ö should not throw synchronous errors
+
+
+  inspectProcedure
+    Γ£ö returns help output (3159ms)
+    Γ£ö returns normal output (3420ms)
+    Γ£ö returns output in SQL format (3182ms)
+
+
+  Index Route - HTTP Integration Tests
+    GET /
+      Γ£ö should return 200 status code (102ms)
+      Γ£ö should return JSON content type
+      Γ£ö should return prompts data
+      Γ£ö should handle errors gracefully
+    PUT /
+      Γ£ö should return 200 status code with valid body (109ms)
+      Γ£ö should return JSON content type
+      Γ£ö should return success status
+      Γ£ö should set isGui flag to true in prompts
+      Γ£ö should accept empty body
+      Γ£ö should handle complex configuration data
+    HTTP Method Tests
+      Γ£ö should return 404 for POST /
+      Γ£ö should return 404 for DELETE /
+      Γ£ö should return 404 for PATCH /
+    Content-Type Handling
+      Γ£ö should handle application/json content type
+      Γ£ö should handle missing content type
+    Error Handling
+      Γ£ö should handle malformed JSON
+      Γ£ö should not crash on undefined route
+
+
+  Docs Route - HTTP Integration Tests
+    GET /docs/readme
+      Γ£ö should return 200 status code (229ms)
+      Γ£ö should return HTML content type (107ms)
+      Γ£ö should return HTML content (60ms)
+      Γ£ö should contain converted markdown (62ms)
+      Γ£ö should contain README content indicators (69ms)
+    GET /docs/changelog
+      Γ£ö should return 200 status code (59ms)
+      Γ£ö should return HTML content type (89ms)
+      Γ£ö should return HTML content (106ms)
+      Γ£ö should contain converted markdown (66ms)
+      Γ£ö should contain changelog content indicators (57ms)
+    HTTP Method Tests
+      Γ£ö should return 404 for POST /docs/readme
+      Γ£ö should return 404 for PUT /docs/readme
+      Γ£ö should return 404 for DELETE /docs/changelog
+    Route Not Found
+      Γ£ö should return 404 for /docs/invalid
+      Γ£ö should return 404 for /docs
+      Γ£ö should return 404 for /docs/
+    Response Headers
+      Γ£ö should include standard response headers for readme (70ms)
+      Γ£ö should include standard response headers for changelog (85ms)
+    Content Length
+      Γ£ö should return substantial content for readme (60ms)
+      Γ£ö should return substantial content for changelog (57ms)
+    Error Handling
+      Γ£ö should handle errors gracefully for readme (82ms)
+      Γ£ö should handle errors gracefully for changelog (60ms)
+    Multiple Requests
+      Γ£ö should handle multiple sequential requests to readme (251ms)
+      Γ£ö should handle alternating requests (156ms)
+
+
+  functions
+    Γ£ö returns help output (1592ms)
+    Γ£ö returns normal output (4434ms)
+    Γ£ö returns output with limit (5364ms)
+    Γ£ö returns output with specific schema (5247ms)
+
+[TEST MODE] Skipping massConvert execution
+Swagger UI available at /api-docs
+Error: Undefined Action: unknownAction
+Error: Undefined Action: undefined
+Swagger UI available at /api-docs
+
+  Static Route - HTTP Integration Tests
+    GET /appconfig/fioriSandboxConfig.json
+      Γ£ö should return 200 status code (499ms)
+      Γ£ö should return JSON content type (164ms)
+      Γ£ö should return valid JSON object (123ms)
+      Γ£ö should contain bootstrapPlugins property (155ms)
+      Γ£ö should contain BootstrapXrayPlugin configuration (184ms)
+      Γ£ö should have version in BootstrapXrayPlugin config (169ms)
+      Γ£ö should return consistent data on multiple requests (349ms)
+    Static File Routes
+      /ui static files
+        Γ£ö should serve files from /ui path (66ms)
+      /sap/dfa/ static files
+        Γ£ö should serve files from /sap/dfa/ path
+      /resources/sap/dfa/ static files
+        Γ£ö should serve files from /resources/sap/dfa/ path
+      /i18n static files
+        Γ£ö should serve i18n files from /i18n path (41ms)
+        Γ£ö should serve German messages if exists (57ms)
+      /favicon.ico
+        Γ£ö should serve favicon
+    HTTP Method Tests
+      Γ£ö should return 404 for POST /appconfig/fioriSandboxConfig.json
+      Γ£ö should return 404 for PUT /appconfig/fioriSandboxConfig.json
+      Γ£ö should return 404 for DELETE /appconfig/fioriSandboxConfig.json (38ms)
+    Route Not Found
+      Γ£ö should return 404 for /appconfig/invalid.json
+      Γ£ö should return 404 for /appconfig
+    Error Handling
+      Γ£ö should handle errors gracefully (188ms)
+    Response Headers
+      Γ£ö should include standard response headers (170ms)
+      Γ£ö should not expose x-powered-by header (110ms)
+    Content Validation
+      Γ£ö should return valid JSON structure (116ms)
+      Γ£ö should have expected properties (141ms)
+    Cache and Performance
+      Γ£ö should handle multiple rapid requests (601ms)
+      Γ£ö should return consistent content across requests (382ms)
+
+General Error: Unexpected token 'o', "not valid json" is not valid JSON
+Error: Undefined Action: undefined
+Swagger UI available at /api-docs
+
+  HANA Inspect Route Integration Tests
+    Route Registration
+      Γ£ö should register HANA inspect routes without errors
+      Γ£ö should export a route function
+      Γ£ö should export handler functions
+    Handler Functions
+      Γ£ö should have querySimpleHandler as async function
+      Γ£ö should have inspectTableHandler as async function
+      Γ£ö should have inspectViewHandler as async function
+      Γ£ö should have correct parameter counts
+    Integration
+      Γ£ö should work with fresh express instance
+      Γ£ö should handle multiple calls to route()
+    Handler Exports
+      Γ£ö should export all required handlers
+      Γ£ö should have consistent handler signatures
+    Route Configuration
+      Γ£ö should not pollute global scope
+      Γ£ö should configure routes without throwing
+    Error Handling
+      Γ£ö should setup routes with error handling
+
+Error: Undefined Action: triggerBroadcast
+Swagger UI available at /api-docs
+Error: Undefined Action: test
+Swagger UI available at /api-docs
+Swagger UI available at /api-docs
+
+  Static Route Integration Tests
+    Route Registration
+      Γ£ö should register static routes without errors
+      Γ£ö should export a route function
+      Γ£ö should accept app parameter
+    Static File Paths
+      Γ£ö should configure /ui static path
+      Γ£ö should configure /sap/dfa/ static path
+      Γ£ö should configure /resources/sap/dfa/ static path
+      Γ£ö should configure /i18n static path
+      Γ£ö should configure /favicon.ico static path
+      Γ£ö should configure multiple static paths
+    GET /appconfig/fioriSandboxConfig.json
+      Γ£ö should configure fioriSandboxConfig.json route
+      Γ£ö should handle async route handler
+      Γ£ö should support JSON response format
+      Γ£ö should integrate with version module
+      Γ£ö should load configuration from JSON file
+      Γ£ö should inject hana-cli version into config
+      Γ£ö should handle errors with next middleware
+    Error Handling
+      Γ£ö should handle missing config file gracefully
+      Γ£ö should propagate errors to next middleware
+      Γ£ö should handle invalid JSON configuration
+      Γ£ö should handle missing version info gracefully
+    Integration
+      Γ£ö should work with fresh express instance
+      Γ£ö should not throw errors during setup
+      Γ£ö should configure all routes together
+      Γ£ö should maintain route configuration
+    Route Structure
+      Γ£ö should validate route function signature
+      Γ£ö should configure routes without side effects
+      Γ£ö should support async middleware handlers
+    Debug Integration
+      Γ£ö should call base.debug during route setup
+      Γ£ö should not fail if debug logging fails
+    Path Resolution
+      Γ£ö should resolve paths relative to module location
+      Γ£ö should use correct path separators
+      Γ£ö should resolve ES module directory correctly
+    Static Middleware Configuration
+      Γ£ö should use express.static for file serving
+      Γ£ö should configure static paths before dynamic routes
+      Γ£ö should support multiple static directories
+
+Swagger UI available at /api-docs
+Swagger UI available at /api-docs
+
+  @all Swagger Route Integration Tests
+    Route Registration
+      Γ£ö should register swagger routes without errors (345ms)
+      Γ£ö should export a route function
+    Swagger Configuration
+      Γ£ö should configure swagger UI at /api-docs (234ms)
+      Γ£ö should provide OpenAPI JSON specification (236ms)
+    Swagger Spec Generation
+      Γ£ö should generate valid OpenAPI 3.0 specification (254ms)
+      Γ£ö should include all major endpoint tags (176ms)
+      Γ£ö should document key API endpoints (254ms)
+    Error Handling
+      Γ£ö should handle swagger setup gracefully on errors (153ms)
+    Swagger UI Options
+      Γ£ö should configure swagger UI with custom options (221ms)
+
+General Error: Unexpected token 'i', "invalid{json}" is not valid JSON
+Error: Undefined Action: causeError
+[TEST MODE] Skipping massConvert execution
+[TEST MODE] Skipping massConvert execution
+Error: Undefined Action: 12345
+Error: Undefined Action: null
+Error: Undefined Action: undefined
+[TEST MODE] Skipping massConvert execution
+
+  Excel Route Integration Tests
+    Route Registration
+      Γ£ö should register excel route without errors
+      Γ£ö should export a route function
+      Γ£ö should accept app parameter
+    GET /excel Route
+      Γ£ö should configure GET /excel route
+      Γ£ö should handle async route handler
+      Γ£ö should be configured for error handling
+    Excel Export Functionality
+      Γ£ö should indicate Excel export is currently disabled
+      Γ£ö should handle missing results gracefully
+      Γ£ö should support error propagation to next middleware
+    Integration
+      Γ£ö should work with fresh express instance
+      Γ£ö should not throw errors during setup
+      Γ£ö should maintain route configuration
+    Error Handling
+      Γ£ö should handle errors with next middleware
+      Γ£ö should support 503 status for disabled functionality
+    Route Structure
+      Γ£ö should validate route function signature
+      Γ£ö should configure route without side effects
+
+Error: Undefined Action: test
+Error: Undefined Action: test
+Error: Undefined Action: test
+Error: Undefined Action: test
+Error: Undefined Action: test
+Error: Undefined Action: test
+Error: Undefined Action: test
+Error: Undefined Action: test
+Error: Undefined Action: test
+Error: Undefined Action: test
+
+  WebSocket End-to-End Message Handling Tests
+    Connection Establishment
+      Γ£ö should successfully establish WebSocket connection (176ms)
+      Γ£ö should receive initial connection message
+      Γ£ö should handle multiple simultaneous connections (73ms)
+    Message Sending and Receiving
+      Γ£ö should send and process massConvert action (523ms)
+      Γ£ö should handle unknown action with error response
+      Γ£ö should handle empty message gracefully (227ms)
+      Γ£ö should handle malformed JSON
+      Γ£ö should handle message with missing action
+    Broadcast Functionality
+      Γ£ö should broadcast messages to all connected clients (157ms)
+      Γ£ö should handle broadcast with varying client states (391ms)
+    Connection Lifecycle
+      Γ£ö should handle client disconnect gracefully
+      Γ£ö should handle rapid connect-disconnect cycles (430ms)
+      Γ£ö should clean up closed connections (163ms)
+    Error Handling
+      Γ£ö should handle client errors without crashing server (160ms)
+      Γ£ö should continue serving after message processing errors (242ms)
+    Message Format Validation
+      Γ£ö should handle messages with extra fields (211ms)
+      Γ£ö should handle numeric action values
+      Γ£ö should handle null action
+      Γ£ö should handle array instead of object (209ms)
+    HTTP GET Endpoint
+      Γ£ö should serve HTML page on GET /websockets (49ms)
+    Performance and Stress Tests
+      Γ£ö should handle large message payload (560ms)
+      Γ£ö should handle rapid message sending (529ms)
+
+Swagger UI available at /api-docs
+
+  status
+    Γ£ö returns help output (1883ms)
+    Γ£ö returns normal output (1464ms)
+    Γ£ö returns output with privileges (958ms)
+
+
+  inspectView
+    Γ£ö returns help output (2901ms)
+    Γ£ö returns normal output with quiet (3436ms)
+    Γ£ö returns output in SQL format (3205ms)
+    Γ£ö returns output in CDS format (4293ms)
+    Γ£ö returns output in JSON format (5018ms)
+
+
+  WebSocket Route Integration Tests
+    Route Registration
+      Γ£ö should register WebSocket routes without errors
+      Γ£ö should export a route function
+      Γ£ö should accept app and server parameters
+    WebSocket Server Setup
+      Γ£ö should initialize WebSocket server
+      Γ£ö should configure WebSocket path
+      Γ£ö should handle WebSocket server creation
+    Error Handling
+      Γ£ö should handle invalid server parameter gracefully
+    Integration
+      Γ£ö should work with fresh express instance
+      Γ£ö should not throw errors during setup
+      Γ£ö should configure both HTTP and WebSocket
+    Server Configuration
+      Γ£ö should accept http server instance
+      Γ£ö should configure upgrade handler
+
+
+  sequences
+    Γ£ö returns help output (1281ms)
+    Γ£ö returns normal output (1675ms)
+    Γ£ö returns output with limit (1364ms)
+    Γ£ö returns output with specific schema (908ms)
+
+
+  synonyms
+    Γ£ö returns help output (1763ms)
+    Γ£ö returns normal output (1352ms)
+    Γ£ö returns output with limit (958ms)
+    Γ£ö returns output with specific schema (749ms)
+
+
+  traceContents
+    Γ£ö returns help output (754ms)
+
+
+  schemas
+    Γ£ö returns help output (1407ms)
+    Γ£ö returns normal output (1662ms)
+    Γ£ö returns output with limit (1413ms)
+    Γ£ö returns output for all schemas (929ms)
+    Γ£ö returns output with schema filter (758ms)
+
+
+  traces
+    Γ£ö returns help output (771ms)
+    Γ£ö returns normal output (711ms)
+
+2026-02-14T13:58:58.228Z hana-cli Yargs values:
+2026-02-14T13:58:58.232Z hana-cli { debug: true, schema: 'TEST_SCHEMA', limit: 10 }
+2026-02-14T13:58:58.232Z hana-cli Prompt values:
+2026-02-14T13:58:58.232Z hana-cli { schema: 'TEST_SCHEMA', limit: 10, debug: true }
+2026-02-14T13:58:58.233Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.234Z mocha:runnable timeout 5000
+2026-02-14T13:58:58.234Z hana-cli Yargs values:
+2026-02-14T13:58:58.234Z hana-cli { disableVerbose: true, schema: 'TEST' }
+2026-02-14T13:58:58.234Z hana-cli Prompt values:
+2026-02-14T13:58:58.235Z hana-cli { schema: 'TEST', disableVerbose: true }
+2026-02-14T13:58:58.235Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.236Z mocha:runnable timeout 5000
+2026-02-14T13:58:58.236Z hana-cli Yargs values:
+2026-02-14T13:58:58.237Z hana-cli { admin: true, schema: 'TEST' }
+2026-02-14T13:58:58.237Z hana-cli Prompt values:
+2026-02-14T13:58:58.237Z hana-cli { schema: 'TEST', admin: true }
+2026-02-14T13:58:58.237Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.238Z mocha:runnable timeout 5000
+2026-02-14T13:58:58.238Z hana-cli Yargs values:
+2026-02-14T13:58:58.239Z hana-cli { conn: 'default.env', schema: 'TEST' }
+2026-02-14T13:58:58.239Z hana-cli Prompt values:
+2026-02-14T13:58:58.239Z hana-cli { schema: 'TEST', conn: 'default.env' }
+2026-02-14T13:58:58.240Z mocha:runner runSuite(): running Base Utility Functions unknown options warning
+2026-02-14T13:58:58.240Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.240Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.241Z mocha:runnable timeout 5000
+2026-02-14T13:58:58.243Z hana-cli Yargs values:
+2026-02-14T13:58:58.243Z hana-cli {
+  schema: 'TEST_SCHEMA',
+  unknownOption: true,
+  anotherBadOption: 'value'
+}
+2026-02-14T13:58:58.243Z hana-cli Prompt values:
+2026-02-14T13:58:58.243Z hana-cli { schema: 'TEST_SCHEMA' }
+2026-02-14T13:58:58.245Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.245Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.246Z mocha:runnable timeout 5000
+2026-02-14T13:58:58.246Z hana-cli Yargs values:
+2026-02-14T13:58:58.246Z hana-cli { schema: 'TEST_SCHEMA', limit: 100, debug: true, admin: false }
+2026-02-14T13:58:58.246Z hana-cli Prompt values:
+2026-02-14T13:58:58.246Z hana-cli { schema: 'TEST_SCHEMA', limit: 100, admin: false, debug: true }
+2026-02-14T13:58:58.247Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.247Z mocha:runnable timeout 5000
+2026-02-14T13:58:58.247Z hana-cli Yargs values:
+2026-02-14T13:58:58.248Z hana-cli { schema: 'TEST_SCHEMA', s: 'TEST_SCHEMA', limit: 100, l: 100 }
+2026-02-14T13:58:58.248Z hana-cli Prompt values:
+2026-02-14T13:58:58.248Z hana-cli { schema: 'TEST_SCHEMA', limit: 100 }
+2026-02-14T13:58:58.248Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.248Z mocha:runnable timeout 5000
+2026-02-14T13:58:58.249Z hana-cli Yargs values:
+2026-02-14T13:58:58.249Z hana-cli { schema: 'TEST_SCHEMA', 'unknown-option': true, unknownOption: true }
+2026-02-14T13:58:58.249Z hana-cli Prompt values:
+2026-02-14T13:58:58.249Z hana-cli { schema: 'TEST_SCHEMA' }
+2026-02-14T13:58:58.249Z mocha:runner runSuite(): running Base Utility Functions color utilities
+2026-02-14T13:58:58.249Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.250Z mocha:runner runSuite(): running Base Utility Functions bundle and localization
+2026-02-14T13:58:58.250Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.251Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.253Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.254Z mocha:runner run(): root suite completed; emitting end
+2026-02-14T13:58:58.254Z mocha:reporters:buffered received EVENT_RUN_END
+2026-02-14T13:58:58.254Z mocha:runner run(): emitted end
+2026-02-14T13:58:58.265Z mocha:serializer serialized: SerializableWorkerResult {
+  failureCount: 0,
+  events: [
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    ... 55 more items
+  ],
+  __type: 'SerializableWorkerResult'
+}
+2026-02-14T13:58:58.306Z mocha:parallel:worker:32644 run(): completed run with 0 test failures; returning to main process
+2026-02-14T13:58:58.313Z mocha:parallel:worker:32644 run(): running test file D:\projects\hana-developer-cli-tool-example\tests\utils\btp.Test.js
+2026-02-14T13:58:58.314Z mocha:suite slow 75
+2026-02-14T13:58:58.314Z mocha:suite timeout 10000
+2026-02-14T13:58:58.315Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.315Z mocha:runnable slow 75
+2026-02-14T13:58:58.315Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.315Z mocha:runnable slow 75
+2026-02-14T13:58:58.315Z mocha:mocha configured 0 global setup functions
+2026-02-14T13:58:58.315Z mocha:mocha configured 0 global teardown functions
+2026-02-14T13:58:58.315Z mocha:mocha set lazy load to true
+
+  Base Utility Functions
+    isDebug
+      Γ£ö should return true when debug flag is set to true
+      Γ£ö should return false when debug flag is set to false
+      Γ£ö should return false when debug flag is not present
+      Γ£ö should return false when prompts is null
+      Γ£ö should return false when prompts is undefined
+      Γ£ö should handle truthy values for debug flag
+    isGui
+      Γ£ö should return true when isGui flag is set to true
+      Γ£ö should return false when isGui flag is set to false
+      Γ£ö should return false when isGui flag is not present
+    getBuilder
+      Γ£ö should include debug options when iDebug is true
+      Γ£ö should not include debug options when iDebug is false
+      Γ£ö should include connection options when iConn is true
+      Γ£ö should not include connection options when iConn is false
+      Γ£ö should preserve input options
+      Γ£ö should have correct group assignments
+      Γ£ö should have correct aliases
+    getPromptSchema
+      Γ£ö should include debug properties when iDebug is true
+      Γ£ö should not include debug properties when iDebug is false
+      Γ£ö should include connection properties when iConn is true
+      Γ£ö should not include connection properties when iConn is false
+      Γ£ö should preserve input schema properties
+      Γ£ö should set ask to askFalse for debug and connection properties
+    askFalse
+      Γ£ö should always return false
+    debug function
+      Γ£ö should be callable without throwing
+      Γ£ö should accept string messages
+      Γ£ö should accept object messages
+    promptHandler critical path
+      Γ£ö should copy debug flag from argv to result object
+      Γ£ö should copy disableVerbose flag from argv
+      Γ£ö should copy admin flag from argv
+      Γ£ö should copy conn value from argv
+    unknown options warning
+      Γ£ö should warn about unknown options
+      Γ£ö should not warn about valid options
+      Γ£ö should detect aliases as valid options
+      Γ£ö should not duplicate warnings for kebab-case and camelCase
+    color utilities
+      Γ£ö should have colors object available
+    bundle and localization
+      Γ£ö should have bundle object available
+      Γ£ö should be able to get text from bundle
+
+2026-02-14T13:58:58.364Z mocha:esm-utils requireModule caught err: 'require() cannot be used on an ESM graph with top-level await. Use import() instead. To see where the top-level await comes from, use --experimental-print-required-tla.\n' +
+  '  From D:\\projects\\hana-developer-cli-tool-example\\node_modules\\mocha\\lib\\nodejs\\esm-utils.js \n' +
+  '  Requiring D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js '
+2026-02-14T13:58:58.470Z mocha:suite timeout 10000
+2026-02-14T13:58:58.470Z mocha:suite retries -1
+2026-02-14T13:58:58.471Z mocha:suite slow 75
+2026-02-14T13:58:58.471Z mocha:suite bail false
+2026-02-14T13:58:58.472Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.472Z mocha:runnable slow 75
+2026-02-14T13:58:58.472Z mocha:suite timeout 10000
+2026-02-14T13:58:58.472Z mocha:suite retries -1
+2026-02-14T13:58:58.472Z mocha:suite slow 75
+2026-02-14T13:58:58.472Z mocha:suite bail false
+2026-02-14T13:58:58.472Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.473Z mocha:runnable slow 75
+2026-02-14T13:58:58.473Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.473Z mocha:runnable slow 75
+2026-02-14T13:58:58.473Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.473Z mocha:runnable slow 75
+2026-02-14T13:58:58.473Z mocha:suite timeout 10000
+2026-02-14T13:58:58.473Z mocha:suite retries -1
+2026-02-14T13:58:58.473Z mocha:suite slow 75
+2026-02-14T13:58:58.473Z mocha:suite bail false
+2026-02-14T13:58:58.473Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.474Z mocha:runnable slow 75
+2026-02-14T13:58:58.474Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.474Z mocha:runnable slow 75
+2026-02-14T13:58:58.474Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.474Z mocha:runnable slow 75
+2026-02-14T13:58:58.474Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.474Z mocha:runnable slow 75
+2026-02-14T13:58:58.474Z mocha:suite timeout 10000
+2026-02-14T13:58:58.474Z mocha:suite retries -1
+2026-02-14T13:58:58.474Z mocha:suite slow 75
+2026-02-14T13:58:58.474Z mocha:suite bail false
+2026-02-14T13:58:58.475Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.475Z mocha:runnable slow 75
+2026-02-14T13:58:58.475Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.475Z mocha:runnable slow 75
+2026-02-14T13:58:58.475Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.475Z mocha:runnable slow 75
+2026-02-14T13:58:58.475Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.475Z mocha:runnable slow 75
+2026-02-14T13:58:58.475Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.475Z mocha:runnable slow 75
+2026-02-14T13:58:58.475Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.475Z mocha:runnable slow 75
+2026-02-14T13:58:58.476Z mocha:suite timeout 10000
+2026-02-14T13:58:58.476Z mocha:suite retries -1
+2026-02-14T13:58:58.476Z mocha:suite slow 75
+2026-02-14T13:58:58.476Z mocha:suite bail false
+2026-02-14T13:58:58.476Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.476Z mocha:runnable slow 75
+2026-02-14T13:58:58.476Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.477Z mocha:runnable slow 75
+2026-02-14T13:58:58.477Z mocha:suite timeout 10000
+2026-02-14T13:58:58.477Z mocha:suite retries -1
+2026-02-14T13:58:58.477Z mocha:suite slow 75
+2026-02-14T13:58:58.477Z mocha:suite bail false
+2026-02-14T13:58:58.477Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.477Z mocha:runnable slow 75
+2026-02-14T13:58:58.477Z mocha:suite timeout 10000
+2026-02-14T13:58:58.477Z mocha:suite retries -1
+2026-02-14T13:58:58.477Z mocha:suite slow 75
+2026-02-14T13:58:58.477Z mocha:suite bail false
+2026-02-14T13:58:58.478Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.478Z mocha:runnable slow 75
+2026-02-14T13:58:58.478Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.478Z mocha:runnable slow 75
+2026-02-14T13:58:58.478Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.478Z mocha:runnable slow 75
+2026-02-14T13:58:58.478Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.478Z mocha:runnable slow 75
+2026-02-14T13:58:58.478Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.478Z mocha:runnable slow 75
+2026-02-14T13:58:58.478Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.478Z mocha:runnable slow 75
+2026-02-14T13:58:58.479Z mocha:suite timeout 10000
+2026-02-14T13:58:58.479Z mocha:suite retries -1
+2026-02-14T13:58:58.479Z mocha:suite slow 75
+2026-02-14T13:58:58.479Z mocha:suite bail false
+2026-02-14T13:58:58.479Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.479Z mocha:runnable slow 75
+2026-02-14T13:58:58.479Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.479Z mocha:runnable slow 75
+2026-02-14T13:58:58.479Z mocha:suite timeout 10000
+2026-02-14T13:58:58.480Z mocha:suite retries -1
+2026-02-14T13:58:58.480Z mocha:suite slow 75
+2026-02-14T13:58:58.480Z mocha:suite bail false
+2026-02-14T13:58:58.480Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.480Z mocha:runnable slow 75
+2026-02-14T13:58:58.480Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.480Z mocha:runnable slow 75
+2026-02-14T13:58:58.480Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.480Z mocha:runnable slow 75
+2026-02-14T13:58:58.480Z mocha:runnable timeout 10000
+2026-02-14T13:58:58.480Z mocha:runnable slow 75
+2026-02-14T13:58:58.481Z mocha:runner grep(): setting to /.*/
+2026-02-14T13:58:58.482Z mocha:runner globals(): setting to [
+  'global',             'clearImmediate',
+  'setImmediate',       'clearInterval',
+  'clearTimeout',       'setInterval',
+  'setTimeout',         'queueMicrotask',
+  'structuredClone',    'atob',
+  'btoa',               'performance',
+  'fetch',              'crypto',
+  'navigator',          'before',
+  'after',              'beforeEach',
+  'afterEach',          'run',
+  'context',            'describe',
+  'xcontext',           'xdescribe',
+  'specify',            'it',
+  'xspecify',           'xit',
+  'cds',                '__cds_loaded_from',
+  '__NEXTGEN_EVENTS__', 'mockKeys',
+  'mockKeysSource',     'esmockCache',
+  'esmockCacheGet',     'esmockTreeIdGet',
+  'XMLHttpRequest',     'Date'
+]
+2026-02-14T13:58:58.482Z mocha:runner globals(): setting to []
+2026-02-14T13:58:58.483Z mocha:runner run(): got options: {
+  diff: true,
+  extension: [ 'js', 'cjs', 'mjs' ],
+  package: false,
+  reporter: 'D:\\projects\\hana-developer-cli-tool-example\\node_modules\\mocha\\lib\\nodejs\\reporters\\parallel-buffered.js',
+  slow: 75,
+  timeout: '10s',
+  ui: 'bdd',
+  'watch-ignore': [ 'node_modules', '.git' ],
+  _: [],
+  config: false,
+  exit: true,
+  require: [ './tests/helper.js' ],
+  watchIgnore: [ 'node_modules', '.git' ],
+  'pass-on-failing-test-suite': false,
+  passOnFailingTestSuite: false,
+  spec: [ './tests/**/*.Test.js' ],
+  '$0': 'mocha',
+  rootHooks: {
+    beforeAll: [ [Function: beforeAll] ],
+    beforeEach: [],
+    afterAll: [ [Function: afterAll] ],
+    afterEach: []
+  },
+  grep: undefined,
+  reporterOption: undefined,
+  reporterOptions: undefined,
+  global: [],
+  enableGlobalSetup: true,
+  enableGlobalTeardown: true,
+  files: [
+    'D:\\projects\\hana-developer-cli-tool-example\\tests\\utils\\btp.Test.js'
+  ],
+  parallel: false,
+  forbidOnly: true,
+  isWorker: true,
+  globalSetup: [],
+  globalTeardown: []
+}
+2026-02-14T13:58:58.483Z mocha:runner trying to remove listener for untracked object process {
+  version: 'v24.13.0',
+  versions: [Object],
+  arch: 'x64',
+  platform: 'win32',
+  release: [Object],
+  _rawDebug: [Function: _rawDebug],
+  moduleLoadList: [Array],
+  binding: [Function: binding],
+  _linkedBinding: [Function: _linkedBinding],
+  _events: [Object: null prototype],
+  _eventsCount: 6,
+  _maxListeners: undefined,
+  domain: null,
+  _exiting: [Getter/Setter],
+  exitCode: [Getter/Setter],
+  config: [Object],
+  dlopen: [Function: dlopen],
+  uptime: [Function: uptime],
+  _getActiveRequests: [Function: _getActiveRequests],
+  _getActiveHandles: [Function: _getActiveHandles],
+  getActiveResourcesInfo: [Function: getActiveResourcesInfo],
+  reallyExit: [Function: reallyExit],
+  _kill: [Function: _kill],
+  loadEnvFile: [Function: loadEnvFile],
+  cpuUsage: [Function: cpuUsage],
+  threadCpuUsage: [Function: threadCpuUsage],
+  resourceUsage: [Function: resourceUsage],
+  memoryUsage: [Function],
+  constrainedMemory: [Function: constrainedMemory],
+  availableMemory: [Function: availableMemory],
+  kill: [Function: kill],
+  exit: [Function: exit],
+  execve: [Function: execve],
+  ref: [Function: ref],
+  unref: [Function: unref],
+  finalization: [Getter/Setter],
+  hrtime: [Function],
+  openStdin: [Function (anonymous)],
+  allowedNodeEnvironmentFlags: [NodeEnvironmentFlagsSet],
+  features: [Object],
+  _fatalException: [Function (anonymous)],
+  setUncaughtExceptionCaptureCallback: [Function: setUncaughtExceptionCaptureCallback],
+  hasUncaughtExceptionCaptureCallback: [Function: hasUncaughtExceptionCaptureCallback],
+  emitWarning: [Function: emitWarning],
+  nextTick: [Function: nextTick],
+  _tickCallback: [Function: runNextTicks],
+  sourceMapsEnabled: [Getter],
+  setSourceMapsEnabled: [Function: setSourceMapsEnabled],
+  getBuiltinModule: [Function: getBuiltinModule],
+  _debugProcess: [Function: _debugProcess],
+  _debugEnd: [Function: _debugEnd],
+  _startProfilerIdleNotifier: [Function (anonymous)],
+  _stopProfilerIdleNotifier: [Function (anonymous)],
+  stdout: [Getter],
+  stdin: [Getter],
+  stderr: [Getter],
+  abort: [Function: abort],
+  umask: [Function: wrappedUmask],
+  chdir: [Function (anonymous)],
+  cwd: [Function: wrappedCwd],
+  env: [Object],
+  title: 'C:\\WINDOWS\\system32\\cmd.exe ',
+  argv: [Array],
+  execArgv: [],
+  pid: 32644,
+  ppid: 59936,
+  execPath: 'd:\\nvm4w\\nodejs\\node.exe',
+  debugPort: 9229,
+  argv0: 'd:\\nvm4w\\nodejs\\node.exe',
+  _preload_modules: [],
+  report: [Getter],
+  channel: [Control],
+  _handleQueue: null,
+  _pendingMessage: null,
+  send: [Function (anonymous)],
+  _send: [Function (anonymous)],
+  connected: true,
+  disconnect: [Function (anonymous)],
+  _disconnect: [Function (anonymous)],
+  mainModule: [Object],
+  Symbol(shapeMode): false,
+  Symbol(kCapture): false,
+  Symbol(kChannelHandle): [Pipe]
+}
+2026-02-14T13:58:58.492Z mocha:runner trying to remove listener for untracked object process {
+  version: 'v24.13.0',
+  versions: [Object],
+  arch: 'x64',
+  platform: 'win32',
+  release: [Object],
+  _rawDebug: [Function: _rawDebug],
+  moduleLoadList: [Array],
+  binding: [Function: binding],
+  _linkedBinding: [Function: _linkedBinding],
+  _events: [Object: null prototype],
+  _eventsCount: 6,
+  _maxListeners: undefined,
+  domain: null,
+  _exiting: [Getter/Setter],
+  exitCode: [Getter/Setter],
+  config: [Object],
+  dlopen: [Function: dlopen],
+  uptime: [Function: uptime],
+  _getActiveRequests: [Function: _getActiveRequests],
+  _getActiveHandles: [Function: _getActiveHandles],
+  getActiveResourcesInfo: [Function: getActiveResourcesInfo],
+  reallyExit: [Function: reallyExit],
+  _kill: [Function: _kill],
+  loadEnvFile: [Function: loadEnvFile],
+  cpuUsage: [Function: cpuUsage],
+  threadCpuUsage: [Function: threadCpuUsage],
+  resourceUsage: [Function: resourceUsage],
+  memoryUsage: [Function],
+  constrainedMemory: [Function: constrainedMemory],
+  availableMemory: [Function: availableMemory],
+  kill: [Function: kill],
+  exit: [Function: exit],
+  execve: [Function: execve],
+  ref: [Function: ref],
+  unref: [Function: unref],
+  finalization: [Getter/Setter],
+  hrtime: [Function],
+  openStdin: [Function (anonymous)],
+  allowedNodeEnvironmentFlags: [NodeEnvironmentFlagsSet],
+  features: [Object],
+  _fatalException: [Function (anonymous)],
+  setUncaughtExceptionCaptureCallback: [Function: setUncaughtExceptionCaptureCallback],
+  hasUncaughtExceptionCaptureCallback: [Function: hasUncaughtExceptionCaptureCallback],
+  emitWarning: [Function: emitWarning],
+  nextTick: [Function: nextTick],
+  _tickCallback: [Function: runNextTicks],
+  sourceMapsEnabled: [Getter],
+  setSourceMapsEnabled: [Function: setSourceMapsEnabled],
+  getBuiltinModule: [Function: getBuiltinModule],
+  _debugProcess: [Function: _debugProcess],
+  _debugEnd: [Function: _debugEnd],
+  _startProfilerIdleNotifier: [Function (anonymous)],
+  _stopProfilerIdleNotifier: [Function (anonymous)],
+  stdout: [Getter],
+  stdin: [Getter],
+  stderr: [Getter],
+  abort: [Function: abort],
+  umask: [Function: wrappedUmask],
+  chdir: [Function (anonymous)],
+  cwd: [Function: wrappedCwd],
+  env: [Object],
+  title: 'C:\\WINDOWS\\system32\\cmd.exe ',
+  argv: [Array],
+  execArgv: [],
+  pid: 32644,
+  ppid: 59936,
+  execPath: 'd:\\nvm4w\\nodejs\\node.exe',
+  debugPort: 9229,
+  argv0: 'd:\\nvm4w\\nodejs\\node.exe',
+  _preload_modules: [],
+  report: [Getter],
+  channel: [Control],
+  _handleQueue: null,
+  _pendingMessage: null,
+  send: [Function (anonymous)],
+  _send: [Function (anonymous)],
+  connected: true,
+  disconnect: [Function (anonymous)],
+  _disconnect: [Function (anonymous)],
+  mainModule: [Object],
+  Symbol(shapeMode): false,
+  Symbol(kCapture): false,
+  Symbol(kChannelHandle): [Pipe]
+}
+2026-02-14T13:58:58.494Z mocha:runner _addEventListener(): adding for event uncaughtException; 0 current listeners
+2026-02-14T13:58:58.494Z mocha:runner _addEventListener(): adding for event unhandledRejection; 0 current listeners
+2026-02-14T13:58:58.495Z mocha:runner run(): starting
+2026-02-14T13:58:58.495Z mocha:runner run(): emitting start
+2026-02-14T13:58:58.495Z mocha:runner run(): emitted start
+2026-02-14T13:58:58.495Z mocha:runner runSuite(): running 
+2026-02-14T13:58:58.497Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.498Z mocha:runner runSuite(): running btp.js - BTP CLI Functions
+2026-02-14T13:58:58.498Z mocha:runner runSuite(): running btp.js - BTP CLI Functions getVersion()
+2026-02-14T13:58:58.499Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.725Z hana-cli Call getVersion
+2026-02-14T13:58:58.726Z hana-cli executeBTPCommand: --version
+2026-02-14T13:58:58.730Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.730Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.754Z hana-cli Call getVersion
+2026-02-14T13:58:58.754Z hana-cli executeBTPCommand: --version
+2026-02-14T13:58:58.757Z mocha:runner total number of failures: 1
+2026-02-14T13:58:58.759Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.789Z hana-cli Call getVersion
+2026-02-14T13:58:58.790Z hana-cli executeBTPCommand: --version
+2026-02-14T13:58:58.790Z hana-cli executeBTPCommand error: Command not found
+2026-02-14T13:58:58.790Z hana-cli getVersion error: Command not found
+2026-02-14T13:58:58.792Z mocha:runner runSuite(): running btp.js - BTP CLI Functions getInfo()
+2026-02-14T13:58:58.793Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+
+  Full Application - HTTP Integration Tests
+    1) "before all" hook in "Full Application - HTTP Integration Tests"
+
+
+Showing first 100 of 150 rows (use --output json with --filename to save all results)
+
+2026-02-14T13:58:58.819Z hana-cli Call getInfo
+2026-02-14T13:58:58.819Z hana-cli executeBTPCommand: --info
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé (index) Γöé 0    Γöé 1          Γöé 2                  Γöé
+Γö£ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöñ
+Γöé 0       Γöé 'ID' Γöé 'NAME'     Γöé 'VALUE'            Γöé
+Γöé 1       Γöé 1    Γöé 'User 1'   Γöé 426.03792141301113 Γöé
+Γöé 2       Γöé 2    Γöé 'User 2'   Γöé 978.7515969638495  Γöé
+Γöé 3       Γöé 3    Γöé 'User 3'   Γöé 513.5122635008788  Γöé
+Γöé 4       Γöé 4    Γöé 'User 4'   Γöé 611.982333153945   Γöé
+Γöé 5       Γöé 5    Γöé 'User 5'   Γöé 900.0731677304816  Γöé
+Γöé 6       Γöé 6    Γöé 'User 6'   Γöé 781.7092774781288  Γöé
+Γöé 7       Γöé 7    Γöé 'User 7'   Γöé 313.1100527585131  Γöé
+Γöé 8       Γöé 8    Γöé 'User 8'   Γöé 454.6468166410327  Γöé
+Γöé 9       Γöé 9    Γöé 'User 9'   Γöé 896.6400333708904  Γöé
+Γöé 10      Γöé 10   Γöé 'User 10'  Γöé 371.6864356812766  Γöé
+Γöé 11      Γöé 11   Γöé 'User 11'  Γöé 341.85813980134947 Γöé
+Γöé 12      Γöé 12   Γöé 'User 12'  Γöé 605.8195325098064  Γöé
+Γöé 13      Γöé 13   Γöé 'User 13'  Γöé 817.6758427901849  Γöé
+Γöé 14      Γöé 14   Γöé 'User 14'  Γöé 513.4054167054217  Γöé
+Γöé 15      Γöé 15   Γöé 'User 15'  Γöé 878.477656687195   Γöé
+Γöé 16      Γöé 16   Γöé 'User 16'  Γöé 418.2390014701063  Γöé
+Γöé 17      Γöé 17   Γöé 'User 17'  Γöé 241.582120845649   Γöé
+Γöé 18      Γöé 18   Γöé 'User 18'  Γöé 770.8653899001176  Γöé
+Γöé 19      Γöé 19   Γöé 'User 19'  Γöé 761.181500892308   Γöé
+Γöé 20      Γöé 20   Γöé 'User 20'  Γöé 562.579940798255   Γöé
+Γöé 21      Γöé 21   Γöé 'User 21'  Γöé 13.224401386556561 Γöé
+Γöé 22      Γöé 22   Γöé 'User 22'  Γöé 195.116714845337   Γöé
+Γöé 23      Γöé 23   Γöé 'User 23'  Γöé 433.7817866431528  Γöé
+Γöé 24      Γöé 24   Γöé 'User 24'  Γöé 776.9435160345471  Γöé
+Γöé 25      Γöé 25   Γöé 'User 25'  Γöé 307.6281431885128  Γöé
+Γöé 26      Γöé 26   Γöé 'User 26'  Γöé 968.0209755698428  Γöé
+Γöé 27      Γöé 27   Γöé 'User 27'  Γöé 187.6649302905419  Γöé
+Γöé 28      Γöé 28   Γöé 'User 28'  Γöé 911.062024013122   Γöé
+Γöé 29      Γöé 29   Γöé 'User 29'  Γöé 129.84823810305178 Γöé
+Γöé 30      Γöé 30   Γöé 'User 30'  Γöé 347.1193988122146  Γöé
+Γöé 31      Γöé 31   Γöé 'User 31'  Γöé 857.388929748605   Γöé
+Γöé 32      Γöé 32   Γöé 'User 32'  Γöé 570.7405888193309  Γöé
+Γöé 33      Γöé 33   Γöé 'User 33'  Γöé 487.4158155411521  Γöé
+Γöé 34      Γöé 34   Γöé 'User 34'  Γöé 728.6402379743007  Γöé
+Γöé 35      Γöé 35   Γöé 'User 35'  Γöé 832.7651114652349  Γöé
+Γöé 36      Γöé 36   Γöé 'User 36'  Γöé 513.8720181805122  Γöé
+Γöé 37      Γöé 37   Γöé 'User 37'  Γöé 772.2093548003954  Γöé
+Γöé 38      Γöé 38   Γöé 'User 38'  Γöé 880.5197003905946  Γöé
+Γöé 39      Γöé 39   Γöé 'User 39'  Γöé 647.2219831602735  Γöé
+Γöé 40      Γöé 40   Γöé 'User 40'  Γöé 795.559115446021   Γöé
+Γöé 41      Γöé 41   Γöé 'User 41'  Γöé 602.9379313176888  Γöé
+Γöé 42      Γöé 42   Γöé 'User 42'  Γöé 541.2415096016447  Γöé
+Γöé 43      Γöé 43   Γöé 'User 43'  Γöé 749.8206715697029  Γöé
+Γöé 44      Γöé 44   Γöé 'User 44'  Γöé 813.8302439725015  Γöé
+Γöé 45      Γöé 45   Γöé 'User 45'  Γöé 266.17052196687854 Γöé
+Γöé 46      Γöé 46   Γöé 'User 46'  Γöé 755.181471422852   Γöé
+Γöé 47      Γöé 47   Γöé 'User 47'  Γöé 165.4576878854581  Γöé
+Γöé 48      Γöé 48   Γöé 'User 48'  Γöé 379.9429583804782  Γöé
+Γöé 49      Γöé 49   Γöé 'User 49'  Γöé 305.05681270835674 Γöé
+Γöé 50      Γöé 50   Γöé 'User 50'  Γöé 491.60448578567195 Γöé
+Γöé 51      Γöé 51   Γöé 'User 51'  Γöé 786.4855502684424  Γöé
+Γöé 52      Γöé 52   Γöé 'User 52'  Γöé 55.599538007813806 Γöé
+Γöé 53      Γöé 53   Γöé 'User 53'  Γöé 760.0019005545223  Γöé
+Γöé 54      Γöé 54   Γöé 'User 54'  Γöé 738.5365300076924  Γöé
+Γöé 55      Γöé 55   Γöé 'User 55'  Γöé 218.5105422681175  Γöé
+Γöé 56      Γöé 56   Γöé 'User 56'  Γöé 83.77702514343488  Γöé
+Γöé 57      Γöé 57   Γöé 'User 57'  Γöé 406.12688914888207 Γöé
+Γöé 58      Γöé 58   Γöé 'User 58'  Γöé 97.36590572224357  Γöé
+Γöé 59      Γöé 59   Γöé 'User 59'  Γöé 531.0686793804119  Γöé
+Γöé 60      Γöé 60   Γöé 'User 60'  Γöé 124.88895695437586 Γöé
+Γöé 61      Γöé 61   Γöé 'User 61'  Γöé 581.2971651376764  Γöé
+Γöé 62      Γöé 62   Γöé 'User 62'  Γöé 962.3157370029556  Γöé
+Γöé 63      Γöé 63   Γöé 'User 63'  Γöé 359.83553461058125 Γöé
+Γöé 64      Γöé 64   Γöé 'User 64'  Γöé 84.81428024659576  Γöé
+Γöé 65      Γöé 65   Γöé 'User 65'  Γöé 440.5509500931801  Γöé
+Γöé 66      Γöé 66   Γöé 'User 66'  Γöé 108.99585419705693 Γöé
+Γöé 67      Γöé 67   Γöé 'User 67'  Γöé 866.7162315723292  Γöé
+Γöé 68      Γöé 68   Γöé 'User 68'  Γöé 304.57944236459645 Γöé
+Γöé 69      Γöé 69   Γöé 'User 69'  Γöé 294.99755595551716 Γöé
+Γöé 70      Γöé 70   Γöé 'User 70'  Γöé 183.28239423776338 Γöé
+Γöé 71      Γöé 71   Γöé 'User 71'  Γöé 41.35446994299852  Γöé
+Γöé 72      Γöé 72   Γöé 'User 72'  Γöé 282.390287246048   Γöé
+Γöé 73      Γöé 73   Γöé 'User 73'  Γöé 867.4703374529589  Γöé
+Γöé 74      Γöé 74   Γöé 'User 74'  Γöé 148.22324535917352 Γöé
+Γöé 75      Γöé 75   Γöé 'User 75'  Γöé 341.2931769816864  Γöé
+Γöé 76      Γöé 76   Γöé 'User 76'  Γöé 144.03919430505007 Γöé
+Γöé 77      Γöé 77   Γöé 'User 77'  Γöé 458.03058461838606 Γöé
+Γöé 78      Γöé 78   Γöé 'User 78'  Γöé 90.35006479775365  Γöé
+Γöé 79      Γöé 79   Γöé 'User 79'  Γöé 589.8997734253325  Γöé
+Γöé 80      Γöé 80   Γöé 'User 80'  Γöé 643.3996132529038  Γöé
+Γöé 81      Γöé 81   Γöé 'User 81'  Γöé 890.5040995713871  Γöé
+Γöé 82      Γöé 82   Γöé 'User 82'  Γöé 768.7128202664684  Γöé
+Γöé 83      Γöé 83   Γöé 'User 83'  Γöé 756.2423826516689  Γöé
+Γöé 84      Γöé 84   Γöé 'User 84'  Γöé 105.2025704371461  Γöé
+Γöé 85      Γöé 85   Γöé 'User 85'  Γöé 645.8924404265551  Γöé
+Γöé 86      Γöé 86   Γöé 'User 86'  Γöé 214.85573459207873 Γöé
+Γöé 87      Γöé 87   Γöé 'User 87'  Γöé 662.1854584032627  Γöé
+Γöé 88      Γöé 88   Γöé 'User 88'  Γöé 758.2132055508218  Γöé
+Γöé 89      Γöé 89   Γöé 'User 89'  Γöé 960.9603423740796  Γöé
+Γöé 90      Γöé 90   Γöé 'User 90'  Γöé 8.856321858387584  Γöé
+Γöé 91      Γöé 91   Γöé 'User 91'  Γöé 589.5580512736535  Γöé
+Γöé 92      Γöé 92   Γöé 'User 92'  Γöé 747.5146259902953  Γöé
+Γöé 93      Γöé 93   Γöé 'User 93'  Γöé 783.8768815207377  Γöé
+Γöé 94      Γöé 94   Γöé 'User 94'  Γöé 371.33790966073866 Γöé
+Γöé 95      Γöé 95   Γöé 'User 95'  Γöé 165.5170609651515  Γöé
+Γöé 96      Γöé 96   Γöé 'User 96'  Γöé 946.1421405307428  Γöé
+Γöé 97      Γöé 97   Γöé 'User 97'  Γöé 387.5769056928464  Γöé
+Γöé 98      Γöé 98   Γöé 'User 98'  Γöé 23.12845964767829  Γöé
+Γöé 99      Γöé 99   Γöé 'User 99'  Γöé 578.6669193479584  Γöé
+Γöé 100     Γöé 100  Γöé 'User 100' Γöé 516.0236460257305  Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+2026-02-14T13:58:58.822Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé (index) Γöé 0    Γöé 1         Γöé
+Γö£ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöñ
+Γöé 0       Γöé 'ID' Γöé 'NAME'    Γöé
+Γöé 1       Γöé 1    Γöé 'User 1'  Γöé
+Γöé 2       Γöé 2    Γöé 'User 2'  Γöé
+Γöé 3       Γöé 3    Γöé 'User 3'  Γöé
+Γöé 4       Γöé 4    Γöé 'User 4'  Γöé
+Γöé 5       Γöé 5    Γöé 'User 5'  Γöé
+Γöé 6       Γöé 6    Γöé 'User 6'  Γöé
+Γöé 7       Γöé 7    Γöé 'User 7'  Γöé
+Γöé 8       Γöé 8    Γöé 'User 8'  Γöé
+Γöé 9       Γöé 9    Γöé 'User 9'  Γöé
+Γöé 10      Γöé 10   Γöé 'User 10' Γöé
+Γöé 11      Γöé 11   Γöé 'User 11' Γöé
+Γöé 12      Γöé 12   Γöé 'User 12' Γöé
+Γöé 13      Γöé 13   Γöé 'User 13' Γöé
+Γöé 14      Γöé 14   Γöé 'User 14' Γöé
+Γöé 15      Γöé 15   Γöé 'User 15' Γöé
+Γöé 16      Γöé 16   Γöé 'User 16' Γöé
+Γöé 17      Γöé 17   Γöé 'User 17' Γöé
+Γöé 18      Γöé 18   Γöé 'User 18' Γöé
+Γöé 19      Γöé 19   Γöé 'User 19' Γöé
+Γöé 20      Γöé 20   Γöé 'User 20' Γöé
+Γöé 21      Γöé 21   Γöé 'User 21' Γöé
+Γöé 22      Γöé 22   Γöé 'User 22' Γöé
+Γöé 23      Γöé 23   Γöé 'User 23' Γöé
+Γöé 24      Γöé 24   Γöé 'User 24' Γöé
+Γöé 25      Γöé 25   Γöé 'User 25' Γöé
+Γöé 26      Γöé 26   Γöé 'User 26' Γöé
+Γöé 27      Γöé 27   Γöé 'User 27' Γöé
+Γöé 28      Γöé 28   Γöé 'User 28' Γöé
+Γöé 29      Γöé 29   Γöé 'User 29' Γöé
+Γöé 30      Γöé 30   Γöé 'User 30' Γöé
+Γöé 31      Γöé 31   Γöé 'User 31' Γöé
+Γöé 32      Γöé 32   Γöé 'User 32' Γöé
+Γöé 33      Γöé 33   Γöé 'User 33' Γöé
+Γöé 34      Γöé 34   Γöé 'User 34' Γöé
+Γöé 35      Γöé 35   Γöé 'User 35' Γöé
+Γöé 36      Γöé 36   Γöé 'User 36' Γöé
+Γöé 37      Γöé 37   Γöé 'User 37' Γöé
+Γöé 38      Γöé 38   Γöé 'User 38' Γöé
+Γöé 39      Γöé 39   Γöé 'User 39' Γöé
+Γöé 40      Γöé 40   Γöé 'User 40' Γöé
+Γöé 41      Γöé 41   Γöé 'User 41' Γöé
+Γöé 42      Γöé 42   Γöé 'User 42' Γöé
+Γöé 43      Γöé 43   Γöé 'User 43' Γöé
+Γöé 44      Γöé 44   Γöé 'User 44' Γöé
+Γöé 45      Γöé 45   Γöé 'User 45' Γöé
+Γöé 46      Γöé 46   Γöé 'User 46' Γöé
+Γöé 47      Γöé 47   Γöé 'User 47' Γöé
+Γöé 48      Γöé 48   Γöé 'User 48' Γöé
+Γöé 49      Γöé 49   Γöé 'User 49' Γöé
+Γöé 50      Γöé 50   Γöé 'User 50' Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+No data found for this query
+2026-02-14T13:58:58.849Z hana-cli Call getInfo
+2026-02-14T13:58:58.849Z hana-cli executeBTPCommand: --info
+2026-02-14T13:58:58.850Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.890Z hana-cli Call getInfo
+2026-02-14T13:58:58.891Z hana-cli executeBTPCommand: --info
+2026-02-14T13:58:58.897Z mocha:runner total number of failures: 2
+2026-02-14T13:58:58.898Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:58.921Z hana-cli Call getInfo
+2026-02-14T13:58:58.921Z hana-cli executeBTPCommand: --info
+2026-02-14T13:58:58.922Z hana-cli executeBTPCommand error: BTP CLI error
+2026-02-14T13:58:58.922Z hana-cli getInfo error: BTP CLI error
+2026-02-14T13:58:58.923Z mocha:runner runSuite(): running btp.js - BTP CLI Functions getBTPConfig()
+2026-02-14T13:58:58.923Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+Warning: terminal.table failed, falling back to console.table: Buffer allocation error
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé (index) Γöé ID Γöé VALUE Γöé
+Γö£ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöñ
+Γöé 0       Γöé 1  Γöé 100   Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+
+Showing first 100 of 150 rows (use --output json with --filename to save all results)
+
+Warning: terminal.table failed, falling back to console.table: Error
+Showing first 100 of 150 rows
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé (index) Γöé ID  Γöé VALUE Γöé
+Γö£ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöñ
+Γöé 0       Γöé 1   Γöé 0     Γöé
+Γöé 1       Γöé 2   Γöé 10    Γöé
+Γöé 2       Γöé 3   Γöé 20    Γöé
+Γöé 3       Γöé 4   Γöé 30    Γöé
+Γöé 4       Γöé 5   Γöé 40    Γöé
+Γöé 5       Γöé 6   Γöé 50    Γöé
+Γöé 6       Γöé 7   Γöé 60    Γöé
+Γöé 7       Γöé 8   Γöé 70    Γöé
+Γöé 8       Γöé 9   Γöé 80    Γöé
+Γöé 9       Γöé 10  Γöé 90    Γöé
+Γöé 10      Γöé 11  Γöé 100   Γöé
+Γöé 11      Γöé 12  Γöé 110   Γöé
+Γöé 12      Γöé 13  Γöé 120   Γöé
+Γöé 13      Γöé 14  Γöé 130   Γöé
+Γöé 14      Γöé 15  Γöé 140   Γöé
+Γöé 15      Γöé 16  Γöé 150   Γöé
+Γöé 16      Γöé 17  Γöé 160   Γöé
+Γöé 17      Γöé 18  Γöé 170   Γöé
+Γöé 18      Γöé 19  Γöé 180   Γöé
+Γöé 19      Γöé 20  Γöé 190   Γöé
+Γöé 20      Γöé 21  Γöé 200   Γöé
+Γöé 21      Γöé 22  Γöé 210   Γöé
+Γöé 22      Γöé 23  Γöé 220   Γöé
+Γöé 23      Γöé 24  Γöé 230   Γöé
+Γöé 24      Γöé 25  Γöé 240   Γöé
+Γöé 25      Γöé 26  Γöé 250   Γöé
+Γöé 26      Γöé 27  Γöé 260   Γöé
+Γöé 27      Γöé 28  Γöé 270   Γöé
+Γöé 28      Γöé 29  Γöé 280   Γöé
+Γöé 29      Γöé 30  Γöé 290   Γöé
+Γöé 30      Γöé 31  Γöé 300   Γöé
+Γöé 31      Γöé 32  Γöé 310   Γöé
+Γöé 32      Γöé 33  Γöé 320   Γöé
+Γöé 33      Γöé 34  Γöé 330   Γöé
+Γöé 34      Γöé 35  Γöé 340   Γöé
+Γöé 35      Γöé 36  Γöé 350   Γöé
+Γöé 36      Γöé 37  Γöé 360   Γöé
+Γöé 37      Γöé 38  Γöé 370   Γöé
+Γöé 38      Γöé 39  Γöé 380   Γöé
+Γöé 39      Γöé 40  Γöé 390   Γöé
+Γöé 40      Γöé 41  Γöé 400   Γöé
+Γöé 41      Γöé 42  Γöé 410   Γöé
+Γöé 42      Γöé 43  Γöé 420   Γöé
+Γöé 43      Γöé 44  Γöé 430   Γöé
+Γöé 44      Γöé 45  Γöé 440   Γöé
+Γöé 45      Γöé 46  Γöé 450   Γöé
+Γöé 46      Γöé 47  Γöé 460   Γöé
+Γöé 47      Γöé 48  Γöé 470   Γöé
+Γöé 48      Γöé 49  Γöé 480   Γöé
+Γöé 49      Γöé 50  Γöé 490   Γöé
+Γöé 50      Γöé 51  Γöé 500   Γöé
+Γöé 51      Γöé 52  Γöé 510   Γöé
+Γöé 52      Γöé 53  Γöé 520   Γöé
+Γöé 53      Γöé 54  Γöé 530   Γöé
+Γöé 54      Γöé 55  Γöé 540   Γöé
+Γöé 55      Γöé 56  Γöé 550   Γöé
+Γöé 56      Γöé 57  Γöé 560   Γöé
+Γöé 57      Γöé 58  Γöé 570   Γöé
+Γöé 58      Γöé 59  Γöé 580   Γöé
+Γöé 59      Γöé 60  Γöé 590   Γöé
+Γöé 60      Γöé 61  Γöé 600   Γöé
+Γöé 61      Γöé 62  Γöé 610   Γöé
+Γöé 62      Γöé 63  Γöé 620   Γöé
+Γöé 63      Γöé 64  Γöé 630   Γöé
+Γöé 64      Γöé 65  Γöé 640   Γöé
+Γöé 65      Γöé 66  Γöé 650   Γöé
+Γöé 66      Γöé 67  Γöé 660   Γöé
+Γöé 67      Γöé 68  Γöé 670   Γöé
+Γöé 68      Γöé 69  Γöé 680   Γöé
+Γöé 69      Γöé 70  Γöé 690   Γöé
+Γöé 70      Γöé 71  Γöé 700   Γöé
+Γöé 71      Γöé 72  Γöé 710   Γöé
+Γöé 72      Γöé 73  Γöé 720   Γöé
+Γöé 73      Γöé 74  Γöé 730   Γöé
+Γöé 74      Γöé 75  Γöé 740   Γöé
+Γöé 75      Γöé 76  Γöé 750   Γöé
+Γöé 76      Γöé 77  Γöé 760   Γöé
+Γöé 77      Γöé 78  Γöé 770   Γöé
+Γöé 78      Γöé 79  Γöé 780   Γöé
+Γöé 79      Γöé 80  Γöé 790   Γöé
+Γöé 80      Γöé 81  Γöé 800   Γöé
+Γöé 81      Γöé 82  Γöé 810   Γöé
+Γöé 82      Γöé 83  Γöé 820   Γöé
+Γöé 83      Γöé 84  Γöé 830   Γöé
+Γöé 84      Γöé 85  Γöé 840   Γöé
+Γöé 85      Γöé 86  Γöé 850   Γöé
+Γöé 86      Γöé 87  Γöé 860   Γöé
+Γöé 87      Γöé 88  Γöé 870   Γöé
+Γöé 88      Γöé 89  Γöé 880   Γöé
+Γöé 89      Γöé 90  Γöé 890   Γöé
+Γöé 90      Γöé 91  Γöé 900   Γöé
+Γöé 91      Γöé 92  Γöé 910   Γöé
+Γöé 92      Γöé 93  Γöé 920   Γöé
+Γöé 93      Γöé 94  Γöé 930   Γöé
+Γöé 94      Γöé 95  Γöé 940   Γöé
+Γöé 95      Γöé 96  Γöé 950   Γöé
+Γöé 96      Γöé 97  Γöé 960   Γöé
+Γöé 97      Γöé 98  Γöé 970   Γöé
+Γöé 98      Γöé 99  Γöé 980   Γöé
+Γöé 99      Γöé 100 Γöé 990   Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+[ { ID: 1, NAME: 'Test' } ]
+
+  Table Output Enhancement Tests
+    Column Width Management
+      Γ£ö should have width and fit properties in tableOptions
+      Γ£ö should have hasBorder and borderChars configured
+      Γ£ö should have color configuration for borders and headers
+    Large Dataset Pagination
+      Γ£ö should have MAX_DISPLAY_ROWS constant defined
+      Γ£ö should display message for large datasets
+      Γ£ö should not display pagination message for small datasets
+      Γ£ö should display no data message for empty datasets
+    Type-Aware Formatting in Text Files
+      Γ£ö should format integers with thousand separators (78ms)
+      Γ£ö should format decimals with appropriate precision
+      Γ£ö should format Date objects to ISO string
+      Γ£ö should format boolean values as strings
+      Γ£ö should handle null and undefined values
+      Γ£ö should stringify objects and arrays
+    Fallback to console.table on Error
+      Γ£ö should fallback to console.table on terminal.table error
+      Γ£ö should handle large datasets in fallback mode
+    Integration with querySimple
+      Γ£ö should export dbQuery function
+      Γ£ö should have proper command configuration
+      Γ£ö should have output format options including table
+      Γ£ö should have default output as table
+    Non-Verbose Mode
+      Γ£ö should use inspect for non-verbose output
+
+2026-02-14T13:58:58.973Z hana-cli Call getBTPConfig
+2026-02-14T13:58:58.973Z hana-cli /custom/config.json
+2026-02-14T13:58:58.974Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:59.022Z hana-cli Call getBTPConfig
+2026-02-14T13:58:59.022Z hana-cli Call getInfo
+2026-02-14T13:58:59.023Z hana-cli executeBTPCommand: --info
+2026-02-14T13:58:59.023Z hana-cli /home/user/.config/.btp/config.json
+2026-02-14T13:58:59.024Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:59.077Z hana-cli Call getBTPConfig
+2026-02-14T13:58:59.079Z hana-cli Call getInfo
+2026-02-14T13:58:59.079Z hana-cli executeBTPCommand: --info
+2026-02-14T13:58:59.080Z hana-cli C:\Users\test\AppData\Roaming/SAP/btp/config.json
+2026-02-14T13:58:59.081Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:59.133Z hana-cli Call getBTPConfig
+2026-02-14T13:58:59.134Z hana-cli Call getInfo
+2026-02-14T13:58:59.134Z hana-cli executeBTPCommand: --info
+2026-02-14T13:58:59.135Z hana-cli /Users/test/Library/Application Support/.btp/config.json
+2026-02-14T13:58:59.136Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:58:59.174Z hana-cli Call getBTPConfig
+2026-02-14T13:58:59.175Z hana-cli Call getInfo
+2026-02-14T13:58:59.175Z hana-cli executeBTPCommand: --info
+
+  cf.js - Cloud Foundry CLI Functions
+    getVersion()
+      2) should return CF CLI version
+      Γ£ö should throw error on stderr output
+      3) should return undefined if no stdout
+      Γ£ö should throw error on execution failure
+    getCFConfig()
+      4) should read CF config.json from home directory
+      Γ£ö should throw error if config file not found (47ms)
+      Γ£ö should throw error on invalid JSON (51ms)
+    getCFOrg()
+      5) should return organization fields from config
+    getCFOrgName()
+      6) should return organization name
+    getCFOrgGUID()
+      7) should return organization GUID
+    getCFSpace()
+      8) should return space fields from config
+    getCFSpaceName()
+      9) should return space name
+    getCFSpaceGUID()
+      10) should return space GUID
+    getCFTarget()
+      11) should return target URL from config
+    getHANAInstances()
+      12) should execute cf curl to get HANA instances
+      13) should handle empty HANA instances
+
+  cf.js - Module Exports
+    Γ£ö should export getVersion function
+    Γ£ö should export getCFConfig function
+    Γ£ö should export getCFOrg function
+    Γ£ö should export getCFOrgName function
+    Γ£ö should export getCFOrgGUID function
+    Γ£ö should export getCFSpace function
+    Γ£ö should export getCFSpaceName function
+    Γ£ö should export getCFSpaceGUID function
+    Γ£ö should export getCFTarget function
+    Γ£ö should export getHANAInstances function
+
+2026-02-14T13:59:00.004Z hana-cli executeBTPCommand error: Command failed: btp --info
+Could not retrieve config directory
+
+ERROR
+
+
+2026-02-14T13:59:00.004Z hana-cli getInfo error: Command failed: btp --info
+Could not retrieve config directory
+
+ERROR
+
+
+2026-02-14T13:59:00.006Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:00.049Z hana-cli Call getBTPConfig
+2026-02-14T13:59:00.050Z hana-cli Call getInfo
+2026-02-14T13:59:00.050Z hana-cli executeBTPCommand: --info
+Using Connection Configuration loaded via default-env.json
+
+
+  Database Client Class
+    constructor
+      Γ£ö should create an instance without throwing
+    adjustWildcard
+      Γ£ö should convert asterisk to percent
+      Γ£ö should leave other strings unchanged
+    getters
+      Γ£ö should return prompts via getPrompts
+      Γ£ö should return kind via getKind
+      Γ£ö should return empty string when optionsCDS is not set
+    schemaCalculation
+      Γ£ö should return schema from credentials when CURRENT_SCHEMA is specified
+      Γ£ö should convert asterisk to percent
+      Γ£ö should return specified schema when provided
+      Γ£ö should default to public when no schema specified and no credentials
+      Γ£ö should default to public when schema not specified
+    setDB and getDB
+      Γ£ö should allow setting and getting DB object
+    getNewClient static method
+      Γ£ö should throw error when no CAP/CDS configuration found (454ms)
+      Γ£ö should default to hybrid profile when no profile specified
+
+
+  triggers
+    Γ£ö returns help output (743ms)
+    Γ£ö returns normal output (756ms)
+    Γ£ö returns output with limit (762ms)
+    Γ£ö returns output with specific schema (1283ms)
+
+
+  Locale Utilities
+    getLocale
+      Γ£ö should return LC_ALL when set
+      Γ£ö should return LC_MESSAGES when LC_ALL is not set
+      Γ£ö should return LANG when LC_ALL and LC_MESSAGES are not set
+      Γ£ö should return LANGUAGE when other locale vars are not set
+      Γ£ö should prioritize LC_ALL over other variables
+      Γ£ö should prioritize LC_MESSAGES over LANG and LANGUAGE
+      Γ£ö should use process.env when no environment provided
+      Γ£ö should return undefined when no locale variables are set
+    normalizeLocale
+      Γ£ö should remove UTF-8 encoding suffix
+      Γ£ö should remove ISO-8859-1 encoding suffix
+      Γ£ö should remove iso88591 encoding suffix
+      Γ£ö should handle locale without encoding suffix
+      Γ£ö should handle simple locale code
+      Γ£ö should handle undefined locale
+      Γ£ö should handle null locale
+      Γ£ö should handle empty string
+
+
+  users
+    Γ£ö returns help output (783ms)
+    Γ£ö returns normal output (787ms)
+    Γ£ö returns output with limit (1326ms)
+
+
+  dbInspect.js - Database Inspection Functions
+    getHANAVersion()
+      Γ£ö should return HANA version information
+      14) should extract major version from VERSION string
+      Γ£ö should throw error if no database version found
+      15) should handle version with single digit major
+    isCalculationView()
+      16) should return false for HANA version < 2
+      Γ£ö should return true when calculation view found by qualified name
+      Γ£ö should return true when calculation view found by view name
+      17) should return false when calculation view not found
+    getView()
+      18) should return view details for HANA 2+
+      19) should return view details for HANA 1
+      Γ£ö should throw error when view not found
+    getDef()
+      Γ£ö should return object definition
+      Γ£ö should format definition with line breaks
+      Γ£ö should throw error when object not found
+    getTable()
+      20) should return table details for HANA 2+
+      21) should return table details for HANA 1
+      Γ£ö should throw error when table not found
+    getTableFields()
+      22) should return table fields for HANA 2+
+      23) should return empty array when no fields found
+    getViewFields()
+      Γ£ö should return view fields
+      Γ£ö should return empty array when no fields found
+    getCalcViewFields()
+      Γ£ö should return calculation view fields
+    getCalcViewParameters()
+      Γ£ö should return calculation view parameters
+      Γ£ö should handle VARCHAR type with length
+    getViewParameters()
+      Γ£ö should return view parameters
+
+  dbInspect.js - Module Exports
+    Γ£ö should export getHANAVersion function
+    Γ£ö should export isCalculationView function
+    Γ£ö should export getView function
+    Γ£ö should export getDef function
+    Γ£ö should export getTable function
+    Γ£ö should export getTableFields function
+    Γ£ö should export getViewFields function
+    Γ£ö should export getCalcViewFields function
+    Γ£ö should export getCalcViewParameters function
+    Γ£ö should export getViewParameters function
+
+
+  connections.js - File Discovery Functions
+    getFileCheckParents()
+      Γ£ö should find file in current directory (245ms)
+      Γ£ö should find file in parent directory (57ms)
+      Γ£ö should check up to 5 parent levels (50ms)
+      Γ£ö should return undefined if file not found (57ms)
+      Γ£ö should handle different file names (53ms)
+    getPackageJSON()
+      Γ£ö should call getFileCheckParents with package.json (58ms)
+      Γ£ö should return undefined if package.json not found (63ms)
+    getMTA()
+      Γ£ö should call getFileCheckParents with mta.yaml (56ms)
+      Γ£ö should return undefined if mta.yaml not found (58ms)
+    getDefaultEnv()
+      Γ£ö should call getFileCheckParents with default-env.json (50ms)
+      Γ£ö should return undefined if default-env.json not found (47ms)
+    getDefaultEnvAdmin()
+      Γ£ö should call getFileCheckParents with default-env-admin.json (52ms)
+      Γ£ö should return undefined if default-env-admin.json not found (52ms)
+    getEnv()
+      Γ£ö should call getFileCheckParents with .env (51ms)
+      Γ£ö should return undefined if .env not found (59ms)
+    getCdsrcPrivate()
+      Γ£ö should call getFileCheckParents with .cdsrc-private.json (54ms)
+      Γ£ö should return undefined if .cdsrc-private.json not found (49ms)
+
+  connections.js - Environment Resolution
+    resolveEnv()
+      Γ£ö should return default-env.json path by default
+      Γ£ö should return default-env-admin.json when admin flag is true
+      Γ£ö should return default-env.json when admin flag is false
+      Γ£ö should handle null options
+      Γ£ö should handle options without admin property
+
+  connections.js - Connection Options (Isolated Tests)
+    getConnOptions() - File Discovery Logic
+      Γ£ö should check for default-env-admin.json when admin flag is true (79ms)
+      Γ£ö should check for .cdsrc-private.json when default-env-admin not found (79ms)
+      Γ£ö should check for .env file in fallback (67ms)
+      Γ£ö should check home directory for config when conn parameter provided (72ms)
+
+  connections.js - Module Exports
+    Γ£ö should export getFileCheckParents function
+    Γ£ö should export getPackageJSON function
+    Γ£ö should export getMTA function
+    Γ£ö should export getDefaultEnv function
+    Γ£ö should export getDefaultEnvAdmin function
+    Γ£ö should export getEnv function
+    Γ£ö should export getCdsrcPrivate function
+    Γ£ö should export resolveEnv function
+    Γ£ö should export getConnOptions function
+    Γ£ö should export createConnection function
+
+
+  SQL Injection Protection Utilities
+    whitespaceTable
+      Γ£ö should contain standard whitespace characters
+      Γ£ö should contain unicode whitespace characters
+    separatorTable
+      Γ£ö should contain common SQL separators
+      Γ£ö should contain SQL operators
+    isAcceptableQuotedParameter
+      Γ£ö should accept strings without unmatched quotes
+      Γ£ö should reject strings with unmatched quotes
+      Γ£ö should reject empty or non-string values
+    isAcceptableParameter
+      Γ£ö should accept single token parameters
+      Γ£ö should accept parameters with double quotes
+      Γ£ö should reject SQL comments
+      Γ£ö should respect maxToken parameter
+      Γ£ö should reject empty or non-string values
+      Γ£ö should handle escaped double quotes
+      Γ£ö should count tokens correctly with separators
+      Γ£ö should reject unclosed quotes
+    escapeDoubleQuotes
+      Γ£ö should escape double quotes
+      Γ£ö should handle multiple double quotes
+      Γ£ö should handle strings without quotes
+    escapeSingleQuotes
+      Γ£ö should escape single quotes
+      Γ£ö should handle multiple single quotes
+      Γ£ö should handle strings without quotes
+
+
+  massConvert.js - Mass Conversion Utilities
+    Module Structure
+      Γ£ö should be a module that exports functions
+      Γ£ö should have conversion-related functions
+    Mass Conversion Functions
+      Γ£ö should export hdbtableSQL function if available
+      Γ£ö should export hdbmigrationtable function if available
+      Γ£ö should export hdbcds function if available
+      Γ£ö should export createZip function if available
+    Conversion Flow
+      Γ£ö should handle database object conversion workflow
+      Γ£ö should support different output formats
+    Utility Functions
+      Γ£ö should handle progress tracking for bulk operations
+      Γ£ö should support ZIP file generation
+    Error Handling
+      Γ£ö should handle conversion errors gracefully
+      Γ£ö should log errors to output array when logging enabled
+    WebSocket Integration
+      Γ£ö should support WebSocket broadcast for progress updates
+      Γ£ö should send percentage progress updates
+    CDS Integration
+      Γ£ö should integrate with @sap/cds for compilation
+      Γ£ö should handle CDS parsing and compilation
+    Database Integration
+      Γ£ö should work with database inspection utilities
+      Γ£ö should handle schema-based operations
+    File Operations
+      Γ£ö should support async file system operations
+      Γ£ö should generate proper file extensions
+
+  massConvert.js - Module Exports
+    Γ£ö should export the module
+    Γ£ö should be importable without errors
+
+2026-02-14T13:59:00.930Z hana-cli executeBTPCommand error: Command failed: btp --info
+Could not retrieve config directory
+
+ERROR
+
+
+2026-02-14T13:59:00.931Z hana-cli getInfo error: Command failed: btp --info
+Could not retrieve config directory
+
+ERROR
+
+
+2026-02-14T13:59:00.932Z mocha:runner runSuite(): running btp.js - BTP CLI Functions getBTPTarget()
+2026-02-14T13:59:00.933Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+Using Connection Configuration loaded via default-env.json
+
+2026-02-14T13:59:00.974Z hana-cli Call getBTPTarget
+2026-02-14T13:59:00.975Z hana-cli Call getBTPConfig
+2026-02-14T13:59:00.975Z hana-cli Call getInfo
+2026-02-14T13:59:00.976Z hana-cli executeBTPCommand: --info
+2026-02-14T13:59:00.976Z hana-cli /home/user/.config/.btp/config.json
+2026-02-14T13:59:00.977Z hana-cli {
+  TargetHierarchy: { globalaccount: 'my-global-account', subaccount: 'my-subaccount' }
+}
+2026-02-14T13:59:00.978Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.032Z hana-cli Call getBTPTarget
+2026-02-14T13:59:01.032Z hana-cli Call getBTPConfig
+2026-02-14T13:59:01.033Z hana-cli Call getInfo
+2026-02-14T13:59:01.033Z hana-cli executeBTPCommand: --info
+2026-02-14T13:59:01.034Z hana-cli /home/user/.config/.btp/config.json
+2026-02-14T13:59:01.034Z hana-cli {}
+2026-02-14T13:59:01.036Z mocha:runner runSuite(): running btp.js - BTP CLI Functions getBTPGlobalAccount()
+2026-02-14T13:59:01.037Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.085Z hana-cli Call getBTPGlobalAccount
+2026-02-14T13:59:01.086Z hana-cli Call getBTPTarget
+2026-02-14T13:59:01.086Z hana-cli Call getBTPConfig
+2026-02-14T13:59:01.087Z hana-cli Call getInfo
+2026-02-14T13:59:01.087Z hana-cli executeBTPCommand: --info
+2026-02-14T13:59:01.087Z hana-cli /home/user/.config/.btp/config.json
+2026-02-14T13:59:01.088Z hana-cli {
+  TargetHierarchy: [
+    {
+      Type: 'globalaccount',
+      ID: 'my-global-account-guid',
+      DisplayName: 'My Global Account'
+    }
+  ]
+}
+2026-02-14T13:59:01.088Z hana-cli {
+  Type: 'globalaccount',
+  ID: 'my-global-account-guid',
+  DisplayName: 'My Global Account'
+}
+2026-02-14T13:59:01.089Z mocha:runner runSuite(): running btp.js - Module Exports
+2026-02-14T13:59:01.089Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.103Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.104Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.104Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.105Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.106Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.106Z mocha:runner runSuite(): running btp.js - Cross-Platform Filesystem Tests @all
+2026-02-14T13:59:01.107Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.109Z mocha:runner runSuite(): running btp.js - Cross-Platform Filesystem Tests @all getBTPConfig() with mock-fs @all
+2026-02-14T13:59:01.109Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.113Z hana-cli Call getBTPConfig
+2026-02-14T13:59:01.115Z hana-cli C:\Users\test\AppData\Roaming\SAP\btp\config.json
+2026-02-14T13:59:01.117Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.118Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.119Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.121Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.122Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.122Z mocha:runner run(): root suite completed; emitting end
+2026-02-14T13:59:01.123Z mocha:reporters:buffered received EVENT_RUN_END
+2026-02-14T13:59:01.123Z mocha:runner run(): emitted end
+2026-02-14T13:59:01.131Z mocha:serializer serialized: SerializableWorkerResult {
+  failureCount: 2,
+  events: [
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'fail',
+      data: [Object],
+      error: [Object: null prototype]
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'fail',
+      data: [Object],
+      error: [Object: null prototype]
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    ... 43 more items
+  ],
+  __type: 'SerializableWorkerResult'
+}
+2026-02-14T13:59:01.132Z mocha:parallel:worker:32644 run(): completed run with 0 test failures; returning to main process
+2026-02-14T13:59:01.138Z mocha:parallel:worker:32644 run(): running test file D:\projects\hana-developer-cli-tool-example\tests\views.Test.js
+2026-02-14T13:59:01.141Z mocha:suite slow 75
+2026-02-14T13:59:01.142Z mocha:suite timeout 10000
+2026-02-14T13:59:01.142Z mocha:runnable timeout 10000
+2026-02-14T13:59:01.142Z mocha:runnable slow 75
+2026-02-14T13:59:01.143Z mocha:runnable timeout 10000
+2026-02-14T13:59:01.143Z mocha:runnable slow 75
+2026-02-14T13:59:01.143Z mocha:mocha configured 0 global setup functions
+2026-02-14T13:59:01.143Z mocha:mocha configured 0 global teardown functions
+2026-02-14T13:59:01.143Z mocha:mocha set lazy load to true
+
+  btp.js - BTP CLI Functions
+    getVersion()
+      Γ£ö should return BTP CLI version (229ms)
+      24) should return undefined if no version output
+      Γ£ö should throw error on execution failure
+    getInfo()
+      Γ£ö should parse BTP CLI info output
+      Γ£ö should handle missing info fields gracefully
+      25) should return undefined if no stdout
+      Γ£ö should throw error on execution failure
+    getBTPConfig()
+      Γ£ö should read config from BTP_CLIENTCONFIG env var (51ms)
+      Γ£ö should read config from getInfo() if BTP_CLIENTCONFIG not set (49ms)
+      Γ£ö should use APPDATA path on Windows (55ms)
+      Γ£ö should use HOME path on macOS (54ms)
+      Γ£ö should throw error if config file not found (868ms)
+      Γ£ö should throw error on invalid JSON (925ms)
+    getBTPTarget()
+      Γ£ö should return target hierarchy from config (44ms)
+      Γ£ö should throw error if config has no target hierarchy (56ms)
+    getBTPGlobalAccount()
+      Γ£ö should return global account from target (52ms)
+
+  btp.js - Module Exports
+    Γ£ö should export getVersion function
+    Γ£ö should export getInfo function
+    Γ£ö should export getBTPConfig function
+    Γ£ö should export getBTPTarget function
+    Γ£ö should export getBTPGlobalAccount function
+
+  btp.js - Cross-Platform Filesystem Tests @all
+    getBTPConfig() with mock-fs @all
+      Γ£ö should read Windows config path with mock filesystem @windows
+      - should read macOS config path with mock filesystem @unix
+      - should read Linux config path with mock filesystem @unix
+      - should handle macOS fallback location with mock filesystem @unix
+
+2026-02-14T13:59:01.150Z mocha:suite timeout 10000
+2026-02-14T13:59:01.150Z mocha:suite retries -1
+2026-02-14T13:59:01.150Z mocha:suite slow 75
+2026-02-14T13:59:01.150Z mocha:suite bail false
+2026-02-14T13:59:01.150Z mocha:runnable timeout 10000
+2026-02-14T13:59:01.151Z mocha:runnable slow 75
+2026-02-14T13:59:01.151Z mocha:runnable timeout 10000
+2026-02-14T13:59:01.151Z mocha:runnable slow 75
+2026-02-14T13:59:01.151Z mocha:runnable timeout 10000
+2026-02-14T13:59:01.151Z mocha:runnable slow 75
+2026-02-14T13:59:01.151Z mocha:runnable timeout 10000
+2026-02-14T13:59:01.151Z mocha:runnable slow 75
+2026-02-14T13:59:01.151Z mocha:runnable timeout 10000
+2026-02-14T13:59:01.151Z mocha:runnable slow 75
+2026-02-14T13:59:01.151Z mocha:runner grep(): setting to /.*/
+2026-02-14T13:59:01.152Z mocha:runner globals(): setting to [
+  'global',             'clearImmediate',
+  'setImmediate',       'clearInterval',
+  'clearTimeout',       'setInterval',
+  'setTimeout',         'queueMicrotask',
+  'structuredClone',    'atob',
+  'btoa',               'performance',
+  'fetch',              'crypto',
+  'navigator',          'before',
+  'after',              'beforeEach',
+  'afterEach',          'run',
+  'context',            'describe',
+  'xcontext',           'xdescribe',
+  'specify',            'it',
+  'xspecify',           'xit',
+  'cds',                '__cds_loaded_from',
+  '__NEXTGEN_EVENTS__', 'mockKeys',
+  'mockKeysSource',     'esmockCache',
+  'esmockCacheGet',     'esmockTreeIdGet',
+  'XMLHttpRequest',     'Date'
+]
+2026-02-14T13:59:01.152Z mocha:runner globals(): setting to []
+2026-02-14T13:59:01.152Z mocha:runner run(): got options: {
+  diff: true,
+  extension: [ 'js', 'cjs', 'mjs' ],
+  package: false,
+  reporter: 'D:\\projects\\hana-developer-cli-tool-example\\node_modules\\mocha\\lib\\nodejs\\reporters\\parallel-buffered.js',
+  slow: 75,
+  timeout: '10s',
+  ui: 'bdd',
+  'watch-ignore': [ 'node_modules', '.git' ],
+  _: [],
+  config: false,
+  exit: true,
+  require: [ './tests/helper.js' ],
+  watchIgnore: [ 'node_modules', '.git' ],
+  'pass-on-failing-test-suite': false,
+  passOnFailingTestSuite: false,
+  spec: [ './tests/**/*.Test.js' ],
+  '$0': 'mocha',
+  rootHooks: {
+    beforeAll: [ [Function: beforeAll] ],
+    beforeEach: [],
+    afterAll: [ [Function: afterAll] ],
+    afterEach: []
+  },
+  grep: undefined,
+  reporterOption: undefined,
+  reporterOptions: undefined,
+  global: [],
+  enableGlobalSetup: true,
+  enableGlobalTeardown: true,
+  files: [
+    'D:\\projects\\hana-developer-cli-tool-example\\tests\\views.Test.js'
+  ],
+  parallel: false,
+  forbidOnly: true,
+  isWorker: true,
+  globalSetup: [],
+  globalTeardown: []
+}
+2026-02-14T13:59:01.152Z mocha:runner trying to remove listener for untracked object process {
+  version: 'v24.13.0',
+  versions: [Object],
+  arch: 'x64',
+  platform: 'win32',
+  release: [Object],
+  _rawDebug: [Function: _rawDebug],
+  moduleLoadList: [Array],
+  binding: [Function: binding],
+  _linkedBinding: [Function: _linkedBinding],
+  _events: [Object: null prototype],
+  _eventsCount: 6,
+  _maxListeners: undefined,
+  domain: null,
+  _exiting: [Getter/Setter],
+  exitCode: [Getter/Setter],
+  config: [Object],
+  dlopen: [Function: dlopen],
+  uptime: [Function: uptime],
+  _getActiveRequests: [Function: _getActiveRequests],
+  _getActiveHandles: [Function: _getActiveHandles],
+  getActiveResourcesInfo: [Function: getActiveResourcesInfo],
+  reallyExit: [Function: reallyExit],
+  _kill: [Function: _kill],
+  loadEnvFile: [Function: loadEnvFile],
+  cpuUsage: [Function: cpuUsage],
+  threadCpuUsage: [Function: threadCpuUsage],
+  resourceUsage: [Function: resourceUsage],
+  memoryUsage: [Function],
+  constrainedMemory: [Function: constrainedMemory],
+  availableMemory: [Function: availableMemory],
+  kill: [Function: kill],
+  exit: [Function: exit],
+  execve: [Function: execve],
+  ref: [Function: ref],
+  unref: [Function: unref],
+  finalization: [Getter/Setter],
+  hrtime: [Function],
+  openStdin: [Function (anonymous)],
+  allowedNodeEnvironmentFlags: [NodeEnvironmentFlagsSet],
+  features: [Object],
+  _fatalException: [Function (anonymous)],
+  setUncaughtExceptionCaptureCallback: [Function: setUncaughtExceptionCaptureCallback],
+  hasUncaughtExceptionCaptureCallback: [Function: hasUncaughtExceptionCaptureCallback],
+  emitWarning: [Function: emitWarning],
+  nextTick: [Function: nextTick],
+  _tickCallback: [Function: runNextTicks],
+  sourceMapsEnabled: [Getter],
+  setSourceMapsEnabled: [Function: setSourceMapsEnabled],
+  getBuiltinModule: [Function: getBuiltinModule],
+  _debugProcess: [Function: _debugProcess],
+  _debugEnd: [Function: _debugEnd],
+  _startProfilerIdleNotifier: [Function (anonymous)],
+  _stopProfilerIdleNotifier: [Function (anonymous)],
+  stdout: [Getter],
+  stdin: [Getter],
+  stderr: [Getter],
+  abort: [Function: abort],
+  umask: [Function: wrappedUmask],
+  chdir: [Function (anonymous)],
+  cwd: [Function: wrappedCwd],
+  env: [Object],
+  title: 'C:\\WINDOWS\\system32\\cmd.exe ',
+  argv: [Array],
+  execArgv: [],
+  pid: 32644,
+  ppid: 59936,
+  execPath: 'd:\\nvm4w\\nodejs\\node.exe',
+  debugPort: 9229,
+  argv0: 'd:\\nvm4w\\nodejs\\node.exe',
+  _preload_modules: [],
+  report: [Getter],
+  channel: [Control],
+  _handleQueue: null,
+  _pendingMessage: null,
+  send: [Function (anonymous)],
+  _send: [Function (anonymous)],
+  connected: true,
+  disconnect: [Function (anonymous)],
+  _disconnect: [Function (anonymous)],
+  mainModule: [Object],
+  Symbol(shapeMode): false,
+  Symbol(kCapture): false,
+  Symbol(kChannelHandle): [Pipe]
+}
+2026-02-14T13:59:01.154Z mocha:runner trying to remove listener for untracked object process {
+  version: 'v24.13.0',
+  versions: [Object],
+  arch: 'x64',
+  platform: 'win32',
+  release: [Object],
+  _rawDebug: [Function: _rawDebug],
+  moduleLoadList: [Array],
+  binding: [Function: binding],
+  _linkedBinding: [Function: _linkedBinding],
+  _events: [Object: null prototype],
+  _eventsCount: 6,
+  _maxListeners: undefined,
+  domain: null,
+  _exiting: [Getter/Setter],
+  exitCode: [Getter/Setter],
+  config: [Object],
+  dlopen: [Function: dlopen],
+  uptime: [Function: uptime],
+  _getActiveRequests: [Function: _getActiveRequests],
+  _getActiveHandles: [Function: _getActiveHandles],
+  getActiveResourcesInfo: [Function: getActiveResourcesInfo],
+  reallyExit: [Function: reallyExit],
+  _kill: [Function: _kill],
+  loadEnvFile: [Function: loadEnvFile],
+  cpuUsage: [Function: cpuUsage],
+  threadCpuUsage: [Function: threadCpuUsage],
+  resourceUsage: [Function: resourceUsage],
+  memoryUsage: [Function],
+  constrainedMemory: [Function: constrainedMemory],
+  availableMemory: [Function: availableMemory],
+  kill: [Function: kill],
+  exit: [Function: exit],
+  execve: [Function: execve],
+  ref: [Function: ref],
+  unref: [Function: unref],
+  finalization: [Getter/Setter],
+  hrtime: [Function],
+  openStdin: [Function (anonymous)],
+  allowedNodeEnvironmentFlags: [NodeEnvironmentFlagsSet],
+  features: [Object],
+  _fatalException: [Function (anonymous)],
+  setUncaughtExceptionCaptureCallback: [Function: setUncaughtExceptionCaptureCallback],
+  hasUncaughtExceptionCaptureCallback: [Function: hasUncaughtExceptionCaptureCallback],
+  emitWarning: [Function: emitWarning],
+  nextTick: [Function: nextTick],
+  _tickCallback: [Function: runNextTicks],
+  sourceMapsEnabled: [Getter],
+  setSourceMapsEnabled: [Function: setSourceMapsEnabled],
+  getBuiltinModule: [Function: getBuiltinModule],
+  _debugProcess: [Function: _debugProcess],
+  _debugEnd: [Function: _debugEnd],
+  _startProfilerIdleNotifier: [Function (anonymous)],
+  _stopProfilerIdleNotifier: [Function (anonymous)],
+  stdout: [Getter],
+  stdin: [Getter],
+  stderr: [Getter],
+  abort: [Function: abort],
+  umask: [Function: wrappedUmask],
+  chdir: [Function (anonymous)],
+  cwd: [Function: wrappedCwd],
+  env: [Object],
+  title: 'C:\\WINDOWS\\system32\\cmd.exe ',
+  argv: [Array],
+  execArgv: [],
+  pid: 32644,
+  ppid: 59936,
+  execPath: 'd:\\nvm4w\\nodejs\\node.exe',
+  debugPort: 9229,
+  argv0: 'd:\\nvm4w\\nodejs\\node.exe',
+  _preload_modules: [],
+  report: [Getter],
+  channel: [Control],
+  _handleQueue: null,
+  _pendingMessage: null,
+  send: [Function (anonymous)],
+  _send: [Function (anonymous)],
+  connected: true,
+  disconnect: [Function (anonymous)],
+  _disconnect: [Function (anonymous)],
+  mainModule: [Object],
+  Symbol(shapeMode): false,
+  Symbol(kCapture): false,
+  Symbol(kChannelHandle): [Pipe]
+}
+2026-02-14T13:59:01.156Z mocha:runner _addEventListener(): adding for event uncaughtException; 0 current listeners
+2026-02-14T13:59:01.156Z mocha:runner _addEventListener(): adding for event unhandledRejection; 0 current listeners
+2026-02-14T13:59:01.156Z mocha:runner run(): starting
+2026-02-14T13:59:01.156Z mocha:runner run(): emitting start
+2026-02-14T13:59:01.157Z mocha:runner run(): emitted start
+2026-02-14T13:59:01.157Z mocha:runner runSuite(): running 
+2026-02-14T13:59:01.157Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:01.157Z mocha:runner runSuite(): running views
+2026-02-14T13:59:01.157Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+
+  xs.js - XSA CLI Functions
+    getCFConfig()
+      26) should read XSA config from .xsconfig file
+      Γ£ö should throw error if config file not found (60ms)
+    getCFOrg()
+      27) should return organization config
+    getCFOrgName()
+      28) should return organization name
+    getCFOrgGUID()
+      29) should return organization GUID
+    getCFSpace()
+      30) should return space config
+    getCFSpaceName()
+      31) should return space name
+    getCFSpaceGUID()
+      32) should return space GUID
+    getCFTarget()
+      33) should return target API URL
+      34) should replace escaped colons in URL
+    getHANAInstances()
+      35) should execute xs curl to get HANA instances
+      36) should handle empty service instances
+      37) should throw error on stderr
+    getHANAInstanceByName()
+      38) should get HANA instance by name
+      39) should return empty array when instance not found
+    getServicePlans()
+      Γ£ö should get service plans for a service GUID
+      Γ£ö should throw error on stderr (42ms)
+    getServices()
+      Γ£ö should get all services
+      Γ£ö should handle empty services list (43ms)
+
+  xs.js - Module Exports
+    Γ£ö should export getCFConfig function
+    Γ£ö should export getCFOrg function
+    Γ£ö should export getCFOrgName function
+    Γ£ö should export getCFOrgGUID function
+    Γ£ö should export getCFSpace function
+    Γ£ö should export getCFSpaceName function
+    Γ£ö should export getCFSpaceGUID function
+    Γ£ö should export getCFTarget function
+    Γ£ö should export getHANAInstances function
+    Γ£ö should export getHANAInstanceByName function
+    Γ£ö should export getServicePlans function
+    Γ£ö should export getServices function
+
+2026-02-14T13:59:01.922Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+
+  Version Check Utilities
+    checkVersion
+      Γ£ö should return a promise (139ms)
+      Γ£ö should resolve without errors (682ms)
+      Γ£ö should complete within timeout (616ms)
+
+2026-02-14T13:59:02.608Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+
+  UI Commands
+    UI (main UI launcher)
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export describe
+      Γ£ö should export builder
+      Γ£ö should export handler function
+      Γ£ö should export main UI function
+    changeLogUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export describe
+      Γ£ö should export handler function
+      Γ£ö should export getChangeLog function
+    containersUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export describe
+      Γ£ö should export builder
+      Γ£ö should export handler function
+      Γ£ö should export getContainers function
+    dataTypesUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export dbStatus function
+    featuresUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export dbStatus function
+    featureUsageUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export dbStatus function
+    functionsUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export getFunctions function
+    hanaCloudHDIInstancesUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export listInstances function
+    hanaCloudSBSSInstancesUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export listInstances function
+    hanaCloudSchemaInstancesUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export listInstances function
+    hanaCloudSecureStoreInstancesUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export listInstances function
+    hanaCloudUPSInstancesUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export listInstances function
+    indexesUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export getIndexes function
+    inspectTableUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export tableInspect function
+    massConvertUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export handler function
+      Γ£ö should export builder
+    querySimpleUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export dbQuery function
+    readMeUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export readMe function
+    schemasUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export getSchemas function
+    systemInfoUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export sysInfo function
+    tablesUI
+      Γ£ö should export command
+      Γ£ö should export aliases
+      Γ£ö should export getTables function
+    Command Structure Validation
+      Γ£ö should verify all UI commands follow consistent patterns
+      Γ£ö should verify all UI commands have at least one alias
+
+2026-02-14T13:59:03.246Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:03.900Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+
+  inspectTable
+    Γ£ö returns help output (3271ms)
+    Γ£ö returns normal output with quiet (3547ms)
+    Γ£ö returns output in SQL format (3332ms)
+    Γ£ö returns output in CDS format (4556ms)
+    Γ£ö returns output in JSON format (5254ms)
+    Γ£ö returns output in YAML format (2403ms)
+    Γ£ö returns output in hdbtable format (2400ms)
+    Γ£ö returns output with quoted identifiers (2288ms)
+
+2026-02-14T13:59:04.506Z mocha:runner _addEventListener(): adding for event error; 0 current listeners
+2026-02-14T13:59:04.507Z mocha:runner run(): root suite completed; emitting end
+2026-02-14T13:59:04.507Z mocha:reporters:buffered received EVENT_RUN_END
+2026-02-14T13:59:04.507Z mocha:runner run(): emitted end
+2026-02-14T13:59:04.509Z mocha:serializer serialized: SerializableWorkerResult {
+  failureCount: 0,
+  events: [
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'pass',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'test end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'hook end',
+      data: [Object],
+      error: undefined
+    },
+    SerializableEvent {
+      eventName: 'suite end',
+      data: [Object],
+      error: undefined
+    }
+  ],
+  __type: 'SerializableWorkerResult'
+}
+2026-02-14T13:59:04.510Z mocha:parallel:worker:32644 run(): completed run with 0 test failures; returning to main process
+
+  views
+    Γ£ö returns help output (764ms)
+    Γ£ö returns normal output (685ms)
+    Γ£ö returns output with limit (637ms)
+    Γ£ö returns output with specific schema (654ms)
+    Γ£ö returns output with view filter (605ms)
+
+
+  systemInfo
+    Γ£ö returns help output (3883ms)
+    Γ£ö returns normal output (2526ms)
+    Γ£ö returns output with env option (2501ms)
+    Γ£ö returns output with dbx option (2268ms)
+
+
+  version
+    Γ£ö returns help output (2921ms)
+    Γ£ö returns normal output (9204ms)
+
+
+  tables
+    Γ£ö returns help output (1422ms)
+    Γ£ö returns normal output (4125ms)
+    Γ£ö returns output with limit (3743ms)
+    Γ£ö returns output with specific schema (4059ms)
+    Γ£ö returns output with table filter (3261ms)
+
+Using Connection Configuration loaded via default-env.json
+
+Using Connection Configuration loaded via default-env.json
+
+
+  Profile Integration Tests
+    PostgreSQL Profile Client
+      Γ£ö should create PostgreSQL client instance
+      Γ£ö should have correct schema for PostgreSQL
+      Γ£ö should default to public schema when not specified
+      Γ£ö should handle CURRENT_SCHEMA placeholder for PostgreSQL
+      Γ£ö should convert wildcard for table names
+      Γ£ö should have listTables method
+      Γ£ö should handle PostgreSQL-specific query structure (507ms)
+    SQLite Profile Client
+      Γ£ö should create SQLite client instance
+      Γ£ö should handle in-memory SQLite database
+      Γ£ö should handle file-based SQLite database
+      Γ£ö should convert wildcard for table names
+      Γ£ö should have listTables method
+      Γ£ö should handle SQLite-specific query structure
+    Profile Factory Method - getNewClient
+      Γ£ö should reject invalid profile with meaningful error
+      Γ£ö should handle missing profile gracefully (defaults to hybrid)
+    Profile-based Command Line Integration
+      Γ£ö should accept postgres profile in tables command (5050ms)
+      Γ£ö should accept sqlite profile in tables command (4233ms)
+      Γ£ö should accept -p alias with postgres (4342ms)
+      Γ£ö should accept -p alias with sqlite (2592ms)
+      Γ£ö should handle pg as alias for postgres profile (2481ms)
+    Profile-specific Schema Handling
+      Γ£ö should correctly calculate PostgreSQL schema from credentials
+      Γ£ö should use public as default for PostgreSQL when no schema in credentials
+      Γ£ö should override with explicit schema for PostgreSQL
+      Γ£ö should handle wildcard schema for PostgreSQL
+    Profile Client Methods
+      Γ£ö should expose getPrompts for PostgreSQL client
+      Γ£ö should expose getKind for PostgreSQL client
+      Γ£ö should expose getPrompts for SQLite client
+      Γ£ö should expose getKind for SQLite client
+      Γ£ö should allow setDB/getDB for PostgreSQL client
+      Γ£ö should allow setDB/getDB for SQLite client
+    Profile Error Handling
+      Γ£ö should provide clear error for unsupported profile via getNewClient
+      Γ£ö should handle missing CDS configuration gracefully
+
+
+  querySimple
+    Γ£ö returns help output (8021ms)
+    Γ£ö returns normal output (10090ms)
+    Table Output Enhancements
+      Γ£ö should display table format output with formatting (5981ms)
+      Γ£ö should save table format to text file with type-aware formatting (4306ms)
+      Γ£ö should handle JSON output format (4096ms)
+      Γ£ö should handle CSV output format (3545ms)
+      Γ£ö should save JSON output to file (2946ms)
+      Γ£ö should handle queries with various data types (3435ms)
+
+
+  Error Handling Tests
+    Invalid parameter values
+      Γ£ö should reject negative limit values (4220ms)
+      Γ£ö should handle zero limit value appropriately (5038ms)
+      Γ£ö should handle non-numeric limit value (4908ms)
+      Γ£ö should handle excessively large limit value (7249ms)
+    Connection error scenarios
+      Γ£ö should handle missing connection file gracefully (5550ms)
+      Γ£ö should handle connection timeout scenario (4052ms)
+    Empty or invalid schema/table names
+      Γ£ö should handle empty schema name (3209ms)
+      Γ£ö should handle special characters in schema name (3275ms)
+      Γ£ö should handle very long schema name (3155ms)
+      Γ£ö should handle Unicode characters in names (3368ms)
+    Missing required dependencies
+      Γ£ö should handle commands gracefully when optional dependencies missing (2586ms)
+    Malformed flag combinations
+      Γ£ö should handle flag without required value (3121ms)
+      Γ£ö should handle duplicate flags (2109ms)
+    SQL Injection prevention
+      Γ£ö should safely handle SQL injection in table parameter (2105ms)
+      Γ£ö should safely handle SQL injection in schema parameter (2441ms)
+    Error message quality
+      Γ£ö should provide helpful error message for invalid command (229ms)
+      Γ£ö should show available commands on invalid command (3196ms)
+    Resource cleanup on errors
+      Γ£ö should not leave connections open after error (2024ms)
+
+
+  Type-Aware Formatting in Text Tables
+    Date and Timestamp Formatting
+      Γ£ö should format CURRENT_TIMESTAMP in readable format (5790ms)
+      Γ£ö should format CURRENT_DATE (4368ms)
+    Numeric Formatting
+      Γ£ö should format large integers with thousand separators (4085ms)
+      Γ£ö should format decimal numbers appropriately (3510ms)
+      Γ£ö should handle very small decimal numbers (2999ms)
+      Γ£ö should handle negative numbers (2650ms)
+      Γ£ö should handle zero values (2736ms)
+    Text and String Handling
+      Γ£ö should handle long text strings with truncation (2182ms)
+      Γ£ö should handle empty strings (2722ms)
+      Γ£ö should handle special characters in strings (1996ms)
+    NULL and Empty Value Handling
+      Γ£ö should handle NULL values gracefully (2273ms)
+    Mixed Data Type Columns
+      Γ£ö should handle multiple columns with different data types (2297ms)
+    Column Width Management in Text Files
+      Γ£ö should limit column width to prevent overly wide tables (2046ms)
+
+
+  Flag Validation Tests
+    Limit flag validation
+      Γ£ö should accept positive limit values (4191ms)
+      Γ£ö should handle limit of 1 (5369ms)
+      Γ£ö should use -l alias for limit (5194ms)
+      Γ£ö should handle very large limit values (7013ms)
+    Schema and table flag validation
+      Γ£ö should accept valid schema names (5306ms)
+      Γ£ö should accept -s alias for schema (4004ms)
+      Γ£ö should accept wildcard patterns in table names (3169ms)
+      Γ£ö should accept -t alias for table (3489ms)
+      Γ£ö should handle lowercase schema names (3294ms)
+    Output format flag validation
+      Γ£ö should accept tbl output format (1298ms)
+      Γ£ö should accept sql output format (1430ms)
+      Γ£ö should accept json output format (1379ms)
+      Γ£ö should accept cds output format (1408ms)
+      Γ£ö should accept -o alias for output (1947ms)
+    Boolean flag validation
+      Γ£ö should accept --debug flag without value (2513ms)
+      Γ£ö should accept --quiet flag without value (2109ms)
+      Γ£ö should accept --admin flag without value (3000ms)
+      Γ£ö should accept --useHanaTypes flag (968ms)
+      Γ£ö should accept --hana alias for useHanaTypes (1081ms)
+    Profile flag validation
+      Γ£ö should accept profile flag with value (1908ms)
+      Γ£ö should accept -p alias for profile (1984ms)
+    Connection flag validation
+      Γ£ö should accept conn flag with filename (2002ms)
+      Γ£ö should accept conn flag with .env extension (1739ms)
+    Flag capitalization handling
+      Γ£ö should accept --Schema capitalized alias (1722ms)
+      Γ£ö should accept --Table capitalized alias (1714ms)
+      Γ£ö should accept --Debug capitalized alias (1715ms)
+      Γ£ö should accept --Admin capitalized alias (1639ms)
+    Flag combination validation
+      Γ£ö should accept multiple valid flags together (1655ms)
+      Γ£ö should handle --debug and --quiet together (1734ms)
+      Γ£ö should accept positional and flag-based parameters together (2226ms)
+    Help flag validation
+      Γ£ö should show help with --help (466ms)
+      Γ£ö should show help with -h (575ms)
+      Γ£ö should prioritize help over other flags (473ms)
+
+
+  Command Alias Tests
+    tables command aliases
+      Γ£ö should work with main command (3506ms)
+      Γ£ö should work with "t" alias (4567ms)
+      Γ£ö should work with "listTables" alias (5498ms)
+      Γ£ö should work with "listtables" alias (5052ms)
+    views command aliases
+      Γ£ö should work with main command (7409ms)
+      Γ£ö should work with "v" alias (4037ms)
+    functions command aliases
+      Γ£ö should work with main command (3967ms)
+      Γ£ö should work with "f" alias (3426ms)
+    procedures command aliases
+      Γ£ö should work with main command (3358ms)
+      Γ£ö should work with "p" alias (3267ms)
+      Γ£ö should work with "sp" alias (5157ms)
+    schemas command aliases
+      Γ£ö should work with main command (2485ms)
+      Γ£ö should work with "s" alias (2222ms)
+    inspectTable command aliases
+      Γ£ö should work with main command (2878ms)
+      Γ£ö should work with "it" alias (2607ms)
+      Γ£ö should work with "table" alias (4796ms)
+      Γ£ö should work with "insTbl" alias (3945ms)
+      Γ£ö should work with "inspectable" alias (3908ms)
+    inspectView command aliases
+      Γ£ö should work with "iv" alias (2011ms)
+      Γ£ö should work with "view" alias (3796ms)
+    inspectProcedure command aliases
+      Γ£ö should work with "ip" alias (894ms)
+      Γ£ö should work with "inspectprocedure" alias (2321ms)
+    inspectFunction command aliases
+      Γ£ö should work with "if" alias (994ms)
+      Γ£ö should work with "function" alias (2257ms)
+    Alias consistency check
+      Γ£ö should produce similar output for command and alias (4226ms)
+      Γ£ö should accept same flags for command and alias (3452ms)
+    Help output for aliases
+      Γ£ö should show help for table alias (507ms)
+      Γ£ö should show help for view alias (533ms)
+      Γ£ö should show help for function alias (473ms)
+    Case sensitivity of aliases
+      Γ£ö should handle lowercase aliases (1605ms)
+      Γ£ö should handle camelCase aliases (1568ms)
+
+
+  Edge Case Tests
+    Empty result sets
+      Γ£ö should handle empty table list gracefully (4842ms)
+      Γ£ö should handle no matching schemas (919ms)
+      Γ£ö should handle no matching views (953ms)
+      Γ£ö should handle no matching functions (5096ms)
+    Wildcard patterns
+      Γ£ö should handle single asterisk wildcard (5093ms)
+      Γ£ö should handle prefix wildcard pattern (7649ms)
+      Γ£ö should handle suffix wildcard pattern (3913ms)
+      Γ£ö should handle middle wildcard pattern (3913ms)
+      Γ£ö should handle percent sign wildcard (3104ms)
+      Γ£ö should handle underscore wildcard (641ms)
+    Special characters in names
+      Γ£ö should handle names with spaces (quoted) (3286ms)
+      Γ£ö should handle names with dots (3172ms)
+      Γ£ö should handle names with underscores (2607ms)
+      Γ£ö should handle names with numbers (2617ms)
+      Γ£ö should handle names with dollar signs (2491ms)
+      Γ£ö should handle names with hash/pound signs (2251ms)
+    Unicode and international characters
+      Γ£ö should handle Chinese characters (2018ms)
+      Γ£ö should handle German umlauts (2477ms)
+      Γ£ö should handle Arabic characters (1970ms)
+      Γ£ö should handle Cyrillic characters (2040ms)
+      Γ£ö should handle emoji characters (2135ms)
+    Case sensitivity handling
+      Γ£ö should handle uppercase schema names (2223ms)
+      Γ£ö should handle lowercase schema names (1874ms)
+      Γ£ö should handle mixed case schema names (1743ms)
+    Boundary values
+      Γ£ö should handle limit of 1 (1997ms)
+      Γ£ö should handle very large limit value (2125ms)
+      Γ£ö should handle minimum valid table name (1743ms)
+      Γ£ö should handle very long table name (1725ms)
+    Quote handling
+      Γ£ö should handle double-quoted identifiers (2275ms)
+      Γ£ö should handle single quotes in names (1815ms)
+    System table patterns
+      Γ£ö should handle queries for M_ monitoring views (1681ms)
+      Γ£ö should handle queries for SYS schema (579ms)
+      Γ£ö should handle queries for INFO schema (1462ms)
+    Concurrent execution behavior
+      Γ£ö should handle multiple simultaneous command invocations (2488ms)
+    Whitespace handling
+      Γ£ö should handle extra whitespace in parameters (1393ms)
+      Γ£ö should handle leading/trailing whitespace (1935ms)
+      Γ£ö should handle tab characters (1615ms)
+    Default parameter behavior
+      Γ£ö should use default schema when not specified (1551ms)
+      Γ£ö should use default limit when not specified (1574ms)
+      Γ£ö should use default table pattern when not specified (1832ms)
+

@@ -64,7 +64,7 @@ export function getBTPHierarchy(): Promise<object>;
  */
 export function getBTPSubAccounts(): Promise<object>;
 /**
- * Get all Subscriptions
+ * Get all Service Plans
  * @returns {Promise<object>}
  */
 export function getBTPPlans(): Promise<object>;
@@ -91,7 +91,7 @@ export function getBTPServiceInstanceDetails(id: string): Promise<object>;
  */
 export function setBTPSubAccount(subAccount: string): Promise<object>;
 /**
- * Get all Service Instances Parameters
+ * Get Service Instance Parameters
  * @param {string} id - service instance id
  * @returns {Promise<object>}
  */
@@ -116,12 +116,12 @@ export function getHANAInstanceByName(name: string): Promise<object>;
 /**
  * Start HANA Cloud Instance
  * @param {string} name - HANA Cloud instance name
- * @returns any
+ * @returns {Promise<string>}
  */
 export function startHana(name: string): Promise<string>;
 /**
  * Stop HANA Cloud Instance
  * @param {string} name - HANA Cloud instance name
- * @returns any
+ * @returns {Promise<string>}
  */
 export function stopHana(name: string): Promise<string>;

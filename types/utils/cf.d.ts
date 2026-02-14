@@ -9,6 +9,11 @@ export function getVersion(): Promise<string>;
  */
 export function getCFConfig(): Promise<object>;
 /**
+ * Clear CF config cache (useful for testing or forced refresh)
+ * @returns {void}
+ */
+export function clearCFConfigCache(): void;
+/**
  * Get target organization
  * @returns {Promise<object>}
  */
@@ -76,7 +81,7 @@ export function getSbssInstances(): Promise<object>;
  */
 export function getSecureStoreInstances(): Promise<object>;
 /**
- * Get all SecureStore service instances
+ * Get all Schema service instances
  * @returns {Promise<object>}
  */
 export function getSchemaInstances(): Promise<object>;
@@ -88,18 +93,18 @@ export function getUpsInstances(): Promise<object>;
 /**
  * Start HANA Cloud Instance
  * @param {string} name - HANA Cloud instance name
- * @returns any
+ * @returns {Promise<string>}
  */
 export function startHana(name: string): Promise<string>;
 /**
  * Stop HANA Cloud Instance
  * @param {string} name - HANA Cloud instance name
- * @returns any
+ * @returns {Promise<string>}
  */
 export function stopHana(name: string): Promise<string>;
 /**
  * Get Cloud Foundry service instance parameters
  * @param {string} serviceInstanceGUID - Service instance GUID
- * @returns object
+ * @returns {Promise<object>}
  */
-export function getCFServiceInstanceParameters(serviceInstanceGUID: string): Promise<any>;
+export function getCFServiceInstanceParameters(serviceInstanceGUID: string): Promise<object>;

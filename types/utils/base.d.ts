@@ -12,6 +12,14 @@ export function stopSpinnerInt(): void;
  */
 export function blankLine(): void;
 /**
+ * Validate that a limit parameter is a valid positive number
+ * @param {any} limit - The limit value to validate
+ * @param {string} [paramName='limit'] - Parameter name for error messages
+ * @throws {Error} If limit is not a valid positive number
+ * @returns {number} The validated limit as a number
+ */
+export function validateLimit(limit: any, paramName?: string): number;
+/**
  *
  * @param {object} newPrompts - processed input prompts
  */
@@ -29,6 +37,7 @@ export function clearConnection(): Promise<void>;
 /**
  * @param {object} [options] - override the already set parameters with new connection options
  * @returns {Promise<hdbextPromiseInstance>} - hdbext instanced promisfied
+ * @throws {Error} If connection creation fails
  */
 export function createDBConnection(options?: object): Promise<hdbextPromiseInstance>;
 /**
@@ -71,6 +80,7 @@ export function askFalse(): boolean;
  * @param {object} inputSchema - prompts current value
  * @param {boolean} [iConn=true] - Add Connection Group
  * @param {boolean} [iDebug=true] - Add Debug Group
+ * @throws {Error} If required parameters are missing or invalid
  */
 export function promptHandler(argv: import("yargs").CommandBuilder, processingFunction: Function, inputSchema: object, iConn?: boolean, iDebug?: boolean): Promise<void>;
 /**
