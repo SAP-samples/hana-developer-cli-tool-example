@@ -2272,6 +2272,76 @@ Options:
                  [string] [choices: "table", "json", "excel", "csv"] [default: "table"]
 ```
 
+### import
+
+```shell
+hana-cli import
+[aliases: imp, uploadData, uploaddata]
+Import data from CSV or Excel files into a database table
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -n, --filename, --Filename  Path to the CSV or Excel file to import  [string]
+  -t, --table, --Table        Target database table (format: SCHEMA.TABLE
+                              or just TABLE)                            [string]
+  -o, --output, --Output      File format (csv or excel)
+                                        [string] [choices: "csv", "excel"] [default: "csv"]
+  -m, --matchMode, --MatchMode Column matching mode - order: by position,
+                              name: by column names, auto: try names then
+                              fall back to position
+                        [string] [choices: "order", "name", "auto"] [default: "auto"]
+      --truncate, --tr        Truncate target table before import
+                                                      [boolean] [default: false]
+  -p, --profile, --Profile    CDS Profile                               [string]
+```
+
+**Description:**
+
+The `import` command allows you to upload data from CSV or Excel files directly into SAP HANA database tables. This is the complementary command to `querySimple`, which exports table data to files.
+
+**Column Matching:**
+
+The command supports three strategies for matching file columns to table columns:
+
+* **order**: Match columns by position (useful when file has same column order as table)
+* **name**: Match columns by name, case-insensitive (useful when names differ but columns are identifiable)
+* **auto** (default): Try name matching first, then fall back to position matching
+
+**Data Type Support:**
+
+Automatically converts data types including integers, decimals, dates, timestamps, booleans, and text values.
+
+**Usage Examples:**
+
+```bash
+# Basic CSV import with auto column matching
+hana-cli import -n data.csv -t EMPLOYEES
+
+# Import Excel file with name-based column matching
+hana-cli import -n data.xlsx -o excel -t EMPLOYEES -m name
+
+# Replace all data (truncate first, then import)
+hana-cli import -n data.csv -t EMPLOYEES --truncate
+
+# Import using schema-qualified table name
+hana-cli import -n backup/employees.csv -t HR.EMPLOYEES
+```
+
+**See Also:** [Import Command Documentation](docs/IMPORT_COMMAND.md) | [Import Examples](docs/IMPORT_EXAMPLES.md)
+
 ### readMe
 
 ```shell

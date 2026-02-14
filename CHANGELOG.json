@@ -1,5 +1,5 @@
 [{
-        "date": "2026-02-13",
+        "date": "2026-02-16",
         "version": "4.202602.0",
         "Changed": [
             "Major version bump to 4.x reflecting significant internal improvements and enhanced stability",
@@ -14,7 +14,8 @@
             "MCP (Model Context Protocol) Server enhancements - added comprehensive troubleshooting documentation and improved error handling for better AI assistant integration",
             "New MCP server troubleshooting guide (mcp-server/TROUBLESHOOTING.md) with common issues and solutions",
             "Improved error messages and debugging capabilities throughout the codebase",
-            "CLI Startup Performance Optimization - Implemented lazy-loading strategy for command modules and dependencies, resulting in 60-77% faster startup times for most commands. Key improvements: ultra-fast path for --version flag bypassing all heavy module imports, deferred yargs loading until after fast-path checks, conditional debug module loading only when DEBUG environment variable is set, elimination of completion overhead, and simplified validation logic. Average command execution now starts in ~700ms vs previous ~2,200ms."
+            "CLI Startup Performance Optimization - Implemented lazy-loading strategy for command modules and dependencies, resulting in 60-77% faster startup times for most commands. Key improvements: ultra-fast path for --version flag bypassing all heavy module imports, deferred yargs loading until after fast-path checks, conditional debug module loading only when DEBUG environment variable is set, elimination of completion overhead, and simplified validation logic. Average command execution now starts in ~700ms vs previous ~2,200ms.",
+            "New import command features - added support for matching columns by order, name, or auto (try name then fall back to order), improved error handling and reporting for mismatched columns and data type issues, and added support for additional data types in the import process"
         ]
     },
     {

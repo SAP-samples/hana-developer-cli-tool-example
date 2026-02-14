@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [4.202602.0] - 2026-02-16
+
+**Changed**
+
+- Major version bump to 4.x reflecting significant internal improvements and enhanced stability
+- Update SAPUI5 version and dependencies to 1.144.1
+- Various dependency updates and maintenance - especially update to @sap/cds-dk 9.7.1 for better compatibility with cds-fiori plugin and the latest CAP features
+- Migrate from Express 4.x to 5.x now that CAP supports Express 5 as well. This is a major internal change but should be mostly transparent to users. If you do see any issues please report them.
+- Convert from node-zip to JSZip for better support and maintenance going forward
+- Low level refactoring of DB connection handling to better support MCP server and future features. This should be mostly transparent to users but if you see any issues please report them.
+- Using AI Code Generation - massive expansion of test cases and test coverage - 317+ new tests added across 6 new test files, improving coverage from ~40% to ~85% of critical paths
+- Enhanced README files throughout the project with better documentation and more examples
+- First version of German Localization - added German translations for key commands (inspect, massConvert, messages, systemInfo, tables)
+- MCP (Model Context Protocol) Server enhancements - added comprehensive troubleshooting documentation and improved error handling for better AI assistant integration
+- New MCP server troubleshooting guide (mcp-server/TROUBLESHOOTING.md) with common issues and solutions
+- Improved error messages and debugging capabilities throughout the codebase
+- CLI Startup Performance Optimization - Implemented lazy-loading strategy for command modules and dependencies, resulting in 60-77% faster startup times for most commands. Key improvements: ultra-fast path for --version flag bypassing all heavy module imports, deferred yargs loading until after fast-path checks, conditional debug module loading only when DEBUG environment variable is set, elimination of completion overhead, and simplified validation logic. Average command execution now starts in ~700ms vs previous ~2,200ms.
+- New import command features - added support for matching columns by order, name, or auto (try name then fall back to order), improved error handling and reporting for mismatched columns and data type issues, and added support for additional data types in the import process
+
 ## [3.202601.0] - 2026-01-30
 
 **Changed**
