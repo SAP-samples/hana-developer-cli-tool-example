@@ -631,6 +631,161 @@ Troubleshooting:
 
 ![certificates example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/certificates.gif)
 
+### cacheStats
+
+```shell
+hana-cli cacheStats
+View SQL plan cache and result cache statistics
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --cacheType, --CacheType  Cache type to display
+     [string] [choices: "plan", "result", "all"] [default: "all"]
+  -l, --limit, --Limit          Limit results               [number] [default: 50]
+```
+
+### columnStats
+
+```shell
+hana-cli columnStats [schema] [table]
+Analyze column store statistics
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --table, --Table   Database Table                       [string] [default: "*"]
+  -s, --schema, --Schema  schema            [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit, --Limit   Limit results                       [number] [default: 200]
+```
+
+### expensiveStatements
+
+```shell
+hana-cli expensiveStatements
+View top resource-consuming SQL statements
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -l, --limit, --Limit             Limit results            [number] [default: 50]
+  -o, --orderBy, --OrderBy         Order results by execution time or start time
+         [string] [choices: "totalTime", "startTime"] [default: "totalTime"]
+```
+
+### memoryAnalysis
+
+```shell
+hana-cli memoryAnalysis
+Memory consumption breakdown by component
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -c, --component, --Component  Component filter             [string] [default: "*"]
+  -l, --limit, --Limit          Limit results               [number] [default: 200]
+```
+
+### queryPlan
+
+```shell
+hana-cli queryPlan --sql "<statement>"
+Visualize query execution plan
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -q, --sql, --Sql, --SQL, --Query  SQL Statement             [string]
+```
+
+### tableHotspots
+
+```shell
+hana-cli tableHotspots [schema] [table]
+Identify frequently accessed tables/partitions
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --table, --Table               Database Table           [string] [default: "*"]
+  -s, --schema, --Schema             schema        [string] [default: "**CURRENT_SCHEMA**"]
+  -p, --includePartitions, --Partitions  Include partition-level statistics
+                                                    [boolean] [default: true]
+  -l, --limit, --Limit               Limit results           [number] [default: 200]
+```
+
 ### cds
 
 ```shell
