@@ -1672,6 +1672,39 @@ Troubleshooting:
 
 ![disks example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/disks.gif)
 
+### erdDiagram
+
+```shell
+hana-cli erdDiagram
+[aliases: erd, er, schema-diagram, entityrelation]
+Generating ER diagram for database schema
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -s, --schema, --Schema           Schema name                               [string]
+  -t, --tables, --Tables           Comma-separated table names (optional)    [string]
+  -o, --output, --Output           Output file path (optional)               [string]
+  -f, --format, --Format           Output format (mermaid, plantuml, graphviz, json)
+                             [string] [choices: "mermaid", "plantuml", "graphviz", "json"] [default: "mermaid"]
+  -c, --showCardinality            Show cardinality in relationships [boolean] [default: true]
+      --showColumns, --cols        Show column details in diagram [boolean] [default: true]
+  -ec, --excludeColumns            Exclude column names (comma-separated)    [string]
+  -p, --profile, --Profile        Database connection profile                [string]
+```
+
 ### export
 
 ```shell
@@ -1909,6 +1942,77 @@ Options:
   -f, --function, --Function  Function                   [string] [default: "*"]
   -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit                 Limit results              [number] [default: 200]
+```
+
+### generateDocs
+
+```shell
+hana-cli generateDocs
+[aliases: docs, gendocs, generateDocumentation]
+Auto-generate database documentation
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -s, --schema, --Schema             Schema name                           [string]
+  -o, --objects, --Objects           Object types to document (tables, views, procedures, functions, all)
+                             [string] [choices: "tables", "views", "procedures", "functions", "all"] [default: "all"]
+  -f, --output, --Output             Output file path                      [string]
+      --format, --fmt                Output format (markdown, html, pdf)   [string] [choices: "markdown", "html", "pdf"] [default: "markdown"]
+      --includeData, --id            Include sample data [boolean] [default: false]
+      --includeGrants, --ig          Include grants information [boolean] [default: true]
+      --includeIndexes, --ii         Include index information [boolean] [default: true]
+      --includeTriggers, --it        Include trigger information [boolean] [default: true]
+      --generateTOC, --toc           Generate table of contents [boolean] [default: true]
+  -p, --profile, --Profile           Database connection profile           [string]
+```
+
+### generateTestData
+
+```shell
+hana-cli generateTestData
+[aliases: testdata, gendata, generateData]
+Generate realistic test data for tables
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --table, --Table               Table name (required)                  [string]
+  -s, --schema, --Schema             Schema name                            [string]
+  -r, --rows, --Rows                 Number of rows to generate [number] [default: 100]
+  -l, --locale, --Locale             Locale for data generation [string] [default: "en"]
+      --seed, --Seed                 Random seed for reproducibility        [number]
+  -f, --format, --Format             Output format (sql, csv, json)
+                             [string] [choices: "sql", "csv", "json"] [default: "sql"]
+  -o, --output, --Output             Output file path                      [string]
+  -x, --realistic, --Realistic       Generate realistic data [boolean] [default: true]
+      --includeRelations, --rel      Include foreign key constraints [boolean] [default: true]
+      --dryRun, --dr                 Preview without executing [boolean] [default: false]
+  -p, --profile, --Profile           Database connection profile           [string]
 ```
 
 ### hdi
