@@ -815,6 +815,170 @@ Options:
   -l, --limit, --Limit               Limit results           [number] [default: 200]
 ```
 
+### alerts
+
+```shell
+hana-cli alerts
+[aliases: alrt, alert]
+View database system alerts and warnings
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -l, --limit, --Limit             Limit results            [number] [default: 50]
+  -sev, --severity, --Severity     Filter by severity level
+         [string] [choices: "ALL", "HIGH", "MEDIUM", "LOW"] [default: "ALL"]
+```
+
+### blocking
+
+```shell
+hana-cli blocking
+[aliases: blk, blocks, locks]
+Identify blocking locks and lock waits
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -l, --limit, --Limit             Limit results            [number] [default: 50]
+  -wt, --waitTime, --WaitTime     Minimum wait time threshold in milliseconds
+                                                      [number] [default: 1000]
+```
+
+### connections
+
+```shell
+hana-cli connections
+[aliases: conn, sessions]
+Monitor database connections and active sessions
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -l, --limit, --Limit             Limit results            [number] [default: 50]
+  -u, --user, --User              Filter by user                   [string]
+  -s, --status, --Status          Filter by session status
+              [string] [choices: "ALL", "RUNNING", "IDLE"] [default: "ALL"]
+```
+
+### healthCheck
+
+```shell
+hana-cli healthCheck
+[aliases: hc, health]
+Perform comprehensive database health diagnostics
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -c, --category, --Category      Health check category
+         [string] [choices: "all", "disk", "memory", "sessions", "backup", "database"]
+         [default: "all"]
+```
+
+### longRunning
+
+```shell
+hana-cli longRunning
+[aliases: lr, slowQuery, longquery]
+Identify long-running and slow SQL statements
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -l, --limit, --Limit             Limit results            [number] [default: 50]
+  -d, --duration, --Duration      Minimum execution time threshold in milliseconds
+                                                      [number] [default: 5000]
+```
+
+### recommendations
+
+```shell
+hana-cli recommendations
+[aliases: rec, recommend]
+AI-based performance optimization recommendations
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -c, --category, --Category      Recommendation category
+         [string] [choices: "all", "indexes", "queries", "cache", "tables", "locks", "memory"]
+         [default: "all"]
+  -l, --limit, --Limit             Limit results            [number] [default: 50]
+```
+
 ### cds
 
 ```shell
