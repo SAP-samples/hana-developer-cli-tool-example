@@ -683,6 +683,35 @@ Options:
   -l, --limit, --Limit   Limit results                       [number] [default: 200]
 ```
 
+### calcViewAnalyzer
+
+```shell
+hana-cli calcViewAnalyzer [schema] [view]
+[aliases: cva, analyzeCalcView, calcview]
+Analyze calculation view performance
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -v, --view, --View        Calculation view name       [string] [default: "*"]
+  -s, --schema, --Schema    Schema name [string] [default: "**CURRENT_SCHEMA**"]
+  -m, --metrics, --Metrics  Include performance metrics
+                                                      [boolean] [default: false]
+  -l, --limit, --Limit      Limit results              [number] [default: 100]
+```
+
 ### expensiveStatements
 
 ```shell
@@ -2912,6 +2941,66 @@ hana-cli import -n data.xlsx -o excel -t SPARSE_DATA --skipEmptyRows false
 hana-cli import -n data.xlsx -o excel -t ORDERS -m name --dryRun --worksheet 1 --maxErrorsAllowed 10 --debug
 ```
 
+### kafkaConnect
+
+```shell
+hana-cli kafkaConnect [action]
+[aliases: kafka, kafkaAdapter, kafkasub]
+Kafka connector configuration management
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -a, --action, --Action        Action to perform (list, create, delete, status, test, info)
+                                [string] [choices: "list", "create", "delete", "status", "test", "info"] [default: "list"]
+  -n, --name, --Name            Kafka Connector Name                          [string]
+  -b, --brokers, --Brokers      Kafka Brokers (comma-separated)               [string]
+  -t, --topic, --Topic          Kafka Topic Name                              [string]
+  -c, --config, --Config        Configuration file path                       [string]
+
+**Actions:**
+
+* **list** - Display all Kafka connectors and their status
+* **create** - Create a new Kafka connector (requires: name, brokers, topic)
+* **delete** - Remove a Kafka connector (requires: name)
+* **status** - Check connector operational status and metrics
+* **test** - Test Kafka connector connectivity
+* **info** - Get detailed connector configuration and mapping information
+
+**Usage Examples:**
+
+```bash
+# List all Kafka connectors
+hana-cli kafkaConnect list
+
+# Create a new Kafka connector
+hana-cli kafka create --name myconnector --brokers kafka:9092 --topic events
+
+# Test connector connection
+hana-cli kafkaConnect test --name myconnector
+
+# Check connector status
+hana-cli kafka status --name myconnector
+
+# Delete a connector
+hana-cli kafkaConnect delete --name oldconnector
+
+# Get detailed connector info
+hana-cli kafka info --name myconnector
+```
+
 ### readMe
 
 ```shell
@@ -3534,6 +3623,71 @@ Options:
   -l, --limit                   Limit results            [number] [default: 200]
 ```
 
+### timeSeriesTools
+
+```shell
+hana-cli timeSeriesTools [action]
+[aliases: timeseries, tst, timeSeriesAnalysis, tsAnalyzer]
+Time-series data analysis, aggregation, forecasting, and anomaly detection
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -a, --action, --Action        Action to perform (list, analyze, aggregate, forecast, detect, info)
+                                [string] [choices: "list", "analyze", "aggregate", "forecast", "detect", "info"] [default: "list"]
+  -t, --table, --Table          Table name for analysis                       [string]
+  -c, --timeColumn, --TimeColumn  Timestamp column name                       [string]
+  -v, --valueColumn, --ValueColumn  Numeric value column for aggregation     [string]
+  -i, --interval, --Interval    Aggregation interval (SECOND, MINUTE, HOUR, DAY, WEEK, MONTH)
+                                [string] [choices: "SECOND", "MINUTE", "HOUR", "DAY", "WEEK", "MONTH"]
+                                [default: "HOUR"]
+
+**Actions:**
+
+* **list** - Display all time-series tables and column listings
+* **analyze** - Provide basic statistics and metadata about a time-series table (min/max timestamp, row count)
+* **aggregate** - Aggregate time-series data by specified interval (supports SECOND, MINUTE, HOUR, DAY, WEEK, MONTH)
+* **forecast** - Generate forecasts using SAP HANA ML predictive capabilities
+* **detect** - Identify anomalies and outliers in time-series data
+* **info** - Get detailed configuration and analysis capabilities information
+
+**Usage Examples:**
+
+```bash
+# List all time-series tables
+hana-cli timeSeriesTools list
+
+# Analyze a specific time-series table
+hana-cli tst analyze --table SENSOR_DATA --timeColumn TIMESTAMP
+
+# Aggregate data by hour
+hana-cli timeseries aggregate --table SENSOR_DATA --timeColumn TIMESTAMP --valueColumn TEMPERATURE --interval HOUR
+
+# Aggregate by day for longer-term trends
+hana-cli tst aggregate --table STOCK_PRICES --timeColumn TRADE_DATE --valueColumn CLOSE_PRICE --interval DAY
+
+# Detect anomalies in sensor readings
+hana-cli timeSeriesTools detect --table SENSOR_DATA --timeColumn TIMESTAMP --valueColumn TEMPERATURE
+
+# Generate forecast for next period
+hana-cli tst forecast --table DEMAND_FORECAST --timeColumn PERIOD --valueColumn DEMAND
+
+# Get detailed time-series tool information
+hana-cli timeseries info
+```
+
 ### UI
 
 ```shell
@@ -3750,6 +3904,71 @@ Options:
   -v, --view, --View      Database View                  [string] [default: "*"]
   -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit             Limit results                  [number] [default: 200]
+```
+
+### xsaServices
+
+```shell
+hana-cli xsaServices [action]
+[aliases: xsa, xsaServiceManagement, xsaServiceMgmt, xsaSvc]
+XSA (Extended Services Architecture) service management and monitoring
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -a, --action, --Action        Action to perform (list, status, start, stop, restart, info)
+                                [string] [choices: "list", "status", "start", "stop", "restart", "info"] [default: "list"]
+  -s, --service, --Service      Service name to manage                        [string]
+  -d, --details, --Details      Show detailed information about services      [boolean] [default: false]
+  -m, --monitoring              Enable real-time monitoring                   [boolean] [default: false]
+
+**Actions:**
+
+* **list** - Display all XSA services and their operational status
+* **status** - Check current status and resource utilization of services
+* **start** - Start a specified XSA service
+* **stop** - Stop a specified XSA service
+* **restart** - Restart a specified XSA service (stop then start)
+* **info** - Get detailed configuration and capability information about services
+
+**Usage Examples:**
+
+```bash
+# List all XSA services
+hana-cli xsaServices list
+
+# Check status of all services with details
+hana-cli xsa list --details
+
+# Get status of a specific service
+hana-cli xsaServices status --service gateway
+
+# Start a service
+hana-cli xsa start --service gateway
+
+# Stop a service
+hana-cli xsaServices stop --service router
+
+# Restart a service
+hana-cli xsa restart --service gateway
+
+# Enable real-time monitoring
+hana-cli xsaServices status --monitoring
+
+# Get detailed service information
+hana-cli xsa info --service gateway
 ```
 
 ## Unit Testing

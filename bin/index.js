@@ -5,7 +5,7 @@ import * as baseLite from '../utils/base-lite.js'
 const commandFiles = [
     './activateHDI.js', './adminHDI.js', './adminHDIGroup.js', './backup.js', './backupList.js',
     './backupStatus.js', './restore.js', './btp.js', './btpSubs.js',
-    './btpInfo.js', './btpInfoUI.js', './callProcedure.js', './cacheStats.js', './certificates.js', './cds.js', './columnStats.js', './openChangeLog.js',
+    './btpInfo.js', './btpInfoUI.js', './calcViewAnalyzer.js', './callProcedure.js', './cacheStats.js', './certificates.js', './cds.js', './columnStats.js', './openChangeLog.js',
     './changeLog.js', './changeLogUI.js', './compareData.js', './compareSchema.js', './connect.js', './containers.js', './containersUI.js',
     './certificatesUI.js',
     './copy2DefaultEnv.js', './copy2Env.js', './copy2Secrets.js', './createGroup.js', './createContainer.js',
@@ -27,7 +27,8 @@ const commandFiles = [
     './connectViaServiceKey.js', './sequences.js', './status.js', './synonyms.js', './systemInfo.js',
     './systemInfoUI.js', './tableHotspots.js', './tables.js', './tablesPG.js', './tablesSQLite.js', './tablesUI.js',
     './traces.js', './traceContents.js', './triggers.js', './UI.js', './hanaCloudUPSInstances.js',
-    './hanaCloudUPSInstancesUI.js', './users.js', './version.js', './views.js'
+    './hanaCloudUPSInstancesUI.js', './users.js', './version.js', './views.js',
+    './calcViewAnalyzer.js', './xsaServices.js', './kafkaConnect.js', './timeSeriesTools.js'
 ]
 
 export async function init() {
