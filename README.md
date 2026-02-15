@@ -1243,6 +1243,74 @@ Options:
 
 ![createXSAAdmin example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/createXSAAdmin.gif)
 
+### compareData
+
+```shell
+hana-cli compareData
+[aliases: cmpdata, compardata, dataCompare]
+Compare data between two tables or schemas for differences
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -st, --sourceTable, --SourceTable      Source table name                 [string]
+  -ss, --sourceSchema, --SourceSchema    Source schema name                [string]
+  -tt, --targetTable, --TargetTable      Target table name                 [string]
+  -ts, --targetSchema, --TargetSchema    Target schema name                [string]
+  -k, --keyColumns, --KeyColumns         Key columns for matching (required) [string]
+  -c, --columns, --Columns               Columns to compare (optional)     [string]
+  -o, --output, --Output                 Output report file path           [string]
+      --showMatches, --sm                Show matching row details [boolean] [default: false]
+  -l, --limit, --Limit                   Maximum rows to compare[number] [default: 1000]
+```
+
+For detailed documentation, see [COMPARE_DATA_COMMAND.md](docs/COMPARE_DATA_COMMAND.md)
+
+### compareSchema
+
+```shell
+hana-cli compareSchema
+[aliases: cmpschema, schemaCompare, compareschema]
+Compare database schema structures across environments
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -ss, --sourceSchema, --SourceSchema          Source schema name (required)     [string]
+  -ts, --targetSchema, --TargetSchema          Target schema name (required)     [string]
+      --tables, --tb                           Specific tables to compare        [string]
+      --compareIndexes, --ci                   Compare indexes [boolean] [default: true]
+      --compareTriggers, --ct                  Compare triggers [boolean] [default: true]
+      --compareConstraints, --cc               Compare constraints [boolean] [default: true]
+  -o, --output, --Output                       Output report file path          [string]
+```
+
+For detailed documentation, see [COMPARE_SCHEMA_COMMAND.md](docs/COMPARE_SCHEMA_COMMAND.md)
+
 ### dataTypes
 
 ```shell
@@ -1266,6 +1334,80 @@ Troubleshooting:
 ```
 
 ![dataTypes example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/dataTypes.gif)
+
+### dataDiff
+
+```shell
+hana-cli dataDiff
+[aliases: ddiff, diffData]
+Show differences between two datasets with detailed change tracking
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t1, --table1, --Table1                First table name (required)           [string]
+  -t2, --table2, --Table2                Second table name (required)          [string]
+  -k, --keyColumns, --KeyColumns         Key columns for matching (required)   [string]
+  -s1, --schema1, --Schema1              Schema for first table                [string]
+  -s2, --schema2, --Schema2              Schema for second table               [string]
+  -c, --compareColumns, --CompareColumns Columns to compare (optional)         [string]
+  -f, --format, --Format                 Report format (json, csv, summary)
+                                  [string] [choices: "json", "csv", "summary"] [default: "summary"]
+  -o, --output, --Output                 Output report file path               [string]
+      --showValues, --sv                 Show actual values [boolean] [default: false]
+  -l, --limit, --Limit                   Maximum rows to compare[number] [default: 10000]
+```
+
+For detailed documentation, see [DATA_DIFF_COMMAND.md](docs/DATA_DIFF_COMMAND.md)
+
+### dataProfile
+
+```shell
+hana-cli dataProfile
+[aliases: prof, profileData, dataStats]
+Generate data quality metrics and statistical analysis for tables
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --table, --Table                   Target table name (required)          [string]
+  -s, --schema, --Schema                 Target schema name                    [string]
+  -c, --columns, --Columns               Columns to profile (optional)         [string]
+  -f, --format, --Format                 Report format (json, csv, summary)
+                                  [string] [choices: "json", "csv", "summary"] [default: "summary"]
+  -o, --output, --Output                 Output report file path               [string]
+      --nullAnalysis, --na               Include NULL analysis [boolean] [default: true]
+      --cardinalityAnalysis, --ca        Include distinct count analysis [boolean] [default: true]
+      --statisticalAnalysis, --sa        Include min/max/avg analysis [boolean] [default: true]
+      --patternAnalysis, --pa            Include string length analysis [boolean] [default: false]
+      --sampleSize, --ss                 Maximum rows to analyze[number] [default: 10000]
+```
+
+For detailed documentation, see [DATA_PROFILE_COMMAND.md](docs/DATA_PROFILE_COMMAND.md)
 
 ### dataTypesUI
 
@@ -1336,6 +1478,44 @@ Troubleshooting:
 ```
 
 ![disks example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/disks.gif)
+
+### export
+
+```shell
+hana-cli export
+[aliases: exp, downloadData, downloaddata]
+Export table/view data to CSV, Excel, or JSON files
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --table, --Table                   Source table name (required)          [string]
+  -s, --schema, --Schema                 Source schema name                    [string]
+  -o, --output, --Output                 Output file path (required)           [string]
+  -f, --format, --Format                 Export format (csv, excel, json)
+                                  [string] [choices: "csv", "excel", "json"] [default: "csv"]
+  -w, --where, --Where                   WHERE clause for filtering            [string]
+  -l, --limit, --Limit                   Maximum rows to export                [number]
+      --orderby, --ob                    ORDER BY clause for sorting           [string]
+  -c, --columns, --Columns               Comma-separated column list           [string]
+  -d, --delimiter, --Delimiter           CSV delimiter character [string] [default: ","]
+      --includeHeaders, --ih             Include header row [boolean] [default: true]
+      --nullValue, --nv                  Value for NULL cells [string] [default: ""]
+```
+
+For comprehensive examples and detailed documentation, see [EXPORT_COMMAND.md](docs/EXPORT_COMMAND.md)
 
 ### dropContainer
 
@@ -2576,7 +2756,7 @@ Options:
 ```shell
 hana-cli import
 [aliases: imp, uploadData, uploaddata]
-Import data from CSV or Excel files into a database table
+Import data from CSV or Excel files into a database table (complement to export command)
 
 Connection Parameters:
   -a, --admin, --Admin  Connect via admin (default-env-admin.json)
