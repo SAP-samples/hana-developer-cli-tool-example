@@ -7,13 +7,13 @@ export const describe = baseLite.bundle.getText("expensiveStatements")
 
 export const builder = baseLite.getBuilder({
   limit: {
-    alias: ['l', 'Limit'],
+    alias: ['l'],
     type: 'number',
     default: 50,
     desc: baseLite.bundle.getText("limit")
   },
   orderBy: {
-    alias: ['o', 'OrderBy'],
+    alias: ['o'],
     type: 'string',
     choices: ['totalTime', 'startTime'],
     default: 'totalTime',

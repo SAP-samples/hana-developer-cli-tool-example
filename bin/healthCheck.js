@@ -7,7 +7,7 @@ export const describe = baseLite.bundle.getText("healthCheck")
 
 export const builder = baseLite.getBuilder({
   checks: {
-    alias: ['c', 'Checks'],
+    alias: ['c'],
     type: 'string',
     default: 'all',
     desc: 'Health checks to perform (all, memory, disk, connection, transaction, backup, replication, resources)',

@@ -9,7 +9,7 @@ export const describe = baseLite.bundle.getText("createModule")
 
 export const builder = baseLite.getBuilder({
     folder: {
-        alias: ['f', 'Folder'],
+        alias: ['f', 'folder'],
         type: 'string',
         default: 'db',
         desc: baseLite.bundle.getText("folder")

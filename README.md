@@ -4312,6 +4312,317 @@ hana-cli xsaServices status --monitoring
 hana-cli xsa info --service gateway
 ```
 
+### auditLog
+
+```shell
+hana-cli auditLog [action]
+[aliases: audit, auditTrail, audit-log]
+Query and analyze SAP HANA audit logs for security events and user activities
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -a, --action, --Action          Action to perform (list, search, filter, export)
+                    [string] [choices: "list", "search", "filter", "export"] [default: "list"]
+  -u, --user, --User              Filter by user name                         [string]
+  -e, --event, --Event            Filter by event type                        [string]
+  -d, --days, --Days              Audit logs from last N days        [number] [default: 30]
+  -l, --limit, --Limit            Limit results                      [number] [default: 100]
+  --severity, --sev, --Severity   Filter by severity (info, warn, error)    [string]
+  -o, --output, --Output          Export format (json, csv)                 [string]
+
+**Usage Examples:**
+
+```bash
+# List recent audit logs
+hana-cli auditLog list
+
+# Search for specific user activity
+hana-cli auditLog search --user SYSTEM
+
+# Filter by event type
+hana-cli auditLog filter --event "USER_CONNECT"
+
+# Export audit logs to CSV
+hana-cli auditLog export --output csv --days 90
+
+# Show last 7 days of security events
+hana-cli auditLog --days 7 --severity warn
+```
+
+### privilegeAnalysis
+
+```shell
+hana-cli privilegeAnalysis [analysis]
+[aliases: priv, privAnalysis, privilege-analysis]
+Analyze user and role privileges with least-privilege recommendations
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -u, --user, --User              User to analyze                             [string]
+  -r, --role, --Role              Role to analyze                             [string]
+  --unused, --showUnused          Show unused privileges                [boolean] [default: false]
+  -s, --suggest, --Suggest        Show privilege reduction suggestions [boolean] [default: false]
+  --detailed, --details           Show detailed privilege breakdown   [boolean] [default: false]
+
+**Usage Examples:**
+
+```bash
+# Analyze privileges for a specific user
+hana-cli privilegeAnalysis --user DEVELOPER
+
+# Analyze a role
+hana-cli privilegeAnalysis --role DEVELOPERS
+
+# Show unused privileges
+hana-cli privilegeAnalysis --user DEVELOPER --unused
+
+# Get privilege reduction recommendations
+hana-cli privilegeAnalysis --suggest
+
+# Detailed privilege analysis
+hana-cli privilegeAnalysis --user SYSTEM --detailed
+```
+
+### securityScan
+
+```shell
+hana-cli securityScan [category]
+[aliases: security, scan, sec-scan]
+Comprehensive security scan for common vulnerabilities and misconfigurations
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -c, --category, --Category      Scan category (passwords, privileges, users, encryption, audit, all)
+                    [string] [choices: "passwords", "privileges", "users", "encryption", "audit", "all"] [default: "all"]
+  --detailed, --details           Show detailed scan results              [boolean] [default: false]
+  -o, --output, --Output          Export scan results (json, csv, html)    [string]
+
+**Scan Categories:**
+
+* **passwords** - Password policy compliance, expired passwords, weak policies
+* **privileges** - Excessive system privileges, wildcard grants, privilege creep
+* **users** - Inactive users, deactivated accounts, unused user accounts
+* **encryption** - Database encryption status, data at rest protection
+* **audit** - Audit logging enabled, audit trail completeness
+* **all** - Comprehensive scan of all categories
+
+**Usage Examples:**
+
+```bash
+# Run comprehensive security scan
+hana-cli securityScan
+
+# Scan password policies only
+hana-cli securityScan --category passwords
+
+# Detailed vulnerability scan
+hana-cli securityScan --category privileges --detailed
+
+# Export scan results to JSON
+hana-cli securityScan --output json
+
+# Audit compliance check
+hana-cli securityScan --category audit
+```
+
+### pwdPolicy
+
+```shell
+hana-cli pwdPolicy [action]
+[aliases: pwd, password, pwdpolicy]
+Manage password policies and compliance requirements
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -l, --list, --List              List all password policies              [boolean] [default: false]
+  -p, --policy, --Policy          Policy name to analyze                       [string]
+  -u, --users, --Users            Show users affected by policy           [boolean] [default: false]
+  -d, --details, --Details        Show detailed policy information        [boolean] [default: false]
+
+**Usage Examples:**
+
+```bash
+# Show password policy compliance summary
+hana-cli pwdPolicy
+
+# List all configured policies
+hana-cli pwdPolicy --list
+
+# Show details of specific policy
+hana-cli pwdPolicy --policy DEFAULT --details
+
+# Show users assigned to policy
+hana-cli pwdPolicy --policy DEFAULT --users
+
+# Detailed policy analysis
+hana-cli pwdPolicy --policy DEFAULT --details --users
+```
+
+### encryptionStatus
+
+```shell
+hana-cli encryptionStatus [scope]
+[aliases: encrypt, encryption, enc-status]
+Check database encryption status and data protection configuration
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -s, --scope, --Scope            Encryption scope (persisted, runtime, all)
+                    [string] [choices: "persisted", "runtime", "all"] [default: "all"]
+  --details, --Details            Show detailed encryption configuration  [boolean] [default: false]
+  --recommendations                Show optimization recommendations     [boolean] [default: false]
+
+**Encryption Scopes:**
+
+* **persisted** - Data at rest encryption for persistent storage
+* **runtime** - Data in-use encryption in memory
+* **all** - Check all encryption categories
+
+**Usage Examples:**
+
+```bash
+# Check overall encryption status
+hana-cli encryptionStatus
+
+# Check persisted data encryption
+hana-cli encryptionStatus --scope persisted
+
+# Detailed encryption analysis
+hana-cli encryptionStatus --details
+
+# Get encryption recommendations
+hana-cli encryptionStatus --recommendations
+
+# Show all encryption details with recommendations
+hana-cli encryptionStatus --scope all --details --recommendations
+```
+
+### grantChains
+
+```shell
+hana-cli grantChains [type]
+[aliases: grants, grant-chains, privilege-chains]
+Visualize privilege inheritance chains and role hierarchies
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -u, --user, --User              Show grant chain for specific user           [string]
+  -r, --role, --Role              Show grant chain for specific role           [string]
+  --depth, --Depth                Maximum chain depth to display      [number] [default: 10]
+  --circular, --Circular          Highlight circular grant dependencies [boolean] [default: false]
+  --unused, --Unused              Show unused roles in chains          [boolean] [default: false]
+  -o, --output, --Output          Export format (json, csv, text)             [string]
+
+**Chain Types:**
+
+* **user-to-role** - Shows which roles are assigned to users
+* **role-to-role** - Shows role inheritance and hierarchy
+* **privilege-inheritance** - Shows complete privilege inheritance path
+* **all** - Display all grant chain types
+
+**Usage Examples:**
+
+```bash
+# Show all grant chains
+hana-cli grantChains
+
+# Show grant chain for specific user
+hana-cli grantChains --user DEVELOPER
+
+# Show role inheritance hierarchy
+hana-cli grantChains --role DEVELOPERS
+
+# Highlight circular dependencies
+hana-cli grantChains --circular
+
+# Show unused roles in chains
+hana-cli grantChains --unused
+
+# Export grant chains to JSON
+hana-cli grantChains --output json
+
+# Deep chain analysis
+hana-cli grantChains --depth 20 --unused
+```
+
 ## Unit Testing
 
 This project includes comprehensive unit tests to ensure code quality and reliability. The test suite covers core functionality, command execution, and database operations.

@@ -9,7 +9,7 @@ export const describe = baseLite.bundle.getText("btpInfo")
 
 export const builder = baseLite.getBuilder({
     output: {
-        alias: ['o', 'Output'],
+        alias: ['o'],
         choices: ["tbl", "json"],
         default: "tbl",
         type: 'string',

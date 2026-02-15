@@ -7,23 +7,23 @@ export const describe = baseLite.bundle.getText("connections")
 
 export const builder = baseLite.getBuilder({
   limit: {
-    alias: ['l', 'Limit'],
+    alias: ['l'],
     type: 'number',
     default: 100,
     desc: baseLite.bundle.getText("limit")
   },
   user: {
-    alias: ['u', 'User'],
+    alias: ['u'],
     type: 'string',
     desc: baseLite.bundle.getText("user")
   },
   application: {
-    alias: ['a', 'Application'],
+    alias: ['a'],
     type: 'string',
     desc: baseLite.bundle.getText("applicationName")
   },
   idle: {
-    alias: ['i', 'Idle'],
+    alias: ['i'],
     type: 'boolean',
     default: false,
     desc: 'Include idle connections'
@@ -78,7 +78,7 @@ export async function getConnectionDetails(prompts) {
         LAST_STATEMENT_START_TIME,
         ROUND((CURRENT_TIMESTAMP - LOGON_TIME) * 24 * 60 * 60, 2) AS "Connection Age (sec)",
         IDLE_TIME AS "Idle Time (microsec)"
-      FROM M_SESSIONS
+      FROM SYS.M_SESSIONS
       WHERE 1=1
     `
 
@@ -122,7 +122,7 @@ export async function getConnectionDetails(prompts) {
         COUNT(CASE WHEN SESSION_STATUS != 'IDLE' THEN 1 END) as "Active Sessions",
         COUNT(DISTINCT USER_NAME) as "Unique Users",
         COUNT(DISTINCT APPLICATION_NAME) as "Unique Applications"
-      FROM M_SESSIONS
+      FROM SYS.M_SESSIONS
     `
 
     const statsResults = await db.execSQL(statsQuery)
@@ -179,7 +179,7 @@ export async function getConnectionDetails(prompts) {
         SELECT 
           USER_NAME,
           COUNT(*) as "Connection Count"
-        FROM M_SESSIONS
+        FROM SYS.M_SESSIONS
         GROUP BY USER_NAME
         ORDER BY "Connection Count" DESC
         LIMIT 10
@@ -202,7 +202,7 @@ export async function getConnectionDetails(prompts) {
         SELECT 
           APPLICATION_NAME,
           COUNT(*) as "Connection Count"
-        FROM M_SESSIONS
+        FROM SYS.M_SESSIONS
         WHERE APPLICATION_NAME IS NOT NULL
         GROUP BY APPLICATION_NAME
         ORDER BY "Connection Count" DESC

@@ -10,30 +10,30 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("connection")
   },
   user: {
-    alias: ['u', 'User'],
+    alias: ['u'],
     desc: baseLite.bundle.getText("user")
   },
   password: {
-    alias: ['p', 'Password'],
+    alias: ['p'],
     desc: baseLite.bundle.getText("password")
   },
   userstorekey: {
-    alias: ['U', 'UserStoreKey'],
+    alias: ['u', 'userstorekey'],
     desc: baseLite.bundle.getText("userstorekey")
   },
   save: {
-    alias: ['s', 'Save'],
+    alias: ['s'],
     desc: baseLite.bundle.getText("save"),
     type: 'boolean',
     default: true
   },
   encrypt: {
-    alias: ['e', 'Encrypt', 'ssl'],
+    alias: ['e', 'ssl'],
     desc: baseLite.bundle.getText("encrypt"),
     type: 'boolean'
   },
   trustStore: {
-    alias: ['t', 'Trust', 'trust', 'truststore'],
+    alias: ['t', 'trust', 'truststore'],
     desc: baseLite.bundle.getText("trustStore")
   }
 }, false)
@@ -134,7 +134,7 @@ export async function dbConnect(input) {
     let results = await db.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`)
     base.outputTableFancy(results)
 
-    let resultsSession = await db.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`)
+    let resultsSession = await db.execSQL(`SELECT * FROM SYS.M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`)
     base.outputTableFancy(resultsSession)
 
     return base.end()

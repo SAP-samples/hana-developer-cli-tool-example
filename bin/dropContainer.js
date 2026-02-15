@@ -9,12 +9,12 @@ export const describe = baseLite.bundle.getText("dropContainer")
 
 export const builder = baseLite.getBuilder({
   container: {
-    alias: ['c', 'Container'],
+    alias: ['c'],
     type: 'string',
     desc: baseLite.bundle.getText("container")
   },
   group: {
-    alias: ['g', 'Group'],
+    alias: ['g'],
     type: 'string',
     default: '',
     desc: baseLite.bundle.getText("group")

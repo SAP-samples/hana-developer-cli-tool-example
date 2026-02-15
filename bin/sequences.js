@@ -7,13 +7,13 @@ export const describe = baseLite.bundle.getText("sequences")
 
 export const builder = baseLite.getBuilder({
   sequence: {
-    alias: ['seq', 'Sequence'],
+    alias: ['seq'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("sequence")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")

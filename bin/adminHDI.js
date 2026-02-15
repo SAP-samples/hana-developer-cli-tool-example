@@ -7,15 +7,15 @@ export const describe = baseLite.bundle.getText("adminHDI")
 
 export const builder = baseLite.getBuilder({
   user: {
-    alias: ['u', 'User'],
+    alias: ['u'],
     desc: baseLite.bundle.getText("user")
   },
   password: {
-    alias: ['p', 'Password'],
+    alias: ['p'],
     desc: baseLite.bundle.getText("password")
   },
   create: {
-    alias: ['c', 'Create'],
+    alias: ['c'],
     desc: baseLite.bundle.getText("createUser"),
     type: 'boolean',
     default: true

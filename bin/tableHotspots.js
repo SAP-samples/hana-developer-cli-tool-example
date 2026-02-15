@@ -7,13 +7,13 @@ export const describe = baseLite.bundle.getText("tableHotspots")
 
 export const builder = baseLite.getBuilder({
   table: {
-    alias: ['t', 'Table'],
+    alias: ['t'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("table")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")

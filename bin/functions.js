@@ -7,13 +7,13 @@ export const describe = baseLite.bundle.getText("functions")
 
 export const builder = baseLite.getBuilder({
   function: {
-    alias: ['f', 'Function'],
+    alias: ['f'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("function")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")

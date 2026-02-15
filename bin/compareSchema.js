@@ -8,51 +8,51 @@ export const describe = baseLite.bundle.getText("compareSchema")
 
 export const builder = baseLite.getBuilder({
   sourceSchema: {
-    alias: ['ss', 'SourceSchema'],
+    alias: ['ss'],
     type: 'string',
     desc: baseLite.bundle.getText("compareSchemaSourceSchema")
   },
   targetSchema: {
-    alias: ['ts', 'TargetSchema'],
+    alias: ['ts'],
     type: 'string',
     desc: baseLite.bundle.getText("compareSchemaTargetSchema")
   },
   tables: {
-    alias: ['tb', 'Tables'],
+    alias: ['tb'],
     type: 'string',
     desc: baseLite.bundle.getText("compareSchemaTableFilter")
   },
   compareIndexes: {
-    alias: ['ci', 'CompareIndexes'],
+    alias: ['ci'],
     type: 'boolean',
     default: true,
     desc: baseLite.bundle.getText("compareSchemaCompareIndexes")
   },
   compareTriggers: {
-    alias: ['ct', 'CompareTriggers'],
+    alias: ['ct'],
     type: 'boolean',
     default: true,
     desc: baseLite.bundle.getText("compareSchemaCompareTriggers")
   },
   compareConstraints: {
-    alias: ['cc', 'CompareConstraints'],
+    alias: ['cc'],
     type: 'boolean',
     default: true,
     desc: baseLite.bundle.getText("compareSchemaCompareConstraints")
   },
   output: {
-    alias: ['o', 'Output'],
+    alias: ['o'],
     type: 'string',
     desc: baseLite.bundle.getText("compareSchemaOutput")
   },
   timeout: {
-    alias: ['to', 'Timeout'],
+    alias: ['to'],
     type: 'number',
     default: 3600,
     desc: baseLite.bundle.getText("compareSchemaTimeout")
   },
   profile: {
-    alias: ['p', 'Profile'],
+    alias: ['p'],
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }

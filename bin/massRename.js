@@ -8,22 +8,22 @@ export const describe = baseLite.bundle.getText("massRename")
 
 export const builder = baseLite.getBuilder({
   schema: {
-    alias: ['s', 'schema'],
+    alias: ['s'],
     type: 'string',
     desc: baseLite.bundle.getText("schemaCDS")
   },
   namespace: {
-    alias: ['n', 'namespace'],
+    alias: ['n'],
     type: 'string',
     desc: baseLite.bundle.getText("namespace")
   },
   prefix: {
-    alias: ['p', 'prefix'],
+    alias: ['p'],
     type: 'string',
     desc: baseLite.bundle.getText("prefix")
   },
   case: {
-    alias: ['c', 'case'],
+    alias: ['c'],
     type: 'string',
     desc: baseLite.bundle.getText("case")
   }

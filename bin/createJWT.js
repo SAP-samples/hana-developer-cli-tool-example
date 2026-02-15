@@ -7,17 +7,17 @@ export const describe = baseLite.bundle.getText("createJWT")
 
 export const builder = baseLite.getBuilder({
   name: {
-    alias: ['c', 'Name'],
+    alias: ['c'],
     type: 'string',
     desc: baseLite.bundle.getText("jwtName")
   },
   certificate: {
-    alias: ['c', 'Certificate'],
+    alias: ['cert'],
     type: 'string',
     desc: baseLite.bundle.getText("certificate")
   },
   issuer: {
-    alias: ['i', 'Issuer'],
+    alias: ['i'],
     desc: baseLite.bundle.getText("issuer"),
     type: 'string'
   }

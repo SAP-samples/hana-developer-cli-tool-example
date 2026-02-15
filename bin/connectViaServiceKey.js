@@ -7,7 +7,7 @@ export const describe = baseLite.bundle.getText("serviceKey")
 
 export const builder = baseLite.getBuilder({
   instance: {
-    alias: ['i', 'Instance'],
+    alias: ['i'],
     desc: baseLite.bundle.getText("instance")
   },
   key: {
@@ -15,13 +15,13 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("key")
   },
   encrypt: {
-    alias: ['e', 'Encrypt', 'ssl'],
+    alias: ['e', 'ssl'],
     desc: baseLite.bundle.getText("encrypt"),
     type: 'boolean',
     default: true
   },
   validate: {
-    alias: ['v', 'Validate', 'validateCertificate'],
+    alias: ['v', 'validatecertificate'],
     desc: baseLite.bundle.getText("validate"),
     type: 'boolean',
     default: false
@@ -33,7 +33,7 @@ export const builder = baseLite.getBuilder({
     default: true
   },
   save: {
-    alias: ['s', 'Save'],
+    alias: ['s'],
     desc: baseLite.bundle.getText("save2"),
     type: 'boolean',
     default: true
@@ -167,7 +167,7 @@ export async function saveEnv(options, input) {
     let results = await db.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`);
     base.outputTableFancy(results)
 
-    let resultsSession = await db.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`);
+    let resultsSession = await db.execSQL(`SELECT * FROM SYS.M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`);
     base.outputTableFancy(resultsSession)
 
   } catch (error) {

@@ -9,79 +9,79 @@ export const describe = baseLite.bundle.getText("export")
 
 export const builder = baseLite.getBuilder({
   table: {
-    alias: ['t', 'Table'],
+    alias: ['t'],
     type: 'string',
     desc: baseLite.bundle.getText("exportTable")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     desc: baseLite.bundle.getText("exportSchema")
   },
   output: {
-    alias: ['o', 'Output'],
+    alias: ['o'],
     type: 'string',
     desc: baseLite.bundle.getText("exportOutput")
   },
   format: {
-    alias: ['f', 'Format'],
+    alias: ['f'],
     choices: ["csv", "excel", "json"],
     default: "csv",
     type: 'string',
     desc: baseLite.bundle.getText("exportFormat")
   },
   where: {
-    alias: ['w', 'Where'],
+    alias: ['w'],
     type: 'string',
     desc: baseLite.bundle.getText("exportWhere")
   },
   limit: {
-    alias: ['l', 'Limit'],
+    alias: ['l'],
     type: 'number',
     desc: baseLite.bundle.getText("exportLimit")
   },
   orderby: {
-    alias: ['ob', 'OrderBy'],
+    alias: ['ob'],
     type: 'string',
     desc: baseLite.bundle.getText("exportOrderBy")
   },
   columns: {
-    alias: ['c', 'Columns'],
+    alias: ['c'],
     type: 'string',
     desc: baseLite.bundle.getText("exportColumns")
   },
   delimiter: {
-    alias: ['d', 'Delimiter'],
+    alias: ['d'],
     type: 'string',
     default: ',',
     desc: baseLite.bundle.getText("exportDelimiter")
   },
   includeHeaders: {
-    alias: ['ih', 'IncludeHeaders'],
+    alias: ['ih'],
     type: 'boolean',
     default: true,
     desc: baseLite.bundle.getText("exportIncludeHeaders")
   },
   nullValue: {
-    alias: ['nv', 'NullValue'],
+    alias: ['nv'],
     type: 'string',
     default: '',
     desc: baseLite.bundle.getText("exportNullValue")
   },
   maxRows: {
-    alias: ['mr', 'MaxRows'],
+    alias: ['mr'],
     type: 'number',
     default: 1000000,
     desc: baseLite.bundle.getText("exportMaxRows")
   },
   timeout: {
-    alias: ['to', 'Timeout'],
+    alias: ['to'],
     type: 'number',
     default: 3600,
     desc: baseLite.bundle.getText("exportTimeout")
   },
   profile: {
-    alias: ['p', 'Profile'],
+    alias: ['p'],
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }

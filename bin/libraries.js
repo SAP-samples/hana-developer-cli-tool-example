@@ -6,13 +6,13 @@ export const describe = baseLite.bundle.getText("libraries")
 
 export const builder = baseLite.getBuilder({
   library: {
-    alias: ['lib', 'Library'],
+    alias: ['lib'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("library")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")

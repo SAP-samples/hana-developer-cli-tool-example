@@ -9,18 +9,18 @@ export const describe = baseLite.bundle.getText("createContainerUsers")
 
 export const builder = baseLite.getBuilder({
   container: {
-    alias: ['c', 'Container'],
+    alias: ['c'],
     type: 'string',
     desc: baseLite.bundle.getText("container")
   },
   save: {
-    alias: ['s', 'Save'],
+    alias: ['s'],
     desc: baseLite.bundle.getText("saveHDI"),
     type: 'boolean',
     default: true
   },
   encrypt: {
-    alias: ['e', 'Encrypt', 'ssl'],
+    alias: ['e', 'ssl'],
     desc: baseLite.bundle.getText("encrypt"),
     type: 'boolean',
     default: false

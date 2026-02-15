@@ -19,11 +19,11 @@ export async function dbStatus(prompts) {
     const dbStatus = await base.createDBConnection()
 
     let results = await dbStatus.execSQL(
-      `SELECT * FROM M_DISKS`)
+      `SELECT * FROM SYS.M_DISKS`)
     base.outputTableFancy(results)
 
     results = await dbStatus.execSQL(
-      `SELECT * FROM M_DISK_USAGE`)
+      `SELECT * FROM SYS.M_DISK_USAGE`)
     base.outputTableFancy(results)
     return base.end()
   } catch (error) {

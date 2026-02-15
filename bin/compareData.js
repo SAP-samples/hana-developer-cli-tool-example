@@ -8,60 +8,60 @@ export const describe = baseLite.bundle.getText("compareData")
 
 export const builder = baseLite.getBuilder({
   sourceTable: {
-    alias: ['st', 'SourceTable'],
+    alias: ['st'],
     type: 'string',
     desc: baseLite.bundle.getText("compareDataSourceTable")
   },
   sourceSchema: {
-    alias: ['ss', 'SourceSchema'],
+    alias: ['ss'],
     type: 'string',
     desc: baseLite.bundle.getText("compareDataSourceSchema")
   },
   targetTable: {
-    alias: ['tt', 'TargetTable'],
+    alias: ['tt'],
     type: 'string',
     desc: baseLite.bundle.getText("compareDataTargetTable")
   },
   targetSchema: {
-    alias: ['ts', 'TargetSchema'],
+    alias: ['ts'],
     type: 'string',
     desc: baseLite.bundle.getText("compareDataTargetSchema")
   },
   keyColumns: {
-    alias: ['k', 'KeyColumns'],
+    alias: ['k'],
     type: 'string',
     desc: baseLite.bundle.getText("compareDataKeyColumns")
   },
   output: {
-    alias: ['o', 'Output'],
+    alias: ['o'],
     type: 'string',
     desc: baseLite.bundle.getText("compareDataOutput")
   },
   columns: {
-    alias: ['c', 'Columns'],
+    alias: ['c'],
     type: 'string',
     desc: baseLite.bundle.getText("compareDataColumns")
   },
   showMatches: {
-    alias: ['sm', 'ShowMatches'],
+    alias: ['sm'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("compareDataShowMatches")
   },
   limit: {
-    alias: ['l', 'Limit'],
+    alias: ['l'],
     type: 'number',
     default: 1000,
     desc: baseLite.bundle.getText("compareDataLimit")
   },
   timeout: {
-    alias: ['to', 'Timeout'],
+    alias: ['to'],
     type: 'number',
     default: 3600,
     desc: baseLite.bundle.getText("compareDataTimeout")
   },
   profile: {
-    alias: ['p', 'Profile'],
+    alias: ['p'],
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }

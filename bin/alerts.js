@@ -7,13 +7,13 @@ export const describe = baseLite.bundle.getText("alerts")
 
 export const builder = baseLite.getBuilder({
   limit: {
-    alias: ['l', 'Limit'],
+    alias: ['l'],
     type: 'number',
     default: 100,
     desc: baseLite.bundle.getText("limit")
   },
   severity: {
-    alias: ['s', 'Severity'],
+    alias: ['s'],
     type: 'string',
     default: 'all',
     choices: ['all', 'CRITICAL', 'WARNING', 'INFO'],
@@ -95,7 +95,7 @@ export async function listAlerts(prompts) {
           IS_ACKNOWLEDGED as "Acknowledged",
           RECOMMENDED_ACTION as "Recommended Action",
           COMPONENT
-        FROM M_ALERTS
+        FROM SYS.M_ALERTS
         WHERE SEVERITY LIKE ?
         ORDER BY INSERT_TIME DESC
       `
@@ -115,7 +115,7 @@ export async function listAlerts(prompts) {
           SEVERITY,
           COUNT(*) as "Count",
           COUNT(CASE WHEN IS_ACKNOWLEDGED = 'TRUE' THEN 1 END) as "Acknowledged"
-        FROM M_ALERTS
+        FROM SYS.M_ALERTS
         GROUP BY SEVERITY
         ORDER BY 
           CASE WHEN SEVERITY = 'CRITICAL' THEN 1
@@ -212,7 +212,7 @@ async function acknowledgeAlert(alertId) {
           SEVERITY,
           DESCRIPTION,
           IS_ACKNOWLEDGED as "Acknowledged"
-        FROM M_ALERTS
+        FROM SYS.M_ALERTS
         WHERE MESSAGE_ID = ?
       `
 
@@ -311,7 +311,7 @@ async function deleteAlert(alertId) {
       // Delete the alert
       try {
         const deleteQuery = `
-          DELETE FROM M_ALERTS 
+          DELETE FROM SYS.M_ALERTS 
           WHERE MESSAGE_ID = ?
         `
 

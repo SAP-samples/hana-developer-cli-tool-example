@@ -7,13 +7,13 @@ export const describe = baseLite.bundle.getText("iniContents")
 
 export const builder = baseLite.getBuilder({
   file: {
-    alias: ['f', 'File'],
+    alias: ['f'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("file")
   },
   section: {
-    alias: ['s', 'Section'],
+    alias: ['s'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("section")

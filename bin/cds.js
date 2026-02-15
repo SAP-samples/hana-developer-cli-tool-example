@@ -13,18 +13,18 @@ export const describe = baseLite.bundle.getText("cds")
 const t = (key, params = []) => baseLite.bundle.getText(key, params)
 export const builder = baseLite.getBuilder({
   table: {
-    alias: ['t', 'Table'],
+    alias: ['t'],
     type: 'string',
     desc: baseLite.bundle.getText("table")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
   },
   view: {
-    alias: ['v', 'View'],
+    alias: ['v'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("viewOpt")
@@ -36,7 +36,7 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("useHanaTypes")
   },
   useQuoted: {
-    alias: ['q', 'quoted', 'quotedIdentifiers'],
+    alias: ['q', 'quoted'],
     desc: baseLite.bundle.getText("gui.useQuoted"),
     type: 'boolean',
     default: false

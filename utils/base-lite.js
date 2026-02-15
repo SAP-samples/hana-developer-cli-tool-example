@@ -64,7 +64,7 @@ export function getBuilder(input, iConn = true, iDebug = true) {
     if (iConn) {
         grpConn = {
             admin: {
-                alias: ['a', 'Admin'],
+                alias: ['a'],
                 type: 'boolean',
                 default: false,
                 group: bundle.getText("grpConn"),
@@ -87,7 +87,7 @@ export function getBuilder(input, iConn = true, iDebug = true) {
                 desc: bundle.getText("disableVerbose")
             },
             debug: {
-                alias: ['Debug'],
+                alias: ['d'],
                 group: bundle.getText("grpDebug"),
                 type: 'boolean',
                 default: false,

@@ -8,70 +8,70 @@ export const describe = baseLite.bundle.getText("dataProfile")
 
 export const builder = baseLite.getBuilder({
   table: {
-    alias: ['t', 'Table'],
+    alias: ['t'],
     type: 'string',
     desc: baseLite.bundle.getText("dataProfileTable")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     desc: baseLite.bundle.getText("dataProfileSchema")
   },
   columns: {
-    alias: ['c', 'Columns'],
+    alias: ['c'],
     type: 'string',
     desc: baseLite.bundle.getText("dataProfileColumns")
   },
   output: {
-    alias: ['o', 'Output'],
+    alias: ['o'],
     type: 'string',
     desc: baseLite.bundle.getText("dataProfileOutput")
   },
   format: {
-    alias: ['f', 'Format'],
+    alias: ['f'],
     choices: ["json", "csv", "summary"],
     default: "summary",
     type: 'string',
     desc: baseLite.bundle.getText("dataProfileFormat")
   },
   nullAnalysis: {
-    alias: ['na', 'NullAnalysis'],
+    alias: ['na'],
     type: 'boolean',
     default: true,
     desc: baseLite.bundle.getText("dataProfileNullAnalysis")
   },
   cardinalityAnalysis: {
-    alias: ['ca', 'CardinalityAnalysis'],
+    alias: ['ca'],
     type: 'boolean',
     default: true,
     desc: baseLite.bundle.getText("dataProfileCardinalityAnalysis")
   },
   statisticalAnalysis: {
-    alias: ['sa', 'StatisticalAnalysis'],
+    alias: ['sa'],
     type: 'boolean',
     default: true,
     desc: baseLite.bundle.getText("dataProfileStatisticalAnalysis")
   },
   patternAnalysis: {
-    alias: ['pa', 'PatternAnalysis'],
+    alias: ['pa'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("dataProfilePatternAnalysis")
   },
   sampleSize: {
-    alias: ['ss', 'SampleSize'],
+    alias: ['ss'],
     type: 'number',
     default: 10000,
     desc: baseLite.bundle.getText("dataProfileSampleSize")
   },
   timeout: {
-    alias: ['to', 'Timeout'],
+    alias: ['to'],
     type: 'number',
     default: 3600,
     desc: baseLite.bundle.getText("dataProfileTimeout")
   },
   profile: {
-    alias: ['p', 'Profile'],
+    alias: ['p'],
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }

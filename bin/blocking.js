@@ -7,13 +7,13 @@ export const describe = baseLite.bundle.getText("blocking")
 
 export const builder = baseLite.getBuilder({
   limit: {
-    alias: ['l', 'Limit'],
+    alias: ['l'],
     type: 'number',
     default: 50,
     desc: baseLite.bundle.getText("limit")
   },
   details: {
-    alias: ['d', 'Details'],
+    alias: ['d'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("details")
@@ -72,7 +72,7 @@ export async function getBlockingSessions(prompts) {
         ROUND((CURRENT_TIMESTAMP - LOCK_ACQUIRED_TIME) * 24 * 60 * 60, 2) AS "Lock Duration (sec)",
         LOCK_OBJECT_SCHEMA,
         LOCK_OBJECT_NAME
-      FROM M_LOCKS
+      FROM SYS.M_LOCKS
       WHERE LOCK_TYPE != 'EXCLUSIVE'
       ORDER BY LOCK_ACQUIRED_TIME ASC
     `
@@ -126,8 +126,8 @@ export async function getBlockingSessions(prompts) {
               S.CLIENT_HOST,
               S.STATEMENT_START_TIME,
               ROUND((CURRENT_TIMESTAMP - S.STATEMENT_START_TIME) * 24 * 60 * 60, 2) AS "Wait Time (sec)"
-            FROM M_SESSIONS S
-            LEFT JOIN USERS U ON S.USER_NAME = U.USER_NAME
+            FROM SYS.M_SESSIONS S
+            LEFT JOIN SYS.USERS U ON S.USER_NAME = U.USER_NAME
             WHERE S.CONNECTION_ID = ? AND S.SESSION_ID = ?
           `
 
@@ -154,8 +154,8 @@ export async function getBlockingSessions(prompts) {
     try {
       const cycleQuery = `
         SELECT COUNT(*) as "Cycle Count"
-        FROM M_LOCKS L1
-        JOIN M_LOCKS L2 ON L1.LOCK_WAITER_CONNECTION_ID = L2.LOCK_OWNER_CONNECTION_ID
+        FROM SYS.M_LOCKS L1
+        JOIN SYS.M_LOCKS L2 ON L1.LOCK_WAITER_CONNECTION_ID = L2.LOCK_OWNER_CONNECTION_ID
         AND L1.LOCK_WAITER_SESSION_ID = L2.LOCK_OWNER_SESSION_ID
         AND L1.LOCK_OWNER_CONNECTION_ID = L2.LOCK_WAITER_CONNECTION_ID
         AND L1.LOCK_OWNER_SESSION_ID = L2.LOCK_WAITER_SESSION_ID

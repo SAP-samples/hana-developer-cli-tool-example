@@ -7,33 +7,33 @@ export const describe = baseLite.bundle.getText("backupStatus")
 
 export const builder = baseLite.getBuilder({
   catalogOnly: {
-    alias: ['co', 'CatalogOnly'],
+    alias: ['co'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("backupStatusCatalogOnly")
   },
   limit: {
-    alias: ['l', 'Limit'],
+    alias: ['l'],
     type: 'number',
     default: 20,
     desc: baseLite.bundle.getText("limit")
   },
   backupType: {
-    alias: ['type', 'Type'],
+    alias: ['type'],
     choices: ["complete", "data", "log", "incremental", "differential", "all"],
     default: "all",
     type: 'string',
     desc: baseLite.bundle.getText("backupStatusType")
   },
   status: {
-    alias: ['st', 'Status'],
+    alias: ['st'],
     choices: ["successful", "running", "failed", "canceled", "all"],
     default: "all",
     type: 'string',
     desc: baseLite.bundle.getText("backupStatusState")
   },
   days: {
-    alias: ['d', 'Days'],
+    alias: ['d'],
     type: 'number',
     default: 7,
     desc: baseLite.bundle.getText("backupStatusDays")
@@ -88,9 +88,11 @@ export async function getBackupStatus(prompts) {
   const dbClientModule = await import("../utils/database/index.js")
   const dbClientClass = dbClientModule.default
 
+  let dbClient = null
+
   try {
     base.debug('getBackupStatus')
-    const dbClient = await dbClientClass.getNewClient(prompts)
+    dbClient = await dbClientClass.getNewClient(prompts)
     await dbClient.connect()
     const db = dbClient.getDB()
 
@@ -105,11 +107,8 @@ export async function getBackupStatus(prompts) {
         SYS_END_TIME,
         STATE_NAME,
         COMMENT,
-        MESSAGE,
-        BACKUP_SIZE,
-        BACKUP_SIZE_COMPRESSED,
-        DESTINATION_TYPE_NAME
-      FROM M_BACKUP_CATALOG
+        MESSAGE
+      FROM SYS.M_BACKUP_CATALOG
       WHERE SYS_START_TIME >= ADD_DAYS(CURRENT_TIMESTAMP, -${prompts.days})
     `
 
@@ -156,7 +155,7 @@ export async function getBackupStatus(prompts) {
         ACTIVE_PHASE,
         CURRENT_SIZE,
         EXPECTED_SIZE
-      FROM M_BACKUP_PROGRESS
+      FROM SYS.M_BACKUP_PROGRESS
       WHERE STATE_NAME = 'running'
     `
 
@@ -180,7 +179,7 @@ export async function getBackupStatus(prompts) {
           VALUE,
           LAYER_NAME,
           SECTION
-        FROM M_INIFILE_CONTENTS
+        FROM SYS.M_INIFILE_CONTENTS
         WHERE FILE_NAME = 'global.ini'
           AND SECTION = 'backup'
       `
@@ -197,7 +196,7 @@ export async function getBackupStatus(prompts) {
       SELECT 
         MAX(SYS_END_TIME) as LAST_SUCCESSFUL_BACKUP,
         ENTRY_TYPE_NAME
-      FROM M_BACKUP_CATALOG
+      FROM SYS.M_BACKUP_CATALOG
       WHERE STATE_NAME = 'successful'
       GROUP BY ENTRY_TYPE_NAME
     `
@@ -252,9 +251,6 @@ export async function getBackupStatus(prompts) {
         START_TIME: b.SYS_START_TIME ? new Date(b.SYS_START_TIME).toLocaleString() : '-',
         END_TIME: b.SYS_END_TIME ? new Date(b.SYS_END_TIME).toLocaleString() : '-',
         STATUS: b.STATE_NAME,
-        SIZE: formatBytes(b.BACKUP_SIZE || 0),
-        COMPRESSED: formatBytes(b.BACKUP_SIZE_COMPRESSED || 0),
-        DESTINATION: b.DESTINATION_TYPE_NAME,
         MESSAGE: b.MESSAGE ? (b.MESSAGE.length > 50 ? b.MESSAGE.substring(0, 50) + '...' : b.MESSAGE) : '-'
       }))
       base.outputTableFancy(catalogFormatted)
@@ -293,6 +289,9 @@ export async function getBackupStatus(prompts) {
     // Provide helpful message if user lacks privileges
     if (error.message.includes('insufficient privilege')) {
       console.log('\n' + base.bundle.getText("backupStatusPrivilegeNote"))
+    }
+    if (dbClient) {
+      await dbClient.disconnect()
     }
     throw error
   }

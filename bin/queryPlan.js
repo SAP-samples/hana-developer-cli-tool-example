@@ -7,7 +7,7 @@ export const describe = baseLite.bundle.getText("queryPlan")
 
 export const builder = baseLite.getBuilder({
   sql: {
-    alias: ['q', 'Sql', 'SQL', 'Query'],
+    alias: ['q', 'sql'],
     type: 'string',
     desc: baseLite.bundle.getText("query")
   }

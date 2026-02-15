@@ -12,18 +12,18 @@ export const describe = baseLite.bundle.getText("inspectView")
 
 export const builder = baseLite.getBuilder({
   view: {
-    alias: ['v', 'View'],
+    alias: ['v'],
     type: 'string',
     desc: baseLite.bundle.getText("view")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
   },
   output: {
-    alias: ['o', 'Output'],
+    alias: ['o'],
     choices: ["tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi", "hdbview", "hdbcds", "jsdoc", "graphql", "postgres"],
     default: "tbl",
     type: 'string',
@@ -42,7 +42,7 @@ export const builder = baseLite.getBuilder({
     default: true
   },
   useQuoted: {
-    alias: ['q', 'quoted', 'quotedIdentifiers'],
+    alias: ['q', 'quoted'],
     desc: baseLite.bundle.getText("gui.useQuoted"),
     type: 'boolean',
     default: false

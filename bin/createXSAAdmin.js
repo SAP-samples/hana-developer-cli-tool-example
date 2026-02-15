@@ -7,11 +7,11 @@ export const describe = baseLite.bundle.getText("createXSAAdmin")
 
 export const builder = baseLite.getBuilder({
   user: {
-    alias: ['u', 'User'],
+    alias: ['u'],
     desc: baseLite.bundle.getText("user")
   },
   password: {
-    alias: ['p', 'Password'],
+    alias: ['p'],
     desc: baseLite.bundle.getText("password")
   }
 })

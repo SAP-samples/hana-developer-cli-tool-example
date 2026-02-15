@@ -7,7 +7,7 @@ export const describe = baseLite.bundle.getText("activateHDI")
 
 export const builder = baseLite.getBuilder({
   tenant: {
-    alias: ['t', 'Tenant'],
+    alias: ['t'],
     type: 'string',
     desc: baseLite.bundle.getText("tenant")
   }

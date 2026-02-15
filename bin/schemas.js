@@ -7,7 +7,7 @@ export const describe = baseLite.bundle.getText("schemas")
 
 export const builder = baseLite.getBuilder({
   schema: {
-    alias: ['s', 'schemas'],
+    alias: ['s'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("schema")

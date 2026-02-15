@@ -7,23 +7,23 @@ export const describe = baseLite.bundle.getText("inspectLibMember")
 
 export const builder = baseLite.getBuilder({
   library: {
-    alias: ["lib", 'Library'],
+    alias: ['lib'],
     type: 'string',
     desc: baseLite.bundle.getText("library")
   },
   libraryMem: {
-    alias: ["m", "libMem", 'LibraryMember'],
+    alias: ["m", "libMem"],
     type: 'string',
     desc: baseLite.bundle.getText("libMember")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
   },
   output: {
-    alias: ['o', 'Output'],
+    alias: ['o'],
     choices: ["tbl", "sql"],
     default: "tbl",
     type: 'string',

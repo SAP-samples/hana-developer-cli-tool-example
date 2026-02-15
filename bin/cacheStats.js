@@ -7,14 +7,14 @@ export const describe = baseLite.bundle.getText("cacheStats")
 
 export const builder = baseLite.getBuilder({
   cacheType: {
-    alias: ['t', 'CacheType'],
+    alias: ['t'],
     type: 'string',
     choices: ['plan', 'result', 'all'],
     default: 'all',
     desc: baseLite.bundle.getText("cacheType")
   },
   limit: {
-    alias: ['l', 'Limit'],
+    alias: ['l'],
     type: 'number',
     default: 50,
     desc: baseLite.bundle.getText("limit")
@@ -63,7 +63,7 @@ export async function getCacheStats(prompts) {
     const results = {}
 
     if (cacheType === 'plan' || cacheType === 'all') {
-      let planQuery = 'SELECT * FROM M_SQL_PLAN_CACHE'
+      let planQuery = 'SELECT * FROM SYS.M_SQL_PLAN_CACHE'
       if (limit || base.sqlInjection.isAcceptableParameter(limit.toString())) {
         planQuery += ` LIMIT ${limit.toString()}`
       }
@@ -73,7 +73,7 @@ export async function getCacheStats(prompts) {
     }
 
     if (cacheType === 'result' || cacheType === 'all') {
-      let resultQuery = 'SELECT * FROM M_RESULT_CACHE'
+      let resultQuery = 'SELECT * FROM SYS.M_RESULT_CACHE'
       if (limit || base.sqlInjection.isAcceptableParameter(limit.toString())) {
         resultQuery += ` LIMIT ${limit.toString()}`
       }

@@ -330,7 +330,7 @@ export function getBuilder(input, iConn = true, iDebug = true) {
     if (iConn) {
         grpConn = {
             admin: {
-                alias: ['a', 'Admin'],
+                alias: ['a'],
                 type: 'boolean',
                 default: false,
                 group: bundle.getText("grpConn"),
@@ -353,7 +353,7 @@ export function getBuilder(input, iConn = true, iDebug = true) {
                 desc: bundle.getText("disableVerbose")
             },
             debug: {
-                alias: ['Debug'],
+                alias: ['d'],
                 group: bundle.getText("grpDebug"),
                 type: 'boolean',
                 default: false,
@@ -378,18 +378,18 @@ export function getMassConvertBuilder(ui = false) {
     /** @type any */
     let parameters = {
         table: {
-            alias: ['t', 'Table'],
+            alias: ['t'],
             type: 'string',
             default: "*",
             desc: bundle.getText("table")
         },
         view: {
-            alias: ['v', 'View'],
+            alias: ['v'],
             type: 'string',
             desc: bundle.getText("view")
         },
         schema: {
-            alias: ['s', 'Schema'],
+            alias: ['s'],
             type: 'string',
             default: '**CURRENT_SCHEMA**',
             desc: bundle.getText("schema")
@@ -401,13 +401,13 @@ export function getMassConvertBuilder(ui = false) {
             desc: bundle.getText("limit")
         },
         folder: {
-            alias: ['f', 'Folder'],
+            alias: ['f'],
             type: 'string',
             default: './',
             desc: bundle.getText("folder")
         },
         filename: {
-            alias: ['n', 'Filename'],
+            alias: ['n'],
             type: 'string',
             desc: bundle.getText("filename")
         },
@@ -417,7 +417,7 @@ export function getMassConvertBuilder(ui = false) {
             desc: bundle.getText("mass.log")
         },
         output: {
-            alias: ['o', 'Output'],
+            alias: ['o'],
             choices: ["hdbtable", "cds", "hdbmigrationtable"],
             default: "cds",
             type: 'string',
@@ -442,7 +442,7 @@ export function getMassConvertBuilder(ui = false) {
             default: true
         },
         useQuoted: {
-            alias: ['q', 'quoted', 'quotedIdentifiers'],
+            alias: ['q', 'quoted'],
             desc: bundle.getText("gui.useQuoted"),
             type: 'boolean',
             default: false
@@ -703,8 +703,9 @@ export function askFalse() {
  * @param {object} inputSchema - Command's input schema
  * @param {boolean} iConn - Whether connection options are included
  * @param {boolean} iDebug - Whether debug options are included
+ * @param {object} [builderOptions] - Command builder options (contains all option definitions)
  */
-function checkUnknownOptions(argv, inputSchema, iConn, iDebug) {
+function checkUnknownOptions(argv, inputSchema, iConn, iDebug, builderOptions) {
     if (!argv || typeof argv !== 'object') {
         return
     }
@@ -725,6 +726,24 @@ function checkUnknownOptions(argv, inputSchema, iConn, iDebug) {
     const standardYargsOptions = ['$0', '_', 'help', 'h', 'version', 'V']
     standardYargsOptions.forEach(opt => knownOptions.add(opt))
     
+    // Add options from builder (highest priority - includes command-specific options)
+    if (builderOptions && typeof builderOptions === 'object') {
+        Object.keys(builderOptions).forEach(key => {
+            knownOptions.add(key)
+            knownOptions.add(toKebabCase(key))
+            
+            // Add aliases from builder option definition
+            const optionDef = builderOptions[key]
+            if (optionDef && optionDef.alias) {
+                const aliases = Array.isArray(optionDef.alias) ? optionDef.alias : [optionDef.alias]
+                aliases.forEach(alias => {
+                    knownOptions.add(alias)
+                    knownOptions.add(toKebabCase(alias))
+                })
+            }
+        })
+    }
+    
     // Add options from inputSchema
     if (inputSchema && typeof inputSchema === 'object') {
         Object.keys(inputSchema).forEach(key => {
@@ -735,12 +754,12 @@ function checkUnknownOptions(argv, inputSchema, iConn, iDebug) {
     
     // Add connection options if included
     if (iConn) {
-        ['admin', 'a', 'Admin', 'conn'].forEach(opt => knownOptions.add(opt))
+        ['admin', 'a', 'conn'].forEach(opt => knownOptions.add(opt))
     }
     
     // Add debug options if included
     if (iDebug) {
-        ['disableVerbose', 'quiet', 'debug', 'Debug'].forEach(opt => knownOptions.add(opt))
+        ['disableVerbose', 'quiet', 'debug', 'd', 'disable-verbose'].forEach(opt => knownOptions.add(opt))
     }
     
     // Build a map of values to option names to detect aliases
@@ -794,7 +813,9 @@ function checkUnknownOptions(argv, inputSchema, iConn, iDebug) {
     // Warn about unknown options
     if (unknownOptions.length > 0) {
         unknownOptions.forEach(opt => {
-            console.warn(colors.yellow(bundle.getText("warning.unknownOption", [opt])))
+            if (opt && opt.trim()) {  // Only warn if option name is not empty
+                console.warn(colors.yellow(bundle.getText("warning.unknownOption", [opt])))
+            }
         })
     }
 }
@@ -806,9 +827,10 @@ function checkUnknownOptions(argv, inputSchema, iConn, iDebug) {
  * @param {object} inputSchema - prompts current value
  * @param {boolean} [iConn=true] - Add Connection Group
  * @param {boolean} [iDebug=true] - Add Debug Group
+ * @param {object} [builderOptions] - Command builder options for validation
  * @throws {Error} If required parameters are missing or invalid
  */
-export async function promptHandler(argv, processingFunction, inputSchema, iConn = true, iDebug = true) {
+export async function promptHandler(argv, processingFunction, inputSchema, iConn = true, iDebug = true, builderOptions) {
     // Input validation
     if (!processingFunction || typeof processingFunction !== 'function') {
         throw new Error(bundle.getText("validation.invalidNumber", ["processingFunction", typeof processingFunction]))
@@ -818,7 +840,7 @@ export async function promptHandler(argv, processingFunction, inputSchema, iConn
     }
     try {
         // Check for unknown options and warn user
-        checkUnknownOptions(argv, inputSchema, iConn, iDebug)
+        checkUnknownOptions(argv, inputSchema, iConn, iDebug, builderOptions)
         
         let schema = getPromptSchema(inputSchema, iConn, iDebug)
         let result = {}

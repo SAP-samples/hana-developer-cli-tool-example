@@ -9,30 +9,30 @@ export const describe = baseLite.bundle.getText("querySimple")
 
 export const builder = baseLite.getBuilder({
   query: {
-    alias: ['q', 'Query'],
+    alias: ['q'],
     type: 'string',
     desc: baseLite.bundle.getText("query")
   },
   folder: {
-    alias: ['f', 'Folder'],
+    alias: ['f'],
     type: 'string',
     default: './',
     desc: baseLite.bundle.getText("folder")
   },
   filename: {
-    alias: ['n', 'Filename'],
+    alias: ['n'],
     type: 'string',
     desc: baseLite.bundle.getText("filename")
   },
   output: {
-    alias: ['o', 'Output'],
+    alias: ['o'],
     choices: ["table", "json", "excel", "csv"],
     default: "table",
     type: 'string',
     desc: baseLite.bundle.getText("outputTypeQuery")
   },
   profile: {
-    alias: ['p', 'Profile'],
+    alias: ['p'],
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }

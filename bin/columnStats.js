@@ -7,19 +7,19 @@ export const describe = baseLite.bundle.getText("columnStats")
 
 export const builder = baseLite.getBuilder({
   table: {
-    alias: ['t', 'Table'],
+    alias: ['t'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("table")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
   },
   limit: {
-    alias: ['l', 'Limit'],
+    alias: ['l'],
     type: 'number',
     default: 200,
     desc: baseLite.bundle.getText("limit")
@@ -70,7 +70,7 @@ export async function getColumnStats(prompts) {
     const table = base.dbClass.objectName(prompts.table)
     const limit = base.validateLimit(prompts.limit)
 
-    let query = `SELECT * FROM M_CS_COLUMNS WHERE SCHEMA_NAME LIKE ? AND TABLE_NAME LIKE ? ORDER BY SCHEMA_NAME, TABLE_NAME, COLUMN_NAME`
+    let query = `SELECT * FROM SYS.M_CS_COLUMNS WHERE SCHEMA_NAME LIKE ? AND TABLE_NAME LIKE ? ORDER BY SCHEMA_NAME, TABLE_NAME, COLUMN_NAME`
     if (limit || base.sqlInjection.isAcceptableParameter(limit.toString())) {
       query += ` LIMIT ${limit.toString()}`
     }

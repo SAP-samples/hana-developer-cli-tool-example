@@ -10,39 +10,39 @@ export const describe = baseLite.bundle.getText("backupList")
 
 export const builder = baseLite.getBuilder({
   directory: {
-    alias: ['dir', 'Directory'],
+    alias: ['dir'],
     type: 'string',
     desc: baseLite.bundle.getText("backupListDirectory")
   },
   backupType: {
-    alias: ['type', 'Type'],
+    alias: ['type'],
     choices: ["table", "schema", "database", "all"],
     default: "all",
     type: 'string',
     desc: baseLite.bundle.getText("backupType")
   },
   sortBy: {
-    alias: ['sort', 'Sort'],
+    alias: ['sort'],
     choices: ["name", "date", "size", "type"],
     default: "date",
     type: 'string',
     desc: baseLite.bundle.getText("backupListSortBy")
   },
   order: {
-    alias: ['o', 'Order'],
+    alias: ['o'],
     choices: ["asc", "desc"],
     default: "desc",
     type: 'string',
     desc: baseLite.bundle.getText("backupListOrder")
   },
   limit: {
-    alias: ['l', 'Limit'],
+    alias: ['l'],
     type: 'number',
     default: 50,
     desc: baseLite.bundle.getText("limit")
   },
   showDetails: {
-    alias: ['details', 'Details'],
+    alias: ['details'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("backupListShowDetails")

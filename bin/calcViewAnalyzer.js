@@ -7,25 +7,25 @@ export const describe = baseLite.bundle.getText("calcViewAnalyzer")
 
 export const builder = baseLite.getBuilder({
   view: {
-    alias: ['v', 'View'],
+    alias: ['v'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("view")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
   },
   metrics: {
-    alias: ['m', 'Metrics'],
+    alias: ['m'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("metrics")
   },
   limit: {
-    alias: ['l', 'Limit'],
+    alias: ['l'],
     type: 'number',
     default: 100,
     desc: baseLite.bundle.getText("limit")

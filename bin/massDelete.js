@@ -7,17 +7,17 @@ export const describe = baseLite.bundle.getText("massDelete")
 
 export const builder = baseLite.getBuilder({
   schema: {
-    alias: ['s', 'schema'],
+    alias: ['s'],
     type: 'string',
     desc: baseLite.bundle.getText("schema")
   },
   object: {
-    alias: ['o', 'object'],
+    alias: ['o'],
     type: 'string',
     desc: baseLite.bundle.getText("object")
   },
   limit: {
-    alias: ['l', 'limit'],
+    alias: ['l'],
     type: 'number',
     default: 1000,
     desc: baseLite.bundle.getText("limit")
@@ -40,7 +40,7 @@ export const builder = baseLite.getBuilder({
     default: false
   },
   force: {
-    alias: ['f', 'force'],
+    alias: ['f'],
     type: 'boolean',
     desc: baseLite.bundle.getText("force"),
     default: false

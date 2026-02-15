@@ -7,13 +7,13 @@ export const describe = baseLite.bundle.getText("memoryAnalysis")
 
 export const builder = baseLite.getBuilder({
   component: {
-    alias: ['c', 'Component'],
+    alias: ['c'],
     type: 'string',
     default: '*',
     desc: baseLite.bundle.getText("component")
   },
   limit: {
-    alias: ['l', 'Limit'],
+    alias: ['l'],
     type: 'number',
     default: 200,
     desc: baseLite.bundle.getText("limit")

@@ -7,13 +7,13 @@ export const describe = baseLite.bundle.getText("containers")
 
 export const builder = baseLite.getBuilder({
   container: {
-    alias: ['c', 'Container'],
+    alias: ['c'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("container")
   },
   containerGroup: {
-    alias: ['g', 'Group', 'group', 'containergroup'],
+    alias: ['g', 'group', 'containergroup'],
     type: 'string',
     default: '*',
     desc: baseLite.bundle.getText("containerGroup")

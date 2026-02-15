@@ -10,54 +10,54 @@ export const describe = baseLite.bundle.getText("backup")
 
 export const builder = baseLite.getBuilder({
   target: {
-    alias: ['tgt', 'Target'],
+    alias: ['tgt'],
     type: 'string',
     desc: baseLite.bundle.getText("backupTarget")
   },
   name: {
-    alias: ['n', 'Name'],
+    alias: ['n'],
     type: 'string',
     desc: baseLite.bundle.getText("backupName")
   },
   backupType: {
-    alias: ['type', 'Type'],
+    alias: ['type'],
     choices: ["table", "schema", "database"],
     default: "table",
     type: 'string',
     desc: baseLite.bundle.getText("backupType")
   },
   format: {
-    alias: ['f', 'Format'],
+    alias: ['f'],
     choices: ["csv", "binary", "parquet"],
     default: "csv",
     type: 'string',
     desc: baseLite.bundle.getText("backupFormat")
   },
   destination: {
-    alias: ['dest', 'Destination'],
+    alias: ['dest'],
     type: 'string',
     desc: baseLite.bundle.getText("backupDestination")
   },
   compress: {
-    alias: ['c', 'Compress'],
+    alias: ['c'],
     type: 'boolean',
     default: true,
     desc: baseLite.bundle.getText("backupCompress")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
   },
   withData: {
-    alias: ['wd', 'WithData'],
+    alias: ['wd'],
     type: 'boolean',
     default: true,
     desc: baseLite.bundle.getText("backupWithData")
   },
   overwrite: {
-    alias: ['ow', 'Overwrite'],
+    alias: ['ow'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("backupOverwrite")
@@ -322,7 +322,7 @@ async function backupDatabase(db, backupPath, options) {
   console.log(base.bundle.getText("backupDatabaseWarning"))
   
   // Get database metadata
-  const dbInfoQuery = `SELECT * FROM M_DATABASE`
+  const dbInfoQuery = `SELECT * FROM SYS.M_DATABASE`
   const dbInfo = await db.statementExecPromisified(
     await db.preparePromisified(dbInfoQuery), 
     []

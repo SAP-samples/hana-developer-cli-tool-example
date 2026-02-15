@@ -7,7 +7,7 @@ export const describe = baseLite.bundle.getText("dropGroup")
 
 export const builder = baseLite.getBuilder({
   group: {
-    alias: ['g', 'Group'],
+    alias: ['g'],
     type: 'string',
     desc: baseLite.bundle.getText("group")
   }

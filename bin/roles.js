@@ -7,13 +7,13 @@ export const describe = baseLite.bundle.getText("roles")
 
 export const builder = baseLite.getBuilder({
   role: {
-    alias: ['r', 'Role'],
+    alias: ['r'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("role")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")

@@ -9,12 +9,12 @@ export const describe = baseLite.bundle.getText("callProcedure")
 
 export const builder = baseLite.getBuilder({
   procedure: {
-    alias: ['p', 'Procedure', 'sp'],
+    alias: ['p', 'sp'],
     type: 'string',
     desc: baseLite.bundle.getText("procedure")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")

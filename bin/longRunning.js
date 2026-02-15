@@ -7,25 +7,25 @@ export const describe = baseLite.bundle.getText("longRunning")
 
 export const builder = baseLite.getBuilder({
   limit: {
-    alias: ['l', 'Limit'],
+    alias: ['l'],
     type: 'number',
     default: 50,
     desc: baseLite.bundle.getText("limit")
   },
   duration: {
-    alias: ['d', 'Duration'],
+    alias: ['d'],
     type: 'number',
     default: 60,
     desc: baseLite.bundle.getText("queryDuration")
   },
   includeIdle: {
-    alias: ['i', 'IncludeIdle'],
+    alias: ['i'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("idleSession")
   },
   cancel: {
-    alias: ['c', 'CancelHash'],
+    alias: ['c'],
     type: 'string',
     desc: 'Statement hash to cancel'
   }

@@ -8,67 +8,67 @@ export const describe = baseLite.bundle.getText("dataDiff")
 
 export const builder = baseLite.getBuilder({
   table1: {
-    alias: ['t1', 'Table1'],
+    alias: ['t1'],
     type: 'string',
     desc: baseLite.bundle.getText("dataDiffTable1")
   },
   table2: {
-    alias: ['t2', 'Table2'],
+    alias: ['t2'],
     type: 'string',
     desc: baseLite.bundle.getText("dataDiffTable2")
   },
   schema1: {
-    alias: ['s1', 'Schema1'],
+    alias: ['s1'],
     type: 'string',
     desc: baseLite.bundle.getText("dataDiffSchema1")
   },
   schema2: {
-    alias: ['s2', 'Schema2'],
+    alias: ['s2'],
     type: 'string',
     desc: baseLite.bundle.getText("dataDiffSchema2")
   },
   keyColumns: {
-    alias: ['k', 'KeyColumns'],
+    alias: ['k'],
     type: 'string',
     desc: baseLite.bundle.getText("dataDiffKeyColumns")
   },
   compareColumns: {
-    alias: ['c', 'CompareColumns'],
+    alias: ['c'],
     type: 'string',
     desc: baseLite.bundle.getText("dataDiffCompareColumns")
   },
   output: {
-    alias: ['o', 'Output'],
+    alias: ['o'],
     type: 'string',
     desc: baseLite.bundle.getText("dataDiffOutput")
   },
   format: {
-    alias: ['f', 'Format'],
+    alias: ['f'],
     choices: ["json", "csv", "summary"],
     default: "summary",
     type: 'string',
     desc: baseLite.bundle.getText("dataDiffFormat")
   },
   limit: {
-    alias: ['l', 'Limit'],
+    alias: ['l'],
     type: 'number',
     default: 10000,
     desc: baseLite.bundle.getText("dataDiffLimit")
   },
   showValues: {
-    alias: ['sv', 'ShowValues'],
+    alias: ['sv'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("dataDiffShowValues")
   },
   timeout: {
-    alias: ['to', 'Timeout'],
+    alias: ['to'],
     type: 'number',
     default: 3600,
     desc: baseLite.bundle.getText("dataDiffTimeout")
   },
   profile: {
-    alias: ['p', 'Profile'],
+    alias: ['p'],
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }

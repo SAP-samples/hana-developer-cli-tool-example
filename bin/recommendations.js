@@ -7,14 +7,14 @@ export const describe = baseLite.bundle.getText("recommendations")
 
 export const builder = baseLite.getBuilder({
   category: {
-    alias: ['c', 'Category'],
+    alias: ['c'],
     type: 'string',
     default: 'all',
     choices: ['all', 'indexes', 'queries', 'cache', 'tables', 'locks', 'memory'],
     desc: 'Recommendation category'
   },
   limit: {
-    alias: ['l', 'Limit'],
+    alias: ['l'],
     type: 'number',
     default: 50,
     desc: baseLite.bundle.getText("limit")

@@ -11,7 +11,7 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("user")
   },
   group: {
-    alias: ['g', 'Group'],
+    alias: ['g'],
     type: 'string',
     default: 'SYS_XS_HANA_BROKER',
     desc: baseLite.bundle.getText("group")

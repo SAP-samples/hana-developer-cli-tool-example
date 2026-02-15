@@ -10,104 +10,104 @@ export const describe = baseLite.bundle.getText("import")
 
 export const builder = baseLite.getBuilder({
   filename: {
-    alias: ['n', 'Filename'],
+    alias: ['n'],
     type: 'string',
     desc: baseLite.bundle.getText("importFilename")
   },
   table: {
-    alias: ['t', 'Table'],
+    alias: ['t'],
     type: 'string',
     desc: baseLite.bundle.getText("importTable")
   },
   output: {
-    alias: ['o', 'Output'],
+    alias: ['o'],
     choices: ["csv", "excel"],
     default: "csv",
     type: 'string',
     desc: baseLite.bundle.getText("importOutputFormat")
   },
   matchMode: {
-    alias: ['m', 'MatchMode'],
+    alias: ['m'],
     choices: ["order", "name", "auto"],
     default: "auto",
     type: 'string',
     desc: baseLite.bundle.getText("importMatchMode")
   },
   truncate: {
-    alias: ['tr', 'Truncate'],
+    alias: ['tr'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("importTruncate")
   },
   batchSize: {
-    alias: ['b', 'BatchSize'],
+    alias: ['b'],
     type: 'number',
     default: 1000,
     desc: baseLite.bundle.getText("importBatchSize")
   },
   worksheet: {
-    alias: ['w', 'Worksheet'],
+    alias: ['w'],
     type: 'number',
     default: 1,
     desc: baseLite.bundle.getText("importWorksheet")
   },
   startRow: {
-    alias: ['sr', 'StartRow'],
+    alias: ['sr'],
     type: 'number',
     default: 1,
     desc: baseLite.bundle.getText("importStartRow")
   },
   skipEmptyRows: {
-    alias: ['se', 'SkipEmptyRows'],
+    alias: ['se'],
     type: 'boolean',
     default: true,
     desc: baseLite.bundle.getText("importSkipEmptyRows")
   },
   excelCacheMode: {
-    alias: ['ec', 'ExcelCacheMode'],
+    alias: ['ec'],
     choices: ["cache", "emit", "ignore"],
     default: "cache",
     type: 'string',
     desc: baseLite.bundle.getText("importExcelCacheMode")
   },
   dryRun: {
-    alias: ['dr', 'DryRun'],
+    alias: ['dr'],
     type: 'boolean',
     default: false,
     desc: 'Preview import results without committing to database'
   },
   maxFileSizeMB: {
-    alias: ['mfs', 'MaxFileSize'],
+    alias: ['mfs'],
     type: 'number',
     default: 500,
     desc: 'Maximum file size in MB (prevents memory exhaustion)'
   },
   timeoutSeconds: {
-    alias: ['ts', 'Timeout'],
+    alias: ['ts'],
     type: 'number',
     default: 3600,
     desc: 'Import operation timeout in seconds (0 = no timeout)'
   },
   nullValues: {
-    alias: ['nv', 'NullValues'],
+    alias: ['nv'],
     type: 'string',
     default: 'null,NULL,#N/A,',
     desc: 'Comma-separated list of values to treat as NULL'
   },
   skipWithErrors: {
-    alias: ['swe', 'SkipWithErrors'],
+    alias: ['swe'],
     type: 'boolean',
     default: false,
     desc: 'Continue import even if errors exceed threshold (logs errors)'
   },
   maxErrorsAllowed: {
-    alias: ['mea', 'MaxErrorsAllowed'],
+    alias: ['mea'],
     type: 'number',
     default: -1,
     desc: 'Maximum errors allowed before stopping (-1 = unlimited)'
   },
   profile: {
-    alias: ['p', 'Profile'],
+    alias: ['p'],
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }

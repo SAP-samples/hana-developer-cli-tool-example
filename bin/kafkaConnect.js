@@ -7,29 +7,29 @@ export const describe = baseLite.bundle.getText("kafkaConnect")
 
 export const builder = baseLite.getBuilder({
   action: {
-    alias: ['a', 'Action'],
+    alias: ['a'],
     type: 'string',
     default: 'list',
     choices: ['list', 'create', 'delete', 'status', 'test', 'info'],
     desc: baseLite.bundle.getText("action")
   },
   name: {
-    alias: ['n', 'Name'],
+    alias: ['n'],
     type: 'string',
     desc: baseLite.bundle.getText("connectorName")
   },
   brokers: {
-    alias: ['b', 'Brokers'],
+    alias: ['b'],
     type: 'string',
     desc: baseLite.bundle.getText("kafkaBrokers")
   },
   topic: {
-    alias: ['t', 'Topic'],
+    alias: ['t'],
     type: 'string',
     desc: baseLite.bundle.getText("kafkaTopic")
   },
   config: {
-    alias: ['c', 'Config'],
+    alias: ['c'],
     type: 'string',
     desc: baseLite.bundle.getText("configPath")
   }

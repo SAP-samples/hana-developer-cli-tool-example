@@ -6,7 +6,7 @@ export const describe = baseLite.bundle.getText("inspectUser")
 
 export const builder = baseLite.getBuilder({
   user: {
-    alias: ['u', 'User'],
+    alias: ['u'],
     type: 'string',
     desc: baseLite.bundle.getText("user")
   }

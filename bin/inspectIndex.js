@@ -7,12 +7,12 @@ export const describe = baseLite.bundle.getText("inspectIndex")
 
 export const builder = baseLite.getBuilder({
   index: {
-    alias: ['i', 'Index'],
+    alias: ['i'],
     type: 'string',
     desc: baseLite.bundle.getText("index")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
