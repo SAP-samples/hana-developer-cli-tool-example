@@ -61,10 +61,11 @@ export default class dbClientClass {
     }[]>;
     /**
      * Execute single SQL Statement and directly return result set
-     * @param {string} sql - SQL Statement
+     * @param {string} query - SQL Statement
+     * @param {Array<any>} [params] - Optional parameter bindings
      * @returns {Promise<any>} - result set object
      */
-    execSQL(query: any): Promise<any>;
+    execSQL(query: string, params?: Array<any>): Promise<any>;
     /**
     * Getter for Prompts Private Attribute
     * @returns {typeof import("prompt")} prompts - input prompts current value

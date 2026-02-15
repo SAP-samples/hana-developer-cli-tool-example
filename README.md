@@ -2523,6 +2523,183 @@ Options:
 
 ![massConvertUI example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/massConvertUI.png)
 
+### massDelete
+
+```shell
+hana-cli massDelete [schema] [object]
+[aliases: md, massdelete, massDel, massdel]
+Bulk delete operations with filtering
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -s, --schema, --Schema  Schema name                [string] [default: "**CURRENT_SCHEMA**"]
+  -o, --object, --Object  Object pattern (supports *)
+                                                         [string] [default: "*"]
+  -t, --type              Object Type (TABLE, VIEW)      [string]
+  -l, --limit             Limit results                  [number] [default: 1000]
+  -d, --dry, --dryrun     Dry run mode - show what would happen without making changes
+                                                      [boolean] [default: false]
+  -f, --force             Force operation without confirmation
+                                                      [boolean] [default: false]
+      --log               Write progress log to file rather than stop on error
+                                                      [boolean] [default: false]
+```
+
+  Notes:
+
+* Use `--dry` flag to preview which objects will be deleted before performing the actual deletion
+* Pattern matching supports `*` and `%` wildcards
+* Use `--force` to skip confirmation prompts (useful for automation)
+* Logs are saved as JSON files with full deletion details
+
+### massUpdate
+
+```shell
+hana-cli massUpdate [schema] [object]
+[aliases: mu, massupdate, massUpd, massupd]
+Bulk update operations
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -s, --schema, --Schema  Schema name                [string] [default: "**CURRENT_SCHEMA**"]
+  -o, --object, --Object  Table pattern (supports *)
+                                                         [string] [default: "*"]
+  -c, --set               SET clause for UPDATE statement (required)
+                                                         [string]
+  -w, --where             WHERE clause for filtering
+                                                         [string]
+  -l, --limit             Limit results                  [number] [default: 1000]
+  -d, --dry, --dryrun     Dry run mode - show what would happen without making changes
+                                                      [boolean] [default: false]
+      --log               Write progress log to file rather than stop on error
+                                                      [boolean] [default: false]
+```
+
+  Notes:
+
+* Use `--dry` flag to preview the UPDATE statements and row counts before execution
+* Pattern matching supports `*` and `%` wildcards for table names
+* The `--set` parameter should contain the column assignments (e.g., "COLUMN1='value'")
+* The `--where` parameter is optional; if omitted, all matching tables are updated
+* Row counts are tracked and logged for each table
+
+### massGrant
+
+```shell
+hana-cli massGrant [schema] [object]
+[aliases: mg, massgrant, massGrn, massgrn]
+Bulk privilege management
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -s, --schema, --Schema    Schema name                [string] [default: "**CURRENT_SCHEMA**"]
+  -o, --object, --Object    Object pattern (supports *)
+                                                         [string] [default: "*"]
+  -t, --type                Object Type (TABLE, VIEW, PROCEDURE)
+                                                         [string]
+  -p, --privilege           Privilege to grant (SELECT, INSERT, UPDATE, DELETE, EXECUTE)
+                                                         [string] [required]
+  -g, --grantee             User or role to grant privileges to
+                                                         [string] [required]
+      --wgo                 Grant WITH GRANT OPTION
+                                                      [boolean] [default: false]
+  -d, --dry, --dryrun       Dry run mode - show what would happen without making changes
+                                                      [boolean] [default: false]
+      --log                 Write progress log to file rather than stop on error
+                                                      [boolean] [default: false]
+```
+
+  Notes:
+
+* Pattern matching supports `*` and `%` wildcards for object names
+* Use `--dry` flag to preview which GRANT statements will be executed
+* Use `--wgo` to allow the grantee to grant the same privileges to other users/roles
+* Grantee can be a user name or role name
+* Logs include confirmation of which privileges were granted to whom
+
+### massExport
+
+```shell
+hana-cli massExport [schema] [object]
+[aliases: me, mexport, massExp, massexp]
+Export multiple objects at once
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -s, --schema, --Schema      Schema name                [string] [default: "**CURRENT_SCHEMA**"]
+  -o, --object, --Object      Table pattern (supports *)
+                                                         [string] [default: "*"]
+  -t, --type                  Object Type (TABLE, VIEW)  [string]
+  -l, --limit                 Limit results              [number] [default: 1000]
+  -f, --format                Export format (csv, json)  [string] [default: "csv"]
+  -d, --directory             Output directory for exports
+                                                         [string] [default: "./"]
+      --data, --includeData   Include table data along with structure
+                                                      [boolean] [default: false]
+```
+
+  Notes:
+
+* Pattern matching supports `*` and `%` wildcards for table names
+* Exports table structure (columns, types, nullability) by default
+* Use `--data` flag to also export actual table data
+* JSON format exports complete metadata and row data
+* CSV format exports comma-separated values suitable for documentation
+* Each table generates separate `_structure` and optionally `_data` files
+* Logs include export status and file locations
+
 ### massRename
 
 ```shell
