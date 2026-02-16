@@ -5,22 +5,23 @@
  */
 export function handler(argv: object): Promise<void>;
 /**
- * Show differences between two datasets
- * @param {object} prompts - User prompts
+ * Manage Smart Data Integration tasks
+ * @param {object} prompts - User prompts with SDI task options
  * @returns {Promise<void>}
  */
-export function dataDiffMain(prompts: object): Promise<void>;
-export const command: "dataDiff";
+export function sdiTasksMain(prompts: object): Promise<void>;
+export const command: "sdiTasks";
 export const aliases: string[];
 export const describe: string;
 export const builder: any;
 export namespace inputPrompts {
-    namespace table1 {
+    namespace action {
         let description: string;
         let type: string;
         let required: boolean;
+        function ask(): boolean;
     }
-    namespace table2 {
+    namespace taskName {
         let description_1: string;
         export { description_1 as description };
         let type_1: string;
@@ -28,23 +29,27 @@ export namespace inputPrompts {
         let required_1: boolean;
         export { required_1 as required };
     }
-    namespace schema1 {
+    namespace flowgraph {
         let description_2: string;
         export { description_2 as description };
         let type_2: string;
         export { type_2 as type };
         let required_2: boolean;
         export { required_2 as required };
+        export function ask_1(): boolean;
+        export { ask_1 as ask };
     }
-    namespace schema2 {
+    namespace agentName {
         let description_3: string;
         export { description_3 as description };
         let type_3: string;
         export { type_3 as type };
         let required_3: boolean;
         export { required_3 as required };
+        export function ask_2(): boolean;
+        export { ask_2 as ask };
     }
-    namespace keyColumns {
+    namespace schema {
         let description_4: string;
         export { description_4 as description };
         let type_4: string;
@@ -52,53 +57,14 @@ export namespace inputPrompts {
         let required_4: boolean;
         export { required_4 as required };
     }
-    namespace compareColumns {
+    namespace profile {
         let description_5: string;
         export { description_5 as description };
         let type_5: string;
         export { type_5 as type };
         let required_5: boolean;
         export { required_5 as required };
-        export function ask(): boolean;
-    }
-    namespace output {
-        let description_6: string;
-        export { description_6 as description };
-        let type_6: string;
-        export { type_6 as type };
-        let required_6: boolean;
-        export { required_6 as required };
-        export function ask_1(): boolean;
-        export { ask_1 as ask };
-    }
-    namespace format {
-        let description_7: string;
-        export { description_7 as description };
-        let type_7: string;
-        export { type_7 as type };
-        let required_7: boolean;
-        export { required_7 as required };
-        export function ask_2(): boolean;
-        export { ask_2 as ask };
-    }
-    namespace profile {
-        let description_8: string;
-        export { description_8 as description };
-        let type_8: string;
-        export { type_8 as type };
-        let required_8: boolean;
-        export { required_8 as required };
         export function ask_3(): void;
         export { ask_3 as ask };
-    }
-    namespace dryRun {
-        let description_9: string;
-        export { description_9 as description };
-        let type_9: string;
-        export { type_9 as type };
-        let required_9: boolean;
-        export { required_9 as required };
-        export function ask_4(): boolean;
-        export { ask_4 as ask };
     }
 }

@@ -138,12 +138,18 @@ export async function executeCommand(
  * Validates that required environment variables are set for database connection
  */
 export function validateEnvironment(): { valid: boolean; message?: string } {
-  // The hana-cli tool uses various connection methods, but most commonly:
-  // - Uses .env files or default-env.json
-  // - Can use connection parameters passed via CLI
-  // - Some commands don't need DB connection (like version, help)
+  // The hana-cli tool uses various connection methods:
+  // - .env files or default-env.json in the project root
+  // - Connection parameters passed via CLI (--conn, --user, --password, etc.)
+  // - Service keys and BTP connections
+  // 
+  // Most commands don't strictly require these at validation time
+  // since connection errors are handled at command execution
+  // 
+  // Some commands like 'version' and 'help' work without any connection
   
   // For now, we'll allow commands to run and let the CLI handle connection validation
+  // This provides better error messages from the actual command execution
   return { valid: true };
 }
 

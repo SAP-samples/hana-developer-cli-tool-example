@@ -163,18 +163,24 @@ class HanaCliMcpServer {
             if (!Array.isArray(commands)) {
                 throw new Error('init() did not return an array of commands');
             }
-            console.error(`[MCP] Loaded ${commands.length} commands from hana-cli`);
+            console.error(`[MCP] Loaded ${commands.length} command modules from hana-cli`);
             // Store commands in map
+            let successCount = 0;
             for (const cmd of commands) {
                 if (cmd && typeof cmd.command === 'string') {
                     const commandName = cmd.command.split(' ')[0];
                     this.commands.set(commandName, cmd);
+                    successCount++;
                 }
             }
-            console.error(`[MCP] Registered ${this.commands.size} unique commands`);
+            console.error(`[MCP] Registered ${this.commands.size} unique commands with ${successCount} processed modules`);
+            if (this.commands.size === 0) {
+                throw new Error('No valid commands were registered');
+            }
         }
         catch (error) {
-            console.error('[MCP] Failed to load commands:', error);
+            const errorMsg = error instanceof Error ? error.message : String(error);
+            console.error(`[MCP] Failed to load commands: ${errorMsg}`);
             throw error;
         }
     }

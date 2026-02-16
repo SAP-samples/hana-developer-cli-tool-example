@@ -32,15 +32,19 @@ This MCP server publishes an icon via the MCP `serverInfo.icons` metadata. For c
 
 ## Available Commands
 
-The server exposes all hana-cli commands with the `hana_` prefix. For example:
+The server exposes all hana-cli commands (150+) with the `hana_` prefix. For example:
 
 - `hana_status` - Check connection status
 - `hana_tables` - List database tables
 - `hana_schemas` - List database schemas
 - `hana_version` - Show version information
-- And 100+ more commands...
+- `hana_import` - Import data (with new matchMode, dryRun, and error handling parameters)
+- `hana_dataValidator` - Validate data quality
+- `hana_healthCheck` - Check system health
+- `hana_memoryAnalysis` - Analyze memory consumption
+- And 140+ more commands...
 
-All command aliases are also available (e.g., `hana_s` for status, `hana_t` for tables).
+All command aliases are also available (e.g., `hana_s` for status, `hana_t` for tables, `hana_imp` for import).
 
 ## Usage
 
@@ -88,10 +92,53 @@ npm run build
 
 ## Architecture
 
-The MCP server consists of three main modules:
+The MCP server consists of four main modules:
 
 1. **command-parser.ts** - Converts yargs command definitions to JSON Schema for MCP
-2. **executor.ts** - Executes CLI commands and captures output
-3. **index.ts** - Main MCP server implementation with tool handlers
+   - Handles both object-based and function-based builders
+   - Extracts parameter types, defaults, choices, and descriptions
+   - Supports command aliases
 
-The server dynamically loads all commands from `../bin/index.js` at startup, ensuring it always exposes the complete set of available commands.
+2. **executor.ts** - Executes CLI commands and captures output
+   - Spawns CLI processes with proper argument conversion
+   - Handles timeouts and process errors
+   - Integrates with output formatter for result formatting
+   - Validates environment configuration
+
+3. **output-formatter.ts** - Formats command output for better readability
+   - Parses ASCII table output from CLI commands
+   - Converts to markdown format
+   - Command-specific formatting (tables, schemas, procedures, etc)
+   - Schema name shortening for UUIDs
+
+4. **index.ts** - Main MCP server implementation
+   - Manages the MCP protocol communication
+   - Loads all commands from the parent hana-cli project
+   - Registers tools with aliases
+   - Handles command execution requests
+
+## Recent Improvements (v1.202602.0)
+
+- **Enhanced builder introspection** - Now handles function-based builders in addition to object builders
+- **Better error messages** - More informative logging during command loading
+- **All new commands exposed** - 150+ commands including new data validation and health check tools
+- **Full parameter documentation** - All parameters with types, defaults, and descriptions
+- **Improved validation** - Better environment validation and error handling
+
+## What's Newly Exposed
+
+**Import Command Enhancements:**
+- `matchMode` - Match columns by order, name, or auto mode
+- `dryRun` - Preview import without committing to database
+- `maxFileSizeMB` - Memory protection for large imports
+- `timeoutSeconds` - Configurable operation timeout
+- `nullValues` - Custom NULL value handling
+- `skipWithErrors` - Continue import on errors
+- `maxErrorsAllowed` - Error threshold control
+
+**New Commands:**
+- `healthCheck` - System health status monitoring
+- `memoryLeaks` - Memory leak detection
+- `memoryAnalysis` - Memory consumption analysis
+- `duplicateDetection` - Find and handle duplicate records
+- Plus 140+ other commands for data analysis, optimization, and management

@@ -80,9 +80,10 @@ export function askFalse(): boolean;
  * @param {object} inputSchema - prompts current value
  * @param {boolean} [iConn=true] - Add Connection Group
  * @param {boolean} [iDebug=true] - Add Debug Group
+ * @param {object} [builderOptions] - Command builder options for validation
  * @throws {Error} If required parameters are missing or invalid
  */
-export function promptHandler(argv: import("yargs").CommandBuilder, processingFunction: Function, inputSchema: object, iConn?: boolean, iDebug?: boolean): Promise<void>;
+export function promptHandler(argv: import("yargs").CommandBuilder, processingFunction: Function, inputSchema: object, iConn?: boolean, iDebug?: boolean, builderOptions?: object): Promise<void>;
 /**
  * Handle Errors cleanup connections and decide how to alter the user
  * @param {*} error - Error Object
