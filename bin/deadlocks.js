@@ -5,14 +5,17 @@ export const command = 'deadlocks'
 export const aliases = ['deadlock', 'dl']
 export const describe = baseLite.bundle.getText("deadlocks")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   limit: {
     alias: ['l'],
     type: 'number',
     default: 50,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).example(
+  'hana-cli deadlocks --limit 50',
+  baseLite.bundle.getText("deadlocksExample")
+)
 
 export let inputPrompts = {
   limit: {

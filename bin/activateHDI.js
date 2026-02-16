@@ -5,13 +5,13 @@ export const command = 'activateHDI [tenant]'
 export const aliases = ['ahdi', 'ah']
 export const describe = baseLite.bundle.getText("activateHDI")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   tenant: {
     alias: ['t'],
     type: 'string',
     desc: baseLite.bundle.getText("tenant")
   }
-})
+})).example('hana-cli activateHDI --container hdi_container', baseLite.bundle.getText("activateHDIExample"))
 
 /**
  * Command handler function

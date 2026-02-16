@@ -7,14 +7,14 @@ export const command = 'hcStart [name]'
 export const aliases = ['hcstart', 'hc_start', 'start']
 export const describe = baseLite.bundle.getText("hcStart")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     name: {
         alias: ['n'],
         type: 'string',
         default: `**default**`,
         desc: baseLite.bundle.getText("hc_instance_name")
     }
-}, false)
+}, false)).example('hana-cli hcStart --name myInstance', baseLite.bundle.getText('hcStartExample'))
 
 /**
  * Command handler function

@@ -5,7 +5,7 @@ export const command = 'serviceKey [instance] [key]'
 export const aliases = ['key', 'servicekey', 'service-key']
 export const describe = baseLite.bundle.getText("serviceKey")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   instance: {
     alias: ['i'],
     desc: baseLite.bundle.getText("instance")
@@ -38,7 +38,7 @@ export const builder = baseLite.getBuilder({
     type: 'boolean',
     default: true
   }
-}, false)
+}, false)).example('hana-cli serviceKey --instance myInstance --key myKey', baseLite.bundle.getText('serviceKeyExample'))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

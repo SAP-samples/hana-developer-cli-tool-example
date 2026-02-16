@@ -8,7 +8,7 @@ export const command = 'copy2Secrets'
 export const aliases = ['secrets', 'make:secrets']
 export const describe = baseLite.bundle.getText("copy2Secrets")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     envJson: {
         alias: ['from-file'],
         type: 'string',
@@ -25,7 +25,10 @@ export const builder = baseLite.getBuilder({
         type: 'string',
         desc: baseLite.bundle.getText("secretsFilter")
     }
-}, false)
+}, false)).example(
+  'hana-cli copy2Secrets --secretsFolder ./secrets',
+  baseLite.bundle.getText("copy2SecretsExample")
+)
 
 
 export async function handler (argv) {

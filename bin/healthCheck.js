@@ -5,7 +5,7 @@ export const command = 'healthCheck'
 export const aliases = ['health', 'h']
 export const describe = baseLite.bundle.getText("healthCheck")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   checks: {
     alias: ['c'],
     type: 'string',
@@ -13,7 +13,7 @@ export const builder = baseLite.getBuilder({
     desc: 'Health checks to perform (all, memory, disk, connection, transaction, backup, replication, resources)',
     choices: ['all', 'memory', 'disk', 'connection', 'transaction', 'backup', 'replication', 'resources']
   }
-})
+})).example('hana-cli healthCheck --checks all', baseLite.bundle.getText("healthCheckExample"))
 
 export let inputPrompts = {
   checks: {

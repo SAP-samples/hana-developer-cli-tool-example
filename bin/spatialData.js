@@ -5,7 +5,7 @@ export const command = 'spatialData [schema] [table]'
 export const aliases = ['spatial', 'geoData', 'geographic', 'geo']
 export const describe = baseLite.bundle.getText("spatialData")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t'],
     type: 'string',
@@ -40,7 +40,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli spatialData --schema MYSCHEMA --table % --bounds', baseLite.bundle.getText('spatialDataExample'))
 
 export let inputPrompts = {
   table: {

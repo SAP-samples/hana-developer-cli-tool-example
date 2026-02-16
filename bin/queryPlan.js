@@ -5,13 +5,13 @@ export const command = 'queryPlan'
 export const aliases = []
 export const describe = baseLite.bundle.getText("queryPlan")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   sql: {
     alias: ['q', 'sql'],
     type: 'string',
     desc: baseLite.bundle.getText("query")
   }
-})
+})).example('hana-cli queryPlan --sql "SELECT * FROM CUSTOMERS"', baseLite.bundle.getText('queryPlanExample'))
 
 export let inputPrompts = {
   sql: {

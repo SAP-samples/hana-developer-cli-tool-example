@@ -5,7 +5,7 @@ export const command = 'iniContents [file] [section]'
 export const aliases = ['if', 'inifiles', 'ini']
 export const describe = baseLite.bundle.getText("iniContents")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   file: {
     alias: ['f'],
     type: 'string',
@@ -24,7 +24,7 @@ export const builder = baseLite.getBuilder({
     default: 200,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).example('hana-cli iniContents --file myFile', baseLite.bundle.getText("iniContentsExample"))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

@@ -6,7 +6,7 @@ export const command = 'referentialCheck'
 export const aliases = ['refcheck', 'checkReferential', 'fkcheck']
 export const describe = baseLite.bundle.getText("referentialCheck")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t'],
     type: 'string',
@@ -59,7 +59,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli referentialCheck --table myTable --mode check', baseLite.bundle.getText("referentialCheckExample"))
 
 export let inputPrompts = {
   table: {

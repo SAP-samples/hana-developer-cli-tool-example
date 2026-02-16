@@ -5,7 +5,7 @@ export const command = 'xsaServices [action]'
 export const aliases = ['xsa', 'xsaSvc', 'xsaservices']
 export const describe = baseLite.bundle.getText("xsaServices")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   action: {
     alias: ['a', 'Action'],
     type: 'string',
@@ -24,7 +24,7 @@ export const builder = baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("details")
   }
-})
+})).example('hana-cli xsaServices --action list --details', baseLite.bundle.getText('xsaServicesExample'))
 
 export let inputPrompts = {
   action: {

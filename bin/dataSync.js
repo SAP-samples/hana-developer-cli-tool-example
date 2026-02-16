@@ -6,7 +6,7 @@ export const command = 'dataSync'
 export const aliases = ['datasync', 'syncData', 'sync']
 export const describe = baseLite.bundle.getText("dataSync")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   sourceConnection: {
     alias: ['sc'],
     type: 'string',
@@ -64,7 +64,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli dataSync --sourceConnection conn1 --targetConnection conn2 --table myTable', baseLite.bundle.getText("dataSyncExample"))
 
 export let inputPrompts = {
   sourceConnection: {

@@ -7,7 +7,7 @@ export const command = 'btpInfo'
 export const aliases = ['btpinfo']
 export const describe = baseLite.bundle.getText("btpInfo")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     output: {
         alias: ['o'],
         choices: ["tbl", "json"],
@@ -15,7 +15,7 @@ export const builder = baseLite.getBuilder({
         type: 'string',
         desc: baseLite.bundle.getText("outputType")
       }
-}, false)
+}, false)).example('hana-cli btpInfo --output json', baseLite.bundle.getText("btpInfoExample"))
 
 
 export async function handler(argv) {

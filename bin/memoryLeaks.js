@@ -5,7 +5,7 @@ export const command = 'memoryLeaks'
 export const aliases = ['memleak', 'ml']
 export const describe = baseLite.bundle.getText("memoryLeaks")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   component: {
     alias: ['c'],
     type: 'string',
@@ -24,7 +24,7 @@ export const builder = baseLite.getBuilder({
     default: 50,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).example('hana-cli memoryLeaks --threshold 25 --limit 100', baseLite.bundle.getText('memoryLeaksExample'))
 
 export let inputPrompts = {
   component: {

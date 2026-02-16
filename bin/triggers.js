@@ -5,7 +5,7 @@ export const command = 'triggers [schema] [trigger] [target]'
 export const aliases = ['trig', 'listTriggers', 'ListTrigs', 'listtrigs', 'Listtrig', "listrig"]
 export const describe = baseLite.bundle.getText("triggers")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   trigger: {
     alias: ['t', 'Trigger'],
     type: 'string',
@@ -35,7 +35,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli triggers --schema MYSCHEMA --trigger %', baseLite.bundle.getText('triggersExample'))
 
 /**
  * Command handler function

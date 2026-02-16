@@ -5,7 +5,7 @@ export const command = 'graphWorkspaces [schema] [workspace]'
 export const aliases = ['gws', 'graphs', 'graphWorkspace', 'graphws']
 export const describe = baseLite.bundle.getText("graphWorkspaces")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   workspace: {
     alias: ['w'],
     type: 'string',
@@ -29,7 +29,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli graphWorkspaces --workspace myWorkspace --schema MYSCHEMA', baseLite.bundle.getText("graphWorkspacesExample"))
 
 export let inputPrompts = {
   workspace: {

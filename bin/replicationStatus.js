@@ -6,7 +6,7 @@ export const command = 'replicationStatus'
 export const aliases = ['replstatus', 'replication', 'replstat']
 export const describe = baseLite.bundle.getText("replicationStatus")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   type: {
     alias: ['ty'],
     type: 'string',
@@ -36,7 +36,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli replicationStatus --type system --detailed', baseLite.bundle.getText("replicationStatusExample"))
 
 export let inputPrompts = {
   type: {

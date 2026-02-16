@@ -5,7 +5,7 @@ export const command = 'partitions [schema] [table]'
 export const aliases = ['parts', 'partition', 'partitioning', 'tablePartitions']
 export const describe = baseLite.bundle.getText("partitions")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t'],
     type: 'string',
@@ -34,7 +34,10 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example(
+  'hana-cli partitions --table myTable --schema MYSCHEMA',
+  baseLite.bundle.getText("partitionsExample")
+)
 
 export let inputPrompts = {
   table: {

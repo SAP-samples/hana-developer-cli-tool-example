@@ -4,7 +4,7 @@ import * as baseLite from '../utils/base-lite.js'
 export const command = 'issue'
 export const aliases = ['Issue', 'openIssue', 'openissue', 'reportIssue', 'reportissue']
 export const describe = baseLite.bundle.getText("issue")
-export const builder = baseLite.getBuilder({}, false)
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).example('hana-cli issue', baseLite.bundle.getText('issueExample'))
 export async function handler(argv) {
   const base = await import('../utils/base.js')
     base.promptHandler(argv, createIssue, {})

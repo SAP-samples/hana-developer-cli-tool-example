@@ -5,7 +5,7 @@ export const command = 'users [user]'
 export const aliases = ['u', 'listUsers', 'listusers']
 export const describe = baseLite.bundle.getText("users")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   user: {
     alias: ['u'],
     type: 'string',
@@ -18,7 +18,10 @@ export const builder = baseLite.getBuilder({
     default: 200,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).example(
+  'hana-cli users --user SYSTEM',
+  baseLite.bundle.getText("usersExample")
+)
 
 /**
  * Command handler function

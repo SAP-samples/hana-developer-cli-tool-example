@@ -6,7 +6,7 @@ export const command = 'btpTarget'
 export const aliases = ['btp-ui']
 export const describe = baseLite.bundle.getText("btpTargetCmd")
 
-export const builder = baseLite.getBuilder({}, false)
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).example('hana-cli btpTarget', baseLite.bundle.getText("btpTargetExample"))
 
 /**
  * Get BTP hierarchy data for UI

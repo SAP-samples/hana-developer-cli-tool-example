@@ -4,7 +4,7 @@ export const command = 'libraries [schema] [library]'
 export const aliases = ['l', 'listLibs', 'ListLibs', 'listlibs', 'ListLib', "listLibraries", "listlibraries"]
 export const describe = baseLite.bundle.getText("libraries")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   library: {
     alias: ['lib'],
     type: 'string',
@@ -28,7 +28,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli libraries --schema MYSCHEMA --library %', baseLite.bundle.getText('librariesExample'))
 
 /**
  * Command handler function

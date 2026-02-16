@@ -6,7 +6,7 @@ export const command = 'massRename'
 export const aliases = ['mr', 'massrename', 'massRN', 'massrn']
 export const describe = baseLite.bundle.getText("massRename")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   schema: {
     alias: ['s'],
     type: 'string',
@@ -27,7 +27,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("case")
   }
-})
+})).example('hana-cli massRename --schema db/schema.cds --prefix app_ --case camelCase', baseLite.bundle.getText('massRenameExample'))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

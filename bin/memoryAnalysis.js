@@ -5,7 +5,7 @@ export const command = 'memoryAnalysis'
 export const aliases = []
 export const describe = baseLite.bundle.getText("memoryAnalysis")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   component: {
     alias: ['c'],
     type: 'string',
@@ -18,7 +18,7 @@ export const builder = baseLite.getBuilder({
     default: 200,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).example('hana-cli memoryAnalysis --component indexserver --limit 200', baseLite.bundle.getText("memoryAnalysisExample"))
 
 export let inputPrompts = {
   component: {

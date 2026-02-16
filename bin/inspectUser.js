@@ -4,13 +4,13 @@ export const command = 'inspectUser [user]'
 export const aliases = ['iu', 'user', 'insUser', 'inspectuser']
 export const describe = baseLite.bundle.getText("inspectUser")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   user: {
     alias: ['u'],
     type: 'string',
     desc: baseLite.bundle.getText("user")
   }
-})
+})).example('hana-cli inspectUser --user SYSTEM', baseLite.bundle.getText("inspectUserExample"))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

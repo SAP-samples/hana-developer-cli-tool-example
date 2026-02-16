@@ -5,7 +5,7 @@ export const command = 'massGrant [schema] [object]'
 export const aliases = ['mg', 'massgrant', 'massGrn', 'massgrn']
 export const describe = baseLite.bundle.getText("massGrant")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   schema: {
     alias: ['s'],
     type: 'string',
@@ -47,7 +47,7 @@ export const builder = baseLite.getBuilder({
     type: 'boolean',
     desc: baseLite.bundle.getText("mass.log")
   }
-})
+})).example('hana-cli massGrant --schema MYSCHEMA --object % --grantee DBUSER --privilege SELECT', baseLite.bundle.getText('massGrantExample'))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

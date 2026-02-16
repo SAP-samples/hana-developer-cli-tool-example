@@ -5,7 +5,7 @@ export const command = 'securityScan'
 export const aliases = ['secscan', 'scan']
 export const describe = baseLite.bundle.getText("securityScan")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   category: {
     alias: ['c'],
     type: 'string',
@@ -25,7 +25,7 @@ export const builder = baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("autoFix")
   }
-})
+})).example('hana-cli securityScan --category all --detailed', baseLite.bundle.getText('securityScanExample'))
 
 export let inputPrompts = {
   category: {

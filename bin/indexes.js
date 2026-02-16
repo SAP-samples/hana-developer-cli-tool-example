@@ -5,7 +5,7 @@ export const command = 'indexes [schema] [indexes]'
 export const aliases = ['ind', 'listIndexes', 'ListInd', 'listind', 'Listind', "listfindexes"]
 export const describe = baseLite.bundle.getText("indexes")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   indexes: {
     alias: ['i'],
     type: 'string',
@@ -29,7 +29,10 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example(
+  'hana-cli indexes --indexes myIndex --schema MYSCHEMA',
+  baseLite.bundle.getText("indexesExample")
+)
 
 export let inputPrompts = {
   indexes: {

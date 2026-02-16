@@ -6,7 +6,7 @@ export const command = 'tablesSQLite [table]'
 export const aliases = ['tablessqlite', 'tablesqlite', 'tablesSqlite', 'tables-sqlite', 'tables-sql', 'tablesSQL']
 export const describe = baseLite.bundle.getText("tablesSQLite")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t', 'Table'],
     type: 'string',
@@ -25,7 +25,10 @@ export const builder = baseLite.getBuilder({
     default: 200,
     desc: baseLite.bundle.getText("limit")
   }
-}, false)
+}, false)).example(
+  'hana-cli tablesSQLite --table * --schema main',
+  baseLite.bundle.getText("tablesSQLiteExample")
+)
 
 export let inputPrompts = {
   table: {

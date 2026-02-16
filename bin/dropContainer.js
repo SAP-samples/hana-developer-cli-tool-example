@@ -7,7 +7,7 @@ export const command = 'dropContainer [container] [group]'
 export const aliases = ['dc', 'dropC']
 export const describe = baseLite.bundle.getText("dropContainer")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   container: {
     alias: ['c'],
     type: 'string',
@@ -19,7 +19,7 @@ export const builder = baseLite.getBuilder({
     default: '',
     desc: baseLite.bundle.getText("group")
   }
-})
+})).example('hana-cli dropContainer --container myContainer', baseLite.bundle.getText("dropContainerExample"))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

@@ -7,7 +7,7 @@ export const command = 'export'
 export const aliases = ['exp', 'downloadData', 'downloaddata']
 export const describe = baseLite.bundle.getText("export")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t'],
     type: 'string',
@@ -86,7 +86,10 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example(
+  'hana-cli export --table myTable --format csv',
+  baseLite.bundle.getText("exportExample")
+)
 
 export let inputPrompts = {
   table: {

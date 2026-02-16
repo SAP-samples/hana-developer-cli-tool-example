@@ -7,7 +7,7 @@ export const command = 'callProcedure [schema] [procedure]'
 export const aliases = ['cp', 'callprocedure', 'callProc', 'callproc', 'callSP', 'callsp']
 export const describe = baseLite.bundle.getText("callProcedure")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   procedure: {
     alias: ['p', 'sp'],
     type: 'string',
@@ -24,7 +24,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli callProcedure --procedure myProc --schema MYSCHEMA', baseLite.bundle.getText("callProcedureExample"))
 
 
 export async function handler(argv) {

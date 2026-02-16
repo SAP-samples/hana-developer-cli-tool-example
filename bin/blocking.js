@@ -5,7 +5,7 @@ export const command = 'blocking'
 export const aliases = ['b', 'locks']
 export const describe = baseLite.bundle.getText("blocking")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   limit: {
     alias: ['l'],
     type: 'number',
@@ -18,7 +18,10 @@ export const builder = baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("details")
   }
-})
+})).example(
+  'hana-cli blocking --limit 50 --details',
+  baseLite.bundle.getText("blockingExample")
+)
 
 export let inputPrompts = {
   limit: {

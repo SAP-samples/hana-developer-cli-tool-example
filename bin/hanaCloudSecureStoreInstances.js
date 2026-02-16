@@ -5,14 +5,14 @@ export const command = 'securestore'
 export const aliases = ['secureStoreInstances', 'securestoreinstances', 'secureStoreServices', 'listSecureStore', 'securestoreservices', 'securestores']
 export const describe = baseLite.bundle.getText("secureStoreInstances")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     cf: {
         alias: ['c', 'cmd'],
         desc: baseLite.bundle.getText("cfxs"),
         type: 'boolean',
         default: true
     }
-}, false)
+}, false)).example('hana-cli securestore --cf', baseLite.bundle.getText("securestoreExample"))
 
 export let inputPrompts = {
     cf: {

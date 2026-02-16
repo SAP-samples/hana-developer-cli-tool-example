@@ -6,7 +6,7 @@ export const command = 'schemaClone'
 export const aliases = ['schemaclone', 'cloneSchema', 'copyschema']
 export const describe = baseLite.bundle.getText("schemaClone")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   sourceSchema: {
     alias: ['ss'],
     type: 'string',
@@ -59,7 +59,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli schemaClone --sourceSchema SOURCE --targetSchema TARGET --includeData', baseLite.bundle.getText("schemaClone"))
 
 export let inputPrompts = {
   sourceSchema: {

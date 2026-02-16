@@ -7,7 +7,7 @@ export const command = 'sub'
 export const aliases = ['subs', 'Sub', 'Subs', 'btpsub', 'btpsubs', 'btpSub', 'btpSubs', 'btpsubscriptions', 'btpSubscriptions']
 export const describe = baseLite.bundle.getText("btpSub")
 
-export const builder = baseLite.getBuilder({}, false)
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).example('hana-cli sub', baseLite.bundle.getText("subExample"))
 
 const SUBSCRIBED_STATE = 'SUBSCRIBED'
 

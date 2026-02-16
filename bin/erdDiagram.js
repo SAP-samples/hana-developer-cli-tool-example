@@ -6,7 +6,7 @@ export const command = 'erdDiagram'
 export const aliases = ['erd', 'er', 'schema-diagram', 'entityrelation']
 export const describe = baseLite.bundle.getText("erdDiagram")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   schema: {
     alias: ['s'],
     type: 'string',
@@ -52,7 +52,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli erdDiagram --schema MYSCHEMA --format mermaid --output erd.md', baseLite.bundle.getText('erdDiagramExample'))
 
 export const inputPrompts = {
   schema: {

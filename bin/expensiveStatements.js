@@ -5,7 +5,7 @@ export const command = 'expensiveStatements'
 export const aliases = []
 export const describe = baseLite.bundle.getText("expensiveStatements")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   limit: {
     alias: ['l'],
     type: 'number',
@@ -19,7 +19,7 @@ export const builder = baseLite.getBuilder({
     default: 'totalTime',
     desc: baseLite.bundle.getText("expensiveStatementsOrderBy")
   }
-})
+})).example('hana-cli expensiveStatements --limit 50 --orderBy totalTime', baseLite.bundle.getText("expensiveStatementsExample"))
 
 export let inputPrompts = {
   limit: {

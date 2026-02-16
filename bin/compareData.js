@@ -6,7 +6,7 @@ export const command = 'compareData'
 export const aliases = ['cmpdata', 'compardata', 'dataCompare']
 export const describe = baseLite.bundle.getText("compareData")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   sourceTable: {
     alias: ['st'],
     type: 'string',
@@ -67,7 +67,10 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example(
+  'hana-cli compareData --sourceTable table1 --targetTable table2',
+  baseLite.bundle.getText("compareDataExample")
+)
 
 export let inputPrompts = {
   sourceTable: {

@@ -12,7 +12,7 @@ const OUTPUTS = {
 export const command = 'systemInfo'
 export const aliases = ['sys', 'sysinfo', 'sysInfo', 'systeminfo']
 export const describe = baseLite.bundle.getText("systemInfo")
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   output: {
     alias: ['o', 'Output'],
     choices: [OUTPUTS.BASIC, OUTPUTS.ENV, OUTPUTS.DBX],
@@ -20,7 +20,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("outputType")
   }
-})
+})).example('hana-cli systemInfo --detailed', baseLite.bundle.getText("systemInfoExample"))
 
 export let inputPrompts = {
   output: {

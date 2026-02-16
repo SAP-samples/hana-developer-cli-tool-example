@@ -5,14 +5,14 @@ export const command = 'sbss'
 export const aliases = ['sbssInstances', 'sbssinstances', 'sbssServices', 'listsbss', 'sbssservices', 'sbsss']
 export const describe = baseLite.bundle.getText("sbssInstances")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     cf: {
         alias: ['c', 'cmd'],
         desc: baseLite.bundle.getText("cfxs"),
         type: 'boolean',
         default: true
     }
-}, false)
+}, false)).example('hana-cli sbss --cf', baseLite.bundle.getText("sbssExample"))
 
 export let inputPrompts = {
     cf: {

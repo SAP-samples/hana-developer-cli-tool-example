@@ -4,7 +4,7 @@ import * as baseLite from '../utils/base-lite.js'
 export const command = 'readMe'
 export const aliases = ['readme']
 export const describe = baseLite.bundle.getText("readMe")
-export const builder = baseLite.getBuilder({}, false)
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).example('hana-cli readMe', baseLite.bundle.getText('readMeExample'))
 
 export const handler = async function () {
 

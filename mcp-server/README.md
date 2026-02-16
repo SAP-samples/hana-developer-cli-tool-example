@@ -128,6 +128,7 @@ The MCP server consists of four main modules:
 ## What's Newly Exposed
 
 **Import Command Enhancements:**
+
 - `matchMode` - Match columns by order, name, or auto mode
 - `dryRun` - Preview import without committing to database
 - `maxFileSizeMB` - Memory protection for large imports
@@ -137,6 +138,7 @@ The MCP server consists of four main modules:
 - `maxErrorsAllowed` - Error threshold control
 
 **New Commands:**
+
 - `healthCheck` - System health status monitoring
 - `memoryLeaks` - Memory leak detection
 - `memoryAnalysis` - Memory consumption analysis

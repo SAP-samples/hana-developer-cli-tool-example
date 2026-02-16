@@ -4,7 +4,10 @@ import * as baseLite from '../utils/base-lite.js'
 export const command = 'changelog'
 export const aliases = ['openrchangelog', 'openChangeLog', 'openChangelog', 'ChangeLog', 'Changelog', 'changes', 'Changes']
 export const describe = baseLite.bundle.getText("changelog")
-export const builder = baseLite.getBuilder({}, false)
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).example(
+  'hana-cli changelog',
+  baseLite.bundle.getText("changelogExample")
+)
 export async function handler (argv) {
   const base = await import('../utils/base.js')
     base.promptHandler(argv, getChangeLog, {}, false)

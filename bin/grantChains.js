@@ -5,7 +5,7 @@ export const command = 'grantChains'
 export const aliases = ['grants', 'grantchain']
 export const describe = baseLite.bundle.getText("grantChains")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   user: {
     alias: ['u'],
     type: 'string',
@@ -29,7 +29,7 @@ export const builder = baseLite.getBuilder({
     default: 'tree',
     desc: baseLite.bundle.getText("outputFormat")
   }
-})
+})).example('hana-cli grantChains --user DBUSER', baseLite.bundle.getText("grantChainsExample"))
 
 export let inputPrompts = {
   user: {

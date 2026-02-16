@@ -5,14 +5,17 @@ export const command = 'status'
 export const aliases = ['s', 'whoami']
 export const describe = baseLite.bundle.getText("status")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   priv: {
     alias: ['p', 'privileges'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("privileges")
   }
-})
+})).example(
+  'hana-cli status --priv',
+  baseLite.bundle.getText("statusExample")
+)
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

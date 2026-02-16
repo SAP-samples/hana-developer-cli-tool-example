@@ -6,14 +6,14 @@ export const aliases = ['hdiInstances', 'hdiinstances', 'hdiServices', 'listhdi'
 export const describe = baseLite.bundle.getText("hdiInstances")
 
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     cf: {
         alias: ['c', 'cmd'],
         desc: baseLite.bundle.getText("cfxs"),
         type: 'boolean',
         default: true
     }
-}, false)
+}, false)).example('hana-cli hdi --cf', baseLite.bundle.getText("hdiExample"))
 
 export let inputPrompts = {
     cf: {

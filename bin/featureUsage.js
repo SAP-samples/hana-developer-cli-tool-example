@@ -4,7 +4,7 @@ import * as baseLite from '../utils/base-lite.js'
 export const command = 'featureUsage'
 export const aliases = ['fu', 'FeaturesUsage']
 export const describe = baseLite.bundle.getText("featureUsage")
-export const builder = baseLite.getBuilder({})
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).example('hana-cli featureUsage', baseLite.bundle.getText("featureUsageExample"))
 export async function handler (argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, dbStatus, {})

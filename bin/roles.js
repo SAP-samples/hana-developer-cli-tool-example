@@ -5,7 +5,7 @@ export const command = 'roles [schema] [role]'
 export const aliases = ['r', 'listRoles', 'listroles']
 export const describe = baseLite.bundle.getText("roles")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   role: {
     alias: ['r'],
     type: 'string',
@@ -29,7 +29,10 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example(
+  'hana-cli roles --role myRole --schema MYSCHEMA',
+  baseLite.bundle.getText("rolesExample")
+)
 
 /**
  * Command handler function

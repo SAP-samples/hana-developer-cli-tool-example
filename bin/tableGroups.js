@@ -5,7 +5,7 @@ export const command = 'tableGroups [action] [groupName]'
 export const aliases = ['tg', 'tablegroup', 'groups', 'groups-tables']
 export const describe = baseLite.bundle.getText("tableGroups")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   action: {
     alias: ['a'],
     type: 'string',
@@ -55,7 +55,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli tableGroups --action list --schema MYSCHEMA', baseLite.bundle.getText('tableGroupsExample'))
 
 export let inputPrompts = {
   action: {

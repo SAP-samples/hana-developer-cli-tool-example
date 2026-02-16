@@ -5,7 +5,7 @@ export const command = 'massExport [schema] [object]'
 export const aliases = ['me', 'mexport', 'massExp', 'massexp']
 export const describe = baseLite.bundle.getText("massExport")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   schema: {
     alias: ['s', 'schema'],
     type: 'string',
@@ -44,7 +44,7 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("includeData"),
     default: false
   }
-})
+})).example('hana-cli massExport --schema MYSCHEMA --object % --format csv --folder exports/', baseLite.bundle.getText('massExportExample'))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

@@ -5,7 +5,7 @@ export const command = 'dataTypes'
 export const aliases = ['dt', 'datatypes', 'dataType', 'datatype']
 export const describe = baseLite.bundle.getText("dataTypes")
 
-export const builder = baseLite.getBuilder({})
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).example('hana-cli dataTypes', baseLite.bundle.getText("dataTypesExample"))
 export async function handler (argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, dbStatus, {})

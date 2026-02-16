@@ -6,7 +6,7 @@ export const command = 'dataLineage'
 export const aliases = ['lineage', 'dataFlow', 'traceLineage']
 export const describe = baseLite.bundle.getText("dataLineage")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t'],
     type: 'string',
@@ -60,7 +60,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli dataLineage --table myTable --depth 3', baseLite.bundle.getText("dataLineageExample"))
 
 export let inputPrompts = {
   table: {

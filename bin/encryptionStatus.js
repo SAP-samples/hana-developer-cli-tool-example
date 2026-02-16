@@ -5,7 +5,7 @@ export const command = 'encryptionStatus'
 export const aliases = ['encryption', 'encrypt']
 export const describe = baseLite.bundle.getText("encryptionStatus")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   scope: {
     alias: ['s'],
     type: 'string',
@@ -19,7 +19,7 @@ export const builder = baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("showDetails")
   }
-})
+})).example('hana-cli encryptionStatus --table myTable', baseLite.bundle.getText("encryptionStatusExample"))
 
 export let inputPrompts = {
   scope: {

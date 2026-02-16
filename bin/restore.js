@@ -8,7 +8,7 @@ export const command = 'restore [backupFile]'
 export const aliases = ['rst', 'restoreBackup']
 export const describe = baseLite.bundle.getText("restore")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   backupFile: {
     alias: ['bf', 'file'],
     type: 'string',
@@ -54,7 +54,7 @@ export const builder = baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("restoreDryRun")
   }
-})
+})).example('hana-cli restore --backupFile backup.db', baseLite.bundle.getText("restoreExample"))
 
 export let inputPrompts = {
   backupFile: {

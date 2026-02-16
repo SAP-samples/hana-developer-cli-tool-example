@@ -6,7 +6,7 @@ export const command = 'dataDiff'
 export const aliases = ['ddiff', 'diffData', 'dataCompare']
 export const describe = baseLite.bundle.getText("dataDiff")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table1: {
     alias: ['t1'],
     type: 'string',
@@ -80,7 +80,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli dataDiff --table1 source_data --table2 target_data', baseLite.bundle.getText("dataDiffExample"))
 
 export let inputPrompts = {
   table1: {

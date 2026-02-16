@@ -5,7 +5,7 @@ export const command = 'connections'
 export const aliases = ['conn', 'c']
 export const describe = baseLite.bundle.getText("connections")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   limit: {
     alias: ['l'],
     type: 'number',
@@ -28,7 +28,10 @@ export const builder = baseLite.getBuilder({
     default: false,
     desc: 'Include idle connections'
   }
-})
+})).example(
+  'hana-cli connections --limit 100',
+  baseLite.bundle.getText("connectionsExample")
+)
 
 export let inputPrompts = {
   limit: {

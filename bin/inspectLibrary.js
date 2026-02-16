@@ -5,7 +5,7 @@ export const command = 'inspectLibrary [schema] [library]'
 export const aliases = ['il', 'library', 'insLib', 'inspectlibrary']
 export const describe = baseLite.bundle.getText("inspectLibrary")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   library: {
     alias: ["lib"],
     type: 'string',
@@ -24,7 +24,10 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("outputType")
   }
-})
+})).example(
+  'hana-cli inspectLibrary --library myLib --schema MYSCHEMA',
+  baseLite.bundle.getText("inspectLibraryExample")
+)
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

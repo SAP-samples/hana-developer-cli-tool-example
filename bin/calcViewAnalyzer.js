@@ -5,7 +5,7 @@ export const command = 'calcViewAnalyzer [schema] [view]'
 export const aliases = ['cva', 'analyzeCalcView', 'calcview']
 export const describe = baseLite.bundle.getText("calcViewAnalyzer")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   view: {
     alias: ['v'],
     type: 'string',
@@ -35,7 +35,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli calcViewAnalyzer --view myView --schema MYSCHEMA', baseLite.bundle.getText("calcViewAnalyzerExample"))
 
 export let inputPrompts = {
   view: {

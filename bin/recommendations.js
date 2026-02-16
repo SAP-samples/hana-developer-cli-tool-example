@@ -5,7 +5,7 @@ export const command = 'recommendations'
 export const aliases = ['rec', 'recommend']
 export const describe = baseLite.bundle.getText("recommendations")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   category: {
     alias: ['c'],
     type: 'string',
@@ -19,7 +19,7 @@ export const builder = baseLite.getBuilder({
     default: 50,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).example('hana-cli recommendations --category indexes --limit 25', baseLite.bundle.getText('recommendationsExample'))
 
 export let inputPrompts = {
   category: {

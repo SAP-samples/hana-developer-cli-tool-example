@@ -10,7 +10,7 @@ export const command = 'inspectView [schema] [view]'
 export const aliases = ['iv', 'view', 'insVew', 'inspectview']
 export const describe = baseLite.bundle.getText("inspectView")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   view: {
     alias: ['v'],
     type: 'string',
@@ -52,7 +52,7 @@ export const builder = baseLite.getBuilder({
       default: false,
       desc: baseLite.bundle.getText("noColons")
   }
-})
+})).example('hana-cli inspectView --view myView --schema MYSCHEMA', baseLite.bundle.getText("inspectViewExample"))
 
 export let inputPrompts = {
   view: {

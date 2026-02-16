@@ -6,7 +6,7 @@ export const command = 'tablesPG [schema] [table]'
 export const aliases = ['tablespg', 'tablespostgres', 'tablesPostgres', 'tables-postgres', 'tables-postgressql', 'tablesPOSTGRES']
 export const describe = baseLite.bundle.getText("tablesPG")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t', 'Table'],
     type: 'string',
@@ -30,7 +30,10 @@ export const builder = baseLite.getBuilder({
     default: 200,
     desc: baseLite.bundle.getText("limit")
   }
-}, false)
+}, false)).example(
+  'hana-cli tablesPG --table * --schema MYSCHEMA',
+  baseLite.bundle.getText("tablesPGExample")
+)
 
 export let inputPrompts = {
   table: {

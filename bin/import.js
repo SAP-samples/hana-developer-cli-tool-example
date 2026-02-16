@@ -8,7 +8,7 @@ export const command = 'import'
 export const aliases = ['imp', 'uploadData', 'uploaddata']
 export const describe = baseLite.bundle.getText("import")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   filename: {
     alias: ['n'],
     type: 'string',
@@ -117,7 +117,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli import --filename data.csv --table myTable', baseLite.bundle.getText("importExample"))
 
 export let inputPrompts = {
   filename: {

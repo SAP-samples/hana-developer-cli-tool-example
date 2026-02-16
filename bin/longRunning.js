@@ -5,7 +5,7 @@ export const command = 'longRunning'
 export const aliases = ['lr', 'longrunning']
 export const describe = baseLite.bundle.getText("longRunning")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   limit: {
     alias: ['l'],
     type: 'number',
@@ -29,7 +29,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: 'Statement hash to cancel'
   }
-})
+})).example('hana-cli longRunning --limit 50 --duration 60', baseLite.bundle.getText("longRunningExample"))
 
 export let inputPrompts = {
   limit: {

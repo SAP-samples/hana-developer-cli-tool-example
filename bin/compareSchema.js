@@ -6,7 +6,7 @@ export const command = 'compareSchema'
 export const aliases = ['cmpschema', 'schemaCompare', 'compareschema']
 export const describe = baseLite.bundle.getText("compareSchema")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   sourceSchema: {
     alias: ['ss'],
     type: 'string',
@@ -58,7 +58,10 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example(
+  'hana-cli compareSchema --sourceSchema SCHEMA1 --targetSchema SCHEMA2',
+  baseLite.bundle.getText("compareSchemaExample")
+)
 
 export let inputPrompts = {
   sourceSchema: {

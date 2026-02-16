@@ -5,7 +5,7 @@ export const command = 'dataVolumes'
 export const aliases = ['dv', 'datavolumes']
 export const describe = baseLite.bundle.getText("dataVolumes")
 
-export const builder = baseLite.getBuilder({})
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).example('hana-cli dataVolumes', baseLite.bundle.getText("dataVolumesExample"))
 export async function handler (argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, dbStatus, {})

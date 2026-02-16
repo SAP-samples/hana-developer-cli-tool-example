@@ -8,7 +8,7 @@ export const command = 'backup [target] [name]'
 export const aliases = ['bkp', 'createBackup']
 export const describe = baseLite.bundle.getText("backup")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   target: {
     alias: ['tgt'],
     type: 'string',
@@ -62,7 +62,7 @@ export const builder = baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("backupOverwrite")
   }
-})
+})).example('hana-cli backup --backupPath /backups', baseLite.bundle.getText("backupExample"))
 
 export let inputPrompts = {
   target: {

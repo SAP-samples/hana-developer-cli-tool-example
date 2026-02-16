@@ -5,7 +5,7 @@ export const command = 'timeSeriesTools [action]'
 export const aliases = ['tsTools', 'timeseries', 'timeseriestools']
 export const describe = baseLite.bundle.getText("timeSeriesTools")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   action: {
     alias: ['a', 'Action'],
     type: 'string',
@@ -47,7 +47,7 @@ export const builder = baseLite.getBuilder({
     default: 1000,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).example('hana-cli timeSeriesTools --action analyze --table TIMESERIES_DATA', baseLite.bundle.getText('timeSeriesToolsExample'))
 
 export let inputPrompts = {
   action: {

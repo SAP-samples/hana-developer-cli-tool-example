@@ -5,7 +5,7 @@ export const command = 'fragmentationCheck'
 export const aliases = ['frag', 'fc']
 export const describe = baseLite.bundle.getText("fragmentationCheck")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   schema: {
     alias: ['s'],
     type: 'string',
@@ -30,7 +30,7 @@ export const builder = baseLite.getBuilder({
     default: 50,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).example('hana-cli fragmentationCheck --schema MYSCHEMA --threshold 10', baseLite.bundle.getText("fragmentationCheckExample"))
 
 export let inputPrompts = {
   schema: {

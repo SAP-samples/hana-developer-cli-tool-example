@@ -4,7 +4,7 @@ export const command = 'connect [user] [password]'
 export const aliases = ['c', 'login']
 export const describe = baseLite.bundle.getText("connect")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   connection: {
     alias: 'n',
     desc: baseLite.bundle.getText("connection")
@@ -36,7 +36,7 @@ export const builder = baseLite.getBuilder({
     alias: ['t', 'trust', 'truststore'],
     desc: baseLite.bundle.getText("trustStore")
   }
-}, false)
+}, false)).example('hana-cli connect --connection localhost:30015 --user DBUSER', baseLite.bundle.getText("connectExample"))
 
 
 /**

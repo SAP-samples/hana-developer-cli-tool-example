@@ -6,7 +6,7 @@ export const command = 'dataProfile'
 export const aliases = ['prof', 'profileData', 'dataStats']
 export const describe = baseLite.bundle.getText("dataProfile")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t'],
     type: 'string',
@@ -76,7 +76,10 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example(
+  'hana-cli dataProfile --table myTable --format summary',
+  baseLite.bundle.getText("dataProfileExample")
+)
 
 export let inputPrompts = {
   table: {

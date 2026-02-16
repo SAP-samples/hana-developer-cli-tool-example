@@ -5,7 +5,7 @@ export const command = 'containers [containerGroup] [container]'
 export const aliases = ['cont', 'listContainers', 'listcontainers']
 export const describe = baseLite.bundle.getText("containers")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   container: {
     alias: ['c'],
     type: 'string',
@@ -24,7 +24,7 @@ export const builder = baseLite.getBuilder({
     default: 200,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).example('hana-cli containers --container myContainer', baseLite.bundle.getText("containersExample"))
 
 export let inputPrompts = {
   container: {

@@ -5,14 +5,14 @@ export const command = 'ups'
 export const aliases = ['upsInstances', 'upsinstances', 'upServices', 'listups', 'upsservices']
 export const describe = baseLite.bundle.getText("upsInstances")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     cf: {
         alias: ['c', 'cmd'],
         desc: baseLite.bundle.getText("cfxs"),
         type: 'boolean',
         default: true
     }
-}, false)
+}, false)).example('hana-cli ups --cf', baseLite.bundle.getText("upsExample"))
 
 export let inputPrompts = {
     cf: {

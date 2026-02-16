@@ -6,7 +6,7 @@ export const command = 'tableCopy'
 export const aliases = ['tablecopy', 'copyTable', 'copytable']
 export const describe = baseLite.bundle.getText("tableCopy")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   sourceTable: {
     alias: ['st'],
     type: 'string',
@@ -74,7 +74,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli tableCopy --sourceTable src_table --targetTable tgt_table --batchSize 1000', baseLite.bundle.getText("tableCopyExample"))
 
 export let inputPrompts = {
   sourceTable: {

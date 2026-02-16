@@ -5,7 +5,7 @@ export const command = 'traceContents [host] [file]'
 export const aliases = ['tc', 'traceContents', 'traceContent', 'tracecontent']
 export const describe = baseLite.bundle.getText("traceContents")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   host: {
     alias: ['ho', 'Host'],
     type: 'string',
@@ -22,7 +22,10 @@ export const builder = baseLite.getBuilder({
     default: 2000,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).example(
+  'hana-cli traceContents --host myhost --file tracefile --limit 1000',
+  baseLite.bundle.getText("traceContentsExample")
+)
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

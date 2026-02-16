@@ -5,14 +5,14 @@ export const command = 'schemaInstances'
 export const aliases = ['schemainstances', 'schemaServices', 'listschemas', 'schemaservices']
 export const describe = baseLite.bundle.getText("schemaInstances")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     cf: {
         alias: ['c', 'cmd'],
         desc: baseLite.bundle.getText("cfxs"),
         type: 'boolean',
         default: true
     }
-}, false)
+}, false)).example('hana-cli schemaInstances --cf', baseLite.bundle.getText("schemaInstancesExample"))
 
 export let inputPrompts = {
     cf: {

@@ -7,7 +7,7 @@ export const command = 'createModule'
 export const aliases = ['createDB', 'createDBModule']
 export const describe = baseLite.bundle.getText("createModule")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     folder: {
         alias: ['f', 'folder'],
         type: 'string',
@@ -20,7 +20,7 @@ export const builder = baseLite.getBuilder({
         default: true,
         desc: baseLite.bundle.getText("hanaCloud")
     }
-}, false)
+}, false)).example('hana-cli createModule --folder db', baseLite.bundle.getText("createModuleExample"))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

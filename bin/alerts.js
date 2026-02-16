@@ -5,7 +5,7 @@ export const command = 'alerts'
 export const aliases = ['a', 'alert']
 export const describe = baseLite.bundle.getText("alerts")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   limit: {
     alias: ['l'],
     type: 'number',
@@ -29,7 +29,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: 'Delete alert by ID'
   }
-})
+})).example('hana-cli alerts --severity CRITICAL', baseLite.bundle.getText("alertsExample"))
 
 export let inputPrompts = {
   limit: {

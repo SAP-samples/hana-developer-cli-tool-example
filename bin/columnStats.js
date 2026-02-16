@@ -5,7 +5,7 @@ export const command = 'columnStats [schema] [table]'
 export const aliases = []
 export const describe = baseLite.bundle.getText("columnStats")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t'],
     type: 'string',
@@ -29,7 +29,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli columnStats --table myTable --schema MYSCHEMA --limit 200', baseLite.bundle.getText("columnStatsExample"))
 
 export let inputPrompts = {
   table: {

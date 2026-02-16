@@ -6,7 +6,7 @@ export const command = 'dataValidator'
 export const aliases = ['dval', 'validateData', 'dataValidation']
 export const describe = baseLite.bundle.getText("dataValidator")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t'],
     type: 'string',
@@ -68,7 +68,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli dataValidator --table myTable --rules validation.json', baseLite.bundle.getText("dataValidatorExample"))
 
 export let inputPrompts = {
   table: {

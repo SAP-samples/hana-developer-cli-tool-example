@@ -5,7 +5,7 @@ export const command = 'diagnose'
 export const aliases = ['diag']
 export const describe = baseLite.bundle.getText("diagnose")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   checks: {
     alias: ['c'],
     type: 'string',
@@ -18,7 +18,7 @@ export const builder = baseLite.getBuilder({
     default: 50,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).example('hana-cli diagnose --checks all', baseLite.bundle.getText("diagnoseExample"))
 
 export let inputPrompts = {
   checks: {

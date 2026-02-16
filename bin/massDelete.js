@@ -5,7 +5,7 @@ export const command = 'massDelete [schema] [object]'
 export const aliases = ['md', 'massdelete', 'massDel', 'massdel']
 export const describe = baseLite.bundle.getText("massDelete")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   schema: {
     alias: ['s'],
     type: 'string',
@@ -49,7 +49,7 @@ export const builder = baseLite.getBuilder({
     type: 'boolean',
     desc: baseLite.bundle.getText("mass.log")
   }
-})
+})).example('hana-cli massDelete --schema MYSCHEMA --object % --objectType TABLE --dryRun', baseLite.bundle.getText('massDeleteExample'))
 
 export async function handler(argv) {
   const base = await import('../utils/base.js')

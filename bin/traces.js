@@ -4,7 +4,7 @@ import * as baseLite from '../utils/base-lite.js'
 export const command = 'traces'
 export const aliases = ['tf', 'Traces']
 export const describe = baseLite.bundle.getText("traces")
-export const builder = baseLite.getBuilder({})
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).example('hana-cli traces', baseLite.bundle.getText("tracesExample"))
 export async function handler (argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, traces, {})

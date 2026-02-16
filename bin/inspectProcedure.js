@@ -6,7 +6,7 @@ export const command = 'inspectProcedure [schema] [procedure]'
 export const aliases = ['ip', 'procedure', 'insProc', 'inspectprocedure', 'inspectsp']
 export const describe = baseLite.bundle.getText("inspectProcedure")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   procedure: {
     alias: ['p', 'sp'],
     type: 'string',
@@ -25,7 +25,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("outputType")
   }
-})
+})).example('hana-cli inspectProcedure --procedure myProcedure --schema MYSCHEMA', baseLite.bundle.getText("inspectProcedureExample"))
 
 /**
  * Command handler function

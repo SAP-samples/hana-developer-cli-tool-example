@@ -5,7 +5,7 @@ export const command = 'functions [schema] [function]'
 export const aliases = ['f', 'listFuncs', 'ListFunc', 'listfuncs', 'Listfunc', "listFunctions", "listfunctions"]
 export const describe = baseLite.bundle.getText("functions")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   function: {
     alias: ['f'],
     type: 'string',
@@ -29,7 +29,10 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example(
+  'hana-cli functions --function myFunction --schema MYSCHEMA',
+  baseLite.bundle.getText("functionsExample")
+)
 
 export let inputPrompts = {
   function: {

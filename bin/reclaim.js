@@ -4,7 +4,7 @@ import * as baseLite from '../utils/base-lite.js'
 export const command = 'reclaim'
 export const aliases = 're'
 export const describe = baseLite.bundle.getText("reclaim")
-export const builder = baseLite.getBuilder({})
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).example('hana-cli reclaim', baseLite.bundle.getText('reclaimExample'))
 export async function handler (argv)  {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, reclaim, {})

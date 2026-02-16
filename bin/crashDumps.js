@@ -5,7 +5,7 @@ export const command = 'crashDumps'
 export const aliases = ['crash', 'cd']
 export const describe = baseLite.bundle.getText("crashDumps")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   days: {
     alias: ['d'],
     type: 'number',
@@ -24,7 +24,7 @@ export const builder = baseLite.getBuilder({
     default: 50,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).example('hana-cli crashDumps --days 7', baseLite.bundle.getText("crashDumpsExample"))
 
 export let inputPrompts = {
   days: {

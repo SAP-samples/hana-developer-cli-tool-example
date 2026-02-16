@@ -8,7 +8,7 @@ export const command = 'backupList [directory]'
 export const aliases = ['blist', 'listBackups', 'backups']
 export const describe = baseLite.bundle.getText("backupList")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   directory: {
     alias: ['dir'],
     type: 'string',
@@ -47,7 +47,7 @@ export const builder = baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("backupListShowDetails")
   }
-})
+})).example('hana-cli backupList --backupPath /backups', baseLite.bundle.getText("backupListExample"))
 
 export let inputPrompts = {
   directory: {

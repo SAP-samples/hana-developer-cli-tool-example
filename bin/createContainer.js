@@ -7,7 +7,7 @@ export const command = 'createContainer [container] [group]'
 export const aliases = ['cc', 'cCont']
 export const describe = baseLite.bundle.getText("createContainer")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   container: {
     alias: ['c'],
     type: 'string',
@@ -31,7 +31,7 @@ export const builder = baseLite.getBuilder({
     type: 'boolean',
     default: false
   }
-})
+})).example('hana-cli createContainer --container myContainer', baseLite.bundle.getText("createContainerExample"))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

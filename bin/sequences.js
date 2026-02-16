@@ -5,7 +5,7 @@ export const command = 'sequences [schema] [sequence]'
 export const aliases = ['seq', 'listSeqs', 'ListSeqs', 'listseqs', 'Listseq', "listSequences"]
 export const describe = baseLite.bundle.getText("sequences")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   sequence: {
     alias: ['seq'],
     type: 'string',
@@ -29,7 +29,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli sequences --schema MYSCHEMA --sequence %', baseLite.bundle.getText('sequencesExample'))
 
 /**
  * Command handler function

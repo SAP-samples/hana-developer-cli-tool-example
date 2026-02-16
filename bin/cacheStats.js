@@ -5,7 +5,7 @@ export const command = 'cacheStats'
 export const aliases = []
 export const describe = baseLite.bundle.getText("cacheStats")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   cacheType: {
     alias: ['t'],
     type: 'string',
@@ -19,7 +19,7 @@ export const builder = baseLite.getBuilder({
     default: 50,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).example('hana-cli cacheStats --cacheType all', baseLite.bundle.getText("cacheStats"))
 
 export let inputPrompts = {
   cacheType: {

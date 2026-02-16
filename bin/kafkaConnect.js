@@ -5,7 +5,7 @@ export const command = 'kafkaConnect [action]'
 export const aliases = ['kafka', 'kafkaAdapter', 'kafkasub']
 export const describe = baseLite.bundle.getText("kafkaConnect")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   action: {
     alias: ['a'],
     type: 'string',
@@ -33,7 +33,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("configPath")
   }
-})
+})).example('hana-cli kafkaConnect --action list', baseLite.bundle.getText('kafkaConnectExample'))
 
 export let inputPrompts = {
   action: {

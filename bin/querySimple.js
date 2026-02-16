@@ -7,7 +7,7 @@ export const command = 'querySimple'
 export const aliases = ['qs', "querysimple"]
 export const describe = baseLite.bundle.getText("querySimple")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   query: {
     alias: ['q'],
     type: 'string',
@@ -36,7 +36,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli querySimple --query "SELECT * FROM CUSTOMERS" --output csv', baseLite.bundle.getText('querySimpleExample'))
 
 export let inputPrompts = {
   query: {

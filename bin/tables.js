@@ -6,7 +6,7 @@ export const command = 'tables [schema] [table]'
 export const aliases = ['t', 'listTables', 'listtables']
 export const describe = baseLite.bundle.getText("tables")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t'],
     type: 'string',
@@ -30,7 +30,10 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example(
+  'hana-cli tables --table myTable --schema MYSCHEMA',
+  baseLite.bundle.getText("tablesExample")
+)
 
 export let inputPrompts = {
   table: {

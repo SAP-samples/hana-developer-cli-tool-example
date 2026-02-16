@@ -12,7 +12,7 @@ function isCommandAvailable(command) {
 
 export const command = 'hdbsql'
 export const describe = baseLite.bundle.getText("hdbsql")
-export const builder = baseLite.getBuilder({})
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).example('hana-cli hdbsql', baseLite.bundle.getText("hdbsqlExample"))
 export async function handler (argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, launchHdbsql, {})

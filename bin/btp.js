@@ -8,13 +8,13 @@ export const command = 'btp [directory] [subaccount]'
 export const aliases = ['btpTarget', 'btptarget', 'btp']
 export const describe = baseLite.bundle.getText("btpCmd")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     subaccount: {
         alias: ['sa'],
         type: 'string',
         desc: baseLite.bundle.getText("btpSa")
     }
-}, false)
+}, false)).example('hana-cli btp --subaccount mySubaccount', baseLite.bundle.getText('btpExample'))
 
 
 /**

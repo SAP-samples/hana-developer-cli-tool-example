@@ -6,7 +6,7 @@ export const command = 'inspectFunction [schema] [function]'
 export const aliases = ['if', 'function', 'insFunc', 'inspectfunction']
 export const describe = baseLite.bundle.getText("inspectFunction")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   function: {
     alias: ['f'],
     type: 'string',
@@ -25,7 +25,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("outputType")
   }
-})
+})).example('hana-cli inspectFunction --function myFunction --schema MYSCHEMA', baseLite.bundle.getText("inspectFunctionExample"))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

@@ -6,7 +6,7 @@ export const command = 'generateDocs'
 export const aliases = ['docs', 'gendocs', 'generateDocumentation']
 export const describe = baseLite.bundle.getText("generateDocs")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   schema: {
     alias: ['s'],
     type: 'string',
@@ -66,7 +66,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli generateDocs --schema MYSCHEMA --format markdown --output docs/', baseLite.bundle.getText('generateDocsExample'))
 
 export const inputPrompts = {
   schema: {

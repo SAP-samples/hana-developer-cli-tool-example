@@ -5,7 +5,7 @@ export const command = 'backupStatus'
 export const aliases = ['bstatus', 'backupstate', 'bkpstatus']
 export const describe = baseLite.bundle.getText("backupStatus")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   catalogOnly: {
     alias: ['co'],
     type: 'boolean',
@@ -38,7 +38,7 @@ export const builder = baseLite.getBuilder({
     default: 7,
     desc: baseLite.bundle.getText("backupStatusDays")
   }
-})
+})).example('hana-cli backupStatus --backupId 12345', baseLite.bundle.getText("backupStatusExample"))
 
 export let inputPrompts = {
   catalogOnly: {

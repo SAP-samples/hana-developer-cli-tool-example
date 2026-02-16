@@ -5,7 +5,7 @@ export const command = 'tableHotspots [schema] [table]'
 export const aliases = []
 export const describe = baseLite.bundle.getText("tableHotspots")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t'],
     type: 'string',
@@ -35,7 +35,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli tableHotspots --schema MYSCHEMA --table CUSTOMERS', baseLite.bundle.getText('tableHotspotsExample'))
 
 export let inputPrompts = {
   table: {

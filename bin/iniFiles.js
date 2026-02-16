@@ -4,7 +4,7 @@ import * as baseLite from '../utils/base-lite.js'
 export const command = 'iniFiles'
 export const aliases = ['if', 'inifiles', 'ini']
 export const describe = baseLite.bundle.getText("iniFiles")
-export const builder = baseLite.getBuilder({})
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).example('hana-cli iniFiles', baseLite.bundle.getText("iniFilesExample"))
 export async function handler (argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, iniFiles, {})

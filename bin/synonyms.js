@@ -5,7 +5,7 @@ export const command = 'synonyms [schema] [synonym] [target]'
 export const aliases = ['syn', 'listSynonyms', 'listsynonyms']
 export const describe = baseLite.bundle.getText("synonyms")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   synonym: {
     alias: ['syn', 'Synonym'],
     type: 'string',
@@ -30,7 +30,7 @@ export const builder = baseLite.getBuilder({
     default: 200,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).example('hana-cli synonyms --schema MYSCHEMA --synonym %', baseLite.bundle.getText('synonymsExample'))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

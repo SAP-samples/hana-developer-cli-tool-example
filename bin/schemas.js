@@ -5,7 +5,7 @@ export const command = 'schemas [schema]'
 export const aliases = ['sch', 'getSchemas', 'listSchemas', 's']
 export const describe = baseLite.bundle.getText("schemas")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   schema: {
     alias: ['s'],
     type: 'string',
@@ -24,7 +24,10 @@ export const builder = baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("allSchemas")
   }
-})
+})).example(
+  'hana-cli schemas --schema MYSCHEMA',
+  baseLite.bundle.getText("schemasExample")
+)
 
 export let inputPrompts = {
   schema: {

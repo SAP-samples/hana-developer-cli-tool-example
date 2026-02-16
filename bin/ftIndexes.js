@@ -5,7 +5,7 @@ export const command = 'ftIndexes [schema] [index]'
 export const aliases = ['fti', 'ftIndex', 'fulltext', 'fulltextIndexes']
 export const describe = baseLite.bundle.getText("ftIndexes")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   index: {
     alias: ['i'],
     type: 'string',
@@ -40,7 +40,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli ftIndexes --index myIndex --schema MYSCHEMA', baseLite.bundle.getText("ftIndexesExample"))
 
 export let inputPrompts = {
   index: {

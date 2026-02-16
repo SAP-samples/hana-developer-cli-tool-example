@@ -6,7 +6,7 @@ export const command = 'sdiTasks'
 export const aliases = ['sditasks', 'sdi', 'smartDataIntegration']
 export const describe = baseLite.bundle.getText("sdiTasks")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   action: {
     alias: ['a'],
     type: 'string',
@@ -40,7 +40,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+}))
 
 export let inputPrompts = {
   action: {

@@ -10,7 +10,7 @@ export const command = 'inspectTable [schema] [table]'
 export const aliases = ['it', 'table', 'insTbl', 'inspecttable', 'inspectable']
 export const describe = baseLite.bundle.getText("inspectTable")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t'],
     type: 'string',
@@ -52,7 +52,7 @@ export const builder = baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("noColons")
   }
-})
+})).example('hana-cli inspectTable --table myTable --schema MYSCHEMA', baseLite.bundle.getText("inspectTableExample"))
 
 export let inputPrompts = {
   table: {

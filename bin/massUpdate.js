@@ -5,7 +5,7 @@ export const command = 'massUpdate [schema] [object]'
 export const aliases = ['mu', 'massupdate', 'massUpd', 'massupd']
 export const describe = baseLite.bundle.getText("massUpdate")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   schema: {
     alias: ['s'],
     type: 'string',
@@ -42,7 +42,7 @@ export const builder = baseLite.getBuilder({
     type: 'boolean',
     desc: baseLite.bundle.getText("mass.log")
   }
-})
+})).example('hana-cli massUpdate --schema MYSCHEMA --object % --set "STATUS = \'INACTIVE\'" --where "CREATED_AT < CURRENT_DATE"', baseLite.bundle.getText('massUpdateExample'))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

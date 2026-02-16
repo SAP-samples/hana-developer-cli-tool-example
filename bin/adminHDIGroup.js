@@ -5,7 +5,7 @@ export const command = 'adminHDIGroup [user] [group]'
 export const aliases = ['adHDIG', 'adhdig']
 export const describe = baseLite.bundle.getText("adminHDIGroup")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   user: {
     alias: ['u', 'User'],
     desc: baseLite.bundle.getText("user")
@@ -16,7 +16,7 @@ export const builder = baseLite.getBuilder({
     default: 'SYS_XS_HANA_BROKER',
     desc: baseLite.bundle.getText("group")
   }
-})
+})).example('hana-cli adminHDIGroup --action create --group myGroup', baseLite.bundle.getText("adminHDIGroupExample"))
 
 /**
  * Command handler function

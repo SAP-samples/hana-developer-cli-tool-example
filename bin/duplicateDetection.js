@@ -6,7 +6,7 @@ export const command = 'duplicateDetection'
 export const aliases = ['dupdetect', 'findDuplicates', 'duplicates']
 export const describe = baseLite.bundle.getText("duplicateDetection")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t'],
     type: 'string',
@@ -75,7 +75,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli duplicateDetection --table myTable --mode exact --threshold 0.95', baseLite.bundle.getText("duplicateDetectionExample"))
 
 export let inputPrompts = {
   table: {

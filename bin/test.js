@@ -5,8 +5,8 @@ import * as conn from '../utils/connections.js'
 export const command = 'test'
 export const describe = baseLite.bundle.getText("test")
 
-export const builder = baseLite.getBuilder({  
-})
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({  
+})).example('hana-cli test', baseLite.bundle.getText("test"))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

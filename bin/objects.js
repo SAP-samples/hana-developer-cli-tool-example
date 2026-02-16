@@ -5,7 +5,7 @@ export const command = 'objects [schema] [object]'
 export const aliases = ['o', 'listObjects', 'listobjects']
 export const describe = baseLite.bundle.getText("objects")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   object: {
     alias: ['o'],
     type: 'string',
@@ -29,7 +29,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli objects --schema MYSCHEMA --object % --limit 300', baseLite.bundle.getText('objectsExample'))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

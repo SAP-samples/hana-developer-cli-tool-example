@@ -11,7 +11,7 @@ export const command = 'cds [schema] [table]'
 export const aliases = ['cdsPreview']
 export const describe = baseLite.bundle.getText("cds")
 const t = (key, params = []) => baseLite.bundle.getText(key, params)
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t'],
     type: 'string',
@@ -52,7 +52,7 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).example('hana-cli cds --table myTable --schema MYSCHEMA', baseLite.bundle.getText("cdsExample"))
 
 export async function handler(argv) {
   const base = await import('../utils/base.js')
