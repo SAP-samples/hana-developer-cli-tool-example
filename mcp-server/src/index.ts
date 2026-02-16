@@ -10,6 +10,7 @@ import { fileURLToPath, pathToFileURL } from 'url';
 import { dirname, join } from 'path';
 import { extractCommandInfo } from './command-parser.js';
 import { executeCommand, formatResult, validateEnvironment } from './executor.js';
+import { ConnectionContext } from './connection-context.js';
 import { CATEGORIES, getCommandsByCategory, searchCommandsByTag, getCommandsInCategory, getAllWorkflows, searchWorkflowsByTag, getWorkflowById } from './command-metadata.js';
 import { getCommandExamples, getCommandPresets, hasExamples, hasPresets, getCommandsWithExamples, getCommandsWithPresets } from './examples-presets.js';
 import { recommendCommands, getQuickStartGuide } from './recommendation.js';
@@ -113,11 +114,53 @@ class HanaCliMcpServer {
         if (hasPresets(name)) {
           fullDescription += `\n\n📋 **Tip:** Use \`hana_parameter_presets\` with command="${name}" to see parameter templates.`;
         }
+
+        // Extend schema with project context parameter
+        const extendedSchema = {
+          ...info.schema,
+          properties: {
+            ...(info.schema.properties || {}),
+            __projectContext: {
+              type: 'object',
+              description: 'Project-specific connection context (optional). Use this to connect to a project-specific database instead of the default. The CLI will use connection files from the specified projectPath.',
+              properties: {
+                projectPath: {
+                  type: 'string',
+                  description: 'Absolute path to the project directory. Example: "C:/Users/dev/projects/my-app" or "/home/user/projects/my-app"'
+                },
+                connectionFile: {
+                  type: 'string',
+                  description: 'Connection file name relative to projectPath. Example: ".env" or "default-env.json". If provided, the CLI will use this specific file.'
+                },
+                host: {
+                  type: 'string',
+                  description: 'Database host (for direct connection). Example: "database.example.com"'
+                },
+                port: {
+                  type: 'number',
+                  description: 'Database port (for direct connection). Default is 30013.'
+                },
+                user: {
+                  type: 'string',
+                  description: 'Database user (for direct connection). Example: "DBADMIN"'
+                },
+                password: {
+                  type: 'string',
+                  description: 'Database password (for direct connection). SECURITY WARNING: Use connection files instead of hardcoding passwords.'
+                },
+                database: {
+                  type: 'string',
+                  description: 'Database name (for direct connection). Default is "SYSTEMDB".'
+                }
+              }
+            }
+          }
+        };
         
         tools.push({
           name: `hana_${sanitizeToolName(name)}`,
           description: fullDescription,
-          inputSchema: info.schema,
+          inputSchema: extendedSchema,
         });
 
         // Also register aliases
@@ -126,7 +169,7 @@ class HanaCliMcpServer {
             tools.push({
               name: `hana_${sanitizeToolName(alias)}`,
               description: `${fullDescription} (alias for ${name})`,
-              inputSchema: info.schema,
+              inputSchema: extendedSchema,
             });
           }
         }
@@ -1330,7 +1373,14 @@ class HanaCliMcpServer {
 
       // Execute the command
       try {
-        const result = await executeCommand(actualCommandName, args || {});
+        // Extract connection context if provided by agent
+        const context = (args as any)?.__projectContext as ConnectionContext | undefined;
+        
+        // Remove context from args before passing to CLI (it's not a CLI parameter)
+        const cleanArgs = { ...args };
+        delete cleanArgs.__projectContext;
+        
+        const result = await executeCommand(actualCommandName, cleanArgs, context);
         const formattedOutput = formatResult(result);
 
         return {

@@ -112,6 +112,34 @@ export function resolveEnv(options) {
  */
 export async function getConnOptions(prompts) {
     base.debug(base.bundle.getText("debug.call", ["getConnOptions"]))
+    
+    // NEW: Check for project-specific context from MCP server
+    // This allows AI agents to specify which project's database to use
+    const projectPath = process.env.HANA_CLI_PROJECT_PATH;
+    const connFile = process.env.HANA_CLI_CONN_FILE;
+    
+    // If project path provided, change to that directory so connection resolution starts there
+    if (projectPath && fs.existsSync(projectPath)) {
+        process.chdir(projectPath);
+        base.debug(`Using project directory for connection resolution: ${projectPath}`);
+    }
+    
+    // NEW: Check for direct database credentials from MCP (for explicit connection setup)
+    // This is used when connection file isn't available or for temporary connections
+    if (process.env.HANA_CLI_HOST) {
+        const directConnection = {
+            hana: {
+                host: process.env.HANA_CLI_HOST,
+                port: parseInt(process.env.HANA_CLI_PORT || '30013'),
+                user: process.env.HANA_CLI_USER,
+                password: process.env.HANA_CLI_PASSWORD,
+                database: process.env.HANA_CLI_DATABASE || 'SYSTEMDB',
+            }
+        };
+        base.debug('Using direct database connection from MCP context');
+        return directConnection;
+    }
+    
     delete process.env.VCAP_SERVICES
 
     // Try .cdsrc-private.json with CDS binding first

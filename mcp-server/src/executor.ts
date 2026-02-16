@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { formatOutput } from './output-formatter.js';
 import { getNextSteps, analyzeOutputForTips } from './next-steps.js';
+import { ConnectionContext } from './connection-context.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -238,11 +239,13 @@ function analyzeError(commandName: string, error: string, output: string): Error
  * 
  * @param commandName - The command to execute (e.g., 'status', 'tables')
  * @param args - Arguments to pass to the command as key-value pairs
+ * @param context - Optional connection context for project-specific connections
  * @returns Promise with execution result including the command name for formatting
  */
 export async function executeCommand(
   commandName: string,
-  args: Record<string, any> = {}
+  args: Record<string, any> = {},
+  context?: ConnectionContext
 ): Promise<ExecutionResult & { commandName: string }> {
   return new Promise((resolve) => {
     try {
@@ -278,14 +281,47 @@ export async function executeCommand(
       let stdout = '';
       let stderr = '';
 
+      // Build environment with connection context
+      const env: Record<string, string> = {
+        ...process.env,
+        // Ensure stdio output is captured
+        FORCE_COLOR: '0',
+      };
+
+      // Apply project context to environment
+      if (context?.projectPath) {
+        env.HANA_CLI_PROJECT_PATH = context.projectPath;
+      }
+
+      if (context?.connectionFile) {
+        env.HANA_CLI_CONN_FILE = context.connectionFile;
+      }
+
+      // Set direct credentials if provided (use cautiously for security)
+      if (context?.host) {
+        env.HANA_CLI_HOST = context.host;
+        env.HANA_CLI_PORT = String(context.port || 30013);
+        if (context.user) {
+          env.HANA_CLI_USER = context.user;
+        }
+        if (context.password) {
+          env.HANA_CLI_PASSWORD = context.password;
+        }
+        if (context.database) {
+          env.HANA_CLI_DATABASE = context.database;
+        }
+      }
+
+      // Determine working directory based on context
+      let cwd = join(__dirname, '..', '..');
+      if (context?.projectPath) {
+        cwd = context.projectPath;
+      }
+
       // Spawn the CLI process
       const child = spawn('node', [cliPath, ...commandArgs], {
-        env: {
-          ...process.env,
-          // Ensure stdio output is captured
-          FORCE_COLOR: '0',
-        },
-        cwd: join(__dirname, '..', '..'),
+        env,
+        cwd,
       });
 
       // Capture stdout
