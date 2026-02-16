@@ -1565,6 +1565,43 @@ Options:
 
 For detailed documentation, see [DATA_DIFF_COMMAND.md](docs/DATA_DIFF_COMMAND.md)
 
+### dataSync
+
+```shell
+hana-cli dataSync
+[aliases: datasync, syncData, sync]
+Synchronize data between systems or tables
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -sc, --sourceConnection          Source connection profile            [string]
+  -tc, --targetConnection          Target connection profile            [string]
+  -s, --schema                     Schema name    [string] [default: "**CURRENT_SCHEMA**"]
+  -t, --table                      Table name to synchronize            [string]
+  -m, --syncMode                   Sync mode (full, incremental)
+                                        [string] [choices: "full", "incremental"] [default: "full"]
+  -b, --batchSize                  Batch size          [number] [default: 1000]
+  -cr, --conflictResolution        Conflict resolution (source, target, skip)
+                                        [string] [choices: "source", "target", "skip"] [default: "source"]
+  -k, --keyColumns                 Key columns for matching             [string]
+  --timeout                        Timeout in seconds  [number] [default: 3600]
+```
+
+For detailed documentation, see [DATA_SYNC_COMMAND.md](docs/DATA_SYNC_COMMAND.md)
+
 ### dataProfile
 
 ```shell
@@ -3581,6 +3618,37 @@ Troubleshooting:
                                                       [boolean] [default: false]
 ```
 
+### replicationStatus
+
+```shell
+hana-cli replicationStatus
+[aliases: replstatus, replication, replstat]
+Monitor system and service replication status
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -ty, --type                      Replication type (system, service)
+                                        [string] [choices: "system", "service"] [default: "system"]
+  -sn, --serviceName               Service name filter                  [string]
+  -d, --detailed                   Show detailed information [boolean] [default: false]
+  -w, --watch                      Watch mode (refresh every 5 seconds) [boolean] [default: false]
+```
+
+For detailed documentation, see [REPLICATION_STATUS_COMMAND.md](docs/REPLICATION_STATUS_COMMAND.md)
+
 ### rick
 
 ```shell
@@ -3716,6 +3784,39 @@ Options:
       --all, --al, --allSchemas  Show all schemas regardless of permissions
                                                       [boolean] [default: false]
 ```
+
+### schemaClone
+
+```shell
+hana-cli schemaClone
+[aliases: schemaclone, cloneSchema, copyschema]
+Clone entire schema with or without data
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -ss, --sourceSchema              Source schema name                   [string]
+  -ts, --targetSchema              Target schema name                   [string]
+  -id, --includeData               Include table data    [boolean] [default: false]
+  -ig, --includeGrants             Include grants        [boolean] [default: false]
+  -par, --parallel                 Parallel operations   [number] [default: 1]
+  -et, --excludeTables             Tables to exclude (comma-separated)  [string]
+  --timeout                        Timeout in seconds    [number] [default: 7200]
+```
+
+For detailed documentation, see [SCHEMA_CLONE_COMMAND.md](docs/SCHEMA_CLONE_COMMAND.md)
 
 ### schemaInstances
 
@@ -4180,6 +4281,42 @@ Options:
   -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit             Limit results                  [number] [default: 200]
 ```
+
+### tableCopy
+
+```shell
+hana-cli tableCopy
+[aliases: tablecopy, copyTable, copytable]
+Copy table structure and/or data with optional filtering
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -st, --sourceTable               Source table name                    [string]
+  -tt, --targetTable               Target table name                    [string]
+  -ss, --sourceSchema              Source schema [string] [default: "**CURRENT_SCHEMA**"]
+  -ts, --targetSchema              Target schema [string] [default: "**CURRENT_SCHEMA**"]
+  -so, --structureOnly             Copy structure only   [boolean] [default: false]
+  -do, --dataOnly                  Copy data only        [boolean] [default: false]
+  -w, --where                      WHERE clause filter                  [string]
+  -l, --limit                      Row limit for copy                   [number]
+  -b, --batchSize                  Batch size            [number] [default: 1000]
+  --timeout                        Timeout in seconds    [number] [default: 3600]
+```
+
+For detailed documentation, see [TABLE_COPY_COMMAND.md](docs/TABLE_COPY_COMMAND.md)
 
 ### traces
 
@@ -4739,6 +4876,38 @@ hana-cli privilegeAnalysis --suggest
 # Detailed privilege analysis
 hana-cli privilegeAnalysis --user SYSTEM --detailed
 ```
+
+### sdiTasks
+
+```shell
+hana-cli sdiTasks
+[aliases: sditasks, sdi, smartDataIntegration]
+Manage Smart Data Integration tasks and flowgraphs
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -a, --action                     Action (list, start, stop, status)
+                                        [string] [choices: "list", "start", "stop", "status"] [default: "list"]
+  -tn, --taskName                  SDI task name                        [string]
+  -fg, --flowgraph                 Flowgraph name                       [string]
+  -an, --agentName                 SDI agent name                       [string]
+  -s, --schema                     Schema name [string] [default: "**CURRENT_SCHEMA**"]
+```
+
+For detailed documentation, see [SDI_TASKS_COMMAND.md](docs/SDI_TASKS_COMMAND.md)
 
 ### securityScan
 
