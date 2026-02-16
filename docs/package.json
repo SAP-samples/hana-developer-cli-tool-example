@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "docs:dev": "vitepress dev .",
-    "docs:build": "vitepress build .",
+    "docs:build": "vitepress build . && echo '' > .vitepress/dist/.nojekyll",
     "docs:serve": "vitepress serve ./dist",
     "docs:preview": "vue-tsc --noEmit && vitepress build . && vitepress serve ./dist"
   },
