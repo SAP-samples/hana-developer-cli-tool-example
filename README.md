@@ -1639,6 +1639,150 @@ Options:
 
 For detailed documentation, see [DATA_PROFILE_COMMAND.md](docs/DATA_PROFILE_COMMAND.md)
 
+### dataValidator
+
+```shell
+hana-cli dataValidator
+[aliases: dval, validateData, dataValidation]
+Validate data against business rules and constraints
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --table, --Table                   Target table name (required)          [string]
+  -s, --schema, --Schema                 Target schema name                    [string]
+  -r, --rules, --Rules                   Validation rules (required)           [string]
+  -rf, --rulesFile, --RulesFile          Path to validation rules file         [string]
+  -c, --columns, --Columns               Columns to validate (optional)        [string]
+  -f, --format, --Format                 Report format (json, csv, summary)
+                                  [string] [choices: "json", "csv", "summary"] [default: "summary"]
+  -o, --output, --Output                 Output report file path               [string]
+      --stopOnFirstError, --sfe          Stop on first error       [boolean] [default: false]
+  -l, --limit, --Limit                   Maximum rows to validate  [number] [default: 10000]
+```
+
+For detailed documentation, see [DATA_VALIDATOR_COMMAND.md](docs/DATA_VALIDATOR_COMMAND.md)
+
+### referentialCheck
+
+```shell
+hana-cli referentialCheck
+[aliases: refcheck, checkReferential, fkcheck]
+Verify referential integrity and foreign key constraints
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --table, --Table                   Target table name (required)          [string]
+  -s, --schema, --Schema                 Target schema name                    [string]
+  -c, --constraints, --Constraints       Specific constraints to check         [string]
+  -m, --mode, --Mode                     Check mode (check, report, repair)
+                          [string] [choices: "check", "report", "repair", "detailed"] [default: "check"]
+  -f, --format, --Format                 Report format (json, csv, summary)
+                                  [string] [choices: "json", "csv", "summary"] [default: "summary"]
+  -o, --output, --Output                 Output report file path               [string]
+  -l, --limit, --Limit                   Maximum rows to check     [number] [default: 10000]
+```
+
+For detailed documentation, see [REFERENTIAL_CHECK_COMMAND.md](docs/REFERENTIAL_CHECK_COMMAND.md)
+
+### duplicateDetection
+
+```shell
+hana-cli duplicateDetection
+[aliases: dupdetect, findDuplicates, duplicates]
+Find duplicate records in a table
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --table, --Table                   Target table name (required)          [string]
+  -s, --schema, --Schema                 Target schema name                    [string]
+  -k, --keyColumns, --KeyColumns         Key columns for matching (required)   [string]
+  -c, --checkColumns, --CheckColumns     Columns to check (optional)           [string]
+  -e, --excludeColumns, --ExcludeColumns Columns to exclude (optional)         [string]
+  -m, --mode, --Mode                     Detection mode (exact, fuzzy, partial)
+                          [string] [choices: "exact", "fuzzy", "partial"] [default: "exact"]
+      --threshold, --th                  Similarity threshold (0-1)  [number] [default: 0.95]
+  -f, --format, --Format                 Report format (json, csv, summary)
+                                  [string] [choices: "json", "csv", "summary"] [default: "summary"]
+  -o, --output, --Output                 Output report file path               [string]
+  -l, --limit, --Limit                   Maximum rows to check     [number] [default: 10000]
+```
+
+For detailed documentation, see [DUPLICATE_DETECTION_COMMAND.md](docs/DUPLICATE_DETECTION_COMMAND.md)
+
+### dataLineage
+
+```shell
+hana-cli dataLineage
+[aliases: lineage, dataFlow, traceLineage]
+Trace data lineage and transformations
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --table, --Table                   Target table name (required)          [string]
+  -s, --schema, --Schema                 Target schema name                    [string]
+  -d, --direction, --Direction           Lineage direction (upstream, downstream)
+                      [string] [choices: "upstream", "downstream", "bidirectional"] [default: "upstream"]
+      --depth, --Depth                   Maximum lineage depth     [number] [default: 5]
+      --includeTransformations, --t      Include transformations   [boolean] [default: true]
+  -f, --format, --Format                 Report format (json, csv, graphml)
+                      [string] [choices: "json", "csv", "graphml", "summary"] [default: "summary"]
+  -o, --output, --Output                 Output report file path               [string]
+```
+
+For detailed documentation, see [DATA_LINEAGE_COMMAND.md](docs/DATA_LINEAGE_COMMAND.md)
+
 ### dataTypesUI
 
 ```shell
