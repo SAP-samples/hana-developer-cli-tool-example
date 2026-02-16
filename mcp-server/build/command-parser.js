@@ -1,3 +1,4 @@
+import { COMMAND_METADATA_MAP } from './command-metadata.js';
 /**
  * Converts a yargs builder object to JSON Schema format for MCP tool parameters
  */
@@ -97,10 +98,16 @@ export function extractCommandInfo(commandModule) {
     // Get builder object, handling both direct objects and functions
     const builderObject = getBuilderObject(commandModule);
     const schema = yargsBuilderToJsonSchema(builderObject);
+    // Get metadata if available
+    const metadata = COMMAND_METADATA_MAP[name];
     return {
         name,
         aliases,
         description,
+        category: metadata?.category,
+        tags: metadata?.tags,
+        useCases: metadata?.useCases,
+        relatedCommands: metadata?.relatedCommands,
         schema
     };
 }

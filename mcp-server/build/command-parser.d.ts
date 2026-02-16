@@ -21,6 +21,10 @@ export interface CommandInfo {
     name: string;
     aliases?: string[];
     description: string;
+    category?: string;
+    tags?: string[];
+    useCases?: string[];
+    relatedCommands?: string[];
     schema: JSONSchema;
 }
 export declare function extractCommandInfo(commandModule: any): CommandInfo;

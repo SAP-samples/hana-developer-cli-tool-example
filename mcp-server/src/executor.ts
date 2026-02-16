@@ -2,6 +2,7 @@ import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { formatOutput } from './output-formatter.js';
+import { getNextSteps, analyzeOutputForTips } from './next-steps.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,6 +14,223 @@ export interface ExecutionResult {
   success: boolean;
   output: string;
   error?: string;
+}
+
+/**
+ * Enhanced error information with suggestions
+ */
+interface ErrorAnalysis {
+  errorType: string;
+  originalError: string;
+  possibleCauses: string[];
+  suggestions: Array<{
+    action: string;
+    command?: string;
+    parameters?: Record<string, any>;
+  }>;
+}
+
+/**
+ * Analyzes error messages and provides actionable suggestions
+ */
+function analyzeError(commandName: string, error: string, output: string): ErrorAnalysis {
+  const errorLower = error.toLowerCase();
+  const outputLower = output.toLowerCase();
+  const combined = errorLower + ' ' + outputLower;
+
+  // Table not found errors
+  if (combined.includes('table') && (combined.includes('not found') || combined.includes('does not exist') || combined.includes('invalid'))) {
+    return {
+      errorType: 'TABLE_NOT_FOUND',
+      originalError: error,
+      possibleCauses: [
+        'Table name is case-sensitive - check capitalization',
+        'Table may be in a different schema',
+        'Table may not exist yet',
+        'User may not have permission to see the table',
+      ],
+      suggestions: [
+        {
+          action: 'List tables in the schema to verify the table name',
+          command: 'hana_tables',
+          parameters: { schema: '<schema-name>' },
+        },
+        {
+          action: 'List all available schemas',
+          command: 'hana_schemas',
+        },
+        {
+          action: 'Check current user and permissions',
+          command: 'hana_status',
+        },
+      ],
+    };
+  }
+
+  // Schema not found errors
+  if (combined.includes('schema') && (combined.includes('not found') || combined.includes('does not exist') || combined.includes('invalid'))) {
+    return {
+      errorType: 'SCHEMA_NOT_FOUND',
+      originalError: error,
+      possibleCauses: [
+        'Schema name is case-sensitive',
+        'Schema does not exist',
+        'User does not have access to the schema',
+      ],
+      suggestions: [
+        {
+          action: 'List all available schemas',
+          command: 'hana_schemas',
+        },
+        {
+          action: 'Check current user permissions',
+          command: 'hana_status',
+        },
+      ],
+    };
+  }
+
+  // File not found errors
+  if (combined.includes('file') && (combined.includes('not found') || combined.includes('enoent') || combined.includes('cannot find'))) {
+    return {
+      errorType: 'FILE_NOT_FOUND',
+      originalError: error,
+      possibleCauses: [
+        'File path is incorrect',
+        'File does not exist at the specified location',
+        'Relative path may need to be absolute',
+      ],
+      suggestions: [
+        {
+          action: 'Check that the file exists and path is correct',
+        },
+        {
+          action: 'Use absolute file paths instead of relative paths',
+        },
+      ],
+    };
+  }
+
+  // Connection errors
+  if (combined.includes('connect') || combined.includes('connection') || combined.includes('econnrefused') || combined.includes('etimedout')) {
+    return {
+      errorType: 'CONNECTION_ERROR',
+      originalError: error,
+      possibleCauses: [
+        'Database credentials not configured',
+        'Database server is not reachable',
+        'Network connectivity issue',
+        'Database is offline or maintenance',
+      ],
+      suggestions: [
+        {
+          action: 'Verify database connection settings in .env or default-env.json',
+        },
+        {
+          action: 'Check if database server is running',
+        },
+        {
+          action: 'Test basic connectivity',
+          command: 'hana_status',
+        },
+      ],
+    };
+  }
+
+  // Authentication errors
+  if (combined.includes('authenticat') || combined.includes('authorization') || combined.includes('credential') || combined.includes('permission denied')) {
+    return {
+      errorType: 'AUTHENTICATION_ERROR',
+      originalError: error,
+      possibleCauses: [
+        'Invalid username or password',
+        'User account may be locked or expired',
+        'Insufficient privileges for the operation',
+      ],
+      suggestions: [
+        {
+          action: 'Verify credentials in .env or default-env.json',
+        },
+        {
+          action: 'Check user status and roles',
+          command: 'hana_status',
+        },
+        {
+          action: 'Contact database administrator for access',
+        },
+      ],
+    };
+  }
+
+  // Timeout errors
+  if (combined.includes('timeout') || combined.includes('timed out')) {
+    return {
+      errorType: 'TIMEOUT',
+      originalError: error,
+      possibleCauses: [
+        'Operation taking too long (default 30s)',
+        'Large dataset requires more time',
+        'Database performance issue',
+      ],
+      suggestions: [
+        {
+          action: 'For data operations, consider filtering or limiting results',
+        },
+        {
+          action: 'Check system health',
+          command: 'hana_healthCheck',
+        },
+        {
+          action: 'For import/export, use timeoutSeconds parameter to increase timeout',
+        },
+      ],
+    };
+  }
+
+  // Parameter/syntax errors
+  if (combined.includes('parameter') || combined.includes('argument') || combined.includes('required') || combined.includes('missing')) {
+    return {
+      errorType: 'PARAMETER_ERROR',
+      originalError: error,
+      possibleCauses: [
+        'Required parameter is missing',
+        'Parameter value format is incorrect',
+        'Parameter name may be misspelled',
+      ],
+      suggestions: [
+        {
+          action: 'Check parameter requirements and examples',
+          command: 'hana_examples',
+          parameters: { command: commandName },
+        },
+        {
+          action: 'View parameter presets for this command',
+          command: 'hana_parameter_presets',
+          parameters: { command: commandName },
+        },
+      ],
+    };
+  }
+
+  // Generic error with generic suggestions
+  return {
+    errorType: 'UNKNOWN_ERROR',
+    originalError: error,
+    possibleCauses: [
+      'Check the error message for specific details',
+    ],
+    suggestions: [
+      {
+        action: 'Try checking system health',
+        command: 'hana_healthCheck',
+      },
+      {
+        action: 'View examples for this command',
+        command: 'hana_examples',
+        parameters: { command: commandName },
+      },
+    ],
+  };
 }
 
 /**
@@ -159,17 +377,80 @@ export function validateEnvironment(): { valid: boolean; message?: string } {
 export function formatResult(result: ExecutionResult & { commandName: string }): string {
   if (result.success) {
     // Apply the formatter to the output
-    return formatOutput(result.commandName, result.output);
+    let formattedOutput = formatOutput(result.commandName, result.output);
+    
+    // Add context-aware tips based on output analysis
+    const tips = analyzeOutputForTips(result.commandName, result.output);
+    if (tips.length > 0) {
+      formattedOutput += '\n\n**📌 Tips:**\n' + tips.join('\n');
+    }
+    
+    // Add suggested next steps
+    const nextSteps = getNextSteps(result.commandName, result.output);
+    if (nextSteps.length > 0) {
+      formattedOutput += '\n\n**🔄 Suggested Next Steps:**\n';
+      nextSteps.forEach((step, i) => {
+        formattedOutput += `${i + 1}. **${step.description}**\n`;
+        if (step.reason) {
+          formattedOutput += `   ${step.reason}\n`;
+        }
+        if (step.parameters) {
+          const paramStr = Object.entries(step.parameters)
+            .map(([k, v]) => `${k}: "${v}"`)
+            .join(', ');
+          formattedOutput += `   → Use: \`hana_${step.command}\` with { ${paramStr} }\n`;
+        } else {
+          formattedOutput += `   → Use: \`hana_${step.command}\`\n`;
+        }
+      });
+    }
+    
+    return formattedOutput;
   } else {
+    // Analyze the error and provide helpful suggestions
+    const errorAnalysis = analyzeError(result.commandName, result.error || '', result.output);
+    
     const parts = [];
-    if (result.output) {
-      // Try to format even error output in case there's useful data
-      const formatted = formatOutput(result.commandName, result.output);
-      parts.push('Output:', formatted);
+    
+    // Add the error header
+    parts.push('❌ **Command Failed**\n');
+    
+    // Add original error
+    parts.push('**Error:**');
+    parts.push(errorAnalysis.originalError);
+    
+    // Add output if available
+    if (result.output && result.output.trim()) {
+      parts.push('\n**Output:**');
+      parts.push(result.output);
     }
-    if (result.error) {
-      parts.push('Error:', result.error);
+    
+    // Add possible causes
+    if (errorAnalysis.possibleCauses.length > 0) {
+      parts.push('\n**Possible Causes:**');
+      errorAnalysis.possibleCauses.forEach((cause, i) => {
+        parts.push(`${i + 1}. ${cause}`);
+      });
     }
-    return parts.join('\n\n');
+    
+    // Add actionable suggestions
+    if (errorAnalysis.suggestions.length > 0) {
+      parts.push('\n**💡 Suggestions:**');
+      errorAnalysis.suggestions.forEach((suggestion, i) => {
+        parts.push(`${i + 1}. ${suggestion.action}`);
+        if (suggestion.command) {
+          if (suggestion.parameters) {
+            const paramStr = Object.entries(suggestion.parameters)
+              .map(([k, v]) => `${k}: "${v}"`)
+              .join(', ');
+            parts.push(`   → Try: \`${suggestion.command}\` with parameters: { ${paramStr} }`);
+          } else {
+            parts.push(`   → Try: \`${suggestion.command}\``);
+          }
+        }
+      });
+    }
+    
+    return parts.join('\n');
   }
 }
