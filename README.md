@@ -739,6 +739,21 @@ hana-cli <command> --help
 
 ## Commands
 
+**📊 Visual Command Reference Guide**: For command structure diagrams, parameter relationships, and quick examples for the most commonly used commands, see the **[Command Structure Reference Guide](COMMAND_REFERENCE.md)**. This separate document provides visual flowcharts and detailed usage patterns for:
+
+* Connection & setup commands
+* Data operations (export, import, sync)
+* Database inspection & analysis
+* HDI container management
+* Backup & recovery operations
+* Performance analysis tools
+* Mass operations
+* Cloud integration
+
+Each command diagram shows the command syntax, available parameters, and typical usage patterns.
+
+---
+
 ### activateHDI
 
 ```shell
