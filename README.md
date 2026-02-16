@@ -1886,6 +1886,38 @@ Troubleshooting:
                                                       [boolean] [default: false]
 ```
 
+### ftIndexes
+
+```shell
+hana-cli ftIndexes [schema] [index]
+[aliases: fti, ftIndex, fulltext, fulltextIndexes]
+List full-text (fuzzy search) indexes and metadata for tables
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -i, --index, --Index  Full-text index name or pattern [string] [default: "*"]
+  -s, --schema, --Schema  schema     [string] [default: "**CURRENT_SCHEMA**"]
+  -t, --table, --Table   Table name                                   [string]
+  -d, --details, --Details  Show detailed JSON output                [boolean]
+  -l, --limit            Limit results               [number] [default: 200]
+```
+
+Example: `hana-cli ftIndexes -t MY_TABLE`
+Example: `hana-cli ftIndexes -t MY_TABLE --details`
+
 ### functions
 
 ```shell
@@ -2014,6 +2046,35 @@ Options:
       --dryRun, --dr                 Preview without executing [boolean] [default: false]
   -p, --profile, --Profile           Database connection profile           [string]
 ```
+
+### graphWorkspaces
+
+```shell
+hana-cli graphWorkspaces [schema] [workspace]
+[aliases: gws, graphs, graphWorkspace, graphws]
+List graph workspace objects in the schema
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -w, --workspace, --Workspace  Workspace name pattern     [string] [default: "*"]
+  -s, --schema, --Schema        schema  [string] [default: "**CURRENT_SCHEMA**"]
+  -l, --limit                   Limit results              [number] [default: 200]
+```
+
+Example: `hana-cli graphWorkspaces -w GRAPH_*`
 
 ### hdi
 
@@ -3085,6 +3146,36 @@ Troubleshooting:
                                                       [boolean] [default: false]
 ```
 
+### partitions
+
+```shell
+hana-cli partitions [schema] [table]
+[aliases: parts, partition, partitioning, tablePartitions]
+Show which tables are partitioned and their storage type
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --table, --Table           Table name                 [string] [default: "*"]
+  -s, --schema, --Schema         schema   [string] [default: "**CURRENT_SCHEMA**"]
+  -pt, --type, --PartitionType   Partition type (RANGE, HASH, ROUND_ROBIN, REPLICA) [string]
+  -l, --limit                    Limit results              [number] [default: 200]
+```
+
+Example: `hana-cli partitions -t SALES_*`
+
 ### ports
 
 ```shell
@@ -3767,6 +3858,37 @@ Options:
   -l, --limit                        Limit results       [number] [default: 200]
 ```
 
+### spatialData
+
+```shell
+hana-cli spatialData [schema] [table]
+[aliases: spatial, geoData, geographic, geo]
+List tables/columns with spatial data types
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -t, --table, --Table    Table name                 [string] [default: "*"]
+  -s, --schema, --Schema  schema   [string] [default: "**CURRENT_SCHEMA**"]
+  -c, --column, --Column  Column name                               [string]
+  -b, --bounds            Include spatial bounds        [boolean] [default: false]
+  -l, --limit             Limit results               [number] [default: 200]
+```
+
+Example: `hana-cli spatialData -t GIS_*`
+
 ### status
 
 ```shell
@@ -3884,7 +4006,77 @@ Troubleshooting:
                                                       [boolean] [default: false]
 ```
 
-![systemInfoUI example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/systemInfoUI.png)
+### tableGroups
+
+Manage SAP HANA table groups (SQL-level `CREATE TABLE GROUP` functionality).
+
+```shell
+hana-cli tableGroups [action] [groupName]
+[aliases: tg, tablegroup, groups, groups-tables]
+Manage table groups for optimization
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Actions:
+  list                List all table groups in a schema (default action)
+  create              Create a new table group
+  drop                Drop an existing table group
+  add_table           Add a table to a table group
+  remove_table        Remove a table from a table group
+  info                Display table group details and member tables
+
+Options:
+  -a, --action        Action to perform                  [string] [default: "list"]
+  -g, --group         Table group name                                 [string]
+  -s, --schema        Schema name                    [string] [default: "**CURRENT_SCHEMA**"]
+  -t, --table         Table name (for add/remove actions)              [string]
+  --type              Table group type (for create action)             [string]
+  --subtype           Table group subtype (for create action)          [string]
+  -l, --limit         Limit results                  [number] [default: 200]
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+```
+
+Examples:
+
+```bash
+# List all table groups in current schema
+hana-cli tableGroups list
+
+# List table groups in a specific schema
+hana-cli tableGroups list -s MYSCHEMA
+
+# Get details about a specific table group
+hana-cli tableGroups info -g MY_GROUP
+
+# Create a new table group
+hana-cli tableGroups create -g MY_GROUP
+
+# Create a table group with type and subtype
+hana-cli tableGroups create -g MY_GROUP --type MY_TYPE --subtype MY_SUBTYPE
+
+# Add a table to a table group
+hana-cli tableGroups add_table -g MY_GROUP -t TABLE1
+
+# Add a table from a specific schema to a table group
+hana-cli tableGroups add_table -g MY_GROUP -t TABLE1 -s MYSCHEMA
+
+# Remove a table from a table group
+hana-cli tableGroups remove_table -g MY_GROUP -t TABLE1
+
+# Drop a table group
+hana-cli tableGroups drop -g MY_GROUP
+```
 
 ### tables
 
@@ -4350,6 +4542,41 @@ Options:
   -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
   -l, --limit             Limit results                  [number] [default: 200]
 ```
+
+### workloadManagement
+
+```shell
+hana-cli workloadManagement [schema] [group]
+[aliases: wlm, workloads, workloadClass, workloadmgmt]
+Show workload group configuration, mappings, and runtime stats
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -g, --group, --Group           Workload class name     [string] [default: "*"]
+  -w, --workload, --Workload     Workload class name                  [string]
+  -s, --schema, --Schema         schema  [string] [default: "**CURRENT_SCHEMA**"]
+  -p, --priority, --Priority     Priority level (LOW, MEDIUM, HIGH, CRITICAL) [string]
+  -a, --activeOnly               Only show groups with active sessions
+                                                      [boolean] [default: false]
+      --showViews, --sv, --views  Show available workload views and columns
+                                                      [boolean] [default: false]
+  -l, --limit                    Limit results          [number] [default: 200]
+```
+
+Example: `hana-cli workloadManagement --showViews`
 
 ### xsaServices
 

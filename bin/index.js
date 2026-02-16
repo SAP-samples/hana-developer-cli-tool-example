@@ -14,7 +14,7 @@ const commandFiles = [
     './dataMask.js', './dataProfile.js', './dataTypes.js', './dataTypesUI.js', './dataVolumes.js', './dependencies.js', './disks.js',
     './dropContainer.js', './dropGroup.js', './encryptionStatus.js', './erdDiagram.js', './export.js', './expensiveStatements.js',
     './features.js', './featuresUI.js', './featureUsage.js', './featureUsageUI.js', './functions.js',
-    './functionsUI.js', './generateDocs.js', './generateTestData.js', './grantChains.js', './hanaCloudHDIInstances.js', './hanaCloudHDIInstancesUI.js',
+    './functionsUI.js', './ftIndexes.js', './generateDocs.js', './generateTestData.js', './grantChains.js', './graphWorkspaces.js', './hanaCloudHDIInstances.js', './hanaCloudHDIInstancesUI.js',
     './hanaCloudInstances.js', './hanaCloudSBSSInstances.js', './hanaCloudSBSSInstancesUI.js',
     './hanaCloudSchemaInstances.js', './hanaCloudSchemaInstancesUI.js', './hanaCloudSecureStoreInstances.js',
     './hanaCloudSecureStoreInstancesUI.js', './hanaCloudStart.js', './hanaCloudStop.js',
@@ -27,12 +27,12 @@ const commandFiles = [
     './massRename.js', './massUpdate.js', './massUsers.js', './memoryAnalysis.js', './objects.js',
     './openBAS.js', './openChangeLog.js', './openDBExplorer.js', './openReadMe.js', './ports.js',
     './privilegeAnalysis.js', './privilegeError.js', './procedures.js', './pwdPolicy.js', './queryPlan.js', './querySimple.js',
-    './querySimpleUI.js', './readMe.js', './readMeUI.js', './recommendations.js', './reclaim.js', './restore.js',
-    './rick.js', './roles.js', './schemas.js', './schemasUI.js', './securityScan.js', './sequences.js', './status.js',
-    './synonyms.js', './systemInfo.js', './systemInfoUI.js', './tableHotspots.js', './tables.js',
+    './querySimpleUI.js', './partitions.js', './readMe.js', './readMeUI.js', './recommendations.js', './reclaim.js', './restore.js',
+    './rick.js', './roles.js', './schemas.js', './schemasUI.js', './securityScan.js', './sequences.js', './spatialData.js', './status.js',
+    './synonyms.js', './systemInfo.js', './systemInfoUI.js', './tableHotspots.js', './tableGroups.js', './tables.js',
     './tablesPG.js', './tablesSQLite.js', './tablesUI.js', './timeSeriesTools.js', './traces.js',
     './traceContents.js', './triggers.js', './UI.js', './users.js', './version.js', './views.js',
-    './xsaServices.js'
+    './workloadManagement.js', './xsaServices.js'
 ]
 
 export async function init() {
