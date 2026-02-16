@@ -31,7 +31,7 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("dataLineageDepth")
   },
   includeTransformations: {
-    alias: ['t'],
+    alias: ['it'],
     type: 'boolean',
     default: true,
     desc: baseLite.bundle.getText("dataLineageIncludeTransformations")

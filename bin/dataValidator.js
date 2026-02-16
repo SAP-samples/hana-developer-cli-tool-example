@@ -40,7 +40,7 @@ export const builder = baseLite.getBuilder({
   format: {
     alias: ['f'],
     choices: ["json", "csv", "summary", "detailed"],
-    default: "summary",
+    default: "json",
     type: 'string',
     desc: baseLite.bundle.getText("dataValidatorFormat")
   },

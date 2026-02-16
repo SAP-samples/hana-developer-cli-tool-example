@@ -40,6 +40,12 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("schemaCloneExcludeTables")
   },
+  dryRun: {
+    alias: ['dr', 'preview'],
+    type: 'boolean',
+    default: false,
+    desc: baseLite.bundle.getText("dryRun")
+  },
   timeout: {
     alias: ['to'],
     type: 'number',
@@ -75,6 +81,12 @@ export let inputPrompts = {
     type: 'string',
     required: false,
     ask: () => { }
+  },
+  dryRun: {
+    description: baseLite.bundle.getText("dryRun"),
+    type: 'boolean',
+    required: false,
+    ask: () => false
   }
 }
 

@@ -10,46 +10,46 @@ export const describe = baseLite.bundle.getText("restore")
 
 export const builder = baseLite.getBuilder({
   backupFile: {
-    alias: ['bf', 'BackupFile'],
+    alias: ['bf', 'file'],
     type: 'string',
     desc: baseLite.bundle.getText("restoreBackupFile")
   },
   target: {
-    alias: ['tgt', 'Target'],
+    alias: ['tgt'],
     type: 'string',
     desc: baseLite.bundle.getText("restoreTarget")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     desc: baseLite.bundle.getText("schema")
   },
   overwrite: {
-    alias: ['ow', 'Overwrite'],
+    alias: ['ow'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("restoreOverwrite")
   },
   dropExisting: {
-    alias: ['de', 'DropExisting'],
+    alias: ['de'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("restoreDropExisting")
   },
   continueOnError: {
-    alias: ['coe', 'ContinueOnError'],
+    alias: ['coe'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("restoreContinueOnError")
   },
   batchSize: {
-    alias: ['b', 'BatchSize'],
+    alias: ['b', 'batch'],
     type: 'number',
     default: 1000,
     desc: baseLite.bundle.getText("restoreBatchSize")
   },
   dryRun: {
-    alias: ['dr', 'DryRun'],
+    alias: ['dr', 'preview'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("restoreDryRun")

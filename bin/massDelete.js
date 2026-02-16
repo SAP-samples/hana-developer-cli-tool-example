@@ -33,8 +33,8 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("includeSystemObjects"),
     default: false
   },
-  dry: {
-    alias: ['d', 'dryrun'],
+  dryRun: {
+    alias: ['dr', 'preview'],
     type: 'boolean',
     desc: baseLite.bundle.getText("dryRun"),
     default: false
@@ -46,8 +46,9 @@ export const builder = baseLite.getBuilder({
     default: false
   },
   log: {
-    alias: ['log'],
     type: 'boolean',
+    desc: baseLite.bundle.getText("mass.log")
+  }
     desc: baseLite.bundle.getText("mass.log")
   }
 })
@@ -81,7 +82,7 @@ export async function handler (argv) {
       description: base.bundle.getText("includeSystemObjects"),
       default: false
     },
-    dry: {
+    dryRun: {
       type: 'boolean',
       description: base.bundle.getText("dryRun"),
       default: false

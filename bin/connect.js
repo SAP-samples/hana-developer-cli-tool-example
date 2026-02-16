@@ -18,7 +18,7 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("password")
   },
   userstorekey: {
-    alias: ['u', 'userstorekey'],
+    alias: ['uk', 'userstore'],
     desc: baseLite.bundle.getText("userstorekey")
   },
   save: {

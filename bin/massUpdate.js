@@ -7,12 +7,12 @@ export const describe = baseLite.bundle.getText("massUpdate")
 
 export const builder = baseLite.getBuilder({
   schema: {
-    alias: ['s', 'schema'],
+    alias: ['s'],
     type: 'string',
     desc: baseLite.bundle.getText("schema")
   },
   object: {
-    alias: ['o', 'object'],
+    alias: ['o'],
     type: 'string',
     desc: baseLite.bundle.getText("object")
   },
@@ -27,19 +27,18 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("whereClause")
   },
   limit: {
-    alias: ['l', 'limit'],
+    alias: ['l'],
     type: 'number',
     default: 1000,
     desc: baseLite.bundle.getText("limit")
   },
-  dry: {
-    alias: ['d', 'dryrun'],
+  dryRun: {
+    alias: ['dr', 'preview'],
     type: 'boolean',
     desc: baseLite.bundle.getText("dryRun"),
     default: false
   },
   log: {
-    alias: ['log'],
     type: 'boolean',
     desc: baseLite.bundle.getText("mass.log")
   }
@@ -74,7 +73,7 @@ export async function handler (argv) {
       default: 1000,
       required: true
     },
-    dry: {
+    dryRun: {
       type: 'boolean',
       description: base.bundle.getText("dryRun"),
       default: false

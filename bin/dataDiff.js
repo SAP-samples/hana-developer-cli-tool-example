@@ -61,6 +61,12 @@ export const builder = baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("dataDiffShowValues")
   },
+  dryRun: {
+    alias: ['dr', 'preview'],
+    type: 'boolean',
+    default: false,
+    desc: baseLite.bundle.getText("dryRun")
+  },
   timeout: {
     alias: ['to'],
     type: 'number',
@@ -123,6 +129,12 @@ export let inputPrompts = {
     type: 'string',
     required: false,
     ask: () => { }
+  },
+  dryRun: {
+    description: baseLite.bundle.getText("dryRun"),
+    type: 'boolean',
+    required: false,
+    ask: () => false
   }
 }
 

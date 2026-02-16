@@ -10,11 +10,13 @@ export const builder = baseLite.getBuilder({
   sourceSchema: {
     alias: ['ss'],
     type: 'string',
+    default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("compareSchemaSourceSchema")
   },
   targetSchema: {
     alias: ['ts'],
     type: 'string',
+    default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("compareSchemaTargetSchema")
   },
   tables: {

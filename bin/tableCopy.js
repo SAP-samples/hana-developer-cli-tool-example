@@ -52,10 +52,16 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("tableCopyLimit")
   },
   batchSize: {
-    alias: ['b'],
+    alias: ['b', 'batch'],
     type: 'number',
     default: 1000,
     desc: baseLite.bundle.getText("tableCopyBatchSize")
+  },
+  dryRun: {
+    alias: ['dr', 'preview'],
+    type: 'boolean',
+    default: false,
+    desc: baseLite.bundle.getText("dryRun")
   },
   timeout: {
     alias: ['to'],
@@ -108,6 +114,12 @@ export let inputPrompts = {
     type: 'string',
     required: false,
     ask: () => { }
+  },
+  dryRun: {
+    description: baseLite.bundle.getText("dryRun"),
+    type: 'boolean',
+    required: false,
+    ask: () => false
   }
 }
 

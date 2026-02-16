@@ -7,22 +7,22 @@ export const describe = baseLite.bundle.getText("massGrant")
 
 export const builder = baseLite.getBuilder({
   schema: {
-    alias: ['s', 'schema'],
+    alias: ['s'],
     type: 'string',
     desc: baseLite.bundle.getText("schema")
   },
   object: {
-    alias: ['o', 'object'],
+    alias: ['o'],
     type: 'string',
     desc: baseLite.bundle.getText("object")
   },
   grantee: {
-    alias: ['g', 'grantee'],
+    alias: ['g'],
     type: 'string',
     desc: baseLite.bundle.getText("grantee")
   },
   privilege: {
-    alias: ['p', 'privilege'],
+    alias: ['pr'],
     type: 'string',
     desc: baseLite.bundle.getText("privilege")
   },
@@ -37,14 +37,13 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("withGrantOption"),
     default: false
   },
-  dry: {
-    alias: ['d', 'dryrun'],
+  dryRun: {
+    alias: ['dr', 'preview'],
     type: 'boolean',
     desc: baseLite.bundle.getText("dryRun"),
     default: false
   },
   log: {
-    alias: ['log'],
     type: 'boolean',
     desc: baseLite.bundle.getText("mass.log")
   }
@@ -83,7 +82,7 @@ export async function handler (argv) {
       description: base.bundle.getText("withGrantOption"),
       default: false
     },
-    dry: {
+    dryRun: {
       type: 'boolean',
       description: base.bundle.getText("dryRun"),
       default: false

@@ -8,7 +8,7 @@ export const describe = baseLite.bundle.getText("tables")
 
 export const builder = baseLite.getBuilder({
   table: {
-    alias: ['t', 'Table'],
+    alias: ['t'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("table")
@@ -26,7 +26,7 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("limit")
   },
   profile: {
-    alias: ['p', 'Profile'],
+    alias: ['p'],
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
