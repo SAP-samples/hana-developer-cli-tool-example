@@ -1685,6 +1685,85 @@ Troubleshooting:
 
 ![dataVolumes example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/dataVolumes.gif)
 
+### crashDumps
+
+```shell
+hana-cli crashDumps
+[aliases: crash, cd]
+List and analyze crash dump files
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -d, --days, --Days               Number of days to analyze      [number] [default: 7]
+  -t, --type, --Type               Filter by crash type                  [string]
+  -l, --limit, --Limit             Limit results                 [number] [default: 50]
+```
+
+### deadlocks
+
+```shell
+hana-cli deadlocks
+[aliases: deadlock, dl]
+Analyze and detect deadlock situations
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -l, --limit, --Limit             Limit results                 [number] [default: 50]
+```
+
+### diagnose
+
+```shell
+hana-cli diagnose
+[aliases: diag]
+Run comprehensive diagnostics on database system
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -c, --checks, --Checks           Diagnostic checks to run
+         [string] [choices: "all", "services", "memory", "alerts", "locks", "backup"] [default: "all"]
+  -l, --limit, --Limit             Limit results                 [number] [default: 50]
+```
+
 ### disks
 
 ```shell
@@ -1921,6 +2000,35 @@ Troubleshooting:
       --debug, --Debug           Debug hana-cli itself by adding output of LOTS
                                  of intermediate details
                                                       [boolean] [default: false]
+```
+
+### fragmentationCheck
+
+```shell
+hana-cli fragmentationCheck
+[aliases: frag, fc]
+Analyze table fragmentation levels
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -s, --schema, --Schema           Filter by schema                      [string]
+  -t, --table, --Table             Filter by table                       [string]
+  -th, --threshold, --Threshold    Fragmentation threshold percentage
+                                                      [number] [default: 10]
+  -l, --limit, --Limit             Limit results                 [number] [default: 50]
 ```
 
 ### ftIndexes
@@ -3112,6 +3220,34 @@ Troubleshooting:
 Options:
   -u, --user, --User          User
   -p, --password, --Password  Password
+```
+
+### memoryLeaks
+
+```shell
+hana-cli memoryLeaks
+[aliases: memleak, ml]
+Detect potential memory leaks
+
+Connection Parameters:
+  -a, --admin, --Admin  Connect via admin (default-env-admin.json)
+                                                      [boolean] [default: false]
+      --conn            Connection Filename to override default-env.json
+
+Troubleshooting:
+      --disableVerbose, --quiet  Disable Verbose output - removes all extra
+                                 output that is only helpful to human readable
+                                 interface. Useful for scripting commands.
+                                                      [boolean] [default: false]
+      --debug, --Debug           Debug hana-cli itself by adding output of LOTS
+                                 of intermediate details
+                                                      [boolean] [default: false]
+
+Options:
+  -c, --component, --Component     Filter by component                  [string]
+  -t, --threshold, --Threshold     Memory growth threshold percentage
+                                                      [number] [default: 10]
+  -l, --limit, --Limit             Limit results                 [number] [default: 50]
 ```
 
 ### objects
