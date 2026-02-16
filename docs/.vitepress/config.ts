@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 
 export default withMermaid(defineConfig({
+  base: '/hana-developer-cli-tool-example/',
   title: 'SAP HANA Developer CLI',
   description: 'Complete documentation for the SAP HANA Developer CLI tool',
   lang: 'en-US',

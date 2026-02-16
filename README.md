@@ -6,7 +6,7 @@ The [change log](CHANGELOG.md) describes notable changes in this package.
 
 ## 📚 Documentation
 
-Complete documentation is available in the **[`docs/`](docs/)** folder and organized with VitePress. test2
+Complete documentation is available in the **[`docs/`](docs/)** folder and organized with VitePress.
 
 **Quick Links:**
 
