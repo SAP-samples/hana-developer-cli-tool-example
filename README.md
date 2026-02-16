@@ -430,14 +430,85 @@ hana-cli dataValidator -t BIGDATA -l 1000000 -to 7200
 hana-cli export -t CUSTOMERS -f json -o ./exports/customers.json
 ```
 
+### Current Schema Defaults (`**CURRENT_SCHEMA**`)
+
+The vast majority of schema-aware commands now use `**CURRENT_SCHEMA**` as the default value for schema parameters. This special placeholder allows you to work with your current database context without explicitly specifying the schema name each time.
+
+#### Supported Commands with Current Schema Default
+
+The following command categories fully support the `**CURRENT_SCHEMA**` placeholder:
+
+**Listing Commands** (30+ commands):
+
+* All schema navigation: `tables`, `views`, `indexes`, `functions`, `procedures`, `triggers`, `sequences`, `synonyms`, `libraries`, `roles`, `objects`
+* Specialized lists: `partitions`, `columnStats`, `spatialData`, `ftIndexes`, `graphWorkspaces`, `tableHotspots`, `tableGroups`, `calcViewAnalyzer`
+
+**Data Manipulation Commands** (10+ commands):
+
+* `export`, `import`, `dataProfile`, `dataDiff`, `compareData`, `compareSchema`, `tableCopy`, `dataSync`
+
+**Analysis Commands** (10+ commands):
+
+* `dataValidator`, `duplicateDetection`, `erdDiagram`, `dataLineage`, `referentialCheck`, and more
+
+#### Current Schema Examples
+
+```bash
+# Without explicit schema - uses CURRENT_SCHEMA
+hana-cli tables                          # List tables in current schema
+hana-cli procedures                      # List procedures in current schema
+hana-cli export -t CUSTOMERS             # Export from current schema
+
+# With explicit schema override
+hana-cli tables -s PRODUCTION            # List tables in PRODUCTION schema
+hana-cli procedures -s OTHER_SCHEMA      # List procedures in OTHER_SCHEMA
+hana-cli export -t CUSTOMERS -s SALES    # Export from SALES schema
+```
+
+For a complete list of all commands with `**CURRENT_SCHEMA**` support, see the [CONSISTENCY_REVIEW_COMPLETE.md](CONSISTENCY_REVIEW_COMPLETE.md) document.
+
+### Multi-Profile Database Support
+
+All database-connected commands now support the `--profile` parameter (alias `-p`), enabling you to work with different database configurations without switching connections or redefining credentials.
+
+#### Supported Commands with Profile Parameter
+
+The `--profile` parameter is available in:
+
+* All data operations: `export`, `import`, `dataProfile`, `dataDiff`, `dataSync`, `duplicateDetection`, `referentialCheck`, `tableCopy`
+* List operations: `tables`, `views`, `indexes`, `functions`, `procedures`, `triggers`, `sequences`, `libraries`, `roles`, `objects`, `partitions`, `columnStats`, `spatialData`, `ftIndexes`, `graphWorkspaces`, `tableHotspots`, `tableGroups`, `calcViewAnalyzer`
+* Analysis tools: `compareData`, `compareSchema`, `dataValidator`, `dataLineage`, `erdDiagram`, and more
+
+#### Profile Parameter Examples
+
+```bash
+# Specify database profile
+hana-cli tables --profile production     # Connect using 'production' profile
+hana-cli export -t CUSTOMERS -p staging  # Export from staging environment
+hana-cli dataValidator -t TABLE -p dev   # Validate data in development
+
+# Works with other parameters
+hana-cli tables -s MYSCHEMA -p prod      # List tables in schema using prod profile
+hana-cli compareSchema -ss SRC -ts TGT -p target  # Schema comparison using target profile
+```
+
+For more details on database profile configuration, see the [utils/README.md](utils/README.md) documentation.
+
 ### Quality Assurance Notes
 
-The consistency of these parameters has been standardized across all 171 commands in the tool. This standardization ensures:
+The consistency of these parameters has been standardized across all 200+ commands in the tool. This standardization ensures:
 
-- **Predictability**: Users can rely on consistent parameter behavior across commands
-- **Discoverability**: Common parameters work the same way in different contexts
-- **Scripting**: Automation scripts are more maintainable with consistent patterns
-- **Error Reduction**: Familiar patterns reduce mistakes and learning curve
+* **Predictability**: Users can rely on consistent parameter behavior across commands
+* **Discoverability**: Common parameters work the same way in different contexts
+* **Scripting**: Automation scripts are more maintainable with consistent patterns
+* **Error Reduction**: Familiar patterns reduce mistakes and learning curve
+* **Multi-Environment Support**: Profile parameter enables seamless switching between database instances
+
+For detailed analysis of all command consistency improvements deployed in February 2026, including the 30 commands and 50+ parameters updated, see:
+
+* [CONSISTENCY_REVIEW_COMPLETE.md](CONSISTENCY_REVIEW_COMPLETE.md) - Complete review report
+* [COMMAND_CONSISTENCY_FIXES.md](COMMAND_CONSISTENCY_FIXES.md) - Implementation details
+* [COMMAND_CONSISTENCY_ANALYSIS.md](COMMAND_CONSISTENCY_ANALYSIS.md) - Detailed audit findings
 
 For detailed information about specific commands, use the built-in help:
 
@@ -741,6 +812,7 @@ Options:
   -p, --procedure, --Procedure, --sp  Stored Procedure                  [string]
   -s, --schema, --Schema              schema
                                         [string] [default: "**CURRENT_SCHEMA**"]
+  --profile, --Profile                CDS Profile                       [string]
 ```
 
 ![callProcedure example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/callProcedure.gif)
@@ -818,10 +890,8 @@ Troubleshooting:
 Options:
   -t, --table, --Table   Database Table                       [string] [default: "*"]
   -s, --schema, --Schema  schema            [string] [default: "**CURRENT_SCHEMA**"]
+  -p, --profile, --Profile  CDS Profile                                 [string]
   -l, --limit, --Limit   Limit results                       [number] [default: 200]
-```
-
-### calcViewAnalyzer
 
 ```shell
 hana-cli calcViewAnalyzer [schema] [view]
@@ -1691,8 +1761,8 @@ Options:
   -t1, --table1, --Table1                First table name (required)           [string]
   -t2, --table2, --Table2                Second table name (required)          [string]
   -k, --keyColumns, --KeyColumns         Key columns for matching (required)   [string]
-  -s1, --schema1, --Schema1              Schema for first table                [string]
-  -s2, --schema2, --Schema2              Schema for second table               [string]
+  -s1, --schema1, --Schema1              Schema for first table               [string] [default: "**CURRENT_SCHEMA**"]
+  -s2, --schema2, --Schema2              Schema for second table              [string] [default: "**CURRENT_SCHEMA**"]
   -c, --compareColumns, --CompareColumns Columns to compare (optional)         [string]
   -f, --format, --Format                 Report format (json, csv, summary)
                                   [string] [choices: "json", "csv", "summary"] [default: "summary"]
@@ -1764,7 +1834,7 @@ Troubleshooting:
 
 Options:
   -t, --table, --Table                   Target table name (required)          [string]
-  -s, --schema, --Schema                 Target schema name                    [string]
+  -s, --schema, --Schema                 Target schema name       [string] [default: "**CURRENT_SCHEMA**"]
   -c, --columns, --Columns               Columns to profile (optional)         [string]
   -f, --format, --Format                 Report format (json, csv, summary)
                                   [string] [choices: "json", "csv", "summary"] [default: "summary"]
@@ -1801,8 +1871,7 @@ Troubleshooting:
 
 Options:
   -t, --table, --Table                   Target table name (required)          [string]
-  -s, --schema, --Schema                 Target schema name                    [string]
-  -r, --rules, --Rules                   Validation rules (required)           [string]
+  -s, --schema, --Schema                 Target schema name       [string] [default: "**CURRENT_SCHEMA**"]
   -rf, --rulesFile, --RulesFile          Path to validation rules file         [string]
   -c, --columns, --Columns               Columns to validate (optional)        [string]
   -f, --format, --Format                 Report format (json, csv, summary)
@@ -1872,8 +1941,7 @@ Troubleshooting:
 
 Options:
   -t, --table, --Table                   Target table name (required)          [string]
-  -s, --schema, --Schema                 Target schema name                    [string]
-  -k, --keyColumns, --KeyColumns         Key columns for matching (required)   [string]
+  -s, --schema, --Schema                 Target schema name       [string] [default: "**CURRENT_SCHEMA**"]
   -c, --checkColumns, --CheckColumns     Columns to check (optional)           [string]
   -e, --excludeColumns, --ExcludeColumns Columns to exclude (optional)         [string]
   -m, --mode, --Mode                     Detection mode (exact, fuzzy, partial)
@@ -1910,8 +1978,7 @@ Troubleshooting:
 
 Options:
   -t, --table, --Table                   Target table name (required)          [string]
-  -s, --schema, --Schema                 Target schema name                    [string]
-  -d, --direction, --Direction           Lineage direction (upstream, downstream)
+  -s, --schema, --Schema                 Target schema name       [string] [default: "**CURRENT_SCHEMA**"]
                       [string] [choices: "upstream", "downstream", "bidirectional"] [default: "upstream"]
       --depth, --Depth                   Maximum lineage depth     [number] [default: 5]
       --includeTransformations, --it     Include transformations   [boolean] [default: true]
@@ -2093,7 +2160,7 @@ Troubleshooting:
                                                       [boolean] [default: false]
 
 Options:
-  -s, --schema, --Schema           Schema name                               [string]
+  -s, --schema, --Schema           Schema name          [string] [default: "**CURRENT_SCHEMA**"]
   -t, --tables, --Tables           Comma-separated table names (optional)    [string]
   -o, --output, --Output           Output file path (optional)               [string]
   -f, --format, --Format           Output format (mermaid, plantuml, graphviz, json)
@@ -2127,7 +2194,8 @@ Troubleshooting:
 
 Options:
   -t, --table, --Table                   Source table name (required)          [string]
-  -s, --schema, --Schema                 Source schema name                    [string]
+  -s, --schema, --Schema                 Source schema name       [string] [default: "**CURRENT_SCHEMA**"]
+  -p, --profile, --Profile               CDS Profile                           [string]
   -o, --output, --Output                 Output file path (required)           [string]
   -f, --format, --Format                 Export format (csv, excel, json)
                                   [string] [choices: "csv", "excel", "json"] [default: "csv"]
@@ -2338,6 +2406,7 @@ Troubleshooting:
 Options:
   -i, --index, --Index  Full-text index name or pattern [string] [default: "*"]
   -s, --schema, --Schema  schema     [string] [default: "**CURRENT_SCHEMA**"]
+  --profile, --Profile  CDS Profile                                   [string]
   -t, --table, --Table   Table name                                   [string]
   -d, --details, --Details  Show detailed JSON output                [boolean]
   -l, --limit            Limit results               [number] [default: 200]
@@ -2371,10 +2440,8 @@ Troubleshooting:
 Options:
   -f, --function, --Function  Function                   [string] [default: "*"]
   -s, --schema, --Schema      schema    [string] [default: "**CURRENT_SCHEMA**"]
-  -l, --limit                 Limit results              [number] [default: 200]
-```
-
-![functions example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/functions.gif)
+  -p, --profile, --Profile    CDS Profile                               [string]
+  -l, --limit                 Limit results              [number] [default: 200](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/functions.gif)
 
 ### functionsUI
 
@@ -2499,10 +2566,8 @@ Troubleshooting:
 Options:
   -w, --workspace, --Workspace  Workspace name pattern     [string] [default: "*"]
   -s, --schema, --Schema        schema  [string] [default: "**CURRENT_SCHEMA**"]
+  --profile, --Profile          CDS Profile                             [string]
   -l, --limit                   Limit results              [number] [default: 200]
-```
-
-Example: `hana-cli graphWorkspaces -w GRAPH_*`
 
 ### hdi
 
@@ -2689,10 +2754,8 @@ Troubleshooting:
 Options:
   -i, --indexes, --Indexes  Function                     [string] [default: "*"]
   -s, --schema, --Schema    schema      [string] [default: "**CURRENT_SCHEMA**"]
-  -l, --limit               Limit results                [number] [default: 200]
-```
-
-![indexes example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/indexes.gif)
+  -p, --profile, --Profile  CDS Profile                                 [string]
+  -l, --limit               Limit results                [number] [default: 200](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/indexes.gif)
 
 ### indexesUI
 
@@ -3163,10 +3226,8 @@ Options:
       --library, --lib, --Library  Library               [string] [default: "*"]
   -s, --schema, --Schema           schema
                                         [string] [default: "**CURRENT_SCHEMA**"]
-  -l, --limit                      Limit results         [number] [default: 200]
-```
-
-![libraries example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/libraries.gif)
+  --profile, --Profile             CDS Profile                         [string]
+  -l, --limit                      Limit results         [number] [default: 200](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/libraries.gif)
 
 ### massConvert
 
@@ -3557,10 +3618,8 @@ Troubleshooting:
 Options:
   -o, --object, --Object  DB Object                      [string] [default: "*"]
   -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
-  -l, --limit             Limit results                  [number] [default: 200]
-```
-
-![objects example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/objects.gif)
+  -p, --profile, --Profile  CDS Profile                                 [string]
+  -l, --limit             Limit results                  [number] [default: 200](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/objects.gif)
 
 ### openbas
 
@@ -3626,6 +3685,7 @@ Troubleshooting:
 Options:
   -t, --table, --Table           Table name                 [string] [default: "*"]
   -s, --schema, --Schema         schema   [string] [default: "**CURRENT_SCHEMA**"]
+  -p, --profile, --Profile       CDS Profile                             [string]
   -pt, --type, --PartitionType   Partition type (RANGE, HASH, ROUND_ROBIN, REPLICA) [string]
   -l, --limit                    Limit results              [number] [default: 200]
 ```
@@ -3707,10 +3767,8 @@ Troubleshooting:
 Options:
   -p, --procedure, --Procedure  Stored Procedure         [string] [default: "*"]
   -s, --schema, --Schema        schema  [string] [default: "**CURRENT_SCHEMA**"]
-  -l, --limit                   Limit results            [number] [default: 200]
-```
-
-![procedures example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/procedures.gif)
+  --profile, --Profile          CDS Profile                             [string]
+  -l, --limit                   Limit results            [number] [default: 200](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/procedures.gif)
 
 ### querySimple
 
@@ -3795,6 +3853,7 @@ Troubleshooting:
 
 Options:
   -n, --filename, --Filename      Path to the CSV or Excel file to import [string]
+  -s, --schema, --Schema          Target schema name           [string] [default: "**CURRENT_SCHEMA**"]
   -t, --table, --Table            Target database table (format: SCHEMA.TABLE
                                   or just TABLE)                          [string]
   -o, --output, --Output          File format (csv or excel)
@@ -4100,10 +4159,8 @@ Troubleshooting:
 Options:
   -r, --role, --Role      Database Role                  [string] [default: "*"]
   -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
-  -l, --limit             Limit results                  [number] [default: 200]
-```
-
-![roles example](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/roles.gif)
+  --profile, --Profile    CDS Profile                                   [string]
+  -l, --limit             Limit results                  [number] [default: 200](https://raw.githubusercontent.com/wiki/SAP-samples/hana-developer-cli-tool-example/images/roles.gif)
 
 ### sbss
 
@@ -4376,10 +4433,8 @@ Options:
       --sequence, --seq, --Sequence  Sequence            [string] [default: "*"]
   -s, --schema, --Schema             schema
                                         [string] [default: "**CURRENT_SCHEMA**"]
+  -p, --profile, --Profile           CDS Profile                         [string]
   -l, --limit                        Limit results       [number] [default: 200]
-```
-
-### spatialData
 
 ```shell
 hana-cli spatialData [schema] [table]
@@ -4403,12 +4458,10 @@ Troubleshooting:
 Options:
   -t, --table, --Table    Table name                 [string] [default: "*"]
   -s, --schema, --Schema  schema   [string] [default: "**CURRENT_SCHEMA**"]
+  -p, --profile, --Profile  CDS Profile                             [string]
   -c, --column, --Column  Column name                               [string]
   -b, --bounds            Include spatial bounds        [boolean] [default: false]
   -l, --limit             Limit results               [number] [default: 200]
-```
-
-Example: `hana-cli spatialData -t GIS_*`
 
 ### status
 
@@ -4553,6 +4606,7 @@ Options:
   -a, --action        Action to perform                  [string] [default: "list"]
   -g, --group         Table group name                                 [string]
   -s, --schema        Schema name                    [string] [default: "**CURRENT_SCHEMA**"]
+  --profile           CDS Profile                                     [string]
   -t, --table         Table name (for add/remove actions)              [string]
   --type              Table group type (for create action)             [string]
   --subtype           Table group subtype (for create action)          [string]
@@ -4623,10 +4677,8 @@ Troubleshooting:
 Options:
   -t, --table             Database Table                 [string] [default: "*"]
   -s, --schema            Schema        [string] [default: "**CURRENT_SCHEMA**"]
+  -p, --profile           CDS Profile                                   [string]
   -l, --limit             Limit results                  [number] [default: 200]
-```
-
-### tablesPG
 
 ```shell
 hana-cli tablesPG [schema] [table]
@@ -4815,10 +4867,8 @@ Options:
   -t, --trigger, --Trigger      Sequence                 [string] [default: "*"]
       --target, --to, --Target  Target object            [string] [default: "*"]
   -s, --schema, --Schema        schema  [string] [default: "**CURRENT_SCHEMA**"]
+  -p, --profile, --Profile      CDS Profile                             [string]
   -l, --limit                   Limit results            [number] [default: 200]
-```
-
-### timeSeriesTools
 
 ```shell
 hana-cli timeSeriesTools [action]
@@ -5098,10 +5148,8 @@ Troubleshooting:
 Options:
   -v, --view, --View      Database View                  [string] [default: "*"]
   -s, --schema, --Schema  schema        [string] [default: "**CURRENT_SCHEMA**"]
+  -p, --profile, --Profile  CDS Profile                                 [string]
   -l, --limit             Limit results                  [number] [default: 200]
-```
-
-### workloadManagement
 
 ```shell
 hana-cli workloadManagement [schema] [group]

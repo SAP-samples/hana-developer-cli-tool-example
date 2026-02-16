@@ -19,6 +19,12 @@ export const builder = baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("importTable")
   },
+  schema: {
+    alias: ['s'],
+    type: 'string',
+    default: '**CURRENT_SCHEMA**',
+    desc: baseLite.bundle.getText("importSchema")
+  },
   output: {
     alias: ['o'],
     choices: ["csv", "excel"],
@@ -123,6 +129,11 @@ export let inputPrompts = {
     description: baseLite.bundle.getText("importTable"),
     type: 'string',
     required: true
+  },
+  schema: {
+    description: baseLite.bundle.getText("importSchema"),
+    type: 'string',
+    required: false
   },
   output: {
     description: baseLite.bundle.getText("importOutputFormat"),

@@ -10,6 +10,7 @@ export const builder = baseLite.getBuilder({
   schema: {
     alias: ['s'],
     type: 'string',
+    default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("erdDiagramSchema")
   },
   tables: {

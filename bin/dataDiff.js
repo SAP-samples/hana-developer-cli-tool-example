@@ -20,11 +20,13 @@ export const builder = baseLite.getBuilder({
   schema1: {
     alias: ['s1'],
     type: 'string',
+    default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("dataDiffSchema1")
   },
   schema2: {
     alias: ['s2'],
     type: 'string',
+    default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("dataDiffSchema2")
   },
   keyColumns: {

@@ -46,6 +46,11 @@ export const builder = baseLite.getBuilder({
     type: 'number',
     default: false,
     desc: baseLite.bundle.getText("port")
+  },
+  profile: {
+    alias: ['pr'],
+    type: 'string',
+    desc: baseLite.bundle.getText("profile")
   }
 })
 

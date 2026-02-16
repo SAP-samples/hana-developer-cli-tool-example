@@ -29,6 +29,11 @@ export const builder = baseLite.getBuilder({
     type: 'number',
     default: 100,
     desc: baseLite.bundle.getText("limit")
+  },
+  profile: {
+    alias: ['p'],
+    type: 'string',
+    desc: baseLite.bundle.getText("profile")
   }
 })
 
