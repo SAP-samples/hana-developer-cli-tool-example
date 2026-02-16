@@ -12,6 +12,30 @@ Introduction Video: [https://youtu.be/dvVQfi9Qgog](https://youtu.be/dvVQfi9Qgog)
 
 However the tool isn't limited to only local development. It also works well when developing in the cloud. The hana-cli tool can also run well from a cloud shell in the SAP Business Application Studio, Google Cloud Shell, AWS Cloud9, etc. We can also run against a SAP HANA service for SAP BTP or SAP HANA Cloud instance. This demonstrates that the tool can run just about anywhere you can get a command line that has access to the Node.js Runtime.  We can also connect to a remote HANA instance even if it isn't running in the same cloud environment in which we are performing our development tasks.
 
+### Supported Environments
+
+```mermaid
+graph TD
+    A["SAP HANA CLI Tool"] --> B{Development Environment}
+    B --> C["Local Development"]
+    B --> D["Cloud Development"]
+    
+    C --> C1["VSCode"]
+    C --> C2["Local SAP HANA Express"]
+    C --> C3["Remote SAP HANA"]
+    
+    D --> D1["SAP Business App Studio"]
+    D --> D2["Google Cloud Shell"]
+    D --> D3["AWS Cloud9"]
+    D --> D4["SAP BTP HANA Service"]
+    D --> D5["SAP HANA Cloud"]
+    
+    style A fill:#0070C0
+    style B fill:#FF6B6B
+    style C fill:#51CF66
+    style D fill:#FFD93D
+```
+
 Running in Cloud Shells Video: [https://youtu.be/L7QyVLvAIIQ](https://youtu.be/L7QyVLvAIIQ)
 
 ## Requirements / Download and Installation
@@ -20,6 +44,28 @@ If you would rather just access the tool directly, it is now available in npm as
 
 ```shell
 npm install -g hana-cli
+```
+
+### Installation Methods
+
+```mermaid
+graph LR
+    A["SAP HANA CLI Tool"] --> B{Installation Method}
+    
+    B --> B1["NPM Package<br/>Quick Install"]
+    B1 --> B1a["npm install -g hana-cli"]
+    B1a --> B1b["✅ Ready to Use"]
+    
+    B --> B2["Clone & Build<br/>From Source"]
+    B2 --> B2a["Clone Repository<br/>from GitHub"]
+    B2a --> B2b["Run npm install"]
+    B2b --> B2c["Run npm link"]
+    B2c --> B2d["✅ Ready to Use"]
+    
+    style B1 fill:#0070C0,color:#fff
+    style B2 fill:#FF6B6B,color:#fff
+    style B1b fill:#51CF66,color:#fff
+    style B2d fill:#51CF66,color:#fff
 ```
 
 Otherwise you can also run it from the sources as described here:
@@ -102,7 +148,53 @@ This will display your current BTP target information including global account, 
 
 This application primarily uses the default-env.json that is often used in local development for connectivity to a remote HANA DB (although it can of course be used with a local SAP HANA, express edition instance as well). For more details on how the default-env.json works, see the readme.md of the @sap/xsenv package or the @sap/hdi-deploy package.
 
+### Connection Configuration Resolution Order
+
 The tool doesn't simply look for a default-env.json file in the current directory however. There are numerous options and places it will look for the connection parameters. Here is the order in which it checks:
+
+```mermaid
+graph TD
+    A["Connection Resolution<br/>Started"] --> B{Admin Mode<br/>Enabled?}
+    B -->|YES| B1["Look for<br/>default-env-admin.json"]
+    B -->|NO| C{.cdsrc-private.json<br/>Found?}
+    
+    B1 --> B2{Found?}
+    B2 -->|YES| Z1["Use Admin Credentials"]
+    B2 -->|NO| C
+    
+    C -->|YES| C1["Use CAP cds bind<br/>Dynamic Lookup"]
+    C -->|NO| D{.env File<br/>Found?}
+    
+    C1 --> Z2["Secure Lookup<br/>from CF/K8s"]
+    
+    D -->|YES| D1{Contains<br/>VCAP_SERVICES?}
+    D1 -->|YES| Z3["Use VCAP Services"]
+    D1 -->|NO| E
+    D -->|NO| E
+    
+    E{--conn Parameter<br/>Specified?} -->|YES| E1["Look for specified<br/>connection file"]
+    E1 --> E2{Local or<br/>Home Found?}
+    E2 -->|YES| Z4["Use Specified File"]
+    E2 -->|NO| F
+    E -->|NO| F
+    
+    F["Look for<br/>default-env.json<br/>in current/parent dirs"]
+    F --> G{Found?}
+    G -->|YES| Z5["Use default-env.json"]
+    G -->|NO| H["Last Resort:<br/>Look for default.json<br/>in HOME/.hana-cli/"]
+    
+    H --> I{Found?}
+    I -->|YES| Z6["Use default.json"]
+    I -->|NO| Z7["❌ No Connection<br/>Configuration Found"]
+    
+    style Z1 fill:#51CF66
+    style Z2 fill:#51CF66
+    style Z3 fill:#51CF66
+    style Z4 fill:#51CF66
+    style Z5 fill:#51CF66
+    style Z6 fill:#51CF66
+    style Z7 fill:#FF6B6B
+```
 
 * First we look for the Admin option and use a default-env-admin.json - this overrides all other parameters
 * If no admin option or if there was an admin option but no default-env-admin.json could be found in this directory or 5 parent directories, then look for `.cdsrc-private.json` in this directory or 5 parent directories and use [`cds bind`](https://cap.cloud.sap/docs/advanced/hybrid-testing#bind-to-cloud-services) functionality to lookup the credentials securely. This is the most secure option, but please note: this will make each command take a few seconds longer as credentials are no longer stored locally but looked up from cf or k8s dynamically with each command
@@ -269,6 +361,37 @@ For complete implementation details, usage examples, and customization options, 
 
 The hana-cli tool includes a complete browser-based interface built with SAP UI5 and the Fiori Launchpad, providing a graphical alternative to the command-line interface. This web interface offers an intuitive, tile-based navigation system for all database operations.
 
+```mermaid
+graph TB
+    CLI["hana-cli<br/>Command Line<br/>Interface"]
+    
+    CLI -->|--web flag| Server["Web Server<br/>Port 3010"]
+    
+    Server --> UI["Fiori Launchpad UI<br/>SAP UI5 Application"]
+    
+    UI --> DB["Database<br/>Operations"]
+    UI --> Cloud["Cloud Services<br/>BTP/CF Integration"]
+    UI --> Admin["Admin<br/>Functions"]
+    
+    DB --> T["Tables,<br/>Views,<br/>Schemas"]
+    DB --> I["Indexes,<br/>Functions,<br/>Procedures"]
+    
+    Cloud --> HDI["HDI<br/>Containers"]
+    Cloud --> SBSS["SBSS<br/>Services"]
+    Cloud --> Store["SecureStore<br/>& Schema"]
+    
+    Admin --> Conv["Mass<br/>Conversion"]
+    Admin --> Monitor["System<br/>Monitoring"]
+    Admin --> API["REST API"]
+    
+    API --> Swagger["Swagger/OpenAPI<br/>Documentation<br/>27+ Endpoints"]
+    
+    style CLI fill:#0070C0,color:#fff
+    style Server fill:#FF6B6B,color:#fff
+    style UI fill:#FFD93D,color:#000
+    style Swagger fill:#51CF66,color:#000
+```
+
 **Key Features:**
 
 * **Fiori Launchpad Interface**: Modern, responsive UI with organized tile groups
@@ -294,6 +417,31 @@ The web UI runs on `http://localhost:3010` by default and provides access to all
 
 The hana-cli tool now includes experimental support for the Model Context Protocol (MCP), enabling AI assistants like Claude to interact with SAP HANA databases through natural language. This integration exposes all 100+ hana-cli commands as tools that AI assistants can invoke directly.
 
+```mermaid
+graph LR
+    AI["🤖 AI Assistant<br/>Claude, etc."]
+    
+    AI -->|Natural Language<br/>Query| MCP["MCP Server<br/>hana-cli Integration"]
+    
+    MCP -->|Tool Invocation| Tools["100+ hana-cli<br/>Commands as Tools"]
+    
+    Tools --> DB["SAP HANA<br/>Database"]
+    Tools --> Cloud["BTP/Cloud<br/>Services"]
+    Tools --> HDI["HDI<br/>Containers"]
+    
+    DB -->|Data & Results| Tools
+    Cloud -->|Service Info| Tools
+    HDI -->|Container Status| Tools
+    
+    Tools -->|Formatted<br/>Response| MCP
+    MCP -->|Natural Language<br/>Result| AI
+    
+    style AI fill:#9D55F0,color:#fff
+    style MCP fill:#0070C0,color:#fff
+    style Tools fill:#FF6B6B,color:#fff
+    style DB fill:#51CF66,color:#fff
+```
+
 **Key Features:**
 
 * Natural language database queries and operations
@@ -311,6 +459,41 @@ For detailed setup instructions, configuration options, and usage examples, plea
 ## Standard Parameters and Conventions
 
 The hana-cli tool follows consistent parameter naming, aliasing, and default value conventions across all commands to provide a predictable and intuitive user experience.
+
+### Command Categories Overview
+
+```mermaid
+graph TB
+    A["200+ hana-cli<br/>Commands"] --> B{Command<br/>Category}
+    
+    B --> C["Connection<br/>Commands"]
+    B --> D["Data<br/>Manipulation"]
+    B --> E["Database<br/>Inspection"]
+    B --> F["Performance<br/>Analysis"]
+    B --> G["Cloud<br/>Integration"]
+    B --> H["HDI<br/>Management"]
+    
+    C --> C1["connect<br/>copy2DefaultEnv<br/>copy2Env"]
+    
+    D --> D1["export<br/>import<br/>dataSync<br/>tableCopy"]
+    
+    E --> E1["tables<br/>views<br/>procedures<br/>schemas<br/>indexes"]
+    
+    F --> F1["tableHotspots<br/>queryPlan<br/>alerts<br/>healthCheck"]
+    
+    G --> G1["btp<br/>btpInfo<br/>activateHDI"]
+    
+    H --> H1["containers<br/>createContainer<br/>dropContainer"]
+    
+    style A fill:#0070C0,color:#fff
+    style B fill:#FF6B6B,color:#fff
+    style C fill:#51CF66,color:#fff
+    style D fill:#9D55F0,color:#fff
+    style E fill:#FFD93D,color:#000
+    style F fill:#F39C12,color:#fff
+    style G fill:#1ABC9C,color:#fff
+    style H fill:#E74C3C,color:#fff
+```
 
 ### Global Standard Parameters
 
@@ -399,6 +582,43 @@ Default values are standardized to ensure consistent behavior:
 ### Usage Examples
 
 #### Using Standard Parameters
+
+```mermaid
+graph LR
+    A["hana-cli<br/>Command"]
+    
+    A --> B{Choose<br/>Operation}
+    
+    B --> C["List Operation<br/>tables, views, etc."]
+    C --> C1["--schema<br/>-s"]
+    C --> C2["--limit<br/>-l"]
+    C --> C3["--profile<br/>-p"]
+    C1 --> C4["Filter by schema"]
+    C2 --> C5["Limit results"]
+    C3 --> C6["Select DB profile"]
+    
+    B --> D["Data Operation<br/>export, import, etc."]
+    D --> D1["--sourceTable/-st<br/>--targetTable/-tt"]
+    D --> D2["--format<br/>-f"]
+    D --> D3["--dryRun/-dr<br/>--preview"]
+    D1 --> D4["Source/Target"]
+    D2 --> D5["Output format"]
+    D3 --> D6["Dry run preview"]
+    
+    B --> E["Batch Operation<br/>massGrant, etc."]
+    E --> E1["--schema/-s"]
+    E --> E2["--dryRun/-dr"]
+    E --> E3["--log"]
+    E1 --> E4["Target schema"]
+    E2 --> E5["Safe execution"]
+    E3 --> E6["Operation log"]
+    
+    style A fill:#0070C0,color:#fff
+    style B fill:#FF6B6B,color:#fff
+    style C fill:#51CF66,color:#fff
+    style D fill:#9D55F0,color:#fff
+    style E fill:#FFD93D,color:#000
+```
 
 ```bash
 # List all tables in current schema with preview of first 100
