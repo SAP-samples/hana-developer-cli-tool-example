@@ -4,6 +4,40 @@
 
 The [change log](CHANGELOG.md) describes notable changes in this package.
 
+## 📚 Documentation
+
+Complete documentation is available in the **[`docs/`](docs/)** folder and organized with VitePress.
+
+**Quick Links:**
+
+- **[Getting Started](docs/01-getting-started/)** - Installation and setup
+- **[Command Reference](docs/02-commands/)** - All 20+ commands with examples
+- **[Features Guide](docs/03-features/)** - CLI, API, MCP, and more
+- **[API Reference](docs/04-api-reference/)** - REST API documentation
+- **[FAQ](docs/faq.md)** - Frequently asked questions
+- **[Troubleshooting](docs/troubleshooting.md)** - Common issues and solutions
+
+### Run Documentation Locally
+
+```bash
+cd docs
+npm install
+npm run docs:dev
+# Open http://localhost:5173
+```
+
+### Build For Production
+
+```bash
+cd docs
+npm run docs:build
+npm run docs:serve
+```
+
+See [docs/README.md](docs/README.md) for complete documentation setup details.
+
+---
+
 ## Description
 
 This sample is intended to shown how one could build a developer-centric SAP HANA command line tool, particularly designed to be used when performing local SAP HANA development in non-SAP tooling (like VSCode). It utilizes the default-env.json that is often used in local development for connectivity to a remote SAP HANA DB (although it can of course be used with a local SAP HANA, express edition instance as well). There is no intention to replacing the hdbsql tool as a generic SQL console. Instead this sample will focus on simplifying and grouping common and complex commands that otherwise might a lot of separate scripts.
@@ -70,27 +104,27 @@ graph LR
 
 Otherwise you can also run it from the sources as described here:
 
-* Install Node.js version 14.x or 16.x on your development machine [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
+- Install Node.js version 14.x or 16.x on your development machine [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
-* @sap Node.js packages have moved from <https://npm.sap.com> to the default registry <https://registry.npmjs.org>. As future versions of @sap modules are going to be published only there, please make sure to adjust your registry with:
+- @sap Node.js packages have moved from <https://npm.sap.com> to the default registry <https://registry.npmjs.org>. As future versions of @sap modules are going to be published only there, please make sure to adjust your registry with:
 
 ```shell
 npm config delete @sap:registry
 ```
 
-* Clone the repository from [https://github.com/SAP-samples/hana-developer-cli-tool-example](https://github.com/SAP-samples/hana-developer-cli-tool-example)
+- Clone the repository from [https://github.com/SAP-samples/hana-developer-cli-tool-example](https://github.com/SAP-samples/hana-developer-cli-tool-example)
 
 ```shell
 git clone https://github.com/SAP-samples/hana-developer-cli-tool-example
 ```
 
-* Run NPM install from the root of the hana-developer-cli-tool-example project you just cloned to download dependencies
+- Run NPM install from the root of the hana-developer-cli-tool-example project you just cloned to download dependencies
 
 ```shell
 npm install
 ```
 
-* Run NPM link from the cloned project root to make the hana-cli command available from everywhere [https://docs.npmjs.com/cli/link](https://docs.npmjs.com/cli/link)
+- Run NPM link from the cloned project root to make the hana-cli command available from everywhere [https://docs.npmjs.com/cli/link](https://docs.npmjs.com/cli/link)
 
 ```shell
 npm link
@@ -196,13 +230,13 @@ graph TD
     style Z7 fill:#FF6B6B
 ```
 
-* First we look for the Admin option and use a default-env-admin.json - this overrides all other parameters
-* If no admin option or if there was an admin option but no default-env-admin.json could be found in this directory or 5 parent directories, then look for `.cdsrc-private.json` in this directory or 5 parent directories and use [`cds bind`](https://cap.cloud.sap/docs/advanced/hybrid-testing#bind-to-cloud-services) functionality to lookup the credentials securely. This is the most secure option, but please note: this will make each command take a few seconds longer as credentials are no longer stored locally but looked up from cf or k8s dynamically with each command
-* If no `.cdsrc-private.json` found in this directory or 5 parent directories, then look for a .env file in this directory or up to 5 parent directories
-* No .env file found or it doesn't contain a VCAP_SERVICES section, then check to see if the --conn parameter was specified. If so check for that file in the current directory or up to 5 parent directories
-* If the file specified via the --conn parameter wasn't found locally then check for it in the ${homedir}/.hana-cli/ folder
-* If no specific configuration file was was found then look for a file named default-env.json in the current directory or up to 5 parent directories
-* Last resort if nothing has been found up to this point - look for a file named default.json in the ${homedir}/.hana-cli/ folder
+- First we look for the Admin option and use a default-env-admin.json - this overrides all other parameters
+- If no admin option or if there was an admin option but no default-env-admin.json could be found in this directory or 5 parent directories, then look for `.cdsrc-private.json` in this directory or 5 parent directories and use [`cds bind`](https://cap.cloud.sap/docs/advanced/hybrid-testing#bind-to-cloud-services) functionality to lookup the credentials securely. This is the most secure option, but please note: this will make each command take a few seconds longer as credentials are no longer stored locally but looked up from cf or k8s dynamically with each command
+- If no `.cdsrc-private.json` found in this directory or 5 parent directories, then look for a .env file in this directory or up to 5 parent directories
+- No .env file found or it doesn't contain a VCAP_SERVICES section, then check to see if the --conn parameter was specified. If so check for that file in the current directory or up to 5 parent directories
+- If the file specified via the --conn parameter wasn't found locally then check for it in the ${homedir}/.hana-cli/ folder
+- If no specific configuration file was was found then look for a file named default-env.json in the current directory or up to 5 parent directories
+- Last resort if nothing has been found up to this point - look for a file named default.json in the ${homedir}/.hana-cli/ folder
 
 ## Examples
 
@@ -310,10 +344,10 @@ This tool will even create a temporary OData V4 service for any existing table, 
 
 For developers looking to understand or extend the internal utilities used by this CLI tool, comprehensive documentation is available in the [utils/README.md](utils/README.md) file. This documentation covers:
 
-* **Core Utilities**: base module, connection management, database inspection, SQL injection protection
-* **CLI Integration**: BTP, Cloud Foundry, and XSA CLI integration utilities
-* **Database Abstraction**: Multi-database support (HANA, PostgreSQL, SQLite) with factory pattern
-* **Usage Examples**: Practical examples for using the utility modules
+- **Core Utilities**: base module, connection management, database inspection, SQL injection protection
+- **CLI Integration**: BTP, Cloud Foundry, and XSA CLI integration utilities
+- **Database Abstraction**: Multi-database support (HANA, PostgreSQL, SQLite) with factory pattern
+- **Usage Examples**: Practical examples for using the utility modules
 
 The utils folder contains reusable modules that provide the foundation for all CLI commands, including database connectivity, terminal UI components, security utilities, and internationalization support.
 
@@ -321,11 +355,11 @@ The utils folder contains reusable modules that provide the foundation for all C
 
 The hana-cli tool includes a built-in web server that exposes all CLI functionality through RESTful HTTP endpoints. Detailed documentation for all HTTP routes is available in the [routes/README.md](routes/README.md) file. This documentation covers:
 
-* **Base Configuration Endpoints**: GET/PUT operations for managing CLI prompts and settings
-* **HANA Database Endpoints**: Complete API for listing and inspecting HANA database objects (tables, views, schemas, containers, etc.)
-* **Documentation Endpoints**: Access to README and CHANGELOG as HTML
-* **WebSocket Support**: Real-time communication for long-running operations
-* **Static Resources**: UI5 application and DFA integration
+- **Base Configuration Endpoints**: GET/PUT operations for managing CLI prompts and settings
+- **HANA Database Endpoints**: Complete API for listing and inspecting HANA database objects (tables, views, schemas, containers, etc.)
+- **Documentation Endpoints**: Access to README and CHANGELOG as HTML
+- **WebSocket Support**: Real-time communication for long-running operations
+- **Static Resources**: UI5 application and DFA integration
 
 The web server is automatically started when using certain CLI commands with the `-w` or `--web` flag, making all hana-cli functionality accessible via HTTP requests at `http://localhost:3010` (configurable port).
 
@@ -335,12 +369,12 @@ The hana-cli web server now includes comprehensive Swagger/OpenAPI 3.0 documenta
 
 **Key Features:**
 
-* **Interactive API Documentation**: Browse all 27+ documented endpoints with full request/response schemas
-* **Try-It-Out Functionality**: Test any API endpoint directly from the browser
-* **Auto-Generated Specification**: Documentation automatically generated from JSDoc comments in route files
-* **OpenAPI 3.0 Standard**: Industry-standard specification for maximum compatibility
-* **Organized Categories**: Endpoints grouped into 10 logical categories (Configuration, HANA System, HANA Objects, HDI, Cloud Services, etc.)
-* **Export Support**: Download the raw OpenAPI JSON specification for client SDK generation
+- **Interactive API Documentation**: Browse all 27+ documented endpoints with full request/response schemas
+- **Try-It-Out Functionality**: Test any API endpoint directly from the browser
+- **Auto-Generated Specification**: Documentation automatically generated from JSDoc comments in route files
+- **OpenAPI 3.0 Standard**: Industry-standard specification for maximum compatibility
+- **Organized Categories**: Endpoints grouped into 10 logical categories (Configuration, HANA System, HANA Objects, HDI, Cloud Services, etc.)
+- **Export Support**: Download the raw OpenAPI JSON specification for client SDK generation
 
 **Accessing Swagger UI:**
 
@@ -394,15 +428,15 @@ graph TB
 
 **Key Features:**
 
-* **Fiori Launchpad Interface**: Modern, responsive UI with organized tile groups
-* **Multiple UI5 Applications**: Specialized apps for listing, inspecting, and managing database objects
-* **Real-Time Operations**: WebSocket-based communication for live updates and long-running tasks
-* **Mass Conversion Tool**: Bulk convert tables to CDS, HDBTable, or HDBMigrationTable formats
-* **System Information Dashboard**: View connection details, version info, and system status
-* **Database Object Browser**: Interactive exploration of tables, views, schemas, functions, indexes, and more
-* **Cloud Foundry Integration**: Manage HDI, SBSS, Schema, and SecureStore service instances
-* **Theme Support**: Automatic light/dark mode detection and customization
-* **Integrated Help**: SAP Digital Foundation Adapter (DFA) with contextual assistance
+- **Fiori Launchpad Interface**: Modern, responsive UI with organized tile groups
+- **Multiple UI5 Applications**: Specialized apps for listing, inspecting, and managing database objects
+- **Real-Time Operations**: WebSocket-based communication for live updates and long-running tasks
+- **Mass Conversion Tool**: Bulk convert tables to CDS, HDBTable, or HDBMigrationTable formats
+- **System Information Dashboard**: View connection details, version info, and system status
+- **Database Object Browser**: Interactive exploration of tables, views, schemas, functions, indexes, and more
+- **Cloud Foundry Integration**: Manage HDI, SBSS, Schema, and SecureStore service instances
+- **Theme Support**: Automatic light/dark mode detection and customization
+- **Integrated Help**: SAP Digital Foundation Adapter (DFA) with contextual assistance
 
 **Quick Start:**
 
@@ -444,15 +478,15 @@ graph LR
 
 **Key Features:**
 
-* Natural language database queries and operations
-* Full access to all hana-cli commands through AI assistants
-* Seamless integration with AI development environments (Cline/Claude Dev, etc.)
-* Command execution with proper parameter handling and error responses
+- Natural language database queries and operations
+- Full access to all hana-cli commands through AI assistants
+- Seamless integration with AI development environments (Cline/Claude Dev, etc.)
+- Command execution with proper parameter handling and error responses
 
 For detailed setup instructions, configuration options, and usage examples, please refer to:
 
-* [mcp-server/README.md](mcp-server/README.md) - Complete installation and configuration guide
-* [mcp-server/TROUBLESHOOTING.md](mcp-server/TROUBLESHOOTING.md) - Common issues and solutions
+- [mcp-server/README.md](mcp-server/README.md) - Complete installation and configuration guide
+- [mcp-server/TROUBLESHOOTING.md](mcp-server/TROUBLESHOOTING.md) - Common issues and solutions
 
 **Note:** This is an experimental feature and may be subject to changes as the MCP specification evolves.
 
@@ -500,7 +534,7 @@ graph TB
 All commands support the following standard connection and debugging parameters:
 
 | Parameter | Alias | Type | Default | Description |
-|-----------|-------|------|---------|-------------|
+| --------- | ----- | ---- | ------- | ----------- |
 | `--admin` | `-a` | boolean | false | Connect via admin credentials (uses default-env-admin.json) |
 | `--conn` | — | string | — | Connection filename to override default-env.json |
 | `--disableVerbose` | `--quiet` | boolean | false | Disable verbose output for scripting |
@@ -511,6 +545,7 @@ All commands support the following standard connection and debugging parameters:
 Commands are organized into categories, each with their own standardized parameters:
 
 #### Data Manipulation Commands
+
 Commands like `export`, `import`, `compareData`, `tableCopy`, `dataSync`, etc.
 
 | Parameter | Alias | Type | Default | Description |
@@ -528,6 +563,7 @@ Commands like `export`, `import`, `compareData`, `tableCopy`, `dataSync`, etc.
 | `--profile` | `-p` | string | — | Database profile (hana, postgresql, sqlite, etc.) |
 
 #### Batch Operations
+
 Commands like `massGrant`, `massUpdate`, `massDelete`, `massExport`, etc.
 
 | Parameter | Alias | Type | Default | Description |
@@ -539,6 +575,7 @@ Commands like `massGrant`, `massUpdate`, `massDelete`, `massExport`, etc.
 | `--log` | — | boolean | false | Enable operation logging |
 
 #### List/Inspect Commands
+
 Commands like `tables`, `schemas`, `users`, `procedures`, `functions`, etc.
 
 | Parameter | Alias | Type | Default | Description |
@@ -660,16 +697,16 @@ The following command categories fully support the `**CURRENT_SCHEMA**` placehol
 
 **Listing Commands** (30+ commands):
 
-* All schema navigation: `tables`, `views`, `indexes`, `functions`, `procedures`, `triggers`, `sequences`, `synonyms`, `libraries`, `roles`, `objects`
-* Specialized lists: `partitions`, `columnStats`, `spatialData`, `ftIndexes`, `graphWorkspaces`, `tableHotspots`, `tableGroups`, `calcViewAnalyzer`
+- All schema navigation: `tables`, `views`, `indexes`, `functions`, `procedures`, `triggers`, `sequences`, `synonyms`, `libraries`, `roles`, `objects`
+- Specialized lists: `partitions`, `columnStats`, `spatialData`, `ftIndexes`, `graphWorkspaces`, `tableHotspots`, `tableGroups`, `calcViewAnalyzer`
 
 **Data Manipulation Commands** (10+ commands):
 
-* `export`, `import`, `dataProfile`, `dataDiff`, `compareData`, `compareSchema`, `tableCopy`, `dataSync`
+- `export`, `import`, `dataProfile`, `dataDiff`, `compareData`, `compareSchema`, `tableCopy`, `dataSync`
 
 **Analysis Commands** (10+ commands):
 
-* `dataValidator`, `duplicateDetection`, `erdDiagram`, `dataLineage`, `referentialCheck`, and more
+- `dataValidator`, `duplicateDetection`, `erdDiagram`, `dataLineage`, `referentialCheck`, and more
 
 #### Current Schema Examples
 
@@ -695,9 +732,9 @@ All database-connected commands now support the `--profile` parameter (alias `-p
 
 The `--profile` parameter is available in:
 
-* All data operations: `export`, `import`, `dataProfile`, `dataDiff`, `dataSync`, `duplicateDetection`, `referentialCheck`, `tableCopy`
-* List operations: `tables`, `views`, `indexes`, `functions`, `procedures`, `triggers`, `sequences`, `libraries`, `roles`, `objects`, `partitions`, `columnStats`, `spatialData`, `ftIndexes`, `graphWorkspaces`, `tableHotspots`, `tableGroups`, `calcViewAnalyzer`
-* Analysis tools: `compareData`, `compareSchema`, `dataValidator`, `dataLineage`, `erdDiagram`, and more
+- All data operations: `export`, `import`, `dataProfile`, `dataDiff`, `dataSync`, `duplicateDetection`, `referentialCheck`, `tableCopy`
+- List operations: `tables`, `views`, `indexes`, `functions`, `procedures`, `triggers`, `sequences`, `libraries`, `roles`, `objects`, `partitions`, `columnStats`, `spatialData`, `ftIndexes`, `graphWorkspaces`, `tableHotspots`, `tableGroups`, `calcViewAnalyzer`
+- Analysis tools: `compareData`, `compareSchema`, `dataValidator`, `dataLineage`, `erdDiagram`, and more
 
 #### Profile Parameter Examples
 
@@ -718,17 +755,17 @@ For more details on database profile configuration, see the [utils/README.md](ut
 
 The consistency of these parameters has been standardized across all 200+ commands in the tool. This standardization ensures:
 
-* **Predictability**: Users can rely on consistent parameter behavior across commands
-* **Discoverability**: Common parameters work the same way in different contexts
-* **Scripting**: Automation scripts are more maintainable with consistent patterns
-* **Error Reduction**: Familiar patterns reduce mistakes and learning curve
-* **Multi-Environment Support**: Profile parameter enables seamless switching between database instances
+- **Predictability**: Users can rely on consistent parameter behavior across commands
+- **Discoverability**: Common parameters work the same way in different contexts
+- **Scripting**: Automation scripts are more maintainable with consistent patterns
+- **Error Reduction**: Familiar patterns reduce mistakes and learning curve
+- **Multi-Environment Support**: Profile parameter enables seamless switching between database instances
 
 For detailed analysis of all command consistency improvements deployed in February 2026, including the 30 commands and 50+ parameters updated, see:
 
-* [CONSISTENCY_REVIEW_COMPLETE.md](CONSISTENCY_REVIEW_COMPLETE.md) - Complete review report
-* [COMMAND_CONSISTENCY_FIXES.md](COMMAND_CONSISTENCY_FIXES.md) - Implementation details
-* [COMMAND_CONSISTENCY_ANALYSIS.md](COMMAND_CONSISTENCY_ANALYSIS.md) - Detailed audit findings
+- [CONSISTENCY_REVIEW_COMPLETE.md](CONSISTENCY_REVIEW_COMPLETE.md) - Complete review report
+- [COMMAND_CONSISTENCY_FIXES.md](COMMAND_CONSISTENCY_FIXES.md) - Implementation details
+- [COMMAND_CONSISTENCY_ANALYSIS.md](COMMAND_CONSISTENCY_ANALYSIS.md) - Detailed audit findings
 
 For detailed information about specific commands, use the built-in help:
 
@@ -741,14 +778,14 @@ hana-cli <command> --help
 
 **📊 Visual Command Reference Guide**: For command structure diagrams, parameter relationships, and quick examples for the most commonly used commands, see the **[Command Structure Reference Guide](COMMAND_REFERENCE.md)**. This separate document provides visual flowcharts and detailed usage patterns for:
 
-* Connection & setup commands
-* Data operations (export, import, sync)
-* Database inspection & analysis
-* HDI container management
-* Backup & recovery operations
-* Performance analysis tools
-* Mass operations
-* Cloud integration
+- Connection & setup commands
+- Data operations (export, import, sync)
+- Database inspection & analysis
+- HDI container management
+- Backup & recovery operations
+- Performance analysis tools
+- Mass operations
+- Cloud integration
 
 Each command diagram shows the command syntax, available parameters, and typical usage patterns.
 
@@ -1476,10 +1513,10 @@ When you execute the `cds` command against a table or view, the tool performs th
 1. **Metadata Extraction**: Reads the complete schema metadata from the specified HANA table or view, including column names, data types, keys, and constraints.
 
 2. **Dynamic CDS Entity Generation**: Automatically generates a temporary CDS entity definition that mirrors the structure of your database object. This entity is created in-memory and includes:
-   * Proper data type mappings from HANA types to CDS types
-   * Preservation of primary keys and nullable constraints
-   * Optional use of HANA-specific data types when the `--useHanaTypes` flag is specified
-   * Quoted identifiers support for non-standard naming conventions
+   - Proper data type mappings from HANA types to CDS types
+   - Preservation of primary keys and nullable constraints
+   - Optional use of HANA-specific data types when the `--useHanaTypes` flag is specified
+   - Quoted identifiers support for non-standard naming conventions
 
 3. **Temporary Service Creation**: Creates an ephemeral CAP service that exposes the generated entity through a fully functional OData V4 endpoint.
 
@@ -1489,12 +1526,12 @@ When you execute the `cds` command against a table or view, the tool performs th
 
 **What This Enables:**
 
-* **Instant Prototyping**: Quickly visualize how database tables will look in a Fiori application without writing any CDS or UI code
-* **Data Exploration**: Browse existing database content through an intuitive interface with built-in filtering, sorting, and pagination
-* **Service Testing**: Test OData queries and operations against real data before committing to a formal service design
-* **Entity Modeling**: See how HANA database types translate to CDS types and identify potential modeling improvements
-* **Demonstration**: Showcase database content to stakeholders in a professional, web-based interface
-* **Development Aid**: Validate database structures and data quality during development iterations
+- **Instant Prototyping**: Quickly visualize how database tables will look in a Fiori application without writing any CDS or UI code
+- **Data Exploration**: Browse existing database content through an intuitive interface with built-in filtering, sorting, and pagination
+- **Service Testing**: Test OData queries and operations against real data before committing to a formal service design
+- **Entity Modeling**: See how HANA database types translate to CDS types and identify potential modeling improvements
+- **Demonstration**: Showcase database content to stakeholders in a professional, web-based interface
+- **Development Aid**: Validate database structures and data quality during development iterations
 
 **Example Usage:**
 
@@ -3520,9 +3557,9 @@ Options:
 
   Notes:
 
-* `--limit` must be a positive integer when provided.
-* For `-o hdbtable`, views are exported as `.hdbview` artifacts inside the ZIP.
-* The output folder is created automatically if it does not exist.
+- `--limit` must be a positive integer when provided.
+- For `-o hdbtable`, views are exported as `.hdbview` artifacts inside the ZIP.
+- The output folder is created automatically if it does not exist.
 
 ### massConvertUI
 
@@ -3613,10 +3650,10 @@ Options:
 
   Notes:
 
-* Use `--dryRun` flag to preview which objects will be deleted before performing the actual deletion
-* Pattern matching supports `*` and `%` wildcards
-* Use `--force` to skip confirmation prompts (useful for automation)
-* Logs are saved as JSON files with full deletion details
+- Use `--dryRun` flag to preview which objects will be deleted before performing the actual deletion
+- Pattern matching supports `*` and `%` wildcards
+- Use `--force` to skip confirmation prompts (useful for automation)
+- Logs are saved as JSON files with full deletion details
 
 ### massUpdate
 
@@ -3656,11 +3693,11 @@ Options:
 
   Notes:
 
-* Use `--dryRun` flag to preview the UPDATE statements and row counts before execution
-* Pattern matching supports `*` and `%` wildcards for table names
-* The `--set` parameter should contain the column assignments (e.g., "COLUMN1='value'")
-* The `--where` parameter is optional; if omitted, all matching tables are updated
-* Row counts are tracked and logged for each table
+- Use `--dryRun` flag to preview the UPDATE statements and row counts before execution
+- Pattern matching supports `*` and `%` wildcards for table names
+- The `--set` parameter should contain the column assignments (e.g., "COLUMN1='value'")
+- The `--where` parameter is optional; if omitted, all matching tables are updated
+- Row counts are tracked and logged for each table
 
 ### massGrant
 
@@ -3703,11 +3740,11 @@ Options:
 
   Notes:
 
-* Pattern matching supports `*` and `%` wildcards for object names
-* Use `--dryRun` flag to preview which GRANT statements will be executed
-* Use `--wgo` to allow the grantee to grant the same privileges to other users/roles
-* Grantee can be a user name or role name
-* Logs include confirmation of which privileges were granted to whom
+- Pattern matching supports `*` and `%` wildcards for object names
+- Use `--dryRun` flag to preview which GRANT statements will be executed
+- Use `--wgo` to allow the grantee to grant the same privileges to other users/roles
+- Grantee can be a user name or role name
+- Logs include confirmation of which privileges were granted to whom
 
 ### massExport
 
@@ -3745,13 +3782,13 @@ Options:
 
   Notes:
 
-* Pattern matching supports `*` and `%` wildcards for table names
-* Exports table structure (columns, types, nullability) by default
-* Use `--data` flag to also export actual table data
-* JSON format exports complete metadata and row data
-* CSV format exports comma-separated values suitable for documentation
-* Each table generates separate `_structure` and optionally `_data` files
-* Logs include export status and file locations
+- Pattern matching supports `*` and `%` wildcards for table names
+- Exports table structure (columns, types, nullability) by default
+- Use `--data` flag to also export actual table data
+- JSON format exports complete metadata and row data
+- CSV format exports comma-separated values suitable for documentation
+- Each table generates separate `_structure` and optionally `_data` files
+- Logs include export status and file locations
 
 ### massRename
 
@@ -4130,53 +4167,53 @@ The `import` command allows you to upload data from CSV or Excel files directly 
 
 **Key Features:**
 
-* **Multi-Database Support**: Works with SAP HANA, PostgreSQL, SQLite, and other CDS-connected databases
-* **Smart Column Matching**: Automatically matches file columns to table columns by name or position
-* **Data Type Conversion**: Automatically converts integers, decimals, dates, timestamps, booleans, and text values
-* **Memory Management**: Automatic batch size adjustment based on available memory to prevent exhaustion
-* **Progress Tracking**: Real-time progress updates with throughput and memory statistics
-* **Error Recovery**: Granular error handling with optional continuation despite errors
-* **Security**: Path traversal prevention, file size validation, and SQL injection protection
+- **Multi-Database Support**: Works with SAP HANA, PostgreSQL, SQLite, and other CDS-connected databases
+- **Smart Column Matching**: Automatically matches file columns to table columns by name or position
+- **Data Type Conversion**: Automatically converts integers, decimals, dates, timestamps, booleans, and text values
+- **Memory Management**: Automatic batch size adjustment based on available memory to prevent exhaustion
+- **Progress Tracking**: Real-time progress updates with throughput and memory statistics
+- **Error Recovery**: Granular error handling with optional continuation despite errors
+- **Security**: Path traversal prevention, file size validation, and SQL injection protection
 
 **Column Matching Strategies:**
 
-* **order**: Match columns by position (useful when file has same column order as table)
-* **name**: Match columns by name, case-insensitive (useful when names differ but columns are identifiable)
-* **auto** (default): Try name matching first, then fall back to position matching
+- **order**: Match columns by position (useful when file has same column order as table)
+- **name**: Match columns by name, case-insensitive (useful when names differ but columns are identifiable)
+- **auto** (default): Try name matching first, then fall back to position matching
 
 **Data Type Support:**
 
 Automatically converts data types including:
 
-* Integers (INT, BIGINT, etc.)
-* Decimals and Floats (DECIMAL, NUMERIC, REAL, DOUBLE, etc.)
-* Dates and Timestamps
-* Booleans
-* Text values (VARCHAR, CLOB, etc.)
+- Integers (INT, BIGINT, etc.)
+- Decimals and Floats (DECIMAL, NUMERIC, REAL, DOUBLE, etc.)
+- Dates and Timestamps
+- Booleans
+- Text values (VARCHAR, CLOB, etc.)
 
 **Performance Tuning:**
 
-* **Batch Size**: Control the number of rows inserted per batch operation. Larger batches (up to 10000) can improve throughput for high-volume imports, while smaller batches may be better for large row sizes or constrained systems. Automatically adjusted based on available memory.
-* **Excel Cache Mode**: Choose between:
-  * `cache` (default): Faster parsing, uses more memory (best for files under 100 MB)
-  * `emit`: Streaming mode with lower memory usage (best for large files)
-  * `ignore`: Skips shared strings entirely (minimal memory, fastest)
+- **Batch Size**: Control the number of rows inserted per batch operation. Larger batches (up to 10000) can improve throughput for high-volume imports, while smaller batches may be better for large row sizes or constrained systems. Automatically adjusted based on available memory.
+- **Excel Cache Mode**: Choose between:
+  - `cache` (default): Faster parsing, uses more memory (best for files under 100 MB)
+  - `emit`: Streaming mode with lower memory usage (best for large files)
+  - `ignore`: Skips shared strings entirely (minimal memory, fastest)
 
 **Excel-Specific Options:**
 
-* **Worksheet Selection**: Import from a specific worksheet by number (e.g., `--worksheet 2` for the second sheet)
-* **Start Row**: Specify which row contains headers when data starts after title rows or metadata
-* **Skip Empty Rows**: Control whether completely empty rows are ignored during import
+- **Worksheet Selection**: Import from a specific worksheet by number (e.g., `--worksheet 2` for the second sheet)
+- **Start Row**: Specify which row contains headers when data starts after title rows or metadata
+- **Skip Empty Rows**: Control whether completely empty rows are ignored during import
 
 **Security & Validation Options:**
 
-* **Dry-Run Mode**: Preview import results without committing to database (transaction is rolled back)
-* **File Size Limit**: Control maximum file size to prevent memory exhaustion (default: 500 MB)
-* **Operation Timeout**: Set maximum duration for import operation (default: 1 hour)
-* **Custom NULL Values**: Define which string values should be treated as NULL (default: `null,NULL,#N/A,`)
-* **Error Handling**:
-  * Stop import after specified number of errors with `--maxErrorsAllowed`
-  * Or continue despite errors with `--skipWithErrors` (errors are logged)
+- **Dry-Run Mode**: Preview import results without committing to database (transaction is rolled back)
+- **File Size Limit**: Control maximum file size to prevent memory exhaustion (default: 500 MB)
+- **Operation Timeout**: Set maximum duration for import operation (default: 1 hour)
+- **Custom NULL Values**: Define which string values should be treated as NULL (default: `null,NULL,#N/A,`)
+- **Error Handling**:
+  - Stop import after specified number of errors with `--maxErrorsAllowed`
+  - Or continue despite errors with `--skipWithErrors` (errors are logged)
 
 **Usage Examples:**
 
@@ -5197,16 +5234,16 @@ The UI command is built on a robust technology stack that combines several key c
 1. **Express.js Web Server**: At its core, the UI runs on an Express.js server that handles HTTP requests, serves static assets, and manages API endpoints. The server automatically binds to an available port (typically starting from 4000) and opens your default browser to the application.
 
 2. **WebSocket Integration**: Real-time communication is enabled through WebSocket connections, allowing for:
-   * Live updates of command execution status
-   * Streaming output from long-running operations
-   * Instant feedback without page refreshes
-   * Push notifications for completed tasks
+   - Live updates of command execution status
+   - Streaming output from long-running operations
+   - Instant feedback without page refreshes
+   - Push notifications for completed tasks
 
 3. **SAP CDS Integration**: For database object previews, the UI seamlessly integrates with the SAP Cloud Application Programming Model (requires `@sap/cds-dk`):
-   * Dynamic OData service generation for tables and views
-   * Embedded Fiori Elements preview capabilities
-   * Interactive data exploration with filtering and sorting
-   * Full CDS modeling support with type conversions
+   - Dynamic OData service generation for tables and views
+   - Embedded Fiori Elements preview capabilities
+   - Interactive data exploration with filtering and sorting
+   - Full CDS modeling support with type conversions
 
 4. **RESTful API Layer**: The server exposes a comprehensive REST API that mirrors the CLI command structure, enabling programmatic access to all functions through standard HTTP methods.
 
@@ -5214,44 +5251,44 @@ The UI command is built on a robust technology stack that combines several key c
 
 The web interface provides access to a wide range of hana-cli features through an intuitive dashboard:
 
-* **Database Object Exploration**:
-  * Browse tables, views, procedures, functions, and other database objects
-  * View detailed metadata and schema information
-  * Inspect object definitions with syntax highlighting
-  * Navigate relationships between objects
+- **Database Object Exploration**:
+  - Browse tables, views, procedures, functions, and other database objects
+  - View detailed metadata and schema information
+  - Inspect object definitions with syntax highlighting
+  - Navigate relationships between objects
 
-* **Data Management**:
-  * Execute SQL queries with rich result formatting
-  * Export query results to JSON, CSV, or Excel formats
-  * Preview data with pagination and filtering
-  * Mass convert tables to CDS or HDI formats
+- **Data Management**:
+  - Execute SQL queries with rich result formatting
+  - Export query results to JSON, CSV, or Excel formats
+  - Preview data with pagination and filtering
+  - Mass convert tables to CDS or HDI formats
 
-* **System Information**:
-  * Monitor HANA system health and statistics
-  * View feature usage and version details
-  * Inspect configuration settings and parameters
-  * Track active connections and sessions
+- **System Information**:
+  - Monitor HANA system health and statistics
+  - View feature usage and version details
+  - Inspect configuration settings and parameters
+  - Track active connections and sessions
 
-* **Development Tools**:
-  * Generate CDS entities from existing tables
-  * Create OData service previews
-  * Convert between different object formats (SQL, CDS, EDMX, OpenAPI)
-  * Test stored procedures with parameter inputs
+- **Development Tools**:
+  - Generate CDS entities from existing tables
+  - Create OData service previews
+  - Convert between different object formats (SQL, CDS, EDMX, OpenAPI)
+  - Test stored procedures with parameter inputs
 
-* **Administration Functions**:
-  * Manage HDI containers and groups
-  * View and configure users and roles
-  * Monitor trace files and logs
-  * Access BTP service instances and bindings
+- **Administration Functions**:
+  - Manage HDI containers and groups
+  - View and configure users and roles
+  - Monitor trace files and logs
+  - Access BTP service instances and bindings
 
 **User Experience Features:**
 
-* **Responsive Design**: The interface adapts to different screen sizes and devices, providing an optimal experience on desktop, tablet, or mobile
-* **Navigation**: Intuitive menu structure with breadcrumbs and search functionality
-* **History**: Command history tracking for easy repetition of common tasks
-* **Themes**: Support for light and dark modes
-* **Bookmarks**: Save frequently used commands and queries for quick access
-* **Multi-tab Support**: Work with multiple objects or queries simultaneously
+- **Responsive Design**: The interface adapts to different screen sizes and devices, providing an optimal experience on desktop, tablet, or mobile
+- **Navigation**: Intuitive menu structure with breadcrumbs and search functionality
+- **History**: Command history tracking for easy repetition of common tasks
+- **Themes**: Support for light and dark modes
+- **Bookmarks**: Save frequently used commands and queries for quick access
+- **Multi-tab Support**: Work with multiple objects or queries simultaneously
 
 **How to Use:**
 
@@ -5265,12 +5302,12 @@ The server will start, your browser will open automatically to `http://localhost
 
 **Benefits of the Web UI:**
 
-* **Ease of Use**: No need to remember command syntax or parameters
-* **Visual Feedback**: Rich formatting of results with tables, charts, and graphs
-* **Collaboration**: Share results easily by copying links or exporting data
-* **Documentation**: Inline help and tooltips for every feature
-* **Efficiency**: Faster execution of complex workflows through guided interfaces
-* **Accessibility**: Work from any device with a web browser
+- **Ease of Use**: No need to remember command syntax or parameters
+- **Visual Feedback**: Rich formatting of results with tables, charts, and graphs
+- **Collaboration**: Share results easily by copying links or exporting data
+- **Documentation**: Inline help and tooltips for every feature
+- **Efficiency**: Faster execution of complex workflows through guided interfaces
+- **Accessibility**: Work from any device with a web browser
 
 The UI command effectively transforms hana-cli from a powerful command-line tool into a full-featured web application, making SAP HANA development and administration accessible to users who prefer graphical interfaces while maintaining all the power and flexibility of the underlying CLI commands.
 
@@ -5871,10 +5908,10 @@ After running coverage tests, open `./coverage/index.html` in your browser to vi
 
 The project aims for 80% code coverage across:
 
-* Lines
-* Statements
-* Functions
-* Branches
+- Lines
+- Statements
+- Functions
+- Branches
 
 For more information about code coverage configuration and interpretation, see the [Coverage section in the Unit Testing Documentation](./tests/README_UNIT_TESTS.md#code-coverage).
 
@@ -5886,9 +5923,9 @@ The HANA CLI tool is designed to work seamlessly across Windows, Linux, and macO
 
 The tool has been tested and validated on:
 
-* **Windows**: Windows 10 and later
-* **Linux**: Ubuntu, Debian, RHEL, and other major distributions
-* **macOS**: macOS 10.15 (Catalina) and later
+- **Windows**: Windows 10 and later
+- **Linux**: Ubuntu, Debian, RHEL, and other major distributions
+- **macOS**: macOS 10.15 (Catalina) and later
 
 ### Cross-Platform Features
 
@@ -5896,26 +5933,26 @@ The tool has been tested and validated on:
 
 The tool automatically handles platform-specific path differences:
 
-* Uses Node.js `path` module for all path operations
-* Automatically detects and uses correct path separators (`/` on Unix, `\` on Windows)
-* Normalizes paths for consistent behavior across platforms
-* Supports both absolute and relative paths on all platforms
+- Uses Node.js `path` module for all path operations
+- Automatically detects and uses correct path separators (`/` on Unix, `\` on Windows)
+- Normalizes paths for consistent behavior across platforms
+- Supports both absolute and relative paths on all platforms
 
 #### Environment Variables
 
 Platform-specific environment variables are handled correctly:
 
-* **Windows**: Uses `APPDATA` for configuration files
-* **macOS**: Uses `HOME/Library/Preferences` with fallback to `HOME/Library/Application Support`
-* **Linux**: Uses `HOME/.config` for configuration files
+- **Windows**: Uses `APPDATA` for configuration files
+- **macOS**: Uses `HOME/Library/Preferences` with fallback to `HOME/Library/Application Support`
+- **Linux**: Uses `HOME/.config` for configuration files
 
 #### Line Endings
 
 The project uses `.gitattributes` to ensure consistent line endings:
 
-* Text files (`.js`, `.json`, `.md`, etc.) use LF (`\n`) in the repository
-* Windows scripts (`.cmd`, `.bat`, `.ps1`) use CRLF (`\r\n`)
-* Binary files are handled appropriately
+- Text files (`.js`, `.json`, `.md`, etc.) use LF (`\n`) in the repository
+- Windows scripts (`.cmd`, `.bat`, `.ps1`) use CRLF (`\r\n`)
+- Binary files are handled appropriately
 
 ### Cross-Platform Testing
 
@@ -5936,27 +5973,27 @@ npm run test:unix
 
 GitHub Actions CI runs the full test suite on all three platforms:
 
-* **Ubuntu Latest**: Tests Linux compatibility
-* **Windows Latest**: Tests Windows compatibility
-* **macOS Latest**: Tests macOS compatibility
-* **Node.js versions**: 20.x, 22.x, and 24.x on each platform
+- **Ubuntu Latest**: Tests Linux compatibility
+- **Windows Latest**: Tests Windows compatibility
+- **macOS Latest**: Tests macOS compatibility
+- **Node.js versions**: 20.x, 22.x, and 24.x on each platform
 
 The CI workflow validates:
 
-* Package installation on each platform
-* All unit tests pass on each platform
-* Cross-platform specific tests
-* Platform-specific path handling
-* CLI command execution
+- Package installation on each platform
+- All unit tests pass on each platform
+- Cross-platform specific tests
+- Platform-specific path handling
+- CLI command execution
 
 #### Mock Filesystem Testing
 
 Tests use `mock-fs` to simulate different filesystem structures:
 
-* Tests can simulate Windows, macOS, and Linux filesystems
-* Validates path handling without requiring multiple OS environments
-* Tests platform-specific configuration file locations
-* Ensures consistent behavior across platforms
+- Tests can simulate Windows, macOS, and Linux filesystems
+- Validates path handling without requiring multiple OS environments
+- Tests platform-specific configuration file locations
+- Ensures consistent behavior across platforms
 
 ### Development Recommendations
 

@@ -1,0 +1,49 @@
+# changeLogUI
+
+> Command: `changeLogUI`  
+> Category: **System Tools**  
+> Status: Production Ready
+
+## Description
+
+Display Change Log in CLI
+
+## Syntax
+
+```bash
+hana-cli changesUI [options]
+```
+
+## Aliases
+
+- `chgUI`
+- `chgui`
+- `changeLogUI`
+- `changelogui`
+
+## Parameters
+
+For a complete list of parameters and options, use:
+
+```bash
+hana-cli changeLogUI --help
+```
+
+## Examples
+
+### Basic Usage
+
+```bash
+hana-cli changeLogUI
+```
+
+Execute the command
+
+## Related Commands
+
+See the [Commands Reference](../all-commands.md) for other commands in this category.
+
+## See Also
+
+- [Category: System Tools](..)
+- [All Commands A-Z](../all-commands.md)
