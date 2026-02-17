@@ -3,39 +3,38 @@
 ## The Problem: Connection Mismatch
 
 ```mermaid
-Project A: ~/projects/project-a          Project B: ~/projects/project-b
-├── .env                                 ├── .env  
-│   ├── host=db-a.company.com           │   ├── host=db-b.company.com
-│   ├── user=admin-a                     │   ├── user=admin-b
-│   └── password=pass-a                  │   └── password=pass-b
-└── package.json                         └── package.json
-                                        
-AI Agent asks: "List tables in Project B"
-     ↓
-MCP Server calls: hana_tables
-     ↓
-CLI connects via:  ~/.hana-cli/default.json  (WRONG DB!)
-     ↓
-Result: Tables from Project A's database instead of Project B
+flowchart LR
+     subgraph PA[Project A: ~/projects/project-a]
+          Aenv[.env<br/>host=db-a.company.com<br/>user=admin-a<br/>password=pass-a]
+          Apkg[package.json]
+     end
+     subgraph PB[Project B: ~/projects/project-b]
+          Benv[.env<br/>host=db-b.company.com<br/>user=admin-b<br/>password=pass-b]
+          Bpkg[package.json]
+     end
+
+     Q["AI Agent asks:<br/>List tables in Project B"] --> M["MCP Server calls: hana_tables"]
+     M --> C["CLI connects via:<br/>~/.hana-cli/default.json<br/>(WRONG DB)"]
+     C --> R["Result:<br/>Tables from Project A's database"]
 ```
 
 ## The Solution: Project Context Passing
 
 ```mermaid
-Project A: ~/projects/project-a          Project B: ~/projects/project-b
-├── .env                                 ├── .env  
-│   └── [database-a credentials]        │   └── [database-b credentials]
-└── package.json                         └── package.json
-                                        
-AI Agent asks: "List tables in Project B" + __projectContext.projectPath
-     ↓
-MCP Server extracts context
-     ↓
-CLI changes to: ~/projects/project-b/
-     ↓
-CLI connects via: ~/projects/project-b/.env  (CORRECT DB!)
-     ↓
-Result: Tables from Project B's database (CORRECT!)
+flowchart LR
+  subgraph PA2[Project A: ~/projects/project-a]
+    A2env[.env<br/>database-a credentials]
+    A2pkg[package.json]
+  end
+  subgraph PB2[Project B: ~/projects/project-b]
+    B2env[.env<br/>database-b credentials]
+    B2pkg[package.json]
+  end
+
+  Q2["AI Agent asks:<br/>List tables in Project B<br/>+ __projectContext.projectPath"] --> M2["MCP Server extracts context"]
+  M2 --> X2["CLI changes to:<br/>~/projects/project-b/"]
+  X2 --> C2["CLI connects via:<br/>~/projects/project-b/.env<br/>(CORRECT DB)"]
+  C2 --> R2["Result:<br/>Tables from Project B's database"]
 ```
 
 ---
@@ -43,117 +42,25 @@ Result: Tables from Project B's database (CORRECT!)
 ## Current Architecture
 
 ```mermaid
-┌─────────────────────────────────────────────────────┐
-│                    AI Agent / LLM                   │
-└─────────────────────────────────────────────────────┘
-                           │
-                    calls MCP tools
-                    {"schema": "MY_SCHEMA"}
-                           ↓
-┌─────────────────────────────────────────────────────┐
-│             MCP Server (index.ts)                   │
-│  ✓ Lists commands, discovers features              │
-│  ✗ NO PROJECT CONTEXT received                     │
-└─────────────────────────────────────────────────────┘
-                           │
-                   executeCommand()
-                           ↓
-┌─────────────────────────────────────────────────────┐
-│            Executor (executor.ts)                   │
-│  spawn('node', [cli.js, 'tables', '--schema...'])  │
-│  ✗ cwd = install path (HARDCODED)                  │
-│  ✗ No project-specific env vars                    │
-└─────────────────────────────────────────────────────┘
-                           │
-                    CLI Process
-                           ↓
-┌─────────────────────────────────────────────────────┐
-│         Database Client (database/index.js)         │
-│              dbClientClass.getNewClient()           │
-│  ✓ Gets connection options from getConnOptions()   │
-└─────────────────────────────────────────────────────┘
-                           │
-                    Connection Resolution
-                           ↓
-┌─────────────────────────────────────────────────────┐
-│         Connections Module (connections.js)         │
-│  Search order (all relative to cwd=install path):  │
-│  1. .cdsrc-private.json                            │
-│  2. default-env.json (install path) ← USED         │
-│  3. ~/.hana-cli/default.json (home dir)            │
-│  4. .env file                                       │
-│  5. VCAP_SERVICES                                   │
-│                                                     │
-│  ✗ NEVER looks in project directory!              │
-│  ✗ Always uses install path or home dir            │
-└─────────────────────────────────────────────────────┘
-                           │
-                    ✗ WRONG DATABASE!
+flowchart TB
+  A["AI Agent / LLM"] --> B["MCP Server (index.ts)<br/>✓ Lists commands, discovers features<br/>✗ No project context received"]
+  B --> C["Executor (executor.ts)<br/>spawn('node', [cli.js, 'tables', '--schema...'])<br/>✗ cwd = install path (hardcoded)<br/>✗ No project-specific env vars"]
+  C --> D["CLI Process"]
+  D --> E["Database Client (database/index.js)<br/>dbClientClass.getNewClient()<br/>✓ Gets connection options from getConnOptions()"]
+  E --> F["Connections Module (connections.js)<br/>Search order (cwd=install path):<br/>1. .cdsrc-private.json<br/>2. default-env.json (install path) ← USED<br/>3. ~/.hana-cli/default.json (home dir)<br/>4. .env file<br/>5. VCAP_SERVICES<br/>✗ Never looks in project dir<br/>✗ Always uses install path or home dir"]
+  F --> G["✗ WRONG DATABASE!"]
 ```
 
 ## Proposed Architecture
 
 ```mermaid
-┌─────────────────────────────────────────────────────┐
-│                    AI Agent / LLM                   │
-└─────────────────────────────────────────────────────┘
-                           │
-                  calls MCP tools with context
-         {"schema": "MY_SCHEMA",                    
-          "__projectContext": {                     
-            "projectPath": "/path/to/project",      
-            "connectionFile": ".env"                
-          }}
-                           ↓
-┌─────────────────────────────────────────────────────┐
-│             MCP Server (index.ts) [UPDATED]         │
-│  ✓ Extracts __projectContext from args             │
-│  ✓ Removes context from CLI args (not a param)     │
-│  ✓ Passes context to executeCommand()              │
-└─────────────────────────────────────────────────────┘
-                           │
-                 executeCommand(cmd, args, context)
-                           ↓
-┌─────────────────────────────────────────────────────┐
-│            Executor (executor.ts) [UPDATED]         │
-│  ✓ Receives CONNECTION CONTEXT parameter           │
-│  ✓ Sets cwd = context.projectPath                  │
-│  ✓ Sets env vars: HANA_CLI_PROJECT_PATH            │
-│  ✓ Sets env vars: HANA_CLI_CONN_FILE               │
-│  spawn('node', [cli.js, 'tables'...],              │
-│    {env, cwd: "/path/to/project"})                 │
-└─────────────────────────────────────────────────────┘
-                           │
-                    CLI Process
-                           ↓
-┌─────────────────────────────────────────────────────┐
-│         Database Client (database/index.js)         │
-│              dbClientClass.getNewClient()           │
-│  ✓ Gets connection options from getConnOptions()   │
-└─────────────────────────────────────────────────────┘
-                           │
-                    Connection Resolution
-                           ↓
-┌─────────────────────────────────────────────────────┐
-│    Connections Module (connections.js) [UPDATED]    │
-│                                                     │
-│  NEW: Check environment for project context        │
-│  if (process.env.HANA_CLI_PROJECT_PATH) {          │
-│    chdir(process.env.HANA_CLI_PROJECT_PATH)        │
-│  }                                                  │
-│                                                     │
-│  Search order (NOW from project directory!):       │
-│  1. .cdsrc-private.json (project dir) ← USED       │
-│  2. default-env.json (project dir) ← USED          │
-│  3. ~/.hana-cli/default.json (fallback)            │
-│  4. .env file (project dir) ← USED                 │
-│  5. VCAP_SERVICES                                   │
-│                                                     │
-│  ✓ FIRST looks in project directory!              │
-│  ✓ Can still fall back to home dir if not found    │
-└─────────────────────────────────────────────────────┘
-                           │
-                    ✓ CORRECT DATABASE!
+flowchart TB
+  A2["AI Agent / LLM"] --> B2["MCP Server (index.ts) [UPDATED]<br/>✓ Extracts __projectContext from args<br/>✓ Removes context from CLI args (not a param)<br/>✓ Passes context to executeCommand()"]
+  B2 --> C2["Executor (executor.ts) [UPDATED]<br/>✓ Receives connection context<br/>✓ Sets cwd = context.projectPath<br/>✓ Sets env vars: HANA_CLI_PROJECT_PATH<br/>✓ Sets env vars: HANA_CLI_CONN_FILE<br/>spawn('node', [cli.js, 'tables'...], {env, cwd})"]
+  C2 --> D2["CLI Process"]
+  D2 --> E2["Database Client (database/index.js)<br/>dbClientClass.getNewClient()<br/>✓ Gets connection options from getConnOptions()"]
+  E2 --> F2["Connections Module (connections.js) [UPDATED]<br/>NEW: Check HANA_CLI_PROJECT_PATH and chdir<br/>Search order (project directory):<br/>1. .cdsrc-private.json (project) ← USED<br/>2. default-env.json (project) ← USED<br/>3. ~/.hana-cli/default.json (fallback)<br/>4. .env file (project) ← USED<br/>5. VCAP_SERVICES<br/>✓ First looks in project directory<br/>✓ Can still fall back to home dir"]
+  F2 --> G2["✓ CORRECT DATABASE!"]
 ```
 
 ---
@@ -163,29 +70,29 @@ Result: Tables from Project B's database (CORRECT!)
 ### Before (All commands use install path)
 
 ```mermaid
-│ Agent: "List tables in Project A"
-├─→ MCP: tables {schema: 'A_SCHEMA'}
-│   └─→ CLI: connects via ~/.hana-cli/default.json (Database A)
-│
-│ Agent: "List tables in Project B" 
-├─→ MCP: tables {schema: 'B_SCHEMA'}
-│   └─→ CLI: connects via ~/.hana-cli/default.json (Database A) ✗
-│
-│ Result: Both commands hit Database A (WRONG!)
+flowchart TB
+     subgraph Before[Before: install path always used]
+          B1["Agent: List tables in Project A"] --> B2["MCP: tables {schema: 'A_SCHEMA'}"]
+          B2 --> B3["CLI connects via ~/.hana-cli/default.json (Database A)"]
+          B4["Agent: List tables in Project B"] --> B5["MCP: tables {schema: 'B_SCHEMA'}"]
+          B5 --> B6["CLI connects via ~/.hana-cli/default.json (Database A) ✗"]
+          B3 --> B7["Result: Both commands hit Database A (WRONG)"]
+          B6 --> B7
+     end
 ```
 
 ### After (Each command uses project context)
 
 ```mermaid
-│ Agent: "List tables in Project A"
-├─→ MCP: tables {schema: 'A_SCHEMA', __projectContext: {projectPath: '/proj/a'}}
-│   └─→ CLI: changes to /proj/a, connects via ./default-env.json (Database A) ✓
-│
-│ Agent: "List tables in Project B"
-├─→ MCP: tables {schema: 'B_SCHEMA', __projectContext: {projectPath: '/proj/b'}}
-│   └─→ CLI: changes to /proj/b, connects via ./default-env.json (Database B) ✓
-│
-│ Result: Each command hits correct database (CORRECT!)
+flowchart TB
+     subgraph After[After: project context applied]
+          A1["Agent: List tables in Project A"] --> A2["MCP: tables {schema: 'A_SCHEMA', __projectContext: {projectPath: '/proj/a'}}"]
+          A2 --> A3["CLI changes to /proj/a, connects via ./default-env.json (Database A) ✓"]
+          A4["Agent: List tables in Project B"] --> A5["MCP: tables {schema: 'B_SCHEMA', __projectContext: {projectPath: '/proj/b'}}"]
+          A5 --> A6["CLI changes to /proj/b, connects via ./default-env.json (Database B) ✓"]
+          A3 --> A7["Result: Each command hits correct database (CORRECT)"]
+          A6 --> A7
+     end
 ```
 
 ---
@@ -193,10 +100,11 @@ Result: Tables from Project B's database (CORRECT!)
 ## Implementation Timeline
 
 ```mermaid
-Week 1                                  Week 2                    Week 3 onwards
-├─ Day 1-2: Update executor.ts         ├─ Day 8-10: CLI updates  ├─ Testing
-├─ Day 3-4: Update index.ts            ├─ Day 11-12: Security    ├─ Documentation
-└─ Day 5: Update schemas              └─ Testing                └─ Rollout
+timeline
+     title Implementation Timeline
+     Week 1 : Update executor.ts, Update index.ts, Update schemas
+     Week 2 : CLI updates, Security, Testing
+     Week 3 onwards : Testing, Documentation, Rollout
 ```
 
 ---
@@ -215,46 +123,16 @@ Week 1                                  Week 2                    Week 3 onwards
 ## Data Flow: Single Command Execution
 
 ```mermaid
-MCP Server (index.ts)
-│
-├─ Tool Called: hana_tables
-│  ├─ Arguments: {schema: 'MY_SCHEMA', __projectContext: {projectPath: '/app'}}
-│  │
-│  └─ Tool Handler:
-│     ├─ Extract context: __projectContext
-│     ├─ Clean args: remove __projectContext
-│     │
-│     └─ Call executeCommand('tables', cleanArgs, context)
-│
-├─ Executor (executor.ts)
-│  ├─ Receive: context = {projectPath: '/app'}
-│  │
-│  ├─ Build Environment:
-│  │  ├─ Set HANA_CLI_PROJECT_PATH=/app
-│  │  ├─ Set HANA_CLI_CONN_FILE=.env
-│  │  └─ Set other env vars...
-│  │
-│  └─ Spawn CLI:
-│     ├─ Command: node /install/bin/cli.js tables
-│     ├─ CWD: /app (not /install)
-│     └─ ENV: {HANA_CLI_PROJECT_PATH=/app, ...}
-│
-├─ CLI Process (bin/cli.js)
-│  └─ Table Handler:
-│     ├─ getNewClient(prompts)
-│     └─ dbClientClass.getNewClient()
-│
-├─ Database Client (database/index.js)
-│  └─ Constructor calls getConnOptions()
-│
-└─ Connection Module (connections.js)
-   ├─ NEW: Check HANA_CLI_PROJECT_PATH=/app
-   ├─ NEW: chdir('/app')
-   ├─ Search for connection:
-   │  ├─ Look for .env in /app ← FOUND!
-   │  └─ Load credentials from /app/.env
-   │
-   └─ Return: Connection to app's database ✓
+flowchart TB
+     A["Tool Called: hana_tables"] --> B["Arguments: {schema: 'MY_SCHEMA', __projectContext: {projectPath: '/app'}}"]
+     B --> C["Tool Handler<br/>Extract context and remove __projectContext"]
+     C --> D["executeCommand('tables', cleanArgs, context)"]
+     D --> E["Executor builds env<br/>HANA_CLI_PROJECT_PATH=/app<br/>HANA_CLI_CONN_FILE=.env"]
+     E --> F["Spawn CLI<br/>node /install/bin/cli.js tables<br/>cwd=/app"]
+     F --> G["CLI Process (bin/cli.js)<br/>Table handler → getNewClient()"]
+     G --> H["Database Client (database/index.js)<br/>getConnOptions()"]
+     H --> I["Connections Module (connections.js)<br/>chdir('/app') and search .env<br/>Load credentials"]
+     I --> J["Return: Connection to app's database ✓"]
 ```
 
 ---
@@ -262,18 +140,13 @@ MCP Server (index.ts)
 ## Backward Compatibility
 
 ```mermaid
-Current Users (No Context)          New Users (With Context)
-                                   
-MCP Tool Call:                     MCP Tool Call:
-├─ hana_tables                     ├─ hana_tables
-└─ {schema: 'X_SCHEMA'}             └─ {schema: 'X_SCHEMA',
-                                      __projectContext: {...}}
-                                   
-Behavior:                          Behavior:
-├─ No context extracted            ├─ Context extracted
-├─ Uses install path (cwd)         ├─ Uses project path (cwd)
-├─ Finds ~/.hana-cli/default.json  ├─ Finds /project/.env
-└─ Works as before ✓               └─ Works correctly ✓
+flowchart LR
+     subgraph Current[Current Users (No Context)]
+          C1["MCP Tool Call: hana_tables<br/>{schema: 'X_SCHEMA'}"] --> C2["Behavior:<br/>No context extracted<br/>Uses install path (cwd)<br/>Finds ~/.hana-cli/default.json<br/>Works as before ✓"]
+     end
+     subgraph New[New Users (With Context)]
+          N1["MCP Tool Call: hana_tables<br/>{schema: 'X_SCHEMA', __projectContext: {...}}"] --> N2["Behavior:<br/>Context extracted<br/>Uses project path (cwd)<br/>Finds /project/.env<br/>Works correctly ✓"]
+     end
 ```
 
 ---
@@ -281,50 +154,25 @@ Behavior:                          Behavior:
 ## Security Model
 
 ```mermaid
-┌──────────────────────────────────────────────────┐
-│ MCP Tool Input (from AI Agent)                   │
-│                                                   │
-│ ✓ Can specify projectPath                        │
-│ ✓ Can specify connectionFile name                │
-│ ✓ Can specify host/port/user/password            │
-│   (use cautiously - prefer .env files)           │
-└──────────────────────────────────────────────────┘
-         ↓
-    VALIDATION LAYER
-         ↓
-┌──────────────────────────────────────────────────┐
-│ Executor Security Checks                         │
-│                                                   │
-│ ✓ Normalize paths (prevent ..)                   │
-│ ✓ Check path exists                              │
-│ ✓ Optional: Whitelist allowed paths              │
-│ ✓ Sanitize env variable names                    │
-│ ✓ Don't log passwords                            │
-└──────────────────────────────────────────────────┘
-         ↓
-┌──────────────────────────────────────────────────┐
-│ Environment Variables (to CLI)                   │
-│                                                   │
-│ ✓ HANA_CLI_PROJECT_PATH = /safe/path             │
-│ ✓ HANA_CLI_USER = safe_user                      │
-│ ✗ HANA_CLI_PASSWORD = [NEVER LOG]                │
-└──────────────────────────────────────────────────┘
+flowchart TB
+     S1["MCP Tool Input (from AI Agent)<br/>✓ projectPath<br/>✓ connectionFile name<br/>✓ host/port/user/password (prefer .env files)"]
+     S1 --> S2["Validation Layer"]
+     S2 --> S3["Executor Security Checks<br/>✓ Normalize paths (prevent ..)<br/>✓ Check path exists<br/>✓ Optional: whitelist allowed paths<br/>✓ Sanitize env variable names<br/>✓ Don't log passwords"]
+     S3 --> S4["Environment Variables (to CLI)<br/>✓ HANA_CLI_PROJECT_PATH=/safe/path<br/>✓ HANA_CLI_USER=safe_user<br/>✗ HANA_CLI_PASSWORD=[NEVER LOG]"]
 ```
 
 ---
 
 ## Testing Matrix
 
-```mermaid
-Test Case                  | Before | After | Expected
-────────────────────────────────────────────────────────
-No context param           | ✓ Works | ✓ Works | Same behavior
-With projectPath           | ✗ Ignored | ✓ Used | Uses project dir
-With connectionFile        | ✗ Ignored | ✓ Used | Uses specified file
-With direct credentials    | ✗ Ignored | ✓ Used | Direct connection
-Context switching          | ✗ N/A | ✓ Works | Each cmd gets own DB
-Multiple projects          | ✗ Fails | ✓ Works | Isolated contexts
-```
+| Test Case | Before | After | Expected |
+| --- | --- | --- | --- |
+| No context param | ✓ Works | ✓ Works | Same behavior |
+| With projectPath | ✗ Ignored | ✓ Used | Uses project dir |
+| With connectionFile | ✗ Ignored | ✓ Used | Uses specified file |
+| With direct credentials | ✗ Ignored | ✓ Used | Direct connection |
+| Context switching | ✗ N/A | ✓ Works | Each cmd gets own DB |
+| Multiple projects | ✗ Fails | ✓ Works | Isolated contexts |
 
 ---
 

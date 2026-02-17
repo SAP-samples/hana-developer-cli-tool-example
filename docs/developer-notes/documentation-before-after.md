@@ -64,7 +64,7 @@ graph TD
 
 ### New Structure with VitePress
 
-```mermaid
+```text
 docs/
 ├── .vitepress/           ← VitePress configuration
 │   └── config.ts         ← Navigation, colors, search setup

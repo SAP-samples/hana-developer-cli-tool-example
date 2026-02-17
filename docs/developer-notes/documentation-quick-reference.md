@@ -30,7 +30,7 @@ npm run docs:dev
 
 ## 🎯 Folder Structure at a Glance
 
-```mermaid
+```text
 docs/
 ├── .vitepress/        ← Configuration (colors, nav, search)
 ├── 01-getting-started/ ← Getting started (5 guides)

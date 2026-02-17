@@ -268,55 +268,13 @@ const tablesB = await mcp.callTool('hana_tables', {
 ## Data Flow Diagram
 
 ```mermaid
-┌─────────────────────────────────────────────────────────┐
-│ AI Agent / LLM                                           │
-│                                                          │
-│ Provides: __projectContext with projectPath            │
-└─────────────────────────────────────────────────────────┘
-                           ↓
-┌─────────────────────────────────────────────────────────┐
-│ MCP Server (index.ts)                                   │
-│                                                          │
-│ • Extracts __projectContext from args                   │
-│ • Removes it from CLI args                              │
-│ • Passes to executeCommand()                            │
-└─────────────────────────────────────────────────────────┘
-                           ↓
-┌─────────────────────────────────────────────────────────┐
-│ Executor (executor.ts)                                  │
-│                                                          │
-│ • Receives context parameter                            │
-│ • Builds env with context variables:                    │
-│   - HANA_CLI_PROJECT_PATH=/project/path                │
-│   - HANA_CLI_CONN_FILE=.env                            │
-│ • Sets cwd = context.projectPath                        │
-│ • Spawns CLI in that directory                          │
-└─────────────────────────────────────────────────────────┘
-                           ↓
-┌─────────────────────────────────────────────────────────┐
-│ CLI Process (bin/cli.js)                                │
-│                                                          │
-│ • Receives env variables                                │
-│ • Calls getConnOptions()                                │
-└─────────────────────────────────────────────────────────┘
-                           ↓
-┌─────────────────────────────────────────────────────────┐
-│ Connection Resolution (utils/connections.js)            │
-│                                                          │
-│ • Checks HANA_CLI_PROJECT_PATH env var                 │
-│ • If set: chdir() to that path                         │
-│ • Searches for:                                         │
-│   1. .cdsrc-private.json (project)                     │
-│   2. default-env.json (project)                        │
-│   3. .env (project)                                     │
-│ • FOUND! Uses project's connection                      │
-└─────────────────────────────────────────────────────────┘
-                           ↓
-┌─────────────────────────────────────────────────────────┐
-│ ✓ CORRECT DATABASE CONNECTION                           │
-│                                                          │
-│ Uses project's database, not install path's!            │
-└─────────────────────────────────────────────────────────┘
+flowchart TB
+  A["AI Agent / LLM<br/>Provides __projectContext with projectPath"]
+  A --> B["MCP Server (index.ts)<br/>Extracts __projectContext<br/>Removes it from CLI args<br/>Passes to executeCommand()"]
+  B --> C["Executor (executor.ts)<br/>Receives context parameter<br/>Builds env vars (HANA_CLI_PROJECT_PATH, HANA_CLI_CONN_FILE)<br/>Sets cwd = context.projectPath<br/>Spawns CLI in that directory"]
+  C --> D["CLI Process (bin/cli.js)<br/>Receives env vars<br/>Calls getConnOptions()"]
+  D --> E["Connection Resolution (utils/connections.js)<br/>chdir() to project path<br/>Search: .cdsrc-private.json, default-env.json, .env<br/>Uses project's connection"]
+  E --> F["✓ CORRECT DATABASE CONNECTION<br/>Uses project's database, not install path's"]
 ```
 
 ---

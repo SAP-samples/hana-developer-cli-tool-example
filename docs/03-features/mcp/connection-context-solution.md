@@ -11,17 +11,10 @@
 ## Current Flow (Simplified)
 
 ```mermaid
-MCP Server
-  ↓
-executeCommand('tables', { schema: 'MY_SCHEMA' })
-  ↓  
-Spawns: node bin/cli.js tables --schema MY_SCHEMA
-  ↓
-CLI looks for connections:
-  1. .cdsrc-private.json (install dir or pwd)
-  2. default-env.json (install dir or pwd)
-  3. ~/.hana-cli/default.json (user home)
-  4. VCAP_SERVICES (environment)
+flowchart TB
+  A["MCP Server"] --> B["executeCommand('tables', { schema: 'MY_SCHEMA' })"]
+  B --> C["Spawns: node bin/cli.js tables --schema MY_SCHEMA"]
+  C --> D["CLI looks for connections:<br/>1. .cdsrc-private.json (install dir or pwd)<br/>2. default-env.json (install dir or pwd)<br/>3. ~/.hana-cli/default.json (user home)<br/>4. VCAP_SERVICES (environment)"]
 ```
 
 **The problem**: Connection files are always from install path, not the project being analyzed.
