@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import { TextBundle } from '@sap/textbundle';
+import pkg from '@sap/textbundle';
+const { TextBundle } = pkg;
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
