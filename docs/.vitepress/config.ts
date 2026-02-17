@@ -12,7 +12,7 @@ export default withMermaid(defineConfig({
   lastUpdated: true,
   
   head: [
-    ['link', { rel: 'icon', href: '/favicon.ico' }],
+    ['link', { rel: 'icon', href: '/hana-developer-cli-tool-example/favicon.ico' }],
     ['meta', { name: 'theme-color', content: '#0092d1' }],
     ['meta', { name: 'og:type', content: 'website' }],
     ['meta', { name: 'og:image', content: '/logo.svg' }],
@@ -37,7 +37,13 @@ export default withMermaid(defineConfig({
       { text: 'Features', link: '/03-features/' },
       { text: 'API Reference', link: '/04-api-reference/' },
       { text: 'Development', link: '/05-development/' },
-      { text: 'Reference', link: '/99-reference/' },
+      {
+        text: 'References',
+        items: [
+          { text: 'Overview', link: '/99-reference/' },
+          { text: 'Troubleshooting', link: '/troubleshooting/' },
+        ]
+      },
       {
         text: 'Resources',
         items: [
@@ -55,6 +61,7 @@ export default withMermaid(defineConfig({
           items: [
             { text: 'Introduction', link: '/01-getting-started/' },
             { text: 'Installation', link: '/01-getting-started/installation' },
+            { text: 'Troubleshooting', link: '/troubleshooting/' },
             { text: 'Quick Start', link: '/01-getting-started/quick-start' },
             { text: 'Configuration', link: '/01-getting-started/configuration' },
             { text: 'Environments', link: '/01-getting-started/environments' },

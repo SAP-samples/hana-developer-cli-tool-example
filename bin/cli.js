@@ -3,17 +3,8 @@
 /*eslint-env node, es6, module */
 // @ts-check
 
-// Ultra-fast path for -V or --version FLAG ONLY (not the version command)
-// This provides quick version lookup for scripts without loading the full CLI
+// Parse initial args before yargs
 const args = process.argv.slice(2)
-if (args.length > 0 && (args[0] === '--version' || args[0] === '-V')) {
-    // Only load what we absolutely need - avoid all imports
-    const { createRequire } = await import('module')
-    const require = createRequire(import.meta.url)
-    const packageInfo = require('../package.json')
-    console.log(packageInfo.version)
-    process.exit(0)
-}
 
 // Defer all imports until after --version fast path
 import * as base from '../utils/base-lite.js'
@@ -32,6 +23,11 @@ const errorHandler = err => {
 }
 process.on('uncaughtException', errorHandler)
 
+// Convert --version or -V flags to version command
+if (args.length > 0 && (args[0] === '--version' || args[0] === '-V')) {
+    args[0] = 'version'
+}
+
 // Find which command is being requested
 const requestedCommand = args[0]
 
@@ -43,7 +39,9 @@ if (!yargs) {
     hideBin = helpers.hideBin
 }
 
-const yargsArgs = hideBin(process.argv)
+// Reconstruct argv with the potentially modified args
+const processArgv = [...process.argv.slice(0, 2), ...args]
+const yargsArgs = hideBin(processArgv)
 
 // Helper to create yargs instance with common configuration
 function createYargsInstance(yargsArgs) {
@@ -51,7 +49,8 @@ function createYargsInstance(yargsArgs) {
         .scriptName(base.colors.blue('hana-cli'))
         .usage(base.colors.blue(base.bundle.getText("usage")))
         .help('help').alias('help', 'h')
-        .version(pkg.version).alias('version', 'V')
+        .version(false) // Disable default version handler, use version command instead
+        .alias('version', 'V')
         .example([[base.colors.green("connect:"), base.bundle.getText("example")]])
         .epilog(base.colors.blue(base.bundle.getText("epilog")))
         .fail((msg, err) => {

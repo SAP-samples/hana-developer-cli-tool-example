@@ -13,7 +13,7 @@ const commandFiles = [
     './createJWT.js', './createModule.js', './createXSAAdmin.js', './dataDiff.js',
     './dataLineage.js',
     './dataMask.js', './dataProfile.js', './dataSync.js', './dataTypes.js', './dataTypesUI.js', './dataVolumes.js', './dataValidator.js', './deadlocks.js', './dependencies.js', './diagnose.js', './disks.js',
-    './dropContainer.js', './dropGroup.js', './encryptionStatus.js', './erdDiagram.js', './export.js', './expensiveStatements.js',
+    './dropContainer.js', './dropGroup.js', './duplicateDetection.js', './encryptionStatus.js', './erdDiagram.js', './export.js', './expensiveStatements.js',
     './features.js', './featuresUI.js', './featureUsage.js', './featureUsageUI.js', './fragmentationCheck.js', './functions.js',
     './functionsUI.js', './ftIndexes.js', './generateDocs.js', './generateTestData.js', './grantChains.js', './graphWorkspaces.js', './hanaCloudHDIInstances.js', './hanaCloudHDIInstancesUI.js',
     './hanaCloudInstances.js', './hanaCloudSBSSInstances.js', './hanaCloudSBSSInstancesUI.js',
@@ -33,7 +33,7 @@ const commandFiles = [
     './synonyms.js', './systemInfo.js', './systemInfoUI.js', './tableHotspots.js', './tableGroups.js', './tables.js',
     './tableCopy.js', './tablesPG.js', './tablesSQLite.js', './tablesUI.js', './timeSeriesTools.js', './traces.js',
     './traceContents.js', './triggers.js', './UI.js', './users.js', './version.js', './views.js',
-    './workloadManagement.js', './xsaServices.js', './duplicateDetection.js'
+    './workloadManagement.js', './xsaServices.js'
 ]
 
 export async function init() {

@@ -19,8 +19,9 @@ npm install
 npm link
 ```
 
-**Requirements**
-- Node.js 14.x or 16.x
+### Requirements
+
+- [Node.js 20.19.0 or later](https://nodejs.org/)
 - Access to a SAP HANA database
 
 [Full Installation Guide →](./installation.md)
@@ -37,7 +38,7 @@ hana-cli --version
 hana-cli --help
 
 # Connect to your HANA instance
-hana-cli alerts -h
+hana-cli connect --host your-hana-server.com --port 30013 --user DBUSER --password ****
 ```
 
 [Quick Start Tutorial →](./quick-start.md)

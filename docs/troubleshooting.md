@@ -75,6 +75,46 @@
    hana-cli dbInfo
    ```
 
+#### Connection Configuration Not Found
+
+**Error:** `❌ No Connection Configuration Found`
+
+**Solutions:**
+
+1. **Check the resolution order**
+   - `default-env-admin.json` (when `--admin`)
+   - `.cdsrc-private.json` (CAP `cds bind`)
+   - `.env` with `VCAP_SERVICES`
+   - `--conn <file>` (current or parent dirs, then `~/.hana-cli/`)
+   - `default-env.json` (current or parent dirs)
+   - `~/.hana-cli/default.json` (last resort)
+
+2. **Validate the file you expect hana-cli to use**
+
+   ```bash
+   # Check JSON validity
+   cat default-env.json | jq '.'
+   ```
+
+3. **If using CAP bindings**
+   - Ensure `.cdsrc-private.json` exists in the project or a parent directory
+   - Run `cds bind` and re-try the command
+
+#### Proxy or Corporate TLS Issues
+
+**Symptoms:** TLS handshake failures, intermittent timeouts, or blocked ports
+
+**Solutions:**
+
+1. **Confirm proxy settings**
+   - Ensure your shell has proxy environment variables set if required by policy
+
+2. **Test raw connectivity**
+   - Ping the host and verify the SQL port is reachable
+
+3. **Use trusted certificates**
+   - Prefer installing the corporate CA certificate and pointing `HANA_SSL_CERT` to it
+
 ---
 
 ### Command Execution Issues
@@ -122,6 +162,100 @@
    ```bash
    sudo npm install -g hana-cli
    ```
+
+#### @sap/cds-dk Not Installed (CAP Bind / CDS Features)
+
+**Symptoms:** CAP binding errors, CDS preview failures, or messages indicating `@sap/cds-dk` is required
+
+**Solutions:**
+
+1. **Install the CDS Development Kit globally**
+
+   ```bash
+   npm install -g @sap/cds-dk
+   ```
+
+2. **Verify availability**
+
+   ```bash
+   cds --version
+   ```
+
+3. **Re-run CAP binding**
+   - From your CAP project root: `cds bind`
+   - Then retry your hana-cli command
+
+#### BTP CLI Missing or Not Logged In
+
+**Symptoms:** BTP-related commands fail or return no target/global account
+
+**Solutions:**
+
+1. **Verify CLI is installed**
+
+   ```bash
+   btp --version
+   ```
+
+2. **Login and target**
+   - Run `btp login`, then set the global account and subaccount
+
+3. **Confirm target**
+
+   ```bash
+   hana-cli btp
+   ```
+
+#### Cloud Foundry CLI Missing or Not Logged In
+
+**Symptoms:** HANA Cloud instance queries return empty results or login errors
+
+**Solutions:**
+
+1. **Verify CLI is installed**
+
+   ```bash
+   cf --version
+   ```
+
+2. **Login and target space**
+   - Run `cf login` and target the correct org/space
+
+3. **Re-run the hana-cli command**
+   - Commands like `hana-cli hc` and `hana-cli hdi` depend on CF context
+
+#### hdbsql Not Found
+
+**Symptoms:** `hana-cli hdbsql` fails or `hdbsql` is not recognized
+
+**Solutions:**
+
+1. **Install SAP HANA Client**
+   - Ensure the HANA client package is installed for your OS
+
+2. **Verify PATH**
+
+   ```bash
+   hdbsql -version
+   ```
+
+3. **Restart your terminal**
+   - PATH changes often require a new shell session
+
+#### Node.js Version Mismatch
+
+**Symptoms:** startup failures, dependency install errors, or `engines` warnings
+
+**Solutions:**
+
+1. **Verify your Node.js version**
+
+   ```bash
+   node --version
+   ```
+
+2. **Upgrade to the required version**
+   - hana-cli requires Node.js 20.19.0 or later
 
 #### Insufficient Privileges
 
