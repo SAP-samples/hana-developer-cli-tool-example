@@ -549,7 +549,7 @@ Commands are organized into categories, each with their own standardized paramet
 Commands like `export`, `import`, `compareData`, `tableCopy`, `dataSync`, etc.
 
 | Parameter | Alias | Type | Default | Description |
-|-----------|-------|------|---------|-------------|
+| ----------- | ------- | ------ | --------- | ------------- |
 | `--schema` | `-s` | string | `**CURRENT_SCHEMA**` | Target schema name |
 | `--sourceSchema` | `-ss` | string | `**CURRENT_SCHEMA**` | Source schema for operations |
 | `--targetSchema` | `-ts` | string | `**CURRENT_SCHEMA**` | Target schema for operations |
@@ -567,7 +567,7 @@ Commands like `export`, `import`, `compareData`, `tableCopy`, `dataSync`, etc.
 Commands like `massGrant`, `massUpdate`, `massDelete`, `massExport`, etc.
 
 | Parameter | Alias | Type | Default | Description |
-|-----------|-------|------|---------|-------------|
+| ----------- | ------- | ------ | --------- | ------------- |
 | `--schema` | `-s` | string | — | Schema containing objects |
 | `--object` | `-o` | string | — | Object name pattern |
 | `--limit` | `-l` | number | 1000 | Maximum objects to process |
@@ -579,7 +579,7 @@ Commands like `massGrant`, `massUpdate`, `massDelete`, `massExport`, etc.
 Commands like `tables`, `schemas`, `users`, `procedures`, `functions`, etc.
 
 | Parameter | Alias | Type | Default | Description |
-|-----------|-------|------|---------|-------------|
+| --------- | ----- | ---- | ------- | ----------- |
 | `--schema` | `-s` | string | `**CURRENT_SCHEMA**` | Filter by schema |
 | `--limit` | `-l` | number | 200 | Maximum results to return |
 | `--profile` | `-p` | string | — | Database profile selector |
@@ -607,7 +607,7 @@ Aliases follow these consistent patterns:
 Default values are standardized to ensure consistent behavior:
 
 | Parameter | Standard Default | Note |
-|-----------|-----------------|------|
+| ----------- | --------------- | ------ |
 | `schema` | `**CURRENT_SCHEMA**` | Uses the connection's current schema |
 | `limit` | 200 (lists) / 1000 (data) | Configurable per command based on context |
 | `batchSize` | 1000 | Applies to all data manipulation operations |
