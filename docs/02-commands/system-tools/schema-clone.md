@@ -28,6 +28,10 @@ For a complete list of parameters and options, use:
 hana-cli schemaClone --help
 ```
 
+## Key Options
+
+- `--timeout, -to` (number): Operation timeout in seconds (default: `7200`)
+
 ## Examples
 
 ### Basic Usage

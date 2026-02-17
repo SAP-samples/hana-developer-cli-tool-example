@@ -81,17 +81,17 @@ export namespace inputPrompts {
         export function ask_2(): boolean;
         export { ask_2 as ask };
     }
-    namespace profile {
+    namespace showValues {
         let description_8: string;
         export { description_8 as description };
         let type_8: string;
         export { type_8 as type };
         let required_8: boolean;
         export { required_8 as required };
-        export function ask_3(): void;
+        export function ask_3(): boolean;
         export { ask_3 as ask };
     }
-    namespace dryRun {
+    namespace limit {
         let description_9: string;
         export { description_9 as description };
         let type_9: string;
@@ -100,5 +100,35 @@ export namespace inputPrompts {
         export { required_9 as required };
         export function ask_4(): boolean;
         export { ask_4 as ask };
+    }
+    namespace timeout {
+        let description_10: string;
+        export { description_10 as description };
+        let type_10: string;
+        export { type_10 as type };
+        let required_10: boolean;
+        export { required_10 as required };
+        export function ask_5(): boolean;
+        export { ask_5 as ask };
+    }
+    namespace profile {
+        let description_11: string;
+        export { description_11 as description };
+        let type_11: string;
+        export { type_11 as type };
+        let required_11: boolean;
+        export { required_11 as required };
+        export function ask_6(): void;
+        export { ask_6 as ask };
+    }
+    namespace dryRun {
+        let description_12: string;
+        export { description_12 as description };
+        let type_12: string;
+        export { type_12 as type };
+        let required_12: boolean;
+        export { required_12 as required };
+        export function ask_7(): boolean;
+        export { ask_7 as ask };
     }
 }

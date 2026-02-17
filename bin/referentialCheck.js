@@ -96,6 +96,20 @@ export let inputPrompts = {
     required: false,
     ask: () => false
   },
+  limit: {
+    description: baseLite.bundle.getText("referentialCheckLimit"),
+    type: 'number',
+    required: false,
+    default: 10000,
+    ask: () => false
+  },
+  timeout: {
+    description: baseLite.bundle.getText("referentialCheckTimeout"),
+    type: 'number',
+    required: false,
+    default: 3600,
+    ask: () => false
+  },
   profile: {
     description: baseLite.bundle.getText("profile"),
     type: 'string',

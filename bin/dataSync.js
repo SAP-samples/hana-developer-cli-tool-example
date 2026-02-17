@@ -100,6 +100,13 @@ export let inputPrompts = {
     type: 'string',
     required: true
   },
+  timeout: {
+    description: baseLite.bundle.getText("dataSyncTimeout"),
+    type: 'number',
+    required: false,
+    default: 3600,
+    ask: () => false
+  },
   profile: {
     description: baseLite.bundle.getText("profile"),
     type: 'string',

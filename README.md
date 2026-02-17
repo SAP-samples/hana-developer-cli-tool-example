@@ -6,7 +6,7 @@ The [change log](CHANGELOG.md) describes notable changes in this package.
 
 ## 📚 Documentation
 
-Complete documentation is available in the **[`docs/`](docs/)** folder and organized with VitePress.
+Complete documentation is available in the **[`docs/`](docs/)** folder and organized with VitePress. This README will maintain a high-level overview and quick links to the most important sections of the documentation but over time expect that more and more detailed documentation will be added to the docs folder as the project evolves.
 
 **Quick Links:**
 

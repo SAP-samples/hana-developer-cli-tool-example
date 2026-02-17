@@ -1,5 +1,5 @@
 // @ts-nocheck
-import chai from 'chai'
+import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 import { describe, it, beforeEach, afterEach } from 'mocha'
 import sinon from 'sinon'
@@ -215,16 +215,16 @@ function makeDbStub({
     if (statement.includes('FROM TABLES') && statement.includes('COUNT')) {
       return [{ COUNT: tableExistsCount }]
     }
-    if (statement.includes('FROM M_BACKUP_CATALOG') && statement.includes('MAX')) {
+    if (statement.includes('M_BACKUP_CATALOG') && statement.includes('MAX')) {
       return lastSuccessful
     }
-    if (statement.includes('FROM M_BACKUP_CATALOG')) {
+    if (statement.includes('M_BACKUP_CATALOG')) {
       return backupCatalog
     }
-    if (statement.includes('FROM M_BACKUP_PROGRESS')) {
+    if (statement.includes('M_BACKUP_PROGRESS')) {
       return backupProgress
     }
-    if (statement.includes("FROM M_INIFILE_CONTENTS")) {
+    if (statement.includes('M_INIFILE_CONTENTS')) {
       return backupConfig
     }
     return []

@@ -116,6 +116,19 @@ export let inputPrompts = {
     required: false,
     ask: () => false
   },
+  limit: {
+    description: baseLite.bundle.getText("compareDataLimit"),
+    type: 'number',
+    required: false,
+    default: 1000,
+    ask: () => false
+  },
+  timeout: {
+    description: baseLite.bundle.getText("compareDataTimeout"),
+    type: 'number',
+    required: false,
+    ask: () => false
+  },
   profile: {
     description: baseLite.bundle.getText("profile"),
     type: 'string',

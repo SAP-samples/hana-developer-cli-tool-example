@@ -197,6 +197,8 @@ graph TD
     D --> D2["--dataOnly/-do<br/>no structure"]
     D --> D3["-b, --batch<br/>1000 records"]
     D --> D4["-dr, --dryRun<br/>preview"]
+    D --> D5["-l, --limit<br/>max rows"]
+    D --> D6["-to, --timeout<br/>3600 seconds"]
     
     A --> E["Result"]
     E --> E1["Structure Copied"]
@@ -250,6 +252,7 @@ graph TD
     E --> E1["-dr, --dryRun<br/>preview"]
     E --> E2["-b, --batch<br/>size"]
     E --> E3["--log<br/>logging"]
+    E --> E4["-to, --timeout<br/>3600 seconds"]
     
     style A fill:#0070C0,color:#fff
 ```

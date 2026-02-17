@@ -20,7 +20,7 @@ describe('workloadManagement', function () {
 
     it("supports wlm alias", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("node bin/wlm.js --help 2>/dev/null || node bin/workloadManagement.js --help", done)
+        localTest("node bin/workloadManagement.js --help", done)
     })
 
     it("returns output with specific priority filter", function (done) {

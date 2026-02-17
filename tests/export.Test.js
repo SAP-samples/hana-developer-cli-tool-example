@@ -1,5 +1,5 @@
 // @ts-nocheck
-import chai from 'chai'
+import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 import { describe, it, beforeEach, afterEach } from 'mocha'
 import sinon from 'sinon'
@@ -84,7 +84,9 @@ describe('@all @export', () => {
     })
 
     it('should have default values', () => {
-      expect(exportCmd.builder.limit).to.be.a('function')
+      expect(exportCmd.inputPrompts.limit).to.exist
+      expect(exportCmd.inputPrompts.limit.type).to.equal('number')
+      expect(exportCmd.inputPrompts.limit.required).to.equal(false)
     })
   })
 

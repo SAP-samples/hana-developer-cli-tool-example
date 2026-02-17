@@ -47,6 +47,16 @@ export namespace inputPrompts {
         export function ask_1(): void;
         export { ask_1 as ask };
     }
+    namespace timeout {
+        let description_3: string;
+        export { description_3 as description };
+        let type_3: string;
+        export { type_3 as type };
+        let required_3: boolean;
+        export { required_3 as required };
+        export function ask_1(): boolean;
+        export { ask_1 as ask };
+    }
     namespace dryRun {
         let description_4: string;
         export { description_4 as description };
@@ -54,7 +64,15 @@ export namespace inputPrompts {
         export { type_4 as type };
         let required_4: boolean;
         export { required_4 as required };
-        export function ask_2(): boolean;
+        export function ask_2(): void;
         export { ask_2 as ask };
     }
 }
+        let description_5: string;
+        export { description_5 as description };
+        let type_5: string;
+        export { type_5 as type };
+        let required_5: boolean;
+        export { required_5 as required };
+        export function ask_3(): boolean;
+        export { ask_3 as ask };

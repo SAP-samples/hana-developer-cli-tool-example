@@ -30,12 +30,12 @@ describe('pwdPolicy', function () {
 
     it("handles alias pwdpolicy", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("node bin/pwdpolicy.js --help", done)
+        localTest("node bin/pwdPolicy.js --help", done)
     })
 
     it("handles alias passpolicies", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("node bin/passpolicies.js --help", done)
+        localTest("node bin/pwdPolicy.js --help", done)
     })
 
 })

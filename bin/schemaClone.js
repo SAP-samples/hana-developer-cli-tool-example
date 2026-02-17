@@ -78,6 +78,13 @@ export let inputPrompts = {
     required: false,
     ask: () => false
   },
+  timeout: {
+    description: baseLite.bundle.getText("schemaCloneTimeout"),
+    type: 'number',
+    required: false,
+    default: 7200,
+    ask: () => false
+  },
   profile: {
     description: baseLite.bundle.getText("profile"),
     type: 'string',

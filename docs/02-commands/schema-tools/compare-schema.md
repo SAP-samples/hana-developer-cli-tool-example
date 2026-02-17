@@ -1,4 +1,3 @@
-````markdown
 # compareSchema
 
 > Command: `compareSchema`  
@@ -29,6 +28,10 @@ For a complete list of parameters and options, use:
 hana-cli compareSchema --help
 ```
 
+## Key Options
+
+- `--timeout, -to` (number): Operation timeout in seconds (default: `3600`)
+
 ## Examples
 
 ### Basic Usage
@@ -47,5 +50,3 @@ See the [Commands Reference](../all-commands.md) for other commands in this cate
 
 - [Category: Schema Tools](..)
 - [All Commands A-Z](../all-commands.md)
-
-````

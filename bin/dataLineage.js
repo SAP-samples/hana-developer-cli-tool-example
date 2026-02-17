@@ -97,6 +97,13 @@ export let inputPrompts = {
     required: false,
     ask: () => false
   },
+  timeout: {
+    description: baseLite.bundle.getText("dataLineageTimeout"),
+    type: 'number',
+    required: false,
+    default: 3600,
+    ask: () => false
+  },
   profile: {
     description: baseLite.bundle.getText("profile"),
     type: 'string',

@@ -81,14 +81,34 @@ export namespace inputPrompts {
         export function ask_2(): boolean;
         export { ask_2 as ask };
     }
-    namespace profile {
+    namespace limit {
         let description_8: string;
         export { description_8 as description };
         let type_8: string;
         export { type_8 as type };
         let required_8: boolean;
         export { required_8 as required };
-        export function ask_3(): void;
+        export function ask_3(): boolean;
         export { ask_3 as ask };
+    }
+    namespace timeout {
+        let description_9: string;
+        export { description_9 as description };
+        let type_9: string;
+        export { type_9 as type };
+        let required_9: boolean;
+        export { required_9 as required };
+        export function ask_4(): boolean;
+        export { ask_4 as ask };
+    }
+    namespace profile {
+        let description_10: string;
+        export { description_10 as description };
+        let type_10: string;
+        export { type_10 as type };
+        let required_10: boolean;
+        export { required_10 as required };
+        export function ask_5(): void;
+        export { ask_5 as ask };
     }
 }

@@ -110,6 +110,42 @@ export let inputPrompts = {
     required: false,
     ask: () => false
   },
+  nullAnalysis: {
+    description: baseLite.bundle.getText("dataProfileNullAnalysis"),
+    type: 'boolean',
+    required: false,
+    ask: () => false
+  },
+  cardinalityAnalysis: {
+    description: baseLite.bundle.getText("dataProfileCardinalityAnalysis"),
+    type: 'boolean',
+    required: false,
+    ask: () => false
+  },
+  statisticalAnalysis: {
+    description: baseLite.bundle.getText("dataProfileStatisticalAnalysis"),
+    type: 'boolean',
+    required: false,
+    ask: () => false
+  },
+  patternAnalysis: {
+    description: baseLite.bundle.getText("dataProfilePatternAnalysis"),
+    type: 'boolean',
+    required: false,
+    ask: () => false
+  },
+  sampleSize: {
+    description: baseLite.bundle.getText("dataProfileSampleSize"),
+    type: 'number',
+    required: false,
+    ask: () => false
+  },
+  timeout: {
+    description: baseLite.bundle.getText("dataProfileTimeout"),
+    type: 'number',
+    required: false,
+    ask: () => false
+  },
   profile: {
     description: baseLite.bundle.getText("profile"),
     type: 'string',

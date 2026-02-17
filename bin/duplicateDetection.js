@@ -112,6 +112,20 @@ export let inputPrompts = {
     required: false,
     ask: () => false
   },
+  limit: {
+    description: baseLite.bundle.getText("duplicateDetectionLimit"),
+    type: 'number',
+    required: false,
+    default: 10000,
+    ask: () => false
+  },
+  timeout: {
+    description: baseLite.bundle.getText("duplicateDetectionTimeout"),
+    type: 'number',
+    required: false,
+    default: 3600,
+    ask: () => false
+  },
   profile: {
     description: baseLite.bundle.getText("profile"),
     type: 'string',

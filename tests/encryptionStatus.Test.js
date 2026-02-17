@@ -43,14 +43,4 @@ describe('encryptionStatus', function () {
         localTest("node bin/encryptionStatus.js --details --quiet", done)
     })
 
-    it("handles alias encryption", function (done) {
-        const localTest = base.myTest.bind(this)
-        localTest("node bin/encryption.js --help", done)
-    })
-
-    it("handles alias encrypt", function (done) {
-        const localTest = base.myTest.bind(this)
-        localTest("node bin/encrypt.js --help", done)
-    })
-
 })

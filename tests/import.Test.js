@@ -1,13 +1,15 @@
 // @ts-nocheck
-import chai from 'chai'
+import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 import { describe, it, beforeEach, afterEach } from 'mocha'
 import sinon from 'sinon'
 import * as fs from 'fs'
 import * as path from 'path'
+import yargsModule from 'yargs'
 
 chai.use(chaiAsPromised.default)
 const expect = chai.expect
+const yargs = yargsModule
 
 /**
  * @test Import Command Tests
@@ -93,7 +95,8 @@ Jane,25,jane@example.com`
 
   describe('builder configuration', () => {
     it('should configure filename option', () => {
-      const built = importCmd.builder({})
+      const yargsInstance = yargs([])
+      const built = importCmd.builder(yargsInstance)
       // Test will be adapted based on actual builder implementation
     })
 
@@ -175,7 +178,12 @@ Jane,25,jane@example.com`
 
       it('should have default batch size in builder', () => {
         // Default batch size should be 1000
-        const built = importCmd.builder({})
+        const mockYargs = {
+          options: (opts) => mockYargs,
+          example: (cmd, desc) => mockYargs,
+          option: () => mockYargs
+        }
+        const built = importCmd.builder(mockYargs)
         // Verify default through builder
       })
 

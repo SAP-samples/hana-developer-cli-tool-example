@@ -112,21 +112,13 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
   const yargs = (await import('yargs')).default
   const { hideBin } = await import('yargs/helpers')
   
-  yargs(hideBin(process.argv))
+  const argv = await builder(yargs(hideBin(process.argv))
     .usage(baseLite.bundle.getText("cli.usage", [command, describe]))
-    .options(builder)
     .help('help').alias('help', 'h')
-    .wrap(null)
-    .parse(process.argv.slice(2), {}, (err, argv, output) => {
-      if (output) {
-        console.log(output)
-      }
-      if (err) {
-        console.error(err.message)
-        process.exit(1)
-      }
-      if (!argv.help && !argv.h) {
-        handler(argv)
-      }
-    })
+    .wrap(null))
+    .argv
+  
+  if (!argv.help && !argv.h) {
+    handler(argv)
+  }
 }

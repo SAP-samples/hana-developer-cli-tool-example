@@ -109,6 +109,19 @@ export let inputPrompts = {
     required: false,
     ask: () => false
   },
+  limit: {
+    description: baseLite.bundle.getText("tableCopyLimit"),
+    type: 'number',
+    required: false,
+    ask: () => false
+  },
+  timeout: {
+    description: baseLite.bundle.getText("tableCopyTimeout"),
+    type: 'number',
+    required: false,
+    default: 3600,
+    ask: () => false
+  },
   profile: {
     description: baseLite.bundle.getText("profile"),
     type: 'string',

@@ -28,6 +28,11 @@ For a complete list of parameters and options, use:
 hana-cli compareData --help
 ```
 
+## Key Options
+
+- `--limit, -l` (number): Maximum rows to compare (default: `1000`)
+- `--timeout, -to` (number): Operation timeout in seconds (default: `3600`)
+
 ## Examples
 
 ### Basic Usage

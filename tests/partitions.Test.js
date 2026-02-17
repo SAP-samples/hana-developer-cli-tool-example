@@ -25,7 +25,7 @@ describe('partitions', function () {
 
     it("supports partition alias", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("node bin/partition.js --help 2>/dev/null || node bin/partitions.js --help", done)
+        localTest("node bin/partitions.js --help", done)
     })
 
 })

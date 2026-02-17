@@ -105,6 +105,20 @@ export let inputPrompts = {
     required: false,
     ask: () => false
   },
+  limit: {
+    description: baseLite.bundle.getText("dataValidatorLimit"),
+    type: 'number',
+    required: false,
+    default: 10000,
+    ask: () => false
+  },
+  timeout: {
+    description: baseLite.bundle.getText("dataValidatorTimeout"),
+    type: 'number',
+    required: false,
+    default: 3600,
+    ask: () => false
+  },
   profile: {
     description: baseLite.bundle.getText("profile"),
     type: 'string',

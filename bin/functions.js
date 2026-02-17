@@ -6,8 +6,8 @@ export const aliases = ['f', 'listFuncs', 'ListFunc', 'listfuncs', 'Listfunc', "
 export const describe = baseLite.bundle.getText("functions")
 
 export const builder = (yargs) => yargs.options(baseLite.getBuilder({
-  function: {
-    alias: ['f'],
+  functionName: {
+    alias: ['f', 'function'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("function")
@@ -35,7 +35,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
 )
 
 export let inputPrompts = {
-  function: {
+  functionName: {
     description: baseLite.bundle.getText("function"),
     type: 'string',
     required: true
@@ -76,9 +76,9 @@ export async function getFunctions(prompts) {
     const db = await base.createDBConnection()
 
     let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.output(base.bundle.getText("log.schemaFunction", [schema, prompts.function]))
+    base.output(base.bundle.getText("log.schemaFunction", [schema, prompts.functionName]))
 
-    let results = await getFunctionsInt(schema, prompts.function, db, prompts.limit)
+    let results = await getFunctionsInt(schema, prompts.functionName, db, prompts.limit)
     base.outputTableFancy(results)
     base.end()
     return results
@@ -118,21 +118,13 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
   const yargs = (await import('yargs')).default
   const { hideBin } = await import('yargs/helpers')
   
-  yargs(hideBin(process.argv))
+  const argv = await builder(yargs(hideBin(process.argv))
     .usage(`${baseLite.bundle.getText("cli.usage")}${command}\n\n${describe}`)
-    .options(builder)
     .help('help').alias('help', 'h')
-    .wrap(null)
-    .parse(process.argv.slice(2), {}, (err, argv, output) => {
-      if (output) {
-        console.log(output)
-      }
-      if (err) {
-        console.error(err.message)
-        process.exit(1)
-      }
-      if (!argv.help && !argv.h) {
-        handler(argv)
-      }
-    })
+    .wrap(null))
+    .argv
+  
+  if (!argv.help && !argv.h) {
+    handler(argv)
+  }
 }

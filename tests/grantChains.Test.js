@@ -35,12 +35,12 @@ describe('grantChains', function () {
 
     it("handles alias grants", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("node bin/grants.js --help", done)
+        localTest("node bin/grantChains.js --help", done)
     })
 
     it("handles alias grantchain", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("node bin/grantchain.js --help", done)
+        localTest("node bin/grantChains.js --help", done)
     })
 
 })

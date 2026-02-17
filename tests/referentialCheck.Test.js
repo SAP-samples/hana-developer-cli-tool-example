@@ -1,11 +1,13 @@
 // @ts-nocheck
-import chai from 'chai'
+import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 import { describe, it, beforeEach, afterEach } from 'mocha'
 import sinon from 'sinon'
+import yargsModule from 'yargs'
 
 chai.use(chaiAsPromised.default)
 const expect = chai.expect
+const yargs = yargsModule
 
 /**
  * @test Referential Check Tests
@@ -57,7 +59,12 @@ describe('@all @referentialCheck', () => {
 
   describe('referentialCheck builder', () => {
     it('should return options with required parameters', () => {
-      const options = referentialCheckCmd.builder({})
+      const mockYargs = {
+        options: (opts) => mockYargs,
+        example: (cmd, desc) => mockYargs,
+        option: () => mockYargs
+      }
+      const options = referentialCheckCmd.builder(mockYargs)
       expect(options).to.have.property('option')
     })
 

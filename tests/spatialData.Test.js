@@ -25,7 +25,7 @@ describe('spatialData', function () {
 
     it("supports spatial alias", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("node bin/spatial.js --help 2>/dev/null || node bin/spatialData.js --help", done)
+        localTest("node bin/spatialData.js --help", done)
     })
 
 })

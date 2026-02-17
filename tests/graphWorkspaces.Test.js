@@ -25,7 +25,7 @@ describe('graphWorkspaces', function () {
 
     it("supports graphWorkspaces alias", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("node bin/gws.js --help 2>/dev/null || node bin/graphWorkspaces.js --help", done)
+        localTest("node bin/graphWorkspaces.js --help", done)
     })
 
 })

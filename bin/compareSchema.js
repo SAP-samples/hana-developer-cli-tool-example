@@ -104,6 +104,12 @@ export let inputPrompts = {
     required: false,
     ask: () => false
   },
+  timeout: {
+    description: baseLite.bundle.getText("compareSchemaTimeout"),
+    type: 'number',
+    required: false,
+    ask: () => false
+  },
   profile: {
     description: baseLite.bundle.getText("profile"),
     type: 'string',

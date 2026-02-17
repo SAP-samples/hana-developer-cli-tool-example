@@ -25,7 +25,7 @@ describe('tableGroups', function () {
 
     it("supports tg alias", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("node bin/tg.js --help 2>/dev/null || node bin/tableGroups.js --help", done)
+        localTest("node bin/tableGroups.js --help", done)
     })
 
 })

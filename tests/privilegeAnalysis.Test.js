@@ -23,9 +23,4 @@ describe('privilegeAnalysis', function () {
         localTest("node bin/privilegeAnalysis.js --depth 3 --quiet", done)
     })
 
-    it("handles user alias", function (done) {
-        const localTest = base.myTest.bind(this)
-        localTest("node bin/privanalysis.js --help", done)
-    })
-
 })

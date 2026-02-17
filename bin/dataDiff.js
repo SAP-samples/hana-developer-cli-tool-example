@@ -82,7 +82,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   }
 })).example('hana-cli dataDiff --table1 source_data --table2 target_data', baseLite.bundle.getText("dataDiffExample"))
 
-export let inputPrompts = {
+const buildInputPrompts = () => ({
   table1: {
     description: baseLite.bundle.getText("dataDiffTable1"),
     type: 'string',
@@ -126,6 +126,27 @@ export let inputPrompts = {
     required: false,
     ask: () => false
   },
+  showValues: {
+    description: baseLite.bundle.getText("dataDiffShowValues"),
+    type: 'boolean',
+    required: false,
+    default: false,
+    ask: () => false
+  },
+  limit: {
+    description: baseLite.bundle.getText("dataDiffLimit"),
+    type: 'number',
+    required: false,
+    default: 10000,
+    ask: () => false
+  },
+  timeout: {
+    description: baseLite.bundle.getText("dataDiffTimeout"),
+    type: 'number',
+    required: false,
+    default: 3600,
+    ask: () => false
+  },
   profile: {
     description: baseLite.bundle.getText("profile"),
     type: 'string',
@@ -138,7 +159,9 @@ export let inputPrompts = {
     required: false,
     ask: () => false
   }
-}
+})
+
+export const inputPrompts = Object.freeze(buildInputPrompts())
 
 /**
  * Command handler function

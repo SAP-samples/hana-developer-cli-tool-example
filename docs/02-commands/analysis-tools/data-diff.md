@@ -28,6 +28,12 @@ For a complete list of parameters and options, use:
 hana-cli dataDiff --help
 ```
 
+## Key Options
+
+- `--showValues, -sv` (boolean): Include actual values in report (default: `false`)
+- `--limit, -l` (number): Maximum rows to compare (default: `10000`)
+- `--timeout, -to` (number): Operation timeout in seconds (default: `3600`)
+
 ## Examples
 
 ### Basic Usage

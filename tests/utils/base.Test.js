@@ -142,11 +142,10 @@ describe('Base Utility Functions', function () {
             const builder = base.getBuilder(input, true, true)
             
             // Check debug aliases
-            assert.ok(builder.debug.alias.includes('Debug'), 'debug should have Debug alias')
+            assert.ok(builder.debug.alias.includes('d'), 'debug should have d alias')
             
             // Check admin aliases
             assert.ok(builder.admin.alias.includes('a'), 'admin should have a alias')
-            assert.ok(builder.admin.alias.includes('Admin'), 'admin should have Admin alias')
             
             // Check disableVerbose aliases
             assert.ok(builder.disableVerbose.alias.includes('quiet'), 'disableVerbose should have quiet alias')

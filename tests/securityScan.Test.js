@@ -50,7 +50,7 @@ describe('securityScan', function () {
 
     it("handles alias secscan", function (done) {
         const localTest = base.myTest.bind(this)
-        localTest("node bin/secscan.js --help", done)
+        localTest("node bin/securityScan.js --help", done)
     })
 
 })

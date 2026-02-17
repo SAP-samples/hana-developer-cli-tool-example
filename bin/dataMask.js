@@ -98,6 +98,12 @@ export const inputPrompts = {
     required: false,
     ask: () => false
   },
+  output: {
+    description: baseLite.bundle.getText("dataMaskOutput"),
+    type: 'string',
+    required: false,
+    ask: () => false
+  },
   profile: {
     description: baseLite.bundle.getText("profile"),
     type: 'string',
