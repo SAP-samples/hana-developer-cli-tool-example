@@ -1,0 +1,162 @@
+# Based on https://www.sap.com/robots.txt
+
+User-agent: *
+Disallow: /
+
+# Search Engines
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-News
+Allow: /
+
+User-agent: Googlebot-Video
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: Storebot-Google
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: 360Spider
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: coccocbot
+Allow: /
+
+User-agent: Daum
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Ecosia_bot
+Allow: /
+
+User-agent: MojeekBot
+Allow: /
+
+User-agent: Yeti
+Allow: /
+
+User-agent: SeznamBot
+Allow: /
+
+User-agent: Sogou web spider
+Allow: /
+
+User-agent: Yahoo! Slurp
+Allow: /
+
+User-agent: YandexAccessibilityBot
+Allow: /
+
+User-agent: YandexMobileBot
+Allow: /
+
+User-agent: Yandex
+Allow: /
+
+# AI and Chat Agents
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+User-agent: MistralAI-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Fetcher and other
+
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: AdsBot-Google-Mobile
+Allow: /
+
+User-agent: AhrefsBot
+Allow: /
+
+User-agent: Google-Safety
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Google-Read-Aloud
+Allow: /
+
+User-agent: Hatena
+Allow: /
+
+User-agent: linkedinbot
+Allow: /
+
+User-agent: Pinterestbot
+Allow: /
+
+User-agent: SchemaBot
+Allow: /
+
+User-agent: Slackbot-LinkExpanding
+Allow: /
+
+User-agent: Telegram
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: SiteAuditBot
+Allow: /
+
+User-agent: Chrome-Lighthouse
+Allow: /
+
+User-agent: Google-InspectionTool
+Allow: /
+
+User-agent: BingPreview
+Allow: /
+
+User-agent: archive.org_bot
+Allow: /
+
+Sitemap: {{SITEMAP}}

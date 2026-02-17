@@ -1,6 +1,16 @@
-# SAP HANA Developer CLI - Documentation
+---
+# https://vitepress.dev/reference/default-theme-home-page
+layout: home
+title: SAP HANA Developer CLI - Documentation
 
-Welcome to the official documentation for the **SAP HANA Developer Command Line Interface**. A developer-centric tool for working with SAP HANA databases from your terminal.
+hero:
+  name: "SAP HANA Developer Command Line Interface"
+  image: /logo.png
+
+  tagline:
+    Welcome to the official documentation for the SAP HANA Developer Command Line Interface. A developer-centric tool for working with SAP HANA databases from your terminal, IDE, or cloud shell environment
+
+---
 
 ## 🚀 Quick Links
 
@@ -9,6 +19,7 @@ Welcome to the official documentation for the **SAP HANA Developer Command Line 
 <div style="border: 1px solid #e3e6f0; border-radius: 8px; padding: 20px;">
 
 ### ⚡ Getting Started
+
 New to hana-cli? Start here with installation and first steps.
 [Get Started →](/01-getting-started/)
 
@@ -17,6 +28,7 @@ New to hana-cli? Start here with installation and first steps.
 <div style="border: 1px solid #e3e6f0; border-radius: 8px; padding: 20px;">
 
 ### 📚 Commands
+
 Explore all available commands organized by category.
 [Browse Commands →](/02-commands/)
 
@@ -25,6 +37,7 @@ Explore all available commands organized by category.
 <div style="border: 1px solid #e3e6f0; border-radius: 8px; padding: 20px;">
 
 ### ✨ Features
+
 Learn about advanced features and integrations.
 [Features →](/03-features/)
 
@@ -33,6 +46,7 @@ Learn about advanced features and integrations.
 <div style="border: 1px solid #e3e6f0; border-radius: 8px; padding: 20px;">
 
 ### 🔌 API Reference
+
 Integration guides and API documentation.
 [API Docs →](/04-api-reference/)
 
@@ -42,7 +56,7 @@ Integration guides and API documentation.
 
 ## What is HANA CLI?
 
-HANA CLI is a powerful command-line tool designed for SAP HANA developers. Whether you're working locally with SAP HANA Express, in the cloud with SAP BTP, or with SAP HANA Cloud, this tool simplifies complex database operations.
+HANA CLI (pronounced "HAN-uh C-L-I") is a powerful command-line tool designed for SAP HANA developers. Whether you're working locally with SAP HANA Express, in the cloud with SAP BTP, or with SAP HANA Cloud, this tool simplifies complex database operations.
 
 ### Key Features
 
@@ -51,7 +65,7 @@ HANA CLI is a powerful command-line tool designed for SAP HANA developers. Wheth
 - **Data Import/Export** - Seamless CSV and Excel file handling
 - **API Server** - REST API for programmatic access
 - **Model Context Protocol** - Integration with AI coding assistants
-- **Multi-Environment** - Works anywhere Node.js runs
+- **Multi-Environment** - Works anywhere Node.js runs (tested on Windows, macOS, and Linux)
 
 ## 📖 Popular Topics
 
@@ -68,17 +82,20 @@ HANA CLI is a powerful command-line tool designed for SAP HANA developers. Wheth
 
 ## 💡 Use Cases
 
-**Local Development**
-- VSCode + SAP HANA Express development
+### Local Development
+
+- VSCode + SAP HANA Express development or [CDS Projects with SAP HANA Cloud remote binding](https://cap.cloud.sap/docs/tools/cds-bind#run-with-service-bindings)
 - Quick database queries and schema changes
 - Data validation and testing
 
-**Cloud Development**
+### Cloud Development
+
 - SAP Business Application Studio integration
 - Cloud shell environments (Google Cloud, AWS)
 - SAP BTP HANA service management
 
-**Data Operations**
+### Data Operations
+
 - ETL and data migration
 - Data quality validation
 - Schema synchronization across environments

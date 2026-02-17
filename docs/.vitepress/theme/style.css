@@ -7,14 +7,30 @@
   --vp-c-brand-lightest: #5CB3FF;
   --vp-c-brand-dark: #005399;
   --vp-c-brand-darker: #003D6B;
+  --vp-sidebar-width: 300px;
+  --vp-nav-height: 44px;
+  --vp-c-brand-1: #088;
+  --vp-c-brand-2: #077;
+  --vp-c-brand-3: #0cc;
+  --vp-c-brand-soft: rgba(16, 179, 185, 0.16);
+
+  --vp-button-brand-active-text: var(--vp-c-text-1);
+  --vp-button-brand-active-bg: var(--vp-c-brand-3);
+  --vp-button-brand-hover-text: var(--vp-c-bg);
+  --vp-button-brand-hover-bg: var(--vp-c-brand-1);
+  --vp-button-brand-text: var(--vp-c-bg);
+  --vp-button-brand-bg: var(--vp-c-brand-2);
+  --vp-button-alt-active-text: var(--vp-c-text-1);
+  --vp-button-alt-active-bg: var(--vp-c-brand-3);
+  --vp-button-alt-hover-text: var(--vp-c-bg);
+  --vp-button-alt-hover-bg: var(--vp-c-brand-2);
+
+  --vp-local-search-highlight-bg: mark;
+  --vp-local-search-highlight-text: black;
+
 }
 
-/* SAP HANA themed colors */
-.dark {
-  --vp-c-bg: #0a0e27;
-  --vp-c-bg-soft: #161b32;
-  --vp-c-bg-mute: #202540;
-}
+
 
 /* Custom code block styling */
 div[class*='language-'] {

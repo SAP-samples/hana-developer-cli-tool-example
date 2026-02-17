@@ -8,17 +8,27 @@ export default withMermaid(defineConfig({
   lang: 'en-US',
   cleanUrls: true,
   ignoreDeadLinks: true,
+  appearance: 'dark',
+  lastUpdated: true,
   
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
-    ['meta', { name: 'theme-color', content: '#0070C0' }],
+    ['meta', { name: 'theme-color', content: '#0092d1' }],
     ['meta', { name: 'og:type', content: 'website' }],
-    ['meta', { name: 'og:image', content: '/logo.png' }],
+    ['meta', { name: 'og:image', content: '/logo.svg' }],
+    ['meta', { name: 'og:site_name', content: 'SAP HANA Developer CLI' }],
+    ['meta', { name: 'keywords', content: 'SAP HANA, CLI, developer tools, database, command-line' }],
+    ['meta', { name: 'author', content: 'SAP' }],
+    ['meta', { name: 'robots', content: 'index, follow' }],
   ],
 
   themeConfig: {
-    logo: '/logo.png',
+    logo: '/logo.svg',
     siteTitle: 'HANA CLI',
+    outline: {
+      level: [2, 3],
+      label: 'On this page'
+    },
     
     nav: [
       { text: 'Home', link: '/' },
@@ -55,6 +65,7 @@ export default withMermaid(defineConfig({
       '/02-commands/': [
         {
           text: 'Commands Reference',
+          collapsed: false,
           items: [
             { text: '📋 All Commands A-Z', link: '/02-commands/all-commands' },
             { text: 'Commands Overview', link: '/02-commands/' },
@@ -62,6 +73,7 @@ export default withMermaid(defineConfig({
         },
         {
           text: 'Analysis Tools',
+          collapsed: true,
           items: [
             { text: 'Column Stats', link: '/02-commands/analysis-tools/column-stats' },
             { text: 'Data Diff', link: '/02-commands/analysis-tools/data-diff' },
@@ -76,6 +88,7 @@ export default withMermaid(defineConfig({
         },
         {
           text: 'Backup & Recovery',
+          collapsed: true,
           items: [
             { text: 'Backup', link: '/02-commands/backup-recovery/backup' },
             { text: 'Backup List', link: '/02-commands/backup-recovery/backup-list' },
@@ -86,6 +99,7 @@ export default withMermaid(defineConfig({
         },
         {
           text: 'BTP Integration',
+          collapsed: true,
           items: [
             { text: 'BTP', link: '/02-commands/btp-integration/btp' },
             { text: 'BTP Info', link: '/02-commands/btp-integration/btp-info' },
@@ -97,6 +111,7 @@ export default withMermaid(defineConfig({
         },
         {
           text: 'Connection & Auth',
+          collapsed: true,
           items: [
             { text: 'Connect', link: '/02-commands/connection-auth/connect' },
             { text: 'Connect via Service Key', link: '/02-commands/connection-auth/connect-via-service-key' },
@@ -109,6 +124,7 @@ export default withMermaid(defineConfig({
         },
         {
           text: 'Data Tools',
+          collapsed: true,
           items: [
             { text: 'Compare Data', link: '/02-commands/data-tools/compare-data' },
             { text: 'Data Sync', link: '/02-commands/data-tools/data-sync' },
@@ -120,6 +136,7 @@ export default withMermaid(defineConfig({
         },
         {
           text: 'Developer Tools',
+          collapsed: true,
           items: [
             { text: 'Call Procedure', link: '/02-commands/developer-tools/call-procedure' },
             { text: 'CDS', link: '/02-commands/developer-tools/cds' },
@@ -137,6 +154,7 @@ export default withMermaid(defineConfig({
         },
         {
           text: 'HANA Cloud',
+          collapsed: true,
           items: [
             { text: 'HANA Cloud Instances', link: '/02-commands/hana-cloud/hana-cloud-instances' },
             { text: 'HANA Cloud SBSS Instances', link: '/02-commands/hana-cloud/hana-cloud-s-b-s-s-instances' },
@@ -149,6 +167,7 @@ export default withMermaid(defineConfig({
         },
         {
           text: 'HDI Management',
+          collapsed: true,
           items: [
             { text: 'Activate HDI', link: '/02-commands/hdi-management/activate-h-d-i' },
             { text: 'Admin HDI', link: '/02-commands/hdi-management/admin-h-d-i' },
@@ -164,6 +183,7 @@ export default withMermaid(defineConfig({
         },
         {
           text: 'Mass Operations',
+          collapsed: true,
           items: [
             { text: 'Mass Convert', link: '/02-commands/mass-operations/mass-convert' },
             { text: 'Mass Delete', link: '/02-commands/mass-operations/mass-delete' },
@@ -176,6 +196,7 @@ export default withMermaid(defineConfig({
         },
         {
           text: 'Object Inspection',
+          collapsed: true,
           items: [
             { text: 'Functions', link: '/02-commands/object-inspection/functions' },
             { text: 'Indexes', link: '/02-commands/object-inspection/indexes' },
@@ -198,6 +219,7 @@ export default withMermaid(defineConfig({
         },
         {
           text: 'Performance & Monitoring',
+          collapsed: true,
           items: [
             { text: 'Alerts', link: '/02-commands/performance-monitoring/alerts' },
             { text: 'Blocking', link: '/02-commands/performance-monitoring/blocking' },
@@ -215,6 +237,7 @@ export default withMermaid(defineConfig({
         },
         {
           text: 'Schema Tools',
+          collapsed: true,
           items: [
             { text: 'Compare Schema', link: '/02-commands/schema-tools/compare-schema' },
             { text: 'Schema Clone', link: '/02-commands/schema-tools/schema-clone' },
@@ -223,6 +246,7 @@ export default withMermaid(defineConfig({
         },
         {
           text: 'Security',
+          collapsed: true,
           items: [
             { text: 'Audit Log', link: '/02-commands/security/audit-log' },
             { text: 'Certificates', link: '/02-commands/security/certificates' },
@@ -238,6 +262,7 @@ export default withMermaid(defineConfig({
         },
         {
           text: 'System Administration',
+          collapsed: true,
           items: [
             { text: 'Cache Contents', link: '/02-commands/system-admin/cache-contents' },
             { text: 'Crash Dumps', link: '/02-commands/system-admin/crash-dumps' },
@@ -259,6 +284,7 @@ export default withMermaid(defineConfig({
         },
         {
           text: 'System Tools',
+          collapsed: true,
           items: [
             { text: 'Cache Contents', link: '/02-commands/system-tools/cache-contents' },
             { text: 'Code Hotspots', link: '/02-commands/system-tools/code-hotspots' },
@@ -464,8 +490,8 @@ export default withMermaid(defineConfig({
     ],
 
     footer: {
-      message: 'Released under the Apache License 2.0',
-      copyright: 'Copyright © 2024 SAP'
+      message: 'Released under the Apache License 2.0 | <a href="https://www.sap.com">SAP SE</a>',
+      copyright: 'Copyright © 2026 SAP | <a href="https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/Feb2026/CONTRIBUTING.md">Contributing</a> | <a href="https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/Feb2026/LICENSE">License</a> | <a href="https://www.sap.com/about/legal/impressum.html">Legal Disclosure</a>'
     },
 
     search: {
@@ -475,6 +501,14 @@ export default withMermaid(defineConfig({
     editLink: {
       pattern: 'https://github.com/SAP-samples/hana-developer-cli-tool-example/edit/Feb2026/docs/:path',
       text: 'Edit this page on GitHub'
+    },
+
+    lastUpdated: {
+      text: 'Last updated',
+      formatOptions: {
+        dateStyle: 'short',
+        timeStyle: 'short'
+      }
     }
   },
 

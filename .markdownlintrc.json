@@ -1,0 +1,6 @@
+{
+  "extends": "default",
+  "rules": {
+    "MD033": false
+  }
+}
