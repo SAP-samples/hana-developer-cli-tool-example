@@ -486,7 +486,7 @@ export default withMermaid(defineConfig({
             { text: 'Overview', link: '/99-reference/' },
             { text: 'Changelog', link: '/99-reference/changelog' },
             { text: 'Command Reference', link: '/99-reference/command-reference' },
-            { text: 'Extended FAQ', link: '/99-reference/faq-extended' },
+            { text: 'FAQ', link: '/99-reference/faq-extended' },
           ]
         }
       ],

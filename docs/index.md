@@ -109,7 +109,7 @@ HANA CLI (pronounced "HAN-uh C-L-I") is a powerful command-line tool designed fo
 
 ## 📝 Need Help?
 
-- Check the [Frequently Asked Questions](./faq.md)
+- Check the [Frequently Asked Questions](./99-reference/faq-extended.md)
 - Review [Troubleshooting Guide](./troubleshooting.md)
 - Search the documentation above
 - Open an issue on [GitHub](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues)

@@ -6,7 +6,7 @@ Additional reference materials and project history.
 
 - [Changelog](./changelog.md) - Version history and releases
 - [Command Reference](./command-reference.md) - Complete command reference
-- [FAQ](./faq-extended.md) - Extended frequently asked questions
+- [FAQ](./faq-extended.md) - Frequently asked questions
 
 ## Troubleshooting & Issues
 
@@ -16,6 +16,7 @@ Additional reference materials and project history.
 ## Additional Resources
 
 Root-level reference documentation:
+
 - [COMMAND_REFERENCE.md](../../COMMAND_REFERENCE.md)
 - [README.md](../../README.md)
 - [Project Analysis & Planning](../../ISSUE_ANALYSIS.md)
