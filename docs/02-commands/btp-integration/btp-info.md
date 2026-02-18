@@ -31,7 +31,44 @@ hana-cli btpInfo --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli btpInfo --output json
+hana-cli btpInfo --output json
+```
+
+Execute the command
+
+---
+
+## btpInfoUI (UI Variant)
+
+> Command: `btpInfoUI`  
+> Status: Production Ready
+
+**Description:** Execute btpInfoUI command - UI version of BTP information display
+
+**Syntax:**
+
+```bash
+hana-cli btpInfoUI [options]
+```
+
+**Aliases:**
+
+- `btpinfoUI`
+- `btpui`
+- `btpInfoui`
+
+**Parameters:**
+
+For a complete list of parameters and options, use:
+
+```bash
+hana-cli btpInfoUI --help
+```
+
+**Example Usage:**
+
+```bash
+hana-cli btpInfoUI
 ```
 
 Execute the command

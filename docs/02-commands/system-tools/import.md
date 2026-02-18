@@ -41,6 +41,44 @@ hana-cli import -n report.xlsx -o excel -t SALES -m name
 hana-cli import -n refresh.csv -t MASTER_DATA --truncate
 ```
 
+---
+
+## importUI (UI Variant)
+
+> Command: `importUI`  
+> Status: Production Ready
+
+**Description:** Import data from CSV or Excel files into a database table via browser based UI
+
+**Syntax:**
+
+```bash
+hana-cli importUI [filename] [table] [options]
+```
+
+**Aliases:**
+
+- `impui`
+- `importui`
+- `uploadui`
+- `uploadUI`
+
+**Parameters:**
+
+For a complete list of parameters and options, use:
+
+```bash
+hana-cli importUI --help
+```
+
+**Example Usage:**
+
+```bash
+hana-cli importUI
+```
+
+Execute the command
+
 ## Related Commands
 
 - [Complete Import Documentation](../data-tools/import.md) - Full reference with all parameters and examples

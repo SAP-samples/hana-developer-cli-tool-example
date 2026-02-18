@@ -41,6 +41,47 @@ hana-cli hana-cli securestore --cf
 
 Execute the command
 
+---
+
+## hanaCloudSecureStoreInstancesUI (UI Variant)
+
+> Command: `hanaCloudSecureStoreInstancesUI`  
+> Status: Production Ready
+
+**Description:** Execute hanaCloudSecureStoreInstancesUI command - UI version for listing SAP HANA Cloud SecureStore instances
+
+**Syntax:**
+
+```bash
+hana-cli securestoreUI [options]
+```
+
+**Aliases:**
+
+- `secureStoreInstancesUI`
+- `secureStoreUI`
+- `securestoreinstancesui`
+- `secureStoreServicesUI`
+- `listSecureStoreUI`
+- `securestoreservicesui`
+- `securestoresui`
+
+**Parameters:**
+
+For a complete list of parameters and options, use:
+
+```bash
+hana-cli hanaCloudSecureStoreInstancesUI --help
+```
+
+**Example Usage:**
+
+```bash
+hana-cli hanaCloudSecureStoreInstancesUI
+```
+
+Execute the command
+
 ## Related Commands
 
 See the [Commands Reference](../all-commands.md) for other commands in this category.

@@ -40,6 +40,46 @@ hana-cli hana-cli inspectTable --table myTable --schema MYSCHEMA
 
 Execute the command
 
+---
+
+## inspectTableUI (UI Variant)
+
+> Command: `inspectTableUI`  
+> Status: Production Ready
+
+**Description:** Execute inspectTableUI command - UI version for inspecting table metadata
+
+**Syntax:**
+
+```bash
+hana-cli inspectTableUI [schema] [table] [options]
+```
+
+**Aliases:**
+
+- `itui`
+- `tableUI`
+- `tableui`
+- `insTblUI`
+- `inspecttableui`
+- `inspectableui`
+
+**Parameters:**
+
+For a complete list of parameters and options, use:
+
+```bash
+hana-cli inspectTableUI --help
+```
+
+**Example Usage:**
+
+```bash
+hana-cli inspectTableUI
+```
+
+Execute the command
+
 ## Related Commands
 
 See the [Commands Reference](../all-commands.md) for other commands in this category.

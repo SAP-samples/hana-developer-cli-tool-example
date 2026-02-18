@@ -38,6 +38,44 @@ hana-cli changeLog
 
 Execute the command
 
+---
+
+## changeLogUI (UI Variant)
+
+> Command: `changeLogUI`  
+> Status: Production Ready
+
+**Description:** Display Change Log in CLI with UI interface
+
+**Syntax:**
+
+```bash
+hana-cli changesUI [options]
+```
+
+**Aliases:**
+
+- `chgUI`
+- `chgui`
+- `changeLogUI`
+- `changelogui`
+
+**Parameters:**
+
+For a complete list of parameters and options, use:
+
+```bash
+hana-cli changeLogUI --help
+```
+
+**Example Usage:**
+
+```bash
+hana-cli changeLogUI
+```
+
+Execute the command
+
 ## Related Commands
 
 See the [Commands Reference](../all-commands.md) for other commands in this category.
