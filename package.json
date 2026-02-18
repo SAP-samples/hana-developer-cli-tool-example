@@ -29,7 +29,8 @@
     "coverage:check": "nyc check-coverage --lines 80 --functions 80 --branches 80",
     "changelog": "node CHANGELOG",
     "types": "tsc  --declaration --allowJs --emitDeclarationOnly --outDir types --skipLibCheck",
-    "postinstall": "node scripts/postinstall.js"
+    "postinstall": "node scripts/postinstall.js",
+    "build:docs-index": "node scripts/build-docs-index.js"
   },
   "repository": {
     "type": "git",

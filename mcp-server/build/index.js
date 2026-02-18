@@ -15,6 +15,7 @@ import { interpretResult } from './result-interpretation.js';
 import { smartSearch } from './smart-search.js';
 import { getConversationTemplate, listConversationTemplates } from './conversation-templates.js';
 import ReadmeKnowledgeBase from './readme-knowledge-base.js';
+import { docsSearch } from './docs-search.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 /**
@@ -385,6 +386,67 @@ class HanaCliMcpServer {
                         },
                     },
                     required: ['query'],
+                },
+            });
+            // Documentation Search Tools
+            tools.push({
+                name: 'hana_search_docs',
+                description: 'Search the comprehensive documentation website (https://sap-samples.github.io/hana-developer-cli-tool-example/) for guides, tutorials, command references, and detailed explanations. Returns relevant documents with excerpts and metadata.',
+                inputSchema: {
+                    type: 'object',
+                    properties: {
+                        query: {
+                            type: 'string',
+                            description: 'Search query (e.g., "import data", "BTP integration", "connection setup", "performance tuning")',
+                        },
+                        category: {
+                            type: 'string',
+                            description: 'Optional: limit search to specific category (getting-started, commands, features, api-reference, development)',
+                        },
+                        docType: {
+                            type: 'string',
+                            enum: ['tutorial', 'command', 'api', 'feature', 'troubleshooting', 'development', 'general'],
+                            description: 'Optional: filter by document type',
+                        },
+                        limit: {
+                            type: 'number',
+                            default: 10,
+                            description: 'Maximum number of results to return (default: 10)',
+                        },
+                    },
+                    required: ['query'],
+                },
+            });
+            tools.push({
+                name: 'hana_get_doc',
+                description: 'Retrieve the full content of a specific documentation page. Use after hana_search_docs to get complete details from a relevant document.',
+                inputSchema: {
+                    type: 'object',
+                    properties: {
+                        path: {
+                            type: 'string',
+                            description: 'Document path from search results (e.g., "01-getting-started/installation.md", "02-commands/data-tools/import.md")',
+                        },
+                    },
+                    required: ['path'],
+                },
+            });
+            tools.push({
+                name: 'hana_docs_stats',
+                description: 'Get documentation statistics including total documents, categories, and document types available. Useful for understanding the scope of available documentation.',
+                inputSchema: {
+                    type: 'object',
+                    properties: {},
+                    required: [],
+                },
+            });
+            tools.push({
+                name: 'hana_list_doc_categories',
+                description: 'List all available documentation categories and document types. Use this to understand what documentation is available before searching.',
+                inputSchema: {
+                    type: 'object',
+                    properties: {},
+                    required: [],
                 },
             });
             tools.push({
@@ -1057,6 +1119,189 @@ class HanaCliMcpServer {
                                 note: searchResults.totalResults > 0
                                     ? `Found ${searchResults.totalResults} matches. Results sorted by relevance.`
                                     : 'No matches found. Try different keywords or browse by category.',
+                            }, null, 2),
+                        },
+                    ],
+                };
+            }
+            // Documentation Search Tool Handlers
+            if (commandName === 'search_docs') {
+                const query = args?.query;
+                const category = args?.category;
+                const docType = args?.docType;
+                const limit = args?.limit || 10;
+                if (!query) {
+                    return {
+                        content: [
+                            {
+                                type: 'text',
+                                text: 'Error: query parameter is required',
+                            },
+                        ],
+                    };
+                }
+                if (!docsSearch.isAvailable()) {
+                    return {
+                        content: [
+                            {
+                                type: 'text',
+                                text: JSON.stringify({
+                                    error: 'Documentation index not available',
+                                    tip: 'Run "npm run build:docs-index" in the project root to generate the documentation index',
+                                }, null, 2),
+                            },
+                        ],
+                    };
+                }
+                const results = docsSearch.search(query, { category, docType, limit });
+                return {
+                    content: [
+                        {
+                            type: 'text',
+                            text: JSON.stringify({
+                                query,
+                                totalResults: results.length,
+                                results: results.map(r => ({
+                                    title: r.document.title,
+                                    path: r.document.path,
+                                    category: r.document.category,
+                                    docType: r.document.docType,
+                                    relevance: r.relevance,
+                                    excerpt: r.snippet || r.document.excerpt,
+                                    matchedKeywords: r.matchedKeywords,
+                                    url: `https://sap-samples.github.io/hana-developer-cli-tool-example/${r.document.path.replace('.md', '.html')}`,
+                                })),
+                                tip: results.length > 0
+                                    ? 'Use hana_get_doc with the path to read the full document content'
+                                    : 'No matches found. Try different keywords or use hana_list_doc_categories to browse available documentation',
+                            }, null, 2),
+                        },
+                    ],
+                };
+            }
+            if (commandName === 'get_doc') {
+                const path = args?.path;
+                if (!path) {
+                    return {
+                        content: [
+                            {
+                                type: 'text',
+                                text: 'Error: path parameter is required',
+                            },
+                        ],
+                    };
+                }
+                if (!docsSearch.isAvailable()) {
+                    return {
+                        content: [
+                            {
+                                type: 'text',
+                                text: JSON.stringify({
+                                    error: 'Documentation index not available',
+                                    tip: 'Run "npm run build:docs-index" in the project root to generate the documentation index',
+                                }, null, 2),
+                            },
+                        ],
+                    };
+                }
+                const document = docsSearch.getDocument(path);
+                const content = docsSearch.getDocumentContent(path);
+                if (!document || !content) {
+                    return {
+                        content: [
+                            {
+                                type: 'text',
+                                text: JSON.stringify({
+                                    error: `Document not found: ${path}`,
+                                    tip: 'Use hana_search_docs to find valid document paths',
+                                }, null, 2),
+                            },
+                        ],
+                    };
+                }
+                return {
+                    content: [
+                        {
+                            type: 'text',
+                            text: JSON.stringify({
+                                title: document.title,
+                                path: document.path,
+                                category: document.category,
+                                docType: document.docType,
+                                url: `https://sap-samples.github.io/hana-developer-cli-tool-example/${path.replace('.md', '.html')}`,
+                                headings: document.headings,
+                                content: content,
+                                relatedLinks: document.links,
+                                lastModified: document.lastModified,
+                            }, null, 2),
+                        },
+                    ],
+                };
+            }
+            if (commandName === 'docs_stats') {
+                if (!docsSearch.isAvailable()) {
+                    return {
+                        content: [
+                            {
+                                type: 'text',
+                                text: JSON.stringify({
+                                    error: 'Documentation index not available',
+                                    tip: 'Run "npm run build:docs-index" in the project root to generate the documentation index',
+                                }, null, 2),
+                            },
+                        ],
+                    };
+                }
+                const stats = docsSearch.getStats();
+                return {
+                    content: [
+                        {
+                            type: 'text',
+                            text: JSON.stringify({
+                                ...stats,
+                                websiteUrl: 'https://sap-samples.github.io/hana-developer-cli-tool-example/',
+                                usage: 'Use hana_search_docs to search, hana_list_doc_categories to browse',
+                            }, null, 2),
+                        },
+                    ],
+                };
+            }
+            if (commandName === 'list_doc_categories') {
+                if (!docsSearch.isAvailable()) {
+                    return {
+                        content: [
+                            {
+                                type: 'text',
+                                text: JSON.stringify({
+                                    error: 'Documentation index not available',
+                                    tip: 'Run "npm run build:docs-index" in the project root to generate the documentation index',
+                                }, null, 2),
+                            },
+                        ],
+                    };
+                }
+                const categories = docsSearch.getCategories();
+                const docTypes = docsSearch.getDocTypes();
+                const categorySummary = {};
+                categories.forEach(cat => {
+                    const docs = docsSearch.listByCategory(cat);
+                    categorySummary[cat] = {
+                        documentCount: docs.length,
+                        sampleDocuments: docs.slice(0, 3).map(d => ({
+                            title: d.title,
+                            path: d.path,
+                        })),
+                    };
+                });
+                return {
+                    content: [
+                        {
+                            type: 'text',
+                            text: JSON.stringify({
+                                categories: categorySummary,
+                                documentTypes: docTypes,
+                                totalCategories: categories.length,
+                                usage: 'Use hana_search_docs with category parameter to limit search scope',
                             }, null, 2),
                         },
                     ],

@@ -188,6 +188,46 @@ The MCP server now integrates comprehensive documentation from all project markd
   - Discover related documentation
   - Examples: "security", "connection", "parameters", "import", "data-quality"
 
+### Comprehensive Documentation Search (Phase 4 - NEW!)
+
+The MCP server now has complete access to all 279 documentation pages from the website:
+
+- **`hana_search_docs`** - Search the full documentation website
+  - Full-text search across all guides, tutorials, command references, and feature docs
+  - Filter by category: getting-started, commands, features, api-reference, development, troubleshooting
+  - Filter by document type: tutorial, command, api, feature, troubleshooting, development, general
+  - Returns ranked results with: title, excerpt, matched keywords, relevance score, direct website URL
+  - **279 documents** indexed with **2,285 keywords** from <https://sap-samples.github.io/hana-developer-cli-tool-example/>
+  - Example: Search for "import CSV data validation" to find relevant import command documentation
+
+- **`hana_get_doc`** - Retrieve full content of any documentation page
+  - Get complete markdown content with all details
+  - Includes table of contents (heading structure)
+  - Shows related document links for further reading
+  - Use after `hana_search_docs` to read full guides
+  - Example: Get full content of "01-getting-started/installation.md"
+
+- **`hana_docs_stats`** - Get documentation index statistics
+  - Total documents indexed: 279
+  - Available categories: 9 (getting-started, commands, features, api-reference, development, troubleshooting, etc.)
+  - Document type distribution
+  - Index build date and version
+  
+- **`hana_list_doc_categories`** - Browse all documentation categories
+  - List all 9 categories with document counts
+  - Sample documents from each category
+  - Perfect for discovering what documentation is available
+
+**Rebuild Documentation Index:**
+After adding or updating documentation files, rebuild the index:
+
+```bash
+npm run build:docs-index  # In project root
+cd mcp-server && npm run build  # Rebuild MCP server
+```
+
+See [DOCS_SEARCH_IMPLEMENTATION.md](./DOCS_SEARCH_IMPLEMENTATION.md) for complete implementation details.
+
 ### Knowledge Base Examples
 
 **Get connection setup guidance:**

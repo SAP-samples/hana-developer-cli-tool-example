@@ -168,6 +168,7 @@ const COMMAND_CATEGORIES = {
   'cds': 'developer-tools',
   'createModule': 'developer-tools',
   'generateDocs': 'developer-tools',
+  'helpDocu': 'developer-tools',
   'issue': 'developer-tools',
   'openChangeLog': 'developer-tools',
   'openReadMe': 'developer-tools',

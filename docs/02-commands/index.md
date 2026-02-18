@@ -43,6 +43,18 @@ Tools for schema management and database structure operations.
 - **[Schema Clone](./schema-tools/schema-clone.md)** - Clone entire schemas with data
 - **[Table Copy](./schema-tools/table-copy.md)** - Copy tables between schemas
 
+## 🛠️ Developer Tools
+
+Commands for development and testing.
+
+- **[Help Documentation](./developer-tools/help-docu.md)** - Open Help Documentation in web browser
+- **[Open README](./developer-tools/open-read-me.md)** - Open README documentation
+- **[Open Change Log](./developer-tools/open-change-log.md)** - Open change log documentation
+- **[CDS](./developer-tools/cds.md)** - CDS operations
+- **[Generate Docs](./developer-tools/generate-docs.md)** - Generate documentation
+
+*Plus 10 more: Call Procedure, Change Log, Code Template, Create Module, HDBSQL, Issue, Query Simple, README - See [All Commands](./all-commands.md)*
+
 ## ⚙️ System Tools
 
 Administrative and system-level commands.

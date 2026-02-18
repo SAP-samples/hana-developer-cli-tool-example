@@ -151,6 +151,7 @@ export default withMermaid(defineConfig({
             { text: 'Code Template', link: '/02-commands/developer-tools/code-template' },
             { text: 'Create Module', link: '/02-commands/developer-tools/create-module' },
             { text: 'Generate Docs', link: '/02-commands/developer-tools/generate-docs' },
+            { text: 'Help Documentation', link: '/02-commands/developer-tools/help-docu' },
             { text: 'HDBSQL', link: '/02-commands/developer-tools/hdbsql' },
             { text: 'Issue', link: '/02-commands/developer-tools/issue' },
             { text: 'Open Change Log', link: '/02-commands/developer-tools/open-change-log' },
