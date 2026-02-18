@@ -2,6 +2,15 @@
 
 This MCP (Model Context Protocol) server exposes all SAP HANA CLI commands as tools that can be used by AI assistants like Claude.
 
+## 🎯 Key Features
+
+- **150+ Tools** - All hana-cli commands accessible via MCP
+- **📚 Resources** - Browsable documentation (NEW!)
+- **🎬 Prompts** - Guided workflows for common tasks (NEW!)
+- **🔍 Discovery** - Intent-based command recommendations
+- **📖 Examples** - Real-world usage examples and parameter presets
+- **🔄 Workflows** - Pre-built multi-step task sequences
+
 ## Installation
 
 The server is already built and ready to use. Dependencies are installed automatically via the `prepare` script.
@@ -29,6 +38,115 @@ To use this MCP server with Cline/Claude Dev, add the following to your MCP sett
 ## Server Icon
 
 This MCP server publishes an icon via the MCP `serverInfo.icons` metadata. For compatibility, the icon is embedded as a PNG data URI derived from `../app/resources/favicon.ico`. If you want to swap the logo, replace the PNG data URI in `src/index.ts` with a new PNG or SVG data URI and update the `mimeType` accordingly.
+
+---
+
+## MCP Resources (NEW!) 📚
+
+Resources provide browsable documentation that AI agents can discover and read directly. This makes it easier for agents to find accurate, up-to-date information without guessing which tools to call.
+
+### Available Resources
+
+**Core Documentation:**
+- `hana://docs/overview` - Project overview and introduction
+- `hana://docs/getting-started` - Installation and setup guide
+- `hana://docs/connection-guide` - 7-step connection resolution guide
+- `hana://docs/security` - Security best practices
+- `hana://docs/parameters` - Standard parameter conventions
+- `hana://docs/best-practices` - Naming conventions and usage patterns
+- `hana://docs/project-structure` - Project folder organization
+
+**Category Guides:**
+- `hana://docs/categories/data-quality` - Data validation, profiling, duplicates
+- `hana://docs/categories/performance` - Performance analysis commands
+- `hana://docs/categories/data-operations` - Import, export, sync commands
+- `hana://docs/categories/inspection` - Schema, table, view exploration
+
+**Command Documentation:**
+- `hana://docs/commands/import` - Import command detailed guide
+- `hana://docs/commands/export` - Export command detailed guide
+- `hana://docs/commands/dataValidator` - Data validation guide
+- `hana://docs/commands/dataProfile` - Data profiling guide
+- `hana://docs/commands/[any-command]` - Access docs for any command
+
+**Other:**
+- `hana://prompts` - List all available workflow prompts
+
+### How AI Agents Use Resources
+
+Instead of calling search tools, agents can directly browse and read documentation:
+
+```typescript
+// Agent discovers available resources
+const resources = await listResources();
+
+// Agent reads specific documentation
+const overview = await readResource('hana://docs/overview');
+const security = await readResource('hana://docs/security');
+const importDocs = await readResource('hana://docs/commands/import');
+```
+
+---
+
+## MCP Prompts (NEW!) 🎬
+
+Prompts are guided workflows that provide step-by-step instructions for common tasks. They help agents follow best practices automatically.
+
+### Available Prompts
+
+1. **`explore-database`** - Step-by-step database exploration
+   - Optional argument: `schema` (specific schema to explore)
+   - Guides through: connection check → system info → schemas → tables → profiling
+
+2. **`import-data`** - Safe data import with validation
+   - Required: `filename` (file to import)
+   - Optional: `table`, `schema`
+   - Workflow: dry run → review → import → validate
+
+3. **`troubleshoot-connection`** - Diagnose connection problems
+   - No arguments required
+   - Guides through common connection issues and solutions
+
+4. **`validate-data-quality`** - Comprehensive quality validation
+   - Required: `table` (table to validate)
+   - Optional: `schema`
+   - Workflow: profile → duplicates → validation → analysis
+
+5. **`quickstart`** - Beginner's guide (first 6 commands)
+   - No arguments required
+   - Perfect for new users learning hana-cli
+
+6. **`export-data`** - Safe data export workflow
+   - Required: `table` (table to export)
+   - Optional: `schema`, `format` (csv/excel/tsv)
+   - Workflow: verify → configure → export → validate
+
+### How AI Agents Use Prompts
+
+Prompts provide pre-structured conversation templates:
+
+```typescript
+// User: "Help me explore the database"
+// Agent invokes the explore-database prompt
+const prompt = await getPrompt('explore-database', { schema: 'SALES' });
+
+// Returns structured workflow with reasoning
+{
+  messages: [
+    { role: 'user', content: { type: 'text', text: 'I want to explore...' } },
+    { role: 'assistant', content: { type: 'text', text: 'Step 1: Verify Connection...' } }
+  ]
+}
+```
+
+**Benefits:**
+- ✅ Consistent, high-quality interactions
+- ✅ Best practices baked in
+- ✅ Error prevention through validation steps
+- ✅ Clear progress indicators
+- ✅ Reduced need for user explanation
+
+---
 
 ## Available Commands
 

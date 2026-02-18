@@ -65,6 +65,11 @@ interface SearchOptions {
 
 /**
  * Documentation search class
+ * 
+ * IMPORTANT: This class runs within the MCP (Model Context Protocol) server.
+ * MCP communicates via JSON-RPC over STDIO. Any output to stdout (console.log)
+ * will break the protocol. Always use console.error() for logging instead,
+ * which writes to stderr and won't interfere with MCP communication.
  */
 export class DocsSearch {
   private index: DocumentIndex | null = null;
@@ -93,7 +98,7 @@ export class DocsSearch {
         });
       }
       
-      console.log(`[DocsSearch] Loaded index with ${this.index?.totalDocuments || 0} documents`);
+      console.error(`[DocsSearch] Loaded index with ${this.index?.totalDocuments || 0} documents`);
     } catch (error) {
       console.error('[DocsSearch] Failed to load documentation index:', error);
       this.index = null;

@@ -11,6 +11,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 /**
  * Documentation search class
+ *
+ * IMPORTANT: This class runs within the MCP (Model Context Protocol) server.
+ * MCP communicates via JSON-RPC over STDIO. Any output to stdout (console.log)
+ * will break the protocol. Always use console.error() for logging instead,
+ * which writes to stderr and won't interfere with MCP communication.
  */
 export class DocsSearch {
     index = null;
@@ -35,7 +40,7 @@ export class DocsSearch {
                     this.documentsMap.set(doc.path, doc);
                 });
             }
-            console.log(`[DocsSearch] Loaded index with ${this.index?.totalDocuments || 0} documents`);
+            console.error(`[DocsSearch] Loaded index with ${this.index?.totalDocuments || 0} documents`);
         }
         catch (error) {
             console.error('[DocsSearch] Failed to load documentation index:', error);

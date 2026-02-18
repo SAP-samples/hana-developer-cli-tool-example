@@ -39,6 +39,11 @@ interface SearchOptions {
 }
 /**
  * Documentation search class
+ *
+ * IMPORTANT: This class runs within the MCP (Model Context Protocol) server.
+ * MCP communicates via JSON-RPC over STDIO. Any output to stdout (console.log)
+ * will break the protocol. Always use console.error() for logging instead,
+ * which writes to stderr and won't interfere with MCP communication.
  */
 export declare class DocsSearch {
     private index;

@@ -1,10 +1,27 @@
 #!/usr/bin/env node
 
+/**
+ * MCP Server for SAP HANA CLI
+ * 
+ * CRITICAL: This file implements the Model Context Protocol (MCP) server.
+ * MCP communicates via JSON-RPC over STDIO. All logging MUST use console.error()
+ * to write to stderr, never console.log() which writes to stdout.
+ * 
+ * Any non-JSON output to stdout will break the protocol and cause errors like:
+ * "Failed to parse message: ..."
+ * 
+ * Use console.error() for all logging throughout this file and in modules it imports.
+ */
+
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
+  ListResourcesRequestSchema,
+  ReadResourceRequestSchema,
+  ListPromptsRequestSchema,
+  GetPromptRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { dirname, join } from 'path';
@@ -21,6 +38,8 @@ import { smartSearch } from './smart-search.js';
 import { getConversationTemplate, listConversationTemplates } from './conversation-templates.js';
 import ReadmeKnowledgeBase from './readme-knowledge-base.js';
 import { docsSearch } from './docs-search.js';
+import { listResources, readResource } from './resources.js';
+import { listPrompts, getPrompt } from './prompts.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -60,6 +79,8 @@ class HanaCliMcpServer {
       {
         capabilities: {
           tools: {},
+          resources: {},
+          prompts: {},
         },
       }
     );
@@ -80,6 +101,9 @@ class HanaCliMcpServer {
   }
 
   private setupHandlers(): void {
+    this.setupResourceHandlers();
+    this.setupPromptHandlers();
+    
     // List available tools
     this.server.setRequestHandler(ListToolsRequestSchema, async () => {
       const tools = [];
@@ -1667,6 +1691,66 @@ class HanaCliMcpServer {
             },
           ],
         };
+      }
+    });
+  }
+
+  /**
+   * Setup MCP Resource handlers for documentation access
+   */
+  private setupResourceHandlers(): void {
+    // List available resources
+    this.server.setRequestHandler(ListResourcesRequestSchema, async () => {
+      try {
+        const resources = listResources();
+        return { resources };
+      } catch (error) {
+        console.error('[MCP] Error listing resources:', error);
+        return { resources: [] };
+      }
+    });
+
+    // Read a specific resource
+    this.server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+      try {
+        const { uri } = request.params;
+        const content = await readResource(uri);
+        return {
+          contents: [content],
+        };
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        console.error(`[MCP] Error reading resource ${request.params.uri}:`, errorMsg);
+        throw new Error(`Failed to read resource: ${errorMsg}`);
+      }
+    });
+  }
+
+  /**
+   * Setup MCP Prompt handlers for guided workflows
+   */
+  private setupPromptHandlers(): void {
+    // List available prompts
+    this.server.setRequestHandler(ListPromptsRequestSchema, async () => {
+      try {
+        const prompts = listPrompts();
+        return { prompts };
+      } catch (error) {
+        console.error('[MCP] Error listing prompts:', error);
+        return { prompts: [] };
+      }
+    });
+
+    // Get a specific prompt
+    this.server.setRequestHandler(GetPromptRequestSchema, async (request) => {
+      try {
+        const { name, arguments: args } = request.params;
+        const result = getPrompt(name, args as Record<string, string> | undefined);
+        return result;
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        console.error(`[MCP] Error getting prompt ${request.params.name}:`, errorMsg);
+        throw new Error(`Failed to get prompt: ${errorMsg}`);
       }
     });
   }

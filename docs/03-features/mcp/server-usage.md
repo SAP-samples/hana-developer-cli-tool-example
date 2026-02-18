@@ -71,8 +71,78 @@ The MCP server exposes 150+ HANA CLI tools:
 }
 ```
 
-2. Restart Claude Desktop
-3. Ask Claude questions about your HANA database
+1. Restart Claude Desktop
+1. Ask Claude questions about your HANA database
+
+### With VSCode (GitHub Copilot)
+
+1. **Build the MCP Server**
+
+   ```bash
+   cd mcp-server
+   npm install
+   npm run build
+   ```
+
+1. **Build the Documentation Index**
+
+   The MCP server includes documentation search tools. Build the index so they work:
+
+   ```bash
+   npm run build:docs-index
+   ```
+
+1. **Configure VSCode MCP Settings**
+
+   Edit your VSCode MCP configuration at `~/.config/Code/User/mcp.json` (or find it in your User settings):
+
+   ```json
+   {
+     "servers": {
+       "io.github.SAP-samples/hana-cli-mcp-server": {
+         "type": "stdio",
+         "command": "node",
+         "args": [
+           "D:/projects/hana-developer-cli-tool-example/mcp-server/build/index.js"
+         ]
+       }
+     }
+   }
+   ```
+
+   **Important Notes:**
+
+   - Replace `D:/projects/hana-developer-cli-tool-example` with your actual project path
+   - Use absolute paths (not relative paths)
+   - Use forward slashes `/` even on Windows
+   - The server name `io.github.SAP-samples/hana-cli-mcp-server` is the standard naming convention and ensures proper tool discovery
+
+1. **Restart VSCode**
+
+   VSCode will automatically detect and load the MCP server
+
+1. **Verify Installation**
+
+   - Open the VSCode output panel (View → Output)
+   - Select "Copilot" from the dropdown
+   - You should see messages like:
+
+   ```text
+   [MCP] Loaded 168 command modules from hana-cli
+   [MCP] Registered 764 tools
+   [MCP] SAP HANA CLI MCP Server running on stdio
+   ```
+
+1. **Use with Copilot**
+
+   Ask Copilot questions about your HANA database:
+
+   - "Show me all tables in my schema"
+   - "Import CSV data into this table"
+   - "Compare data between two tables"
+   - Copilot will use the `hana_*` tools to answer
+
+**Tip:** Use `hana_search_docs` tool to search the full documentation for answers to complex questions.
 
 ### With Custom AI Agents
 
@@ -119,9 +189,10 @@ When calling MCP tools, pass project context to automatically detect connections
 ```
 
 The MCP server will:
+
 1. Change to the project directory
-2. Look for `.env`, `default-env.json`, or connection files
-3. Execute the command using the project's database
+1. Look for `.env`, `default-env.json`, or connection files
+1. Execute the command using the project's database
 
 See [Connection Guide](./connection-guide.md) for details.
 
@@ -138,13 +209,15 @@ All results are returned as **markdown tables** for easy reading:
 ## Error Handling
 
 When a command fails, the error is returned with:
+
 - Error message
 - Command that failed
 - Debug information (if available)
 - Suggestions for fixes
 
 Example:
-```
+
+```text
 Error: Schema MY_SCHEMA not found
 Command: hana_tables --schema MY_SCHEMA
 Try: Check schema name is correct and you have permissions
