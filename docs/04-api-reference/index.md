@@ -14,6 +14,7 @@ HANA CLI can run as an HTTP server, exposing all commands through REST endpoints
 ## Available Resources
 
 - **[Swagger/OpenAPI](./swagger.md)** - Complete API specification
+- **[HTTP Routes](./http-routes.md)** - Web server routes and endpoints
 - **[REST Endpoints](./endpoints.md)** - Detailed endpoint documentation
 
 ## Starting the API Server
