@@ -8,6 +8,7 @@ Technical documentation for developers and contributors.
 - [Codebase Overview](./architecture/codebase.md)
 - [Project Structure & Components](./architecture/project-structure.md)
 - [Command Deep Dives](./architecture/codebase.md)
+- [Utilities Reference](./architecture/utilities.md)
 
 ## MCP Server
 

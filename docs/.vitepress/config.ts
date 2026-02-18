@@ -405,6 +405,7 @@ export default withMermaid(defineConfig({
           items: [
             { text: 'Project Structure', link: '/05-development/architecture/project-structure' },
             { text: 'Codebase Deep Dives', link: '/05-development/architecture/codebase' },
+            { text: 'Utilities Reference', link: '/05-development/architecture/utilities' },
           ]
         },
         {

@@ -1,241 +1,363 @@
 # Testing & Quality Assurance
 
-Comprehensive testing infrastructure and practices.
+Comprehensive testing infrastructure for HANA CLI with over 1247+ tests covering utilities, routes, and CLI integration.
 
-## Test Suite Overview
+## Overview
 
-HANA CLI includes over 300 tests across multiple categories.
+This document describes the unit tests and integration tests that provide comprehensive coverage for:
 
-For detailed coverage analysis, see: [TEST_COVERAGE_ANALYSIS.md](../../../TEST_COVERAGE_ANALYSIS.md)
+- Utility functions in `/utils`
+- Route handlers in `/routes`  
+- CLI command integration
+- Cross-platform compatibility
+- HTTP API endpoints
+- WebSocket communication
 
-## Unit Tests
+**Total Tests Added: 1247+**
 
-Testing individual functions and modules in isolation.
+- **Utils Tests: 438+** - Core utilities and helper functions
+- **Routes Tests: 368+** - HTTP routes and API endpoints
+- **CLI Integration Tests: 200+** - Command-line interface
+- **HTTP Integration Tests: 128+** - HTTP request/response handling
+- **Cross-Platform Tests: 165+** - Windows, Linux, macOS support
 
-**Location:** `tests/unit/`
+**Test Execution Time: ~25-35 minutes for full suite**
 
-**Coverage Areas:**
-- Utility functions (formatting, validation, parsing)
-- Database operation builders
-- Error handling
-- Data transformation
+## Utilities Tests
 
-**Example:**
-```bash
-npm test -- tests/unit/utils/formatting.js
-```
+Tests for utility functions in `/utils` folder covering database, connection, inspection, and CLI integration utilities.
 
-## Integration Tests
+### Key Test Files
 
-Testing how components work together.
+**sqlInjection.Test.js** - 40 tests
+Tests for SQL injection protection utilities covering whitespace handling, parameter validation, and quote escaping.
 
-**Location:** `tests/integration/`
+**locale.Test.js** - 8 tests
+Tests for locale detection with environment variable priority handling.
 
-**Coverage Areas:**
-- Command workflows (import → export → compare)
-- Database connections
-- File I/O operations
-- Error recovery
+**versionCheck.Test.js** - 3 tests
+Tests for Node.js version validation.
 
-**Example:**
-```bash
-npm test -- tests/integration/import-export.js
-```
+**base.Test.js** - 33 tests
+Tests for core base utility functions including debug flag detection, GUI mode, command builders, and prompt schema generation.
 
-## End-to-End Tests
+**database.Test.js** - 14 tests
+Tests for database client class covering constructor initialization, wildcard conversion, and schema calculation.
 
-Testing complete workflows through the CLI.
+**connections.Test.js** - 60+ tests
+Tests for connection management covering file discovery, environment detection, and connection creation from various sources.
 
-**Location:** `tests/e2e/`
+**dbInspect.Test.js** - 85+ tests  
+Tests for database inspection and metadata retrieval including version detection, calculation view identification, and object definition retrieval.
 
-**Coverage Areas:**
-- Full command execution
-- Exit codes
-- Console output
-- Error messages
+**btp.Test.js** - 45+ tests
+Tests for BTP CLI interaction utilities covering version detection, info parsing, configuration reading, and target hierarchy.
 
-**Example:**
-```bash
-npm test -- tests/e2e/import.e2e.js
-```
+**cf.Test.js** - 50+ tests
+Tests for Cloud Foundry CLI interaction including org/space management and HANA instance discovery.
+
+**xs.Test.js** - 60+ tests
+Tests for XSA CLI interaction covering configuration parsing and service discovery.
+
+**massConvert.Test.js** - 40+ tests
+Tests for mass conversion utility module structure and export validation.
+
+**profileIntegration.Test.js** - 70+ tests
+Integration tests for PostgreSQL and SQLite profile functionality with actual database client behavior.
+
+## Routes Tests
+
+Tests for HTTP route handlers and API endpoints accessed through the web server.
+
+### Key Test Files
+
+**index.Test.js** - 30 tests (enhanced)
+Integration tests for the index route handler covering GET and PUT operations with mocked HTTP requests/responses.
+
+**hanaList.Test.js** - 50+ tests (enhanced)
+Integration tests for HANA list routes covering route registration and path validation.
+
+**docs.Test.js** - 45 tests
+Integration tests for documentation routes (README, changelog) with markdown to HTML conversion.
+
+**hanaInspect.Test.js** - 55 tests
+Integration tests for HANA inspect routes covering table and view inspection operations.
+
+**webSocket.Test.js** - 40 tests
+Integration tests for WebSocket routes and HTTP endpoints.
+
+**webSocket.e2e.Test.js** - 60+ tests
+End-to-end tests for WebSocket real-time communication with real client-server interaction.
+
+**excel.Test.js** - 17 tests
+Integration tests for Excel export routes (currently disabled with 503 status).
+
+**dfa.Test.js** - 53 tests
+Integration tests for Digital Foundation Adapter routes with catalogue and context help.
+
+**static.Test.js** - 38 tests
+Integration tests for static file serving and Fiori sandbox configuration.
+
+### HTTP Integration Tests (with supertest)
+
+Additional HTTP integration tests for full end-to-end request/response validation:
+
+- **index.http.Test.js** - 17 tests
+- **docs.http.Test.js** - 26 tests
+- **static.http.Test.js** - 32 tests
+- **fullApp.http.Test.js** - 53 tests
+
+## CLI Integration Tests
+
+### genericFlags.Test.js - 200+ tests
+
+Comprehensive cross-command integration tests for generic CLI flags tested across 60+ commands:
+
+- `--debug` / `--Debug` - Enables debug output
+- `--quiet` / `--disableVerbose` - Suppresses verbose output
+- `--help` / `-h` - Displays command help
+- `--admin` / `-a` - Uses admin connection
+- `--conn` - Specifies connection file
+
+**Commands Tested:** Database commands, inspect commands, HDI commands, system queries, cloud instances, utilities, connections, and BTP commands.
+
+### errorHandling.Test.js - 30+ tests
+
+Error handling validation for invalid parameters, connection errors, SQL injection prevention, and special character handling.
+
+### flagValidation.Test.js - 40+ tests
+
+Command-line flag validation covering limit values, schema/table names, output formats, and boolean flags.
+
+### outputFormats.Test.js - 25+ tests
+
+Output format validation for SQL, JSON, YAML, CDS, CDL, EDMX, OpenAPI, GraphQL, and database-specific formats.
+
+### commandAliases.Test.js - 30+ tests
+
+Command alias testing ensuring all aliases work identically to main commands.
+
+### edgeCases.Test.js - 50+ tests
+
+Edge case and boundary condition testing for empty results, wildcards, special characters, Unicode, case sensitivity, and concurrent execution.
+
+### tableOutput.Test.js - 20 tests
+
+Unit tests for table output enhancements covering column width management, pagination, and type-aware formatting.
+
+### querySimple.Test.js - 8 tests (enhanced)
+
+Integration tests for querySimple command with table format output and file export validation.
+
+### typeAwareFormatting.Test.js - 20 tests
+
+Type-aware formatting tests for dates, numbers, text, and NULL values in text exports.
+
+## Test Framework
+
+**Test Runner:** Mocha  
+**Assertion Library:** Node.js built-in assert  
+**Reporter:** Mochawesome (generates HTML reports)  
+**Configuration:** tests/.mocharc.json
 
 ## Running Tests
 
-### All Tests
+### Run All Tests
+
 ```bash
 npm test
 ```
 
-### Specific Test File
+### Run Specific Test Suites
+
 ```bash
-npm test -- tests/unit/utils/validation.js
+# Utils tests only
+npm run test:utils
+
+# Routes tests only  
+npm run test:routes
+
+# CLI tests only
+npm run test:cli
+
+# Generic flags tests
+npm test tests/genericFlags.Test.js
 ```
 
-### Watch Mode
+### Run Specific Test Files
+
 ```bash
-npm test -- --watch
+# Database utilities
+npm test tests/utils/database.Test.js
+
+# Connection utilities
+npm test tests/utils/connections.Test.js
+
+# Route integration
+npm test tests/routes/index.Test.js
+
+# WebSocket end-to-end
+npm test tests/routes/webSocket.e2e.Test.js
 ```
 
-### With Coverage
+### Run HTTP Integration Tests
+
 ```bash
-npm test -- --coverage
+# All HTTP tests
+npm test tests/routes/*.http.Test.js
+
+# Specific HTTP test
+npm test tests/routes/index.http.Test.js
 ```
 
-## Using Mocks
+## Test Reports
 
-Tests use mocked database connections:
+After running tests, Mochawesome generates HTML reports in:
 
-```javascript
-const mockDb = {
-  execute: jest.fn().mockResolvedValue({
-    rows: [{ id: 1, name: 'Test' }]
-  })
-}
+```
+mochawesome-report/test-report_XXX.html
 ```
 
-## Test Assertions
+Open in a browser for detailed results with pass/fail statistics and execution times.
 
-Using Jest matchers:
+## Code Coverage
 
-```javascript
-expect(result).toBeDefined()
-expect(result).toEqual(expected)
-expect(result).not.toThrow()
-expect(mockDb.execute).toHaveBeenCalled()
-```
+The project uses nyc (Istanbul) for code coverage reporting.
 
-## Coverage Goals
+### Running Coverage Reports
 
-Target metrics:
-- **Line Coverage:** 85%+
-- **Branch Coverage:** 80%+
-- **Function Coverage:** 90%+
-
-Currently tracked in: [TEST_COVERAGE_COMPLETION_SUMMARY.md](../../../TEST_COVERAGE_COMPLETION_SUMMARY.md)
-
-## Performance Benchmarks
-
-Startup time benchmarks:
-- **Before optimization:** 2.2 seconds
-- **After optimization:** 700ms
-- **Improvement:** ~7x faster
-
-See: [OPTIMIZATION_PATTERN.md](../../../OPTIMIZATION_PATTERN.md)
-
-## CI/CD Testing
-
-Automated testing on every commit:
-- Run full test suite
-- Generate coverage reports
-- Block merging if tests fail
-- Report to pull request
-
-## Testing Best Practices
-
-1. **Arrange-Act-Assert Pattern**
-   ```javascript
-   // Arrange
-   const input = { name: 'test' }
-   
-   // Act
-   const result = processData(input)
-   
-   // Assert
-   expect(result).toBeDefined()
-   ```
-
-2. **Descriptive Test Names**
-   ```javascript
-   it('should throw error when file does not exist', () => {
-     // test code
-   })
-   ```
-
-3. **Single Responsibility**
-   - Test one thing per test
-   - Clear expected behavior
-   - Easy to debug when failing
-
-4. **Mock External Dependencies**
-   - Database calls
-   - File system operations
-   - Network requests
-
-5. **Use Fixtures**
-   - Prepare test data
-   - Reusable across tests
-   - Easier maintenance
-
-## Debugging Tests
-
-### Verbose Output
 ```bash
-npm test -- --verbose
+# Run all tests with coverage
+npm run coverage
+
+# Run specific suites with coverage
+npm run coverage:cli
+npm run coverage:utils
+npm run coverage:routes
+
+# Check coverage meets thresholds
+npm run coverage:check
 ```
 
-### Debug Single Test
+### Coverage Configuration
+
+Coverage settings in `.nycrc.json`:
+
+- **Lines:** 80% target
+- **Statements:** 80% target  
+- **Functions:** 80% target
+- **Branches:** 80% target
+
+HTML coverage reports generated in `./coverage/index.html`
+
+## Cross-Platform Testing
+
+Tests validate behavior across Windows, Linux, and macOS:
+
+- Path handling with platform-specific separators
+- Environment variable detection
+- Platform-specific config paths
+- Line ending management (LF vs CRLF)
+- ES module compatibility
+
+### Test Organization
+
 ```bash
-node --inspect-brk node_modules/.bin/jest tests/unit/specific-test.js
-```
+describe('Feature @all', () => {
+  // Runs on all platforms
+})
 
-Then open `chrome://inspect` in Chrome DevTools.
-
-### Print Debug Info
-```javascript
-console.log('Current state:', { input, output })
-```
-
-## Writing New Tests
-
-For new commands:
-1. Create test file: `tests/unit/commands/new-command.js`
-2. Test builder function
-3. Test handler function (mocked)
-4. Test error cases
-5. Add integration test: `tests/integration/new-command.js`
-
-Example template:
-```javascript
-describe('NewCommand', () => {
-  it('should accept required options', () => {
-    // test code
-  })
-  
-  it('should throw error without options', () => {
-    // test code
-  })
-  
-  it('should execute handler', async () => {
-    // test code
-  })
+describe('Windows Paths @windows', () => {
+  if (process.platform !== 'win32') this.skip()
+  // Windows-only tests
 })
 ```
 
-## Test Data
+### CI/CD Integration
 
-Sample test data files in `tests/fixtures/`:
-- CSV files for import testing
-- Excel files for format testing
-- SQL scripts for schema testing
-- Sample JSON for output validation
+GitHub Actions runs full test suite on:
+- **Operating Systems:** Ubuntu, Windows, macOS
+- **Node.js Versions:** 20.x, 22.x, 24.x
 
-## Performance Profiling
+## Testing Best Practices
 
-Identify bottlenecks:
+### Unit Tests
+
+- Focus on pure function testing
+- Cover edge cases and error conditions
+- Validate input/output contracts
+- Test both success and failure paths
+
+### Integration Tests
+
+- Test route registration and structure
+- Validate HTTP request/response handling
+- Test error propagation through middleware
+- Test mocked database connections
+
+### CLI Integration Tests
+
+- Execute actual CLI commands as subprocess
+- Validate flag parsing and behavior
+- Ensure consistent behavior across commands
+- Test cross-command consistency
+
+### End-to-End Tests
+
+- Test complete workflows
+- Real network communication (WebSocket tests)
+- Concurrent execution scenarios
+- Performance under load
+
+## Writing New Tests
+
+When adding new features:
+
+1. Add unit tests for utility functions
+2. Add integration tests for route handlers  
+3. Add CLI tests for commands
+4. Test error cases and edge conditions
+5. Test cross-command consistency
+6. Validate output formats
+7. Test flag combinations
+
+## Test Development Guidelines
+
+When writing tests, follow these patterns:
+
+1. **Clear Test Names:** Describe what is being tested
+2. **Arrange-Act-Assert:** Organize test logic clearly
+3. **Single Responsibility:** Test one thing per test
+4. **Error Path Testing:** Include failure scenarios
+5. **Mocked Dependencies:** Mock external systems
+6. **Isolated Tests:** Tests should run independently
+
+## Debugging Tests
+
+### Run with Debug Output
+
 ```bash
-node --prof app/import.js
-node --prof-process isolate-*.log > profile.txt
+npm test -- --reporter spec tests/targetTest.js
 ```
 
-## Continuous Monitoring
+### Print Debug Info
 
-Tools in use:
-- Jest for test execution
-- Coverage reports showing gaps
-- Benchmarks tracking performance
-- GitHub Actions for CI/CD
+```javascript
+console.log('Debug info:', variable)
+```
+
+### Inspect Specific Test
+
+Add `.only()` to run single test:
+
+```javascript
+it.only('should test this', () => {
+  // Only this test runs
+})
+```
 
 See Also:
-- [Development Guide](../index.md)
-- [Architecture](./project-structure.md)
+
+- [Development Guide](./index.md)
+- [Architecture](./architecture/)
 - [Troubleshooting](../../troubleshooting.md)
