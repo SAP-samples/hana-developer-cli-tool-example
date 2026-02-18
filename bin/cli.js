@@ -9,6 +9,7 @@ const args = process.argv.slice(2)
 // Defer all imports until after --version fast path
 import * as base from '../utils/base-lite.js'
 import { commandMap } from './commandMap.js'
+import { getSuggestionMessage } from '../utils/commandSuggestions.js'
 
 // Defer yargs import until after fast-path checks (saves ~77ms)
 let yargs, hideBin
@@ -57,7 +58,23 @@ function createYargsInstance(yargsArgs) {
             if (err) {
                 console.error(base.colors.red(err.message))
             } else if (msg) {
-                console.error(base.colors.red(msg))
+                // Check if this is an unknown command error and translate it
+                const unknownCommandMatch = msg.match(/Unknown (?:command|argument): (\S+)/)
+                if (unknownCommandMatch) {
+                    const unknownCommand = unknownCommandMatch[1]
+                    // Replace yargs' English message with our translated version
+                    const translatedMsg = base.bundle.getText("unknownCommand", [unknownCommand])
+                    console.error(base.colors.red(translatedMsg))
+                    
+                    // Add suggestion if available
+                    const suggestionMsg = getSuggestionMessage(unknownCommand, base.bundle)
+                    if (suggestionMsg) {
+                        console.error(base.colors.yellow(suggestionMsg))
+                    }
+                } else {
+                    // For other errors, display as-is
+                    console.error(base.colors.red(msg))
+                }
             }
             process.exit(1)
         })
