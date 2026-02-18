@@ -1,122 +1,134 @@
-# Interactive Swagger API Documentation
+# Swagger API Documentation
 
-The HANA CLI REST API server provides interactive Swagger/OpenAPI documentation accessible directly from the running server.
+Interactive Swagger/OpenAPI 3.0 documentation is available for the HANA CLI web server. The OpenAPI specification is generated automatically from JSDoc annotations in the route files.
 
-## Accessing Swagger UI
+## Accessing the Documentation
 
-When you start the API server, Swagger documentation is available at:
+When you run the HANA CLI UI server, the Swagger documentation is available at:
 
-```
-http://localhost:3010/api/swagger
-```
+- **Swagger UI**: <http://localhost:3010/api-docs>
+- **OpenAPI JSON Spec**: <http://localhost:3010/api-docs.json>
 
-### Starting the API Server
+### Starting the Server
 
 ```bash
-# Start API server
-hana-cli server
+# Start the UI server
+node bin/cli.js ui
 
-# Or with custom port
-hana-cli server --port 3100
-
-# Then visit
-open http://localhost:3010/api/swagger
+# Or using the CLI
+hana-cli ui
 ```
 
 ## What's Available in Swagger UI
 
 The interactive Swagger interface includes:
 
-### 1. **Complete API Reference**
-- All 50+ REST endpoints documented
-- Request/response schemas
-- Parameter information
-- Example values
+1. **Complete API Reference**
+   - All REST endpoints documented
+   - Request/response schemas
+   - Parameter information
+   - Example values
 
-### 2. **Try It Out** Feature
-- Test endpoints directly from browser
-- Configure parameters
-- See live responses
-- Inspect request/response headers
+2. **Try It Out** Feature
+   - Test endpoints directly from the browser
+   - Configure parameters
+   - See live responses
+   - Inspect request/response headers
 
-### 3. **API Tags**
-- Configuration endpoints
-- HANA System information
-- HANA Objects (tables, views, functions)
-- Inspection tools
-- HDI management
-- Cloud Services
-- Documentation
-- Export formats
-- WebSocket
-- Digital Foundation Adapter (DFA)
+3. **API Tags**
+   - Configuration endpoints
+   - HANA System information
+   - HANA Objects (tables, views, functions)
+   - Inspection tools
+   - HDI management
+   - Cloud Services
+   - Documentation
+   - Export formats
+   - WebSocket
+   - Digital First Adoption (DFA)
 
-### 4. **Schemas**
-- Request body schemas
-- Response object definitions
-- Data types and constraints
-- Error responses
+4. **Schemas**
+   - Request body schemas
+   - Response object definitions
+   - Data types and constraints
+   - Error responses
 
-## API Endpoints by Category
+## API Categories
+
+The Swagger spec organizes endpoints into 10 categories:
+
+1. **Configuration** - Application configuration and settings
+2. **HANA System** - Database system information and features
+3. **HANA Objects** - Tables, views, schemas, functions, indexes
+4. **HANA Inspect** - Detailed object inspection outputs
+5. **HDI** - HANA Deployment Infrastructure containers
+6. **Cloud Services** - HANA Cloud service instances
+7. **Documentation** - README and CHANGELOG rendering
+8. **Export** - Data export
+9. **Digital First Adoption** - DFA help and contextual assistance
+10. **WebSockets** - WebSocket information
+
+## Endpoint Coverage
 
 ### Configuration
 
-```
-GET    /                                Get current configuration
-PUT    /                                Update configuration
-```
+- `GET /` - Get current prompts/configuration
+- `PUT /` - Update prompts/configuration
 
 ### HANA System
 
-```
-GET    /hana                            System information
-GET    /hana/schemas                    List schemas
-GET    /hana/version                    Database version
-GET    /hana/features                   Available features
-```
+- `GET /hana` - System information (session, user, overview, services, version)
+- `GET /hana/dataTypes` - List database data types
+- `GET /hana/features` - List database features
+- `GET /hana/featureUsage` - Feature usage statistics
 
 ### HANA Objects
 
-```
-GET    /hana/tables                     List tables
-GET    /hana/views                      List views
-GET    /hana/functions                  List functions
-GET    /hana/procedures                 List procedures
-GET    /hana/indexes                    List indexes
-GET    /hana/roles                      List roles
-GET    /hana/containers                 List HDI containers
-```
+- `GET /hana/tables` - List all database tables
+- `GET /hana/views` - List all database views
+- `GET /hana/schemas` - List all database schemas
+- `GET /hana/functions` - List all database functions
+- `GET /hana/indexes` - List all database indexes
 
-### Inspection
+### HANA Inspect
 
-```
-GET    /hana/inspect/table/:name        Inspect table
-GET    /hana/inspect/view/:name         Inspect view
-GET    /hana/inspect/function/:name     Inspect function
-```
+- `GET /hana/inspectTable` - Inspect table structure (SQL, CDS, hdbtable formats)
+- `GET /hana/inspectView` - Inspect view structure
+- `GET /hana/querySimple` - Execute simple SQL query
 
-### Data Operations
+### HDI
 
-```
-POST   /execute                         Execute SQL query
-POST   /import                          Import data
-POST   /export                          Export data
-```
+- `GET /hana/containers` - List HDI containers
 
 ### Cloud Services
 
-```
-GET    /hana/btpInfo                    BTP information
-GET    /hana/btpSubs                    BTP subaccounts
-GET    /hana/hdiServiceInstances       HDI instances
-```
+- `GET /hana/hdi` - List HANA Cloud HDI instances
+- `GET /hana/sbss` - List HANA Cloud SBSS instances
+- `GET /hana/schemaInstances` - List HANA Cloud Schema instances
+- `GET /hana/securestore` - List HANA Cloud Secure Store instances
+- `GET /hana/ups` - List User-Provided Service instances
 
 ### Documentation
 
-```
-GET    /docs                            This documentation
-GET    /docs/:command                   Command-specific docs
-```
+- `GET /docs/readme` - Get README as HTML
+- `GET /docs/changelog` - Get CHANGELOG as HTML
+
+### Export
+
+- `GET /excel` - Export last query results to Excel (currently disabled)
+
+### Digital First Adoption
+
+- `GET /sap/dfa/help/webassistant/catalogue` - DFA help catalogue
+- `GET /sap/dfa/help/webassistant/context` - DFA context help
+
+### WebSockets
+
+- `GET /websockets` - WebSocket information endpoint
+
+### Static Files
+
+- `GET /appconfig/fioriSandboxConfig.json` - Fiori Launchpad sandbox configuration
 
 ## Example API Calls
 
@@ -128,229 +140,51 @@ curl http://localhost:3010/hana
 
 # List all tables
 curl http://localhost:3010/hana/tables
-
-# Execute SQL query
-curl -X POST http://localhost:3010/execute \
-  -H "Content-Type: application/json" \
-  -d '{
-    "sql": "SELECT COUNT(*) FROM MY_TABLE"
-  }'
 ```
 
 ### Using the Try It Out Feature
 
-1. Open Swagger UI: `http://localhost:3010/api/swagger`
-2. Find endpoint (e.g., `GET /hana/tables`)
+1. Open Swagger UI: `http://localhost:3010/api-docs`
+2. Find an endpoint (for example, `GET /hana/tables`)
 3. Click **Try it out**
 4. Enter parameters if needed
 5. Click **Execute**
-6. View response in **Responses** section
+6. View the response in **Responses**
 
 ## OpenAPI Specification
 
 The complete OpenAPI 3.0 specification is available at:
 
-```
-http://localhost:3010/swagger-output.json
+```text
+http://localhost:3010/api-docs.json
 ```
 
 Use this to:
+
 - Generate client SDKs
 - Import into API testing tools (Postman, Insomnia)
-- Document in other tools
 - Integrate with CI/CD pipelines
 
 ### Import into Postman
 
 1. Open Postman
 2. Click **Import**
-3. Paste: `http://localhost:3010/swagger-output.json`
-4. All endpoints automatically added
+3. Paste: `http://localhost:3010/api-docs.json`
+4. All endpoints are added automatically
 5. Ready to test
 
-## Authentication
+## Troubleshooting
 
-By default, the API server runs in **unsecured mode** (development):
+If Swagger UI does not load:
 
-```bash
-hana-cli server
-# No authentication required
-```
-
-### Enable Authentication
-
-```bash
-# With API key
-hana-cli server --api-key "my-secret-key"
-
-# With token
-hana-cli server --token-required --tokens "token1,token2"
-
-# Then include in requests
-curl -H "Authorization: Bearer token1" \
-  http://localhost:3010/hana/tables
-```
-
-## Rate Limiting & Performance
-
-```bash
-# Enable rate limiting (100 req/min)
-hana-cli server --rate-limit 100
-
-# Configure connection pool
-hana-cli server --pool-size 20
-
-# Set query timeout (30 seconds default)
-hana-cli server --timeout 60
-```
+1. Confirm the UI server is running on port 3010
+2. Verify `swagger-jsdoc` is installed (`npm list swagger-jsdoc`)
+3. Check server logs for Swagger setup errors
+4. Visit `/api-docs.json` to verify the spec is being generated
 
 ## See Also
 
 - [REST API Server Guide](./index.md)
 - [Command Flows & Diagrams](./command-flows.md)
-- [Web UI Guide](../web-ui/)
-
-## API Categories
-
-### Database Information
-
-- `GET /api/v1/dbInfo` - Get database information
-- `GET /api/v1/alerts` - Get database alerts
-- `GET /api/v1/replicationStatus` - Check replication status
-
-### Tables & Schemas
-
-- `GET /api/v1/tables` - List tables in schema
-- `GET /api/v1/views` - List views in schema
-- `GET /api/v1/schemas` - List all schemas
-
-### Data Operations
-
-- `POST /api/v1/export` - Export table data
-- `POST /api/v1/import` - Import data
-- `POST /api/v1/dataProfile` - Profile table data
-- `POST /api/v1/dataDiff` - Compare data
-- `POST /api/v1/dataValidator` - Validate data
-
-### Schema Operations
-
-- `POST /api/v1/compareSchema` - Compare schemas
-- `POST /api/v1/schemaClone` - Clone schema
-- `POST /api/v1/tableCopy` - Copy table
-
-### Analysis
-
-- `POST /api/v1/duplicateDetection` - Find duplicates
-- `POST /api/v1/dataLineage` - Trace data lineage
-- `POST /api/v1/referentialCheck` - Check foreign keys
-
-See full [API Documentation](./endpoints.md) for details.
-
-## Interactive Testing
-
-Use Swagger UI for interactive API testing:
-
-1. Start server: `hana-cli server`
-2. Open: `http://localhost:3000/api-docs`
-3. Expand endpoint
-4. Click "Try it out"
-5. Enter parameters
-6. Click "Execute"
-
-## Command Line Testing
-
-Use curl to test endpoints:
-
-```bash
-# Get database info
-curl http://localhost:3000/api/v1/dbInfo
-
-# List tables
-curl 'http://localhost:3000/api/v1/tables?schema=MYSCHEMA'
-
-# Export data
-curl -X POST http://localhost:3000/api/v1/export \
-  -H "Content-Type: application/json" \
-  -d '{
-    "schema": "HR",
-    "table": "EMPLOYEES",
-    "format": "json"
-  }'
-```
-
-## Authentication
-
-All endpoints support:
-
-- **Basic Auth**: `-u username:password`
-- **Bearer Token**: `-H "Authorization: Bearer token"`
-- **No Auth** (default): Open to localhost/configured hosts
-
-## Response Format
-
-All responses follow standard format:
-
-**Success (200):**
-```json
-{
-  "success": true,
-  "data": { ... },
-  "timestamp": "2024-02-16T10:30:00Z"
-}
-```
-
-**Error (400/500):**
-```json
-{
-  "success": false,
-  "error": "Error message",
-  "code": "ERROR_CODE",
-  "timestamp": "2024-02-16T10:30:00Z"
-}
-```
-
-## Integrating with Tools
-
-### JavaScript/Node.js
-
-```javascript
-const axios = require('axios');
-
-async function getTableProfile(schema, table) {
-  try {
-    const response = await axios.post('http://localhost:3000/api/v1/dataProfile', {
-      schema: schema,
-      table: table
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error:', error.message);
-  }
-}
-```
-
-### Python
-
-```python
-import requests
-
-def export_table(schema, table):
-    endpoint = 'http://localhost:3000/api/v1/export'
-    payload = {
-        'schema': schema,
-        'table': table,
-        'format': 'json'
-    }
-    response = requests.post(endpoint, json=payload)
-    return response.json()
-```
-
-## Documentation Files
-
-- [Swagger Specification](./endpoints.md)
-- [API Reference](/04-api-reference/)
-
-## See Also
-
-- [API Server Guide](../features/api-server.md)
+- [Swagger Implementation Details](./swagger-implementation.md)
 - [REST Endpoints](./endpoints.md)

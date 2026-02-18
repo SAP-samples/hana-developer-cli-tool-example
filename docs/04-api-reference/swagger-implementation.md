@@ -78,7 +78,8 @@ A comprehensive Swagger/OpenAPI 3.0 documentation system has been successfully i
 
 ### 4. Documentation
 
-- ✅ Created **docs/SWAGGER.md** - Comprehensive documentation
+- ✅ Updated **docs/04-api-reference/swagger.md** - Comprehensive Swagger guide
+- ✅ Updated **docs/04-api-reference/swagger-implementation.md** - Implementation details
 - ✅ Created **test-swagger.js** - Quick test helper script
 - ✅ Created **tests/routes/swagger.Test.js** - Automated tests
 
@@ -129,7 +130,7 @@ node test-swagger.js
 ✅ **Error Handling** - Graceful fallback on configuration errors
 ✅ **Type Safety** - TypeScript compatible with @ts-check
 ✅ **Testing** - Automated tests included
-✅ **Documentation** - Comprehensive SWAGGER.md guide
+✅ **Documentation** - Comprehensive Swagger guide in `docs/04-api-reference/swagger.md`
 
 ## 🏷️ API Categories
 
@@ -158,7 +159,8 @@ node test-swagger.js
 ### Created
 
 - ✅ routes/swagger.js (239 lines)
-- ✅ docs/SWAGGER.md (comprehensive guide)
+- ✅ docs/04-api-reference/swagger.md (comprehensive guide)
+- ✅ docs/04-api-reference/swagger-implementation.md (implementation guide)
 - ✅ test-swagger.js (test helper)
 - ✅ tests/routes/swagger.Test.js (automated tests)
 
@@ -209,6 +211,148 @@ app.get('/hana/procedures', async (req, res, next) => {
   // Implementation
 })
 ```
+
+## 🧩 Implementation Details
+
+### Technologies Used
+
+- **swagger-jsdoc** (v6.2.8): Generates OpenAPI spec from JSDoc
+- **swagger-ui-express** (v5.0.0): Serves interactive Swagger UI
+
+### Architecture
+
+The core implementation lives in `routes/swagger.js`:
+
+- Configures the OpenAPI 3.0 spec
+- Scans route files for JSDoc annotations
+- Serves Swagger UI at `/api-docs`
+- Serves raw JSON spec at `/api-docs.json`
+
+### OpenAPI Specification
+
+- **OpenAPI**: 3.0.0
+- **Title**: HANA CLI API
+- **Version**: 3.202602.0
+- **Description**: RESTful API for HANA Developer CLI Tool
+- **License**: Apache 2.0
+
+## 🧾 JSDoc Annotation Format
+
+All endpoints follow this Swagger JSDoc format:
+
+```javascript
+/**
+ * @swagger
+ * /endpoint/path:
+ *   get:
+ *     tags: [Tag Name]
+ *     summary: Short description
+ *     description: Longer detailed description
+ *     parameters:
+ *       - in: query
+ *         name: paramName
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Parameter description
+ *     responses:
+ *       200:
+ *         description: Success response description
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 field:
+ *                   type: string
+ *       500:
+ *         description: Error response
+ */
+app.get('/endpoint/path', async (req, res, next) => {
+  // Handler code
+})
+```
+
+## 🧪 Swagger UI Features
+
+The Swagger UI includes:
+
+- Interactive API documentation
+- Try-it-out functionality for testing endpoints
+- Request/response examples
+- Schema definitions
+- Syntax highlighting
+- Filtering and search
+- Persistent authorization (if enabled)
+- Request duration display
+
+## 🎨 Customization
+
+The UI is customized with:
+
+- Monokai syntax highlighting theme
+- Hidden top bar (custom CSS)
+- Custom site title: “HANA CLI API Documentation”
+- Explorer mode enabled
+- Request duration display enabled
+- Filter/search enabled
+
+## ✅ Testing
+
+Quick test helper:
+
+```bash
+node test-swagger.js
+```
+
+Automated test:
+
+```bash
+npm test tests/routes/swagger.Test.js
+```
+
+## ➕ Adding New Endpoints
+
+To document new endpoints:
+
+1. Add Swagger JSDoc annotations above the route handler
+2. Use appropriate tags to organize the endpoint
+3. Document all parameters and responses
+4. The Swagger specification will be regenerated automatically
+
+Example:
+
+```javascript
+/**
+ * @swagger
+ * /hana/newEndpoint:
+ *   get:
+ *     tags: [HANA Objects]
+ *     summary: My new endpoint
+ *     description: Detailed description of what this does
+ *     responses:
+ *       200:
+ *         description: Success
+ */
+app.get('/hana/newEndpoint', async (req, res, next) => {
+  // Your code here
+})
+```
+
+## 🧯 Troubleshooting
+
+If Swagger UI does not load:
+
+1. Check that the server is running on the expected port (default 3010)
+2. Verify `swagger-jsdoc` is installed (`npm list swagger-jsdoc`)
+3. Check server console for any Swagger setup errors
+4. Visit `/api-docs.json` to confirm the spec is being generated
+
+## 🔗 References
+
+- [Swagger/OpenAPI Specification](https://swagger.io/specification/)
+- [swagger-jsdoc Documentation](https://github.com/Surnet/swagger-jsdoc)
+- [swagger-ui-express Documentation](https://github.com/scottie1984/swagger-ui-express)
 
 ## 🔍 What's Next?
 
