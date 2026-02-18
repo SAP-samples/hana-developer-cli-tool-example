@@ -411,7 +411,15 @@ export default withMermaid(defineConfig({
         {
           text: 'MCP Server',
           items: [
-            { text: 'MCP Overview', link: '/05-development/mcp-server/overview' },
+            { text: 'Overview', link: '/05-development/mcp-server/' },
+            { text: 'Features', link: '/05-development/mcp-server/features' },
+            { text: 'Setup & Configuration', link: '/05-development/mcp-server/setup-and-configuration' },
+            { text: 'Troubleshooting', link: '/05-development/mcp-server/troubleshooting' },
+            { text: 'Discovery Tools', link: '/05-development/mcp-server/discovery-tools' },
+            { text: 'Advanced Features', link: '/05-development/mcp-server/advanced-features' },
+            { text: 'Prompts & Resources', link: '/05-development/mcp-server/prompts-and-resources' },
+            { text: 'Documentation Search', link: '/05-development/mcp-server/docs-search' },
+            { text: 'Implementation Phases', link: '/05-development/mcp-server/implementation-phases' },
           ]
         }
       ],
