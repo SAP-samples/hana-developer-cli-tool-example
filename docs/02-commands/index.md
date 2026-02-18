@@ -28,8 +28,8 @@ Tools for data analysis, profiling, and quality checks.
 
 Commands for data migration, synchronization, and transformation.
 
-- **[Import](./data-tools/import.md)** - Load CSV/Excel data into tables
-- **[Export](./data-tools/export.md)** - Export table data to files
+- **[Import](./data-tools/import.md)** - Load CSV/Excel data into tables (with batch processing, Excel worksheet selection, and performance tuning)
+- **[Export](./data-tools/export.md)** - Export table data to CSV/Excel/JSON files (with filtering, column selection, and custom formatting)
 - **[Compare Data](./data-tools/compare-data.md)** - Compare data across different sources
 - **[Data Sync](./data-tools/data-sync.md)** - Synchronize data between systems
 - **[Data Validator](./data-tools/data-validator.md)** - Validate data consistency and integrity

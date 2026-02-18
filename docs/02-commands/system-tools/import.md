@@ -1,62 +1,49 @@
 # import
 
 > Command: `import`  
-> Category: **System Tools**  
+> Aliases: `imp`, `uploadData`, `uploaddata`  
+> Category: **Data Tools**  
 > Status: Production Ready
 
-## Description
+## ⚠️ Redirect Notice
 
-The `import` command performs operations related to system tools.
+The `import` command documentation has been relocated to the **Data Tools** category.
 
-## Syntax
+**👉 [Go to Import Command Documentation](../data-tools/import.md)**
+
+## Quick Reference
+
+Upload CSV or Excel files directly into SAP HANA database tables.
 
 ```bash
-hana-cli import [options]
+hana-cli import -n <filename> -t <table> [options]
 ```
 
-## Aliases
+### Common Options
 
-See command help for available aliases.
+- `-n, --filename`: Path to CSV or Excel file
+- `-t, --table`: Target table (SCHEMA.TABLE or TABLE)
+- `-o, --output`: File format (csv or excel)
+- `-m, --matchMode`: Column matching (order, name, or auto)
+- `--truncate`: Clear table before import
+- `--batchSize`: Rows per batch (default: 1000)
 
-## Parameters
-
-### Required Parameters
-
-| Parameter | Description |
-|-----------|-------------|
-| - | *See 'hana-cli import --help' for required parameters* |
-
-### Optional Parameters
-
-| Parameter | Alias | Description | Default |
-|-----------|-------|-------------|---------|
-| `--help` | `-h` | Display help information | false |
-| `--verbose` | `-v` | Enable verbose output | false |
-
-## Examples
-
-### Basic Usage
+### Quick Examples
 
 ```bash
-hana-cli import
-```
+# Basic CSV import
+hana-cli import -n data.csv -t HR.EMPLOYEES
 
-For more examples, run:
+# Excel with name matching
+hana-cli import -n report.xlsx -o excel -t SALES -m name
 
-```bash
-hana-cli import --help
-```
-
-## Documentation
-
-For detailed command documentation, parameters, and examples, use:
-
-```bash
-hana-cli import --help
+# Truncate and import
+hana-cli import -n refresh.csv -t MASTER_DATA --truncate
 ```
 
 ## Related Commands
 
+- [Complete Import Documentation](../data-tools/import.md) - Full reference with all parameters and examples
 - [All Commands A-Z](../all-commands.md)
 - [Commands Overview](..)
 
