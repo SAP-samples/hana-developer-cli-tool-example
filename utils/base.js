@@ -68,6 +68,7 @@ let inGui = false
 let lastResults
 
 import * as locale from "../utils/locale.js"
+import * as commandSuggestions from "./commandSuggestions.js"
 const TextBundle = require('@sap/textbundle').TextBundle
 /** @typeof TextBundle - instance of sap/textbundle */
 export const bundle = new TextBundle(path.join(__dirname, '..', '/_i18n/messages'), locale.getLocale())
@@ -812,9 +813,21 @@ function checkUnknownOptions(argv, inputSchema, iConn, iDebug, builderOptions) {
     
     // Warn about unknown options
     if (unknownOptions.length > 0) {
+        // Build list of available options for suggestions (exclude standard yargs options)
+        const availableOptions = Array.from(knownOptions).filter(k => 
+            k !== '$0' && k !== '_' && k !== 'help' && k !== 'h' && k !== 'version' && k !== 'V'
+        )
+        
         unknownOptions.forEach(opt => {
             if (opt && opt.trim()) {  // Only warn if option name is not empty
-                console.warn(colors.yellow(bundle.getText("warning.unknownOption", [opt])))
+                const warningMsg = bundle.getText("warning.unknownOption", [opt])
+                console.warn(colors.yellow(warningMsg))
+                
+                // Add suggestion if available
+                const suggestion = commandSuggestions.getOptionSuggestionMessage(opt, availableOptions, bundle)
+                if (suggestion) {
+                    console.warn(colors.cyan(suggestion))
+                }
             }
         })
     }

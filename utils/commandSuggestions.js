@@ -74,3 +74,51 @@ export function getSuggestionMessage(invalidCommand, bundle) {
     
     return bundle.getText("didYouMeanMultiple", [suggestions.join('\n    ')])
 }
+
+/**
+ * Find similar option names based on user input
+ * @param {string} input - The invalid option entered by the user
+ * @param {string[]} availableOptions - List of valid option names to match against
+ * @param {number} [threshold=0.4] - Similarity threshold (0-1), lower = more strict
+ * @param {number} [maxSuggestions=3] - Maximum number of suggestions to return
+ * @returns {string[]} Array of suggested option names
+ */
+export function getSimilarOptions(input, availableOptions, threshold = 0.4, maxSuggestions = 3) {
+    if (!input || typeof input !== 'string' || !availableOptions || availableOptions.length === 0) {
+        return []
+    }
+
+    // Get suggestions using didyoumean2
+    // @ts-ignore - TypeScript has trouble with the options object type
+    const suggestions = didYouMean(input, availableOptions, {
+        threshold: threshold,
+        thresholdType: ThresholdTypeEnums.SIMILARITY,
+        returnType: ReturnTypeEnums.ALL_CLOSEST_MATCHES,
+        caseSensitive: false,
+        trimSpaces: true
+    })
+    
+    // Return up to maxSuggestions
+    return suggestions.slice(0, maxSuggestions)
+}
+
+/**
+ * Get a formatted suggestion message for an invalid option
+ * @param {string} invalidOption - The invalid option name
+ * @param {string[]} availableOptions - List of valid option names
+ * @param {object} bundle - The i18n text bundle for translations
+ * @returns {string} Formatted message with suggestions, or empty string if no suggestions
+ */
+export function getOptionSuggestionMessage(invalidOption, availableOptions, bundle) {
+    const suggestions = getSimilarOptions(invalidOption, availableOptions)
+    
+    if (suggestions.length === 0) {
+        return ''
+    }
+    
+    if (suggestions.length === 1) {
+        return bundle.getText("didYouMeanOption", [suggestions[0]])
+    }
+    
+    return bundle.getText("didYouMeanMultipleOptions", [suggestions.join('\n    ')])
+}
