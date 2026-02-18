@@ -108,7 +108,8 @@ hana-cli schemaClone -s SOURCE -t TARGET --admin
         "user": "DBUSER",
         "password": "password",
         "encrypt": true,
-        "sslCertificate": "/path/to/cert.pem"
+        "sslTrustStore": "/path/to/truststore.pem",
+        "sslValidateCertificate": true
       }
     }]
   }
@@ -261,12 +262,28 @@ export HANA_PASSWORD=test_password
 
 ### SSL Certificate Issues
 
-```bash
-# Allow self-signed certificates (not recommended for production)
-export HANA_SSL_VERIFY=false
+SSL validation is disabled by default in hana-cli. To enable it with a trusted certificate:
 
-# Or use certificate file
-export HANA_SSL_CERT=/path/to/cert.pem
+```bash
+# Connect with a trust store
+hana-cli connect -n host:port -u USER -p PASSWORD --trustStore /path/to/cert.pem
+```
+
+Or configure in `default-env.json`:
+
+```json
+{
+  "VCAP_SERVICES": {
+    "hana": [{
+      "credentials": {
+        "host": "hana.example.com",
+        "port": 30015,
+        "sslTrustStore": "/path/to/cert.pem",
+        "sslValidateCertificate": true
+      }
+    }]
+  }
+}
 ```
 
 ### Proxy Issues
