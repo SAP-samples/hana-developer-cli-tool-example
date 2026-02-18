@@ -24,6 +24,12 @@ The Model Context Protocol implementation for AI integration.
 
 - See [GitHub Repository](https://github.com/SAP-samples/hana-developer-cli-tool-example) for contribution guidelines
 
+## Documentation
+
+Learn how to work on the project documentation built with VitePress.
+
+- [Documentation Structure & Development](./documentation.md) - Complete guide to building, editing, and deploying the documentation site
+
 ## Command Deep Dives
 
 Detailed implementation and usage examples for each command.

@@ -25,7 +25,7 @@ npm run docs:serve
 
 ## Folder Structure
 
-```
+```bash
 docs/
 ├── .vitepress/
 │   ├── config.ts              # VitePress configuration
@@ -73,6 +73,7 @@ docs/
 ### config.ts
 
 Main VitePress configuration with:
+
 - Site title and metadata
 - Navigation sidebar structure
 - Theme colors (SAP HANA blue)
@@ -167,6 +168,7 @@ Provide real-world examples.
 VitePress supports:
 
 ### Info Box
+
 ```markdown
 :::info
 This is informational content.
@@ -174,6 +176,7 @@ This is informational content.
 ```
 
 ### Warning Box
+
 ```markdown
 :::warning
 This is important!
@@ -181,6 +184,7 @@ This is important!
 ```
 
 ### Danger Box
+
 ```markdown
 :::danger
 This could be destructive.
@@ -188,6 +192,7 @@ This could be destructive.
 ```
 
 ### Details/Expandable
+
 ```markdown
 <details>
 <summary>Click to expand</summary>
@@ -200,6 +205,7 @@ Hidden content here.
 ## Search
 
 Full-text search is enabled in the documentation:
+
 - Uses local search provider
 - No external dependencies
 - Indexes all content
@@ -208,6 +214,7 @@ Full-text search is enabled in the documentation:
 ## Git Integration
 
 The config includes:
+
 - Edit on GitHub links
 - View on GitHub links
 - Automatic branch detection (Feb2026)
@@ -215,6 +222,7 @@ The config includes:
 ## SEO & Metadata
 
 Built-in SEO features:
+
 - Proper OpenGraph metadata
 - Semantic HTML
 - Clean URLs (cleanUrls: true)
@@ -246,6 +254,7 @@ A: Yes, fully responsive by default.
 ## Troubleshooting
 
 ### Build fails
+
 ```bash
 rm -rf node_modules dist
 npm install
@@ -253,10 +262,12 @@ npm run docs:build
 ```
 
 ### Search not working
+
 - Rebuild with `npm run docs:build`
 - Search only works in built version, not dev mode
 
 ### Style issues
+
 - Check `theme/style.css`
 - Clear browser cache
 - Run `npm run docs:build` to test production
@@ -270,6 +281,7 @@ npm run docs:build
 ## Maintenance
 
 The documentation typically needs updates when:
+
 - New commands are added
 - Command syntax changes
 - Bug fixes or improvements
