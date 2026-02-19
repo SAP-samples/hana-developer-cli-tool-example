@@ -246,25 +246,25 @@ hana-cli columnStats [schema] [table] [options]
 
 ```mermaid
 graph TD
-    A["hana-cli columnStats"] --> B["Arguments"]
-    A --> C["Connection Parameters"]
-    A --> D["Troubleshooting Options"]
-    A --> E["Analysis Options"]
+    A["🔷 hana-cli columnStats"]
+    A --> B["📋 Arguments"]
+    B --> B1["[schema]: CURRENT_SCHEMA"]
+    B1 --> B2["[table]: default *"]
+    B2 --> C["🔌 Connection Parameters"]
+    C --> C1["-a, --admin: Connect via admin"]
+    C1 --> C2["--conn: Connection file override"]
+    C2 --> D["⚙️ Options"]
+    D --> D1["-t, --table: Database table name"]
+    D1 --> D2["-s, --schema: Schema name"]
+    D2 --> D3["-l, --limit: Result limit"]
+    D3 --> D4["-p, --profile: CDS Profile"]
+    D4 --> E["🔍 Troubleshooting"]
+    E --> E1["--disableVerbose, --quiet"]
+    E1 --> E2["-d, --debug: Debug mode"]
+    E2 --> F["✅ Help: -h, --help"]
     
-    B --> B1["[schema]<br/>default: **CURRENT_SCHEMA**"]
-    B --> B2["[table]<br/>default: *"]
-    
-    C --> C1["-a, --admin<br/>Connect via admin"]
-    C --> C2["--conn<br/>Connection file override"]
-    
-    D --> D1["--disableVerbose, --quiet<br/>Disable verbose output"]
-    D --> D2["-d, --debug<br/>Debug mode"]
-    
-    E --> E1["-t, --table<br/>Database table name"]
-    E --> E2["-s, --schema<br/>Schema name"]
-    E --> E3["-l, --limit<br/>Result limit"]
-    E --> E4["-p, --profile<br/>CDS Profile"]
-    E --> E5["-h, --help<br/>Show help"]
+    style A fill:#0070C0,color:#fff,stroke:#fff,stroke-width:2px
+    style F fill:#51CF66,color:#fff,stroke:#fff,stroke-width:2px
 ```
 
 ## Parameters

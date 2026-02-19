@@ -137,35 +137,33 @@ hana-cli duplicateDetection [options]
 
 ```mermaid
 graph TD
-    A["hana-cli duplicateDetection"] --> B["Required Parameters"]
-    A --> C["Schema & Connection"]
-    A --> D["Troubleshooting Options"]
-    A --> E["Column Selection"]
-    A --> F["Detection Options"]
-    A --> G["Output & Format"]
+    A["🔷 hana-cli duplicateDetection"]
+    A --> B["📋 Required Parameters"]
+    B --> B1["-t, --table: Table to check"]
+    B1 --> B2["-k, --keyColumns: Key columns"]
+    B2 --> C["📍 Schema & Connection"]
+    C --> C1["-s, --schema: Schema for table"]
+    C1 --> C2["-a, --admin: Connect via admin"]
+    C2 --> C3["--conn: Connection file override"]
+    C3 --> D["📊 Column Selection"]
+    D --> D1["-c, --checkColumns: Columns to check"]
+    D1 --> D2["-e, --excludeColumns: Exclude columns"]
+    D2 --> E["🔬 Detection Options"]
+    E --> E1["-m, --mode: exact/fuzzy/partial"]
+    E1 --> E2["--threshold, --th: Match threshold"]
+    E2 --> E3["-l, --limit: Max rows to check"]
+    E3 --> E4["--timeout, --to: Timeout"]
+    E4 --> F["🔢 Output & Format"]
+    F --> F1["-o, --output: Report file"]
+    F1 --> F2["-f, --format: Report format"]
+    F2 --> F3["-p, --profile: CDS Profile"]
+    F3 --> G["🔍 Troubleshooting"]
+    G --> G1["--disableVerbose, --quiet"]
+    G1 --> G2["-d, --debug: Debug mode"]
+    G2 --> H["✅ Help: -h, --help"]
     
-    B --> B1["-t, --table<br/>Table name to check"]
-    B --> B2["-k, --keyColumns<br/>Key columns for matching"]
-    
-    C --> C1["-s, --schema<br/>Schema for table"]
-    C --> C2["-a, --admin<br/>Connect via admin"]
-    C --> C3["--conn<br/>Connection file override"]
-    
-    D --> D1["--disableVerbose, --quiet<br/>Disable verbose output"]
-    D --> D2["-d, --debug<br/>Debug mode"]
-    
-    E --> E1["-c, --checkColumns<br/>Columns to check"]
-    E --> E2["-e, --excludeColumns<br/>Columns to exclude"]
-    
-    F --> F1["-m, --mode<br/>exact/fuzzy/partial"]
-    F --> F2["--threshold, --th<br/>Fuzzy match threshold"]
-    F --> F3["-l, --limit<br/>Max rows to check"]
-    F --> F4["--timeout, --to<br/>Operation timeout"]
-    
-    G --> G1["-o, --output<br/>Report file path"]
-    G --> G2["-f, --format<br/>Report format"]
-    G --> G3["-p, --profile<br/>CDS Profile"]
-    G --> G4["-h, --help<br/>Show help"]
+    style A fill:#0070C0,color:#fff,stroke:#fff,stroke-width:2px
+    style H fill:#51CF66,color:#fff,stroke:#fff,stroke-width:2px
 ```
 
 | Option | Alias | Type | Default | Description |

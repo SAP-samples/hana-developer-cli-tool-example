@@ -138,37 +138,34 @@ hana-cli dataProfile [options]
 
 ```mermaid
 graph TD
-    A["hana-cli dataProfile"] --> B["Required Parameters"]
-    A --> C["Schema & Connection"]
-    A --> D["Troubleshooting Options"]
-    A --> E["Column Selection"]
-    A --> F["Analysis Options"]
-    A --> G["Performance Options"]
-    A --> H["Output & Format"]
+    A["🔷 hana-cli dataProfile"]
+    A --> B["📋 Required Parameters"]
+    B --> B1["-t, --table: Target table"]
+    B1 --> C["📍 Schema & Connection"]
+    C --> C1["-s, --schema: Target schema"]
+    C1 --> C2["-a, --admin: Connect via admin"]
+    C2 --> C3["--conn: Connection file override"]
+    C3 --> D["📊 Column Selection"]
+    D --> D1["-c, --columns: Columns to profile"]
+    D1 --> E["🔬 Analysis Options"]
+    E --> E1["--nullAnalysis, --na: NULL analysis"]
+    E1 --> E2["--cardinalityAnalysis, --ca: Distinct values"]
+    E2 --> E3["--statisticalAnalysis, --sa: Min/Max/Avg"]
+    E3 --> E4["--patternAnalysis, --pa: String patterns"]
+    E4 --> F["🚀 Performance Options"]
+    F --> F1["--sampleSize, --ss: Max rows"]
+    F1 --> F2["--timeout, --to: Timeout"]
+    F2 --> G["🔢 Output & Format"]
+    G --> G1["-o, --output: Report file"]
+    G1 --> G2["-f, --format: Report format"]
+    G2 --> G3["-p, --profile: CDS Profile"]
+    G3 --> H["🔍 Troubleshooting"]
+    H --> H1["--disableVerbose, --quiet"]
+    H1 --> H2["-d, --debug: Debug mode"]
+    H2 --> I["✅ Help: -h, --help"]
     
-    B --> B1["-t, --table<br/>Target table name"]
-    
-    C --> C1["-s, --schema<br/>Target schema name"]
-    C --> C2["-a, --admin<br/>Connect via admin"]
-    C --> C3["--conn<br/>Connection file override"]
-    
-    D --> D1["--disableVerbose, --quiet<br/>Disable verbose output"]
-    D --> D2["-d, --debug<br/>Debug mode"]
-    
-    E --> E1["-c, --columns<br/>Columns to profile"]
-    
-    F --> F1["--nullAnalysis, --na<br/>NULL value analysis"]
-    F --> F2["--cardinalityAnalysis, --ca<br/>Distinct value analysis"]
-    F --> F3["--statisticalAnalysis, --sa<br/>Min/Max/Avg analysis"]
-    F --> F4["--patternAnalysis, --pa<br/>String length patterns"]
-    
-    G --> G1["--sampleSize, --ss<br/>Max rows to analyze"]
-    G --> G2["--timeout, --to<br/>Operation timeout"]
-    
-    H --> H1["-o, --output<br/>Report file path"]
-    H --> H2["-f, --format<br/>Report format"]
-    H --> H3["-p, --profile<br/>CDS Profile"]
-    H --> H4["-h, --help<br/>Show help"]
+    style A fill:#0070C0,color:#fff,stroke:#fff,stroke-width:2px
+    style I fill:#51CF66,color:#fff,stroke:#fff,stroke-width:2px
 ```
 
 ## Parameters

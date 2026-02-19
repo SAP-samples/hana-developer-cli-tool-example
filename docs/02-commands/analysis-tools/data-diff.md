@@ -220,36 +220,34 @@ hana-cli dataDiff [options]
 
 ```mermaid
 graph TD
-    A["hana-cli dataDiff"] --> B["Required Parameters"]
-    A --> C["Table & Schema Parameters"]
-    A --> D["Connection Parameters"]
-    A --> E["Troubleshooting Options"]
-    A --> F["Comparison Options"]
-    A --> G["Output & Format"]
+    A["🔷 hana-cli dataDiff"]
+    A --> B["📋 Required Parameters"]
+    B --> B1["--table1, --t1: First table"]
+    B1 --> B2["--table2, --t2: Second table"]
+    B2 --> B3["-k, --keyColumns: Key columns"]
+    B3 --> C["📍 Schema Parameters"]
+    C --> C1["-s1, --schema1: First table schema"]
+    C1 --> C2["-s2, --schema2: Second table schema"]
+    C2 --> D["🔌 Connection Parameters"]
+    D --> D1["-a, --admin: Connect via admin"]
+    D1 --> D2["--conn: Connection file override"]
+    D2 --> E["⚙️ Comparison Options"]
+    E --> E1["-c, --compareColumns: Columns to compare"]
+    E1 --> E2["-l, --limit: Max rows"]
+    E2 --> E3["--showValues, --sv: Show values"]
+    E3 --> E4["--timeout, --to: Timeout"]
+    E4 --> F["🔢 Output & Format"]
+    F --> F1["-o, --output: Report file"]
+    F1 --> F2["-f, --format: Report format"]
+    F2 --> F3["-p, --profile: CDS Profile"]
+    F3 --> F4["--dryRun, --dr: Preview mode"]
+    F4 --> G["🔍 Troubleshooting"]
+    G --> G1["--disableVerbose, --quiet"]
+    G1 --> G2["-d, --debug: Debug mode"]
+    G2 --> H["✅ Help: -h, --help"]
     
-    B --> B1["-k, --keyColumns<br/>Key columns for matching"]
-    B --> B2["--table1, --t1<br/>First table name"]
-    B --> B3["--table2, --t2<br/>Second table name"]
-    
-    C --> C1["-s1, --schema1<br/>Schema for first table"]
-    C --> C2["-s2, --schema2<br/>Schema for second table"]
-    
-    D --> D1["-a, --admin<br/>Connect via admin"]
-    D --> D2["--conn<br/>Connection file override"]
-    
-    E --> E1["--disableVerbose, --quiet<br/>Disable verbose output"]
-    E --> E2["-d, --debug<br/>Debug mode"]
-    
-    F --> F1["-c, --compareColumns<br/>Columns to compare"]
-    F --> F2["-l, --limit<br/>Max rows to compare"]
-    F --> F3["--showValues, --sv<br/>Show actual values"]
-    F --> F4["--timeout, --to<br/>Operation timeout"]
-    
-    G --> G1["-o, --output<br/>Report file path"]
-    G --> G2["-f, --format<br/>Report format"]
-    G --> G3["-p, --profile<br/>CDS Profile"]
-    G --> G4["--dryRun, --dr<br/>Preview mode"]
-    G --> G5["-h, --help<br/>Show help"]
+    style A fill:#0070C0,color:#fff,stroke:#fff,stroke-width:2px
+    style H fill:#51CF66,color:#fff,stroke:#fff,stroke-width:2px
 ```
 
 ## Parameters

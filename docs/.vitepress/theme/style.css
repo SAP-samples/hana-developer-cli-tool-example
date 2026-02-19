@@ -36,3 +36,51 @@
 div[class*='language-'] {
   border-radius: 8px;
 }
+
+/* Mermaid diagram styling */
+.mermaid {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin: 20px 0;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 1200px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  /* Force narrow width to make diagrams stack vertically */
+  width: 100%;
+}
+
+/* Force SVG to be constrained width - this makes TD diagrams more vertical */
+.mermaid > svg {
+  max-width: 500px !important;
+  width: 500px !important;
+}
+
+/* Further constraint for very wide content */
+.mermaid foreignObject {
+  max-width: 300px !important;
+}
+
+/* Responsive - adjust for smaller screens */
+@media (max-width: 1024px) {
+  .mermaid > svg {
+    max-width: 400px !important;
+    width: 400px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .mermaid {
+    max-height: 900px;
+    padding: 15px;
+  }
+  
+  .mermaid > svg {
+    max-width: 350px !important;
+    width: 350px !important;
+  }
+}

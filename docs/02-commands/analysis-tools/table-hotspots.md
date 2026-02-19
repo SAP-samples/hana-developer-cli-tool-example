@@ -39,22 +39,23 @@ hana-cli tableHotspots [options]
 
 ```mermaid
 graph TD
-    A["hana-cli tableHotspots"] --> B["Connection Parameters"]
-    A --> C["Troubleshooting Options"]
-    A --> D["Analysis Options"]
+    A["🔷 hana-cli tableHotspots"]
+    A --> B["🔌 Connection Parameters"]
+    B --> B1["-a, --admin: Connect via admin"]
+    B1 --> B2["--conn: Connection file override"]
+    B2 --> B3["-p, --profile: CDS Profile"]
+    B3 --> C["⚙️ Analysis Options"]
+    C --> C1["-s, --schema: Schema name"]
+    C1 --> C2["-t, --table: Table name"]
+    C2 --> C3["-l, --limit: Result limit"]
+    C3 --> C4["--includePartitions: Include partitions"]
+    C4 --> D["🔍 Troubleshooting"]
+    D --> D1["--disableVerbose, --quiet"]
+    D1 --> D2["-d, --debug: Debug mode"]
+    D2 --> E["✅ Help: -h, --help"]
     
-    B --> B1["-a, --admin<br/>Connect via admin"]
-    B --> B2["--conn<br/>Connection file override"]
-    B --> B3["-p, --profile<br/>CDS Profile"]
-    
-    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output"]
-    C --> C2["-d, --debug<br/>Debug mode"]
-    
-    D --> D1["-s, --schema<br/>Schema name<br/>default: CURRENT_SCHEMA"]
-    D --> D2["-t, --table<br/>Table name"]
-    D --> D3["-p, --includePartitions<br/>Include partitions<br/>default: true"]
-    D --> D4["-l, --limit<br/>Result limit<br/>default: 200"]
-    D --> D5["-h, --help<br/>Show help"]
+    style A fill:#0070C0,color:#fff,stroke:#fff,stroke-width:2px
+    style E fill:#51CF66,color:#fff,stroke:#fff,stroke-width:2px
 ```
 
 ## Parameters

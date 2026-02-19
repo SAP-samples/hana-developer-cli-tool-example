@@ -160,29 +160,28 @@ hana-cli erdDiagram [options]
 
 ```mermaid
 graph TD
-    A["hana-cli erdDiagram"] --> B["Schema Selection"]
-    A --> C["Connection Parameters"]
-    A --> D["Troubleshooting Options"]
-    A --> E["Table & Column Options"]
-    A --> F["Output & Format"]
+    A["🔷 hana-cli erdDiagram"]
+    A --> B["📋 Arguments"]
+    B --> B1["Schema: -s, --schema"]
+    B1 --> B2["Tables: -t, --tables"]
+    B2 --> C["🔌 Connection Parameters"]
+    C --> C1["-a, --admin"]
+    C1 --> C2["--conn"]
+    C2 --> D["⚙️ Options"]
+    D --> D1["--showCardinality, -c"]
+    D1 --> D2["--showColumns, --cols"]
+    D2 --> D3["--excludeColumns, --ec"]
+    D3 --> E["📤 Output"]
+    E --> E1["-o, --output"]
+    E1 --> E2["-f, --format"]
+    E2 --> E3["-p, --profile"]
+    E3 --> F["🔍 Troubleshooting"]
+    F --> F1["--disableVerbose, --quiet"]
+    F1 --> F2["-d, --debug"]
+    F2 --> G["✅ Help: -h, --help"]
     
-    B --> B1["-s, --schema<br/>Schema to diagram"]
-    B --> B2["-t, --tables<br/>Comma-separated tables"]
-    
-    C --> C1["-a, --admin<br/>Connect via admin"]
-    C --> C2["--conn<br/>Connection file override"]
-    
-    D --> D1["--disableVerbose, --quiet<br/>Disable verbose output"]
-    D --> D2["-d, --debug<br/>Debug mode"]
-    
-    E --> E1["--showCardinality, -c<br/>Show cardinality"]
-    E --> E2["--showColumns, --cols<br/>Show columns"]
-    E --> E3["--excludeColumns, --ec<br/>Columns to exclude"]
-    
-    F --> F1["-o, --output<br/>Output file"] 
-    F --> F2["-f, --format<br/>Format type"]
-    F --> F3["-p, --profile<br/>CDS Profile"]
-    F --> F4["-h, --help<br/>Show help"]
+    style A fill:#0070C0,color:#fff,stroke:#fff,stroke-width:2px
+    style G fill:#51CF66,color:#fff,stroke:#fff,stroke-width:2px
 ```
 
 ## Parameters
@@ -251,7 +250,7 @@ erDiagram
 
 Generates PlantUML diagram code:
 
-```plantuml
+```text
 @startuml
 entity CUSTOMERS {
     * CUSTOMER_ID : int <<generated>>
@@ -287,7 +286,7 @@ ORDERS ||--|{ ORDER_ITEMS : contains
 
 Generates GraphViz DOT format for visualization:
 
-```dot
+```text
 digraph schema {
     rankdir=LR;
     

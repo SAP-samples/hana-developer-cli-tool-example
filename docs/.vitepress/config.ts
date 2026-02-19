@@ -1,15 +1,16 @@
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 
-export default withMermaid(defineConfig({
-  base: '/hana-developer-cli-tool-example/',
-  title: 'SAP HANA Developer CLI',
-  description: 'Complete documentation for the SAP HANA Developer CLI tool',
-  lang: 'en-US',
-  cleanUrls: true,
-  ignoreDeadLinks: true,
-  appearance: 'dark',
-  lastUpdated: true,
+export default withMermaid(
+  defineConfig({
+    base: '/hana-developer-cli-tool-example/',
+    title: 'SAP HANA Developer CLI',
+    description: 'Complete documentation for the SAP HANA Developer CLI tool',
+    lang: 'en-US',
+    cleanUrls: true,
+    ignoreDeadLinks: true,
+    appearance: 'dark',
+    lastUpdated: true,
   
   head: [
     ['link', { rel: 'icon', href: '/hana-developer-cli-tool-example/favicon.ico' }],
@@ -543,4 +544,48 @@ export default withMermaid(defineConfig({
       chunkSizeWarningLimit: 2000, // Increased from default 500KB to 2MB for large documentation pages (changelog, command reference, etc.)
     }
   }
-}))
+  }),
+  // Mermaid plugin configuration for improved diagram readability
+  {
+    mermaidConfig: {
+      theme: 'dark',
+      startOnLoad: true,
+      securityLevel: 'loose',
+      flowchart: {
+        useMaxWidth: true,
+        maxWidth: 500,
+        // Encourage vertical arrangement of nodes
+        padding: 50,
+        nodeSpacing: 50,
+        rankSpacing: 60,
+        curve: 'linear',
+        diagramMarginX: 20,
+        diagramMarginY: 20,
+      },
+      sequenceDiagram: {
+        useMaxWidth: true,
+        maxWidth: 500,
+        padding: 50,
+        mirrorActors: true,
+      },
+      gantt: {
+        useMaxWidth: true,
+        maxWidth: 500,
+        padding: 50,
+        fontSize: 14,
+      },
+      classDiagram: {
+        useMaxWidth: true,
+        maxWidth: 500,
+        padding: 50,
+      },
+      stateDiagram: {
+        useMaxWidth: true,
+        maxWidth: 500,
+        padding: 50,
+      },
+    },
+    logLevel: 'error',
+    securityLevel: 'loose',
+  }
+)

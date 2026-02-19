@@ -19,7 +19,7 @@
 ## Installation Methods
 
 ```mermaid
-graph LR
+graph TB
     A["SAP HANA CLI Tool"] --> B{Installation Method}
     
     B --> B1["NPM Package<br/>Quick Install"]

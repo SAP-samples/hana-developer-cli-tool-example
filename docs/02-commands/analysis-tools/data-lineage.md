@@ -184,30 +184,29 @@ hana-cli dataLineage [options]
 
 ```mermaid
 graph TD
-    A["hana-cli dataLineage"] --> B["Required Parameters"]
-    A --> C["Schema & Connection"]
-    A --> D["Troubleshooting Options"]
-    A --> E["Lineage Analysis Options"]
-    A --> F["Output & Format"]
+    A["🔷 hana-cli dataLineage"]
+    A --> B["📋 Required Parameters"]
+    B --> B1["-t, --table: Table to trace"]
+    B1 --> C["📍 Schema & Connection"]
+    C --> C1["-s, --schema: Schema for table"]
+    C1 --> C2["-a, --admin: Connect via admin"]
+    C2 --> C3["--conn: Connection file override"]
+    C3 --> D["🔬 Lineage Analysis Options"]
+    D --> D1["--direction, --dir: upstream|downstream|bidirectional"]
+    D1 --> D2["--depth, --dp: Max lineage depth"]
+    D2 --> D3["--includeTransformations, --it: Include views & procedures"]
+    D3 --> D4["--timeout, --to: Timeout"]
+    D4 --> E["🔢 Output & Format"]
+    E --> E1["-o, --output: Report file"]
+    E1 --> E2["-f, --format: Report format"]
+    E2 --> E3["-p, --profile: CDS Profile"]
+    E3 --> F["🔍 Troubleshooting"]
+    F --> F1["--disableVerbose, --quiet"]
+    F1 --> F2["-d, --debug: Debug mode"]
+    F2 --> G["✅ Help: -h, --help"]
     
-    B --> B1["-t, --table<br/>Table name to trace"]
-    
-    C --> C1["-s, --schema<br/>Schema for table"]
-    C --> C2["-a, --admin<br/>Connect via admin"]
-    C --> C3["--conn<br/>Connection file override"]
-    
-    D --> D1["--disableVerbose, --quiet<br/>Disable verbose output"]
-    D --> D2["-d, --debug<br/>Debug mode"]
-    
-    E --> E1["--direction, --dir<br/>upstream/downstream/bidirectional"]
-    E --> E2["--depth, --dp<br/>Max lineage depth"]
-    E --> E3["--includeTransformations, --it<br/>Include views & procedures"]
-    E --> E4["--timeout, --to<br/>Operation timeout"]
-    
-    F --> F1["-o, --output<br/>Report file path"]
-    F --> F2["-f, --format<br/>Report format"]
-    F --> F3["-p, --profile<br/>CDS Profile"]
-    F --> F4["-h, --help<br/>Show help"]
+    style A fill:#0070C0,color:#fff,stroke:#fff,stroke-width:2px
+    style G fill:#51CF66,color:#fff,stroke:#fff,stroke-width:2px
 ```
 
 | Option | Alias | Type | Default | Description |

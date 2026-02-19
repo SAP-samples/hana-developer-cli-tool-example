@@ -116,21 +116,22 @@ hana-cli fragmentationCheck [options]
 
 ```mermaid
 graph TD
-    A["hana-cli fragmentationCheck"] --> B["Connection Parameters"]
-    A --> C["Troubleshooting Options"]
-    A --> D["Analysis Options"]
+    A["🔷 hana-cli fragmentationCheck"]
+    A --> B["🔌 Connection Parameters"]
+    B --> B1["-a, --admin: Connect via admin"]
+    B1 --> B2["--conn: Connection file override"]
+    B2 --> C["⚙️ Analysis Options"]
+    C --> C1["-s, --schema: Schema name"]
+    C1 --> C2["-t, --table: Database table"]
+    C2 --> C3["--threshold, --th: Fragmentation %"]
+    C3 --> C4["-l, --limit: Result limit"]
+    C4 --> D["🔍 Troubleshooting"]
+    D --> D1["--disableVerbose, --quiet"]
+    D1 --> D2["-d, --debug: Debug mode"]
+    D2 --> E["✅ Help: -h, --help"]
     
-    B --> B1["-a, --admin<br/>Connect via admin"]
-    B --> B2["--conn<br/>Connection file override"]
-    
-    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output"]
-    C --> C2["-d, --debug<br/>Debug mode"]
-    
-    D --> D1["-s, --schema<br/>Schema name"]
-    D --> D2["-t, --table<br/>Database table"]
-    D --> D3["--threshold, --th<br/>Fragmentation threshold %<br/>default: 10"]
-    D --> D4["-l, --limit<br/>Result limit<br/>default: 50"]
-    D --> D5["-h, --help<br/>Show help"]
+    style A fill:#0070C0,color:#fff,stroke:#fff,stroke-width:2px
+    style E fill:#51CF66,color:#fff,stroke:#fff,stroke-width:2px
 ```
 
 ## Parameters

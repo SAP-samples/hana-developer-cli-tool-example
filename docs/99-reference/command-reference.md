@@ -22,7 +22,7 @@ This document provides visual diagrams and quick reference guides for the most c
 **Purpose**: Establish and save connection to SAP HANA database
 
 ```mermaid
-graph LR
+graph TB
     A["hana-cli connect<br/>[user] [password]"] --> B["Connection Parameters"]
     B --> B1["-n, --connection<br/>host:port"]
     B --> B2["-u, --user<br/>username"]
@@ -65,7 +65,7 @@ hana-cli connect -U MYHDBKEY -s
 **Purpose**: Convert .env file to default-env.json format
 
 ```mermaid
-graph LR
+graph TB
     A[".env File"] --> B["hana-cli copy2DefaultEnv"]
     B --> C["Parse VCAP_SERVICES"]
     C --> D["Format for HANA"]
@@ -364,7 +364,7 @@ hana-cli inspectTable -t ORDERS -o json
 **Purpose**: List views in schema
 
 ```mermaid
-graph LR
+graph TB
     A["hana-cli views"] --> B["-s, --schema<br/>**CURRENT_SCHEMA**"]
     A --> C["-l, --limit<br/>200"]
     A --> D["-p, --profile<br/>database"]
@@ -383,7 +383,7 @@ graph LR
 **Purpose**: List stored procedures in schema
 
 ```mermaid
-graph LR
+graph TB
     A["hana-cli procedures"] --> B["-s, --schema<br/>**CURRENT_SCHEMA**"]
     A --> C["-l, --limit<br/>200"]
     A --> D["-p, --profile<br/>database"]
@@ -854,7 +854,7 @@ hana-cli btpInfo
 **Purpose**: Activate HDI service in tenant
 
 ```mermaid
-graph LR
+graph TB
     A["hana-cli activateHDI"] --> B["-t, --tenant<br/>tenant ID"]
     A --> C["Note: Must run in SYSTEMDB"]
     B --> D["HDI Activated"]
@@ -874,7 +874,7 @@ graph LR
 All list commands follow this standard pattern:
 
 ```mermaid
-graph LR
+graph TB
     A["hana-cli [command]"] --> B["Filters"]
     B --> B1["-s, --schema<br/>**CURRENT_SCHEMA**"]
     B --> B2["-p, --profile<br/>database profile"]

@@ -66,28 +66,29 @@ hana-cli referentialCheck [options]
 
 ```mermaid
 graph TD
-    A["hana-cli referentialCheck"] --> B["Connection Parameters"]
-    A --> C["Troubleshooting Options"]
-    A --> D["Analysis Options"]
-    A --> E["Report Options"]
+    A["🔷 hana-cli referentialCheck"]
+    A --> B["📋 Required Parameters"]
+    B --> B1["-t, --table: Table to check"]
+    B1 --> C["🔌 Connection Parameters"]
+    C --> C1["-a, --admin: Connect via admin"]
+    C1 --> C2["--conn: Connection file override"]
+    C2 --> D["⚙️ Analysis Options"]
+    D --> D1["-s, --schema: Schema name"]
+    D1 --> D2["-c, --constraints: Specific constraints"]
+    D2 --> D3["-m, --mode: check|report|repair|detailed"]
+    D3 --> D4["-l, --limit: Max rows to check"]
+    D4 --> D5["--timeout, --to: Operation timeout"]
+    D5 --> E["🔢 Output & Format"]
+    E --> E1["-o, --output: Report file"]
+    E1 --> E2["-f, --format: json|csv|summary"]
+    E2 --> E3["-p, --profile: CDS Profile"]
+    E3 --> F["🔍 Troubleshooting"]
+    F --> F1["--disableVerbose, --quiet"]
+    F1 --> F2["-d, --debug: Debug mode"]
+    F2 --> G["✅ Help: -h, --help"]
     
-    B --> B1["-a, --admin<br/>Connect via admin"]
-    B --> B2["--conn<br/>Connection file override"]
-    
-    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output"]
-    C --> C2["-d, --debug<br/>Debug mode"]
-    
-    D --> D1["-t, --table<br/>Table name to check"]
-    D --> D2["-s, --schema<br/>Schema name<br/>default: CURRENT_SCHEMA"]
-    D --> D3["-c, --constraints<br/>Specific constraints<br/>comma-separated"]
-    D --> D4["-m, --mode<br/>check|report|repair|detailed<br/>default: check"]
-    D --> D5["-l, --limit<br/>Max rows to check<br/>default: 10000"]
-    D --> D6["--timeout, --to<br/>Operation timeout<br/>default: 3600s"]
-    
-    E --> E1["-o, --output<br/>Report file path"]
-    E --> E2["-f, --format<br/>json|csv|summary<br/>default: summary"]
-    E --> E3["-p, --profile<br/>CDS Profile"]
-    E --> E4["-h, --help<br/>Show help"]
+    style A fill:#0070C0,color:#fff,stroke:#fff,stroke-width:2px
+    style G fill:#51CF66,color:#fff,stroke:#fff,stroke-width:2px
 ```
 
 ## Parameters
