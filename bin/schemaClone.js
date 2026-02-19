@@ -130,8 +130,19 @@ export async function schemaCloneMain(prompts) {
     const dbClient = await dbClientClass.getNewClient(prompts)
     await dbClient.connect()
 
-    const sourceSchema = prompts.sourceSchema
-    const targetSchema = prompts.targetSchema
+    // Get current schema if using **CURRENT_SCHEMA**
+    let sourceSchema = prompts.sourceSchema
+    let targetSchema = prompts.targetSchema
+
+    if (sourceSchema === '**CURRENT_SCHEMA**') {
+      const result = await dbClient.execSQL("SELECT CURRENT_SCHEMA FROM DUMMY")
+      sourceSchema = result?.[0]?.CURRENT_SCHEMA || 'PUBLIC'
+    }
+
+    if (targetSchema === '**CURRENT_SCHEMA**') {
+      const result = await dbClient.execSQL("SELECT CURRENT_SCHEMA FROM DUMMY")
+      targetSchema = result?.[0]?.CURRENT_SCHEMA || sourceSchema
+    }
 
     console.log(base.bundle.getText("info.startingSchemaClone", [sourceSchema, targetSchema]))
 

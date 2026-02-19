@@ -8,13 +8,13 @@ export const describe = baseLite.bundle.getText("compareSchema")
 
 export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   sourceSchema: {
-    alias: ['ss'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("compareSchemaSourceSchema")
   },
   targetSchema: {
-    alias: ['ts'],
+    alias: ['t'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("compareSchemaTargetSchema")
@@ -151,8 +151,19 @@ export async function compareSchemaMain(prompts) {
 
     const dbKind = (dbClient.getKind() || 'hana').toLowerCase()
 
-    const sourceSchema = prompts.sourceSchema
-    const targetSchema = prompts.targetSchema
+    // Get current schema if using **CURRENT_SCHEMA**
+    let sourceSchema = prompts.sourceSchema
+    let targetSchema = prompts.targetSchema
+
+    if (sourceSchema === '**CURRENT_SCHEMA**') {
+      const result = await dbClient.execSQL("SELECT CURRENT_SCHEMA FROM DUMMY")
+      sourceSchema = result?.[0]?.CURRENT_SCHEMA || 'PUBLIC'
+    }
+
+    if (targetSchema === '**CURRENT_SCHEMA**') {
+      const result = await dbClient.execSQL("SELECT CURRENT_SCHEMA FROM DUMMY")
+      targetSchema = result?.[0]?.CURRENT_SCHEMA || sourceSchema
+    }
 
     if (!sourceSchema || !targetSchema) {
       throw new Error(baseLite.bundle.getText("errSchemaRequired"))
@@ -215,7 +226,7 @@ async function getSchemaInfo(dbClient, schema, dbKind, options) {
 
     for (const table of tables) {
       const tableName = table.TABLE_NAME
-      const colQuery = `SELECT COLUMN_NAME, DATA_TYPE, NULLABLE, POSITION 
+      const colQuery = `SELECT COLUMN_NAME, DATA_TYPE_NAME, IS_NULLABLE, POSITION 
                         FROM SYS.TABLE_COLUMNS 
                         WHERE SCHEMA_NAME = ? AND TABLE_NAME = ? 
                         ORDER BY POSITION`
@@ -225,8 +236,8 @@ async function getSchemaInfo(dbClient, schema, dbKind, options) {
         type: table.TABLE_TYPE,
         columns: columns.map(c => ({
           name: c.COLUMN_NAME,
-          type: c.DATA_TYPE,
-          nullable: c.NULLABLE === 'TRUE' || c.NULLABLE === 'YES'
+          type: c.DATA_TYPE_NAME,
+          nullable: c.IS_NULLABLE === 'TRUE' || c.IS_NULLABLE === 'YES'
         }))
       }
     }
@@ -234,8 +245,8 @@ async function getSchemaInfo(dbClient, schema, dbKind, options) {
     // Get indexes
     if (options.compareIndexes) {
       const indexQuery = `SELECT INDEX_NAME, TABLE_NAME, COLUMN_NAME 
-                          FROM SYS.INDEXES 
-                          WHERE SCHEMA_NAME = ? ORDER BY TABLE_NAME, INDEX_NAME`
+                          FROM SYS.INDEX_COLUMNS 
+                          WHERE SCHEMA_NAME = ? ORDER BY TABLE_NAME, INDEX_NAME, POSITION`
       const indexes = await dbClient.execSQL(indexQuery, [schema.toUpperCase()])
       for (const idx of indexes) {
         const key = `${idx.TABLE_NAME}.${idx.INDEX_NAME}`
@@ -248,7 +259,7 @@ async function getSchemaInfo(dbClient, schema, dbKind, options) {
 
     // Get triggers
     if (options.compareTriggers) {
-      const triggerQuery = `SELECT TRIGGER_NAME, TABLE_NAME FROM SYS.TRIGGERS WHERE SCHEMA_NAME = ? ORDER BY TABLE_NAME`
+      const triggerQuery = `SELECT TRIGGER_NAME, SUBJECT_TABLE_NAME as TABLE_NAME FROM SYS.TRIGGERS WHERE SCHEMA_NAME = ? ORDER BY SUBJECT_TABLE_NAME`
       const triggers = await dbClient.execSQL(triggerQuery, [schema.toUpperCase()])
       for (const trig of triggers) {
         info.triggers[trig.TRIGGER_NAME] = { table: trig.TABLE_NAME }
@@ -427,33 +438,100 @@ function compareTableStructure(sourceTable, targetTable) {
  * @returns {void}
  */
 function displaySchemaComparison(comparison) {
-  console.log(`\n${baseLite.colors.green('Table Matches:')} ${comparison.tableMatches}`)
+  console.log('\n' + '='.repeat(80))
+  console.log(baseLite.colors.bold.cyan('SCHEMA COMPARISON RESULTS'))
+  console.log('='.repeat(80) + '\n')
 
+  // Summary Section
+  console.log(baseLite.colors.bold('📊 SUMMARY'))
+  console.log(baseLite.colors.green(`  ✓ Table Matches: ${comparison.tableMatches}`))
+  console.log(baseLite.colors.yellow(`  ⚠ Table Differences: ${comparison.tableDifferences.length}`))
+  console.log(baseLite.colors.cyan(`  ← Source-Only Tables: ${comparison.sourceOnlyTables.length}`))
+  console.log(baseLite.colors.magenta(`  → Target-Only Tables: ${comparison.targetOnlyTables.length}`))
+  console.log(baseLite.colors.yellow(`  ⚠ Index Differences: ${comparison.indexDifferences.length}`))
+  console.log(baseLite.colors.yellow(`  ⚠ Trigger Differences: ${comparison.triggerDifferences.length}`))
+
+  // Table Differences Detail
   if (comparison.tableDifferences.length > 0) {
-    console.log(`\n${baseLite.colors.yellow('Table Differences:')}`)
-    comparison.tableDifferences.slice(0, 5).forEach(diff => {
-      console.log(`  ${diff.table}:`)
-      diff.differences.slice(0, 3).forEach(d => {
-        console.log(`    - ${d.type}: ${JSON.stringify(d)}`)
+    console.log('\n' + '-'.repeat(80))
+    console.log(baseLite.colors.bold.yellow('⚠ TABLE STRUCTURE DIFFERENCES'))
+    console.log('-'.repeat(80))
+    
+    comparison.tableDifferences.forEach(diff => {
+      console.log(`\n${baseLite.colors.bold.white('Table:')} ${baseLite.colors.cyan(diff.table)}`)
+      diff.differences.forEach(d => {
+        if (d.type === 'columnChange') {
+          console.log(`  ${baseLite.colors.yellow('●')} Column ${baseLite.colors.white(d.column)} changed:`)
+          console.log(`      Type: ${baseLite.colors.cyan(d.sourceType)} → ${baseLite.colors.cyan(d.targetType)}`)
+          console.log(`      Nullable: ${baseLite.colors.cyan(d.sourceNullable)} → ${baseLite.colors.cyan(d.targetNullable)}`)
+        } else if (d.type === 'missingColumn') {
+          console.log(`  ${baseLite.colors.red('✗')} Column ${baseLite.colors.red(d.column)} ${baseLite.colors.red('missing in target')}`)
+        } else if (d.type === 'extraColumn') {
+          console.log(`  ${baseLite.colors.green('+')} Column ${baseLite.colors.green(d.column)} ${baseLite.colors.green('only in target')}`)
+        } else if (d.type === 'tableType') {
+          console.log(`  ${baseLite.colors.yellow('●')} Table type changed: ${baseLite.colors.cyan(d.source)} → ${baseLite.colors.cyan(d.target)}`)
+        }
       })
     })
   }
 
+  // Source-Only Tables
   if (comparison.sourceOnlyTables.length > 0) {
-    console.log(`\n${baseLite.colors.cyan('Source-Only Tables:')} ${comparison.sourceOnlyTables.join(', ')}`)
+    console.log('\n' + '-'.repeat(80))
+    console.log(baseLite.colors.bold.cyan('← TABLES ONLY IN SOURCE'))
+    console.log('-'.repeat(80))
+    
+    const maxPerLine = 5
+    for (let i = 0; i < comparison.sourceOnlyTables.length; i += maxPerLine) {
+      const batch = comparison.sourceOnlyTables.slice(i, i + maxPerLine)
+      console.log('  ' + batch.map(t => baseLite.colors.cyan(t)).join(', '))
+    }
   }
 
+  // Target-Only Tables
   if (comparison.targetOnlyTables.length > 0) {
-    console.log(`\n${baseLite.colors.magenta('Target-Only Tables:')} ${comparison.targetOnlyTables.join(', ')}`)
+    console.log('\n' + '-'.repeat(80))
+    console.log(baseLite.colors.bold.magenta('→ TABLES ONLY IN TARGET'))
+    console.log('-'.repeat(80))
+    
+    const maxPerLine = 5
+    for (let i = 0; i < comparison.targetOnlyTables.length; i += maxPerLine) {
+      const batch = comparison.targetOnlyTables.slice(i, i + maxPerLine)
+      console.log('  ' + batch.map(t => baseLite.colors.magenta(t)).join(', '))
+    }
   }
 
+  // Index Differences
   if (comparison.indexDifferences.length > 0) {
-    console.log(`\n${baseLite.colors.yellow('Index Differences:')} ${comparison.indexDifferences.length}`)
+    console.log('\n' + '-'.repeat(80))
+    console.log(baseLite.colors.bold.yellow('⚠ INDEX DIFFERENCES'))
+    console.log('-'.repeat(80))
+    
+    comparison.indexDifferences.forEach(diff => {
+      if (diff.type === 'missing') {
+        console.log(`  ${baseLite.colors.red('✗')} ${baseLite.colors.red(diff.name)} ${baseLite.colors.red('(missing in target)')}`)
+      } else if (diff.type === 'extra') {
+        console.log(`  ${baseLite.colors.green('+')} ${baseLite.colors.green(diff.name)} ${baseLite.colors.green('(only in target)')}`)
+      }
+    })
   }
 
+  // Trigger Differences
   if (comparison.triggerDifferences.length > 0) {
-    console.log(`\n${baseLite.colors.yellow('Trigger Differences:')} ${comparison.triggerDifferences.length}`)
+    console.log('\n' + '-'.repeat(80))
+    console.log(baseLite.colors.bold.yellow('⚠ TRIGGER DIFFERENCES'))
+    console.log('-'.repeat(80))
+    
+    comparison.triggerDifferences.forEach(diff => {
+      if (diff.type === 'missing') {
+        console.log(`  ${baseLite.colors.red('✗')} ${baseLite.colors.red(diff.name)} ${baseLite.colors.red('(missing in target)')}`)
+      } else if (diff.type === 'extra') {
+        console.log(`  ${baseLite.colors.green('+')} ${baseLite.colors.green(diff.name)} ${baseLite.colors.green('(only in target)')}`)
+      }
+    })
   }
+
+  console.log('\n' + '='.repeat(80) + '\n')
 }
 
 /**

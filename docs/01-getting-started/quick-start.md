@@ -26,19 +26,19 @@ If this shows alerts without errors, you're connected!
 ### View database information
 
 ```bash
-hana-cli dbInfo
+hana-cli systemInfo
 ```
 
-### List tables in a schema
+### List tables in the current schema
 
 ```bash
-hana-cli tables -s MYSCHEMA
+hana-cli tables 
 ```
 
 ### Profile data in a table
 
 ```bash
-hana-cli dataProfile -s MYSCHEMA -t EMPLOYEES
+hana-cli dataProfile -t EMPLOYEES
 ```
 
 ## Step 4: Import Data

@@ -154,6 +154,13 @@ export let inputPrompts = {
     required: false,
     ask: () => false
   },
+  maxRows: {
+    description: baseLite.bundle.getText("exportMaxRows"),
+    type: 'number',
+    required: false,
+    default: 1000000,
+    ask: () => false
+  },
   timeout: {
     description: baseLite.bundle.getText("exportTimeout"),
     type: 'number',
@@ -176,7 +183,7 @@ export let inputPrompts = {
  */
 export async function handler(argv) {
   const base = await import('../utils/base.js')
-  base.promptHandler(argv, exportData, inputPrompts)
+  await base.promptHandler(argv, exportData, inputPrompts, true, false)
 }
 
 /**
@@ -188,33 +195,39 @@ export async function exportData(prompts) {
   const base = await import('../utils/base.js')
   base.debug('exportData')
 
+  let dbClient = null
+  let timeoutHandle = null
+
   try {
     base.setPrompts(prompts)
 
     // Set operation timeout
     const abortController = new AbortController()
-    const timeoutHandle = prompts.timeout > 0
+    timeoutHandle = prompts.timeout > 0
       ? setTimeout(() => abortController.abort(), prompts.timeout * 1000)
       : null
 
     // Connect to database
-    const dbClient = await dbClientClass.getNewClient(prompts)
+    dbClient = await dbClientClass.getNewClient(prompts)
     await dbClient.connect()
 
     const dbKind = (dbClient.getKind() || 'hana').toLowerCase()
 
     // Get schema if not provided
     let schema = prompts.schema
-    if (!schema && dbKind !== 'sqlite') {
-      schema = await getCurrentSchema(dbClient, dbKind)
-      if (!schema && dbKind === 'hana') {
-        throw new Error(baseLite.bundle.getText("errNoSchemaSpecified"))
+    // Handle the **CURRENT_SCHEMA** placeholder
+    if (!schema || schema === '**CURRENT_SCHEMA**') {
+      if (dbKind !== 'sqlite') {
+        schema = await getCurrentSchema(dbClient, dbKind)
+        if (!schema && dbKind === 'hana') {
+          throw new Error('No schema specified')
+        }
       }
     }
 
     const table = prompts.table
     if (!table) {
-      throw new Error(baseLite.bundle.getText("errTableNotFound", [table]))
+      throw new Error(`Table not found: ${table}`)
     }
 
     // Parse column list if provided
@@ -243,14 +256,14 @@ export async function exportData(prompts) {
     }
 
     base.debug(`Export query: ${query}`)
-    console.log(baseLite.bundle.getText("info.startingExport", [table]))
+    console.log(`Starting export for table: ${table}`)
 
     // Execute query
     const startTime = Date.now()
     const rows = await dbClient.execSQL(query)
 
     if (!rows || rows.length === 0) {
-      console.log(baseLite.bundle.getText("info.noDataToExport"))
+      console.log('No data to export')
       await dbClient.disconnect()
       if (timeoutHandle) clearTimeout(timeoutHandle)
       return
@@ -266,6 +279,19 @@ export async function exportData(prompts) {
 
     base.debug(`Output file: ${outputFile}`)
 
+    // Check if output file already exists and prompt for confirmation
+    const fs = await import('fs')
+    if (fs.existsSync(outputFile)) {
+      console.log(`File ${outputFile} already exists.`)
+      const confirmOverwrite = await promptForConfirmation('Do you want to overwrite it? (yes/no): ')
+      if (!confirmOverwrite) {
+        console.log('Export cancelled.')
+        await dbClient.disconnect()
+        if (timeoutHandle) clearTimeout(timeoutHandle)
+        return
+      }
+    }
+
     // Export based on format
     if (prompts.format === 'json') {
       await exportJSON(outputFile, rows, prompts.nullValue)
@@ -278,15 +304,24 @@ export async function exportData(prompts) {
     const elapsed = Date.now() - startTime
     const elapsedSeconds = (elapsed / 1000).toFixed(2)
 
-    console.log(baseLite.bundle.getText("success.exportComplete", [rows.length, outputFile, elapsedSeconds]))
+    console.log(`Export complete: ${rows.length} rows exported to ${outputFile} (${elapsedSeconds}s)`)
 
     await dbClient.disconnect()
     if (timeoutHandle) clearTimeout(timeoutHandle)
 
   } catch (error) {
-    console.error(baseLite.bundle.getText("error.export", [error.message]))
+    const errorMsg = `Export error: ${error.message}`
+    console.error(errorMsg)
     base.debug(error)
-    throw error
+    if (timeoutHandle) clearTimeout(timeoutHandle)
+    if (dbClient) {
+      try {
+        await dbClient.disconnect()
+      } catch (e) {
+        // Ignore disconnect errors
+      }
+    }
+    process.exit(1)
   }
 }
 
@@ -331,7 +366,7 @@ async function exportCSV(filePath, rows, delimiter = ',', includeHeaders = true,
     base.debug(`CSV file written: ${filePath}`)
 
   } catch (error) {
-    throw new Error(baseLite.bundle.getText("error.fileWrite", [filePath, error.message]))
+    throw new Error(`File write error for ${filePath}: ${error.message}`)
   }
 }
 
@@ -400,7 +435,7 @@ async function exportExcel(filePath, sheetName, rows, nullValue = '') {
     base.debug(`Excel file written: ${filePath}`)
 
   } catch (error) {
-    throw new Error(baseLite.bundle.getText("error.fileWrite", [filePath, error.message]))
+    throw new Error(`File write error for ${filePath}: ${error.message}`)
   }
 }
 
@@ -435,8 +470,29 @@ async function exportJSON(filePath, rows, nullValue = '') {
     base.debug(`JSON file written: ${filePath}`)
 
   } catch (error) {
-    throw new Error(baseLite.bundle.getText("error.fileWrite", [filePath, error.message]))
+    throw new Error(`File write error for ${filePath}: ${error.message}`)
   }
+}
+
+/**
+ * Prompt user for confirmation (yes/no)
+ * @param {string} message - Prompt message
+ * @returns {Promise<boolean>}
+ */
+async function promptForConfirmation(message) {
+  const readline = await import('readline')
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  })
+
+  return new Promise((resolve) => {
+    rl.question(message, (answer) => {
+      rl.close()
+      const normalized = (answer || '').toLowerCase().trim()
+      resolve(normalized === 'yes' || normalized === 'y')
+    })
+  })
 }
 
 /**

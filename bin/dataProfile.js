@@ -161,7 +161,7 @@ export let inputPrompts = {
  */
 export async function handler(argv) {
   const base = await import('../utils/base.js')
-  base.promptHandler(argv, dataProfileMain, inputPrompts)
+  await base.promptHandler(argv, dataProfileMain, inputPrompts, true, false)
 }
 
 /**
@@ -173,32 +173,38 @@ export async function dataProfileMain(prompts) {
   const base = await import('../utils/base.js')
   base.debug('dataProfileMain')
 
+  let dbClient = null
+  let timeoutHandle = null
+
   try {
     base.setPrompts(prompts)
 
     // Set operation timeout
-    const timeoutHandle = prompts.timeout > 0
+    timeoutHandle = prompts.timeout > 0
       ? setTimeout(() => process.exit(1), prompts.timeout * 1000)
       : null
 
     // Connect to database
-    const dbClient = await dbClientClass.getNewClient(prompts)
+    dbClient = await dbClientClass.getNewClient(prompts)
     await dbClient.connect()
 
     const dbKind = (dbClient.getKind() || 'hana').toLowerCase()
 
     // Get schema if not provided
     let schema = prompts.schema
-    if (!schema && dbKind !== 'sqlite') {
-      schema = await getCurrentSchema(dbClient, dbKind)
+    // Handle the **CURRENT_SCHEMA** placeholder
+    if (!schema || schema === '**CURRENT_SCHEMA**') {
+      if (dbKind !== 'sqlite') {
+        schema = await getCurrentSchema(dbClient, dbKind)
+      }
     }
 
     const table = prompts.table
     if (!table) {
-      throw new Error(baseLite.bundle.getText("errTableNotFound", [table]))
+      throw new Error(`Table not found: ${table}`)
     }
 
-    console.log(baseLite.bundle.getText("info.startingDataProfile", [table]))
+    console.log(`Starting data profile analysis for table: ${table}`)
 
     // Get table columns
     const columns = await getTableColumns(dbClient, schema, table, dbKind)
@@ -227,19 +233,24 @@ export async function dataProfileMain(prompts) {
       displayProfile(profile, prompts.format)
     }
 
-    console.log(baseLite.bundle.getText("success.dataProfileComplete", [
-      table,
-      profile.rowCount,
-      profile.columnCount
-    ]))
+    console.log(`Data profile complete for table ${table}. Rows: ${profile.rowCount}, Columns: ${profile.columnCount}`)
 
     await dbClient.disconnect()
     if (timeoutHandle) clearTimeout(timeoutHandle)
 
   } catch (error) {
-    console.error(baseLite.bundle.getText("error.dataProfile", [error.message]))
+    const errorMsg = `Data profile error: ${error.message}`
+    console.error(errorMsg)
     base.debug(error)
-    throw error
+    if (timeoutHandle) clearTimeout(timeoutHandle)
+    if (dbClient) {
+      try {
+        await dbClient.disconnect()
+      } catch (e) {
+        // Ignore disconnect errors
+      }
+    }
+    process.exit(1)
   }
 }
 
