@@ -16,6 +16,46 @@ import fs from 'fs'
 import chalk from 'chalk'
 export const colors = chalk
 
+// Global configuration storage
+let _config = {}
+
+/**
+ * Set global configuration (called from cli.js at startup)
+ * @param {Object} config Configuration object
+ */
+export function setConfig(config) {
+    _config = config || {}
+}
+
+/**
+ * Get global configuration
+ * @returns {Object} Configuration object
+ */
+export function getConfig() {
+    return _config
+}
+
+/**
+ * Get a specific configuration value with dot notation support
+ * @param {string} key Configuration key (supports dot notation for nested access)
+ * @param {*} defaultValue Default value if key not found
+ * @returns {*} Configuration value or default
+ */
+export function getConfigValue(key, defaultValue = undefined) {
+    const keys = key.split('.')
+    let value = _config
+    
+    for (const k of keys) {
+        if (value && typeof value === 'object' && k in value) {
+            value = value[k]
+        } else {
+            return defaultValue
+        }
+    }
+    
+    return value
+}
+
 /** @type {typeof import("debug") } */
 // Lazy-load debug module only if DEBUG env var is set (saves ~8ms on startup)
 let _debug = null
@@ -171,6 +211,7 @@ export async function error(err) {
 
 /**
  * Build yargs options with common connection and debug parameters
+ * Applies configuration defaults from .hana-cli-config or hana-cli.config.js
  * @param {object} input - Command-specific options
  * @param {boolean} [iConn=true] - Include connection parameters
  * @param {boolean} [iDebug=true] - Include debug parameters
@@ -186,11 +227,12 @@ export function getBuilder(input, iConn = true, iDebug = true) {
             admin: {
                 alias: ['a'],
                 type: 'boolean',
-                default: false,
+                default: getConfigValue('admin', false),
                 group: bundle.getText("grpConn"),
                 desc: bundle.getText("admin")
             },
             conn: {
+                default: getConfigValue('conn'),
                 group: bundle.getText("grpConn"),
                 desc: bundle.getText("connFile")
             },
@@ -203,22 +245,52 @@ export function getBuilder(input, iConn = true, iDebug = true) {
                 alias: ['quiet'],
                 group: bundle.getText("grpDebug"),
                 type: 'boolean',
-                default: false,
+                default: getConfigValue('disableVerbose', false),
                 desc: bundle.getText("disableVerbose")
             },
             debug: {
                 alias: ['d'],
                 group: bundle.getText("grpDebug"),
                 type: 'boolean',
-                default: false,
+                default: getConfigValue('debug', false),
                 desc: bundle.getText("debug")
             }
         }
     }
+    
+    // Merge input options and apply config defaults to input options as well
     let builder = {
         ...input,
         ...grpConn,
         ...grpDebug
     }
+    
+    // Apply config defaults to input options - only if not already set in input
+    for (const [key, option] of Object.entries(builder)) {
+        if (option && typeof option === 'object' && !('default' in option)) {
+            const configValue = getConfigValue(key)
+            if (configValue !== undefined) {
+                option.default = configValue
+            }
+        }
+    }
+    
+    // Apply global config defaults
+    if (getConfigValue('defaultSchema')) {
+        if (builder.schema && !builder.schema.default) {
+            builder.schema.default = getConfigValue('defaultSchema')
+        }
+    }
+    
+    if (getConfigValue('outputFormat')) {
+        if (builder.outputFormat && !builder.outputFormat.default) {
+            builder.outputFormat.default = getConfigValue('outputFormat')
+        }
+    }
+    
+    if (getConfigValue('language')) {
+        // Language is typically handled globally, not per-command
+    }
+    
     return builder
 }

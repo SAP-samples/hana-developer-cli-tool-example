@@ -10,7 +10,7 @@ const OUTPUTS = {
   DBX: "dbx"
 }
 export const command = 'systemInfo'
-export const aliases = ['sys', 'sysinfo', 'sysInfo', 'systeminfo']
+export const aliases = ['sys', 'sysinfo', 'sysInfo', 'systeminfo', 'system-information', 'dbInfo', 'dbinfo']
 export const describe = baseLite.bundle.getText("systemInfo")
 export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   output: {

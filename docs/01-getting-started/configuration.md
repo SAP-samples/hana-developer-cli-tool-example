@@ -4,9 +4,9 @@ Configure HANA CLI for your development environment.
 
 ## Connection Configuration
 
-### Method 1: default-env.json (Recommended)
+### Method 1: default-env.json
 
-Create a `default-env.json` file in your working directory:
+Create a `default-env.json` file in your working directory manually or via `hana-cli connect` command.
 
 ```json
 {
@@ -56,23 +56,20 @@ hana-cli dbInfo \
   --password password
 ```
 
-## CDS Profiles
+## CDS Profiles (Recommended as the best practice)
 
 Use CDS profiles for different environments:
 
 ```bash
 # Use specific profile
 hana-cli tables -s SCHEMA --profile production
-
-# List available profiles
-hana-cli profiles list
 ```
 
 ## Admin Credentials
 
 For admin operations, use separate credentials:
 
-Create `default-env-admin.json`:
+Create `default-env-admin.json` manually or via `hana-cli connect` command.
 
 ```json
 {
@@ -178,7 +175,18 @@ export HANA_LOG_FORMAT=json
 
 ## Profile Configuration
 
-Create `.hana-cli-config` or `hana-cli.config.js`:
+Create a `.hana-cli-config` or `hana-cli.config.js` file to set defaults for all commands.
+
+This configuration file is **automatically loaded** at startup and overrides built-in defaults for connection settings, output format, logging, and more.
+
+**Configuration file locations (searched in order):**
+
+1. Current working directory (project-specific): `.hana-cli-config` or `hana-cli.config.js`
+2. User home directory (global): `~/.hana-cli-config` or `~/hana-cli.config.js`
+
+The first configuration file found is used. Project-level config takes priority over global user config.
+
+### JSON Configuration (.hana-cli-config)
 
 ```json
 {
@@ -187,11 +195,14 @@ Create `.hana-cli-config` or `hana-cli.config.js`:
   "outputFormat": "json",
   "language": "en",
   "logLevel": "info",
-  "timeout": 30000
+  "timeout": 30000,
+  "admin": false,
+  "debug": false,
+  "disableVerbose": false
 }
 ```
 
-Or as JavaScript:
+### JavaScript Configuration (hana-cli.config.js)
 
 ```javascript
 module.exports = {
@@ -199,19 +210,93 @@ module.exports = {
   defaultProfile: 'development',
   outputFormat: 'json',
   language: 'en',
+  logLevel: 'info',
   timeout: 30000,
   profiles: {
     development: {
       host: 'localhost',
-      port: 30013
+      port: 30013,
+      user: 'DBADMIN',
+      password: 'password'
     },
     production: {
       host: 'prod-hana.company.com',
-      port: 30013
+      port: 30013,
+      user: 'prod_user',
+      password: process.env.HANA_PASSWORD
     }
   }
 };
 ```
+
+### Configuration Priority
+
+Configuration priority (highest to lowest):
+
+1. Command-line arguments (override everything)
+2. Project-level config (`.hana-cli-config` or `hana-cli.config.js` in current directory)
+3. User global config (`~/.hana-cli-config` or `~/hana-cli.config.js`)
+4. Built-in defaults
+
+Example:
+
+```bash
+# Config file sets defaultSchema to MYSCHEMA
+# But this command uses a different schema
+hana-cli tables -s OTHERSCHEMA
+```
+
+## Viewing and Managing Configuration
+
+Use the `hana-cli config` command to view and manage configuration files:
+
+```bash
+# Display current configuration values
+hana-cli config
+
+# Show configuration file paths
+hana-cli config --path
+
+# Open config in default editor (creates template if not exists)
+hana-cli config -e
+
+# Reset configuration (delete config file)
+hana-cli config --reset
+
+# Use global config instead of project config
+hana-cli config --global
+```
+
+### Config Command Options
+
+| Option | Short | Description |
+| ------ | ----- | ----------- |
+| `--edit` | `-e` | Open configuration file in your default editor |
+| `--global` | `-g` | Use global config (home directory) instead of project config |
+| `--path` | `-p` | Show configuration file paths |
+| `--reset` | | Remove configuration file and reset to defaults |
+
+The `config` command automatically:
+
+- Displays both project-level and global configuration if they exist
+- Shows helpful hints for creating or editing config
+- Creates a configuration template when you open a file that doesn't exist yet
+
+### Supported Configuration Options
+
+| Option | Type | Description |
+| ------ | ---- | ----------- |
+| `defaultSchema` | string | Default schema for commands (e.g., `tables -s SCHEMA`) |
+| `defaultProfile` | string | Default CDS profile for commands (e.g., `tables --profile production`) |
+| `outputFormat` | string | Default output format (e.g., `json`, `csv`, `table`) |
+| `language` | string | UI language (e.g., `en`, `de`, `fr`) |
+| `logLevel` | string | Logging level (`error`, `warn`, `info`, `debug`, `trace`) |
+| `timeout` | number | Command timeout in milliseconds |
+| `admin` | boolean | Default for admin operations |
+| `debug` | boolean | Enable debug output by default |
+| `disableVerbose` | boolean | Disable verbose output by default |
+| `conn` | string | Default connection file path |
+| `profiles` | object | Named connection profiles (for `--profile` option) |
 
 ## Environment-Specific Configurations
 

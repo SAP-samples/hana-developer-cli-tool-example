@@ -45,6 +45,8 @@ export const commandMap = {
     'certificates': './certificates.js',
     'certificatesUI': './certificatesUI.js',
     'cds': './cds.js',
+    'config': './config.js',
+    'cfg': './config.js',
     'columnStats': './columnStats.js',
     'openChangeLog': './openChangeLog.js',
     'changeLog': './changeLog.js',

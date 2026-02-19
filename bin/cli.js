@@ -10,6 +10,12 @@ const args = process.argv.slice(2)
 import * as base from '../utils/base-lite.js'
 import { commandMap } from './commandMap.js'
 import { getSuggestionMessage } from '../utils/commandSuggestions.js'
+import { loadConfig, applyConfigToEnv } from '../utils/config-loader.js'
+
+// Load configuration early - before any command processing
+const config = await loadConfig()
+applyConfigToEnv(config)
+base.setConfig(config)
 
 // Defer yargs import until after fast-path checks (saves ~77ms)
 let yargs, hideBin

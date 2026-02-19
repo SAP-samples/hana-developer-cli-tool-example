@@ -15,7 +15,7 @@ export HANA_PORT=30013
 export HANA_USER=SYSTEM
 export HANA_PASSWORD=password
 
-hana-cli dbInfo
+hana-cli systemInfo
 ```
 
 ### VSCode Integration
@@ -54,10 +54,11 @@ Built-in Node.js runtime - HANA CLI works out of the box:
 npm install -g hana-cli
 
 # Use immediately
-hana-cli dbInfo
+hana-cli systemInfo
 ```
 
 **Features:**
+
 - Pre-configured with SAP tools
 - Direct access to BTP services
 - Integrated terminal
@@ -75,7 +76,7 @@ export HANA_HOST=your-hana-server
 export HANA_USER=dbuser
 export HANA_PASSWORD=password
 
-hana-cli tables -s SCHEMA
+hana-cli tables 
 ```
 
 ### AWS Cloud9
@@ -102,7 +103,7 @@ npm install -g hana-cli
 hana-cli compareSchema -s SCHEMA1 -s SCHEMA2
 ```
 
-## SAP Cloud Platforms
+## SAP Cloud Environments
 
 ### SAP BTP (Business Technology Platform)
 
@@ -110,17 +111,18 @@ Connect to HANA service on BTP:
 
 ```bash
 # Credentials auto-discovered from VCAP_SERVICES
-hana-cli dbInfo
+hana-cli systemInfo
 
 # Works with any BTP HANA instance
 hana-cli export -s SCHEMA -t TABLE -o data.csv
 ```
 
 **Supported Services:**
+
 - SAP HANA Cloud
 - SAP HANA service for BTP
 - SAP Data Lake
-- SAP Analytics Cloud
+- SAP Business Data Cloud
 
 ### SAP HANA Cloud
 
@@ -141,7 +143,7 @@ hana-cli dataProfile -s SCHEMA -t TABLE
 Containerized development environment:
 
 ```dockerfile
-FROM node:16
+FROM node:24
 
 # Install HANA CLI
 RUN npm install -g hana-cli
@@ -157,7 +159,7 @@ Run:
 
 ```bash
 docker run -e HANA_HOST=my-hana -e HANA_USER=user \
-  my-hana-cli-image hana-cli dbInfo
+  my-hana-cli-image hana-cli systemInfo
 ```
 
 ### VS Code Dev Containers
@@ -190,7 +192,7 @@ spec:
     spec:
       containers:
       - name: hana-cli
-        image: node:16
+        image: node:24
         command: ["npm", "install", "-g", "hana-cli"]
         env:
         - name: HANA_HOST
@@ -221,7 +223,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '24'
       - run: npm install -g hana-cli
       - run: hana-cli dataSync -s1 DEV -t1 TABLE -s2 PROD -t2 TABLE
         env:
@@ -236,7 +238,7 @@ jobs:
 
 ```yaml
 import-data:
-  image: node:16
+  image: node:24
   script:
     - npm install -g hana-cli
     - hana-cli import -n data.csv -t EMPLOYEES
@@ -278,7 +280,7 @@ pipeline {
 npm install -g hana-cli
 
 # Use in PowerShell, CMD, or WSL
-hana-cli dbInfo
+hana-cli systemInfo
 ```
 
 ### macOS
@@ -288,7 +290,7 @@ hana-cli dbInfo
 npm install -g hana-cli
 
 # Use in Terminal
-hana-cli dbInfo
+hana-cli systemInfo
 ```
 
 ### Linux
@@ -298,29 +300,32 @@ hana-cli dbInfo
 npm install -g hana-cli
 
 # Use in shell/terminal
-hana-cli dbInfo
+hana-cli systemInfo
 ```
 
 ## Network Scenarios
 
 ### Same Network
+
 ```bash
-hana-cli dbInfo  # Direct connection works
+hana-cli systemInfo  # Direct connection works
 ```
 
 ### VPN/Tunneling
+
 ```bash
 # Connect through VPN - works normally
 hana-cli export -s SCHEMA -t TABLE -o data.csv
 ```
 
 ### Bastion Host / Jump Server
+
 ```bash
 # SSH tunnel through bastion to HANA
 # Then use HANA CLI with forwarded port
 export HANA_HOST=localhost
 export HANA_PORT=3306  # tunneled port
-hana-cli dbInfo
+hana-cli systemInfo
 ```
 
 ## Compatibility
