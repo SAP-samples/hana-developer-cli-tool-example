@@ -95,8 +95,8 @@ describe('@all @dataValidator', () => {
       expect(dataValidatorCmd.inputPrompts.schema.required).to.equal(false)
     })
 
-    it('should have required rules prompt', () => {
-      expect(dataValidatorCmd.inputPrompts.rules.required).to.equal(true)
+    it('should have optional rules prompt', () => {
+      expect(dataValidatorCmd.inputPrompts.rules.required).to.equal(false)
     })
   })
 

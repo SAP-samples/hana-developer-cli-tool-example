@@ -10,6 +10,7 @@ import { createRequire } from 'module'
 export const require = createRequire(import.meta.url)
 
 import * as path from 'path'
+import fs from 'fs'
 
 /** @type {typeof import("chalk")} */
 import chalk from 'chalk'
@@ -34,8 +35,115 @@ export const debug = (...args) => {
 
 import * as locale from "./locale.js"
 const TextBundle = require('@sap/textbundle').TextBundle
+
+/**
+ * Parse .properties file content into a key-value map.
+ * @param {string} content
+ * @returns {Record<string, string>}
+ */
+function parseProperties(content) {
+    /** @type {Record<string, string>} */
+    const entries = {}
+    const lines = content.split(/\r?\n/)
+    for (const line of lines) {
+        const trimmed = line.trim()
+        if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('!')) {
+            continue
+        }
+
+        const separatorIndex = trimmed.search(/[:=]/)
+        if (separatorIndex === -1) {
+            continue
+        }
+
+        const key = trimmed.slice(0, separatorIndex).trim()
+        const value = trimmed.slice(separatorIndex + 1).trim()
+        if (key) {
+            entries[key] = value
+        }
+    }
+
+    return entries
+}
+
+/**
+ * Load .properties file content if present.
+ * @param {string} filePath
+ * @returns {Record<string, string>}
+ */
+function loadPropertiesFile(filePath) {
+    try {
+        if (!fs.existsSync(filePath)) {
+            return {}
+        }
+        const content = fs.readFileSync(filePath, 'utf-8')
+        return parseProperties(content)
+    } catch {
+        return {}
+    }
+}
+
+/**
+ * Load additional text resources for a given base name and locale.
+ * @param {string} baseName
+ * @param {string} localeTag
+ * @returns {Record<string, string>}
+ */
+function loadAdditionalTexts(baseName, localeTag) {
+    const basePath = path.join(__dirname, '..', '/_i18n', `${baseName}.properties`)
+    let texts = loadPropertiesFile(basePath)
+
+    const candidates = []
+    if (localeTag) {
+        candidates.push(localeTag)
+        const languageOnly = localeTag.split(/[_-]/)[0]
+        if (languageOnly && languageOnly !== localeTag) {
+            candidates.push(languageOnly)
+        }
+    }
+
+    for (const candidate of candidates) {
+        const localizedPath = path.join(__dirname, '..', '/_i18n', `${baseName}_${candidate}.properties`)
+        texts = { ...texts, ...loadPropertiesFile(localizedPath) }
+    }
+
+    return texts
+}
+
+/**
+ * Format text with {n} placeholders.
+ * @param {string} value
+ * @param {Array<any>} args
+ * @returns {string}
+ */
+function formatText(value, args) {
+    if (!args || args.length === 0) {
+        return value
+    }
+    return value.replace(/\{(\d+)\}/g, (match, index) => {
+        const replacement = args[Number(index)]
+        return replacement !== undefined ? String(replacement) : match
+    })
+}
+
+const normalizedLocale = locale.normalizeLocale(locale.getLocale())
+const baseBundle = new TextBundle(path.join(__dirname, '..', '/_i18n/messages'), normalizedLocale)
+const duplicateDetectionTexts = loadAdditionalTexts('duplicateDetection', normalizedLocale)
+
 /** @typeof TextBundle - instance of sap/textbundle */
-export const bundle = new TextBundle(path.join(__dirname, '..', '/_i18n/messages'), locale.normalizeLocale(locale.getLocale()))
+export const bundle = new Proxy(baseBundle, {
+    get(target, prop) {
+        if (prop === 'getText') {
+            return (key, args) => {
+                if (Object.prototype.hasOwnProperty.call(duplicateDetectionTexts, key)) {
+                    return formatText(duplicateDetectionTexts[key], args)
+                }
+                return baseBundle.getText(key, args)
+            }
+        }
+        return target[prop]
+    }
+})
 
 /**
  * Output an error to the console

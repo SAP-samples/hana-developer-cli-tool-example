@@ -84,8 +84,8 @@ export let inputPrompts = {
   rules: {
     description: baseLite.bundle.getText("dataValidatorRules"),
     type: 'string',
-    required: true,
-    ask: () => true
+    required: false,
+    ask: () => false
   },
   columns: {
     description: baseLite.bundle.getText("dataValidatorColumns"),
@@ -176,15 +176,23 @@ export async function dataValidatorMain(prompts) {
     
     console.log(`Starting data validation for table: ${table}`)
 
-    // Parse validation rules
-    const rules = parseValidationRules(prompts.rules, prompts.rulesFile)
+    // Get table columns
+    const tableColumns = await getTableColumns(dbClient, schema, table, dbKind)
+
+    // Parse validation rules (use default preset when none provided)
+    let rulesInput = prompts.rules
+    if (!rulesInput && !prompts.rulesFile) {
+      rulesInput = buildDefaultRulesString(tableColumns)
+      if (rulesInput) {
+        console.log(`No rules provided. Using default rules preset: ${rulesInput}`)
+      }
+    }
+
+    const rules = parseValidationRules(rulesInput, prompts.rulesFile)
 
     if (rules.length === 0) {
       throw new Error(baseLite.bundle.getText("error.noValidationRules"))
     }
-
-    // Get table columns
-    const tableColumns = await getTableColumns(dbClient, schema, table, dbKind)
 
     // Get data to validate
     let query = `SELECT * FROM ${formatQualifiedName(schema, table)}`
@@ -312,6 +320,54 @@ function parseValidationRules(rulesStr, rulesFile) {
   }
 
   return rules
+}
+
+/**
+ * Build default rules based on column names
+ * @param {Array<string>} columns - Table columns
+ * @returns {string}
+ */
+function buildDefaultRulesString(columns) {
+  if (!Array.isArray(columns) || columns.length === 0) {
+    return ''
+  }
+
+  const ruleMap = new Map()
+
+  const addRule = (column, rule) => {
+    if (!ruleMap.has(column)) {
+      ruleMap.set(column, new Set())
+    }
+    ruleMap.get(column).add(rule)
+  }
+
+  for (const column of columns) {
+    const upper = String(column).toUpperCase()
+
+    if (/(^|_)ID$/.test(upper)) {
+      addRule(column, 'required')
+    }
+
+    if (upper.includes('EMAIL')) {
+      addRule(column, 'email')
+    }
+
+    if (/(DATE|_AT|_ON)$/.test(upper)) {
+      addRule(column, 'date')
+    }
+
+    if (/(AMOUNT|PRICE|TOTAL|COUNT|QTY|QUANTITY)$/.test(upper)) {
+      addRule(column, 'numeric')
+    }
+  }
+
+  if (ruleMap.size === 0) {
+    addRule(columns[0], 'required')
+  }
+
+  return Array.from(ruleMap.entries())
+    .map(([column, rules]) => `${column}:${Array.from(rules).join(',')}`)
+    .join(';')
 }
 
 /**

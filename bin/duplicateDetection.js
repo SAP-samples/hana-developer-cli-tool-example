@@ -2,11 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
-export const command = 'duplicateDetection'
-export const aliases = ['dupdetect', 'findDuplicates', 'duplicates']
-export const describe = baseLite.bundle.getText("duplicateDetection")
-
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({
+const duplicateDetectionOptions = {
   table: {
     alias: ['t'],
     type: 'string',
@@ -75,7 +71,14 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli duplicateDetection --table myTable --mode exact --threshold 0.95', baseLite.bundle.getText("duplicateDetectionExample"))
+}
+
+export const command = 'duplicateDetection'
+export const aliases = ['dupdetect', 'findDuplicates', 'duplicates']
+export const describe = baseLite.bundle.getText("duplicateDetection")
+
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(duplicateDetectionOptions))
+  .example('hana-cli duplicateDetection --table myTable --mode exact --threshold 0.95', baseLite.bundle.getText("duplicateDetectionExample"))
 
 export let inputPrompts = {
   table: {
@@ -92,7 +95,7 @@ export let inputPrompts = {
     description: baseLite.bundle.getText("duplicateDetectionKeyColumns"),
     type: 'string',
     required: false,
-    ask: () => true
+    ask: () => false
   },
   checkColumns: {
     description: baseLite.bundle.getText("duplicateDetectionCheckColumns"),
@@ -141,7 +144,7 @@ export let inputPrompts = {
  */
 export async function handler(argv) {
   const base = await import('../utils/base.js')
-  base.promptHandler(argv, duplicateDetectionMain, inputPrompts)
+  base.promptHandler(argv, duplicateDetectionMain, inputPrompts, true, true, duplicateDetectionOptions)
 }
 
 /**
@@ -170,6 +173,10 @@ export async function duplicateDetectionMain(prompts) {
     // Get schema if not provided
     let schema = prompts.schema
 
+    if (schema === '**CURRENT_SCHEMA**') {
+      schema = null
+    }
+
     if (!schema && dbKind !== 'sqlite') {
       schema = await getCurrentSchema(dbClient, dbKind)
     }
@@ -182,14 +189,30 @@ export async function duplicateDetectionMain(prompts) {
     const tableColumns = await getTableColumns(dbClient, schema, table, dbKind)
 
     if (tableColumns.length === 0) {
-      throw new Error(baseLite.bundle.getText("error.noColumns"))
+      throw new Error(baseLite.bundle.getText("error.noColumnsDetailed", [table, schema || '']))
     }
 
     // Determine columns to check
     let checkColumns = tableColumns
     if (prompts.checkColumns) {
       const selected = prompts.checkColumns.split(',').map(c => c.trim()).filter(c => c)
-      checkColumns = checkColumns.filter(c => selected.includes(c))
+      const missing = selected.filter(c => !checkColumns.includes(c))
+      if (missing.length > 0) {
+        console.warn(baseLite.colors.yellow(baseLite.bundle.getText(
+          "warning.duplicateDetectionCheckColumnsMissing",
+          [missing.join(', '), checkColumns.join(', ')]
+        )))
+      }
+
+      const matched = checkColumns.filter(c => selected.includes(c))
+      if (selected.length > 0 && matched.length === 0) {
+        console.warn(baseLite.colors.yellow(baseLite.bundle.getText(
+          "warning.duplicateDetectionCheckColumnsNone",
+          [selected.join(', '), checkColumns.join(', ')]
+        )))
+      } else if (matched.length > 0) {
+        checkColumns = matched
+      }
     }
 
     if (prompts.excludeColumns) {

@@ -26,7 +26,7 @@ hana-cli dataValidator [options]
 | -------- | ------- | -------- | --------- | ------------- |
 | `--table` | `-t` | string | required | Name of the table to validate |
 | `--schema` | `-s` | string | optional | Schema name (uses current if omitted) |
-| `--rules` | `-r` | string | required | Validation rules in format: `column:rule1,rule2;column2:rule3` |
+| `--rules` | `-r` | string | auto (default preset) | Validation rules in format: `column:rule1,rule2;column2:rule3` |
 | `--rulesFile` | `-rf` | string | optional | Path to file containing validation rules |
 | `--columns` | `-c` | string | optional | Comma-separated list of specific columns to validate |
 | `--output` | `-o` | string | optional | Output file path for the report |
@@ -55,6 +55,17 @@ Supported rules:
 - `length:min:max` - Column value length must be between min and max
 - `pattern:regex` - Column must match the specified regex pattern
 - `range:min:max` - Numeric column must be between min and max
+
+### Default rules preset
+
+If you omit both `--rules` and `--rulesFile`, the command generates a default rules preset based on column names:
+
+- Columns ending with `ID` or `_ID` → `required`
+- Columns containing `EMAIL` → `email`
+- Columns ending with `DATE`, `_AT`, or `_ON` → `date`
+- Columns ending with `AMOUNT`, `PRICE`, `TOTAL`, `COUNT`, `QTY`, or `QUANTITY` → `numeric`
+
+If no columns match these patterns, the first column is validated as `required`.
 
 ## Rules File Format
 
@@ -136,6 +147,12 @@ hana-cli dataValidator --table CUSTOMERS \
 
 ```bash
 hana-cli dataValidator --table ORDERS --rulesFile ./validation-rules.txt --limit 50000
+```
+
+### Use default rules preset
+
+```bash
+hana-cli dataValidator --table CUSTOMERS --schema SALES
 ```
 
 ### Stop on first error
