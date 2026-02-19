@@ -5,7 +5,7 @@ export const command = 'securityScan'
 export const aliases = ['secscan', 'scan']
 export const describe = baseLite.bundle.getText("securityScan")
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({
+const securityScanOptions = {
   category: {
     alias: ['c'],
     type: 'string',
@@ -25,7 +25,11 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("autoFix")
   }
-})).example('hana-cli securityScan --category all --detailed', baseLite.bundle.getText('securityScanExample'))
+}
+
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(securityScanOptions)).example('hana-cli securityScan --category all --detailed', baseLite.bundle.getText('securityScanExample'))
+
+export const securityScanBuilderOptions = baseLite.getBuilder(securityScanOptions)
 
 export let inputPrompts = {
   category: {
@@ -47,7 +51,7 @@ export let inputPrompts = {
  */
 export async function handler(argv) {
   const base = await import('../utils/base.js')
-  base.promptHandler(argv, scanForVulnerabilities, inputPrompts, true, true, builder)
+  base.promptHandler(argv, scanForVulnerabilities, inputPrompts, true, true, securityScanBuilderOptions)
 }
 
 /**

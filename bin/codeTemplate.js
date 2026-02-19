@@ -6,7 +6,7 @@ export const command = 'codeTemplate'
 export const aliases = ['template', 'codegen', 'scaffold', 'boilerplate']
 export const describe = baseLite.bundle.getText("codeTemplate")
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({
+const codeTemplateOptions = {
   pattern: {
     alias: ['p'],
     type: 'string',
@@ -53,7 +53,11 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli codeTemplate --pattern crud --object myTable', baseLite.bundle.getText("codeTemplateExample"))
+}
+
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(codeTemplateOptions)).example('hana-cli codeTemplate --pattern crud --object myTable', baseLite.bundle.getText("codeTemplateExample"))
+
+export const codeTemplateBuilderOptions = baseLite.getBuilder(codeTemplateOptions)
 
 export const inputPrompts = {
   pattern: {
@@ -105,7 +109,7 @@ export const inputPrompts = {
  */
 export async function handler(argv) {
   const base = await import('../utils/base.js')
-  base.promptHandler(argv, codeTemplateMain, inputPrompts, true, true, builder)
+  base.promptHandler(argv, codeTemplateMain, inputPrompts, true, true, codeTemplateBuilderOptions)
 }
 
 /**

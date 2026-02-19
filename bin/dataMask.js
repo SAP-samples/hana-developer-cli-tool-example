@@ -6,7 +6,7 @@ export const command = 'dataMask'
 export const aliases = ['mask', 'dataprivacy', 'anonymize', 'pii']
 export const describe = baseLite.bundle.getText("dataMask")
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({
+const dataMaskOptions = {
   schema: {
     alias: ['s'],
     type: 'string',
@@ -60,7 +60,11 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli dataMask --table CUSTOMERS --maskType hash --columns EMAIL', baseLite.bundle.getText('dataMaskExample'))
+}
+
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(dataMaskOptions)).example('hana-cli dataMask --table CUSTOMERS --maskType hash --columns EMAIL', baseLite.bundle.getText('dataMaskExample'))
+
+export const dataMaskBuilderOptions = baseLite.getBuilder(dataMaskOptions)
 
 export const inputPrompts = {
   schema: {
@@ -119,7 +123,7 @@ export const inputPrompts = {
  */
 export async function handler(argv) {
   const base = await import('../utils/base.js')
-  base.promptHandler(argv, dataMaskMain, inputPrompts, true, true, builder)
+  base.promptHandler(argv, dataMaskMain, inputPrompts, true, true, dataMaskBuilderOptions)
 }
 
 /**

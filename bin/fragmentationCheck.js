@@ -9,7 +9,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   schema: {
     alias: ['s'],
     type: 'string',
-    default: null,
+    default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
   },
   table: {
@@ -79,7 +79,7 @@ export async function checkFragmentation(prompts) {
 
     try {
       const limit = base.validateLimit(prompts.limit)
-      const schema = prompts.schema || null
+      const schema = await base.dbClass.schemaCalc(prompts, db)
       const table = prompts.table || null
       const threshold = prompts.threshold || 10
 
@@ -145,7 +145,7 @@ export async function checkFragmentation(prompts) {
 
       results.forEach(row => {
         const fragPercent = row['Fragmentation %']
-        totalDeltaSize += row['Delta Size (MB)'] || 0
+        totalDeltaSize += parseFloat(row['Delta Size (MB)']) || 0
 
         if (fragPercent >= 50) {
           criticalCount++

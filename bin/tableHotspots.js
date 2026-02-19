@@ -2,7 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 
 export const command = 'tableHotspots [schema] [table]'
-export const aliases = []
+export const aliases = ['th', 'hotspots']
 export const describe = baseLite.bundle.getText("tableHotspots")
 
 export const builder = (yargs) => yargs.options(baseLite.getBuilder({

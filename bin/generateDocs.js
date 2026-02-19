@@ -6,7 +6,7 @@ export const command = 'generateDocs'
 export const aliases = ['docs', 'gendocs', 'generateDocumentation']
 export const describe = baseLite.bundle.getText("generateDocs")
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({
+const generateDocsOptions = {
   schema: {
     alias: ['s'],
     type: 'string',
@@ -66,7 +66,11 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli generateDocs --schema MYSCHEMA --format markdown --output docs/', baseLite.bundle.getText('generateDocsExample'))
+}
+
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(generateDocsOptions)).example('hana-cli generateDocs --schema MYSCHEMA --format markdown --output docs/', baseLite.bundle.getText('generateDocsExample'))
+
+export const generateDocsBuilderOptions = baseLite.getBuilder(generateDocsOptions)
 
 export const inputPrompts = {
   schema: {
@@ -108,7 +112,7 @@ export const inputPrompts = {
  */
 export async function handler(argv) {
   const base = await import('../utils/base.js')
-  base.promptHandler(argv, generateDocsMain, inputPrompts, true, true, builder)
+  base.promptHandler(argv, generateDocsMain, inputPrompts, true, true, generateDocsBuilderOptions)
 }
 
 /**

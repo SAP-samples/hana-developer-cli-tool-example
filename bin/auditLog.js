@@ -5,7 +5,7 @@ export const command = 'auditLog'
 export const aliases = ['audit', 'auditlog']
 export const describe = baseLite.bundle.getText("auditLog")
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({
+const auditLogOptions = {
   limit: {
     alias: ['l'],
     type: 'number',
@@ -40,7 +40,11 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: 7,
     desc: baseLite.bundle.getText("auditDays")
   }
-})).example('hana-cli auditLog --table AUDIT_TABLE --limit 1000', baseLite.bundle.getText("auditLogExample"))
+}
+
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(auditLogOptions)).example('hana-cli auditLog --table AUDIT_TABLE --limit 1000', baseLite.bundle.getText("auditLogExample"))
+
+export const auditLogBuilderOptions = baseLite.getBuilder(auditLogOptions)
 
 export let inputPrompts = {
   limit: {
@@ -62,7 +66,7 @@ export let inputPrompts = {
  */
 export async function handler(argv) {
   const base = await import('../utils/base.js')
-  base.promptHandler(argv, viewAuditLog, inputPrompts, true, true, builder)
+  base.promptHandler(argv, viewAuditLog, inputPrompts, true, true, auditLogBuilderOptions)
 }
 
 /**

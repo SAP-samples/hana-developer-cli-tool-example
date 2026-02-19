@@ -5,7 +5,7 @@ export const command = 'pwdPolicy'
 export const aliases = ['pwdpolicy', 'passpolicies']
 export const describe = baseLite.bundle.getText("pwdPolicy")
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({
+const pwdPolicyOptions = {
   policy: {
     alias: ['p'],
     type: 'string',
@@ -29,7 +29,11 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("detailedPolicyInfo")
   }
-})).example('hana-cli pwdPolicy --list --details', baseLite.bundle.getText('pwdPolicyExample'))
+}
+
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(pwdPolicyOptions)).example('hana-cli pwdPolicy --list --details', baseLite.bundle.getText('pwdPolicyExample'))
+
+export const pwdPolicyBuilderOptions = baseLite.getBuilder(pwdPolicyOptions)
 
 export let inputPrompts = {
   list: {
@@ -46,7 +50,7 @@ export let inputPrompts = {
  */
 export async function handler(argv) {
   const base = await import('../utils/base.js')
-  base.promptHandler(argv, managePasswordPolicies, inputPrompts, true, true, builder)
+  base.promptHandler(argv, managePasswordPolicies, inputPrompts, true, true, pwdPolicyBuilderOptions)
 }
 
 /**

@@ -8,6 +8,119 @@
 
 Finds duplicate records in HANA tables using various matching strategies. It supports exact matching, fuzzy matching with similarity thresholds, and partial key matching to identify near-duplicates.
 
+### What Are Duplicate Records?
+
+**Duplicate records** are multiple entries in a table that represent the same real-world entity but were entered separately. Common examples:
+
+- Same customer entered twice with slightly different names (John Smith vs. Jon Smith)
+- Same product created multiple times due to system errors
+- Duplicate transactions from failed batch retries
+- Data imported twice due to incomplete cleanup
+
+### Why Is Duplicate Detection Critical?
+
+Duplicate data creates significant problems across your organization:
+
+**Data Quality Issues:**
+
+- **False Uniqueness**: Records that should be unique (customers, products) appear multiple times
+- **Skewed Metrics**: Counts, aggregations, and statistics become inaccurate
+- **Broken Relationships**: Foreign key references may point to wrong duplicate copies
+- **Data Inconsistency**: Updates to one copy don't reflect in other duplicates
+
+**Business Impact:**
+
+- **Incorrect Revenue**: Duplicate customer records inflate customer counts and revenue figures
+- **Invalid Analytics**: Reports show wrong trends, patterns, and insights
+- **Marketing Waste**: Marketing campaigns target duplicate customer records unnecessarily
+- **Compliance Risk**: Regulations (GDPR, CCPA) require accurate, non-redundant personal data
+- **Loss of Trust**: Duplicate billing or communications damage customer relationships
+- **Decision Errors**: Leadership makes decisions based on inflated or inaccurate data
+
+**Operational & Financial Impact:**
+
+- **Processing Waste**: Systems process duplicate records unnecessarily (storage, memory, CPU)
+- **Storage Growth**: Database grows unnecessarily with redundant data
+- **Manual Cleanup Costs**: Requires time-consuming manual review and merging
+- **Integration Failures**: Other systems reject or duplicate data when integrating duplicates
+- **Customer Support Issues**: Customers report receiving duplicate communications or bills
+- **System Performance**: More records mean slower queries and reports
+
+**Common Real-World Scenarios:**
+
+1. **E-commerce**: Customer "John Smith" entered as "Jon Smith" and "John Smyth" → duplicate orders and shipping
+2. **Healthcare**: Patient registered twice under slightly different spellings → medication overdose risk
+3. **CRM**: Company "ABC Corp" and "ABC Corporation" tracked as different accounts → lost sales tracking
+4. **Finance**: Same invoice processed twice → double-counting revenue
+5. **Manufacturing**: Part number "A001" and "A-001" treated as different items → inventory mismatch
+
+### How Duplicate Detection Helps
+
+#### 1. Data Quality Assurance
+
+```bash
+# Identify duplicate customers by key columns
+hana-cli duplicateDetection \
+  --table CUSTOMERS \
+  --keyColumns CUSTOMER_EMAIL \
+  --mode exact
+```
+
+Find exact duplicates so you can decide which record to keep.
+
+#### 2. Fuzzy Matching for Near-Duplicates
+
+```bash
+# Find similar customer names (typos, variations)
+hana-cli duplicateDetection \
+  --table CUSTOMERS \
+  --keyColumns FIRST_NAME,LAST_NAME \
+  --mode fuzzy \
+  --threshold 85
+```
+
+Discover records that are similar but not identical (85% match threshold).
+
+#### 3. Post-Migration Validation
+
+```bash
+# Ensure migration didn't create duplicates
+hana-cli duplicateDetection \
+  --table PRODUCTS \
+  --checkColumns PRODUCT_SKU,PRODUCT_NAME \
+  --limit 100000
+```
+
+Verify data integrity after system migration or import.
+
+#### 4. Merge Strategy Planning
+
+```bash
+# Generate detailed duplicate report for analysis
+hana-cli duplicateDetection \
+  --table SUPPLIERS \
+  --keyColumns SUPPLIER_NAME,COUNTRY \
+  --mode fuzzy \
+  --threshold 90 \
+  --format json \
+  --output duplicates-analysis.json
+```
+
+Export duplicates for review and decision-making before merging.
+
+#### 5. Ongoing Monitoring
+
+```bash
+# Regular duplicate checks as part of data governance
+hana-cli duplicateDetection \
+  --table vendor_contracts \
+  --checkColumns vendor_id,contract_number \
+  --mode exact \
+  --output daily-dups.csv
+```
+
+Monitor for new duplicates introduced by ongoing operations.
+
 ## Syntax
 
 ```bash
@@ -20,7 +133,40 @@ hana-cli duplicateDetection [options]
 - `findDuplicates`
 - `duplicates`
 
-## Parameters
+## Command Diagram
+
+```mermaid
+graph TD
+    A["hana-cli duplicateDetection"] --> B["Required Parameters"]
+    A --> C["Schema & Connection"]
+    A --> D["Troubleshooting Options"]
+    A --> E["Column Selection"]
+    A --> F["Detection Options"]
+    A --> G["Output & Format"]
+    
+    B --> B1["-t, --table<br/>Table name to check"]
+    B --> B2["-k, --keyColumns<br/>Key columns for matching"]
+    
+    C --> C1["-s, --schema<br/>Schema for table"]
+    C --> C2["-a, --admin<br/>Connect via admin"]
+    C --> C3["--conn<br/>Connection file override"]
+    
+    D --> D1["--disableVerbose, --quiet<br/>Disable verbose output"]
+    D --> D2["-d, --debug<br/>Debug mode"]
+    
+    E --> E1["-c, --checkColumns<br/>Columns to check"]
+    E --> E2["-e, --excludeColumns<br/>Columns to exclude"]
+    
+    F --> F1["-m, --mode<br/>exact/fuzzy/partial"]
+    F --> F2["--threshold, --th<br/>Fuzzy match threshold"]
+    F --> F3["-l, --limit<br/>Max rows to check"]
+    F --> F4["--timeout, --to<br/>Operation timeout"]
+    
+    G --> G1["-o, --output<br/>Report file path"]
+    G --> G2["-f, --format<br/>Report format"]
+    G --> G3["-p, --profile<br/>CDS Profile"]
+    G --> G4["-h, --help<br/>Show help"]
+```
 
 | Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |

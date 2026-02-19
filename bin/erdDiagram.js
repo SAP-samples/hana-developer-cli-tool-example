@@ -6,7 +6,7 @@ export const command = 'erdDiagram'
 export const aliases = ['erd', 'er', 'schema-diagram', 'entityrelation']
 export const describe = baseLite.bundle.getText("erdDiagram")
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({
+const erdDiagramOptions = {
   schema: {
     alias: ['s'],
     type: 'string',
@@ -52,7 +52,11 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli erdDiagram --schema MYSCHEMA --format mermaid --output erd.md', baseLite.bundle.getText('erdDiagramExample'))
+}
+
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(erdDiagramOptions)).example('hana-cli erdDiagram --schema MYSCHEMA --format mermaid --output erd.md', baseLite.bundle.getText('erdDiagramExample'))
+
+export const erdDiagramBuilderOptions = baseLite.getBuilder(erdDiagramOptions)
 
 export const inputPrompts = {
   schema: {
@@ -79,6 +83,24 @@ export const inputPrompts = {
     required: false,
     ask: () => false
   },
+  showCardinality: {
+    description: baseLite.bundle.getText("erdDiagramShowCardinality"),
+    type: 'boolean',
+    required: false,
+    ask: () => false
+  },
+  showColumns: {
+    description: baseLite.bundle.getText("erdDiagramShowColumns"),
+    type: 'boolean',
+    required: false,
+    ask: () => false
+  },
+  excludeColumns: {
+    description: baseLite.bundle.getText("erdDiagramExcludeColumns"),
+    type: 'string',
+    required: false,
+    ask: () => false
+  },
   profile: {
     description: baseLite.bundle.getText("profile"),
     type: 'string',
@@ -94,7 +116,7 @@ export const inputPrompts = {
  */
 export async function handler(argv) {
   const base = await import('../utils/base.js')
-  base.promptHandler(argv, erdDiagramMain, inputPrompts, true, true, builder)
+  base.promptHandler(argv, erdDiagramMain, inputPrompts, true, true, erdDiagramBuilderOptions)
 }
 
 /**
@@ -117,7 +139,7 @@ export async function erdDiagramMain(prompts) {
 
     // Get schema if not provided
     let schema = prompts.schema
-    if (!schema && dbKind !== 'sqlite') {
+    if ((!schema || schema === '**CURRENT_SCHEMA**') && dbKind !== 'sqlite') {
       schema = await getCurrentSchema(dbClient, dbKind)
     }
 

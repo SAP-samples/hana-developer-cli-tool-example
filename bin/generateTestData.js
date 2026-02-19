@@ -6,7 +6,7 @@ export const command = 'generateTestData'
 export const aliases = ['testdata', 'gendata', 'generateData']
 export const describe = baseLite.bundle.getText("generateTestData")
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({
+const generateTestDataOptions = {
   table: {
     alias: ['t'],
     type: 'string',
@@ -69,10 +69,14 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example(
+}
+
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(generateTestDataOptions)).example(
   'hana-cli generateTestData --table myTable --rows 100 --format sql',
   baseLite.bundle.getText("generateTestDataExample")
 )
+
+export const generateTestDataBuilderOptions = baseLite.getBuilder(generateTestDataOptions)
 
 export const inputPrompts = {
   table: {
@@ -125,7 +129,7 @@ export const inputPrompts = {
  */
 export async function handler(argv) {
   const base = await import('../utils/base.js')
-  base.promptHandler(argv, generateTestDataMain, inputPrompts, true, true, builder)
+  base.promptHandler(argv, generateTestDataMain, inputPrompts, true, true, generateTestDataBuilderOptions)
 }
 
 /**

@@ -6,7 +6,23 @@
 
 ## Description
 
-The `tableHotspots` command performs operations related to analysis tools.
+The `tableHotspots` command identifies tables and partitions that experience high access frequency. It analyzes access patterns and statistics to help optimize performance and resource allocation.
+
+### What is a Table Hotspot?
+
+A **table hotspot** is a table (or partition) that receives a disproportionately high volume of read/write operations compared to other tables. These tables are accessed frequently by queries and applications, making them critical to overall system performance.
+
+### Why Should You Care?
+
+Understanding table hotspots is crucial for database performance management:
+
+- **Performance Bottlenecks**: Hotspots often become performance bottlenecks if not properly indexed or optimized, as contention increases with access frequency
+- **Resource Planning**: Identifying hotspots helps you allocate resources (CPU, memory, cache) to high-impact tables
+- **Optimization Priority**: Focus optimization efforts on tables that provide the greatest performance improvement
+- **Capacity Planning**: Plan for growth and scaling based on which tables are driving load
+- **Partition Strategy**: Determines if horizontal partitioning would help distribute load across multiple partitions
+- **Index Design**: Hotspots are candidates for specialized indexing strategies (composite indexes, covering indexes)
+- **Query Tuning**: Hotspot tables often benefit most from query optimization efforts
 
 ## Syntax
 
@@ -16,22 +32,51 @@ hana-cli tableHotspots [options]
 
 ## Aliases
 
-See command help for available aliases.
+- `th`
+- `hotspots`
+
+## Command Diagram
+
+```mermaid
+graph TD
+    A["hana-cli tableHotspots"] --> B["Connection Parameters"]
+    A --> C["Troubleshooting Options"]
+    A --> D["Analysis Options"]
+    
+    B --> B1["-a, --admin<br/>Connect via admin"]
+    B --> B2["--conn<br/>Connection file override"]
+    B --> B3["-p, --profile<br/>CDS Profile"]
+    
+    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output"]
+    C --> C2["-d, --debug<br/>Debug mode"]
+    
+    D --> D1["-s, --schema<br/>Schema name<br/>default: CURRENT_SCHEMA"]
+    D --> D2["-t, --table<br/>Table name"]
+    D --> D3["-p, --includePartitions<br/>Include partitions<br/>default: true"]
+    D --> D4["-l, --limit<br/>Result limit<br/>default: 200"]
+    D --> D5["-h, --help<br/>Show help"]
+```
 
 ## Parameters
 
-### Required Parameters
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--schema` | `-s` | string | **CURRENT_SCHEMA** | Schema name |
+| `--table` | `-t` | string | * | Table name (supports wildcards) |
+| `--includePartitions` | `-p` | boolean | true | Include partition information |
+| `--limit` | `-l` | number | 200 | Limit results |
+| `--profile` | `-p` | string | optional | CDS profile for connections |
+| `--admin` | `-a` | boolean | false | Connect via admin (default-env-admin.json) |
+| `--conn` | - | string | optional | Connection filename override |
+| `--disableVerbose` | `--quiet` | boolean | false | Disable verbose output |
+| `--debug` | `-d` | boolean | false | Debug mode - adds detailed output |
+| `--help` | `-h` | boolean | - | Show help |
 
-| Parameter | Description |
-|-----------|-------------|
-| - | *See 'hana-cli tableHotspots --help' for required parameters* |
+For a complete list of parameters and options, use:
 
-### Optional Parameters
-
-| Parameter | Alias | Description | Default |
-|-----------|-------|-------------|---------|
-| `--help` | `-h` | Display help information | false |
-| `--verbose` | `-v` | Enable verbose output | false |
+```bash
+hana-cli tableHotspots --help
+```
 
 ## Examples
 
@@ -41,11 +86,55 @@ See command help for available aliases.
 hana-cli tableHotspots
 ```
 
-For more examples, run:
+### Check Specific Schema
 
 ```bash
-hana-cli tableHotspots --help
+hana-cli th --schema PRODUCTION
 ```
+
+### Check Specific Table with Partitions
+
+```bash
+hana-cli tableHotspots --table CUSTOMERS --includePartitions
+```
+
+### Get More Results
+
+```bash
+hana-cli hotspots --limit 500
+```
+
+## Output Example
+
+The command returns a report of the most frequently accessed tables:
+
+```text
+SCHEMA_NAME      TABLE_NAME           TOTAL_ACCESS_COUNT    RECORD_COUNT    ACCESS_RANK
+---              ---                  ---                   ---             ---
+PRODUCTION       ORDERS               1524385               285643          1
+PRODUCTION       CUSTOMERS            982156                156427          2
+PRODUCTION       ORDER_ITEMS          876432                524986          3
+PRODUCTION       PRODUCTS             643521                28976           4
+PRODUCTION       TRANSACTIONS         521847                186534          5
+```
+
+When partition information is included (default), you also get partition-level statistics:
+
+```text
+SCHEMA_NAME      TABLE_NAME           PART_ID    TOTAL_ACCESS_COUNT    RECORD_COUNT
+---              ---                  ---        ---                   ---
+PRODUCTION       ORDERS               1          1524385               285643
+PRODUCTION       ORDERS               2          892156                187354
+PRODUCTION       CUSTOMERS            1          982156                156427
+```
+
+The output shows:
+
+- **SCHEMA_NAME**: Schema containing the table
+- **TABLE_NAME**: Table name
+- **TOTAL_ACCESS_COUNT**: Total number of accesses to the table
+- **RECORD_COUNT**: Number of records in the table
+- **PART_ID**: Partition ID (when partition information is included)
 
 ## Documentation
 

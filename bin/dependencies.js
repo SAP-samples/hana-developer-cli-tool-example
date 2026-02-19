@@ -6,7 +6,7 @@ export const command = 'dependencies'
 export const aliases = ['deps', 'depend', 'dependency-graph', 'relationships']
 export const describe = baseLite.bundle.getText("dependencies")
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({
+const dependenciesOptions = {
   schema: {
     alias: ['s'],
     type: 'string',
@@ -59,10 +59,14 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example(
+}
+
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(dependenciesOptions)).example(
   'hana-cli dependencies --object myTable --direction incoming --depth 3',
   baseLite.bundle.getText("dependenciesExample")
 )
+
+export const dependenciesBuilderOptions = baseLite.getBuilder(dependenciesOptions)
 
 export const inputPrompts = {
   schema: {
@@ -122,7 +126,7 @@ export const inputPrompts = {
  */
 export async function handler(argv) {
   const base = await import('../utils/base.js')
-  base.promptHandler(argv, dependenciesMain, inputPrompts, true, true, builder)
+  base.promptHandler(argv, dependenciesMain, inputPrompts, true, true, dependenciesBuilderOptions)
 }
 
 /**

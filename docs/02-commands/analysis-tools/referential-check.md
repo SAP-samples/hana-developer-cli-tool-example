@@ -1,12 +1,54 @@
 # referentialCheck
 
 > Command: `referentialCheck`  
-> Category: **System Tools**  
+> Category: **Analysis Tools**  
 > Status: Production Ready
 
 ## Description
 
 Verifies referential integrity and validates foreign key constraints in HANA tables. It identifies orphaned records and constraint violations that could indicate data quality issues.
+
+### What is Referential Integrity?
+
+**Referential integrity** is a database concept that ensures relationships between tables are valid and consistent. It enforces that:
+
+- Foreign key values in a child table must exist as primary key values in the parent table
+- When parent records are modified or deleted, related child records are handled appropriately
+- Data relationships remain logically consistent across the database
+
+### Why is Referential Integrity Critical?
+
+Understanding and maintaining referential integrity is essential for database health and business operations:
+
+**Data Quality Issues:**
+
+- **Orphaned Records**: Records that reference non-existent parent records, creating data inconsistencies
+- **Broken Relationships**: Invalid foreign key references that break application logic
+- **Silent Data Loss**: Child records may exist without their parent context, creating "zombie" data
+- **Cascading Problems**: Violations compound over time as more invalid relationships are created
+
+**Business Impact:**
+
+- **Incorrect Reporting**: Analytics and reports may include orphaned records, producing misleading insights
+- **Financial Inaccuracy**: Revenue, inventory, or accounting data may be understated or overstated
+- **Customer Data Corruption**: Customer relationships and history become unreliable
+- **Compliance Violations**: Regulations (GDPR, SOX, etc.) may require data integrity validation
+- **Application Failures**: Applications may crash or behave unexpectedly when encountering orphaned records
+
+**Operational Risks:**
+
+- **Data Migration Issues**: Violations prevent clean migration to other systems
+- **Backup Integrity**: Corrupted relationships mean backups restore invalid data
+- **Query Performance**: Orphaned records can distort indexing and query optimization
+- **Audit Trails**: Impossible to track complete audit trails when relationships are broken
+
+### Common Causes of Violations
+
+- Disabled foreign key constraints during bulk operations without proper re-validation
+- Data imports without constraint checking
+- Manual deletions without cascading deletes
+- System crashes or incomplete transactions
+- Direct SQL updates bypassing application logic
 
 ## Syntax
 
@@ -20,19 +62,59 @@ hana-cli referentialCheck [options]
 - `checkReferential`
 - `fkcheck`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    A["hana-cli referentialCheck"] --> B["Connection Parameters"]
+    A --> C["Troubleshooting Options"]
+    A --> D["Analysis Options"]
+    A --> E["Report Options"]
+    
+    B --> B1["-a, --admin<br/>Connect via admin"]
+    B --> B2["--conn<br/>Connection file override"]
+    
+    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output"]
+    C --> C2["-d, --debug<br/>Debug mode"]
+    
+    D --> D1["-t, --table<br/>Table name to check"]
+    D --> D2["-s, --schema<br/>Schema name<br/>default: CURRENT_SCHEMA"]
+    D --> D3["-c, --constraints<br/>Specific constraints<br/>comma-separated"]
+    D --> D4["-m, --mode<br/>check|report|repair|detailed<br/>default: check"]
+    D --> D5["-l, --limit<br/>Max rows to check<br/>default: 10000"]
+    D --> D6["--timeout, --to<br/>Operation timeout<br/>default: 3600s"]
+    
+    E --> E1["-o, --output<br/>Report file path"]
+    E --> E2["-f, --format<br/>json|csv|summary<br/>default: summary"]
+    E --> E3["-p, --profile<br/>CDS Profile"]
+    E --> E4["-h, --help<br/>Show help"]
+```
+
 ## Parameters
 
 | Option | Alias | Type | Default | Description |
-| --------- | ------- | -------- | --------- | -------------------------------- |
-| `--table` | `-t` | string | required | Name of the table to check |
-| `--schema` | `-s` | string | optional | Schema name (uses current if omitted) |
-| `--constraints` | `-c` | string | optional | Comma-separated specific constraint names to check |
+| --- | --- | --- | --- | --- |
+| `--table` | `-t` | string | required | Table name to check |
+| `--schema` | `-s` | string | **CURRENT_SCHEMA** | Schema name |
+| `--constraints` | `-c` | string | optional | Specific constraints to check (comma-separated) |
 | `--mode` | `-m` | string | check | Check mode: `check`, `report`, `repair`, `detailed` |
-| `--output` | `-o` | string | optional | Output file path for the report |
+| `--output` | `-o` | string | optional | Output report file path |
 | `--format` | `-f` | string | summary | Report format: `json`, `csv`, `summary` |
-| `--limit` | `-l` | number | 10000 | Maximum rows to check for orphaned records |
-| `--timeout` | `-to` | number | 3600 | Operation timeout in seconds |
-| `--profile` | `-p` | string | optional | Connection profile to use |
+| `--limit` | `-l` | number | 10000 | Maximum rows to check |
+| `--timeout` | `--to` | number | 3600 | Operation timeout in seconds |
+| `--profile` | `-p` | string | optional | CDS profile for connections |
+| `--admin` | `-a` | boolean | false | Connect via admin (default-env-admin.json) |
+| `--conn` | - | string | optional | Connection filename override |
+| `--disableVerbose` | `--quiet` | boolean | false | Disable verbose output |
+| `--debug` | `-d` | boolean | false | Debug mode - adds detailed output |
+| `--help` | `-h` | boolean | - | Show help |
+
+**Note on CURRENT_SCHEMA:**
+
+When `--schema` is not specified, the command uses `CURRENT_SCHEMA`, which resolves to:
+
+- The schema defined in your database connection configuration (from default-env.json or connection file)
+- If no schema is configured, it defaults to the `public` schema
 
 For a complete list of parameters and options, use:
 
@@ -208,5 +290,5 @@ See the [Commands Reference](../all-commands.md) for other commands in this cate
 
 ## See Also
 
-- [Category: System Tools](..)
+- [Category: Analysis Tools](..)
 - [All Commands A-Z](../all-commands.md)

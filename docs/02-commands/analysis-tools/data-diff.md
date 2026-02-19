@@ -1,12 +1,208 @@
 # dataDiff
 
 > Command: `dataDiff`  
-> Category: **System Tools**  
+> Category: **Analysis Tools**  
 > Status: Production Ready
 
 ## Description
 
 Performs detailed row-level comparison between two datasets, identifying specific columns that differ. This is useful for data validation, change tracking, and identifying discrepancies at the cell level.
+
+### What is Data Diff?
+
+**Data diff** is a row-by-row comparison of two datasets (tables, schemas, or even different databases) that shows:
+
+- **Which rows match**: Identical rows in both datasets
+- **Which rows are different**: Rows that exist in both but have different values
+- **Column-level differences**: Exactly which columns differ and how
+- **Missing rows**: Rows in source but not in target, or vice versa
+- **Summary statistics**: Counts of matches, differences, and missing records
+
+Think of it as a detailed "diff" tool like you use in code comparison—but for data.
+
+### Why Would You Want Data Diff?
+
+Data diff solves critical problems across your organization:
+
+**Data Migration & Integration:**
+
+- **Migration Validation**: Verify that data migrated correctly to a new system (row counts match, values are identical)
+- **Integration Testing**: Compare data before/after integration to ensure no loss or corruption
+- **System Cutover**: Validate that old and new systems have identical data before switching over
+- **Database Replication**: Verify that replica databases are perfectly in sync
+- **ETL Validation**: Confirm that data imported/transformed matches expected results
+
+**Data Reconciliation:**
+
+- **Cross-system Reconciliation**: Find discrepancies between operational system and data warehouse
+- **Financial Reconciliation**: Ensure accounting records match between systems (GL, subledger, reports)
+- **Inventory Accuracy**: Compare physical inventory against system records
+- **Account Balancing**: Verify account balances match between source and reporting systems
+- **Transaction Matching**: Match orders between sales system and fulfillment system
+
+**Quality Assurance & Testing:**
+
+- **Production vs. Test**: Compare production data with test environment (anonymized) to verify test data completeness
+- **Regression Testing**: Verify that code changes haven't affected data correctness
+- **Release Validation**: Confirm that data-related changes in a release work correctly
+- **Snapshot Validation**: Compare current state against known-good snapshots
+- **Bug Verification**: Confirm that bugs are fixed by comparing before/after data
+
+**Troubleshooting & Debugging:**
+
+- **Data Discrepancy Investigation**: Find exactly what's different when reports show wrong numbers
+- **Timeline Tracking**: Compare data snapshots at different points in time to find when data changed
+- **Source of Truth**: Determine which system has correct data when sources disagree
+- **Audit Issues**: Track down exactly which records differ from audit trail
+- **Performance Impact**: Find if schema changes or migration affected data correctness
+
+**Compliance & Audit:**
+
+- **Regulatory Required Reconciliations**: Document data matching between systems for compliance
+- **Audit Trail**: Prove that data is accurately synchronized between systems
+- **Change Documentation**: Record exactly what changed in a data update
+- **Change Audit**: Verify that only authorized changes were made
+- **Regulatory Reporting**: Ensure source data matches regulatory reports
+
+### What Can You Do With Data Diff?
+
+#### 1. Validate Database Migration
+
+```bash
+# Compare old and new database schemas after migration
+hana-cli dataDiff \
+  --table1 CUSTOMERS \
+  --table2 CUSTOMERS \
+  --schema1 LEGACY_DB \
+  --schema2 NEW_DB \
+  --keyColumns CUSTOMER_ID \
+  --format json \
+  --output migration-validation.json
+```
+
+Verify that all customer records migrated correctly and no data was lost or corrupted.
+
+#### 2. ETL Process Validation
+
+```bash
+# Verify data imported correctly into warehouse
+hana-cli dataDiff \
+  --table1 SALES \
+  --table2 SALES_FACT \
+  --schema1 SOURCE_SYSTEM \
+  --schema2 DATA_WAREHOUSE \
+  --keyColumns SALE_ID \
+  --compareColumns AMOUNT,CUSTOMER_ID,PRODUCT_ID \
+  --showValues
+```
+
+Confirm that source data matches transformed data in warehouse.
+
+#### 3. Financial Reconciliation
+
+```bash
+# Reconcile GL accounts between operational and reporting systems
+hana-cli dataDiff \
+  --table1 GENERAL_LEDGER \
+  --table2 GL_REPORTING \
+  --keyColumns ACCOUNT_ID,POSTING_DATE \
+  --compareColumns DEBIT_AMOUNT,CREDIT_AMOUNT,BALANCE \
+  --format csv \
+  --output daily-reconciliation.csv
+```
+
+Find accounting discrepancies that need investigation before closing books.
+
+#### 4. Replication Verification
+
+```bash
+# Verify database replication is working correctly
+hana-cli dataDiff \
+  --table1 CRITICAL_TABLE \
+  --table2 CRITICAL_TABLE \
+  --schema1 PRIMARY_DB \
+  --schema2 REPLICA_DB \
+  --limit 100000 \
+  --timeout 1800
+```
+
+Confirm replica database is perfectly synchronized with primary.
+
+#### 5. System Integration Testing
+
+```bash
+# Compare order data between order system and fulfillment system
+hana-cli dataDiff \
+  --table1 ORDERS \
+  --table2 FULFILLMENT_ORDERS \
+  --keyColumns ORDER_ID \
+  --compareColumns ORDER_DATE,CUSTOMER_ID,TOTAL_AMOUNT,STATUS \
+  --showValues \
+  --format json
+```
+
+Ensure both systems have matching order information.
+
+#### 6. Data Quality Checkpoint
+
+```bash
+# Compare current state with known-good snapshot
+hana-cli dataDiff \
+  --table1 PRODUCTS \
+  --table2 PRODUCTS_SNAPSHOT_2026_02_00 \
+  --keyColumns PRODUCT_ID \
+  --limit 50000
+```
+
+Verify that recent changes didn't corrupt data.
+
+#### 7. Audit Trail Comparison
+
+```bash
+# Track exactly what changed in a production update
+hana-cli dataDiff \
+  --table1 CUSTOMER_BACKUP_BEFORE_IMPORT \
+  --table2 CUSTOMERS \
+  --keyColumns CUSTOMER_ID \
+  --format csv \
+  --output import-changes.csv
+```
+
+Document exactly which customer records changed and how.
+
+### Comparison Modes
+
+#### Full Comparison
+
+- Compares all columns between tables
+- Shows every difference
+- Slowest but most thorough
+
+#### Selective Comparison
+
+- Compare only specific columns
+- Reduces output and execution time
+- Use when you only care about certain fields
+
+#### Key-based Comparison
+
+- Groups rows by key columns
+- Shows which rows exist in both/either dataset
+- Find missing records quickly
+
+### Benefits by Role
+
+**Data Engineers**: Validate data pipelines and transformations
+
+**Database Administrators**: Verify replication, backups, and migrations
+
+**QA Teams**: Confirm that schema changes don't affect data correctness
+
+**Finance Teams**: Reconcile accounts and journal entries
+
+**Compliance Officers**: Document data synchronization for audit
+
+**Business Analysts**: Investigate data discrepancies in systems
 
 ## Syntax
 
@@ -20,30 +216,64 @@ hana-cli dataDiff [options]
 - `diffData`
 - `dataCompare`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    A["hana-cli dataDiff"] --> B["Required Parameters"]
+    A --> C["Table & Schema Parameters"]
+    A --> D["Connection Parameters"]
+    A --> E["Troubleshooting Options"]
+    A --> F["Comparison Options"]
+    A --> G["Output & Format"]
+    
+    B --> B1["-k, --keyColumns<br/>Key columns for matching"]
+    B --> B2["--table1, --t1<br/>First table name"]
+    B --> B3["--table2, --t2<br/>Second table name"]
+    
+    C --> C1["-s1, --schema1<br/>Schema for first table"]
+    C --> C2["-s2, --schema2<br/>Schema for second table"]
+    
+    D --> D1["-a, --admin<br/>Connect via admin"]
+    D --> D2["--conn<br/>Connection file override"]
+    
+    E --> E1["--disableVerbose, --quiet<br/>Disable verbose output"]
+    E --> E2["-d, --debug<br/>Debug mode"]
+    
+    F --> F1["-c, --compareColumns<br/>Columns to compare"]
+    F --> F2["-l, --limit<br/>Max rows to compare"]
+    F --> F3["--showValues, --sv<br/>Show actual values"]
+    F --> F4["--timeout, --to<br/>Operation timeout"]
+    
+    G --> G1["-o, --output<br/>Report file path"]
+    G --> G2["-f, --format<br/>Report format"]
+    G --> G3["-p, --profile<br/>CDS Profile"]
+    G --> G4["--dryRun, --dr<br/>Preview mode"]
+    G --> G5["-h, --help<br/>Show help"]
+```
+
 ## Parameters
 
-### Required Parameters
-
-- **-t1, --table1** (string): First table to compare
-- **-t2, --table2** (string): Second table to compare
-- **-k, --keyColumns** (string): Comma-separated columns for row matching (must uniquely identify rows)
-
-### Optional Parameters
-
-- **-s1, --schema1** (string): Schema for first table. Defaults to current schema.
-- **-s2, --schema2** (string): Schema for second table. Defaults to schema1.
-- **-c, --compareColumns** (string): Specific columns to compare (comma-separated). Defaults to all common columns.
-- **-o, --output** (string): File path for diff report
-- **-f, --format** (string): Report output format
-  - Choices: `json`, `csv`, `summary`
-  - Default: `summary`
-- **-l, --limit** (number): Maximum rows to compare
-  - Default: `10000`
-- **--showValues, --sv** (boolean): Include actual values in report
-  - Default: `false`
-- **--timeout, --to** (number): Operation timeout in seconds
-  - Default: `3600`
-- **-p, --profile**: CDS profile for connections
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--table1` | `-t1` | string | required | First table to compare |
+| `--table2` | `-t2` | string | required | Second table to compare |
+| `--keyColumns` | `-k` | string | required | Comma-separated columns for row matching (must uniquely identify rows) |
+| `--schema1` | `-s1` | string | **CURRENT_SCHEMA** | Schema for first table |
+| `--schema2` | `-s2` | string | **CURRENT_SCHEMA** | Schema for second table |
+| `--compareColumns` | `-c` | string | optional | Specific columns to compare (comma-separated) |
+| `--showValues` | `--sv` | boolean | false | Include actual values in report |
+| `--limit` | `-l` | number | 10000 | Maximum rows to compare |
+| `--timeout` | `--to` | number | 3600 | Operation timeout in seconds |
+| `--output` | `-o` | string | optional | File path for diff report |
+| `--format` | `-f` | string | summary | Report output format (json, csv, summary) |
+| `--dryRun` | `--dr, --preview` | boolean | false | Dry run mode (show what would happen) |
+| `--profile` | `-p` | string | optional | CDS profile for connections |
+| `--admin` | `-a` | boolean | false | Connect via admin (default-env-admin.json) |
+| `--conn` | - | string | optional | Connection filename override |
+| `--disableVerbose` | `--quiet` | boolean | false | Disable verbose output |
+| `--debug` | `-d` | boolean | false | Debug mode - adds detailed output |
+| `--help` | `-h` | boolean | - | Show help message |
 
 For a complete list of parameters and options, use:
 
@@ -249,5 +479,5 @@ See the [Commands Reference](../all-commands.md) for other commands in this cate
 
 ## See Also
 
-- [Category: System Tools](..)
+- [Category: Analysis Tools](..)
 - [All Commands A-Z](../all-commands.md)

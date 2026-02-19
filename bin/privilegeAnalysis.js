@@ -5,7 +5,7 @@ export const command = 'privilegeAnalysis'
 export const aliases = ['privanalysis', 'privanalyze']
 export const describe = baseLite.bundle.getText("privilegeAnalysis")
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({
+const privilegeAnalysisOptions = {
   user: {
     alias: ['u'],
     type: 'string',
@@ -28,7 +28,11 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: true,
     desc: baseLite.bundle.getText("suggestLeastPrivilege")
   }
-})).example('hana-cli privilegeAnalysis --user TESTUSER --suggest', baseLite.bundle.getText("privilegeAnalysisExample"))
+}
+
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(privilegeAnalysisOptions)).example('hana-cli privilegeAnalysis --user TESTUSER --suggest', baseLite.bundle.getText("privilegeAnalysisExample"))
+
+export const privilegeAnalysisBuilderOptions = baseLite.getBuilder(privilegeAnalysisOptions)
 
 export let inputPrompts = {
   user: {
@@ -45,7 +49,7 @@ export let inputPrompts = {
  */
 export async function handler(argv) {
   const base = await import('../utils/base.js')
-  base.promptHandler(argv, analyzePrivileges, inputPrompts, true, true, builder)
+  base.promptHandler(argv, analyzePrivileges, inputPrompts, true, true, privilegeAnalysisBuilderOptions)
 }
 
 /**
