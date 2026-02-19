@@ -6,7 +6,7 @@ export const command = 'dataLineage'
 export const aliases = ['lineage', 'dataFlow', 'traceLineage']
 export const describe = baseLite.bundle.getText("dataLineage")
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({
+const dataLineageOptions = {
   table: {
     alias: ['t'],
     type: 'string',
@@ -19,7 +19,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     desc: baseLite.bundle.getText("dataLineageSchema")
   },
   direction: {
-    alias: ['d'],
+    alias: ['dir'],
     choices: ["upstream", "downstream", "bidirectional"],
     default: "upstream",
     type: 'string',
@@ -60,7 +60,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli dataLineage --table myTable --depth 3', baseLite.bundle.getText("dataLineageExample"))
+}
+
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(dataLineageOptions))
+  .example('hana-cli dataLineage --table myTable --depth 3', baseLite.bundle.getText("dataLineageExample"))
 
 export let inputPrompts = {
   table: {
@@ -83,6 +86,13 @@ export let inputPrompts = {
     description: baseLite.bundle.getText("dataLineageDepth"),
     type: 'string',
     required: false,
+    ask: () => false
+  },
+  includeTransformations: {
+    description: baseLite.bundle.getText("dataLineageIncludeTransformations"),
+    type: 'boolean',
+    required: false,
+    default: true,
     ask: () => false
   },
   output: {
@@ -119,7 +129,7 @@ export let inputPrompts = {
  */
 export async function handler(argv) {
   const base = await import('../utils/base.js')
-  base.promptHandler(argv, dataLineageMain, inputPrompts)
+  base.promptHandler(argv, dataLineageMain, inputPrompts, true, true, dataLineageOptions)
 }
 
 /**
@@ -148,6 +158,10 @@ export async function dataLineageMain(prompts) {
     // Get schema if not provided
     let schema = prompts.schema
 
+    if (schema === '**CURRENT_SCHEMA**') {
+      schema = null
+    }
+
     if (!schema && dbKind !== 'sqlite') {
       schema = await getCurrentSchema(dbClient, dbKind)
     }
@@ -155,6 +169,9 @@ export async function dataLineageMain(prompts) {
     const table = prompts.table
     const depth = prompts.depth || 5
     const direction = prompts.direction || 'upstream'
+    const includeTransformations = typeof prompts.includeTransformations === 'boolean'
+      ? prompts.includeTransformations
+      : true
 
     console.log(baseLite.bundle.getText("info.startingLineageTrace", [table, direction]))
 
@@ -165,6 +182,7 @@ export async function dataLineageMain(prompts) {
       table,
       direction,
       depth,
+      includeTransformations,
       dbKind
     )
 
@@ -218,7 +236,7 @@ async function getCurrentSchema(dbClient, dbKind) {
  * @param {string} dbKind - Database kind
  * @returns {Promise<object>}
  */
-async function traceLineage(dbClient, schema, table, direction, depth, dbKind) {
+async function traceLineage(dbClient, schema, table, direction, depth, includeTransformations, dbKind) {
   const lineage = {
     rootTable: table,
     direction: direction,
@@ -279,15 +297,17 @@ async function traceLineage(dbClient, schema, table, direction, depth, dbKind) {
         }
 
         // Find views/transformations
-        const transforms = await getTransformations(dbClient, schema, table, dbKind)
-        for (const transform of transforms) {
-          lineage.transformations.push({
-            source: table,
-            transformation: transform.name,
-            type: transform.type,
-            definition: transform.definition
-          })
-          lineage.transformationCount++
+        if (includeTransformations) {
+          const transforms = await getTransformations(dbClient, schema, table, dbKind)
+          for (const transform of transforms) {
+            lineage.transformations.push({
+              source: table,
+              transformation: transform.name,
+              type: transform.type,
+              definition: transform.definition
+            })
+            lineage.transformationCount++
+          }
         }
       }
 
@@ -350,8 +370,8 @@ async function getSourceTables(dbClient, schema, table, dbKind) {
       `
       const result = await dbClient.execSQL(query, [schema || 'PUBLIC', table.toUpperCase()])
       return result.map(r => ({
-        name: r.table_name,
-        schema: r.schema_name,
+        name: r.table_name || r.TABLE_NAME,
+        schema: r.schema_name || r.SCHEMA_NAME,
         joinType: 'reference'
       }))
     } catch (err) {
@@ -406,8 +426,8 @@ async function getTargetTables(dbClient, schema, table, dbKind) {
       `
       const result = await dbClient.execSQL(query, [schema || 'PUBLIC', table.toUpperCase()])
       return result.map(r => ({
-        name: r.table_name,
-        schema: r.schema_name,
+        name: r.table_name || r.TABLE_NAME,
+        schema: r.schema_name || r.SCHEMA_NAME,
         joinType: 'reference'
       }))
     } catch (err) {
@@ -552,32 +572,37 @@ function generateGraphML(lineage) {
  * @returns {string}
  */
 function formatSummaryReport(lineage) {
-  let report = 'Data Lineage Report\n'
-  report += '===================\n\n'
-  report += `Root Table: ${lineage.rootTable}\n`
-  report += `Direction: ${lineage.direction}\n`
-  report += `Depth: ${lineage.depth}\n\n`
-  report += `Source Tables: ${lineage.sourceCount}\n`
-  report += `Target Tables: ${lineage.targetCount}\n`
-  report += `Transformations: ${lineage.transformationCount}\n\n`
+  let report = `${baseLite.colors.bold('Data Lineage Report')}\n`
+  report += `${baseLite.colors.bold('===================')}\n\n`
+  report += `${baseLite.colors.cyan('Root Table:')} ${lineage.rootTable}\n`
+  report += `${baseLite.colors.cyan('Direction:')} ${lineage.direction}\n`
+  report += `${baseLite.colors.cyan('Depth:')} ${lineage.depth}\n\n`
+  report += `${baseLite.colors.green('Source Tables:')} ${lineage.sourceCount}\n`
+  report += `${baseLite.colors.green('Target Tables:')} ${lineage.targetCount}\n`
+  report += `${baseLite.colors.green('Transformations:')} ${lineage.transformationCount}\n\n`
 
   if (lineage.nodes.length > 0) {
-    report += 'Nodes:\n'
-    for (const node of lineage.nodes.slice(0, 20)) {
-      report += `  ${node.id} (Level ${node.level})\n`
+    report += `${baseLite.colors.bold('Nodes:')}\n`
+    const nodesToShow = lineage.nodes.slice(0, 20)
+    for (const node of nodesToShow) {
+      const indent = '  '.repeat(Math.max(0, Number(node.level) || 0))
+      const label = node.schema && node.name
+        ? `${node.schema}.${node.name}`
+        : node.id
+      report += `${indent}- ${label} ${baseLite.colors.gray(`(Level ${node.level})`)}\n`
     }
     if (lineage.nodes.length > 20) {
-      report += `  ... and ${lineage.nodes.length - 20} more nodes\n`
+      report += `  ${baseLite.colors.gray(`... and ${lineage.nodes.length - 20} more nodes`)}\n`
     }
   }
 
   if (lineage.transformations.length > 0) {
-    report += '\nTransformations:\n'
+    report += `\n${baseLite.colors.bold('Transformations:')}\n`
     for (const t of lineage.transformations.slice(0, 10)) {
-      report += `  ${t.type}: ${t.transformation}\n`
+      report += `  - ${t.type}: ${t.transformation}\n`
     }
     if (lineage.transformations.length > 10) {
-      report += `  ... and ${lineage.transformations.length - 10} more transformations\n`
+      report += `  ${baseLite.colors.gray(`... and ${lineage.transformations.length - 10} more transformations`)}\n`
     }
   }
 

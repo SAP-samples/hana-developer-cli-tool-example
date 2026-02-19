@@ -200,6 +200,14 @@ export async function dataDiffMain(prompts) {
     let schema1 = prompts.schema1
     let schema2 = prompts.schema2
 
+    if (schema1 === '**CURRENT_SCHEMA**') {
+      schema1 = null
+    }
+
+    if (schema2 === '**CURRENT_SCHEMA**') {
+      schema2 = null
+    }
+
     if (!schema1 && dbKind !== 'sqlite') {
       schema1 = await getCurrentSchema(dbClient, dbKind)
     }

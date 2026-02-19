@@ -174,6 +174,14 @@ export async function compareDataMain(prompts) {
     let sourceSchema = prompts.sourceSchema
     let targetSchema = prompts.targetSchema
 
+    if (sourceSchema === '**CURRENT_SCHEMA**') {
+      sourceSchema = null
+    }
+
+    if (targetSchema === '**CURRENT_SCHEMA**') {
+      targetSchema = null
+    }
+
     if (!sourceSchema && dbKind !== 'sqlite') {
       sourceSchema = await getCurrentSchema(dbClient, dbKind)
     }

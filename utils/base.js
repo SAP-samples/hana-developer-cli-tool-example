@@ -164,15 +164,27 @@ function formatText(value, args) {
 
 const normalizedLocale = locale.normalizeLocale(locale.getLocale())
 const baseBundle = new TextBundle(path.join(__dirname, '..', '/_i18n/messages'), normalizedLocale)
-const duplicateDetectionTexts = loadAdditionalTexts('duplicateDetection', normalizedLocale)
+const additionalBundles = [
+    'duplicateDetection',
+    'compareData',
+    'dataDiff',
+    'dataLineage',
+    'dataProfile',
+    'dataValidator',
+    'export',
+    'referentialCheck'
+]
+const additionalTexts = additionalBundles.reduce((acc, bundleName) => {
+    return { ...acc, ...loadAdditionalTexts(bundleName, normalizedLocale) }
+}, {})
 
 /** @typeof TextBundle - instance of sap/textbundle */
 export const bundle = new Proxy(baseBundle, {
     get(target, prop) {
         if (prop === 'getText') {
             return (key, args) => {
-                if (Object.prototype.hasOwnProperty.call(duplicateDetectionTexts, key)) {
-                    return formatText(duplicateDetectionTexts[key], args)
+                if (Object.prototype.hasOwnProperty.call(additionalTexts, key)) {
+                    return formatText(additionalTexts[key], args)
                 }
                 return baseBundle.getText(key, args)
             }
