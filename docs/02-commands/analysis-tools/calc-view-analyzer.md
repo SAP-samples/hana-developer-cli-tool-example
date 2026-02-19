@@ -2,7 +2,7 @@
 
 > Command: `calcViewAnalyzer`  
 > Category: **Object Inspection**  
-> Status: Production Ready
+> Status: Early Access
 
 ## Description
 
@@ -19,6 +19,32 @@ hana-cli calcViewAnalyzer [schema] [view] [options]
 - `cva`
 - `analyzeCalcView`
 - `calcview`
+
+## Command Diagram
+
+```mermaid
+graph TD
+    A["hana-cli calcViewAnalyzer"] --> B["Arguments"]
+    A --> C["Connection Parameters"]
+    A --> D["Troubleshooting Options"]
+    A --> E["Analysis Options"]
+    
+    B --> B1["[schema]<br/>default: **CURRENT_SCHEMA**"]
+    B --> B2["[view]<br/>default: *"]
+    
+    C --> C1["-a, --admin<br/>Connect via admin"]
+    C --> C2["--conn<br/>Connection file override"]
+    
+    D --> D1["--disableVerbose, --quiet<br/>Disable verbose output"]
+    D --> D2["-d, --debug<br/>Debug mode"]
+    
+    E --> E1["-v, --view<br/>Database view name"]
+    E --> E2["-s, --schema<br/>Schema name"]
+    E --> E3["-m, --metrics<br/>Performance metrics"]
+    E --> E4["-l, --limit<br/>Result limit"]
+    E --> E5["-p, --profile<br/>CDS Profile"]
+    E --> E6["-h, --help<br/>Show help"]
+```
 
 ## Parameters
 
@@ -56,10 +82,10 @@ Returns calculation view metadata including:
 - View name
 - View type
 - Comments
-- Validity status
-- Creation and last modified times
+- Validity status (IS_VALID)
+- Creation time (CREATE_TIME)
 
-When `--metrics` flag is enabled, includes performance metrics for analysis.
+When `--metrics` flag is enabled, includes performance-sorted results for analysis.
 
 ## Examples
 

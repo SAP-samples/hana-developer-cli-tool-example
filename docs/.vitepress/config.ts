@@ -82,15 +82,16 @@ export default withMermaid(defineConfig({
           text: 'Analysis Tools',
           collapsed: true,
           items: [
+            { text: 'Calc View Analyzer', link: '/02-commands/analysis-tools/calc-view-analyzer' },
             { text: 'Column Stats', link: '/02-commands/analysis-tools/column-stats' },
             { text: 'Data Diff', link: '/02-commands/analysis-tools/data-diff' },
             { text: 'Data Lineage', link: '/02-commands/analysis-tools/data-lineage' },
             { text: 'Data Profile', link: '/02-commands/analysis-tools/data-profile' },
             { text: 'Duplicate Detection', link: '/02-commands/analysis-tools/duplicate-detection' },
+            { text: 'ERD Diagram', link: '/02-commands/analysis-tools/erd-diagram' },
             { text: 'Fragmentation Check', link: '/02-commands/analysis-tools/fragmentation-check' },
             { text: 'Referential Check', link: '/02-commands/analysis-tools/referential-check' },
-            { text: 'Table Hotspots', link: '/02-commands/analysis-tools/table-hotspots' },
-            { text: 'Timeseries Tools', link: '/02-commands/analysis-tools/timeseries-tools' }
+            { text: 'Table Hotspots', link: '/02-commands/analysis-tools/table-hotspots' }
           ]
         },
         {
@@ -295,22 +296,29 @@ export default withMermaid(defineConfig({
           collapsed: true,
           items: [
             { text: 'Cache Contents', link: '/02-commands/system-tools/cache-contents' },
-            { text: 'Code Hotspots', link: '/02-commands/system-tools/code-hotspots' },
-            { text: 'Column Stats', link: '/02-commands/system-tools/column-stats' },
-            { text: 'Compare Schema', link: '/02-commands/system-tools/compare-schema' },
+            { text: 'CLI', link: '/02-commands/system-tools/cli' },
+            { text: 'Command Map', link: '/02-commands/system-tools/command-map' },
+            { text: 'Copy2 Default Env', link: '/02-commands/system-tools/copy2-default-env' },
+            { text: 'Copy2 Env', link: '/02-commands/system-tools/copy2-env' },
+            { text: 'Copy2 Secrets', link: '/02-commands/system-tools/copy2-secrets' },
             { text: 'Data Mask', link: '/02-commands/system-tools/data-mask' },
             { text: 'Data Volumes', link: '/02-commands/system-tools/data-volumes' },
-            { text: 'ERD Diagram', link: '/02-commands/system-tools/erd-diagram' },
             { text: 'Ft Indexes', link: '/02-commands/system-tools/ft-indexes' },
             { text: 'Generate Test Data', link: '/02-commands/system-tools/generate-test-data' },
             { text: 'Graph Workspaces', link: '/02-commands/system-tools/graph-workspaces' },
             { text: 'Index Test', link: '/02-commands/system-tools/index-test' },
-            { text: 'Open DB Explorer', link: '/02-commands/system-tools/open-d-b-explorer' },
-            { text: 'Recommendations', link: '/02-commands/system-tools/recommendations' },
+            { text: 'Inspect Index', link: '/02-commands/system-tools/inspect-index' },
             { text: 'Replication Status', link: '/02-commands/system-tools/replication-status' },
+            { text: 'RICK', link: '/02-commands/system-tools/rick' },
+            { text: 'Schema Clone', link: '/02-commands/system-tools/schema-clone' },
             { text: 'SDI Tasks', link: '/02-commands/system-tools/sdi-tasks' },
             { text: 'Spatial Data', link: '/02-commands/system-tools/spatial-data' },
-            { text: 'Table Statistics', link: '/02-commands/system-tools/table-statistics' },
+            { text: 'Synonyms', link: '/02-commands/system-tools/synonyms' },
+            { text: 'Table Groups', link: '/02-commands/system-tools/table-groups' },
+            { text: 'Test', link: '/02-commands/system-tools/test' },
+            { text: 'Timeseries Tools', link: '/02-commands/system-tools/timeseries-tools' },
+            { text: 'UI', link: '/02-commands/system-tools/u-i' },
+            { text: 'Version', link: '/02-commands/system-tools/version' },
             { text: 'XSA Services', link: '/02-commands/system-tools/xsa-services' }
           ]
         }

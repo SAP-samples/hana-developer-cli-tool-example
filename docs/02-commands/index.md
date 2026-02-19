@@ -14,15 +14,16 @@ All available commands organized by category. **186 total commands** available -
 
 Tools for data analysis, profiling, and quality checks.
 
+- **[Calc View Analyzer](./analysis-tools/calc-view-analyzer.md)** - Analyze Calculation views
+- **[Data Diff](./analysis-tools/data-diff.md)** - Compare data between tables or systems
 - **[Data Lineage](./analysis-tools/data-lineage.md)** - Trace data flow and dependencies
 - **[Data Profile](./analysis-tools/data-profile.md)** - Analyze column statistics and distributions
-- **[Data Diff](./analysis-tools/data-diff.md)** - Compare data between tables or systems
 - **[Duplicate Detection](./analysis-tools/duplicate-detection.md)** - Find duplicate records
+- **[Entity Relationship Diagram](./analysis-tools/erd-diagram.md)** - Generate ER diagrams for database schemas
 - **[Referential Check](./analysis-tools/referential-check.md)** - Validate foreign key relationships
-- **[Calc View Analyzer](./analysis-tools/calc-view-analyzer.md)** - Analyze calculated views
-- **[Data Validator](./analysis-tools/data-validator.md)** - Validate data consistency
+- **[Table Hotspots](./analysis-tools/table-hotspots.md)** - Identify frequently accessed data
 
-*Plus 3 more: columnStats, fragmentationCheck - See [All Commands](./all-commands.md)*
+*Plus 2 more: columnStats, fragmentationCheck - See [All Commands](./all-commands.md)*
 
 ## 🗄️ Data Tools
 
@@ -71,8 +72,10 @@ Looking for a specific command? Use the search bar above or check the full [Comm
 ## Pro Tips
 
 - Use `--help` flag with any command for detailed options
-- Most commands support `--output` for different formats (json, csv, table)
-- Use `--verbose` flag for detailed execution information
+- Many commands support `--output` for different formats (json, csv, table)
+- Use `--verbose` flag for detailed execution output
+- Use `--debug` flag for debugging information
+- Use `--quiet` flag to suppress output for scripting
 - Commands support aliases for faster typing (e.g., `imp` for `import`)
 
 ## Examples
