@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'traceContents [host] [file]'
 export const aliases = ['tc', 'traceContents', 'traceContent', 'tracecontent']
 export const describe = baseLite.bundle.getText("traceContents")
@@ -22,10 +23,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: 2000,
     desc: baseLite.bundle.getText("limit")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli traceContents --host myhost --file tracefile --limit 1000',
   baseLite.bundle.getText("traceContentsExample")
-)
+).epilog(buildDocEpilogue('traceContents', 'system-tools', ['traces', 'diagnose']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

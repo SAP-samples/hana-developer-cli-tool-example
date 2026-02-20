@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'massDelete [schema] [object]'
 export const aliases = ['md', 'massdelete', 'massDel', 'massdel']
 export const describe = baseLite.bundle.getText("massDelete")
@@ -49,7 +50,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'boolean',
     desc: baseLite.bundle.getText("mass.log")
   }
-})).example('hana-cli massDelete --schema MYSCHEMA --object % --objectType TABLE --dryRun', baseLite.bundle.getText('massDeleteExample'))
+})).wrap(160).example('hana-cli massDelete --schema MYSCHEMA --object % --objectType TABLE --dryRun', baseLite.bundle.getText('massDeleteExample')).wrap(160).epilog(buildDocEpilogue('massDelete', 'mass-operations', ['massExport', 'massUpdate']))
 
 export async function handler(argv) {
   const base = await import('../utils/base.js')

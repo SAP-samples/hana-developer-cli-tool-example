@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'createXSAAdmin [user] [password]'
 export const aliases = ['cXSAAdmin', 'cXSAA', 'cxsaadmin', 'cxsaa']
 export const describe = baseLite.bundle.getText("createXSAAdmin")
@@ -14,7 +15,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     alias: ['p'],
     desc: baseLite.bundle.getText("password")
   }
-})).example('hana-cli createXSAAdmin --user admin --password MyPassword', baseLite.bundle.getText("createXSAAdminExample"))
+})).wrap(160).example('hana-cli createXSAAdmin --user admin --password MyPassword', baseLite.bundle.getText("createXSAAdminExample")).wrap(160).epilog(buildDocEpilogue('createXSAAdmin', 'security', ['users', 'roles', 'createGroup']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

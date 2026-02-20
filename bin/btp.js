@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import * as btp from '../utils/btp.js'
 import { select } from '@inquirer/prompts'
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 const colors = baseLite.colors
 
 export const command = 'btp [directory] [subaccount]'
@@ -14,7 +15,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
         type: 'string',
         desc: baseLite.bundle.getText("btpSa")
     }
-}, false)).example('hana-cli btp --subaccount mySubaccount', baseLite.bundle.getText('btpExample'))
+}, false)).wrap(160).example('hana-cli btp --subaccount mySubaccount', baseLite.bundle.getText('btpExample')).wrap(160).epilog(buildDocEpilogue('btp', 'btp-integration', ['btpInfo', 'btpTarget', 'btpSubs', 'hanaCloudInstances']))
 
 
 /**

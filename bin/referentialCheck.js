@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'referentialCheck'
 export const aliases = ['refcheck', 'checkReferential', 'fkcheck']
 export const describe = baseLite.bundle.getText("referentialCheck")
@@ -59,7 +60,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli referentialCheck --table myTable --mode check', baseLite.bundle.getText("referentialCheckExample"))
+})).wrap(160).example('hana-cli referentialCheck --table myTable --mode check', baseLite.bundle.getText("referentialCheckExample")).wrap(160).epilog(buildDocEpilogue('referentialCheck', 'analysis-tools', ['tables', 'compareData', 'dataValidator']))
 
 export let inputPrompts = {
   table: {

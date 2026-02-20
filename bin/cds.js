@@ -5,6 +5,7 @@ import { createRequire } from 'module'
 // @ts-ignore
 import cds from '@sap/cds'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 global.__xRef = []
 
 export const command = 'cds [schema] [table]'
@@ -52,7 +53,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli cds --table myTable --schema MYSCHEMA', baseLite.bundle.getText("cdsExample"))
+})).wrap(160).example('hana-cli cds --table myTable --schema MYSCHEMA', baseLite.bundle.getText("cdsExample")).wrap(160).epilog(buildDocEpilogue('cds', 'developer-tools', ['activateHDI', 'generateDocs', 'codeTemplate']))
 
 export async function handler(argv) {
   const base = await import('../utils/base.js')

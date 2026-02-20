@@ -4,6 +4,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { homedir } from 'os'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'restore [backupFile]'
 export const aliases = ['rst', 'restoreBackup']
 export const describe = baseLite.bundle.getText("restore")
@@ -54,7 +55,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("restoreDryRun")
   }
-})).example('hana-cli restore --backupFile backup.db', baseLite.bundle.getText("restoreExample"))
+})).wrap(160).example('hana-cli restore --backupFile backup.db', baseLite.bundle.getText("restoreExample")).wrap(160).epilog(buildDocEpilogue('restore', 'backup-recovery', ['backup', 'backupList', 'backupStatus']))
 
 export let inputPrompts = {
   backupFile: {

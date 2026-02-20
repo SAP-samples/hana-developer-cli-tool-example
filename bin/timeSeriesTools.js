@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'timeSeriesTools [action]'
 export const aliases = ['tsTools', 'timeseries', 'timeseriestools']
 export const describe = baseLite.bundle.getText("timeSeriesTools")
@@ -47,7 +48,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: 1000,
     desc: baseLite.bundle.getText("limit")
   }
-})).example('hana-cli timeSeriesTools --action analyze --table TIMESERIES_DATA', baseLite.bundle.getText('timeSeriesToolsExample'))
+})).wrap(160).example('hana-cli timeSeriesTools --action analyze --table TIMESERIES_DATA', baseLite.bundle.getText('timeSeriesToolsExample')).wrap(160).epilog(buildDocEpilogue('timeSeriesTools', 'developer-tools', ['tables', 'dataProfile']))
 
 export let inputPrompts = {
   action: {

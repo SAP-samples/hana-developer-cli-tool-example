@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'views [schema] [view]'
 export const aliases = ['v', 'listViews', 'listviews']
 export const describe = baseLite.bundle.getText("views")
@@ -29,10 +30,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli views --view myView --schema MYSCHEMA',
   baseLite.bundle.getText("viewsExample")
-)
+).epilog(buildDocEpilogue('views', 'schema-tools', ['inspectView', 'tables', 'procedures']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

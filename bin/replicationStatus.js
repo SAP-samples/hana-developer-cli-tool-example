@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'replicationStatus'
 export const aliases = ['replstatus', 'replication', 'replstat']
 export const describe = baseLite.bundle.getText("replicationStatus")
@@ -36,7 +37,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli replicationStatus --type system --detailed', baseLite.bundle.getText("replicationStatusExample"))
+})).wrap(160).example('hana-cli replicationStatus --type system --detailed', baseLite.bundle.getText("replicationStatusExample")).wrap(160).epilog(buildDocEpilogue('replicationStatus', 'backup-recovery', ['backupStatus', 'backup', 'healthCheck']))
 
 export let inputPrompts = {
   type: {

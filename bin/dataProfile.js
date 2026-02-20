@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'dataProfile'
 export const aliases = ['prof', 'profileData', 'dataStats']
 export const describe = baseLite.bundle.getText("dataProfile")
@@ -76,10 +77,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli dataProfile --table myTable --format summary',
   baseLite.bundle.getText("dataProfileExample")
-)
+).epilog(buildDocEpilogue('dataProfile', 'data-tools', ['dataValidator', 'duplicateDetection']))
 
 export let inputPrompts = {
   table: {

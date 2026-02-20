@@ -1,5 +1,6 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'inspectUser [user]'
 export const aliases = ['iu', 'user', 'insUser', 'inspectuser']
 export const describe = baseLite.bundle.getText("inspectUser")
@@ -10,7 +11,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("user")
   }
-})).example('hana-cli inspectUser --user SYSTEM', baseLite.bundle.getText("inspectUserExample"))
+})).wrap(160).example('hana-cli inspectUser --user SYSTEM', baseLite.bundle.getText("inspectUserExample")).wrap(160).epilog(buildDocEpilogue('inspectUser', 'security', ['users', 'roles', 'pwdPolicy']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

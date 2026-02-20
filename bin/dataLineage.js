@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'dataLineage'
 export const aliases = ['lineage', 'dataFlow', 'traceLineage']
 export const describe = baseLite.bundle.getText("dataLineage")
@@ -63,7 +64,7 @@ const dataLineageOptions = {
 }
 
 export const builder = (yargs) => yargs.options(baseLite.getBuilder(dataLineageOptions))
-  .example('hana-cli dataLineage --table myTable --depth 3', baseLite.bundle.getText("dataLineageExample"))
+  .example('hana-cli dataLineage --table myTable --depth 3', baseLite.bundle.getText("dataLineageExample")).wrap(160).epilog(buildDocEpilogue('dataLineage', 'data-tools', ['dataProfile', 'compareData']))
 
 export let inputPrompts = {
   table: {

@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'blocking'
 export const aliases = ['b', 'locks']
 export const describe = baseLite.bundle.getText("blocking")
@@ -18,10 +19,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("details")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli blocking --limit 50 --details',
   baseLite.bundle.getText("blockingExample")
-)
+).epilog(buildDocEpilogue('blocking', 'performance-monitoring', ['deadlocks', 'longRunning', 'connections']))
 
 export let inputPrompts = {
   limit: {

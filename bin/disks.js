@@ -1,11 +1,12 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'disks'
 export const aliases = ['di', 'Disks']
 export const describe = baseLite.bundle.getText("disks")
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).example('hana-cli disks', baseLite.bundle.getText("disksExample"))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).wrap(160).example('hana-cli disks', baseLite.bundle.getText("disksExample")).wrap(160).epilog(buildDocEpilogue('disks', 'system-tools', ['hostInformation', 'dataVolumes', 'ports']))
 export async function handler (argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, dbStatus, {})

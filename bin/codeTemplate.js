@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'codeTemplate'
 export const aliases = ['template', 'codegen', 'scaffold', 'boilerplate']
 export const describe = baseLite.bundle.getText("codeTemplate")
@@ -55,7 +56,7 @@ const codeTemplateOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(codeTemplateOptions)).example('hana-cli codeTemplate --pattern crud --object myTable', baseLite.bundle.getText("codeTemplateExample"))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(codeTemplateOptions)).wrap(160).example('hana-cli codeTemplate --pattern crud --object myTable', baseLite.bundle.getText("codeTemplateExample")).wrap(160).epilog(buildDocEpilogue('codeTemplate', 'developer-tools', ['createModule', 'generateTestData']))
 
 export const codeTemplateBuilderOptions = baseLite.getBuilder(codeTemplateOptions)
 

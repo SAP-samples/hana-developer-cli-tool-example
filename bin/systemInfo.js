@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import * as dbInspect from '../utils/dbInspect.js'
 import * as conn from '../utils/connections.js'
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 const colors = baseLite.colors
 
 const OUTPUTS = {
@@ -20,7 +21,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("outputType")
   }
-})).example('hana-cli systemInfo --detailed', baseLite.bundle.getText("systemInfoExample"))
+})).wrap(160).example('hana-cli systemInfo --detailed', baseLite.bundle.getText("systemInfoExample")).wrap(160).epilog(buildDocEpilogue('systemInfo', 'system-admin', ['status', 'healthCheck', 'version']))
 
 export let inputPrompts = {
   output: {

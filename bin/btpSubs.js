@@ -1,13 +1,14 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 import * as btp from '../utils/btp.js'
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 const colors = baseLite.colors
 
 export const command = 'sub'
 export const aliases = ['subs', 'Sub', 'Subs', 'btpsub', 'btpsubs', 'btpSub', 'btpSubs', 'btpsubscriptions', 'btpSubscriptions']
 export const describe = baseLite.bundle.getText("btpSub")
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).example('hana-cli sub', baseLite.bundle.getText("subExample"))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).wrap(160).example('hana-cli sub', baseLite.bundle.getText("subExample")).wrap(160).epilog(buildDocEpilogue('btpSubs', 'btp-integration', ['btp', 'btpInfo', 'hanaCloudInstances']))
 
 const SUBSCRIBED_STATE = 'SUBSCRIBED'
 

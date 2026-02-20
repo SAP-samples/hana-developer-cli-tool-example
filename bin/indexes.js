@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'indexes [schema] [indexes]'
 export const aliases = ['ind', 'listIndexes', 'ListInd', 'listind', 'Listind', "listfindexes"]
 export const describe = baseLite.bundle.getText("indexes")
@@ -29,10 +30,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli indexes --indexes myIndex --schema MYSCHEMA',
   baseLite.bundle.getText("indexesExample")
-)
+).epilog(buildDocEpilogue('indexes', 'schema-tools', ['inspectIndex', 'tables', 'tableHotspots']))
 
 export let inputPrompts = {
   indexes: {

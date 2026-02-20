@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'inspectTrigger [schema] [trigger]'
 export const aliases = ['itrig', 'trigger', 'insTrig', 'inspecttrigger', 'inspectrigger']
 export const describe = baseLite.bundle.getText("inspectTrigger")
@@ -25,7 +26,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("outputType")
   }
-})).example('hana-cli inspectTrigger --trigger myTrigger --schema MYSCHEMA', baseLite.bundle.getText("inspectTriggerExample"))
+})).wrap(160).example('hana-cli inspectTrigger --trigger myTrigger --schema MYSCHEMA', baseLite.bundle.getText("inspectTriggerExample")).wrap(160).epilog(buildDocEpilogue('inspectTrigger', 'object-inspection', ['triggers', 'inspectProcedure', 'tables']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

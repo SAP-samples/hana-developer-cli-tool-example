@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'procedures [schema] [procedure]'
 export const aliases = ['p', 'listProcs', 'ListProc', 'listprocs', 'Listproc', "listProcedures", "listprocedures", 'sp']
 export const describe = baseLite.bundle.getText("procedures")
@@ -29,10 +30,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli procedures --procedure myProcedure --schema MYSCHEMA',
   baseLite.bundle.getText("proceduresExample")
-)
+).epilog(buildDocEpilogue('procedures', 'schema-tools', ['inspectProcedure', 'functions', 'views']))
 
 /**
  * Command handler function

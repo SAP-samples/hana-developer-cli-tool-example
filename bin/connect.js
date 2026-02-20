@@ -1,5 +1,6 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'connect [user] [password]'
 export const aliases = ['c', 'login']
 export const describe = baseLite.bundle.getText("connect")
@@ -36,7 +37,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     alias: ['t', 'trust', 'truststore'],
     desc: baseLite.bundle.getText("trustStore")
   }
-}, false)).example('hana-cli connect --connection localhost:30015 --user DBUSER', baseLite.bundle.getText("connectExample"))
+}, false)).wrap(160).example('hana-cli connect --connection localhost:30015 --user DBUSER', baseLite.bundle.getText("connectExample")).wrap(160).epilog(buildDocEpilogue('connect', 'connection-auth', ['connections', 'connectViaServiceKey', 'config']))
 
 
 /**

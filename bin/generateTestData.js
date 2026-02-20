@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'generateTestData'
 export const aliases = ['testdata', 'gendata', 'generateData']
 export const describe = baseLite.bundle.getText("generateTestData")
@@ -71,10 +72,10 @@ const generateTestDataOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(generateTestDataOptions)).example(
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(generateTestDataOptions)).wrap(160).example(
   'hana-cli generateTestData --table myTable --rows 100 --format sql',
   baseLite.bundle.getText("generateTestDataExample")
-)
+).epilog(buildDocEpilogue('generateTestData', 'developer-tools', ['codeTemplate', 'import', 'dataProfile']))
 
 export const generateTestDataBuilderOptions = baseLite.getBuilder(generateTestDataOptions)
 

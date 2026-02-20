@@ -4,6 +4,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { homedir } from 'os'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'backupList [directory]'
 export const aliases = ['blist', 'listBackups', 'backups']
 export const describe = baseLite.bundle.getText("backupList")
@@ -47,7 +48,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("backupListShowDetails")
   }
-})).example('hana-cli backupList --backupPath /backups', baseLite.bundle.getText("backupListExample"))
+})).wrap(160).example('hana-cli backupList --backupPath /backups', baseLite.bundle.getText("backupListExample")).wrap(160).epilog(buildDocEpilogue('backupList', 'backup-recovery', ['backup', 'backupStatus', 'restore']))
 
 export let inputPrompts = {
   directory: {

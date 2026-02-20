@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'createJWT [name]'
 export const aliases = ['cJWT', 'cjwt', 'cJwt']
 export const describe = baseLite.bundle.getText("createJWT")
@@ -21,7 +22,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     desc: baseLite.bundle.getText("issuer"),
     type: 'string'
   }
-})).example('hana-cli createJWT --name myJWT --issuer https://example.com', baseLite.bundle.getText("createJWTExample"))
+})).wrap(160).example('hana-cli createJWT --name myJWT --issuer https://example.com', baseLite.bundle.getText("createJWTExample")).wrap(160).epilog(buildDocEpilogue('createJWT', 'connection-auth', ['inspectJWT', 'connectViaServiceKey']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

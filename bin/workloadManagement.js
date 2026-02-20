@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'workloadManagement [schema] [group]'
 export const aliases = ['wlm', 'workloads', 'workloadClass', 'workloadmgmt']
 export const describe = baseLite.bundle.getText("workloadManagement")
@@ -46,10 +47,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: 200,
     desc: baseLite.bundle.getText("limit")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli workloadManagement --showViews',
   baseLite.bundle.getText("workloadShowViews")
-)
+).epilog(buildDocEpilogue('workloadManagement', 'system-admin', ['status', 'longRunning', 'healthCheck']))
 
 export let inputPrompts = {
   group: {

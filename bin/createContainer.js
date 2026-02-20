@@ -3,6 +3,7 @@ import * as baseLite from '../utils/base-lite.js'
 import * as conn from "../utils/connections.js"
 import * as xsenv from '@sap/xsenv'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'createContainer [container] [group]'
 export const aliases = ['cc', 'cCont']
 export const describe = baseLite.bundle.getText("createContainer")
@@ -31,7 +32,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'boolean',
     default: false
   }
-})).example('hana-cli createContainer --container myContainer', baseLite.bundle.getText("createContainerExample"))
+})).wrap(160).example('hana-cli createContainer --container myContainer', baseLite.bundle.getText("createContainerExample")).wrap(160).epilog(buildDocEpilogue('createContainer', 'hdi-management', ['dropContainer', 'containers', 'createContainerUsers']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'iniContents [file] [section]'
 export const aliases = ['if', 'inifiles', 'ini']
 export const describe = baseLite.bundle.getText("iniContents")
@@ -24,7 +25,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: 200,
     desc: baseLite.bundle.getText("limit")
   }
-})).example('hana-cli iniContents --file myFile', baseLite.bundle.getText("iniContentsExample"))
+})).wrap(160).example('hana-cli iniContents --file myFile', baseLite.bundle.getText("iniContentsExample")).wrap(160).epilog(buildDocEpilogue('iniContents', 'system-tools', ['iniFiles', 'config']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

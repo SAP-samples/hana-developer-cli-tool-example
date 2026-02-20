@@ -1,5 +1,6 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'libraries [schema] [library]'
 export const aliases = ['l', 'listLibs', 'ListLibs', 'listlibs', 'ListLib', "listLibraries", "listlibraries"]
 export const describe = baseLite.bundle.getText("libraries")
@@ -28,7 +29,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli libraries --schema MYSCHEMA --library %', baseLite.bundle.getText('librariesExample'))
+})).wrap(160).example('hana-cli libraries --schema MYSCHEMA --library %', baseLite.bundle.getText('librariesExample')).wrap(160).epilog(buildDocEpilogue('libraries', 'schema-tools', ['inspectLibrary', 'inspectLibMember']))
 
 /**
  * Command handler function

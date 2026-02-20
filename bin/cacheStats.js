@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'cacheStats'
 export const aliases = []
 export const describe = baseLite.bundle.getText("cacheStats")
@@ -19,7 +20,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: 50,
     desc: baseLite.bundle.getText("limit")
   }
-})).example('hana-cli cacheStats --cacheType all', baseLite.bundle.getText("cacheStats"))
+})).wrap(160).example('hana-cli cacheStats --cacheType all', baseLite.bundle.getText("cacheStats")).wrap(160).epilog(buildDocEpilogue('cacheStats', 'system-tools', ['memoryAnalysis', 'systemInfo']))
 
 export let inputPrompts = {
   cacheType: {

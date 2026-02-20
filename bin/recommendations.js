@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'recommendations'
 export const aliases = ['rec', 'recommend']
 export const describe = baseLite.bundle.getText("recommendations")
@@ -19,7 +20,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: 50,
     desc: baseLite.bundle.getText("limit")
   }
-})).example('hana-cli recommendations --category indexes --limit 25', baseLite.bundle.getText('recommendationsExample'))
+})).wrap(160).example('hana-cli recommendations --category indexes --limit 25', baseLite.bundle.getText('recommendationsExample')).wrap(160).epilog(buildDocEpilogue('recommendations', 'performance-monitoring', ['healthCheck', 'expensiveStatements']))
 
 export let inputPrompts = {
   category: {

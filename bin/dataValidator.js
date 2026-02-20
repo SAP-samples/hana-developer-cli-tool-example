@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'dataValidator'
 export const aliases = ['dval', 'validateData', 'dataValidation']
 export const describe = baseLite.bundle.getText("dataValidator")
@@ -68,7 +69,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli dataValidator --table myTable --rules validation.json', baseLite.bundle.getText("dataValidatorExample"))
+})).wrap(160).example('hana-cli dataValidator --table myTable --rules validation.json', baseLite.bundle.getText("dataValidatorExample")).wrap(160).epilog(buildDocEpilogue('dataValidator', 'data-tools', ['import', 'dataProfile']))
 
 export let inputPrompts = {
   table: {

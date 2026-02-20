@@ -4,6 +4,7 @@ import dbClientClass from "../utils/database/index.js"
 import ExcelJS from 'exceljs'
 import { parse } from 'csv-parse'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'import'
 export const aliases = ['imp', 'uploadData', 'uploaddata']
 export const describe = baseLite.bundle.getText("import")
@@ -117,7 +118,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli import --filename data.csv --table myTable', baseLite.bundle.getText("importExample"))
+})).wrap(160).example('hana-cli import --filename data.csv --table myTable', baseLite.bundle.getText("importExample")).wrap(160).epilog(buildDocEpilogue('import', 'data-tools', ['export', 'dataValidator']))
 
 export let inputPrompts = {
   filename: {

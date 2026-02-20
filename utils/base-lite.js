@@ -185,7 +185,8 @@ const additionalBundles = [
     'dataProfile',
     'dataValidator',
     'export',
-    'referentialCheck'
+    'referentialCheck',
+    'interactive'
 ]
 const additionalTexts = additionalBundles.reduce((acc, bundleName) => {
     return { ...acc, ...loadAdditionalTexts(bundleName, normalizedLocale) }

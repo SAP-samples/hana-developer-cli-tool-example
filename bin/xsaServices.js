@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'xsaServices [action]'
 export const aliases = ['xsa', 'xsaSvc', 'xsaservices']
 export const describe = baseLite.bundle.getText("xsaServices")
@@ -24,7 +25,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("details")
   }
-})).example('hana-cli xsaServices --action list --details', baseLite.bundle.getText('xsaServicesExample'))
+})).wrap(160).example('hana-cli xsaServices --action list --details', baseLite.bundle.getText('xsaServicesExample')).wrap(160).epilog(buildDocEpilogue('xsaServices', 'system-admin', ['systemInfo', 'status']))
 
 export let inputPrompts = {
   action: {

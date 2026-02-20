@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'auditLog'
 export const aliases = ['audit', 'auditlog']
 export const describe = baseLite.bundle.getText("auditLog")
@@ -42,7 +43,7 @@ const auditLogOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(auditLogOptions)).example('hana-cli auditLog --table AUDIT_TABLE --limit 1000', baseLite.bundle.getText("auditLogExample"))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(auditLogOptions)).wrap(160).example('hana-cli auditLog --table AUDIT_TABLE --limit 1000', baseLite.bundle.getText("auditLogExample")).wrap(160).epilog(buildDocEpilogue('auditLog', 'security', ['systemInfo', 'securityScan']))
 
 export const auditLogBuilderOptions = baseLite.getBuilder(auditLogOptions)
 

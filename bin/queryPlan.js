@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'queryPlan'
 export const aliases = []
 export const describe = baseLite.bundle.getText("queryPlan")
@@ -11,7 +12,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("query")
   }
-})).example('hana-cli queryPlan --sql "SELECT * FROM CUSTOMERS"', baseLite.bundle.getText('queryPlanExample'))
+})).wrap(160).example('hana-cli queryPlan --sql "SELECT * FROM CUSTOMERS"', baseLite.bundle.getText('queryPlanExample')).wrap(160).epilog(buildDocEpilogue('queryPlan', 'performance-monitoring', ['querySimple', 'expensiveStatements']))
 
 export let inputPrompts = {
   sql: {

@@ -4,11 +4,12 @@ import * as conn from "../utils/connections.js"
 import * as fs from 'fs'
 import * as xsenv from '@sap/xsenv'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'copy2Env'
 export const aliases = ['copyEnv', 'copyenv', 'copy2env']
 export const describe = baseLite.bundle.getText("copy2Env")
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).example('hana-cli copy2Env', baseLite.bundle.getText("copy2Env"))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).wrap(160).example('hana-cli copy2Env', baseLite.bundle.getText("copy2Env")).wrap(160).epilog(buildDocEpilogue('copy2Env', 'connection-auth', ['connect', 'config', 'copy2Secrets']))
 
 export async function handler(argv) {
   const base = await import('../utils/base.js')

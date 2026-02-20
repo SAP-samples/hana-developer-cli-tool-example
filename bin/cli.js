@@ -55,6 +55,7 @@ function createYargsInstance(yargsArgs) {
     return yargs(yargsArgs)
         .scriptName(base.colors.blue('hana-cli'))
         .usage(base.colors.blue(base.bundle.getText("usage")))
+        .wrap(160)
         .help('help').alias('help', 'h')
         .version(false) // Disable default version handler, use version command instead
         .alias('version', 'V')

@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'schemaClone'
 export const aliases = ['schemaclone', 'cloneSchema', 'copyschema']
 export const describe = baseLite.bundle.getText("schemaClone")
@@ -59,7 +60,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli schemaClone --sourceSchema SOURCE --targetSchema TARGET --includeData', baseLite.bundle.getText("schemaClone"))
+})).wrap(160).example('hana-cli schemaClone --sourceSchema SOURCE --targetSchema TARGET --includeData', baseLite.bundle.getText("schemaClone")).wrap(160).epilog(buildDocEpilogue('schemaClone', 'schema-tools', ['schemas', 'tables', 'export']))
 
 export let inputPrompts = {
   sourceSchema: {

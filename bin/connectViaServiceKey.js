@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'serviceKey [instance] [key]'
 export const aliases = ['key', 'servicekey', 'service-key']
 export const describe = baseLite.bundle.getText("serviceKey")
@@ -38,7 +39,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'boolean',
     default: true
   }
-}, false)).example('hana-cli serviceKey --instance myInstance --key myKey', baseLite.bundle.getText('serviceKeyExample'))
+}, false)).wrap(160).example('hana-cli serviceKey --instance myInstance --key myKey', baseLite.bundle.getText('serviceKeyExample')).wrap(160).epilog(buildDocEpilogue('connectViaServiceKey', 'connection-auth', ['connect', 'connections', 'config']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

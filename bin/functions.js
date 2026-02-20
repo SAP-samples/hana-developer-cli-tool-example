@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'functions [schema] [function]'
 export const aliases = ['f', 'listFuncs', 'ListFunc', 'listfuncs', 'Listfunc', "listFunctions", "listfunctions"]
 export const describe = baseLite.bundle.getText("functions")
@@ -29,10 +30,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli functions --function myFunction --schema MYSCHEMA',
   baseLite.bundle.getText("functionsExample")
-)
+).epilog(buildDocEpilogue('functions', 'schema-tools', ['inspectFunction', 'procedures', 'objects']))
 
 export let inputPrompts = {
   functionName: {
@@ -121,7 +122,7 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
   const argv = await builder(yargs(hideBin(process.argv))
     .usage(`${baseLite.bundle.getText("cli.usage")}${command}\n\n${describe}`)
     .help('help').alias('help', 'h')
-    .wrap(null))
+    )
     .argv
   
   if (!argv.help && !argv.h) {

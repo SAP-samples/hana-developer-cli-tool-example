@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'backupStatus'
 export const aliases = ['bstatus', 'backupstate', 'bkpstatus']
 export const describe = baseLite.bundle.getText("backupStatus")
@@ -38,7 +39,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: 7,
     desc: baseLite.bundle.getText("backupStatusDays")
   }
-})).example('hana-cli backupStatus --backupId 12345', baseLite.bundle.getText("backupStatusExample"))
+})).wrap(160).example('hana-cli backupStatus --backupId 12345', baseLite.bundle.getText("backupStatusExample")).wrap(160).epilog(buildDocEpilogue('backupStatus', 'backup-recovery', ['backup', 'backupList', 'replicationStatus']))
 
 export let inputPrompts = {
   catalogOnly: {

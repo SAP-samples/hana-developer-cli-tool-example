@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'dataDiff'
 export const aliases = ['ddiff', 'diffData', 'dataCompare']
 export const describe = baseLite.bundle.getText("dataDiff")
@@ -80,7 +81,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli dataDiff --table1 source_data --table2 target_data', baseLite.bundle.getText("dataDiffExample"))
+})).wrap(160).example('hana-cli dataDiff --table1 source_data --table2 target_data', baseLite.bundle.getText("dataDiffExample")).wrap(160).epilog(buildDocEpilogue('dataDiff', 'data-tools', ['compareData', 'dataValidator']))
 
 const buildInputPrompts = () => ({
   table1: {

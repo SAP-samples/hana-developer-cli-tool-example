@@ -4,6 +4,7 @@ import * as dbInspect from '../utils/dbInspect.js'
 import dbClass from "sap-hdb-promisfied"
 import * as conn from "../utils/connections.js"
 import cds from '@sap/cds'
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 global.__xRef = []
 
 export const command = 'inspectView [schema] [view]'
@@ -52,7 +53,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
       default: false,
       desc: baseLite.bundle.getText("noColons")
   }
-})).example('hana-cli inspectView --view myView --schema MYSCHEMA', baseLite.bundle.getText("inspectViewExample"))
+})).wrap(160).example('hana-cli inspectView --view myView --schema MYSCHEMA', baseLite.bundle.getText("inspectViewExample")).wrap(160).epilog(buildDocEpilogue('inspectView', 'object-inspection', ['views', 'inspectTable', 'inspectProcedure']))
 
 export let inputPrompts = {
   view: {

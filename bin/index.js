@@ -23,7 +23,7 @@ const commandFiles = [
     './indexes.js', './indexesUI.js', './iniContents.js', './iniFiles.js', './inspectFunction.js',
     './inspectIndex.js', './inspectJWT.js', './inspectLibMember.js', './inspectLibrary.js',
     './inspectProcedure.js', './inspectTable.js', './inspectTableUI.js', './inspectTrigger.js',
-    './inspectUser.js', './inspectView.js', './issue.js', './kafkaConnect.js', './libraries.js',
+    './inspectUser.js', './inspectView.js', './interactive.js', './issue.js', './kafkaConnect.js', './libraries.js',
     './longRunning.js', './massConvert.js', './massConvertUI.js', './massDelete.js', './massExport.js', './massGrant.js',
     './massRename.js', './massUpdate.js', './massUsers.js', './memoryAnalysis.js', './memoryLeaks.js', './objects.js',
     './openBAS.js', './openChangeLog.js', './openDBExplorer.js', './openReadMe.js', './ports.js',
@@ -32,7 +32,7 @@ const commandFiles = [
     './rick.js', './roles.js', './schemas.js', './schemasUI.js', './schemaClone.js', './securityScan.js', './sdiTasks.js', './sequences.js', './spatialData.js', './status.js',
     './synonyms.js', './systemInfo.js', './systemInfoUI.js', './tableHotspots.js', './tableGroups.js', './tables.js',
     './tableCopy.js', './tablesPG.js', './tablesSQLite.js', './tablesUI.js', './timeSeriesTools.js', './traces.js',
-    './traceContents.js', './triggers.js', './UI.js', './users.js', './version.js', './views.js',
+    './traceContents.js', './triggers.js', './UI.js', './users.js', './version.js', './viewDocs.js', './views.js',
     './workloadManagement.js', './xsaServices.js'
 ]
 

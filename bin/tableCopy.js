@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'tableCopy'
 export const aliases = ['tablecopy', 'copyTable', 'copytable']
 export const describe = baseLite.bundle.getText("tableCopy")
@@ -74,7 +75,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli tableCopy --sourceTable src_table --targetTable tgt_table --batchSize 1000', baseLite.bundle.getText("tableCopyExample"))
+})).wrap(160).example('hana-cli tableCopy --sourceTable src_table --targetTable tgt_table --batchSize 1000', baseLite.bundle.getText("tableCopyExample")).wrap(160).epilog(buildDocEpilogue('tableCopy', 'mass-operations', ['export', 'import', 'tables']))
 
 export let inputPrompts = {
   sourceTable: {

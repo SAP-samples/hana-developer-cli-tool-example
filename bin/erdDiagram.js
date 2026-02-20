@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'erdDiagram'
 export const aliases = ['erd', 'er', 'schema-diagram', 'entityrelation']
 export const describe = baseLite.bundle.getText("erdDiagram")
@@ -54,7 +55,7 @@ const erdDiagramOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(erdDiagramOptions)).example('hana-cli erdDiagram --schema MYSCHEMA --format mermaid --output erd.md', baseLite.bundle.getText('erdDiagramExample'))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(erdDiagramOptions)).wrap(160).example('hana-cli erdDiagram --schema MYSCHEMA --format mermaid --output erd.md', baseLite.bundle.getText('erdDiagramExample')).wrap(160).epilog(buildDocEpilogue('erdDiagram', 'analysis-tools', ['calcViewAnalyzer', 'schemaClone', 'graphWorkspaces']))
 
 export const erdDiagramBuilderOptions = baseLite.getBuilder(erdDiagramOptions)
 

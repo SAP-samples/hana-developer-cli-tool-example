@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'ftIndexes [schema] [index]'
 export const aliases = ['fti', 'ftIndex', 'fulltext', 'fulltextIndexes']
 export const describe = baseLite.bundle.getText("ftIndexes")
@@ -40,7 +41,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli ftIndexes --index myIndex --schema MYSCHEMA', baseLite.bundle.getText("ftIndexesExample"))
+})).wrap(160).example('hana-cli ftIndexes --index myIndex --schema MYSCHEMA', baseLite.bundle.getText("ftIndexesExample")).wrap(160).epilog(buildDocEpilogue('ftIndexes', 'schema-tools', ['indexes', 'tables']))
 
 export let inputPrompts = {
   index: {

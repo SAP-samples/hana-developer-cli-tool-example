@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'alerts'
 export const aliases = ['a', 'alert']
 export const describe = baseLite.bundle.getText("alerts")
@@ -29,7 +30,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: 'Delete alert by ID'
   }
-})).example('hana-cli alerts --severity CRITICAL', baseLite.bundle.getText("alertsExample"))
+})).wrap(160).example('hana-cli alerts --severity CRITICAL', baseLite.bundle.getText("alertsExample")).wrap(160).epilog(buildDocEpilogue('alerts', 'system-tools', ['healthCheck', 'systemInfo']))
 
 export let inputPrompts = {
   limit: {

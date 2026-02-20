@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 import * as btp from '../utils/btp.js'
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 const colors = baseLite.colors
 
 export const command = 'btpInfo'
@@ -15,7 +16,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
         type: 'string',
         desc: baseLite.bundle.getText("outputType")
       }
-}, false)).example('hana-cli btpInfo --output json', baseLite.bundle.getText("btpInfoExample"))
+}, false)).wrap(160).example('hana-cli btpInfo --output json', baseLite.bundle.getText("btpInfoExample")).wrap(160).epilog(buildDocEpilogue('btpInfo', 'btp-integration', ['btp', 'btpTarget', 'btpSubs']))
 
 
 export async function handler(argv) {

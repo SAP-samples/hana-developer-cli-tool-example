@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'calcViewAnalyzer [schema] [view]'
 export const aliases = ['cva', 'analyzeCalcView', 'calcview']
 export const describe = baseLite.bundle.getText("calcViewAnalyzer")
@@ -35,7 +36,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli calcViewAnalyzer --view myView --schema MYSCHEMA', baseLite.bundle.getText("calcViewAnalyzerExample"))
+})).wrap(160).example('hana-cli calcViewAnalyzer --view myView --schema MYSCHEMA', baseLite.bundle.getText("calcViewAnalyzerExample")).wrap(160).epilog(buildDocEpilogue('calcViewAnalyzer', 'analysis-tools', ['views', 'erdDiagram']))
 
 export let inputPrompts = {
   view: {

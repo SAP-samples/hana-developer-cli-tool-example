@@ -4,6 +4,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import * as xsenv from '@sap/xsenv'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'copy2Secrets'
 export const aliases = ['secrets', 'make:secrets']
 export const describe = baseLite.bundle.getText("copy2Secrets")
@@ -25,10 +26,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
         type: 'string',
         desc: baseLite.bundle.getText("secretsFilter")
     }
-}, false)).example(
+}, false)).wrap(160).example(
   'hana-cli copy2Secrets --secretsFolder ./secrets',
   baseLite.bundle.getText("copy2SecretsExample")
-)
+).epilog(buildDocEpilogue('copy2Secrets', 'connection-auth', ['connect', 'copy2Env']))
 
 
 export async function handler (argv) {

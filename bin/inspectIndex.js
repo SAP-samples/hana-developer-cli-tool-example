@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'inspectIndex [schema] [index]'
 export const aliases = ['ii', 'index', 'insIndex', 'inspectindex']
 export const describe = baseLite.bundle.getText("inspectIndex")
@@ -17,7 +18,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
   }
-})).example('hana-cli inspectIndex --index myIndex --schema MYSCHEMA', baseLite.bundle.getText("inspectIndexExample"))
+})).wrap(160).example('hana-cli inspectIndex --index myIndex --schema MYSCHEMA', baseLite.bundle.getText("inspectIndexExample")).wrap(160).epilog(buildDocEpilogue('inspectIndex', 'object-inspection', ['indexes', 'tables', 'tableHotspots']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

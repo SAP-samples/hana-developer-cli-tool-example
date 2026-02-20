@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'compareData'
 export const aliases = ['cmpdata', 'compardata', 'dataCompare']
 export const describe = baseLite.bundle.getText("compareData")
@@ -67,10 +68,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli compareData --sourceTable table1 --targetTable table2',
   baseLite.bundle.getText("compareDataExample")
-)
+).epilog(buildDocEpilogue('compareData', 'data-tools', ['compareSchema', 'dataDiff']))
 
 export let inputPrompts = {
   sourceTable: {

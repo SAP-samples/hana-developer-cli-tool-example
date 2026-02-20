@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'adminHDI [user] [password]'
 export const aliases = ['adHDI', 'adhdi']
 export const describe = baseLite.bundle.getText("adminHDI")
@@ -20,7 +21,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'boolean',
     default: true
   }
-})).example('hana-cli adminHDI --action list', baseLite.bundle.getText("adminHDIExample"))
+})).wrap(160).example('hana-cli adminHDI --action list', baseLite.bundle.getText("adminHDIExample")).wrap(160).epilog(buildDocEpilogue('adminHDI', 'hdi-management', ['adminHDIGroup', 'hanaCloudHDIInstances']))
 
 /**
  * Command handler function

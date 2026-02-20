@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'tableHotspots [schema] [table]'
 export const aliases = ['th', 'hotspots']
 export const describe = baseLite.bundle.getText("tableHotspots")
@@ -35,7 +36,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli tableHotspots --schema MYSCHEMA --table CUSTOMERS', baseLite.bundle.getText('tableHotspotsExample'))
+})).wrap(160).example('hana-cli tableHotspots --schema MYSCHEMA --table CUSTOMERS', baseLite.bundle.getText('tableHotspotsExample')).wrap(160).epilog(buildDocEpilogue('tableHotspots', 'performance-monitoring', ['columnStats', 'indexes', 'inspectTable']))
 
 export let inputPrompts = {
   table: {

@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'partitions [schema] [table]'
 export const aliases = ['parts', 'partition', 'partitioning', 'tablePartitions']
 export const describe = baseLite.bundle.getText("partitions")
@@ -34,10 +35,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli partitions --table myTable --schema MYSCHEMA',
   baseLite.bundle.getText("partitionsExample")
-)
+).epilog(buildDocEpilogue('partitions', 'schema-tools', ['tables', 'inspectTable', 'tableHotspots']))
 
 export let inputPrompts = {
   table: {

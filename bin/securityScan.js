@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'securityScan'
 export const aliases = ['secscan', 'scan']
 export const describe = baseLite.bundle.getText("securityScan")
@@ -27,7 +28,7 @@ const securityScanOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(securityScanOptions)).example('hana-cli securityScan --category all --detailed', baseLite.bundle.getText('securityScanExample'))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(securityScanOptions)).wrap(160).example('hana-cli securityScan --category all --detailed', baseLite.bundle.getText('securityScanExample')).wrap(160).epilog(buildDocEpilogue('securityScan', 'security', ['pwdPolicy', 'users', 'healthCheck']))
 
 export const securityScanBuilderOptions = baseLite.getBuilder(securityScanOptions)
 

@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'grantChains'
 export const aliases = ['grants', 'grantchain']
 export const describe = baseLite.bundle.getText("grantChains")
@@ -31,7 +32,7 @@ const grantChainsOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(grantChainsOptions)).example('hana-cli grantChains --user DBUSER', baseLite.bundle.getText("grantChainsExample"))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(grantChainsOptions)).wrap(160).example('hana-cli grantChains --user DBUSER', baseLite.bundle.getText("grantChainsExample")).wrap(160).epilog(buildDocEpilogue('grantChains', 'analysis-tools', ['privilegeAnalysis', 'privilegeError', 'roles']))
 
 export const grantChainsBuilderOptions = baseLite.getBuilder(grantChainsOptions)
 

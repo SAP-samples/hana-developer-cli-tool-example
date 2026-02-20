@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'massUsers [user] [password]'
 export const aliases = ['massUser', 'mUsers', 'mUser', 'mu']
 export const describe = baseLite.bundle.getText("massUsers")
@@ -14,7 +15,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     alias: ['p'],
     desc: baseLite.bundle.getText("password")
   }
-})).example('hana-cli massUsers --user DBADMIN --password SecurePass123', baseLite.bundle.getText('massUsersExample'))
+})).wrap(160).example('hana-cli massUsers --user DBADMIN --password SecurePass123', baseLite.bundle.getText('massUsersExample')).wrap(160).epilog(buildDocEpilogue('massUsers', 'mass-operations', ['users', 'roles', 'massGrant']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

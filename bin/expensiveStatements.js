@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'expensiveStatements'
 export const aliases = []
 export const describe = baseLite.bundle.getText("expensiveStatements")
@@ -19,7 +20,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: 'totalTime',
     desc: baseLite.bundle.getText("expensiveStatementsOrderBy")
   }
-})).example('hana-cli expensiveStatements --limit 50 --orderBy totalTime', baseLite.bundle.getText("expensiveStatementsExample"))
+})).wrap(160).example('hana-cli expensiveStatements --limit 50 --orderBy totalTime', baseLite.bundle.getText("expensiveStatementsExample")).wrap(160).epilog(buildDocEpilogue('expensiveStatements', 'performance-monitoring', ['longRunning', 'queryPlan', 'blocking']))
 
 export let inputPrompts = {
   limit: {

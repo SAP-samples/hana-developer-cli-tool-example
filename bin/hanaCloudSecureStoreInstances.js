@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'securestore'
 export const aliases = ['secureStoreInstances', 'securestoreinstances', 'secureStoreServices', 'listSecureStore', 'securestoreservices', 'securestores']
 export const describe = baseLite.bundle.getText("secureStoreInstances")
@@ -12,7 +13,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
         type: 'boolean',
         default: true
     }
-}, false)).example('hana-cli securestore --cf', baseLite.bundle.getText("securestoreExample"))
+}, false)).wrap(160).example('hana-cli securestore --cf', baseLite.bundle.getText("securestoreExample")).wrap(160).epilog(buildDocEpilogue('hanaCloudSecureStoreInstances', 'hana-cloud', ['hanaCloudInstances', 'certificates']))
 
 export let inputPrompts = {
     cf: {

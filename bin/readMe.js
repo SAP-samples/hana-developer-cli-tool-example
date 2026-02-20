@@ -1,10 +1,11 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'readMe'
 export const aliases = ['readme']
 export const describe = baseLite.bundle.getText("readMe")
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).example('hana-cli readMe', baseLite.bundle.getText('readMeExample'))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).wrap(160).example('hana-cli readMe', baseLite.bundle.getText('readMeExample')).wrap(160).epilog(buildDocEpilogue('readMe', 'developer-tools', ['readMeUI', 'helpDocu', 'openReadMe']))
 
 export const handler = async function () {
 

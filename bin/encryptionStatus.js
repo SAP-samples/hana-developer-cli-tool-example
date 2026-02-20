@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'encryptionStatus'
 export const aliases = ['encryption', 'encrypt']
 export const describe = baseLite.bundle.getText("encryptionStatus")
@@ -21,7 +22,7 @@ const encryptionStatusOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(encryptionStatusOptions)).example('hana-cli encryptionStatus --table myTable', baseLite.bundle.getText("encryptionStatusExample"))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(encryptionStatusOptions)).wrap(160).example('hana-cli encryptionStatus --table myTable', baseLite.bundle.getText("encryptionStatusExample")).wrap(160).epilog(buildDocEpilogue('encryptionStatus', 'security', ['certificates', 'healthCheck']))
 
 export const encryptionStatusBuilderOptions = baseLite.getBuilder(encryptionStatusOptions)
 

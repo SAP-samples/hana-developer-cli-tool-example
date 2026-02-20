@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 const duplicateDetectionOptions = {
   table: {
     alias: ['t'],
@@ -78,7 +79,7 @@ export const aliases = ['dupdetect', 'findDuplicates', 'duplicates']
 export const describe = baseLite.bundle.getText("duplicateDetection")
 
 export const builder = (yargs) => yargs.options(baseLite.getBuilder(duplicateDetectionOptions))
-  .example('hana-cli duplicateDetection --table myTable --mode exact --threshold 0.95', baseLite.bundle.getText("duplicateDetectionExample"))
+  .example('hana-cli duplicateDetection --table myTable --mode exact --threshold 0.95', baseLite.bundle.getText("duplicateDetectionExample")).wrap(160).epilog(buildDocEpilogue('duplicateDetection', 'data-tools', ['dataProfile', 'dataValidator']))
 
 export let inputPrompts = {
   table: {

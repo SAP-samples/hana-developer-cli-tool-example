@@ -2,13 +2,14 @@
 import * as baseLite from '../utils/base-lite.js'
 import * as conn from '../utils/connections.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'opendbx'
 export const aliases = ['open', 'openDBX', 'opendb', 'openDBExplorer', 'opendbexplorer', 'dbx', 'DBX']
 export const describe = baseLite.bundle.getText("opendbx")
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).example(
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).wrap(160).example(
   'hana-cli opendbx',
   baseLite.bundle.getText("opendbxExample")
-)
+).epilog(buildDocEpilogue('openDBExplorer', 'schema-tools', ['tables', 'schemas', 'objects']))
 export async function handler (argv) {
   const base = await import('../utils/base.js')
     base.promptHandler(argv, getDBX, {})

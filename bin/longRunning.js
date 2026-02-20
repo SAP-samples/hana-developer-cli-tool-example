@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'longRunning'
 export const aliases = ['lr', 'longrunning']
 export const describe = baseLite.bundle.getText("longRunning")
@@ -29,7 +30,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: 'Statement hash to cancel'
   }
-})).example('hana-cli longRunning --limit 50 --duration 60', baseLite.bundle.getText("longRunningExample"))
+})).wrap(160).example('hana-cli longRunning --limit 50 --duration 60', baseLite.bundle.getText("longRunningExample")).wrap(160).epilog(buildDocEpilogue('longRunning', 'performance-monitoring', ['expensiveStatements', 'deadlocks', 'blocking']))
 
 export let inputPrompts = {
   limit: {

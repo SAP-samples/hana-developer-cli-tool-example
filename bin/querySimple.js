@@ -3,6 +3,7 @@ import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 import ExcelJS from 'exceljs'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'querySimple'
 export const aliases = ['qs', "querysimple"]
 export const describe = baseLite.bundle.getText("querySimple")
@@ -36,7 +37,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli querySimple --query "SELECT * FROM CUSTOMERS" --output csv', baseLite.bundle.getText('querySimpleExample'))
+})).wrap(160).example('hana-cli querySimple --query "SELECT * FROM CUSTOMERS" --output csv', baseLite.bundle.getText('querySimpleExample')).wrap(160).epilog(buildDocEpilogue('querySimple', 'performance-monitoring', ['queryPlan', 'expensiveStatements']))
 
 export let inputPrompts = {
   query: {

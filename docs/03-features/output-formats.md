@@ -13,7 +13,8 @@ hana-cli dataProfile -s HR -t EMPLOYEES
 ```
 
 **Output:**
-```
+
+```bash
 Column Name        Type       Nulls  Distinct  Min  Max
 ID                 INT        0      1000      1    1000
 FIRST_NAME         STRING     5      950       -    -
@@ -29,6 +30,7 @@ hana-cli dataProfile -s HR -t EMPLOYEES --output json
 ```
 
 **Output:**
+
 ```json
 {
   "schema": "HR",
@@ -51,14 +53,6 @@ Spreadsheet-compatible:
 
 ```bash
 hana-cli export -s HR -t EMPLOYEES --output csv -o employees.csv
-```
-
-### Prettified JSON (Pretty)
-
-Formatted JSON with indentation:
-
-```bash
-hana-cli dataProfile -s HR -t EMPLOYEES --output pretty
 ```
 
 ## Using Output Formats
@@ -111,7 +105,6 @@ echo "Analysis saved to profile.csv"
 | Scripting/automation | JSON | `--output json` |
 | Spreadsheet analysis | CSV | `--output csv` |
 | API responses | JSON | `--output json` |
-| Human reports | Pretty | `--output pretty` |
 
 ## Format-Specific Options
 
@@ -126,20 +119,13 @@ hana-cli export -s SCHEMA -t TABLE --header false
 
 # Custom delimiter
 hana-cli export -s SCHEMA -t TABLE --delimiter ';'
-
-# Custom encoding
-hana-cli export -s SCHEMA -t TABLE --encoding 'utf-16'
 ```
+
+**Note:** CSV files are exported using UTF-8 encoding by default, which provides full Unicode support and is compatible with modern spreadsheet applications and data processing tools.
 
 ### JSON Options
 
-```bash
-# Pretty-printed (compact by default)
-hana-cli dataProfile -s SCHEMA -t TABLE --output json --pretty
-
-# With metadata
-hana-cli export -s SCHEMA -t TABLE --output json --metadata
-```
+JSON format is useful for programmatic processing and integration with other tools.
 
 ## See Also
 

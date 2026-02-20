@@ -2,11 +2,12 @@
 import * as baseLite from '../utils/base-lite.js'
 import * as btp from '../utils/btp.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'btpTarget'
 export const aliases = ['btp-ui']
 export const describe = baseLite.bundle.getText("btpTargetCmd")
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).example('hana-cli btpTarget', baseLite.bundle.getText("btpTargetExample"))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).wrap(160).example('hana-cli btpTarget', baseLite.bundle.getText("btpTargetExample")).wrap(160).epilog(buildDocEpilogue('btpTarget', 'btp-integration', ['btp', 'btpInfo', 'btpSubs']))
 
 /**
  * Get BTP hierarchy data for UI

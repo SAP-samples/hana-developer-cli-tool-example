@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'pwdPolicy'
 export const aliases = ['pwdpolicy', 'passpolicies']
 export const describe = baseLite.bundle.getText("pwdPolicy")
@@ -31,7 +32,7 @@ const pwdPolicyOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(pwdPolicyOptions)).example('hana-cli pwdPolicy --list --details', baseLite.bundle.getText('pwdPolicyExample'))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(pwdPolicyOptions)).wrap(160).example('hana-cli pwdPolicy --list --details', baseLite.bundle.getText('pwdPolicyExample')).wrap(160).epilog(buildDocEpilogue('pwdPolicy', 'security', ['users', 'inspectUser']))
 
 export const pwdPolicyBuilderOptions = baseLite.getBuilder(pwdPolicyOptions)
 

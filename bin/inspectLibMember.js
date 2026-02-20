@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'inspectLibMember [schema] [library] [libraryMem]'
 export const aliases = ['ilm', 'libraryMember', 'librarymember', 'insLibMem', 'inspectlibrarymember']
 export const describe = baseLite.bundle.getText("inspectLibMember")
@@ -29,10 +30,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("outputType")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli inspectLibMember --library myLib --libraryMem myMember --output tbl',
   baseLite.bundle.getText("inspectLibMemberExample")
-)
+).epilog(buildDocEpilogue('inspectLibMember', 'object-inspection', ['libraries', 'inspectLibrary']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

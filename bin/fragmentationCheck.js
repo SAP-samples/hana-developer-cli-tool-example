@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'fragmentationCheck'
 export const aliases = ['frag', 'fc']
 export const describe = baseLite.bundle.getText("fragmentationCheck")
@@ -30,7 +31,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: 50,
     desc: baseLite.bundle.getText("limit")
   }
-})).example('hana-cli fragmentationCheck --schema MYSCHEMA --threshold 10', baseLite.bundle.getText("fragmentationCheckExample"))
+})).wrap(160).example('hana-cli fragmentationCheck --schema MYSCHEMA --threshold 10', baseLite.bundle.getText("fragmentationCheckExample")).wrap(160).epilog(buildDocEpilogue('fragmentationCheck', 'performance-monitoring', ['reclaim', 'healthCheck']))
 
 export let inputPrompts = {
   schema: {

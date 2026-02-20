@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'dependencies'
 export const aliases = ['deps', 'depend', 'dependency-graph', 'relationships']
 export const describe = baseLite.bundle.getText("dependencies")
@@ -61,10 +62,10 @@ const dependenciesOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(dependenciesOptions)).example(
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(dependenciesOptions)).wrap(160).example(
   'hana-cli dependencies --object myTable --direction incoming --depth 3',
   baseLite.bundle.getText("dependenciesExample")
-)
+).epilog(buildDocEpilogue('dependencies', 'analysis-tools', ['objects', 'views', 'procedures']))
 
 export const dependenciesBuilderOptions = baseLite.getBuilder(dependenciesOptions)
 

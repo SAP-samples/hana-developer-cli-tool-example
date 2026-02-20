@@ -1,13 +1,14 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'readMeUI'
 export const aliases = ['readmeui', 'readMeUi', 'readmeUI']
 export const describe = baseLite.bundle.getText("readMe")
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).example(
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).wrap(160).example(
   'hana-cli readMeUI',
   baseLite.bundle.getText("readMeUIExample")
-)
+).epilog(buildDocEpilogue('readMeUI', 'developer-tools', ['readMe', 'UI', 'openReadMe']))
 export async function handler (argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, readMe, {})

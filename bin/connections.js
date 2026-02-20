@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'connections'
 export const aliases = ['conn', 'c']
 export const describe = baseLite.bundle.getText("connections")
@@ -28,10 +29,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: false,
     desc: 'Include idle connections'
   }
-})).example(
+})).wrap(160).example(
   'hana-cli connections --limit 100',
   baseLite.bundle.getText("connectionsExample")
-)
+).epilog(buildDocEpilogue('connections', 'connection-auth', ['connect', 'connectViaServiceKey', 'status']))
 
 export let inputPrompts = {
   limit: {

@@ -5,6 +5,7 @@ import path from 'path'
 import os from 'os'
 import { spawn } from 'child_process'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'config [action]'
 export const aliases = ['cfg']
 export const describe = baseLite.bundle.getText("config")
@@ -38,7 +39,7 @@ export const builder = (yargs) => yargs
         desc: 'Action: show (default), list, paths, or edit',
         type: 'string'
     })
-    .example('hana-cli config', 'Display current configuration')
+    .example('hana-cli config', 'Display current configuration').epilog(buildDocEpilogue('config', 'connection-auth', ['connect', 'connections']))
     .example('hana-cli config -e', 'Edit configuration in default editor')
     .example('hana-cli config --path', 'Show configuration file paths')
 

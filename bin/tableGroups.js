@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'tableGroups [action] [groupName]'
 export const aliases = ['tg', 'tablegroup', 'groups', 'groups-tables']
 export const describe = baseLite.bundle.getText("tableGroups")
@@ -55,7 +56,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli tableGroups --action list --schema MYSCHEMA', baseLite.bundle.getText('tableGroupsExample'))
+})).wrap(160).example('hana-cli tableGroups --action list --schema MYSCHEMA', baseLite.bundle.getText('tableGroupsExample')).wrap(160).epilog(buildDocEpilogue('tableGroups', 'schema-tools', ['tables', 'objects']))
 
 export let inputPrompts = {
   action: {

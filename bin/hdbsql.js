@@ -4,6 +4,7 @@ import * as  conn from '../utils/connections.js'
 import * as xsenv from '@sap/xsenv'
 import { spawn, spawnSync } from 'child_process'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 function isCommandAvailable(command) {
   const checkCommand = process.platform === 'win32' ? 'where' : 'which'
   const result = spawnSync(checkCommand, [command], { stdio: 'ignore' })
@@ -12,7 +13,7 @@ function isCommandAvailable(command) {
 
 export const command = 'hdbsql'
 export const describe = baseLite.bundle.getText("hdbsql")
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).example('hana-cli hdbsql', baseLite.bundle.getText("hdbsqlExample"))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).wrap(160).example('hana-cli hdbsql', baseLite.bundle.getText("hdbsqlExample")).wrap(160).epilog(buildDocEpilogue('hdbsql', 'developer-tools', ['querySimple', 'callProcedure']))
 export async function handler (argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, launchHdbsql, {})

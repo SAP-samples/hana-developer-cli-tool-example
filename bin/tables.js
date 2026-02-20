@@ -2,6 +2,7 @@
 // Use lightweight base-lite for command metadata to avoid loading heavy deps during CLI init
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'tables [schema] [table]'
 export const aliases = ['t', 'listTables', 'listtables']
 export const describe = baseLite.bundle.getText("tables")
@@ -30,10 +31,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli tables --table myTable --schema MYSCHEMA',
   baseLite.bundle.getText("tablesExample")
-)
+).epilog(buildDocEpilogue('tables', 'schema-tools', ['inspectTable', 'tableGroups', 'schemas']))
 
 export let inputPrompts = {
   table: {
@@ -115,7 +116,7 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
   const argv = await builder(yargs(hideBin(process.argv))
     .usage(baseLite.bundle.getText("cli.usage", [command, describe]))
     .help('help').alias('help', 'h')
-    .wrap(null))
+    )
     .argv
   
   if (!argv.help && !argv.h) {

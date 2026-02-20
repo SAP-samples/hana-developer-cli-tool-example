@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'deadlocks'
 export const aliases = ['deadlock', 'dl']
 export const describe = baseLite.bundle.getText("deadlocks")
@@ -12,10 +13,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: 50,
     desc: baseLite.bundle.getText("limit")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli deadlocks --limit 50',
   baseLite.bundle.getText("deadlocksExample")
-)
+).epilog(buildDocEpilogue('deadlocks', 'performance-monitoring', ['longRunning', 'blocking', 'healthCheck']))
 
 export let inputPrompts = {
   limit: {

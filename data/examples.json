@@ -1,0 +1,336 @@
+{
+  "examples": [
+    {
+      "command": "connect",
+      "aliases": ["c"],
+      "title": "Connect to HANA Database",
+      "description": "Establish a connection to a HANA database instance",
+      "examples": [
+        {
+          "usage": "hana-cli connect -n localhost:30013 -u DBADMIN -p password",
+          "description": "Connect to HANA on localhost with port and credentials"
+        },
+        {
+          "usage": "hana-cli connect -n hana.example.com -u DBADMIN -p password",
+          "description": "Connect to remote HANA instance using hostname"
+        },
+        {
+          "usage": "hana-cli c -e default-env.json",
+          "description": "Connect using environment file (default-env.json)"
+        }
+      ]
+    },
+    {
+      "command": "import",
+      "aliases": ["imp", "uploadData"],
+      "title": "Import Data from CSV or Excel",
+      "description": "Import data from CSV or Excel files into database tables",
+      "examples": [
+        {
+          "usage": "hana-cli import -n data.csv -t HR.EMPLOYEES",
+          "description": "Import CSV with auto column matching"
+        },
+        {
+          "usage": "hana-cli import -n data.xlsx -o excel -t SALES -m name",
+          "description": "Import Excel with name-based column matching"
+        },
+        {
+          "usage": "hana-cli import -n data.csv -t EMPLOYEES --truncate",
+          "description": "Import and clear table before insert (truncate)"
+        },
+        {
+          "usage": "hana-cli import -n bulk.csv -t ORDERS -b 5000",
+          "description": "Import with custom batch size for large files"
+        }
+      ]
+    },
+    {
+      "command": "export",
+      "aliases": ["exp", "downloadData"],
+      "title": "Export Data to CSV or Excel",
+      "description": "Export table or query results to CSV or Excel files",
+      "examples": [
+        {
+          "usage": "hana-cli export -t CUSTOMERS -f customers.csv",
+          "description": "Export table to CSV file"
+        },
+        {
+          "usage": "hana-cli export -s SCHEMA -t SALES -o excel -f sales.xlsx",
+          "description": "Export table to Excel from specific schema"
+        },
+        {
+          "usage": "hana-cli export -q \"SELECT * FROM PRODUCTS WHERE price > 100\" -f expensive.csv",
+          "description": "Export custom query results to CSV"
+        }
+      ]
+    },
+    {
+      "command": "inspectTable",
+      "aliases": ["it"],
+      "title": "Inspect Table Structure and Metadata",
+      "description": "View detailed information about a database table including columns, types, and constraints",
+      "examples": [
+        {
+          "usage": "hana-cli inspectTable -t EMPLOYEES",
+          "description": "Show table structure and column details"
+        },
+        {
+          "usage": "hana-cli inspectTable -t HR.DEPARTMENTS --indexes",
+          "description": "Show table with index information"
+        },
+        {
+          "usage": "hana-cli it -s MYSCHEMA -t ORDERS -v",
+          "description": "Verbose output for table in specific schema"
+        }
+      ]
+    },
+    {
+      "command": "dataProfile",
+      "aliases": ["prof", "profileData"],
+      "title": "Profile Table Data Statistics",
+      "description": "Analyze and profile data in tables including null counts, distinct values, and distributions",
+      "examples": [
+        {
+          "usage": "hana-cli dataProfile -t CUSTOMERS",
+          "description": "Profile all columns in CUSTOMERS table"
+        },
+        {
+          "usage": "hana-cli dataProfile -t ORDERS -c ORDER_ID,CUSTOMER_ID",
+          "description": "Profile specific columns only"
+        },
+        {
+          "usage": "hana-cli prof -t EMPLOYEES --histogram",
+          "description": "Include histogram data in profile output"
+        }
+      ]
+    },
+    {
+      "command": "compareSchema",
+      "aliases": ["cmpschema"],
+      "title": "Compare Database Schemas",
+      "description": "Compare table structures between two schemas to find differences",
+      "examples": [
+        {
+          "usage": "hana-cli compareSchema -s SCHEMA1 -t SCHEMA2",
+          "description": "Compare two schemas and show differences"
+        },
+        {
+          "usage": "hana-cli cmpschema -s DEV -t PROD --tables ORDERS,CUSTOMERS",
+          "description": "Compare specific tables between environments"
+        }
+      ]
+    },
+    {
+      "command": "compareData",
+      "aliases": ["cmpdata"],
+      "title": "Compare Data Between Tables",
+      "description": "Compare row-level data differences between source and target tables",
+      "examples": [
+        {
+          "usage": "hana-cli compareData -s SCHEMA1 -t TABLE1 -c SCHEMA2.TABLE2",
+          "description": "Compare tables between schemas"
+        },
+        {
+          "usage": "hana-cli dataDiff -t EMPLOYEES -k EMP_ID",
+          "description": "Use employee ID as comparison key"
+        }
+      ]
+    },
+    {
+      "command": "duplicateDetection",
+      "aliases": ["dupdetect", "findDuplicates"],
+      "title": "Find Duplicate Records",
+      "description": "Identify and analyze duplicate rows in a table",
+      "examples": [
+        {
+          "usage": "hana-cli duplicateDetection -t CUSTOMERS -c EMAIL",
+          "description": "Find duplicate email addresses in CUSTOMERS table"
+        },
+        {
+          "usage": "hana-cli dupdetect -t PRODUCTS -c SKU,VARIANT -o duplicates.csv",
+          "description": "Find duplicates by multiple columns and export results"
+        }
+      ]
+    },
+    {
+      "command": "dataValidator",
+      "aliases": ["dval", "validateData"],
+      "title": "Validate Data Quality",
+      "description": "Validate data against specified rules and constraints",
+      "examples": [
+        {
+          "usage": "hana-cli dataValidator -t ORDERS -r rules.json",
+          "description": "Validate table against rules file"
+        },
+        {
+          "usage": "hana-cli dval -t EMPLOYEES --not-null ID,EMAIL --unique EMAIL",
+          "description": "Check NOT NULL and UNIQUE constraints"
+        }
+      ]
+    },
+    {
+      "command": "dataSync",
+      "aliases": ["sync", "syncData"],
+      "title": "Synchronize Data Between Environments",
+      "description": "Sync data changes from source to target table",
+      "examples": [
+        {
+          "usage": "hana-cli dataSync -s SCHEMA1 -t TABLE1 -c SCHEMA2.TABLE2 -k ID",
+          "description": "Sync tables with ID as key column"
+        },
+        {
+          "usage": "hana-cli sync --source DEV.CUSTOMERS --target PROD.CUSTOMERS",
+          "description": "Full data synchronization between environments"
+        }
+      ]
+    },
+    {
+      "command": "tables",
+      "aliases": ["t"],
+      "title": "List Database Tables",
+      "description": "Browse and list tables in database schemas",
+      "examples": [
+        {
+          "usage": "hana-cli tables",
+          "description": "List all tables in current schema"
+        },
+        {
+          "usage": "hana-cli tables -s MYSCHEMA",
+          "description": "List tables in specific schema"
+        },
+        {
+          "usage": "hana-cli t --pattern CUST%",
+          "description": "List tables matching pattern"
+        }
+      ]
+    },
+    {
+      "command": "erdDiagram",
+      "aliases": ["erd"],
+      "title": "Generate Entity Relationship Diagram",
+      "description": "Create visual ERD of schema relationships",
+      "examples": [
+        {
+          "usage": "hana-cli erdDiagram -s MYSCHEMA",
+          "description": "Generate ERD for schema"
+        },
+        {
+          "usage": "hana-cli erd -s SALES -o relations.svg --format svg",
+          "description": "Export ERD as SVG image"
+        }
+      ]
+    },
+    {
+      "command": "kb",
+      "aliases": [],
+      "title": "Search Knowledge Base",
+      "description": "Search for help topics and documentation",
+      "examples": [
+        {
+          "usage": "hana-cli kb \"import csv\"",
+          "description": "Search for CSV import topics"
+        },
+        {
+          "usage": "hana-cli kb data validation",
+          "description": "Search for data validation help"
+        }
+      ]
+    },
+    {
+      "command": "helpDocu",
+      "aliases": ["docs", "documentation"],
+      "title": "View Full Documentation",
+      "description": "Open complete command documentation",
+      "examples": [
+        {
+          "usage": "hana-cli docs",
+          "description": "Show documentation index"
+        },
+        {
+          "usage": "hana-cli helpDocu --topic import",
+          "description": "View import command documentation"
+        }
+      ]
+    },
+    {
+      "command": "config",
+      "aliases": ["cfg"],
+      "title": "Manage Configuration",
+      "description": "View and manage CLI configuration settings",
+      "examples": [
+        {
+          "usage": "hana-cli config",
+          "description": "Show current configuration"
+        },
+        {
+          "usage": "hana-cli config --set loglevel=debug",
+          "description": "Update configuration setting"
+        }
+      ]
+    },
+    {
+      "command": "status",
+      "aliases": [],
+      "title": "Check Database Status",
+      "description": "View database and system health status",
+      "examples": [
+        {
+          "usage": "hana-cli status",
+          "description": "Show overall system status"
+        },
+        {
+          "usage": "hana-cli status --services",
+          "description": "Show individual service status"
+        }
+      ]
+    },
+    {
+      "command": "indexes",
+      "aliases": [],
+      "title": "Manage Database Indexes",
+      "description": "List, analyze, and manage database indexes",
+      "examples": [
+        {
+          "usage": "hana-cli indexes -t CUSTOMERS",
+          "description": "Show indexes on CUSTOMERS table"
+        },
+        {
+          "usage": "hana-cli indexes --unused",
+          "description": "Find unused indexes"
+        }
+      ]
+    },
+    {
+      "command": "users",
+      "aliases": [],
+      "title": "Manage Database Users",
+      "description": "List and manage database users and privileges",
+      "examples": [
+        {
+          "usage": "hana-cli users",
+          "description": "List all database users"
+        },
+        {
+          "usage": "hana-cli users -u DBADMIN",
+          "description": "Show details for specific user"
+        }
+      ]
+    },
+    {
+      "command": "roles",
+      "aliases": [],
+      "title": "Manage Database Roles",
+      "description": "List and manage database roles and permissions",
+      "examples": [
+        {
+          "usage": "hana-cli roles",
+          "description": "List all system roles"
+        },
+        {
+          "usage": "hana-cli roles -r DEVELOPER",
+          "description": "Show role details and members"
+        }
+      ]
+    }
+  ]
+}

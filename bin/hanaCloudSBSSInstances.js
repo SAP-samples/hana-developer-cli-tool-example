@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'sbss'
 export const aliases = ['sbssInstances', 'sbssinstances', 'sbssServices', 'listsbss', 'sbssservices', 'sbsss']
 export const describe = baseLite.bundle.getText("sbssInstances")
@@ -12,7 +13,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
         type: 'boolean',
         default: true
     }
-}, false)).example('hana-cli sbss --cf', baseLite.bundle.getText("sbssExample"))
+}, false)).wrap(160).example('hana-cli sbss --cf', baseLite.bundle.getText("sbssExample")).wrap(160).epilog(buildDocEpilogue('hanaCloudSBSSInstances', 'hana-cloud', ['hanaCloudInstances']))
 
 export let inputPrompts = {
     cf: {

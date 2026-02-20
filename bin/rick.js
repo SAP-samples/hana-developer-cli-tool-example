@@ -1,10 +1,11 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'rick'
 
 export const describe = baseLite.bundle.getText("rick")
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false, false)).example('hana-cli rick', baseLite.bundle.getText('rickExample'))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false, false)).wrap(160).example('hana-cli rick', baseLite.bundle.getText('rickExample')).wrap(160).epilog(buildDocEpilogue('rick', 'system-tools', ['version', 'healthCheck']))
 export async function handler(argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, getRick, {}, false)

@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import * as dbInspect from '../utils/dbInspect.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'inspectProcedure [schema] [procedure]'
 export const aliases = ['ip', 'procedure', 'insProc', 'inspectprocedure', 'inspectsp']
 export const describe = baseLite.bundle.getText("inspectProcedure")
@@ -25,7 +26,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("outputType")
   }
-})).example('hana-cli inspectProcedure --procedure myProcedure --schema MYSCHEMA', baseLite.bundle.getText("inspectProcedureExample"))
+})).wrap(160).example('hana-cli inspectProcedure --procedure myProcedure --schema MYSCHEMA', baseLite.bundle.getText("inspectProcedureExample")).wrap(160).epilog(buildDocEpilogue('inspectProcedure', 'object-inspection', ['procedures', 'inspectFunction', 'callProcedure']))
 
 /**
  * Command handler function

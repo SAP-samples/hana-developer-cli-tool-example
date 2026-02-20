@@ -3,6 +3,7 @@ import * as baseLite from '../utils/base-lite.js'
 import * as cf from '../utils/cf.js'
 import * as btp from '../utils/btp.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'hcStart [name]'
 export const aliases = ['hcstart', 'hc_start', 'start']
 export const describe = baseLite.bundle.getText("hcStart")
@@ -14,7 +15,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
         default: `**default**`,
         desc: baseLite.bundle.getText("hc_instance_name")
     }
-}, false)).example('hana-cli hcStart --name myInstance', baseLite.bundle.getText('hcStartExample'))
+}, false)).wrap(160).example('hana-cli hcStart --name myInstance', baseLite.bundle.getText('hcStartExample')).wrap(160).epilog(buildDocEpilogue('hanaCloudStart', 'hana-cloud', ['hanaCloudStop', 'hanaCloudInstances']))
 
 /**
  * Command handler function

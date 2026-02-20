@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'kafkaConnect [action]'
 export const aliases = ['kafka', 'kafkaAdapter', 'kafkasub']
 export const describe = baseLite.bundle.getText("kafkaConnect")
@@ -33,7 +34,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("configPath")
   }
-})).example('hana-cli kafkaConnect --action list', baseLite.bundle.getText('kafkaConnectExample'))
+})).wrap(160).example('hana-cli kafkaConnect --action list', baseLite.bundle.getText('kafkaConnectExample')).wrap(160).epilog(buildDocEpilogue('kafkaConnect', 'data-tools', ['dataSync', 'import']))
 
 export let inputPrompts = {
   action: {

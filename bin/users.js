@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'users [user]'
 export const aliases = ['u', 'listUsers', 'listusers']
 export const describe = baseLite.bundle.getText("users")
@@ -18,10 +19,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: 200,
     desc: baseLite.bundle.getText("limit")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli users --user SYSTEM',
   baseLite.bundle.getText("usersExample")
-)
+).epilog(buildDocEpilogue('users', 'security', ['roles', 'inspectUser', 'massUsers']))
 
 /**
  * Command handler function

@@ -2,6 +2,7 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'dataMask'
 export const aliases = ['mask', 'dataprivacy', 'anonymize', 'pii']
 export const describe = baseLite.bundle.getText("dataMask")
@@ -62,7 +63,7 @@ const dataMaskOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(dataMaskOptions)).example('hana-cli dataMask --table CUSTOMERS --maskType hash --columns EMAIL', baseLite.bundle.getText('dataMaskExample'))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(dataMaskOptions)).wrap(160).example('hana-cli dataMask --table CUSTOMERS --maskType hash --columns EMAIL', baseLite.bundle.getText('dataMaskExample')).wrap(160).epilog(buildDocEpilogue('dataMask', 'data-tools', ['dataValidator', 'import']))
 
 export const dataMaskBuilderOptions = baseLite.getBuilder(dataMaskOptions)
 

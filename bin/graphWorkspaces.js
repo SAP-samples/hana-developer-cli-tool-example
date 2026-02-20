@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'graphWorkspaces [schema] [workspace]'
 export const aliases = ['gws', 'graphs', 'graphWorkspace', 'graphws']
 export const describe = baseLite.bundle.getText("graphWorkspaces")
@@ -29,7 +30,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli graphWorkspaces --workspace myWorkspace --schema MYSCHEMA', baseLite.bundle.getText("graphWorkspacesExample"))
+})).wrap(160).example('hana-cli graphWorkspaces --workspace myWorkspace --schema MYSCHEMA', baseLite.bundle.getText("graphWorkspacesExample")).wrap(160).epilog(buildDocEpilogue('graphWorkspaces', 'analysis-tools', ['erdDiagram', 'objects']))
 
 export let inputPrompts = {
   workspace: {

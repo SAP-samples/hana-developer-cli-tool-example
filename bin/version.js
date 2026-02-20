@@ -3,10 +3,11 @@ import * as baseLite from '../utils/base-lite.js'
 import * as cf from '../utils/cf.js'
 import * as btp from '../utils/btp.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'version'
 export const aliases = 'ver'
 export const describe = baseLite.bundle.getText("version")
-export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).example('hana-cli version', baseLite.bundle.getText("version"))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).wrap(160).example('hana-cli version', baseLite.bundle.getText("version")).wrap(160).epilog(buildDocEpilogue('version', 'system-tools', ['systemInfo', 'status']))
 export async function handler(argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, verOutput, {}, false)

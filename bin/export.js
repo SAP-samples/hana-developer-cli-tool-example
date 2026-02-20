@@ -3,6 +3,7 @@ import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 import ExcelJS from 'exceljs'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'export'
 export const aliases = ['exp', 'downloadData', 'downloaddata']
 export const describe = baseLite.bundle.getText("export")
@@ -86,10 +87,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli export --table myTable --format csv',
   baseLite.bundle.getText("exportExample")
-)
+).epilog(buildDocEpilogue('export', 'data-tools', ['import', 'massExport']))
 
 export let inputPrompts = {
   table: {

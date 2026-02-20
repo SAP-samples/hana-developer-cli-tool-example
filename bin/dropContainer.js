@@ -3,6 +3,7 @@ import * as baseLite from '../utils/base-lite.js'
 import * as fs from 'fs'
 import * as path from 'path'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'dropContainer [container] [group]'
 export const aliases = ['dc', 'dropC']
 export const describe = baseLite.bundle.getText("dropContainer")
@@ -19,7 +20,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: '',
     desc: baseLite.bundle.getText("group")
   }
-})).example('hana-cli dropContainer --container myContainer', baseLite.bundle.getText("dropContainerExample"))
+})).wrap(160).example('hana-cli dropContainer --container myContainer', baseLite.bundle.getText("dropContainerExample")).wrap(160).epilog(buildDocEpilogue('dropContainer', 'hdi-management', ['createContainer', 'containers']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

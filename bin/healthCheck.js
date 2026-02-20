@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'healthCheck'
 export const aliases = ['health', 'h']
 export const describe = baseLite.bundle.getText("healthCheck")
@@ -13,7 +14,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     desc: 'Health checks to perform (all, memory, disk, connection, transaction, backup, replication, resources)',
     choices: ['all', 'memory', 'disk', 'connection', 'transaction', 'backup', 'replication', 'resources']
   }
-})).example('hana-cli healthCheck --checks all', baseLite.bundle.getText("healthCheckExample"))
+})).wrap(160).example('hana-cli healthCheck --checks all', baseLite.bundle.getText("healthCheckExample")).wrap(160).epilog(buildDocEpilogue('healthCheck', 'system-admin', ['systemInfo', 'status', 'diagnose']))
 
 export let inputPrompts = {
   checks: {

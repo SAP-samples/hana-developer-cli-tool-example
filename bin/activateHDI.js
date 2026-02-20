@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'activateHDI [tenant]'
 export const aliases = ['ahdi', 'ah']
 export const describe = baseLite.bundle.getText("activateHDI")
@@ -11,7 +12,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("tenant")
   }
-})).example('hana-cli activateHDI --container hdi_container', baseLite.bundle.getText("activateHDIExample"))
+})).wrap(160).example('hana-cli activateHDI --container hdi_container', baseLite.bundle.getText("activateHDIExample")).wrap(160).epilog(buildDocEpilogue('activateHDI', 'hdi-management', ['adminHDI', 'adminHDIGroup', 'cds']))
 
 /**
  * Command handler function

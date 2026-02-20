@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'dropGroup [group]'
 export const aliases = ['dg', 'dropG']
 export const describe = baseLite.bundle.getText("dropGroup")
@@ -11,7 +12,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("group")
   }
-})).example('hana-cli dropGroup --group myGroup', baseLite.bundle.getText("dropGroupExample"))
+})).wrap(160).example('hana-cli dropGroup --group myGroup', baseLite.bundle.getText("dropGroupExample")).wrap(160).epilog(buildDocEpilogue('dropGroup', 'security', ['createGroup', 'users', 'roles']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

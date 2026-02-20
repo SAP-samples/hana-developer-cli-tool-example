@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'crashDumps'
 export const aliases = ['crash', 'cd']
 export const describe = baseLite.bundle.getText("crashDumps")
@@ -24,7 +25,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: 50,
     desc: baseLite.bundle.getText("limit")
   }
-})).example('hana-cli crashDumps --days 7', baseLite.bundle.getText("crashDumpsExample"))
+})).wrap(160).example('hana-cli crashDumps --days 7', baseLite.bundle.getText("crashDumpsExample")).wrap(160).epilog(buildDocEpilogue('crashDumps', 'system-tools', ['diagnose', 'healthCheck']))
 
 export let inputPrompts = {
   days: {

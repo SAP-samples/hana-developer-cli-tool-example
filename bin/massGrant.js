@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'massGrant [schema] [object]'
 export const aliases = ['mg', 'massgrant', 'massGrn', 'massgrn']
 export const describe = baseLite.bundle.getText("massGrant")
@@ -47,7 +48,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'boolean',
     desc: baseLite.bundle.getText("mass.log")
   }
-})).example('hana-cli massGrant --schema MYSCHEMA --object % --grantee DBUSER --privilege SELECT', baseLite.bundle.getText('massGrantExample'))
+})).wrap(160).example('hana-cli massGrant --schema MYSCHEMA --object % --grantee DBUSER --privilege SELECT', baseLite.bundle.getText('massGrantExample')).wrap(160).epilog(buildDocEpilogue('massGrant', 'mass-operations', ['massUsers', 'users', 'roles']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

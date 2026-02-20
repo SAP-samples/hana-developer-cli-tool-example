@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'spatialData [schema] [table]'
 export const aliases = ['spatial', 'geoData', 'geographic', 'geo']
 export const describe = baseLite.bundle.getText("spatialData")
@@ -40,7 +41,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli spatialData --schema MYSCHEMA --table % --bounds', baseLite.bundle.getText('spatialDataExample'))
+})).wrap(160).example('hana-cli spatialData --schema MYSCHEMA --table % --bounds', baseLite.bundle.getText('spatialDataExample')).wrap(160).epilog(buildDocEpilogue('spatialData', 'system-tools', ['tables', 'dataProfile']))
 
 export let inputPrompts = {
   table: {

@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'schemas [schema]'
 export const aliases = ['sch', 'getSchemas', 'listSchemas', 's']
 export const describe = baseLite.bundle.getText("schemas")
@@ -24,10 +25,10 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("allSchemas")
   }
-})).example(
+})).wrap(160).example(
   'hana-cli schemas --schema MYSCHEMA',
   baseLite.bundle.getText("schemasExample")
-)
+).epilog(buildDocEpilogue('schemas', 'schema-tools', ['objects', 'schemaClone', 'tables']))
 
 export let inputPrompts = {
   schema: {

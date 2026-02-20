@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'triggers [schema] [trigger] [target]'
 export const aliases = ['trig', 'listTriggers', 'ListTrigs', 'listtrigs', 'Listtrig', "listrig"]
 export const describe = baseLite.bundle.getText("triggers")
@@ -35,7 +36,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})).example('hana-cli triggers --schema MYSCHEMA --trigger %', baseLite.bundle.getText('triggersExample'))
+})).wrap(160).example('hana-cli triggers --schema MYSCHEMA --trigger %', baseLite.bundle.getText('triggersExample')).wrap(160).epilog(buildDocEpilogue('triggers', 'schema-tools', ['inspectTrigger', 'procedures', 'tables']))
 
 /**
  * Command handler function

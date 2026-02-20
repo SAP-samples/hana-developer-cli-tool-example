@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'privilegeAnalysis'
 export const aliases = ['privanalysis', 'privanalyze']
 export const describe = baseLite.bundle.getText("privilegeAnalysis")
@@ -30,7 +31,7 @@ const privilegeAnalysisOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(privilegeAnalysisOptions)).example('hana-cli privilegeAnalysis --user TESTUSER --suggest', baseLite.bundle.getText("privilegeAnalysisExample"))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(privilegeAnalysisOptions)).wrap(160).example('hana-cli privilegeAnalysis --user TESTUSER --suggest', baseLite.bundle.getText("privilegeAnalysisExample")).wrap(160).epilog(buildDocEpilogue('privilegeAnalysis', 'analysis-tools', ['roles', 'users', 'grantChains']))
 
 export const privilegeAnalysisBuilderOptions = baseLite.getBuilder(privilegeAnalysisOptions)
 

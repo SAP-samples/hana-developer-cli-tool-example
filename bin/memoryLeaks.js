@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'memoryLeaks'
 export const aliases = ['memleak', 'ml']
 export const describe = baseLite.bundle.getText("memoryLeaks")
@@ -24,7 +25,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: 50,
     desc: baseLite.bundle.getText("limit")
   }
-})).example('hana-cli memoryLeaks --threshold 25 --limit 100', baseLite.bundle.getText('memoryLeaksExample'))
+})).wrap(160).example('hana-cli memoryLeaks --threshold 25 --limit 100', baseLite.bundle.getText('memoryLeaksExample')).wrap(160).epilog(buildDocEpilogue('memoryLeaks', 'performance-monitoring', ['memoryAnalysis', 'healthCheck']))
 
 export let inputPrompts = {
   component: {

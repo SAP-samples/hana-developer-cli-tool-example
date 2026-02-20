@@ -4,6 +4,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { homedir } from 'os'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'backup [target] [name]'
 export const aliases = ['bkp', 'createBackup']
 export const describe = baseLite.bundle.getText("backup")
@@ -62,7 +63,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("backupOverwrite")
   }
-})).example('hana-cli backup --backupPath /backups', baseLite.bundle.getText("backupExample"))
+})).wrap(160).example('hana-cli backup --backupPath /backups', baseLite.bundle.getText("backupExample")).wrap(160).epilog(buildDocEpilogue('backup', 'backup-recovery', ['backupStatus', 'backupList', 'restore']))
 
 export let inputPrompts = {
   target: {

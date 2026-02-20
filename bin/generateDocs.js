@@ -2,8 +2,9 @@
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'generateDocs'
-export const aliases = ['docs', 'gendocs', 'generateDocumentation']
+export const aliases = ['gendocs', 'generateDocumentation']
 export const describe = baseLite.bundle.getText("generateDocs")
 
 const generateDocsOptions = {
@@ -68,7 +69,7 @@ const generateDocsOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(generateDocsOptions)).example('hana-cli generateDocs --schema MYSCHEMA --format markdown --output docs/', baseLite.bundle.getText('generateDocsExample'))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(generateDocsOptions)).wrap(160).example('hana-cli generateDocs --schema MYSCHEMA --format markdown --output docs/', baseLite.bundle.getText('generateDocsExample')).wrap(160).epilog(buildDocEpilogue('generateDocs', 'developer-tools', ['helpDocu', 'readMe']))
 
 export const generateDocsBuilderOptions = baseLite.getBuilder(generateDocsOptions)
 
