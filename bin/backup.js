@@ -383,12 +383,15 @@ async function backupDatabase(db, backupPath, options) {
  * @param {boolean} compress - Whether to compress the output
  */
 async function writeCSVBackup(backupPath, backupData, compress) {
-  const json2csv = /** @type {any} */ (await import('@json2csv/node'))
-  const { Parser } = json2csv
+  const { AsyncParser } = await import('@json2csv/node')
+  
+  const opts = {}
+  const transformOpts = {}
+  const asyncOpts = {}
   
   // Create CSV from data
-  const parser = new Parser()
-  const csv = parser.parse(backupData.data)
+  const parser = new AsyncParser(opts, transformOpts, asyncOpts)
+  const csv = await parser.parse(backupData.data).promise()
   
   // Write metadata as separate JSON file
   fs.writeFileSync(`${backupPath}.meta.json`, JSON.stringify(backupData.metadata, null, 2))

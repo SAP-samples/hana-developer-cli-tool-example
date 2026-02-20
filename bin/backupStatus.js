@@ -34,7 +34,6 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     desc: baseLite.bundle.getText("backupStatusState")
   },
   days: {
-    alias: ['d'],
     type: 'number',
     default: 7,
     desc: baseLite.bundle.getText("backupStatusDays")
