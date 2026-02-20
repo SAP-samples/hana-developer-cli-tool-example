@@ -140,7 +140,7 @@ For Linux and macOS users, this repository includes a convenient installation sc
 
 The script performs the following actions:
 
-1. Downloads the latest BTP CLI installer from the official SAP samples repository
+1. Downloads the latest BTP CLI installer from the SAP Development Tools download page
 2. Makes the installer executable and runs it with automatic confirmation
 3. Configures shell aliases for easier BTP CLI usage
 4. Adds the BTP CLI binary location to your PATH
@@ -154,7 +154,7 @@ chmod +x install-btp.sh
 
 After running the script, you may need to restart your terminal or run `source ~/.bashrc` to apply the PATH changes.
 
-**Note:** Windows users should refer to the [official BTP CLI installation documentation](https://help.sap.com/docs/btp/sap-business-technology-platform/download-and-start-using-btp-cli-client) for platform-specific installation instructions.
+**Note:** Windows users should download the BTP CLI from the [SAP Development Tools page](https://tools.hana.ondemand.com/#cloud-btpcli) and follow the platform-specific instructions there.
 
 ### Verifying the Installation
 

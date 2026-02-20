@@ -58,7 +58,7 @@ npm run build
 
 Query database metadata:
 
-```
+```bash
 Tool: inspect_tables
 Parameters: schema, pattern
 Returns: list of tables matching pattern
@@ -68,7 +68,7 @@ Returns: list of tables matching pattern
 
 Execute data commands:
 
-```
+```bash
 Tool: run_command
 Parameters: command, args
 Returns: command output
@@ -78,7 +78,7 @@ Returns: command output
 
 Get help crafting queries:
 
-```
+```bash
 Tool: suggest_query
 Parameters: intent, schema, tables
 Returns: suggested SQL or command
@@ -93,6 +93,7 @@ Ask Claude:
 > "Generate an import command script for CSV files in the data/ folder into my HR schema"
 
 Claude will:
+
 1. Use MCP to inspect available table structures
 2. Generate appropriate import commands
 3. Recommend column mapping
@@ -102,6 +103,7 @@ Claude will:
 > "Analyze data quality in my SALES schema"
 
 Claude will:
+
 1. Use inspection tools to understand structure
 2. Run data profile and validation
 3. Generate analysis report
@@ -111,6 +113,7 @@ Claude will:
 > "What are the differences between my DEV and PROD schemas?"
 
 Claude will:
+
 1. Inspect both schemas
 2. Run compareSchema command
 3. Provide detailed comparison

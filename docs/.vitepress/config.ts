@@ -341,6 +341,7 @@ export default withMermaid(
           text: 'MCP Server & AI',
           items: [
             { text: 'MCP Overview', link: '/03-features/mcp/' },
+            { text: 'MCP Integration', link: '/03-features/mcp-integration' },
             { text: 'Architecture', link: '/03-features/mcp/architecture' },
             { text: 'Server Usage', link: '/03-features/mcp/server-usage' },
             { text: 'Connection Guide', link: '/03-features/mcp/connection-guide' },

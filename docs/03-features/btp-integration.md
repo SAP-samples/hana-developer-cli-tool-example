@@ -8,7 +8,7 @@ HANA CLI includes commands to manage SAP HANA on SAP BTP and SAP Business Techno
 
 ## BTP CLI Requirement
 
-All BTP-related functionality requires the [SAP BTP Command Line Interface](https://help.sap.com/docs/btp/sap-business-technology-platform/btp-cli-command-reference) to be installed.
+All BTP-related functionality requires the [SAP BTP Command Line Interface](https://help.sap.com/docs/btp/btp-cli-command-reference/btp-cli-command-reference?locale=en-US&version=LATEST) to be installed.
 
 ### Installation
 
@@ -19,105 +19,110 @@ All BTP-related functionality requires the [SAP BTP Command Line Interface](http
 ./install-btp.sh
 
 # Or manual
-curl -sL https://github.com/SAP-samples/btp-cli-Linux/releases/latest/download/btp -o ~/btp
-chmod +x ~/btp
-sudo mv ~/btp /usr/local/bin/
+# Download the btp CLI from https://tools.hana.ondemand.com/#cloud-btpcli
+# Extract the archive and move the btp binary into your PATH
+chmod +x ./btp
+sudo mv ./btp /usr/local/bin/
 btp --version
 ```
 
 **Windows:**
 
-Download from [GitHub](https://github.com/SAP-samples/btp-cli-install) and run installer.
+Download from [SAP Development Tools](https://tools.hana.ondemand.com/#cloud-btpcli) and run the installer.
 
 ## BTP Commands
 
-### Global Account Management
+### BTP Account Management
 
 ```bash
-# List global accounts
-hana-cli globalAccounts
+# Set BTP target (directory and subaccount) interactively
+hana-cli btp
 
-# List directories in account
-hana-cli directories
+# Set BTP target with specific subaccount
+hana-cli btp --subaccount mySubaccount
 
-# List subaccounts
-hana-cli subaccounts
+# Display BTP configuration (global account, directory, subaccount)
+hana-cli btpInfo
+
+# Display BTP configuration as JSON
+hana-cli btpInfo --output json
+
+# List BTP subscriptions
+hana-cli sub
 ```
 
-### HANA Service Management
+### HANA Cloud Instance Management
 
 ```bash
-# List HANA service instances
-hana-cli hanaServiceInstances
+# List HANA Cloud instances
+hana-cli hc
 
 # Get specific instance details
-hana-cli hanaServiceInstances -i INSTANCE_ID
+hana-cli hc --name my-hana
 
-# Create new HANA instance
-hana-cli createHANAService --name my-hana --plan standard
+# Start a HANA Cloud instance
+hana-cli hcStart --name my-hana
 
-# Delete HANA instance
-hana-cli deleteHANAService --name my-hana
-```
+# Stop a HANA Cloud instance
+hana-cli hcStop --name my-hana
 
-### Entitlements & Quotas
-
-```bash
-# Check entitlements
-hana-cli entitlements
-
-# Request entitlements
-hana-cli requestEntitlement --service hana --plan standard --quantity 1
-
-# Assign entitlements
-hana-cli assignEntitlement --subaccount SUB_ID --plan standard
+# List HDI service instances
+hana-cli hdi
 ```
 
 ## Integration Workflows
 
-### Connect to BTP HANA Service
+### Connect to BTP HANA Cloud Service
 
-1. **List available services:**
+1. **Set BTP target:**
+
    ```bash
-   hana-cli hanaServiceInstances
+   hana-cli btp
    ```
 
-2. **Get connection details:**
+2. **List available HANA Cloud instances:**
+
    ```bash
-   hana-cli getServiceBinding --service-instance MY_HANA
+   hana-cli hc
    ```
 
-3. **Save credentials locally:**
+3. **Connect to instance:**
+
    ```bash
    hana-cli connect -d <host> -u <user> -p <password> -s
    ```
 
 4. **Use HANA CLI normally:**
+
    ```bash
    hana-cli tables
    ```
 
-### Deploy with HANA on BTP
+### Manage HANA Cloud Instances
 
-1. **Create new HANA service:**
+1. **List your HANA Cloud instances:**
+
    ```bash
-   hana-cli createHANAService --name prod-db --plan standard
+   hana-cli hc
    ```
 
-2. **Wait for provisioning:**
+2. **Start an instance:**
+
    ```bash
-   hana-cli hanaServiceInstances -i prod-db
+   hana-cli hcStart --name my-hana
    ```
 
-3. **Get connection info:**
+3. **Stop an instance:**
+
    ```bash
-   hana-cli getServiceBinding --service-instance prod-db
+   hana-cli hcStop --name my-hana
    ```
 
-4. **Use in application:**
-   - Connection string stored in `VCAP_SERVICES`
-   - HANA CLI auto-detects for local development
-   - App uses same `default-env.json`
+4. **Check instance status:**
+
+   ```bash
+   hana-cli hc --name my-hana
+   ```
 
 ## See Also
 
