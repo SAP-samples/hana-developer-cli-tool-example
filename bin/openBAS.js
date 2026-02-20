@@ -4,7 +4,7 @@ import * as btp from '../utils/btp.js'
 
 import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'openbas'
-export const aliases = ['openBAS', 'openBas', 'openBusinessApplicationStudio', 'bas', 'BAS']
+export const aliases = ['openBuild', 'build', 'openbuild', 'openBAS', 'openBas', 'openBusinessApplicationStudio', 'bas', 'BAS']
 export const describe = baseLite.bundle.getText("openbas")
 export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).wrap(160).example('hana-cli openBAS', baseLite.bundle.getText('openBASExample')).wrap(160).epilog(buildDocEpilogue('openBAS', 'developer-tools', ['cds', 'activateHDI']))
 export async function handler (argv) {

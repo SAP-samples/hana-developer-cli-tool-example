@@ -20,7 +20,40 @@ hana-cli btp [directory] [subaccount] [options]
 - `btptarget`
 - `btp`
 
+
+## Command Diagram
+
+```mermaid
+graph TD
+    A["hana-cli btp"] --> B["Arguments"]
+    A --> C["Troubleshooting Options"]
+    A --> D["Main Options"]
+    
+    B --> B1["[directory]<br/>Optional"]
+    B --> B2["[subaccount]<br/>Optional"]
+    
+    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output"]
+    C --> C2["-d, --debug<br/>Debug mode"]
+    
+    D --> D1["--subaccount, --sa<br/>Subaccount ID"]
+    D --> D2["-h, --help<br/>Show help"]
+```
+
 ## Parameters
+
+### Troubleshooting Options
+
+| Parameter | Aliases | Description | Type | Default |
+| --- | --- | --- | --- | --- |
+| `--disableVerbose` | `--quiet` | Disable verbose output - removes all extra output that is only helpful for human-readable interface. Useful for scripting commands. | boolean | `false` |
+| `--debug` | `-d` | Debug hana-cli itself by adding output of many intermediate details | boolean | `false` |
+
+### Main Options
+
+| Parameter | Aliases | Description | Type | Default |
+| --- | --- | --- | --- | --- |
+| `--subaccount` | `--sa` | The ID of the subaccount to be targeted | string | |
+| `--help` | `-h` | Show help | boolean | |
 
 For a complete list of parameters and options, use:
 

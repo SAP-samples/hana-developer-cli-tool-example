@@ -18,7 +18,35 @@ hana-cli btpInfo [options]
 
 - `btpinfo`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    A["hana-cli btpInfo"] --> B["Troubleshooting Options"]
+    A --> C["Main Options"]
+    
+    B --> B1["--disableVerbose, --quiet<br/>Disable verbose output"]
+    B --> B2["-d, --debug<br/>Debug mode"]
+    
+    C --> C1["-h, --help<br/>Show help"]
+    C --> C2["-o, --output<br/>Output format: tbl/json"]
+```
+
 ## Parameters
+
+### Troubleshooting Options
+
+| Parameter | Aliases | Description | Type | Default |
+| --- | --- | --- | --- | --- |
+| `--disableVerbose` | `--quiet` | Disable verbose output - removes all extra output that is only helpful for human-readable interface. Useful for scripting commands. | boolean | `false` |
+| `--debug` | `-d` | Debug hana-cli itself by adding output of many intermediate details | boolean | `false` |
+
+### Main Options
+
+| Parameter | Aliases | Description | Type | Default |
+| --- | --- | --- | --- | --- |
+| `--output` | `-o` | Output format for inspection. Available formats: `tbl` (table), `json` | string | `tbl` |
+| `--help` | `-h` | Show help | boolean | |
 
 For a complete list of parameters and options, use:
 
