@@ -5,7 +5,7 @@ Explore the advanced features and capabilities of HANA CLI.
 ## 🌐 Core Features
 
 - **[Command Line Interface](./cli-features.md)** - Complete CLI capabilities and options
-- **[REST API Server](./api-server.md)** - Run as HTTP server for programmatic access
+- **[REST API Server](./api-server.md)** - Run as HTTP server for programmatic access - powers the Web UI and external integrations
 - **[Model Context Protocol (MCP)](./mcp-integration.md)** - Integration with AI coding assistants
 - **[Output Formats](./output-formats.md)** - JSON, CSV, Table, and more
 

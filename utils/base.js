@@ -51,7 +51,30 @@ import open from 'open'
 /** @type {typeof import("debug") } */
 // @ts-ignore
 import debugModule from 'debug'
-export const debug = new debugModule('hana-cli')
+
+// Create a lazy-loaded debug instance that can be refreshed at runtime
+let _debugInstance = null
+let _debugEnabled = false
+export const debug = (...args) => {
+    // Check if DEBUG was just enabled (e.g., by --debug flag at runtime)
+    if (process.env.DEBUG && !_debugEnabled) {
+        _debugInstance = null
+        _debugEnabled = true
+    }
+    
+    if (!_debugInstance) {
+        if (process.env.DEBUG) {
+            _debugInstance = debugModule('hana-cli')
+            _debugEnabled = true
+        } else {
+            // No-op function when debug is disabled
+            _debugInstance = () => {}
+            _debugEnabled = false
+        }
+    }
+    return _debugInstance(...args)
+}
+
 // @ts-ignore
 import setDebug from 'debug'
 
@@ -1193,6 +1216,11 @@ export function verboseOutput(prompts) {
 export function isDebug(prompts) {
     if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'debug') && prompts.debug) {
         inDebug = true
+        // Enable debug module output when debug flag is set
+        process.env.DEBUG = 'hana-cli*'
+        // Re-enable the debug module with the new setting
+        const debugModule = require('debug')
+        debugModule.enable('hana-cli*')
         return true
     }
     else {

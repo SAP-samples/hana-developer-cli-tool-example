@@ -19,23 +19,23 @@ These options work with all commands:
 | `--debug` | boolean | Debug information |
 | `--output` | string | Output format |
 | `--profile` | string | CDS profile |
-| `--admin` | boolean | Admin credentials |
+| `--admin` | boolean | Use Admin credentials to override default credentials |
 
 ## Output Formats
 
-Most commands support multiple output formats:
+Many commands support multiple output formats:
 
 ```bash
 # Table format (default)
 hana-cli dataProfile -s SCHEMA -t TABLE
 
-# JSON format
-hana-cli dataProfile -s SCHEMA -t TABLE --output json
+# JSON format to console
+hana-cli dataProfile -s SCHEMA -t TABLE --format json
 
-# CSV format
-hana-cli dataProfile -s SCHEMA -t TABLE --output csv
+# CSV format to console
+hana-cli dataProfile -s SCHEMA -t TABLE --format csv
 
-# Export to file
+# Export to file (uses --format for format, defaults to json)
 hana-cli dataProfile -s SCHEMA -t TABLE -o report.json
 ```
 

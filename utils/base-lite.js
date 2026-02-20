@@ -59,15 +59,24 @@ export function getConfigValue(key, defaultValue = undefined) {
 /** @type {typeof import("debug") } */
 // Lazy-load debug module only if DEBUG env var is set (saves ~8ms on startup)
 let _debug = null
+let _debugEnabled = false
 export const debug = (...args) => {
+    // Check if DEBUG was just enabled (e.g., by --debug flag at runtime)
+    if (process.env.DEBUG && !_debugEnabled) {
+        _debug = null
+        _debugEnabled = true
+    }
+    
     if (!_debug) {
         // Only load debug module if DEBUG is enabled
         if (process.env.DEBUG) {
             const debugModule = require('debug')
             _debug = debugModule('hana-cli')
+            _debugEnabled = true
         } else {
             // No-op function when debug is disabled
             _debug = () => {}
+            _debugEnabled = false
         }
     }
     return _debug(...args)

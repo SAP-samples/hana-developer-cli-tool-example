@@ -151,6 +151,30 @@ export let inputPrompts = {
     type: 'string',
     required: false,
     ask: () => { }
+  },
+  debug: {
+    description: baseLite.bundle.getText("debug"),
+    type: 'boolean',
+    required: false,
+    ask: () => false
+  },
+  disableVerbose: {
+    description: baseLite.bundle.getText("disableVerbose"),
+    type: 'boolean',
+    required: false,
+    ask: () => false
+  },
+  admin: {
+    description: baseLite.bundle.getText("admin"),
+    type: 'boolean',
+    required: false,
+    ask: () => false
+  },
+  conn: {
+    description: baseLite.bundle.getText("connFile"),
+    type: 'string',
+    required: false,
+    ask: () => false
   }
 }
 
@@ -171,13 +195,13 @@ export async function handler(argv) {
  */
 export async function dataProfileMain(prompts) {
   const base = await import('../utils/base.js')
-  base.debug('dataProfileMain')
 
   let dbClient = null
   let timeoutHandle = null
 
   try {
     base.setPrompts(prompts)
+    base.debug('dataProfileMain')
 
     // Set operation timeout
     timeoutHandle = prompts.timeout > 0
@@ -227,9 +251,16 @@ export async function dataProfileMain(prompts) {
     )
 
     // Output results
-    if (prompts.output) {
+    // Check if output value is actually a format type (json, csv, summary)
+    const formatTypes = ['json', 'csv', 'summary']
+    if (prompts.output && formatTypes.includes(prompts.output.toLowerCase())) {
+      // User specified format using --output instead of --format
+      displayProfile(profile, prompts.output.toLowerCase())
+    } else if (prompts.output) {
+      // User specified a file path for output
       await outputProfile(prompts.output, profile, prompts.format)
     } else {
+      // No file specified, display to console with specified format
       displayProfile(profile, prompts.format)
     }
 
