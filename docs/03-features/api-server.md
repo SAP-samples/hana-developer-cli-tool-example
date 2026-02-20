@@ -5,154 +5,97 @@ Run HANA CLI as an HTTP server for programmatic access.
 ## Starting the Server
 
 ```bash
-# Start on default port 3000
+# Start on default port 3010
 hana-cli server
 
 # Start on custom port
 hana-cli server --port 8080
 
-# With authentication
-hana-cli server --auth basic
+# Start on specific host
+hana-cli server --host 0.0.0.0 --port 8080
 ```
 
 ## Configuration
-
-### Environment Variables
-
-```bash
-# Server configuration
-HANA_API_PORT=3000
-HANA_API_HOST=localhost
-HANA_API_AUTH=basic
-HANA_API_TIMEOUT=30000
-```
 
 ### Server Options
 
 | Option | Type | Description |
 | ------ | ---- | ----------- |
-| `--port` | number | Server port (default: 3000) |
+| `--port, -p` | number | Server port (default: 3010) |
 | `--host` | string | Server host (default: localhost) |
-| `--auth` | string | Authentication type: `none`, `basic`, `bearer` |
-| `--timeout` | number | Request timeout in ms |
 
 ## Accessing the API
 
 ### Swagger UI
 
-```
-http://localhost:3000/api-docs
+```bash
+http://localhost:3010/api-docs
 ```
 
 ### Base URL
 
-```
-http://localhost:3000/api/v1
+All routes are served from the root path:
+
+```bash
+http://localhost:3010/
 ```
 
 ### Example Requests
 
-#### Get Database Info
+#### Get Current Configuration
 
 ```bash
-curl http://localhost:3000/api/v1/dbInfo
+curl http://localhost:3010/
 ```
 
 **Response:**
+
 ```json
 {
-  "database": "HDB",
-  "version": "2.00.050",
-  "platform": "SAP HANA"
+  "schema": "**CURRENT_SCHEMA**",
+  "table": "*",
+  "port": 3010
 }
 ```
 
-#### List Tables
+#### Update Configuration
 
 ```bash
-curl 'http://localhost:3000/api/v1/tables?schema=MYSCHEMA'
-```
-
-#### Run Export
-
-```bash
-curl -X POST http://localhost:3000/api/v1/export \
+curl -X PUT http://localhost:3010/ \
   -H "Content-Type: application/json" \
   -d '{
-    "schema": "HR",
-    "table": "EMPLOYEES",
-    "format": "json"
+    "schema": "MYSCHEMA",
+    "table": "EMPLOYEES"
   }'
 ```
 
-## Authentication
+#### Access Web UI
 
-### Basic Auth
-
-```bash
-# Start server with basic auth
-hana-cli server --auth basic
-
-# Call with credentials
-curl -u username:password http://localhost:3000/api/v1/dbInfo
-```
-
-### Bearer Token
+The server also provides a browser-based UI:
 
 ```bash
-# Start server
-hana-cli server --auth bearer
-
-# Call with token
-curl -H "Authorization: Bearer YOUR_TOKEN" \
-  http://localhost:3000/api/v1/dbInfo
-```
-
-## CORS & Headers
-
-The API accepts these headers:
-
-```
-Content-Type: application/json
-Accept: application/json
-Authorization: Bearer <token>
-X-Request-ID: <uuid>
-```
-
-## Rate Limiting
-
-Default limits per IP:
-
-- 100 requests per minute
-- 1000 requests per hour
-
-Configure via environment:
-
-```bash
-export HANA_API_RATE_LIMIT=200
-export HANA_API_RATE_WINDOW=60
+http://localhost:3010/ui/
 ```
 
 ## Error Handling
 
-API returns standard HTTP status codes:
+The server returns standard HTTP status codes:
+
+- `200` - Success
+- `404` - Route not found
+- `500` - Internal server error
+
+Error responses include a JSON body:
 
 ```json
 {
-  "error": "Table not found",
-  "code": "TABLE_NOT_FOUND",
-  "details": "Schema 'INVALID' not found"
+  "error": {
+    "message": "Route not found",
+    "status": 404,
+    "path": "/invalid-path"
+  }
 }
 ```
-
-Status codes:
-
-- `200` - Success
-- `400` - Bad request
-- `401` - Unauthorized
-- `403` - Forbidden
-- `404` - Not found
-- `500` - Server error
 
 ## See Also
 

@@ -1391,6 +1391,7 @@ export async function webServerSetup(urlPath) {
     debug(bundle.getText("debug.serverSetup"))
     // @ts-ignore
     const port = process.env.PORT || prompts.port || 3010
+    const host = process.env.HOST || prompts.host || 'localhost'
 
     if (!(/^[1-9]\d*$/.test(port) && 1 <= 1 * port && 1 * port <= 65535)) {
         return error(`${port} ${bundle.getText("errPort")}`)
@@ -1422,9 +1423,9 @@ export async function webServerSetup(urlPath) {
 
     // Start the Server
     server.on("request", app)
-    server.listen(port, async function () {
+    server.listen(port, host, async function () {
         // @ts-ignore
-        let serverAddr = `http://localhost:${server.address().port}${urlPath}`
+        let serverAddr = `http://${host}:${server.address().port}${urlPath}`
         debug(serverAddr)
         console.info(bundle.getText("server.httpServer", [serverAddr]))
         startSpinnerInt()

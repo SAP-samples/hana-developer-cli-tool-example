@@ -23,12 +23,12 @@ HANA CLI can run as an HTTP server, exposing all commands through REST endpoints
 hana-cli server
 ```
 
-The server runs on `http://localhost:3000` by default.
+The server runs on `http://localhost:3010` by default.
 
 Access Swagger UI:
 
-```
-http://localhost:3000/api-docs
+```text
+http://localhost:3010/api-docs
 ```
 
 ## Quick Example
@@ -37,33 +37,31 @@ http://localhost:3000/api-docs
 # Start the server
 hana-cli server
 
-# In another terminal, call an API endpoint
-curl http://localhost:3000/api/alerts
+# In another terminal, get current configuration
+curl http://localhost:3010/
 
-# Or with data
-curl -X POST http://localhost:3000/api/import \
+# Update configuration
+curl -X PUT http://localhost:3010/ \
   -H "Content-Type: application/json" \
   -d '{
     "schema": "MYSCHEMA",
-    "table": "EMPLOYEES",
-    "file": "data.csv"
+    "table": "EMPLOYEES"
   }'
 ```
 
-## Authentication
+## Configuration Options
 
-API endpoints support:
-- Basic Authentication
-- API Key authentication
-- Custom headers
+Customize the server with command-line options:
 
-See [Swagger documentation](./swagger.md) for details.
+```bash
+# Custom port
+hana-cli server --port 8080
 
-## Rate Limiting
+# Custom host
+hana-cli server --host 0.0.0.0 --port 8080
+```
 
-Default rate limits:
-- 100 requests per minute per IP
-- Configurable via environment variables
+See [Swagger documentation](./swagger.md) for API details.
 
 ## Next Steps
 
