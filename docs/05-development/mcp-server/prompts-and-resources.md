@@ -9,7 +9,7 @@ Resources are named, readable content that AI agents can discover and browse dir
 ### Key Differences from Tools
 
 | Feature | Tools | Resources |
-|---------|-------|-----------|
+| --------- | ------- | ----------- |
 | **Purpose** | Execute commands | Read documentation |
 | **Input** | Required parameters | Resource URI |
 | **Output** | Command results | Document content |
@@ -20,7 +20,7 @@ Resources are named, readable content that AI agents can discover and browse dir
 
 Instead of searching or guessing:
 
-```
+```bash
 Agent: "I want to import data but I'm not sure how"
 
 Traditional (without resources):
@@ -39,16 +39,19 @@ With Resources:
 
 ### Core Documentation Resources
 
-**Project Overview**
+#### Project Overview
+
 - `hana://docs/overview` - Project introduction and features
 - `hana://docs/getting-started` - Installation and setup guide
 
-**Connection and Setup**
+#### Connection and Setup
+
 - `hana://docs/connection-guide` - 7-step connection resolution
 - `hana://docs/security` - Security best practices
 - `hana://docs/parameters` - Standard parameter conventions
 
-**Architecture and Design**
+#### Architecture and Design
+
 - `hana://docs/best-practices` - Naming conventions and patterns
 - `hana://docs/project-structure` - Project folder organization
 - `hana://docs/implementation` - Technical implementation details
@@ -77,6 +80,7 @@ Individual command guides (available for all 150+ commands):
 - `hana://docs/commands/[any-command]` - Any command documentation
 
 **Each command resource includes:**
+
 - Detailed description
 - All parameters explained
 - Use cases and examples
@@ -107,6 +111,7 @@ Prompts are guided conversation templates that help AI agents follow structured 
 ### How Prompts Work
 
 Prompts provide:
+
 1. **Multi-step guidance** - Step-by-step instructions
 2. **Context preservation** - Information carries through steps
 3. **Best practices** - Baked-in standards
@@ -121,7 +126,7 @@ Prompts provide:
 
 **Prompt Steps:**
 
-```
+```bash
 📋 SAFE DATA IMPORT WORKFLOW
 
 Step 1: Verify Source File
@@ -157,9 +162,11 @@ Step 6: Validate Results
 **Duration:** 15-30 minutes
 
 **Parameters:**
+
 - `schema` (optional) - Specific schema to explore
 
 **Guided Steps:**
+
 1. Verify database connection
 2. Check database version and system info
 3. List all schemas
@@ -170,6 +177,7 @@ Step 6: Validate Results
 6. Summarize findings
 
 **Outcomes:**
+
 - Understanding of database structure
 - Schema catalog
 - Sample table definitions
@@ -180,11 +188,13 @@ Step 6: Validate Results
 **Duration:** 20-40 minutes
 
 **Parameters:**
+
 - `filename` (required) - File to import
 - `table` (optional) - Target table
 - `schema` (optional) - Target schema
 
 **Guided Steps:**
+
 1. Verify file exists and is readable
 2. Inspect target table structure
 3. Preview import with dry-run
@@ -194,6 +204,7 @@ Step 6: Validate Results
 7. Generate import report
 
 **Outcomes:**
+
 - Successful safe import
 - Error documentation
 - Validation report
@@ -205,6 +216,7 @@ Step 6: Validate Results
 **Parameters:** None required
 
 **Guided Steps:**
+
 1. Check basic connectivity
 2. Verify credentials
 3. Test database connection
@@ -214,6 +226,7 @@ Step 6: Validate Results
 7. Provide remediation steps
 
 **Outcomes:**
+
 - Diagnosed connection issue
 - Recommended solutions
 - Verified working connection
@@ -223,10 +236,12 @@ Step 6: Validate Results
 **Duration:** 30-60 minutes
 
 **Parameters:**
+
 - `table` (required) - Table to validate
 - `schema` (optional) - Target schema
 
 **Guided Steps:**
+
 1. Profile the table (data distribution, nulls, etc.)
 2. Check for duplicate records
 3. Run data validator
@@ -235,6 +250,7 @@ Step 6: Validate Results
 6. Generate quality report
 
 **Outcomes:**
+
 - Data quality assessment
 - Issue prioritization
 - Remediation recommendations
@@ -248,6 +264,7 @@ Step 6: Validate Results
 **Perfect for:** First-time users
 
 **Teaches:**
+
 1. `hana_status` - Verify connection
 2. `hana_version` - Check database version
 3. `hana_schemas` - List schemas
@@ -256,6 +273,7 @@ Step 6: Validate Results
 6. `hana_healthCheck` - System health
 
 **Outcomes:**
+
 - Understanding of basic commands
 - Confidence in CLI usage
 - Ready for advanced workflows
@@ -265,11 +283,13 @@ Step 6: Validate Results
 **Duration:** 20-40 minutes
 
 **Parameters:**
+
 - `table` (required) - Table to export
 - `schema` (optional) - Source schema
 - `format` (optional) - CSV, Excel, or TSV
 
 **Guided Steps:**
+
 1. Verify source table exists
 2. Check user has SELECT privilege
 3. Configure export format
@@ -279,6 +299,7 @@ Step 6: Validate Results
 7. Validate data integrity
 
 **Outcomes:**
+
 - Successfully exported file
 - Export validation report
 - Format verification
@@ -287,7 +308,7 @@ Step 6: Validate Results
 
 ### Resource Discovery Workflow
 
-```
+```bash
 1. Agent: "I need help with..."
    
 2. System: Lists available resources
@@ -311,7 +332,7 @@ Step 6: Validate Results
 
 ### Prompt-Guided Workflow
 
-```
+```bash
 1. User: "Help me explore the database"
    
 2. Agent: Invokes explore-database prompt
@@ -338,7 +359,7 @@ Step 6: Validate Results
 
 ### Example: Learn Import by Resources, Execute by Prompt
 
-```
+```bash
 Step 1: Resources (Learning)
 - Agent reads hana://docs/commands/import
 - Agent reviews hana://examples/import
@@ -357,7 +378,7 @@ Step 3: Resources (Validation)
 
 ### Example: Performance Tuning
 
-```
+```bash
 Step 1: Understand
 - Agent reads hana://docs/categories/performance
 - Agent reviews hana://workflows/performance-baseline
@@ -384,19 +405,22 @@ Step 4: Implement & Verify
 ### For Agent Developers
 
 1. **Start with Resource Discovery**
+
    ```typescript
    resources = await listResources()
    // Shows available learning material
    ```
 
 2. **Use Prompts for Complex Tasks**
+
    ```typescript
    await invokePrompt('import-data', { file: 'data.csv' })
    // Provides structured guidance
    ```
 
 3. **Chain Resources and Prompts**
-   ```
+
+   ```bash
    Read resource → Invoke prompt → Execute → Validate
    ```
 
@@ -405,7 +429,7 @@ Step 4: Implement & Verify
    - Prompts build on context
    - Results inform next steps
 
-### For Users
+### For Users (Best Practices)
 
 1. **Explore Resources First**
    - Get familiar with available help

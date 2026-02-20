@@ -6,18 +6,21 @@ Complete project architecture and folder organization.
 
 HANA CLI is organized into clear logical modules:
 
-```
+```bash
 hana-developer-cli-tool-example/
-├── bin/                      # CLI entry point
-│   ├── hana-cli             # Executable
-│   └── hana-cli.js          # Main entry file
-│
-├── app/                      # Command implementations
-│   ├── index.js             # Export all commands
+├── bin/                      # CLI commands and entry point
+│   ├── cli.js               # Main entry point
+│   ├── commandMap.js        # Command-to-file mapping for lazy loading
+│   ├── index.js             # Command exports (fallback to load all)
+│   ├── import.js            # Import command implementation
+│   ├── export.js            # Export command implementation
 │   ├── alerts.js            # Alerts command
-│   ├── import.js            # Import command
-│   ├── export.js            # Export command
-│   └── ...                  # Other commands
+│   └── ...                  # 150+ other command implementations
+│
+├── app/                      # Fiori UI5 application (not CLI commands)
+│   ├── appconfig/           # Application configuration
+│   ├── dfa/                 # Data foundation
+│   └── resources/           # UI resources
 │
 ├── utils/                    # Utility functions
 │   ├── database.js          # Database operations
@@ -67,52 +70,113 @@ hana-developer-cli-tool-example/
 
 ## Key Components
 
-### bin/ - CLI Entry Point
+### bin/ - CLI Commands and Entry Point
 
-The executable entry point that:
+Contains both the main entry point and all command implementations (150+ commands).
+
+#### Main Entry Point (`cli.js`)
+
 1. Parses command-line arguments
-2. Loads appropriate command handler
-3. Executes command
-4. Returns results
+2. Loads configuration files
+3. Checks `commandMap.js` for requested command
+4. **Lazy loads** only the specific command module (performance optimization)
+5. Creates yargs instance with command configuration
+6. Executes command and handles errors
 
-### app/ - Command Implementations
+#### Command Structure
 
-Each command has:
-- **Builder function** - Defines command options/flags
-- **Handler function** - Executes command logic
-- **Exported** from `app/index.js` for loading
+Each command file (e.g., `import.js`, `export.js`) exports:
+
+- **command** - Command name
+- **aliases** - Alternative command names
+- **describe** - Command description (internationalized)
+- **builder** - Function that defines options/flags with yargs
+- **handler** - Function that receives parsed argv and delegates to promptHandler
+- **inputPrompts** - Schema for interactive prompts
+- **Processing function** - Actual business logic (e.g., `importData`, `exportData`)
 
 Example structure:
+
 ```javascript
-exports.command = 'import'
-exports.aliases = ['imp', 'uploadData']
-exports.describe = 'Import data from CSV or Excel'
-exports.builder = (yargs) => {
-  // Define options
+export const command = 'import'
+export const aliases = ['imp', 'uploadData']
+export const describe = baseLite.bundle.getText("import")
+
+export const builder = (yargs) => yargs.options({
+  filename: { alias: ['n'], type: 'string', desc: '...' },
+  table: { alias: ['t'], type: 'string', desc: '...' }
+  // ...more options
+})
+
+export let inputPrompts = {
+  filename: { description: '...', type: 'string', required: true }
+  // ...schema for interactive prompts
 }
-exports.handler = async (argv) => {
-  // Execute command
+
+export async function handler(argv) {
+  const base = await import('../utils/base.js')
+  base.promptHandler(argv, importData, inputPrompts)
+}
+
+export async function importData(prompts) {
+  // Actual import logic
 }
 ```
 
+### app/ - UI5 Application
+
+Contains Fiori UI5 application resources (not CLI commands):
+
+- **appconfig/** - UI application configuration
+- **dfa/** - Data foundation artifacts
+- **resources/** - UI5 resources and components
+
 ### utils/ - Shared Utilities
 
-Reusable functions:
-- **database.js** - Database connection, queries
-- **formatting.js** - Table, JSON, CSV output
-- **validation.js** - Data type checking
-- **translation.js** - Internationalization
-- **logger.js** - Debug and error logging
+Reusable functions organized by category:
+
+#### Core Utilities
+
+- **base.js** - Central command functionality, database connections, terminal UI
+- **base-lite.js** - Lightweight version of base for faster loading
+- **connections.js** - Connection file discovery and management
+- **dbInspect.js** - Database metadata inspection and versioning
+- **locale.js** - Locale detection for internationalization
+- **sqlInjection.js** - SQL injection protection and validation
+- **versionCheck.js** - Node.js version validation
+
+#### CLI Integration
+
+- **btp.js** - SAP BTP CLI integration and API calls
+- **cf.js** - Cloud Foundry CLI integration
+- **xs.js** - XS Advanced CLI integration
+
+#### Mass Operations
+
+- **massConvert.js** - Bulk conversion of database objects to HDI formats
+- **massExport.js** - Mass export operations for tables and data
+- **massDelete.js** - Bulk delete operations across multiple objects
+- **massUpdate.js** - Mass update operations with WHERE clauses
+- **massGrant.js** - Bulk privilege granting
+
+#### Additional Utilities
+
+- **commandSuggestions.js** - Command suggestion system
+- **config-loader.js** - Configuration file loading
+- **doc-linker.js** - Documentation linking utilities
+- **database/** - Database client abstraction layer (HANA, PostgreSQL, SQLite)
 
 ### routes/ - REST API Server
 
 When running `hana-cli server`:
+
 1. Initializes Express server
 2. Registers API routes
 3. Maps routes to command handlers
 4. Returns JSON responses
 
 Enables:
+
 - Programmatic access via HTTP
 - Integration with other tools
 - Microservice architecture
@@ -120,6 +184,7 @@ Enables:
 ### mcp-server/ - AI Integration
 
 Model Context Protocol implementation:
+
 - Exposes tools and resources
 - Enables AI assistant integration
 - Provides database introspection
@@ -127,7 +192,8 @@ Model Context Protocol implementation:
 
 ### tests/ - Test Suite
 
-Over 300 test cases covering:
+Over 1400 test cases covering:
+
 - Unit tests for individual functions
 - Integration tests for workflows
 - End-to-end tests for commands
@@ -138,6 +204,7 @@ Run with: `npm test`
 ### docs/ - VitePress Documentation
 
 This professional documentation site with:
+
 - Getting started guides
 - Complete command reference
 - Feature documentation
@@ -149,41 +216,122 @@ Run locally: `cd docs && npm run docs:dev`
 ### _i18n/ - Translations
 
 Internationalization files in `properties` format:
+
 - `messages.properties` - English
 - `messages_de.properties` - German
+- `messages_es.properties` - Spanish
+- `messages_fr.properties` - French
+- `messages_pt.properties` - Portuguese
 - Additional languages as needed
 
 ## Code Flow Example: Import Command
 
-1. **Entry** (`bin/hana-cli.js`)
-   - User runs: `hana-cli import -n data.csv -t TABLE`
+Actual execution flow when running: `hana-cli import -n data.csv -t TABLE`
 
-2. **Parsing** (yargs)
-   - Parses arguments
-   - Validates required options
-   - Loads `app/import.js`
+### 1. Entry Point (`bin/cli.js`)
 
-3. **Building** (`app/import.js` - builder function)
-   - Defines options: filename, table, matchMode, truncate
-   - Sets defaults
-   - Adds help text
+- Parses command-line arguments
+- Loads configuration from config files (`loadConfig()`)
+- Checks `commandMap` for the requested command
+- **Lazy loading**: Dynamically imports only `bin/import.js` (optimization: ~7x faster startup)
 
-4. **Handler** (`app/import.js` - handler function)
-   - Validates input (file exists, table valid)
-   - Calls utils functions:
-     - `database.js` - Connect to HANA
-     - `validation.js` - Type checking
-     - `formatting.js` - Output results
-   - Handles errors with try-catch
+```javascript
+const commandModule = await import(commandMap[requestedCommand])
+```
 
-5. **Output**
-   - Returns success/error message
-   - Writes results to stdout
-   - Exits with appropriate code
+### 2. Yargs Builder (`bin/import.js` - builder function)
+
+- Defines all command options and flags:
+  - `--filename` (`-n`) - CSV/Excel file path
+  - `--table` (`-t`) - Target table name
+  - `--schema` (`-s`) - Target schema (default: current)
+  - `--matchMode` (`-m`) - Column matching strategy
+  - `--truncate` (`-tr`) - Clear table before import
+  - `--batchSize` (`-b`) - Rows per batch (default: 1000)
+  - Plus 10+ additional options
+- Sets defaults and validates types
+- Builds help text and examples
+
+### 3. Yargs Handler (`bin/import.js` - handler function)
+
+```javascript
+export async function handler(argv) {
+  const base = await import('../utils/base.js')
+  base.promptHandler(argv, importData, inputPrompts)
+}
+```
+
+- Imports `utils/base.js` (deferred for performance)
+- Delegates to `base.promptHandler()` with three key params:
+  - `argv` - Parsed command-line arguments
+  - `importData` - The actual processing function
+  - `inputPrompts` - Schema for interactive prompts
+
+### 4. Prompt Handler (`utils/base.js` - promptHandler)
+
+- Validates all provided arguments against schema
+- Checks for unknown/invalid options
+- Prompts interactively for any missing required values
+- Applies defaults for quiet mode
+- Enables debug logging if `--debug` flag present
+- Calls the processing function: `await importData(prompts)`
+
+### 5. Import Processing (`bin/import.js` - importData function)
+
+Main business logic execution:
+
+1. **Database Connection**
+   - Uses `dbClientClass.getNewClient()` from `utils/database/`
+   - Supports HANA, PostgreSQL, SQLite via abstraction layer
+   - Connects to target database
+
+2. **Schema Resolution**
+   - Parses qualified table name (schema.table)
+   - Falls back to current schema if not specified
+   - Handles SQLite (no schema concept)
+
+3. **File Processing**
+   - Creates streaming iterator for CSV or Excel
+   - Validates file size (prevents memory exhaustion)
+   - Reads records incrementally
+
+4. **Table Metadata**
+   - Queries database for table structure
+   - Gets column names, types, constraints
+   - Prepares for data type conversion
+
+5. **Transaction Management**
+   - Starts database transaction
+   - Optional: Truncates table if `--truncate` flag set
+   - Processes data in configurable batches
+
+6. **Data Import Loop**
+   - Matches file columns to table columns (by order/name/auto)
+   - Converts data types per table schema
+   - Handles NULL value parsing
+   - Inserts batch with recursive error handling
+   - Tracks progress (rows/sec, memory usage, errors)
+
+7. **Commit/Rollback**
+   - Commits transaction on success
+   - Rolls back on error (or stops on max errors)
+   - Dry-run mode: No actual database changes
+
+### 6. Output & Cleanup
+
+- Displays import summary:
+  - Rows processed, inserted, failed
+  - Execution time
+  - Memory usage
+  - Error details (first 100 errors)
+- Disconnects from database
+- Returns control to CLI
+- Exits with appropriate code (0 = success, 1 = error)
 
 ## Dependencies & Versions
 
 Current major dependencies:
+
 - **Node.js**: 22+
 - **yargs**: CLI parsing
 - **Express**: REST server
@@ -194,6 +342,7 @@ Current major dependencies:
 ## Performance Optimization
 
 Recent improvements (v4.202602):
+
 - Lazy-loaded command modules
 - Deferred yargs initialization
 - Conditional debug loading
@@ -202,6 +351,7 @@ Recent improvements (v4.202602):
 ## Testing Strategy
 
 Approach:
+
 - **Unit tests**: Individual functions
 - **Integration tests**: Component interaction
 - **Mocking**: Database calls mocked
@@ -212,6 +362,7 @@ Run: `npm test`
 ## Building & Distribution
 
 Build process:
+
 1. Run tests: `npm test`
 2. Build types: `npx tsc --noEmit`
 3. Package: `npm pack` or publish to npm
@@ -219,13 +370,16 @@ Build process:
 
 ## Contributing Guidelines
 
-When adding features:
-1. Create implementation in `app/`
-2. Add utilities to `utils/` if reusable
-3. Write tests in `tests/`
-4. Update docs in `docs/02-commands/`
-5. Add i18n entries in `_i18n/`
-6. Submit PR with test coverage
+When adding new commands:
+
+1. Create command implementation in `bin/` (e.g., `bin/myCommand.js`)
+2. Add command mapping to `bin/commandMap.js` for lazy loading
+3. Export command from `bin/index.js` for fallback loading
+4. Add reusable utilities to `utils/` if needed
+5. Write tests in `tests/`
+6. Update command docs in `docs/02-commands/`
+7. Add i18n text entries in `_i18n/*.properties` files
+8. Submit PR with test coverage and documentation
 
 ## See Also
 

@@ -1,6 +1,6 @@
 # Testing & Quality Assurance
 
-Comprehensive testing infrastructure for HANA CLI with over 1247+ tests covering utilities, routes, and CLI integration.
+Comprehensive testing infrastructure for HANA CLI with over 1400 tests covering utilities, routes, and CLI integration.
 
 ## Overview
 
@@ -13,7 +13,7 @@ This document describes the unit tests and integration tests that provide compre
 - HTTP API endpoints
 - WebSocket communication
 
-**Total Tests Added: 1247+**
+### Total Tests Added: 1400+
 
 - **Utils Tests: 438+** - Core utilities and helper functions
 - **Routes Tests: 368+** - HTTP routes and API endpoints
@@ -21,7 +21,9 @@ This document describes the unit tests and integration tests that provide compre
 - **HTTP Integration Tests: 128+** - HTTP request/response handling
 - **Cross-Platform Tests: 165+** - Windows, Linux, macOS support
 
-**Test Execution Time: ~25-35 minutes for full suite**
+### Test Execution Time
+
+~25-35 minutes for full suite
 
 ## Utilities Tests
 
@@ -69,7 +71,7 @@ Integration tests for PostgreSQL and SQLite profile functionality with actual da
 
 Tests for HTTP route handlers and API endpoints accessed through the web server.
 
-### Key Test Files
+### Route Test Files (HTTP Endpoints)
 
 **index.Test.js** - 30 tests (enhanced)
 Integration tests for the index route handler covering GET and PUT operations with mocked HTTP requests/responses.
@@ -109,7 +111,9 @@ Additional HTTP integration tests for full end-to-end request/response validatio
 
 ## CLI Integration Tests
 
-### genericFlags.Test.js - 200+ tests
+### CLI Flag Integration Tests
+
+#### genericFlags.Test.js - 200+ tests
 
 Comprehensive cross-command integration tests for generic CLI flags tested across 60+ commands:
 
@@ -121,35 +125,35 @@ Comprehensive cross-command integration tests for generic CLI flags tested acros
 
 **Commands Tested:** Database commands, inspect commands, HDI commands, system queries, cloud instances, utilities, connections, and BTP commands.
 
-### errorHandling.Test.js - 30+ tests
+#### errorHandling.Test.js - 30+ tests
 
 Error handling validation for invalid parameters, connection errors, SQL injection prevention, and special character handling.
 
-### flagValidation.Test.js - 40+ tests
+#### flagValidation.Test.js - 40+ tests
 
 Command-line flag validation covering limit values, schema/table names, output formats, and boolean flags.
 
-### outputFormats.Test.js - 25+ tests
+#### outputFormats.Test.js - 25+ tests
 
 Output format validation for SQL, JSON, YAML, CDS, CDL, EDMX, OpenAPI, GraphQL, and database-specific formats.
 
-### commandAliases.Test.js - 30+ tests
+#### commandAliases.Test.js - 30+ tests
 
 Command alias testing ensuring all aliases work identically to main commands.
 
-### edgeCases.Test.js - 50+ tests
+#### edgeCases.Test.js - 50+ tests
 
 Edge case and boundary condition testing for empty results, wildcards, special characters, Unicode, case sensitivity, and concurrent execution.
 
-### tableOutput.Test.js - 20 tests
+#### tableOutput.Test.js - 20 tests
 
 Unit tests for table output enhancements covering column width management, pagination, and type-aware formatting.
 
-### querySimple.Test.js - 8 tests (enhanced)
+#### querySimple.Test.js - 8 tests (enhanced)
 
 Integration tests for querySimple command with table format output and file export validation.
 
-### typeAwareFormatting.Test.js - 20 tests
+#### typeAwareFormatting.Test.js - 20 tests
 
 Type-aware formatting tests for dates, numbers, text, and NULL values in text exports.
 
@@ -214,7 +218,7 @@ npm test tests/routes/index.http.Test.js
 
 After running tests, Mochawesome generates HTML reports in:
 
-```
+```bash
 mochawesome-report/test-report_XXX.html
 ```
 
@@ -276,6 +280,7 @@ describe('Windows Paths @windows', () => {
 ### CI/CD Integration
 
 GitHub Actions runs full test suite on:
+
 - **Operating Systems:** Ubuntu, Windows, macOS
 - **Node.js Versions:** 20.x, 22.x, 24.x
 
@@ -295,7 +300,7 @@ GitHub Actions runs full test suite on:
 - Test error propagation through middleware
 - Test mocked database connections
 
-### CLI Integration Tests
+### CLI Tests
 
 - Execute actual CLI commands as subprocess
 - Validate flag parsing and behavior

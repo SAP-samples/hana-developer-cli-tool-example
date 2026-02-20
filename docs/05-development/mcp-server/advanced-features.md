@@ -11,7 +11,8 @@ Automated execution of multi-step workflows with parameter substitution and resu
 Pre-built sequences of commands that work together to accomplish a goal.
 
 **Example Workflow - Data Quality Check:**
-```
+
+```bash
 1. Profile data (dataProfile)
    ↓
 2. Find duplicates (duplicateDetection)
@@ -39,6 +40,7 @@ Pre-built sequences of commands that work together to accomplish a goal.
 ```
 
 **Output includes:**
+
 - Results from each step
 - Execution time per step
 - Any errors encountered
@@ -59,6 +61,7 @@ Pre-built sequences of commands that work together to accomplish a goal.
 ```
 
 **Shows:**
+
 - All steps in order
 - Parameters for each step
 - Expected execution
@@ -71,53 +74,67 @@ The MCP server includes 20+ professional workflows:
 #### 1. Data Validation Workflows
 
 **data-quality-check** (5 steps)
+
 - Profile → Duplicates → Validation → Interpretation → Report
 
 **data-integrity-audit** (6 steps)
+
 - Inspect → Compare → Validate → Referential check → Analysis → Report
 
 **data-cleansing** (7 steps)
+
 - Profile → Identify issues → Mask sensitive → Clean → Transform → Validate → Report
 
 #### 2. Schema Management Workflows
 
 **schema-comparison** (4 steps)
+
 - Inspect source → Inspect target → Compare → Generate DDL
 
 **schema-migration** (6 steps)
+
 - Validate source → Compare → Generate DDL → Test → Migrate → Verify
 
 **schema-clone** (5 steps)
+
 - Inspect source → Clone → Verify structures → Build indexes → Validate
 
 #### 3. Performance Analysis Workflows
 
 **performance-baseline** (5 steps)
+
 - Health check → Memory analysis → Expensive statements → Index review → Report
 
 **performance-optimization** (7 steps)
+
 - Baseline → Hotspot analysis → Index test → Recommendations → Implement → Test → Verify
 
 **resource-optimization** (4 steps)
+
 - Memory analysis → Identify large tables → Reclaim space → Verify
 
 #### 4. Data Operations Workflows
 
 **safe-import** (5 steps)
+
 - Dry run → Review errors → Validate → Import → Verify
 
 **safe-export** (4 steps)
+
 - Verify source → Configure format → Export → Validate
 
 **data-migration** (6 steps)
+
 - Export → Prepare target → Import → Validate → Compare → Report
 
 #### 5. Troubleshooting Workflows
 
 **connection-diagnosis** (4 steps)
+
 - Test connection → Check permissions → Verify network → Get info
 
 **performance-diagnosis** (5 steps)
+
 - Health check → Memory → Expensive queries → Hotspots → Recommendations
 
 ### Parameter Substitution
@@ -148,6 +165,7 @@ Workflows support parameter templates using `<parameter-name>`:
 ```
 
 When executing, provide actual values:
+
 ```json
 {
   "workflowId": "my-workflow",
@@ -165,6 +183,7 @@ Parameters are automatically substituted in each step.
 Control how workflows handle errors:
 
 **Continue on errors:**
+
 ```json
 {
   "workflowId": "data-quality-check",
@@ -174,6 +193,7 @@ Control how workflows handle errors:
 ```
 
 **Stop on first error:**
+
 ```json
 {
   "workflowId": "data-quality-check", 
@@ -183,6 +203,7 @@ Control how workflows handle errors:
 ```
 
 **Output shows:**
+
 ```json
 {
   "steps": [
@@ -221,6 +242,7 @@ Analyzes command output and provides:
 ### How to Use
 
 **Input:**
+
 ```json
 {
   "command": "dataProfile",
@@ -229,6 +251,7 @@ Analyzes command output and provides:
 ```
 
 **Output:**
+
 ```json
 {
   "command": "dataProfile",
@@ -265,6 +288,7 @@ Analyzes command output and provides:
 ### Command-Specific Interpretation
 
 #### Data Profile Results
+
 - Data quality issues detected
 - NULL value percentages
 - Duplicate identification
@@ -272,42 +296,49 @@ Analyzes command output and provides:
 - Range and distribution analysis
 
 **Provides:**
+
 - Data quality score
 - Issues ranked by severity
 - Cleaning recommendations
 - Next validation steps
 
 #### Memory Analysis Results
+
 - Memory usage concentration
 - Largest tables and indexes
 - Memory growth trends
 - Fragmentation issues
 
 **Provides:**
+
 - Resource optimization suggestions
 - Partitioning recommendations
 - Compression opportunities
 - Reclaim recommendations
 
 #### Health Check Results
+
 - System status and alerts
 - Critical warnings
 - Performance issues
 - Resource constraints
 
 **Provides:**
+
 - Problem diagnosis
 - Immediate actions
 - Investigations needed
 - Prevention tips
 
 #### Expensive Statements Results
+
 - Long-running queries
 - Resource-intensive operations
 - Query patterns
 - Performance bottlenecks
 
 **Provides:**
+
 - Optimization suggestions
 - Index recommendations
 - Query rewrite options
@@ -315,8 +346,9 @@ Analyzes command output and provides:
 
 ### Interpretation Examples
 
-**Example 1: Data Profile**
-```
+#### Example 1: Data Profile
+
+```bash
 Raw Output:
 " Rows: 10000
   Columns: 8
@@ -336,8 +368,9 @@ Recommendations:
 - Priority: medium → "Fix validation errors"
 ```
 
-**Example 2: Memory Analysis**
-```
+#### Example 2: Memory Analysis
+
+```bash
 Raw Output:
 "TOP MEMORY ALLOCATIONS
 1. TABLE CUSTOMERS - 800 MB (45%)
@@ -384,6 +417,7 @@ Access all 279 project documentation pages directly from MCP.
 ```
 
 **Returns:**
+
 ```json
 {
   "results": [
@@ -411,6 +445,7 @@ Access all 279 project documentation pages directly from MCP.
 ```
 
 **Returns:**
+
 - Complete markdown content
 - Document metadata
 - Table of contents (headings)
@@ -422,11 +457,13 @@ Access all 279 project documentation pages directly from MCP.
 **MCP Tool:** `hana_list_doc_categories`
 
 Returns:
+
 - All 9+ categories
 - Number of documents per category
 - Sample documents from each
 
 **Categories:**
+
 - Getting Started (5 docs)
 - Commands (80+ docs)
 - Features (15 docs)
@@ -437,7 +474,7 @@ Returns:
 
 ### Documentation Search Workflow
 
-```
+```bash
 1. User: "How do I import a CSV file?"
    ↓
 2. System: Calls hana_search_docs
@@ -457,7 +494,7 @@ Returns:
 
 ### Scenario 1: Complete Data Migration
 
-```
+```bash
 1. Preview: hana_preview_workflow("schema-migration")
    ↓
 2. Execute: hana_execute_workflow("schema-migration")
@@ -473,7 +510,7 @@ Returns:
 
 ### Scenario 2: Performance Optimization
 
-```
+```bash
 1. Get baseline: hana_execute_workflow("performance-baseline")
    ↓
 2. Analyze: hana_interpret_result("memoryAnalysis", baseline)
@@ -491,7 +528,7 @@ Returns:
 
 ### Scenario 3: Data Quality Assurance
 
-```
+```bash
 1. Profile data: hana_dataProfile(table)
    ↓
 2. Interpret: hana_interpret_result("dataProfile", results)
@@ -536,6 +573,7 @@ hana_execute_workflow("data-migration", parameters)
 ### 3. Interpret All Results
 
 Every command result should be interpreted:
+
 ```json
 hana_interpret_result(command, result)
 ```
@@ -544,7 +582,7 @@ Gets insights, recommendations, and next steps.
 
 ### 4. Chain Workflows Logically
 
-```
+```bash
 Diagnosis → Analysis → Action → Verification → Report
 ```
 
@@ -553,6 +591,7 @@ Each step builds on previous results.
 ### 5. Track Metrics Over Time
 
 Use key metrics to measure success:
+
 - Before/after comparisons
 - Performance improvements
 - Data quality scores

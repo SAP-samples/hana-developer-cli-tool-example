@@ -57,7 +57,7 @@ The recommendation system matches your intent to commands using:
 ### Common Intent Patterns
 
 | Intent | Recommended Command |
-|--------|---------------------|
+| -------- | --------------------- |
 | "List tables" | `hana_tables`, `hana_schemas` |
 | "Find duplicates" | `hana_duplicateDetection`, `hana_dataProfile` |
 | "Import data" | `hana_import`, `hana_tableCopy`, `hana_dataSync` |
@@ -99,7 +99,8 @@ The smart search looks across:
 
 ### Usage Examples
 
-**Example 1: Find Import Commands**
+#### Example 1: Find Import Commands
+
 ```json
 {
   "query": "import CSV",
@@ -109,6 +110,7 @@ The smart search looks across:
 ```
 
 **Result:**
+
 ```json
 {
   "results": [
@@ -130,7 +132,8 @@ The smart search looks across:
 }
 ```
 
-**Example 2: Find Data Quality Workflows**
+#### Example 2: Find Data Quality Workflows
+
 ```json
 {
   "query": "data quality validation",
@@ -140,6 +143,7 @@ The smart search looks across:
 ```
 
 **Result:**
+
 ```json
 {
   "results": [
@@ -187,6 +191,7 @@ Perfect for users new to HANA CLI and the MCP server.
 The quick start teaches you these commands in order:
 
 1. **`hana_status`** - Verify connection and current user
+
    ```bash
    # Shows:
    # - Current user
@@ -194,38 +199,49 @@ The quick start teaches you these commands in order:
    # - Current schema
    # - Version information
    ```
+
    **Why:** Confirms everything is set up correctly
 
 2. **`hana_version`** - Check database version
+
    ```bash
    # Shows HANA version and build number
    ```
+
    **Why:** Understand database capabilities
 
 3. **`hana_schemas`** - List available schemas
+
    ```bash
    # Shows all schemas you can access
    ```
+
    **Why:** See available data sources
 
 4. **`hana_tables`** - List tables in a schema
+
    ```bash
    hana_tables --schema SALES
    # Shows all tables in SALES schema
    ```
+
    **Why:** Find the data you need to work with
 
 5. **`hana_inspectTable`** - View table structure
+
    ```bash
    hana_inspectTable --table CUSTOMERS --schema SALES
    # Shows columns, types, constraints
    ```
+
    **Why:** Understand what data is available
 
 6. **`hana_healthCheck`** - Check system health
+
    ```bash
    # Shows warnings and critical issues
    ```
+
    **Why:** Ensure database is running properly
 
 ### Next Commands to Learn
@@ -248,6 +264,7 @@ Pre-built conversation flows for common tasks.
 **Goal:** Understand database structure and data
 
 **Phases:**
+
 1. Verify connection
 2. Check version and system info
 3. List available schemas
@@ -255,6 +272,7 @@ Pre-built conversation flows for common tasks.
 5. Profile data quality
 
 **Commands:**
+
 - `hana_status`
 - `hana_version`
 - `hana_systemInfo`
@@ -264,6 +282,7 @@ Pre-built conversation flows for common tasks.
 - `hana_dataProfile`
 
 **Tips:**
+
 - Start with SYSTEM schema for system tables
 - Look for SALES, CUSTOMER, PRODUCT schemas
 - Profile small tables first to understand data
@@ -273,6 +292,7 @@ Pre-built conversation flows for common tasks.
 **Goal:** Diagnose and fix issues
 
 **Phases:**
+
 1. Check system health
 2. Verify connectivity
 3. Test permissions
@@ -280,6 +300,7 @@ Pre-built conversation flows for common tasks.
 5. Identify bottlenecks
 
 **Commands:**
+
 - `hana_healthCheck`
 - `hana_status`
 - `hana_inspectUser`
@@ -288,6 +309,7 @@ Pre-built conversation flows for common tasks.
 - `hana_recommendations`
 
 **Tips:**
+
 - Run healthCheck first
 - Check user roles and privileges
 - Top queries often cause performance issues
@@ -298,6 +320,7 @@ Pre-built conversation flows for common tasks.
 **Goal:** Move data between sources
 
 **Phases:**
+
 1. Validate source schema
 2. Prepare target schema
 3. Export source data
@@ -305,6 +328,7 @@ Pre-built conversation flows for common tasks.
 5. Verify migration
 
 **Commands:**
+
 - `hana_inspectTable`
 - `hana_compareSchema`
 - `hana_export`
@@ -313,6 +337,7 @@ Pre-built conversation flows for common tasks.
 - `hana_dataValidator`
 
 **Tips:**
+
 - Always do dry-run first
 - Start with small tables
 - Validate after import
@@ -323,6 +348,7 @@ Pre-built conversation flows for common tasks.
 **Goal:** Optimize database performance
 
 **Phases:**
+
 1. Establish baseline
 2. Identify hotspots
 3. Analyze indexes
@@ -330,6 +356,7 @@ Pre-built conversation flows for common tasks.
 5. Implement improvements
 
 **Commands:**
+
 - `hana_memoryAnalysis`
 - `hana_tableHotspots`
 - `hana_indexTest`
@@ -337,6 +364,7 @@ Pre-built conversation flows for common tasks.
 - `hana_expensiveStatements`
 
 **Tips:**
+
 - Large tables cause most issues
 - Monitor memory usage trends
 - Test index effectiveness
@@ -347,6 +375,7 @@ Pre-built conversation flows for common tasks.
 **Goal:** Review and secure database access
 
 **Phases:**
+
 1. Inventory users
 2. Review roles and privileges
 3. Check inactive accounts
@@ -354,6 +383,7 @@ Pre-built conversation flows for common tasks.
 5. Identify issues
 
 **Commands:**
+
 - `hana_users`
 - `hana_inspectUser`
 - `hana_roles`
@@ -361,6 +391,7 @@ Pre-built conversation flows for common tasks.
 - `hana_replicationStatus`
 
 **Tips:**
+
 - Document all user accounts
 - Review DBA privileges
 - Look for inactive accounts
@@ -368,21 +399,25 @@ Pre-built conversation flows for common tasks.
 
 ### Using a Template
 
-**Step 1: Get Template**
+#### Step 1: Get Template
+
 ```json
 {
   "templateId": "data-exploration"
 }
 ```
 
-**Step 2: Review Steps**
+#### Step 2: Review Steps
+
 Each step includes:
+
 - Purpose and goal
 - Commands to run
 - Expected outcomes
 - Tips for success
 
-**Step 3: Follow Guided Workflow**
+#### Step 3: Follow Guided Workflow
+
 - Run each command in sequence
 - Review results
 - Proceed to next step
@@ -395,7 +430,8 @@ Each step includes:
 The system automatically suggests useful next steps:
 
 **After `hana_status`:**
-```
+
+```bash
 ✅ Connected successfully
 
 🔄 Suggested Next Steps:
@@ -413,7 +449,8 @@ The system automatically suggests useful next steps:
 ```
 
 **After `hana_tables`:**
-```
+
+```bash
 ✅ Listed 47 tables
 
 🔄 Suggested Next Steps:
@@ -435,7 +472,8 @@ The system automatically suggests useful next steps:
 Tips appear based on command results:
 
 **When import has errors:**
-```
+
+```bash
 ⚠️ Import completed with 5 errors
 
 📌 Suggested Actions:
@@ -446,7 +484,8 @@ Tips appear based on command results:
 ```
 
 **When memory usage is high:**
-```
+
+```bash
 ⚠️ Memory usage at 85% capacity
 
 📌 Suggested Actions:
@@ -459,7 +498,9 @@ Tips appear based on command results:
 ## Best Practices for Discovery
 
 ### 1. Start with Recommendations
+
 For any task, start with `hana_recommend`:
+
 ```json
 {
   "intent": "what you want to do"
@@ -469,7 +510,9 @@ For any task, start with `hana_recommend`:
 This ensures you're using the right command.
 
 ### 2. Review Examples
+
 Before running a command, check examples:
+
 ```json
 {
   "command": "import"
@@ -479,7 +522,9 @@ Before running a command, check examples:
 Learn from real-world usage patterns.
 
 ### 3. Use Parameter Presets
+
 Let presets guide your parameters:
+
 ```json
 {
   "command": "import"
@@ -489,7 +534,9 @@ Let presets guide your parameters:
 Get templates for different scenarios.
 
 ### 4. Follow Templates
+
 For complex tasks, use conversation templates:
+
 - Data exploration
 - Troubleshooting
 - Data migration
@@ -497,7 +544,9 @@ For complex tasks, use conversation templates:
 - Security audits
 
 ### 5. Interpret Results
+
 Use result interpretation for insights:
+
 ```json
 {
   "command": "dataProfile",
@@ -510,6 +559,7 @@ Get AI-friendly analysis and recommendations.
 ## Workflow Discovery
 
 ### List Available Workflows
+
 ```json
 {
   "action": "list"
@@ -519,6 +569,7 @@ Get AI-friendly analysis and recommendations.
 Returns all 20+ pre-built workflows.
 
 ### Get Workflow Details
+
 ```json
 {
   "workflowId": "data-quality-check"
@@ -528,6 +579,7 @@ Returns all 20+ pre-built workflows.
 Returns complete steps, parameters, and examples.
 
 ### Search Workflows
+
 ```json
 {
   "query": "data validation",
@@ -538,6 +590,7 @@ Returns complete steps, parameters, and examples.
 Find workflows matching your needs.
 
 ### Execute Workflow
+
 ```json
 {
   "action": "execute",
@@ -554,6 +607,7 @@ Runs complete multi-step workflow.
 ## Examples for Commands
 
 ### Get Examples
+
 ```json
 {
   "command": "import"
@@ -561,6 +615,7 @@ Runs complete multi-step workflow.
 ```
 
 Returns 5+ real-world scenarios:
+
 - Quick CSV import
 - Large file with error handling
 - Streaming mode
@@ -568,6 +623,7 @@ Returns 5+ real-world scenarios:
 - Error validation
 
 ### What Examples Include
+
 - Complete parameter set
 - Scenario description
 - Expected output
@@ -575,6 +631,7 @@ Returns 5+ real-world scenarios:
 - Common issues and solutions
 
 ### Using Examples in Your Work
+
 1. Find relevant scenario
 2. Copy parameter template
 3. Customize for your data

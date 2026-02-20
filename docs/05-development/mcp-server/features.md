@@ -9,6 +9,7 @@ Complete documentation of all features available in the SAP HANA CLI MCP Server.
 All SAP HANA CLI commands are exposed as standardized MCP tools with the `hana_` prefix.
 
 **Command Categories:**
+
 - **System Admin** - Status, health check, memory analysis, INI files, feature usage
 - **Data Tools** - Import, export, data synchronization, data validation
 - **Analysis Tools** - Data profiling, duplicate detection, data comparison, lineage analysis
@@ -21,6 +22,7 @@ All SAP HANA CLI commands are exposed as standardized MCP tools with the `hana_`
 - **Development Tools** - HDBSQL, procedure calls, code templates, documentation generation
 
 **Example Tools:**
+
 ```bash
 hana_status              # Check connection
 hana_tables              # List database tables
@@ -37,19 +39,23 @@ All command aliases are also available (e.g., `hana_s` for status, `hana_imp` fo
 Help agents find the right command for any task.
 
 #### Command Recommendations (`hana_recommend`)
+
 Get command suggestions based on natural language intent:
 
-**Input:** 
+**Input:**
+
 - Natural language description (e.g., "find duplicate rows", "export table to CSV")
 
 **Output:**
+
 - Top 5 matching commands
 - Confidence scores
 - Reasoning for each match
 - Ready-to-use parameter templates
 
 **Example:**
-```
+
+```bash
 Intent: "find duplicate rows"
 
 Recommendations:
@@ -64,24 +70,29 @@ Recommendations:
 ```
 
 #### Smart Search (`hana_smart_search`)
+
 Comprehensive search across all resources:
 
 **Searches:**
+
 - Command names and descriptions
 - Workflow templates by name/purpose
 - Usage examples by scenario
 - Parameter presets by use case
 
 **Features:**
+
 - Relevance ranking
 - Multi-scope searching
 - Type indicators
 - Helpful suggestions for few results
 
 #### Quick Start Guide (`hana_quickstart`)
+
 Perfect for new users to learn basic concepts:
 
 **6 Essential Commands:**
+
 1. `hana_status` - Verify connection
 2. `hana_version` - Check database version
 3. `hana_schemas` - List available schemas
@@ -92,15 +103,18 @@ Perfect for new users to learn basic concepts:
 ### 3. Examples and Presets
 
 #### Real-World Examples (`hana_examples`)
+
 Usage examples for 40+ commands with complete parameter sets.
 
 **For each example:**
+
 - Scenario description
 - Parameter values
 - Expected output summary
 - Tips and best practices
 
 **Example - Import Command:**
+
 ```json
 {
   "scenarios": [
@@ -132,15 +146,18 @@ Usage examples for 40+ commands with complete parameter sets.
 ```
 
 #### Parameter Presets (`hana_parameter_presets`)
+
 Pre-configured parameter combinations for common use cases.
 
 **For each command, presets include:**
+
 - Preset name (e.g., "quick-import", "safe-import", "large-file")
 - Description of when to use
 - Pre-filled parameters with placeholders
 - Notes and warnings
 
 **Example - Import Presets:**
+
 - **quick-import** - Fast import for small, clean files
 - **safe-import** - Conservative settings with error handling
 - **large-file** - Optimized for large files with parallel processing
@@ -154,12 +171,14 @@ Pre-configured parameter combinations for common use cases.
 Execute multi-step workflow sequences with automatic parameter substitution.
 
 **Features:**
+
 - Parameter validation before execution
 - Step result tracking
 - Error handling with optional continuation
 - Preview mode to see what will execute
 
 **Example Workflow - Data Quality Check:**
+
 ```json
 {
   "steps": [
@@ -192,6 +211,7 @@ Execute multi-step workflow sequences with automatic parameter substitution.
 Pre-built conversation flows for common tasks.
 
 **Available Templates:**
+
 1. **data-exploration** (15-30 min)
    - Connection verification
    - Schema discovery
@@ -223,6 +243,7 @@ Pre-built conversation flows for common tasks.
    - Compliance check
 
 **Each template includes:**
+
 - Phase-by-phase steps
 - Commands for each step
 - Expected outcomes
@@ -234,6 +255,7 @@ Pre-built conversation flows for common tasks.
 AI-friendly analysis and insights from command results.
 
 **For each command result, provides:**
+
 - **Summary** - High-level interpretation
 - **Key Insights** - Important patterns and findings
 - **Recommendations** - Actionable suggestions ranked by priority
@@ -241,6 +263,7 @@ AI-friendly analysis and insights from command results.
 - **Key Metrics** - Extracted numeric values and statistics
 
 **Example - Data Profile Result:**
+
 ```json
 {
   "summary": "4,250 rows analyzed; moderate data quality issues detected",
@@ -275,6 +298,7 @@ AI-friendly analysis and insights from command results.
 Access to all 279 project documentation pages with full-text search.
 
 **Features:**
+
 - Fast full-text search
 - Category filtering
 - Document type filtering
@@ -282,6 +306,7 @@ Access to all 279 project documentation pages with full-text search.
 - Direct links to website
 
 **Available Categories:**
+
 - Getting Started (5 docs)
 - Commands & Reference (80+ docs)
 - Features (15 docs)
@@ -292,7 +317,8 @@ Access to all 279 project documentation pages with full-text search.
 - And more...
 
 **Search Example:**
-```
+
+```bash
 Query: "import CSV"
 Results:
 1. Import Command Guide (99% match)
@@ -306,6 +332,7 @@ Results:
 The MCP Server was built in three phases, each adding significant capabilities:
 
 ### Phase 1: Core Features
+
 - 150+ command tools
 - Parameter discovery system
 - Enhanced error messages
@@ -313,6 +340,7 @@ The MCP Server was built in three phases, each adding significant capabilities:
 - Parameter presets
 
 ### Phase 2: Discovery & Guidance
+
 - Intent-based recommendations
 - Quick start guide
 - Context-aware next steps
@@ -320,6 +348,7 @@ The MCP Server was built in three phases, each adding significant capabilities:
 - Output analysis tips
 
 ### Phase 3: Advanced Features
+
 - Workflow execution system
 - Result interpretation engine
 - Smart search system
@@ -329,10 +358,12 @@ The MCP Server was built in three phases, each adding significant capabilities:
 ## Context-Aware Guidance
 
 ### Automatic Next Steps
+
 After successful command execution, the system suggests relevant next steps:
 
 **Example after `hana_status`:**
-```
+
+```bash
 ✅ Connection verified
 
 🔄 Suggested Next Steps:
@@ -347,10 +378,12 @@ After successful command execution, the system suggests relevant next steps:
 ```
 
 ### Output-Aware Tips
+
 Tips automatically appear based on command output:
 
 **Example from import with errors:**
-```
+
+```bash
 ⚠️ Import completed with 5 errors
 
 📌 Tips:
@@ -360,9 +393,11 @@ Tips automatically appear based on command output:
 ```
 
 ### Troubleshooting Guides
+
 Command-specific troubleshooting for common issues:
 
 **Available for:**
+
 - import (5 common issues)
 - export (3 common issues)
 - dataProfile (2 common issues)
@@ -373,9 +408,11 @@ Command-specific troubleshooting for common issues:
 ## Error Handling and Diagnostics
 
 ### Intelligent Error Analysis
+
 Errors are analyzed and matched to common causes:
 
 **Error Types:**
+
 - TABLE_NOT_FOUND → suggests listing tables, checking schema
 - SCHEMA_NOT_FOUND → suggests listing schemas, checking permissions
 - FILE_NOT_FOUND → suggests checking paths, using absolute paths
@@ -386,6 +423,7 @@ Errors are analyzed and matched to common causes:
 - UNKNOWN_ERROR → generic suggestions for troubleshooting
 
 ### Debug Mode
+
 Enable detailed diagnostic output:
 
 ```bash
@@ -396,7 +434,7 @@ hana_tables --debug true
 ## Summary Table
 
 | Feature | Count | Examples |
-|---------|-------|----------|
+| --------- | ------- | ---------- |
 | **Commands** | 150+ | import, export, tables, dataProfile |
 | **Discovery Tools** | 4 | recommend, smart_search, quickstart |
 | **Examples** | 40+ | 5 import scenarios, 3 export scenarios |

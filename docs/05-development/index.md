@@ -14,12 +14,11 @@ Technical documentation for developers and contributors.
 
 The Model Context Protocol implementation for AI integration.
 
-- [MCP Server README](./mcp-server/README.md)
-- [Phase 1: Implementation](./mcp-server/phase1.md)
-- [Phase 2: Implementation](./mcp-server/phase2.md)
-- [Phase 3: Implementation](./mcp-server/phase3.md)
+- [MCP Server README](./mcp-server/index)
+- [Phase 1: Implementation](./mcp-server/implementation-phases)
+- [Phase 2: Implementation](./mcp-server/implementation-phases)
+- [Phase 3: Implementation](./mcp-server/implementation-phases)
 - [Troubleshooting](./mcp-server/troubleshooting.md)
-- [Improvements & Recommendations](./mcp-server/improvements.md)
 
 ## Contributing
 
@@ -35,9 +34,9 @@ Learn how to work on the project documentation built with VitePress.
 
 Detailed implementation and usage examples for each command.
 
-- [Import Command Details](../02-commands/data-tools/import-details.md)
-- [Export Command Details](../02-commands/data-tools/export-details.md)
-- [Compare Schema Details](../02-commands/schema-tools/compare-schema-details.md)
+- [Import Command Details](../02-commands/data-tools/import.md)
+- [Export Command Details](../02-commands/data-tools/export.md)
+- [Compare Schema Details](../02-commands/schema-tools/compare-schema.md)
 
 ## Testing & Quality Assurance
 
@@ -48,10 +47,6 @@ Detailed implementation and usage examples for each command.
 
 - [Implementation Guide](./implementation.md)
 - [Feature Documentation](../03-features/)
-
-## Performance & Optimization
-
-- [Optimization Patterns](./performance/optimization.md)
 
 ## See Also
 

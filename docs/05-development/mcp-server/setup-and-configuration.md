@@ -6,7 +6,7 @@ Installation, configuration, and connection setup for the MCP Server.
 
 ### Prerequisites
 
-- Node.js 14+ (v16 or v18 recommended)
+- Node.js 22+
 - npm (included with Node.js)
 - SAP HANA database instance or SAP BTP HANA Cloud instance
 
@@ -20,6 +20,7 @@ npm install
 ```
 
 The installation includes:
+
 - TypeScript compiler and type definitions
 - MCP SDK packages
 - Database connection utilities
@@ -34,6 +35,7 @@ npm run build
 ```
 
 This generates:
+
 - `build/index.js` - Main MCP server entry point
 - `build/src/` - All TypeScript source files compiled to JavaScript
 
@@ -65,6 +67,7 @@ hana-cli serviceKey -i <instance-name> -k <key-name>
 ```
 
 This command:
+
 1. Connects to SAP Cloud Foundry
 2. Retrieves the service key
 3. Creates `default-env.json` with connection details
@@ -79,6 +82,7 @@ hana-cli connect
 ```
 
 This will ask for:
+
 - Host/Server address
 - Port (default: 30013 or 443 for HANA Cloud)
 - Username
@@ -111,6 +115,7 @@ Create a `default-env.json` file in your project root:
 ```
 
 **For on-premise HANA:**
+
 ```json
 {
   "VCAP_SERVICES": {
@@ -149,10 +154,11 @@ npm run build
 
 Add the following to your Claude Dev MCP settings file:
 
-**Location:** 
+**Location:**
 `C:\Users\<username>\AppData\Roaming\Code\User\globalStorage\saoudrizwan.claude-dev\settings\cline_mcp_settings.json`
 
 **Configuration:**
+
 ```json
 {
   "mcpServers": {
@@ -168,6 +174,7 @@ Add the following to your Claude Dev MCP settings file:
 ```
 
 **Notes:**
+
 - Replace the path with your actual project location
 - Use forward slashes `/` even on Windows
 - Connection credentials are read from `default-env.json`
@@ -187,7 +194,8 @@ hana-cli status
 ```
 
 Expected output:
-```
+
+```bash
 Connected to: hanacloud.ondemand.com:443
 User: DBADMIN
 Current Schema: YOURSCHEMA
@@ -197,14 +205,16 @@ Version: 2.0.0
 ### Common Connection Issues
 
 #### Issue: "Connection refused"
+
 - **Cause:** HANA instance not accessible or firewall blocking
-- **Solution:** 
+- **Solution:**
   1. Verify host address and port
   2. Check firewall rules
   3. Ensure HANA instance is running
   4. Test network connectivity: `ping your-host.com`
 
 #### Issue: "Authentication failed"
+
 - **Cause:** Invalid username or password
 - **Solution:**
   1. Verify credentials in `default-env.json`
@@ -213,6 +223,7 @@ Version: 2.0.0
   4. Try resetting password in SAP HANA or SAP BTP
 
 #### Issue: "Unknown host"
+
 - **Cause:** Invalid hostname or DNS resolution failure
 - **Solution:**
   1. Verify hostname spelling
@@ -221,6 +232,7 @@ Version: 2.0.0
   4. Check SAP BTP service instance name
 
 #### Issue: "SSL certificate error"
+
 - **Cause:** Certificate validation failure (usually for HANA Cloud)
 - **Solution:**
   1. **Temporary:** Set `sslValidateCertificate: false` (development only)
@@ -229,6 +241,7 @@ Version: 2.0.0
   4. Check system clock for correct time
 
 #### Issue: "Schema not found"
+
 - **Cause:** User doesn't have access to specified schema
 - **Solution:**
   1. Verify schema name (case-sensitive)
@@ -249,6 +262,7 @@ hana-cli tables --debug
 ```
 
 This outputs:
+
 - Connection details
 - Query statements
 - Timing information
@@ -257,16 +271,18 @@ This outputs:
 ## Connection Parameters Reference
 
 ### Required Parameters
+
 | Parameter | Description | Example |
-|-----------|-------------|---------|
+| --------- | ----------- | ------- |
 | `host` | Database server hostname or IP | `hanacloud.ondemand.com` |
 | `port` | Database port number | `443` (HANA Cloud), `30013` (On-premise) |
 | `user` | Database username | `DBADMIN` |
 | `password` | Database password | `SecurePassword123!` |
 
 ### Optional Parameters
+
 | Parameter | Description | Default | Example |
-|-----------|-------------|---------|---------|
+| --------- | ----------- | ------- | ------- |
 | `schema` | Default schema for queries | `SYSTEM` | `SALES` |
 | `encrypt` | Enable SSL/TLS | `true` | `true` or `false` |
 | `sslValidateCertificate` | Validate SSL certificates | `true` | `true` or `false` |
@@ -288,6 +304,7 @@ hana-cli serviceKey -i dev-instance -k dev-key --output dev-env.json
 ```
 
 Then switch between environments:
+
 ```bash
 export DEFAULT_ENV_FILE="prod-env.json"
 hana-cli status
@@ -426,7 +443,7 @@ hana-cli status \
 ### Common Error Messages
 
 | Error | Cause | Solution |
-|-------|-------|----------|
+| --- | --- | --- |
 | `ECONNREFUSED` | Connection refused | Check IP/port, firewall |
 | `ENOTFOUND` | DNS resolution failed | Verify hostname, check DNS |
 | `ETIMEDOUT` | Connection timeout | Check network, increase timeout |
@@ -439,11 +456,13 @@ See [Troubleshooting Guide](./troubleshooting.md) for more issues and solutions.
 ## Next Steps
 
 1. **Verify Connection**
+
    ```bash
    hana-cli status
    ```
 
 2. **Explore Database**
+
    ```bash
    hana-cli schemas
    hana-cli tables --schema <name>

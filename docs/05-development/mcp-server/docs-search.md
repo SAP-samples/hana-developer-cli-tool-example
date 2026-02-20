@@ -20,7 +20,7 @@ The MCP server includes a comprehensive documentation index of all project docum
 ### Statistics
 
 | Metric | Count |
-|--------|-------|
+| -------- | ------- |
 | **Total Documents** | 279 |
 | **Categories** | 9 |
 | **Keywords Indexed** | 2,285 |
@@ -96,12 +96,14 @@ The MCP server includes a comprehensive documentation index of all project docum
 Fast full-text search across all documentation.
 
 **Parameters:**
+
 - `query` (required) - Search keywords (e.g., "import CSV", "connection failed")
 - `category` (optional) - Limit to category (getting-started, commands, features, api-reference, development, troubleshooting, examples, reference, advanced)
 - `docType` (optional) - Filter by type (tutorial, command, api, feature, troubleshooting, development, example, reference)
 - `limit` (optional) - Max results (default: 10, max: 50)
 
 **Returns:**
+
 ```json
 {
   "results": [
@@ -171,9 +173,11 @@ Fast full-text search across all documentation.
 Retrieve full content of a specific documentation page.
 
 **Parameters:**
+
 - `path` (required) - Document path from search results (e.g., "02-commands/data-tools/import.md")
 
 **Returns:**
+
 ```json
 {
   "path": "02-commands/data-tools/import.md",
@@ -212,6 +216,7 @@ Browse available documentation categories with sample documents.
 **Parameters:** None
 
 **Returns:**
+
 ```json
 {
   "categories": [
@@ -248,6 +253,7 @@ Overview of documentation status and metrics.
 **Parameters:** None
 
 **Returns:**
+
 ```json
 {
   "totalDocuments": 279,
@@ -285,13 +291,13 @@ Results are ranked by relevance using this scoring:
 7. **Heading Match** - 10 points per heading
 8. **Category Match** - 15 points
 
-**Final Score = Sum of all matching scores**
+#### Final Score = Sum of all matching scores
 
 Results are sorted by score (highest first).
 
 ### Example Ranking
 
-```
+```bash
 Query: "import CSV"
 
 Document 1: "Import Command"
@@ -400,11 +406,13 @@ const examplesSection = commandDoc.content.match(/## Examples([\s\S]*?)##/);
 The documentation index is built automatically from all markdown files in the `docs/` directory.
 
 **Build on demand:**
+
 ```bash
 npm run build:docs-index
 ```
 
 **Build generates:**
+
 - `mcp-server/docs-index.json` - Pre-built searchable index
 - Metadata for all 279 pages
 - Keywords and headings extracted
@@ -454,7 +462,7 @@ npm run build
 
 ### How Agents Use Documentation
 
-```
+```bash
 User: "How do I import data?"
 
 Agent: Calls hana_search_docs("import data")
@@ -472,7 +480,7 @@ Success!
 
 ### Documentation-First Workflow
 
-```
+```bash
 1. **Discover** - Search documentation
 2. **Learn** - Read full guides
 3. **Understand** - Get examples and parameters
@@ -505,6 +513,7 @@ Success!
 **Cause:** Search keywords don't match documents
 
 **Solution:**
+
 1. Try different keywords
 2. Browse categories first
 3. Use general terms
@@ -515,6 +524,7 @@ Success!
 **Cause:** Search terms too general
 
 **Solution:**
+
 1. Add more keywords
 2. Use category filter
 3. Use docType filter
@@ -525,6 +535,7 @@ Success!
 **Cause:** Relevance scoring doesn't match intent
 
 **Solution:**
+
 1. Add more specific keywords
 2. Use category/type filters
 3. Review top 3-5 results

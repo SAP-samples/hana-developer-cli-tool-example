@@ -7,32 +7,35 @@ Technical details of the MCP Server implementation across three phases.
 The MCP Server was developed in three phases, each adding significant capabilities and improvements to the AI agent experience.
 
 | Phase | Focus | Major Features | Tools Added |
-|-------|-------|----------------|-------------|
+| ----- | ----- | -------------- | ----------- |
 | **Phase 1** | Core Features | Discovery basics, examples, presets, error handling | 3 tools |
 | **Phase 2** | Guidance & Navigation | Recommendations, quick start, context-aware suggestions | 3 tools |
 | **Phase 3** | Advanced Capabilities | Workflows, interpretation, search, templates | 6 tools |
 
 ## Phase 1: Core Features (Discovery & Examples)
 
-### Goals
+### Phase 1 Goals
 
 - Provide parameter guidance and discovery
 - Include real-world usage examples
 - Improve error messages with suggestions
 - Make commands self-documenting
 
-### Features Implemented
+### Phase 1 Features Implemented
 
 #### 1. Command Examples (`hana_examples`)
+
 - 40+ real-world usage scenarios
 - Complete parameter sets
 - Expected outputs
 - Tips and best practices
 
 **Files Created:**
+
 - `src/examples-presets.ts` (1000+ lines)
 
 **Scope:**
+
 - import (5 scenarios)
 - export (3 scenarios)
 - dataProfile (2 scenarios)
@@ -42,25 +45,29 @@ The MCP Server was developed in three phases, each adding significant capabiliti
 - And 10+ more commands
 
 #### 2. Parameter Presets (`hana_parameter_presets`)
+
 - Pre-configured parameter templates
 - Named presets for common use cases
 - Descriptions and use case guidance
 - Ready-to-use parameter sets
 
 **Presets include:**
+
 - quick-import, safe-import, large-file, streaming-mode, bulk-insert
 - quick-export, safe-export, format-specific
 - quality-check, pattern-analysis, threshold-based
 - And more...
 
 #### 3. Enhanced Tool Descriptions
+
 - Category and tags inline
 - Common use cases listed
 - Related commands for discovery
 - Links to examples and presets
 
 **Format:**
-```
+
+```bash
 hana_import: Import data from CSV/Excel/TSV file to database table.
 [Category: data-operations] [Tags: import, data, csv, excel, etl]
 
@@ -76,12 +83,14 @@ hana_import: Import data from CSV/Excel/TSV file to database table.
 ```
 
 #### 4. Intelligent Error Messages
+
 - Error pattern detection
 - Actionable suggestions
 - Ready-to-run commands for recovery
 - Categorized causes
 
 **Error Categories:**
+
 - TABLE_NOT_FOUND
 - SCHEMA_NOT_FOUND
 - FILE_NOT_FOUND
@@ -92,7 +101,8 @@ hana_import: Import data from CSV/Excel/TSV file to database table.
 - UNKNOWN_ERROR
 
 **Error Output Format:**
-```
+
+```bash
 ❌ Command Failed
 
 Error: Table not found: MY_TABLE
@@ -108,13 +118,13 @@ Possible Causes:
    → Try: hana_tables with parameters: { schema: "<schema-name>" }
 ```
 
-### Files Modified
+### Phase 1 Files Modified
 
 1. **src/index.ts** - Added tool handlers for examples and presets
 2. **src/executor.ts** - Enhanced error analysis and formatting
 3. **README.md** - Added features documentation
 
-### Metrics
+### Phase 1 Metrics
 
 - ✅ 40+ examples added
 - ✅ 30+ parameter presets
@@ -124,28 +134,32 @@ Possible Causes:
 
 ## Phase 2: Discovery & Guidance
 
-### Goals
+### Phase 2 Goals
 
 - Help agents find commands by intent
 - Provide next-step suggestions
 - Guide users through tasks
 - Enable self-service troubleshooting
 
-### Features Implemented
+### Phase 2 Features Implemented
 
 #### 1. Intent-Based Recommendations (`hana_recommend`)
+
 Natural language intent matching with confidence scoring.
 
 **Files Created:**
+
 - `src/recommendation.ts` (280 lines)
 
 **Features:**
+
 - Pattern matching (100+ intent patterns)
 - Confidence scoring (high/medium/low)
 - Example parameters for recommendations
 - Reasoning for matches
 
 **Scoring Algorithm:**
+
 - Direct command name match: 50 points
 - Intent pattern match: 25 points
 - Tag match: 15 points
@@ -153,6 +167,7 @@ Natural language intent matching with confidence scoring.
 - Use case match: 5 points
 
 **Example Recommendations:**
+
 ```json
 {
   "intent": "find duplicate rows",
@@ -172,9 +187,11 @@ Natural language intent matching with confidence scoring.
 ```
 
 #### 2. Quick Start Guide (`hana_quickstart`)
+
 Beginner-friendly 6-step introduction.
 
 **6 Essential Commands:**
+
 1. status - Check connection
 2. version - View database version
 3. schemas - List available schemas
@@ -183,32 +200,39 @@ Beginner-friendly 6-step introduction.
 6. healthCheck - System health verification
 
 **Features:**
+
 - Step-by-step progression
 - Purpose explanation for each
 - Tips for success
 - Parameter templates included
 
 #### 3. Context-Aware Next Steps
+
 Automatic suggestions after command execution.
 
 **Files Modified:**
+
 - `src/next-steps.ts` (380 lines)
 
 **Features:**
+
 - Command-specific next steps
 - Output-based analysis
 - Reasoning for suggestions
 - Ready-to-run parameters
 
 **Examples:**
+
 - After `status` → suggest schemas, healthCheck, version
 - After `tables` → suggest inspectTable, dataProfile
 - After `import` → suggest dataValidator, dataProfile
 
 #### 4. Troubleshooting Guides (`hana_troubleshoot`)
+
 Command-specific troubleshooting for common issues.
 
 **Coverage:**
+
 - import (5 common issues)
 - export (3 common issues)
 - dataProfile (2 common issues)
@@ -217,27 +241,30 @@ Command-specific troubleshooting for common issues.
 - healthCheck (2 common issues)
 
 **Each guide includes:**
+
 - Issue description
 - Root causes
 - Step-by-step solutions
 - Prevention tips
 
 #### 5. Output-Based Tips
+
 Context-sensitive suggestions based on results.
 
 **Rules:**
+
 - Import with errors → suggest dryRun, skipWithErrors
 - Memory analysis with high usage → suggest optimization
 - Many tables → suggest filtering
 - Health warnings → suggest investigation
 
-### Files Modified
+### Phase 2 Files Modified
 
 1. **src/index.ts** - Added Phase 2 tool handlers
 2. **src/executor.ts** - Integrated next-steps into results
 3. **README.md** - Added Phase 2 documentation
 
-### Metrics
+### Phase 2 Metrics
 
 - ✅ 100+ intent patterns
 - ✅ 4 discovery tools
@@ -247,22 +274,25 @@ Context-sensitive suggestions based on results.
 
 ## Phase 3: Advanced Features & Automation
 
-### Goals
+### Phase 3 Goals
 
 - Automate multi-step workflows
 - Provide AI-friendly result analysis
 - Enable comprehensive search
 - Create guided conversation templates
 
-### Features Implemented
+### Phase 3 Features Implemented
 
 #### 1. Workflow Execution System (`hana_execute_workflow`, `hana_preview_workflow`)
+
 Automated multi-step command sequences.
 
 **Files Created:**
+
 - `src/workflow-execution.ts` (230 lines)
 
 **Features:**
+
 - Parameter substitution
 - Step validation
 - Result tracking
@@ -270,6 +300,7 @@ Automated multi-step command sequences.
 - Preview mode
 
 **Built-in Workflows (20+):**
+
 - data-quality-check (5 steps)
 - schema-migration (6 steps)
 - performance-baseline (5 steps)
@@ -278,6 +309,7 @@ Automated multi-step command sequences.
 - And 15+ more...
 
 **Workflow Structure:**
+
 ```json
 {
   "steps": [
@@ -293,6 +325,7 @@ Automated multi-step command sequences.
 ```
 
 **Execution Output:**
+
 ```json
 {
   "steps": [
@@ -310,12 +343,15 @@ Automated multi-step command sequences.
 ```
 
 #### 2. Result Interpretation Engine (`hana_interpret_result`)
+
 AI-friendly analysis of command results.
 
 **Files Created:**
+
 - `src/result-interpretation.ts` (380 lines)
 
 **Features:**
+
 - Summary generation
 - Insight extraction
 - Recommendation ranking
@@ -323,6 +359,7 @@ AI-friendly analysis of command results.
 - Metric extraction
 
 **Command Coverage:**
+
 - dataProfile → quality issues, nulls, duplicates
 - memoryAnalysis → usage concentration, bottlenecks
 - healthCheck → issues, warnings, recommendations
@@ -330,6 +367,7 @@ AI-friendly analysis of command results.
 - And more...
 
 **Output Structure:**
+
 ```json
 {
   "summary": "...",
@@ -348,12 +386,15 @@ AI-friendly analysis of command results.
 ```
 
 #### 3. Smart Search System (`hana_smart_search`)
+
 Comprehensive search across all resources.
 
 **Files Created:**
+
 - `src/smart-search.ts` (320 lines)
 
 **Features:**
+
 - Multi-scope searching (commands, workflows, examples, presets)
 - Relevance ranking
 - Result type indicators
@@ -361,6 +402,7 @@ Comprehensive search across all resources.
 - Search suggestions
 
 **Scoring Algorithm:**
+
 - Exact match: 100 points
 - Contains phrase: 50 points
 - Contains all words: 30 points
@@ -368,18 +410,22 @@ Comprehensive search across all resources.
 - Start of text bonus: 20 points
 
 **Search Scope:**
+
 - 150+ commands
 - 20+ workflows
 - 40+ examples
 - 30+ presets
 
 #### 4. Conversation Templates (`hana_conversation_templates`, `hana_get_template`)
+
 Guided workflows for common tasks.
 
 **Files Created:**
+
 - `src/conversation-templates.ts` (450 lines)
 
 **5 Main Templates:**
+
 1. **data-exploration** - Understand database structure
 2. **troubleshooting** - Diagnose problems
 3. **data-migration** - Move data safely
@@ -387,6 +433,7 @@ Guided workflows for common tasks.
 5. **security-audit** - Review access control
 
 **Template Structure:**
+
 ```json
 {
   "phases": [
@@ -408,35 +455,40 @@ Guided workflows for common tasks.
 ```
 
 #### 5. Documentation Search Integration (4 tools)
+
 Access to 279 documentation pages.
 
 **Files Created:**
+
 - `src/docs-search.ts` (400 lines)
 - `docs-index.json` (pre-built index)
 
 **Tools:**
+
 - `hana_search_docs` - Full-text search
 - `hana_get_doc` - Retrieve full content
 - `hana_list_doc_categories` - Browse categories
 - `hana_docs_stats` - Index statistics
 
 **Features:**
+
 - 279 indexed pages
 - 9 categories
 - 2,285 keywords
 - Fast searching
 - Relevance ranking
 
-### Files Modified
+### Phase 3 Files Modified
 
 1. **src/index.ts** (+250 lines) - Phase 3 tool handlers
 2. **package.json** - Added docs index build script
 3. **README.md** - Phase 3 documentation
 4. **scripts/build-docs-index.js** (NEW) - Index builder
 
-### Build Changes
+### Phase 3 Build Changes
 
 **Added build scripts:**
+
 ```bash
 npm run build:docs-index  # Build documentation index
 ```
@@ -446,7 +498,7 @@ npm run build:docs-index  # Build documentation index
 ### Total Impact
 
 | Metric | Phase 1 | Phase 2 | Phase 3 | Total |
-|--------|---------|---------|---------|-------|
+| ------ | ------- | ------- | ------- | ----- |
 | **New Files** | 1 | 2 | 6 | 9 |
 | **MCP Tools Added** | 3 | 3 | 6 | 12 |
 | **Total Commands** | 150+ | 150+ | 150+ | 150+ |
@@ -455,7 +507,7 @@ npm run build:docs-index  # Build documentation index
 
 ### Code Organization
 
-```
+```bash
 src/
 ├── index.ts              (Main server, 1000+ lines)
 ├── executor.ts           (Command execution, 400 lines)
@@ -471,7 +523,7 @@ src/
 
 ### Build Process
 
-```
+```bash
 TypeScript Source → npm run build → JavaScript Output
                 ↓
         Type Checking & Compilation
@@ -486,18 +538,21 @@ TypeScript Source → npm run build → JavaScript Output
 ## Performance Characteristics
 
 ### Load Time
+
 - MCP server startup: <1 second
 - Documentation index load: <500ms
 - Command recommendations: <100ms
 - Search ranking: <50ms per query
 
 ### Memory Usage
+
 - Base server: ~50MB
 - With 279 docs indexed: ~75MB
 - Per workflow execution: +5-10MB
 - Result interpretation: <1MB
 
 ### Scalability
+
 - Supports 150+ commands easily
 - Can handle 500+ commands if needed
 - Documentation index scales to 1000+ pages
@@ -506,11 +561,13 @@ TypeScript Source → npm run build → JavaScript Output
 ## Testing and Quality
 
 ### Test Coverage
+
 - Phase 1: Core functionality tested (examples, presets, errors)
 - Phase 2: Discovery system tested (recommendations, guidance)
 - Phase 3: Advanced features tested (workflows, interpretation, search)
 
 ### Build Validation
+
 ✅ All TypeScript compiles without errors
 ✅ All files generated in build/
 ✅ No runtime errors on startup
@@ -519,6 +576,7 @@ TypeScript Source → npm run build → JavaScript Output
 ## Future Enhancements
 
 ### Potential Phase 4
+
 - Machine learning for better recommendations
 - User behavior learning
 - Custom workflow recording
@@ -526,6 +584,7 @@ TypeScript Source → npm run build → JavaScript Output
 - Integration with external systems
 
 ### Optimization Opportunities
+
 - Caching frequently used results
 - Incremental documentation indexing
 - Compression of workflow definitions

@@ -13,18 +13,21 @@ Common issues and solutions for the MCP Server.
 **Solution:**
 
 1. **Verify Connection Status**
+
    ```bash
    hana-cli status
    ```
-   
+
    Should display your connection details, current schema, and HANA version.
 
 2. **Check default-env.json Exists**
+
    ```bash
    ls -la default-env.json
    ```
-   
+
    If missing, create it using:
+
    ```bash
    hana-cli connect
    # or
@@ -32,6 +35,7 @@ Common issues and solutions for the MCP Server.
    ```
 
 3. **Validate Connection Credentials**
+
    ```json
    {
      "VCAP_SERVICES": {
@@ -52,13 +56,15 @@ Common issues and solutions for the MCP Server.
    ```
 
 4. **Enable Debug Mode**
+
    ```bash
    hana-cli tables --debug
    ```
-   
+
    Shows connection details, query execution, and timing.
 
 5. **Test Basic Connectivity**
+
    ```bash
    # For HANA Cloud
    ping your-host.hanacloud.ondemand.com
@@ -72,6 +78,7 @@ Common issues and solutions for the MCP Server.
 **Symptom:** Commands fail with "Connection timeout" error after waiting.
 
 **Causes:**
+
 - Network connectivity issues
 - Firewall blocking the connection
 - Database instance not running or unresponsive
@@ -80,26 +87,30 @@ Common issues and solutions for the MCP Server.
 **Solutions:**
 
 1. **Verify Network Connectivity**
+
    ```bash
    ping your-host.com
    telnet your-host.com 443
    ```
 
 2. **Check Database is Running**
+
    ```bash
    hana-cli status
    ```
-   
+
    If this fails, the database instance is not running.
 
 3. **Increase Timeout Value**
+
    ```bash
    hana-cli tables --timeout 600
    ```
-   
+
    Increases timeout to 10 minutes (default 5 minutes).
 
 4. **Filter Large Result Sets**
+
    ```bash
    # Instead of listing all tables
    hana-cli tables --table MY_* --schema SALES
@@ -109,6 +120,7 @@ Common issues and solutions for the MCP Server.
    ```
 
 5. **Check System Health**
+
    ```bash
    hana-cli healthCheck
    hana-cli memoryAnalysis
@@ -119,6 +131,7 @@ Common issues and solutions for the MCP Server.
 **Symptom:** "Authentication failed" or "Invalid credentials" error.
 
 **Causes:**
+
 - Wrong username or password
 - User account disabled or expired
 - Insufficient database privileges
@@ -126,6 +139,7 @@ Common issues and solutions for the MCP Server.
 **Solutions:**
 
 1. **Verify Credentials**
+
    ```bash
    hana-cli status --user DBADMIN --password YourPassword
    ```
@@ -148,6 +162,7 @@ Common issues and solutions for the MCP Server.
 **Symptom:** "DEPTH_ZERO_SELF_SIGNED_CERT" or "Certificate verification failed"
 
 **Causes:**
+
 - Self-signed certificates (common in development)
 - Expired certificates
 - Certificate not trusted by system
@@ -155,11 +170,13 @@ Common issues and solutions for the MCP Server.
 **Solutions:**
 
 1. **Temporary Fix (Development Only)**
+
    ```json
    {
      "sslValidateCertificate": false
    }
    ```
+
    ⚠️ Never do this in production!
 
 2. **Permanent Fix**
@@ -179,6 +196,7 @@ Common issues and solutions for the MCP Server.
 **Symptom:** `Error: Table 'MY_TABLE' not found` or `Table does not exist`
 
 **Causes:**
+
 - Table name is case-sensitive (usually uppercase in HANA)
 - Table in different schema than expected
 - Table doesn't exist yet
@@ -187,6 +205,7 @@ Common issues and solutions for the MCP Server.
 **Solutions:**
 
 1. **Check Table Name (Case-Sensitive)**
+
    ```bash
    # These are different
    MY_TABLE    # Case as stored
@@ -195,6 +214,7 @@ Common issues and solutions for the MCP Server.
    ```
 
 2. **List Available Tables**
+
    ```bash
    hana-cli tables
    # or for specific schema
@@ -202,6 +222,7 @@ Common issues and solutions for the MCP Server.
    ```
 
 3. **Verify Schema**
+
    ```bash
    # Check current schema
    hana-cli status
@@ -214,6 +235,7 @@ Common issues and solutions for the MCP Server.
    ```
 
 4. **Check User Permissions**
+
    ```bash
    # See current user
    hana-cli inspectUser
@@ -226,6 +248,7 @@ Common issues and solutions for the MCP Server.
 **Symptom:** `Error: Schema '<schema>' does not exist` or permission denied
 
 **Causes:**
+
 - Schema name typo or wrong case
 - User doesn't have access to schema
 - Schema doesn't exist
@@ -233,11 +256,13 @@ Common issues and solutions for the MCP Server.
 **Solutions:**
 
 1. **List Available Schemas**
+
    ```bash
    hana-cli schemas
    ```
 
 2. **Check Schema Permissions**
+
    ```bash
    hana-cli status
    # Shows user and roles
@@ -253,6 +278,7 @@ Common issues and solutions for the MCP Server.
 **Symptom:** `Error: File not found` or `Cannot read file`
 
 **Causes:**
+
 - File path doesn't exist
 - Relative path not working as expected
 - File permissions issue
@@ -261,6 +287,7 @@ Common issues and solutions for the MCP Server.
 **Solutions:**
 
 1. **Verify File Path**
+
    ```bash
    # Use absolute path
    hana-cli import --file /absolute/path/to/data.csv
@@ -270,6 +297,7 @@ Common issues and solutions for the MCP Server.
    ```
 
 2. **Check File Exists and is Readable**
+
    ```bash
    # Verify file exists
    test -f data.csv && echo "File exists" || echo "Not found"
@@ -280,6 +308,7 @@ Common issues and solutions for the MCP Server.
    ```
 
 3. **Verify File Format**
+
    ```bash
    # CSV file
    file -b data.csv
@@ -291,6 +320,7 @@ Common issues and solutions for the MCP Server.
    ```
 
 4. **Check File Contents**
+
    ```bash
    # Show first few lines
    head -5 data.csv
@@ -304,6 +334,7 @@ Common issues and solutions for the MCP Server.
 **Symptom:** Import partially succeeds with some rows having errors.
 
 **Causes:**
+
 - Data type mismatches
 - Invalid values for columns
 - Constraint violations (primary key, foreign key)
@@ -312,13 +343,15 @@ Common issues and solutions for the MCP Server.
 **Solutions:**
 
 1. **Preview Before Importing**
+
    ```bash
    hana-cli import --file data.csv --table MY_TABLE --dryRun true
    ```
-   
+
    Shows what would be imported without actually importing.
 
 2. **Skip Errors and Continue**
+
    ```bash
    hana-cli import \
      --file data.csv \
@@ -328,6 +361,7 @@ Common issues and solutions for the MCP Server.
    ```
 
 3. **Enable Error Logging**
+
    ```bash
    hana-cli import \
      --file data.csv \
@@ -337,6 +371,7 @@ Common issues and solutions for the MCP Server.
    ```
 
 4. **Validate Data Quality**
+
    ```bash
    # After import
    hana-cli dataValidator --table MY_TABLE
@@ -361,6 +396,7 @@ Common issues and solutions for the MCP Server.
 **Symptom:** Commands take longer than expected to complete.
 
 **Causes:**
+
 - Large datasets being processed
 - Complex queries
 - Network latency
@@ -370,12 +406,14 @@ Common issues and solutions for the MCP Server.
 **Solutions:**
 
 1. **Check System Health**
+
    ```bash
    hana-cli healthCheck
    hana-cli memoryAnalysis
    ```
 
 2. **Filter Large Results**
+
    ```bash
    # Instead of full table
    hana-cli dataProfile --table BIG_TABLE --limit 10000
@@ -385,17 +423,20 @@ Common issues and solutions for the MCP Server.
    ```
 
 3. **Check CPU and Memory**
+
    ```bash
    hana-cli cpuAnalysis
    hana-cli memoryAnalysis --sort used
    ```
 
 4. **Identify Expensive Queries**
+
    ```bash
    hana-cli expensiveStatements --order executionTime --limit 10
    ```
 
 5. **Review Indexes**
+
    ```bash
    hana-cli indexTest --table MY_TABLE
    ```
@@ -405,6 +446,7 @@ Common issues and solutions for the MCP Server.
 **Symptom:** `Error: Out of memory` or process crashes.
 
 **Causes:**
+
 - Processing too much data at once
 - Memory fragmentation
 - Database memory pressure
@@ -412,12 +454,14 @@ Common issues and solutions for the MCP Server.
 **Solutions:**
 
 1. **Check Available Memory**
+
    ```bash
    hana-cli memoryAnalysis
    hana-cli diskSpace
    ```
 
 2. **Process Data in Batches**
+
    ```bash
    hana-cli import \
      --file large_file.csv \
@@ -427,12 +471,14 @@ Common issues and solutions for the MCP Server.
    ```
 
 3. **Increase Available Memory**
+
    ```bash
    export NODE_OPTIONS="--max-old-space-size=4096"
    hana-cli dataProfile --table BIG_TABLE
    ```
 
 4. **Use Limits and Filters**
+
    ```bash
    # Profile subset only
    hana-cli dataProfile --table BIG_TABLE --limit 100000
@@ -445,6 +491,7 @@ Common issues and solutions for the MCP Server.
 **Symptom:** Claude Dev can't connect to MCP server or "Connection refused"
 
 **Causes:**
+
 - Build not updated
 - Wrong path in configuration
 - Node.js not installed
@@ -453,12 +500,14 @@ Common issues and solutions for the MCP Server.
 **Solutions:**
 
 1. **Rebuild MCP Server**
+
    ```bash
    cd mcp-server
    npm run build
    ```
 
 2. **Verify Configuration Path**
+
    ```json
    {
      "mcpServers": {
@@ -469,17 +518,19 @@ Common issues and solutions for the MCP Server.
      }
    }
    ```
-   
+
    Use absolute path with forward slashes.
 
 3. **Test Server Start**
+
    ```bash
    node mcp-server/build/index.js
    ```
-   
+
    Should start without errors.
 
 4. **Check Node.js Installation**
+
    ```bash
    node --version
    # Should be v14 or higher
@@ -490,6 +541,7 @@ Common issues and solutions for the MCP Server.
 **Symptom:** MCP connects but shows no available commands.
 
 **Causes:**
+
 - Build failed silently
 - TypeScript compilation errors
 - Missing dependencies
@@ -497,12 +549,14 @@ Common issues and solutions for the MCP Server.
 **Solutions:**
 
 1. **Check Build Success**
+
    ```bash
    ls -la mcp-server/build/
    # Should show many files
    ```
 
 2. **Check for Compilation Errors**
+
    ```bash
    cd mcp-server
    npm run build 2>&1 | tee build.log
@@ -510,6 +564,7 @@ Common issues and solutions for the MCP Server.
    ```
 
 3. **Reinstall Dependencies**
+
    ```bash
    cd mcp-server
    rm -rf node_modules package-lock.json
@@ -522,6 +577,7 @@ Common issues and solutions for the MCP Server.
 **Symptom:** "Command timeout" when running MCP tools.
 
 **Causes:**
+
 - Database query taking too long
 - Network latency
 - Default timeout too short
@@ -529,16 +585,19 @@ Common issues and solutions for the MCP Server.
 **Solutions:**
 
 1. **Increase Timeout**
+
    ```bash
    hana-cli tables --timeout 600
    ```
 
 2. **Filter Results**
+
    ```bash
    hana-cli tables --table MY_* --schema SALES
    ```
 
 3. **Check Database Health**
+
    ```bash
    hana-cli healthCheck
    ```
@@ -582,6 +641,7 @@ hana-cli <command>
 ### Troubleshooting Checklist
 
 When reporting issues, include:
+
 - [ ] Error message (full text)
 - [ ] Command that failed
 - [ ] Debug output (`--debug` flag)

@@ -13,6 +13,7 @@ The `utils/` folder contains reusable utility modules that provide core function
 **Description:** Central functionality shared by all commands. Provides core utilities, database connectivity, output formatting, and CLI helpers.
 
 **Key Exports:**
+
 - `colors` - Chalk color utility for terminal output formatting
 - `debug` - Debug logging utility
 - `bundle` - i18n text bundle for internationalization
@@ -21,6 +22,7 @@ The `utils/` folder contains reusable utility modules that provide core function
 - `require` - CommonJS require function for ESM modules
 
 **Key Functions:**
+
 - `startSpinnerInt()` - Start an elegant terminal spinner
 - `endSpinner(msg)` - End the spinner with optional message
 - `log(msg)` - Output log message with color
@@ -43,11 +45,13 @@ The `utils/` folder contains reusable utility modules that provide core function
 **Description:** Lightweight utilities for CLI initialization with minimal dependencies (no heavy database imports).
 
 **Key Exports:**
+
 - `colors` - Chalk color utility
 - `debug` - Lazy-loaded debug module (only loads if DEBUG env var is set)
 - `bundle` - i18n text bundle
 
 **Key Functions:**
+
 - `error(err)` - Output error message (async)
 - `getBuilder(input, iConn, iDebug)` - Build yargs options with common parameters
 
@@ -62,6 +66,7 @@ The `utils/` folder contains reusable utility modules that provide core function
 **Description:** Helper utility for making connections to HANA DB and determining connection settings. Supports multiple connection sources: `.cdsrc-private.json`, `default-env.json`, `default-env-admin.json`, `.env` files, XSA environment, and direct credentials.
 
 **Key Functions:**
+
 - `getFileCheckParents(filename, maxDepth)` - Search current and parent directories for a file
 - `getPackageJSON()` - Find package.json in current/parent directories
 - `getMTA()` - Find mta.yaml in current/parent directories
@@ -73,6 +78,7 @@ The `utils/` folder contains reusable utility modules that provide core function
 - `getConnOptions(prompts)` - Get connection options from available sources
 
 **Environment Variables Supported:**
+
 - `HANA_CLI_PROJECT_PATH` - Project directory for MCP server context
 - `HANA_CLI_CONN_FILE` - Connection file name
 - `HANA_CLI_HOST` - Direct database host
@@ -90,6 +96,7 @@ The `utils/` folder contains reusable utility modules that provide core function
 **Description:** Localization utilities for detecting and normalizing locale strings.
 
 **Key Functions:**
+
 - `getLocale(env)` - Get locale from environment variables (LC_ALL, LC_MESSAGES, LANG, LANGUAGE)
 - `normalizeLocale(locale)` - Normalize locale string by removing encoding suffixes (e.g., 'de_DE.UTF-8' → 'de_DE')
 
@@ -104,6 +111,7 @@ The `utils/` folder contains reusable utility modules that provide core function
 **Description:** SQL Injection Protection Utilities. Provides comprehensive whitelist-based parameter validation.
 
 **Key Exports:**
+
 - `whitespaceTable` - Map of whitespace characters including Unicode variants
 - `separatorTable` - Map of SQL separator characters
 - `isAcceptableQuotedParameter(value)` - Check if quoted parameter contains no unescaped quotes
@@ -124,6 +132,7 @@ The `utils/` folder contains reusable utility modules that provide core function
 **Description:** Database object dynamic inspection and metadata processing. Provides functions for analyzing database schemas, tables, views, procedures, and their properties.
 
 **Key Functions:**
+
 - `getHANAVersion(db, options)` - Get HANA database version (with caching)
 - `isCalculationView(db, schema, viewId, options)` - Check if view is a calculation view
 - `getView(db, schema, viewId)` - Get database view details
@@ -149,6 +158,7 @@ The `utils/` folder contains reusable utility modules that provide core function
 **Description:** Bulk operations for converting database objects between formats (e.g., SQL to HDBTABLE or HDBVIEW).
 
 **Key Functions:**
+
 - `convertTablesToHdbtable(db, schema, tablePattern, format, output)` - Convert tables to HDBTABLE format
 - `convertViewsToHdbview(db, schema, viewPattern, format, output)` - Convert views to HDBVIEW format
 - `convertToCSV(sourceCode)` - Convert object definition to CSV format
@@ -165,6 +175,7 @@ The `utils/` folder contains reusable utility modules that provide core function
 **Description:** Bulk deletion of database objects (tables, views, procedures) with optional filtering and dry-run support.
 
 **Key Functions:**
+
 - `deleteObjects()` - Main function to trigger mass deletion
 - `deleteObjectsInternal(db, schema, objectPattern, objectType, limit, dry, logOutput)` - Execute bulk delete
 - `executeDeletion(db, objectList, dry, logOutput)` - Run deletion with optional dry-run
@@ -179,6 +190,7 @@ The `utils/` folder contains reusable utility modules that provide core function
 **Description:** Bulk export of database objects (tables, views, procedures) with their structure and data.
 
 **Key Functions:**
+
 - `getTablesInternal(db, schema, tablePattern, limit)` - Find tables matching pattern
 - `getTableStructure(db, schema, table)` - Get table column definitions
 - `getTableData(db, schema, table, limit)` - Export table data
@@ -197,6 +209,7 @@ The `utils/` folder contains reusable utility modules that provide core function
 **Description:** Bulk privilege grant operations on database objects (tables, views, procedures).
 
 **Key Functions:**
+
 - `grantPrivilege()` - Main function for bulk privilege grants
 - `getObjectsInternal(db, schema, objectPattern, objectType, limit)` - Find objects for granting
 - `executeGrant(db, objectList, grantee, privilege, withGrantOption, dry, logOutput)` - Execute bulk grant
@@ -214,6 +227,7 @@ The `utils/` folder contains reusable utility modules that provide core function
 **Description:** Bulk update operations on database tables with optional WHERE clause filtering.
 
 **Key Functions:**
+
 - `updateTables()` - Main function to trigger mass update
 - `getTablesInternal(db, schema, tablePattern, limit)` - Find tables matching pattern
 - `getUpdateCount(db, schema, table, whereClause)` - Get count of rows to be updated
@@ -231,12 +245,14 @@ The `utils/` folder contains reusable utility modules that provide core function
 **Description:** Utility for suggesting similar commands when user enters invalid command or option names.
 
 **Key Functions:**
+
 - `getUniqueCommands()` - Get unique command names from command map
 - `getSimilarCommands(input, threshold, maxSuggestions)` - Find similar commands using fuzzy matching
 - `getSuggestionMessage(invalidCommand, bundle)` - Get formatted suggestion message for display
 - `getSimilarOptions(input, availableOptions, threshold, maxSuggestions)` - Find similar options
 
 **Parameters:**
+
 - `threshold` (default: 0.4) - Similarity threshold (0-1, lower = more strict)
 - `maxSuggestions` (default: 3) - Maximum suggestions to return
 
@@ -251,19 +267,21 @@ The `utils/` folder contains reusable utility modules that provide core function
 **Description:** Node.js version validation using package.json engine requirements.
 
 **Key Functions:**
+
 - `checkVersion()` - Check if current Node.js version meets requirements from package.json
 
 **Use Case:** Ensure CLI runs on compatible Node.js version before initializing.
 
 ---
 
-## Cloud Platform Integration
+## Cloud Integration
 
 ### btp.js
 
 **Description:** Library for calling BTP (SAP Business Technology Platform) APIs via CLI.
 
 **Key Functions:**
+
 - `getVersion()` - Get BTP CLI version
 - `getSubaccounts()` - Get available subaccounts
 - `getSubaccountByName(name)` - Find subaccount by name
@@ -283,6 +301,7 @@ The `utils/` folder contains reusable utility modules that provide core function
 **Description:** Library for calling CloudFoundry (CF) APIs via CLI.
 
 **Key Functions:**
+
 - `getVersion()` - Get CloudFoundry CLI version
 - `getCFConfig()` - Read CF CLI central configuration
 - `clearCFConfigCache()` - Clear CF config cache for refresh
@@ -307,6 +326,7 @@ The `utils/` folder contains reusable utility modules that provide core function
 **Description:** Library for calling XSA (SAP XS Advanced) APIs via CLI.
 
 **Key Functions:**
+
 - `getVersion()` - Get XS CLI version
 - `getCFConfig()` - Read XS CLI configuration
 - `clearXSConfigCache()` - Clear XS config cache
@@ -344,12 +364,15 @@ Provides abstraction layer for different database backends.
 **Description:** Abstract database client factory and base class.
 
 **Key Classes:**
+
 - `dbClientClass` - Abstract base class for database clients
 
 **Key Static Methods:**
+
 - `getNewClient(prompts)` - Factory method to create database client of correct type
 
 **Key Instance Methods:**
+
 - `connect()` - Establish database connection
 - `disconnect()` - Disconnect from database
 - `listTables()` - List database tables
@@ -357,6 +380,7 @@ Provides abstraction layer for different database backends.
 - `getKind()` - Get database kind/flavor
 
 **Supported Database Types:**
+
 - `hana` - SAP HANA (direct connection)
 - `hanaCDS` - SAP HANA (via CDS)
 - `sqlite` - SQLite
@@ -369,6 +393,7 @@ Provides abstraction layer for different database backends.
 **Description:** Database client for HANA direct connection (non-CDS).
 
 **Key Methods:**
+
 - `connect()` - Connect to HANA with direct credentials
 - `disconnect()` - Close direct connection
 - `listTables()` - Query HANA table catalog
@@ -384,6 +409,7 @@ Provides abstraction layer for different database backends.
 **Description:** Database client for HANA via CDS framework.
 
 **Key Methods:**
+
 - `connect()` - Connect via CDS framework
 - `disconnect()` - Close CDS connection
 - `listTables()` - Get tables via CDS query
@@ -399,6 +425,7 @@ Provides abstraction layer for different database backends.
 **Description:** Database client for SQLite databases.
 
 **Key Methods:**
+
 - `connect()` - Connect to SQLite file
 - `disconnect()` - Close SQLite connection
 - `listTables()` - Query SQLite table catalog
@@ -414,6 +441,7 @@ Provides abstraction layer for different database backends.
 **Description:** Database client for PostgreSQL databases.
 
 **Key Methods:**
+
 - `connect()` - Connect to PostgreSQL server
 - `disconnect()` - Close PostgreSQL connection
 - `listTables()` - Query PostgreSQL table catalog
@@ -426,7 +454,7 @@ Provides abstraction layer for different database backends.
 
 ## Usage Examples
 
-### Connecting to Database
+### Connecting to Database Example
 
 ```javascript
 import * as connections from './utils/connections.js'
@@ -440,7 +468,7 @@ const connOptions = await connections.getConnOptions(prompts)
 const db = await base.createDBConnection()
 ```
 
-### SQL Injection Protection
+### SQL Injection Protection Example
 
 ```javascript
 import * as sqlInjection from './utils/sqlInjection.js'
@@ -452,7 +480,7 @@ if (sqlInjection.isAcceptableParameter(userInput, 1)) {
 }
 ```
 
-### Database Inspection
+### Database Inspection Example
 
 ```javascript
 import * as dbInspect from './utils/dbInspect.js'
@@ -465,7 +493,7 @@ const table = await dbInspect.getTable(db, 'SCHEMA', 'TABLE_NAME')
 const fields = await dbInspect.getTableFields(db, table[0].TABLE_OID)
 ```
 
-### Bulk Operations
+### Bulk Operations Example
 
 ```javascript
 import * as massExport from './utils/massExport.js'
@@ -485,12 +513,14 @@ for (let table of tables) {
 ### Promisification
 
 Many utilities wrap callback-based APIs into promises:
+
 - Database statements use `preparePromisified()` and `statementExecPromisified()`
 - Child process commands use `promisify(child_process.exec)`
 
 ### Caching
 
 Performance optimization through strategic caching:
+
 - **HANA Version** - Cached to avoid repeated queries
 - **Calculation View** - Cached per schema/view ID
 - **CF/XS Config** - Cached to avoid file I/O
@@ -498,12 +528,14 @@ Performance optimization through strategic caching:
 ### Progress Tracking
 
 Bulk operations use progress bars:
+
 - `base.terminal.progressBar()` for visual feedback
 - WebSocket broadcast for remote UIs
 
 ### Localization
 
 All user-facing strings use i18n bundles:
+
 - `bundle.getText(key, parameters)` for translated messages
 - Locale detection and normalization
 
@@ -525,6 +557,7 @@ All user-facing strings use i18n bundles:
 ## Testing Utilities
 
 Most mass operation utilities support:
+
 - **Dry-run mode** - Preview changes without executing
 - **Logging** - Write operation logs to JSON
 - **Progress feedback** - Visual progress bars

@@ -105,7 +105,7 @@ Each section has clear hierarchies and cross-links.
 npm run docs:dev
 ```
 
-Open http://localhost:5173 to view.
+Open <http://localhost:5173> to view.
 
 ### Production Build
 

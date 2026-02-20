@@ -14,25 +14,18 @@ Major refactoring in v4.202602 focused on performance and reliability.
 
 **Result:** ~7x faster startup (700ms).
 
-Details in: [OPTIMIZATION_PATTERN.md](../../OPTIMIZATION_PATTERN.md)
-
 ### Command Consistency
 
 **Problem:** Commands had inconsistent naming and parameters.
 
 **Solution:** Standardized all commands across the CLI.
 
-**Changes Tracked In:**
-- [COMMAND_CONSISTENCY_ANALYSIS.md](../../COMMAND_CONSISTENCY_ANALYSIS.md)
-- [COMMAND_CONSISTENCY_FIXES.md](../../COMMAND_CONSISTENCY_FIXES.md)
-
 ## Parameter Standardization
 
 **Effort:** Standardized parameter naming and behavior.
 
-For details, see: [PARAMETER_STANDARDIZATION_PLAN.md](../../PARAMETER_STANDARDIZATION_PLAN.md)
-
 **Key Changes:**
+
 - Consistent schema/source naming
 - Consistent table/target naming
 - Consistent output format options
@@ -44,13 +37,18 @@ For details, see: [PARAMETER_STANDARDIZATION_PLAN.md](../../PARAMETER_STANDARDIZ
 
 Multi-language support for all output and help text.
 
-Details: [INTERNATIONALIZATION_UPDATES.md](../../INTERNATIONALIZATION_UPDATES.md)
+Details: [INTERNATIONALIZATION_UPDATES.md](../../03-features/internationalization.md)
 
 **Supported Languages:**
+
 - English (en)
 - German (de)
+- Spanish (es)
+- French (fr)
+- Portuguese (pt)
 
 **Implementation:**
+
 - Properties files in `_i18n/`
 - Dynamic loading based on locale
 - Fallback to English if translation missing
@@ -59,9 +57,10 @@ Details: [INTERNATIONALIZATION_UPDATES.md](../../INTERNATIONALIZATION_UPDATES.md
 
 AI-first integration enabling natural language commands.
 
-Details: [MCP_SERVER_IMPLEMENTATION_COMPLETE.md](../../MCP_SERVER_IMPLEMENTATION_COMPLETE.md)
+Details: [MCP_SERVER_IMPLEMENTATION_COMPLETE.md](../../03-features/mcp/index.md)
 
 **Architecture:**
+
 - Standalone Node.js MCP server
 - Exposes HANA CLI tools
 - Provides database introspection
@@ -72,6 +71,7 @@ Details: [MCP_SERVER_IMPLEMENTATION_COMPLETE.md](../../MCP_SERVER_IMPLEMENTATION
 REST API server for programmatic access.
 
 **Features:**
+
 - HTTP endpoints for all commands
 - JSON request/response format
 - Authentication support
@@ -81,9 +81,10 @@ REST API server for programmatic access.
 
 API documentation and testing interface.
 
-Details: [SWAGGER_IMPLEMENTATION.md](../../SWAGGER_IMPLEMENTATION.md)
+Details: [SWAGGER_IMPLEMENTATION.md](../../04-api-reference/swagger.md)
 
 **Benefits:**
+
 - Interactive API testing
 - Auto-generated documentation
 - Client SDK generation
@@ -93,9 +94,10 @@ Details: [SWAGGER_IMPLEMENTATION.md](../../SWAGGER_IMPLEMENTATION.md)
 
 Integration with SAP knowledge base and documentation.
 
-Details: [KNOWLEDGE_BASE_INTEGRATION_SUMMARY.md](../../KNOWLEDGE_BASE_INTEGRATION_SUMMARY.md)
+Details: [KNOWLEDGE_BASE_INTEGRATION_SUMMARY.md](../../03-features/knowledge-base.md)
 
 **Features:**
+
 - Lookup relevant documentation
 - Provide context to users
 - Link to help resources
@@ -105,9 +107,10 @@ Details: [KNOWLEDGE_BASE_INTEGRATION_SUMMARY.md](../../KNOWLEDGE_BASE_INTEGRATIO
 
 Advanced import capabilities.
 
-Details: [IMPORT_ENHANCEMENTS_SUMMARY.md](../../IMPORT_ENHANCEMENTS_SUMMARY.md)
+Details: [IMPORT_ENHANCEMENTS_SUMMARY.md](../../03-features/import.md)
 
 **Enhancements:**
+
 - Smarter column matching
 - Type inference
 - Error tolerance modes
@@ -119,9 +122,10 @@ Details: [IMPORT_ENHANCEMENTS_SUMMARY.md](../../IMPORT_ENHANCEMENTS_SUMMARY.md)
 
 Comprehensive command documentation.
 
-See: [COMMAND_DOCUMENTATION_UPDATES.md](../../COMMAND_DOCUMENTATION_UPDATES.md)
+See: [COMMAND_DOCUMENTATION_UPDATES.md](../../02-commands/index.md)
 
 **Coverage:**
+
 - All 16 base commands
 - All variations and aliases
 - Parameters and options
@@ -133,10 +137,11 @@ See: [COMMAND_DOCUMENTATION_UPDATES.md](../../COMMAND_DOCUMENTATION_UPDATES.md)
 Testing infrastructure and metrics.
 
 Details:
-- [TEST_COVERAGE_ANALYSIS.md](../../TEST_COVERAGE_ANALYSIS.md)
-- [TEST_COVERAGE_COMPLETION_SUMMARY.md](../../TEST_COVERAGE_COMPLETION_SUMMARY.md)
+
+- [TEST_COVERAGE_ANALYSIS.md](../../05-development/testing.md)
 
 **Focus Areas:**
+
 - Unit test coverage
 - Integration test coverage
 - Benchmark tests
@@ -165,10 +170,12 @@ Details:
 ## Migration & Upgrade Path
 
 Version upgrade considerations documented in:
+
 - [CHANGELOG.md](../../CHANGELOG.md)
 - [README.md](../../README.md#upgrading)
 
 **Backward Compatibility:**
+
 - Command names maintained across versions
 - Aliases for deprecated commands
 - Deprecation warnings before removal
@@ -177,6 +184,7 @@ Version upgrade considerations documented in:
 ## Future Roadmap
 
 Planned implementations:
+
 - Additional language support
 - Advanced query builder
 - Real-time monitoring
@@ -184,6 +192,7 @@ Planned implementations:
 - GraphQL API option
 
 See Also:
+
 - [Architecture Overview](./architecture/project-structure.md)
 - [Testing Guide](./testing.md)
 - [Contributing Guidelines](../index.md#contributing)
