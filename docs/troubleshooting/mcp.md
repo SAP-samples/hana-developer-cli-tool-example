@@ -9,6 +9,7 @@ Solutions for common MCP server issues.
 **Problem:** `node dist/src/index.js` fails to run
 
 **Solutions:**
+
 1. Verify Node.js is installed: `node --version`
 2. Check dependencies are installed: `npm install`
 3. Rebuild TypeScript: `npm run build`
@@ -19,6 +20,7 @@ Solutions for common MCP server issues.
 **Problem:** MCP executes commands but gets database connection errors
 
 **Solutions:**
+
 1. Verify connection file exists in project: `ls .env` or `ls default-env.json`
 2. Check credentials in connection file are correct
 3. Verify network access to HANA server
@@ -29,6 +31,7 @@ Solutions for common MCP server issues.
 **Problem:** MCP ignores projectPath and uses wrong connection
 
 **Solutions:**
+
 1. Ensure `__projectContext` is included in tool call
 2. Check projectPath is absolute path (not relative)
 3. Verify connection file exists at that location
@@ -41,6 +44,7 @@ Solutions for common MCP server issues.
 **Problem:** Tool call returns error from HANA CLI
 
 **Solutions:**
+
 1. Check command parameters are correct
 2. Verify schema/table names exist and you have permissions
 3. Check data types match (especially for import)
@@ -51,6 +55,7 @@ Solutions for common MCP server issues.
 **Problem:** User doesn't have access to schema/table
 
 **Solutions:**
+
 1. Verify user in connection file has necessary permissions
 2. Check with database admin for grants
 3. Try with admin/system user temporarily
@@ -63,6 +68,7 @@ Solutions for common MCP server issues.
 **Problem:** Commands take too long to complete
 
 **Solutions:**
+
 1. Reduce data size with `--limit` parameter
 2. Use `--batchSize` smaller values for imports
 3. Add WHERE clause filtering to exports
@@ -73,6 +79,7 @@ Solutions for common MCP server issues.
 **Problem:** Out of memory errors
 
 **Solutions:**
+
 1. Use smaller `--batchSize` values
 2. Process data in chunks with `--limit`
 3. Use pagination for large result sets
@@ -85,6 +92,7 @@ Solutions for common MCP server issues.
 **Problem:** AI assistant doesn't see available tools
 
 **Solutions:**
+
 1. Restart Claude Desktop if using it
 2. Verify MCP server is running
 3. Check claude_desktop_config.json configuration
@@ -95,6 +103,7 @@ Solutions for common MCP server issues.
 **Problem:** AI assistant returns incorrect data
 
 **Solutions:**
+
 1. Verify schema/table names are correct
 2. Check project path in context is right project
 3. Review data in database directly to confirm
@@ -118,6 +127,7 @@ DEBUG=hana-cli:* node dist/src/index.js > debug.log 2>&1
 ### Check MCP Logs
 
 Look for messages starting with:
+
 - `hana-cli:` - General messages
 - `hana-cli:executor:` - Command execution
 - `hana-cli:connection:` - Connection issues
