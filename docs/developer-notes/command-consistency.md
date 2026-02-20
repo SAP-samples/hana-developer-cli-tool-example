@@ -7,17 +7,20 @@ Analysis of command parameter inconsistencies and standardization efforts.
 ### Current Schema Default Issues
 
 **Commands Needing `'**CURRENT_SCHEMA**'` Default:**
+
 - dataLineage, dataDiff, dataProfile, dataValidator
 - duplicateDetection, erdDiagram, export  
 - referentialCheck, schemaClone, tableCopy
 
 **Commands Already Correct:**
+
 - backup, callProcedure, tables, views, functions
 - procedures, roles, indexes, triggers, sequences
 
 ### Profile Parameter Coverage
 
 **Commands WITH profile parameter (23):**
+
 - compareData, compareSchema, dataDiff, dataMask
 - dataProfile, dataSync, dataValidator, dataLineage
 - dependencies, duplicateDetection, erdDiagram, export
@@ -26,6 +29,7 @@ Analysis of command parameter inconsistencies and standardization efforts.
 - sdiTasks, tableCopy, tables
 
 **Commands NEEDING profile parameter (19):**
+
 - views, indexes, functions, procedures, triggers
 - sequences, libraries, roles, objects, partitions
 - columnStats, spatialData, ftIndexes, graphWorkspaces
@@ -42,6 +46,7 @@ Analysis of command parameter inconsistencies and standardization efforts.
 ## Standardization Results
 
 ### Implemented ✅
+
 - batchSize parameter standardized to 1000 default
 - Batch size range: 1-10,000 with validation
 - profile parameter consistent across data operation commands
@@ -49,6 +54,7 @@ Analysis of command parameter inconsistencies and standardization efforts.
 - Debug mode (`--debug`) for troubleshooting
 
 ### Recommended
+
 - Adopt `'**CURRENT_SCHEMA**'` as default across all schema parameters
 - Add profile parameter to all schema-browsing commands
 - Use consistent output format options (json, table, csv, excel)
@@ -57,6 +63,7 @@ Analysis of command parameter inconsistencies and standardization efforts.
 ## Testing
 
 All changes validated with:
+
 - Unit tests for parameter validation
 - Integration tests with actual databases
 - Error handling for invalid parameter combinations

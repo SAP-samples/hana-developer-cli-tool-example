@@ -418,6 +418,19 @@ export default withMermaid(
           ]
         },
         {
+          text: 'Developer Notes',
+          collapsed: true,
+          items: [
+            { text: 'Overview', link: '/developer-notes/' },
+            { text: 'Parameter Standards', link: '/developer-notes/parameter-standards' },
+            { text: 'Command Consistency', link: '/developer-notes/command-consistency' },
+            { text: 'Testing Guide', link: '/developer-notes/testing-guide' },
+            { text: 'Test Coverage Summary', link: '/developer-notes/test-coverage-summary' },
+            { text: 'Documentation Quick Reference', link: '/developer-notes/documentation-quick-reference' },
+            { text: 'Knowledge Base Summary', link: '/developer-notes/knowledge-base-summary' },
+          ]
+        },
+        {
           text: 'MCP Server',
           items: [
             { text: 'Overview', link: '/05-development/mcp-server/' },

@@ -8,7 +8,7 @@ Your HANA CLI documentation has been professionally reorganized and is now ready
 
 ### 1. **Created Organized Folder Structure**
 
-```text
+```bash
 docs/
 ├── 01-getting-started/      # Installation, setup, config
 ├── 02-commands/             # All commands by category

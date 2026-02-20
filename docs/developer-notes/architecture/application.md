@@ -4,7 +4,7 @@ Detailed architecture and design of HANA CLI components.
 
 ## System Architecture
 
-```
+```bash
 ┌─────────────────────────────────────────────────────────────────────┐
 │                      Usage Interfaces                               │
 ├─────────────────┬─────────────────┬─────────────────┬───────────────┤
@@ -63,6 +63,7 @@ exports.handler = async (argv) => { /* execute command */ }
 ```
 
 **Key Commands:**
+
 - Data tools: import, export, compareData, dataDiff, etc.
 - Schema tools: schemaClone, compareSchema, erdDiagram, etc.
 - Query tools: callProcedure, querySimple, etc.
@@ -135,6 +136,7 @@ exports.handler = async (argv) => { /* execute command */ }
 **After:** 700ms (~7x improvement)
 
 **Techniques:**
+
 - Lazy loading of commands on-demand
 - Deferred yargs initialization
 - Conditional debug loading
@@ -143,6 +145,7 @@ exports.handler = async (argv) => { /* execute command */ }
 ### Query Performance
 
 **Optimizations:**
+
 - Connection pooling
 - Result caching
 - Batch processing
@@ -151,6 +154,7 @@ exports.handler = async (argv) => { /* execute command */ }
 ### Memory Efficiency
 
 **Techniques:**
+
 - Streaming large result sets
 - Lazy evaluation
 - Garbage collection tuning
@@ -160,7 +164,7 @@ exports.handler = async (argv) => { /* execute command */ }
 
 ### Command Execution Flow
 
-```
+```bash
 1. User Input (CLI / Web UI / API / MCP)
    │
 2. Parameter Parsing (yargs)
@@ -245,7 +249,7 @@ module.exports = {
 
 ### Error Flow
 
-```
+```bash
 Error Occurs
    │
 Caught by handler

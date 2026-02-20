@@ -4,7 +4,7 @@ Complete reference of all documentation files created and organized with VitePre
 
 ## Overview
 
-```
+```bash
 docs/                          # Root documentation folder
 ├── .vitepress/               # VitePress configuration
 │   ├── config.ts             # Main site configuration
@@ -101,7 +101,7 @@ docs/                          # Root documentation folder
 
 ### Configuration & Setup
 
-```
+```bash
 docs/package.json
 docs/.vitepress/config.ts          (400+ lines)
 docs/.vitepress/theme/index.ts     (20 lines)
@@ -112,7 +112,7 @@ docs/README.md                     (200+ lines)
 
 ### Home & Navigation
 
-```
+```bash
 docs/index.md                      (120+ lines)  [Home page]
 docs/01-getting-started/index.md   (50 lines)    [Section overview]
 docs/02-commands/index.md          (80 lines)    [Commands overview]
@@ -122,7 +122,7 @@ docs/04-api-reference/index.md     (50 lines)    [API overview]
 
 ### Getting Started Guides
 
-```
+```bash
 docs/01-getting-started/installation.md      (150 lines)
 docs/01-getting-started/quick-start.md       (100 lines)
 docs/01-getting-started/configuration.md     (200 lines)
@@ -132,7 +132,8 @@ docs/01-getting-started/environments.md      (250 lines)
 ### Command Documentation (14 files)
 
 **Analysis Tools** (6 commands):
-```
+
+```bash
 docs/02-commands/analysis-tools/data-lineage.md
 docs/02-commands/analysis-tools/data-profile.md
 docs/02-commands/analysis-tools/data-diff.md
@@ -142,7 +143,8 @@ docs/02-commands/analysis-tools/calc-view-analyzer.md
 ```
 
 **Data Tools** (6 commands):
-```
+
+```bash
 docs/02-commands/data-tools/import.md
 docs/02-commands/data-tools/export.md
 docs/02-commands/data-tools/compare-data.md
@@ -152,14 +154,16 @@ docs/02-commands/data-tools/kafka-connect.md
 ```
 
 **Schema Tools** (3 commands):
-```
+
+```bash
 docs/02-commands/schema-tools/compare-schema.md
 docs/02-commands/schema-tools/schema-clone.md
 docs/02-commands/schema-tools/table-copy.md
 ```
 
 **System Tools** (4 commands):
-```
+
+```bash
 docs/02-commands/system-tools/replication-status.md
 docs/02-commands/system-tools/sdi-tasks.md
 docs/02-commands/system-tools/xsa-services.md
@@ -168,7 +172,7 @@ docs/02-commands/system-tools/timeseries-tools.md
 
 ### Feature Documentation (6 files)
 
-```
+```bash
 docs/03-features/cli-features.md
 docs/03-features/api-server.md               (150 lines)
 docs/03-features/mcp-integration.md
@@ -179,14 +183,14 @@ docs/03-features/knowledge-base.md
 
 ### API Documentation (3 files)
 
-```
+```bash
 docs/04-api-reference/swagger.md             (150 lines)
 docs/04-api-reference/http-routes.md
 ```
 
 ### Support Documentation (3 files)
 
-```
+```bash
 docs/faq.md                                  (250 lines)
 docs/troubleshooting.md                      (300 lines)
 ```
@@ -195,7 +199,7 @@ docs/troubleshooting.md                      (300 lines)
 
 The VitePress configuration (config.ts) creates this navigation:
 
-```
+```bash
 Home
 ├── Getting Started
 │   ├── Overview
@@ -249,6 +253,7 @@ Home
 ## What Each File Contains
 
 ### Home Page (index.md)
+
 - Welcome message
 - Quick navigation cards
 - Key features overview
@@ -256,13 +261,16 @@ Home
 - Resources and links
 
 ### Getting Started Section
+
 - **installation.md**: Multiple installation methods, requirements, troubleshooting
 - **quick-start.md**: 5-minute tutorial with hands-on steps
 - **configuration.md**: Connection setup, profiles, SSL, proxy, logging
 - **environments.md**: Local, cloud, BTP, Docker, CI/CD, operating systems
 
 ### Commands Section
+
 Each command file includes:
+
 - Quick start examples
 - Aliases
 - Options reference table
@@ -271,6 +279,7 @@ Each command file includes:
 - Related commands
 
 ### Features Section
+
 - **cli-features.md**: Syntax, common options, output, piping, scripts
 - **api-server.md**: Starting server, authentication, CORS, rate limiting
 - **mcp-integration.md**: Setup, tools, use cases, documentation links
@@ -279,26 +288,31 @@ Each command file includes:
 - **knowledge-base.md**: Help access, examples, documentation
 
 ### API Reference Section
+
 - **swagger.md**: Swagger UI access, specification, testing methods
 - **http-routes.md**: HTTP server routes and REST endpoints
 
 ### Support
+
 - **faq.md**: 30+ frequently asked questions with answers
 - **troubleshooting.md**: Common issues, solutions, debug tips
 
 ## Quick Links
 
 ### For Users
+
 - Start here: `docs/01-getting-started/installation.md`
 - Command list: `docs/02-commands/index.md`
 - Need help: `docs/troubleshooting.md` or `docs/faq.md`
 
 ### For Developers
+
 - API docs: `docs/04-api-reference/`
 - Integration: `docs/03-features/api-server.md`
 - MCP setup: `docs/03-features/mcp-integration.md`
 
 ### For Maintainers
+
 - Documentation guide: `docs/README.md`
 - Build commands: `docs/package.json`
 - Configuration: `docs/.vitepress/config.ts`
@@ -329,12 +343,14 @@ npm run docs:preview
 ## Version Control
 
 All documentation files are tracked in git:
+
 - Main files: `docs/[filename].md`
 - Organized in folders: `docs/01-getting-started/*.md`, etc.
 - Configuration: `docs/.vitepress/config.ts`
 - Dependencies: `docs/package.json`
 
 Ignore list (`.gitignore`):
+
 - `node_modules/`
 - `dist/` (build output)
 - `.vitepress/cache/`
@@ -343,6 +359,7 @@ Ignore list (`.gitignore`):
 ## Deployment
 
 The docs can be deployed to:
+
 - **GitHub Pages**: Static site deployment
 - **Vercel**: Auto-deploy on git push
 - **Netlify**: Continuous deployment
@@ -352,6 +369,7 @@ The docs can be deployed to:
 ## Future Enhancements
 
 Possible additions:
+
 - Screenshots and diagrams
 - Video tutorials
 - Interactive examples

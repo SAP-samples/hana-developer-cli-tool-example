@@ -13,39 +13,23 @@ Your SAP HANA CLI documentation has been **completely restructured and organized
 You had excellent documentation, but it was scattered and difficult to navigate:
 
 ```mermaid
-graph TD
-    A[Project Root] --> B[README.md]
-    A --> C[CHANGELOG.md]
-    A --> D[COMMAND_REFERENCE.md]
-    A --> E[COMMAND_CONSISTENCY_ANALYSIS.md]
-    A --> F[COMMAND_CONSISTENCY_FIXES.md]
-    A --> G[COMMAND_DOCUMENTATION_UPDATES.md]
-    A --> H[GENERIC_FLAGS_TEST_SUMMARY.md]
-    A --> I[IMPORT_ENHANCEMENTS_SUMMARY.md]
-    A --> J[INTERNATIONALIZATION_UPDATES.md]
-    A --> K[ISSUE_ANALYSIS.md]
-    A --> L[KNOWLEDGE_BASE_INTEGRATION.md]
-    A --> M[KNOWLEDGE_BASE_INTEGRATION_SUMMARY.md]
-    A --> N[MCP_CONNECTION_CONTEXT_ANALYSIS.md]
-    A --> O[MCP_CONNECTION_CONTEXT_SOLUTION.md]
-    A --> P[MCP_IMPLEMENTATION_COMPLETE.md]
-    A --> Q[MCP_IMPLEMENTATION_GUIDE.md]
-    A --> R[MCP_SERVER_IMPLEMENTATION_COMPLETE.md]
-    A --> S[MCP_SERVER_UPDATES.md]
-    A --> T[MCP_VISUAL_SUMMARY.md]
-    A --> U[OPTIMIZATION_PATTERN.md]
-    A --> V[PARAMETER_STANDARDIZATION_PLAN.md]
-    A --> W[README_MCP_CONNECTION_CONTEXT.md]
-    A --> X[SWAGGER_IMPLEMENTATION.md]
-    A --> Y[TEST_COVERAGE_ANALYSIS.md]
-    A --> Z[TEST_COVERAGE_COMPLETION_SUMMARY.md]
-    A --> AA[docs/]
-    AA --> AB[CALC_VIEW_ANALYZER_COMMAND.md]
-    AA --> AC[COMPARE_DATA_COMMAND.md]
-    AA --> AD[COMPARE_SCHEMA_COMMAND.md]
-    AA --> AE[... (25+ more files at root level)]
-    AA --> AF[(no clear organization)]
+graph LR
+    Root[Project Root] --> Core[Core Files<br/>README, CHANGELOG<br/>COMMAND_REFERENCE]
+    Root --> Analysis[Analysis Docs<br/>COMMAND_CONSISTENCY<br/>TEST_COVERAGE]
+    Root --> MCP[MCP Docs<br/>IMPLEMENTATION<br/>CONTEXT_SOLUTION]
+    Root --> Features[Feature Docs<br/>INTERNATIONALIZATION<br/>KNOWLEDGE_BASE]
+    Root --> DocsFolder[docs/ folder<br/>25+ command files<br/>No organization]
+    
+    style Root fill:#e74c3c
+    style DocsFolder fill:#e74c3c
 ```
+
+**Problems:**
+
+- 25+ documents scattered across root directory
+- Another 25+ files in unorganized docs/ folder  
+- No clear categorization
+- Difficult to find information
 
 ### Issues
 
@@ -189,10 +173,10 @@ Each command documentation includes:
 
 ### Support (2 pages)
 
-| Document             | Content                         | Count         |
-|----------------------|------------------------|---------------|
-| **faq.md**           | Frequently asked questions      | 30+ questions |
-| **troubleshooting.md** | Common issues and solutions   | 20+ topics    |
+| Document               | Content                        | Count         |
+|------------------------|--------------------------------|---------------|
+| **faq.md**             | Frequently asked questions     | 30+ questions |
+| **troubleshooting.md** | Common issues and solutions    | 20+ topics    |
 
 ---
 
@@ -250,13 +234,13 @@ git subtree push --prefix docs/dist origin gh-pages
 
 **Vercel:**
 
-```
+```bash
 Deploy docs folder as static site
 ```
 
 **Netlify:**
 
-```
+```bash
 Connect repo, select docs folder as publish
 ```
 
@@ -265,7 +249,7 @@ Connect repo, select docs folder as publish
 ## Statistics
 
 | Metric | Value |
-|--------|-------|
+| -------- | ------- |
 | **Documentation Files** | 40+ |
 | **Organized Folders** | 5 |
 | **Total Lines** | 5,000+ |
@@ -282,7 +266,7 @@ Connect repo, select docs folder as publish
 
 ### Before
 
-```
+```bash
 "Where's the import command documentation?"
 → Search root folder
 → Find IMPORT_COMMAND.md maybe?
@@ -292,7 +276,7 @@ Connect repo, select docs folder as publish
 
 ### After
 
-```
+```bash
 "Where's the import command documentation?"
 → Go to /docs
 → See "Commands" in navigation
