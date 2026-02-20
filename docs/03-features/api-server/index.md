@@ -9,51 +9,32 @@ Start the API server:
 ```bash
 hana-cli server
 
-# By default listens on http://localhost:3001
+# By default listens on http://localhost:3010
 ```
 
 Access the API:
 
 ```bash
 # List all tables
-curl http://localhost:3001/api/tables -H "Authorization: Bearer YOUR_TOKEN"
+curl http://localhost:3010/hana/tables
 
 # Get table details
-curl http://localhost:3001/api/tables/MY_SCHEMA/MY_TABLE -H "Authorization: Bearer YOUR_TOKEN"
+curl http://localhost:3010/hana/tables/MY_SCHEMA/MY_TABLE 
 
 # Execute query
-curl -X POST http://localhost:3001/api/execute \
-  -H "Authorization: Bearer YOUR_TOKEN" \
+curl -X POST http://localhost:3010/hana/querySimple \
   -H "Content-Type: application/json" \
-  -d '{"sql": "SELECT * FROM MY_TABLE LIMIT 10"}'
+  -d '{"q": "SELECT * FROM MY_TABLE LIMIT 10"}'
 ```
 
 ## API Overview
 
 The HANA CLI API server provides HTTP endpoints for all CLI commands.
 
-### Server Modes
-
-**CLI Mode** (default)
-```bash
-hana-cli [command] [options]
-```
-
-**Web UI Mode** (interactive UI)
-```bash
-hana-cli [command] -w --port 3010
-```
-
-**API Server Mode** (programmatic access)
-```bash
-hana-cli server --port 3001
-```
-
 ### Request Format
 
 ```json
-POST /api/execute HTTP/1.1
-Authorization: Bearer <token>
+POST /hana/execute HTTP/1.1
 Content-Type: application/json
 
 {
@@ -68,6 +49,7 @@ Content-Type: application/json
 ### Response Format
 
 Success response:
+
 ```json
 {
   "success": true,
@@ -83,6 +65,7 @@ Success response:
 ```
 
 Error response:
+
 ```json
 {
   "success": false,
@@ -96,38 +79,36 @@ Error response:
 
 ### Connection
 
-- `GET /api/connection` - Current connection info
-- `POST /api/connect` - Establish new connection
-- `POST /api/disconnect` - Close connection
+- `GET /hana/connection` - Current connection info
+- `POST /hana/connect` - Establish new connection
+- `POST /hana/disconnect` - Close connection
 
 ### Data Operations
 
-- `GET /api/tables?schema=SCHEMA` - List tables
-- `GET /api/tables/SCHEMA/TABLE` - Table details
-- `GET /api/views?schema=SCHEMA` - List views
-- `POST /api/export` - Export data
-- `POST /api/import` - Import data
+- `GET /hana/tables?schema=SCHEMA` - List tables
+- `GET /hana/tables/SCHEMA/TABLE` - Table details
+- `GET /hana/views?schema=SCHEMA` - List views
+- `POST /hana/export` - Export data
+- `POST /hana/import` - Import data
 
 ### Schema Operations
 
-- `GET /api/schemas` - List all schemas
-- `GET /api/objects?schema=SCHEMA` - List objects
-- `POST /api/compareSchema` - Compare schemas
-- `POST /api/schemaClone` - Clone schema
+- `GET /hana/schemas` - List all schemas
+- `GET /hana/objects?schema=SCHEMA` - List objects
+- `POST /hana/compareSchema` - Compare schemas
+- `POST /hana/schemaClone` - Clone schema
 
 ### Query Execution
 
-- `POST /api/execute` - Run SQL query
-- `POST /api/callProcedure` - Execute stored procedure
-- `GET /api/query/:id/results` - Get query results
-- `POST /api/query/:id/cancel` - Cancel running query
+- `POST /hana/execute` - Run SQL query
+- `POST /hana/callProcedure` - Execute stored procedure
+- `GET /hana/query/:id/results` - Get query results
+- `POST /hana/query/:id/cancel` - Cancel running query
 
 ### System
 
-- `GET /api/system/info` - System information
-- `GET /api/system/version` - Database version
-- `GET /api/health` - Health check
-- `GET /api/metrics` - Performance metrics
+- `GET /hana/health` - Health check
+- `GET /hana/metrics` - Performance metrics
 
 ## Authentication
 
@@ -137,25 +118,12 @@ By default, run in **unsecured mode** (development/local):
 hana-cli server
 ```
 
-With token authentication:
-
-```bash
-hana-cli server --token-required \
-  --tokens "prod-token:secret123,dev-token:secret456"
-```
-
-With API key:
-
-```bash
-hana-cli server --api-key "my-app-api-key"
-```
-
 ## Configuration
 
 ### Port
 
 ```bash
-hana-cli server --port 3001
+hana-cli server --port 3010
 ```
 
 ### Host
@@ -164,39 +132,16 @@ hana-cli server --port 3001
 hana-cli server --host 0.0.0.0  # Listen on all interfaces
 ```
 
-### Database
-
-Use specific connection:
-
-```bash
-hana-cli server -d host:port -u user -p password
-```
-
-### CORS
-
-Enable cross-origin requests:
-
-```bash
-hana-cli server --cors "*"
-hana-cli server --cors "https://myapp.example.com"
-```
-
-### Rate Limiting
-
-```bash
-hana-cli server --rate-limit 100  # Max 100 requests per minute
-```
-
 ## Usage Examples
 
 ### Using with curl
 
 ```bash
 # Get tables
-curl "http://localhost:3001/api/tables?schema=MY_SCHEMA"
+curl "http://localhost:3010/hana/tables?schema=MY_SCHEMA"
 
 # Export data with filters
-curl -X POST "http://localhost:3001/api/export" \
+curl -X POST "http://localhost:3010/hana/export" \
   -H "Content-Type: application/json" \
   -d '{
     "schema": "MY_SCHEMA",
@@ -206,7 +151,7 @@ curl -X POST "http://localhost:3001/api/export" \
   }'
 
 # Execute query
-curl -X POST "http://localhost:3001/api/execute" \
+curl -X POST "http://localhost:3010/hana/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "sql": "SELECT COUNT(*) FROM MY_TABLE"
@@ -219,12 +164,12 @@ curl -X POST "http://localhost:3001/api/execute" \
 const fetch = require('node-fetch');
 
 // Get table list
-const response = await fetch('http://localhost:3001/api/tables?schema=MY_SCHEMA');
+const response = await fetch('http://localhost:3010/hana/tables?schema=MY_SCHEMA');
 const data = await response.json();
 console.log(data.data.rows);
 
 // Execute query
-const queryResult = await fetch('http://localhost:3001/api/execute', {
+const queryResult = await fetch('http://localhost:3010/hana/execute', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
@@ -241,7 +186,7 @@ import json
 
 # Get tables
 response = requests.get(
-    'http://localhost:3001/api/tables',
+    'http://localhost:3010/hana/tables',
     params={'schema': 'MY_SCHEMA'}
 )
 tables = response.json()['data']['rows']
@@ -249,42 +194,10 @@ print(tables)
 
 # Execute query
 result = requests.post(
-    'http://localhost:3001/api/execute',
+    'http://localhost:3010/hana/execute',
     json={'sql': 'SELECT * FROM MY_TABLE LIMIT 5'}
 )
 print(result.json())
-```
-
-## Performance Considerations
-
-### Connection Pooling
-
-Server maintains connection pool:
-- Default pool size: 10 connections
-- Configure: `--pool-size 20`
-
-### Query Timeout
-
-Default timeout: 30 seconds
-
-```bash
-hana-cli server --timeout 60
-```
-
-### Result Caching
-
-Cache recent queries:
-
-```bash
-hana-cli server --cache-queries
-```
-
-### Compression
-
-Enable response compression:
-
-```bash
-hana-cli server --compress
 ```
 
 ## See Also

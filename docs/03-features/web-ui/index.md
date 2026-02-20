@@ -4,17 +4,23 @@ Complete documentation for the HANA CLI web application - a modern SAP UI5-based
 
 ## Quick Start
 
-Launch the web interface with any CLI command using the `-w` or `--web` flag:
+Launch the Fiori Launchpad web interface:
 
 ```bash
-hana-cli tables -w
-# Opens http://localhost:3010 automatically
+hana-cli ui
+# Starts server and opens http://localhost:3010/ui/#Shell-home automatically
 ```
 
 By default, the web server runs on **port 3010**. Change it if needed:
 
 ```bash
-hana-cli tables -w --port 3030
+hana-cli ui --port 3030
+```
+
+The server can also be accessed from other machines on your network:
+
+```bash
+hana-cli ui --host 0.0.0.0 --port 8080
 ```
 
 ## Overview
@@ -35,11 +41,11 @@ The Fiori Launchpad includes multiple specialized applications:
 ### Tables & Objects Browser
 
 **Application ID:** `sap.hanacli.tables`  
-**Launch:** `hana-cli tables -w`
 
 The primary application for browsing and listing all types of database objects:
 
 **Features:**
+
 - List all tables in the current schema
 - List all views and calculation views
 - Browse all schemas
@@ -55,6 +61,7 @@ The primary application for browsing and listing all types of database objects:
   - User-Provided Service (UPS) instances
 
 **Additional Features:**
+
 - Search across objects
 - View object properties and metadata
 - Export object definitions
@@ -62,6 +69,7 @@ The primary application for browsing and listing all types of database objects:
 - Connection switching
 
 **Available Routes:**
+
 - `#tables-ui` - List all tables
 - `#views-ui` - List all views
 - `#schemas-ui` - List all schemas
@@ -81,11 +89,11 @@ The primary application for browsing and listing all types of database objects:
 ### Inspect Tool
 
 **Application ID:** `sap.hanacli.inspect`  
-**Launch:** `hana-cli inspect -w`
 
 Provides detailed inspection capabilities for database objects:
 
 **Features:**
+
 - Inspect table structures, columns, and metadata
 - Inspect view definitions and columns
 - Execute and analyze SQL queries
@@ -99,6 +107,7 @@ Provides detailed inspection capabilities for database objects:
 - Object metadata
 
 **Available Routes:**
+
 - `#inspectTable-ui` - Inspect table details
 - `#inspectView-ui` - Inspect view details
 - `#querySimple-ui` - Execute SQL queries
@@ -106,11 +115,11 @@ Provides detailed inspection capabilities for database objects:
 ### Mass Converter
 
 **Application ID:** `sap.hanacli.massConvert`  
-**Launch:** `hana-cli massConvert -w`
 
 Enables mass conversion of database tables to different formats:
 
 **Features:**
+
 - Convert multiple tables simultaneously
 - Support for CDS (Core Data Services) format
 - Generate `.hdbtable` files for HDI deployments
@@ -121,6 +130,7 @@ Enables mass conversion of database tables to different formats:
 - Multi-table batch processing
 
 **Configuration Options:**
+
 - Output format selection (CDS, HDBTable, HDBMigrationTable)
 - Use HANA-specific data types
 - Use "pure" catalog definitions
@@ -128,16 +138,17 @@ Enables mass conversion of database tables to different formats:
 - Connection parameter override
 
 **Available Routes:**
+
 - `#massconvert-ui` - Mass conversion interface
 
 ### System Information
 
 **Application ID:** `sap.hanacli.systemInfo`  
-**Launch:** `hana-cli systemInfo -w`
 
 Provides comprehensive system information about the connected HANA database:
 
 **Features:**
+
 - Current session details
 - Database version information
 - System ID and configuration
@@ -148,6 +159,7 @@ Provides comprehensive system information about the connected HANA database:
 - Resource usage
 
 **Available Routes:**
+
 - `#systeminfo-ui` - System information dashboard
 
 ## Architecture
@@ -155,7 +167,7 @@ Provides comprehensive system information about the connected HANA database:
 ### Technology Stack
 
 | Component | Purpose | Version |
-|-----------|---------|---------|
+| --- | --- | --- |
 | SAP UI5 | UI Framework | 1.144.1 |
 | Fiori Launchpad | App Container | Latest |
 | Node.js Express | Backend API | Runtime |
@@ -164,7 +176,7 @@ Provides comprehensive system information about the connected HANA database:
 
 ### Folder Structure
 
-```
+```bash
 app/
 ├── resources/
 │   ├── index.html           # Main Fiori Launchpad entry
@@ -241,22 +253,26 @@ app/
 #### Core Files
 
 **`resources/index.html`** - Main entry point for the Fiori Launchpad
-- Loads UI5 framework from CDN (https://ui5.sap.com/1.144.1/)
+
+- Loads UI5 framework from CDN `https://ui5.sap.com/<version>/`
 - Configures the Fiori Launchpad sandbox environment
 - Supports both light and dark themes (auto-detected based on system preferences)
 - Registers resource roots for all UI5 applications
 
 **`resources/init.js`** - Initialization script for the Launchpad
+
 - Creates and renders the Fiori shell container
 - Configures flexibility services for UI adaptation
 - Sets up session storage connector for personalization
 
 **`resources/WebAssistant.js`** - SAP Enable Now Web Assistant integration
+
 - Provides contextual help and guided tours
 - Loads from SAP productive environment
 - Enables in-app learning and documentation
 
 **`appconfig/fioriSandboxConfig.json`** - Complete Launchpad configuration
+
 - Defines tile groups and layouts
 - Configures navigation targets
 - Sets up application routes
@@ -272,18 +288,22 @@ app/
 All applications use shared components from `/resources/common`:
 
 **Controllers:**
+
 - **BaseController.js** - Base class with common functionality for all app controllers
 - **handler.js** - Shared event handlers and utility functions
 
 **Views (XML Fragments):**
+
 - **BusyDialog.fragment.xml** - Loading indicator dialog
 - **Connection.fragment.xml** - Database connection configuration UI
 - **Debug.fragment.xml** - Debug information display
 
 **Models:**
+
 - **models.js** - Shared data models and model creation utilities
 
 **Additional Resources:**
+
 - **Component.js** - Reusable component definition
 - **index.js** - Common module exports
 - **/css** - Shared stylesheets
@@ -334,6 +354,7 @@ ws.send(JSON.stringify({
 ### Internationalization
 
 Supports multiple languages:
+
 - **English** - Primary language
 - **German** - Full translations
 - **Extensible** - Easy to add more languages
@@ -343,6 +364,7 @@ Text files: `/resources/*/i18n/*.properties`
 ### Personalization
 
 Users can personalize the Launchpad:
+
 - Rearrange tiles
 - Hide/show tile groups
 - Change themes
@@ -362,6 +384,7 @@ Currently, authentication is handled through the database connection configured 
 ### Browser Compatibility
 
 Supports modern browsers:
+
 - Chrome/Edge (latest)
 - Firefox (latest)
 - Safari (latest)
@@ -373,6 +396,7 @@ Requires JavaScript enabled and WebSocket support.
 The application includes SAP Digital Foundation Adapter (DFA) help content integration:
 
 **Structure:**
+
 - `library.js` - Help library definition
 - `library-preload.js` - Pre-loaded library bundle
 - `/catalog` - Help catalog definitions
@@ -384,6 +408,7 @@ The application includes SAP Digital Foundation Adapter (DFA) help content integ
 - `/wpb` - Web page builder resources
 
 **Features:**
+
 - Contextual help overlay on UI5 applications
 - Guided tours and walkthroughs
 - Integration with SAP Enable Now
@@ -394,7 +419,7 @@ The application includes SAP Digital Foundation Adapter (DFA) help content integ
 
 The web UI connects to the HANA CLI backend running locally:
 
-```
+```bash
 ┌─────────────────────────────────────────┐
 │  Browser (Web UI)                       │
 │  ├─ Tables App                          │
@@ -426,7 +451,7 @@ The web UI connects to the HANA CLI backend running locally:
 
 ```bash
 # Launch web UI
-hana-cli tables -w
+hana-cli tablesUI
 
 # In browser:
 # 1. Search for schema
@@ -439,7 +464,7 @@ hana-cli tables -w
 
 ```bash
 # Launch mass converter
-hana-cli massConvert -w
+hana-cli massConvertUI
 
 # In browser:
 # 1. Select tables to convert
@@ -449,25 +474,11 @@ hana-cli massConvert -w
 # 5. Download results
 ```
 
-### Inspect Object Details
-
-```bash
-# Launch inspector
-hana-cli inspect -w
-
-# In browser:
-# 1. Search for table/view
-# 2. View full schema details
-# 3. Check constraints
-# 4. Review statistics
-# 5. Export inspection report
-```
-
 ### Check System Status
 
 ```bash
 # Launch system info
-hana-cli systemInfo -w
+hana-cli systemInfoUI
 
 # View:
 # - Current connection info
@@ -572,8 +583,7 @@ Theme is auto-selected based on system preferences and can be changed via user s
 ## See Also
 
 - [REST API Server](../api-server/)
-- [App README](../../app/README.md) - Detailed technical documentation
-- [HTTP Routes Documentation](../../routes/README.md) - Backend API endpoints
+- [HTTP Routes Documentation](../../04-api-reference/http-routes) - Backend API endpoints
 - [Getting Started](../../01-getting-started/)
 - [Features Guide](../)
 - [UI5 Documentation](https://ui5.sap.com/) - SAP UI5 framework reference

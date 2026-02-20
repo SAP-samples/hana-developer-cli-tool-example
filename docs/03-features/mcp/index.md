@@ -4,7 +4,6 @@ Complete documentation for the Model Context Protocol (MCP) server that enables 
 
 ## Quick Start
 
-- **[MCP Quick Setup](../../01-getting-started/mcp-quickstart.md)** - Getting started with MCP server
 - **[Server Usage Guide](./server-usage.md)** - Running and using the MCP server
 - **[Architecture Overview](./architecture.md)** - How MCP works with HANA CLI
 
@@ -26,7 +25,7 @@ Complete documentation for the Model Context Protocol (MCP) server that enables 
 
 ## For Developers
 
-- [MCP Implementation Details](../../developer-notes/mcp-architecture.md)
+- [MCP Implementation Details](../../05-development/mcp-server)
 - [Troubleshooting](../../troubleshooting/mcp.md)
 
 ## Resources
