@@ -31,16 +31,27 @@ export async function userInspect(prompts) {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
 
-    base.output(`${baseLite.bundle.getText("user")}: ${prompts.user}`)
+    base.output(`\n${baseLite.bundle.getText("user")}: ${prompts.user}`)
 
     let query =
       `SELECT *  
   FROM USERS 
   WHERE USER_NAME = ? `;
     let userDetails = (await db.statementExecPromisified(await db.preparePromisified(query), [prompts.user]))
-    base.outputTableFancy(userDetails)
+    
+    // Format user details as key-value pairs for better readability
+    if (userDetails && userDetails.length > 0) {
+      const user = userDetails[0]
+      Object.entries(user).forEach(([key, value]) => {
+        const displayValue = value === null || value === undefined ? '(empty)' : value
+        base.output(`  ${key}: ${displayValue}`)
+      })
+    } else {
+      base.output(baseLite.bundle.getText('noData'))
+    }
 
-    base.output(baseLite.bundle.getText("userParams"))
+    base.output(`\n📋 ${baseLite.bundle.getText("userParams")}`)
+    base.output('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
     query =
       `SELECT *
   FROM  USER_PARAMETERS
@@ -48,7 +59,8 @@ export async function userInspect(prompts) {
     let resultsParams = await db.statementExecPromisified(await db.preparePromisified(query), [prompts.user])
    base.outputTableFancy(resultsParams)
 
-    base.output(baseLite.bundle.getText("grantedRoles"))
+    base.output(`\n🔐 ${baseLite.bundle.getText("grantedRoles")}`)
+    base.output('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
     query =
       `SELECT ROLE_SCHEMA_NAME, ROLE_NAME, GRANTOR, IS_GRANTABLE
   FROM  GRANTED_ROLES
@@ -56,7 +68,8 @@ export async function userInspect(prompts) {
     let resultsRoles = await db.statementExecPromisified(await db.preparePromisified(query), [prompts.user])
     base.outputTableFancy(resultsRoles)
 
-    base.output(baseLite.bundle.getText("grantedPrivs"))
+    base.output(`\n⚡ ${baseLite.bundle.getText("grantedPrivs")}`)
+    base.output('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
     query =
       `SELECT PRIVILEGE, OBJECT_TYPE, GRANTOR, IS_GRANTABLE
   FROM  GRANTED_PRIVILEGES

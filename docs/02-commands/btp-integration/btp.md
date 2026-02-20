@@ -20,7 +20,6 @@ hana-cli btp [directory] [subaccount] [options]
 - `btptarget`
 - `btp`
 
-
 ## Command Diagram
 
 ```mermaid

@@ -6,7 +6,7 @@
 
 ## Description
 
-Connect and write default-env.json via service key
+Connect and write default-env.json via Cloud Foundry HANA service key
 
 ## Syntax
 
@@ -20,7 +20,26 @@ hana-cli serviceKey [instance] [key] [options]
 - `servicekey`
 - `service-key`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    A["hana-cli serviceKey"] --> B["[instance] [key]"]
+    A --> C["Help"]
+    
+    B --> B1["instance<br/>Service instance"]
+    B --> B2["key<br/>Service key name"]
+    
+    C --> C1["-h, --help<br/>Show Help"]
+```
+
 ## Parameters
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `instance` | string | Cloud Foundry service instance name |
+| `key` | string | Service key name |
+| `--help`, `-h` | boolean | Show help information |
 
 For a complete list of parameters and options, use:
 
