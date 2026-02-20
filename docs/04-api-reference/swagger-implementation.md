@@ -8,8 +8,8 @@ A comprehensive Swagger/OpenAPI 3.0 documentation system has been successfully i
 
 ### 1. Dependencies
 
-- ✅ **swagger-jsdoc** (v6.2.8) - Already in package.json
-- ✅ **swagger-ui-express** (v5.0.0) - Already in package.json
+- ✅ **swagger-jsdoc**
+- ✅ **swagger-ui-express**
 
 ### 2. Core Swagger Route
 
@@ -154,27 +154,6 @@ node test-swagger.js
 - **Format**: JSDoc with @swagger tags
 - **Output**: Interactive HTML + JSON spec
 
-## 📁 Files Modified/Created
-
-### Created
-
-- ✅ routes/swagger.js (239 lines)
-- ✅ docs/04-api-reference/swagger.md (comprehensive guide)
-- ✅ docs/04-api-reference/swagger-implementation.md (implementation guide)
-- ✅ test-swagger.js (test helper)
-- ✅ tests/routes/swagger.Test.js (automated tests)
-
-### Modified
-
-- ✅ routes/index.js (added JSDoc annotations)
-- ✅ routes/hanaList.js (added JSDoc annotations)
-- ✅ routes/hanaInspect.js (added JSDoc annotations)
-- ✅ routes/docs.js (added JSDoc annotations)
-- ✅ routes/excel.js (added JSDoc annotations)
-- ✅ routes/dfa.js (added JSDoc annotations)
-- ✅ routes/static.js (added JSDoc annotations)
-- ✅ routes/webSocket.js (added JSDoc annotations)
-
 ## ✨ Benefits
 
 1. **API Discovery** - Easy to explore all available endpoints
@@ -216,8 +195,8 @@ app.get('/hana/procedures', async (req, res, next) => {
 
 ### Technologies Used
 
-- **swagger-jsdoc** (v6.2.8): Generates OpenAPI spec from JSDoc
-- **swagger-ui-express** (v5.0.0): Serves interactive Swagger UI
+- **swagger-jsdoc**
+- **swagger-ui-express**
 
 ### Architecture
 
@@ -232,7 +211,7 @@ The core implementation lives in `routes/swagger.js`:
 
 - **OpenAPI**: 3.0.0
 - **Title**: HANA CLI API
-- **Version**: 3.202602.0
+- **Version**: Dynamically loaded from package.json
 - **Description**: RESTful API for HANA Developer CLI Tool
 - **License**: Apache 2.0
 
@@ -298,12 +277,6 @@ The UI is customized with:
 - Filter/search enabled
 
 ## ✅ Testing
-
-Quick test helper:
-
-```bash
-node test-swagger.js
-```
 
 Automated test:
 

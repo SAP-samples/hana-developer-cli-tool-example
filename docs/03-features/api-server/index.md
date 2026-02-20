@@ -194,8 +194,8 @@ print(tables)
 
 # Execute query
 result = requests.post(
-    'http://localhost:3010/hana/execute',
-    json={'sql': 'SELECT * FROM MY_TABLE LIMIT 5'}
+    'http://localhost:3010/hana/simpleQuery',
+    json={'q': 'SELECT * FROM MY_TABLE LIMIT 5'}
 )
 print(result.json())
 ```

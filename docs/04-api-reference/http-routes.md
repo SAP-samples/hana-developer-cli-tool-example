@@ -18,7 +18,7 @@ This document provides comprehensive documentation for all HTTP endpoints expose
 
 ## Server Overview
 
-The HTTP server is automatically initialized when certain CLI commands are run (e.g., `hana-cli inspectTable -o json -w`). The server:
+The HTTP server is automatically initialized when certain CLI commands are run (e.g., `hana-cli inspectTableUI`). The server:
 
 - **Default Port**: 3010 (configurable via `PORT` environment variable or `--port` parameter)
 - **Base URL**: `http://localhost:3010`
@@ -707,6 +707,4 @@ export function route(app, server) {
 
 ## See Also
 
-- [Main README](../README.md) - Project overview and CLI documentation
-- [Utils Documentation](../utils/README.md) - Internal utility modules
-- [CHANGELOG](../CHANGELOG.md) - Project change history
+- [CHANGELOG](../99-reference/CHANGELOG) - Project change history

@@ -67,7 +67,9 @@ docs/                          # Root documentation folder
 ├── 04-api-reference/         # REST API Documentation
 │   ├── index.md              # API overview
 │   ├── swagger.md            # Swagger/OpenAPI docs (150+ lines)
-│   └── endpoints.md          # REST endpoint reference (100+ lines)
+│   ├── swagger-implementation.md
+│   ├── command-flows.md
+│   └── http-routes.md        # REST HTTP routes documentation
 │
 ├── public/                   # Static assets (future)
 │   └── [place logo.png here]
@@ -179,7 +181,7 @@ docs/03-features/knowledge-base.md
 
 ```
 docs/04-api-reference/swagger.md             (150 lines)
-docs/04-api-reference/endpoints.md           (100 lines)
+docs/04-api-reference/http-routes.md
 ```
 
 ### Support Documentation (3 files)
@@ -278,7 +280,7 @@ Each command file includes:
 
 ### API Reference Section
 - **swagger.md**: Swagger UI access, specification, testing methods
-- **endpoints.md**: All endpoints organized by category with examples
+- **http-routes.md**: HTTP server routes and REST endpoints
 
 ### Support
 - **faq.md**: 30+ frequently asked questions with answers

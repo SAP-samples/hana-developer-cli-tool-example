@@ -4,9 +4,13 @@ import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import { readFileSync } from 'fs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+
+// Load version from package.json
+const pkg = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf8'))
 
 /**
  * Swagger/OpenAPI configuration and setup
@@ -20,7 +24,7 @@ export function route(app) {
         openapi: '3.0.0',
         info: {
             title: base.bundle.getText("swagger.info.title"),
-            version: '3.202602.0',
+            version: pkg.version,
             description: base.bundle.getText("swagger.info.description"),
             contact: {
                 name: base.bundle.getText("swagger.info.contactName"),

@@ -91,9 +91,8 @@ docs/
 │   ├── internationalization.md
 │   └── knowledge-base.md
 │
-├── 04-api-reference/     ← API Documentation (2 docs)
-│   ├── swagger.md
-│   └── endpoints.md
+├── 04-api-reference/     ← API Documentation (1 doc)
+│   └── swagger.md
 │
 ├── index.md              ← Home page
 ├── faq.md                ← FAQ
@@ -182,12 +181,11 @@ Each command documentation includes:
 | **i18n** | internationalization.md | Multi-language support |
 | **Help** | knowledge-base.md | Built-in help, examples |
 
-### API Reference (2 pages)
+### API Reference (1 page)
 
 | Document         | Content                           |
 |------------------|-----------------------------------|
 | **swagger.md**   | Swagger UI, OpenAPI spec, testing |
-| **endpoints.md** | All REST endpoints with examples  |
 
 ### Support (2 pages)
 

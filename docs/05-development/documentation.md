@@ -59,7 +59,9 @@ docs/
 ├── 04-api-reference/          # API Documentation
 │   ├── index.md               # API overview
 │   ├── swagger.md             # Swagger/OpenAPI docs
-│   └── endpoints.md           # REST endpoints
+│   ├── http-routes.md         # REST HTTP routes
+│   ├── command-flows.md       # Command flow diagrams
+│   └── swagger-implementation.md
 │
 ├── index.md                   # Home/landing page
 ├── faq.md                     # Frequently asked questions

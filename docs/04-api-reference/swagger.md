@@ -187,4 +187,3 @@ If Swagger UI does not load:
 - [REST API Server Guide](./index.md)
 - [Command Flows & Diagrams](./command-flows.md)
 - [Swagger Implementation Details](./swagger-implementation.md)
-- [REST Endpoints](./endpoints.md)

@@ -396,7 +396,6 @@ export default withMermaid(
             { text: 'Swagger Implementation', link: '/04-api-reference/swagger-implementation' },
             { text: 'Command Flows', link: '/04-api-reference/command-flows' },
             { text: 'HTTP Routes', link: '/04-api-reference/http-routes' },
-            { text: 'REST Endpoints', link: '/04-api-reference/endpoints' },
           ]
         }
       ],
