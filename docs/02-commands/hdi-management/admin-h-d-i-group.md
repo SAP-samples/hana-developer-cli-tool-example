@@ -19,7 +19,34 @@ hana-cli adminHDIGroup [user] [group] [options]
 - `adHDIG`
 - `adhdig`
 
+## Command Diagram
+
+```mermaid
+flowchart TD
+    A["hana-cli adminHDIGroup [user] [group]"] --> B["Add a User as an HDI Group Admin"]                
+    A --> U["[user]\nUser to be added as HDI Group Admin (string)"]
+    A --> G["[group]\nHDI Group to which the user should be added (string)"]    
+    A --> C{"Connection Parameters"}
+    C --> C1["-a, --admin\nConnect via admin (default-env-admin.json)\nDefault: false"]
+    C --> C2["--conn\nConnection filename to override default-env.json"]
+    A --> E{"Troubleshooting"}
+    E --> E1["--disableVerbose, --quiet\nDisable verbose/extra human-readable output\nUseful for scripting commands\nDefault: false"]
+    E --> E2["-d, --debug\nDebug hana-cli with lots of intermediate details\nDefault: false"]
+    A --> O{"Options"}
+    O --> O1["-h, --help\nShow help"]
+```
+
 ## Parameters
+
+| Option | Type | Default | Group | Description |
+| --- | --- | --- | --- | --- |
+| `[user]` | `string` | _(none)_ | Positional Argument | User to be added as HDI Group Admin. |
+| `[group]` | `string` | _(none)_ | Positional Argument | HDI Group to which the user should be added. |
+| `-a`, `--admin` | `boolean` | `false` | Connection Parameters | Connect via admin (`default-env-admin.json`). |
+| `--conn` | `string` | _(none)_ | Connection Parameters | Connection filename to override `default-env.json`. |
+| `--disableVerbose`, `--quiet` | `boolean` | `false` | Troubleshooting | Disable verbose output by removing extra human-readable output. Useful for scripting commands. |
+| `-d`, `--debug` | `boolean` | `false` | Troubleshooting | Debug `hana-cli` itself by adding lots of intermediate details. |
+| `-h`, `--help` | `boolean` | _(none)_ | Options | Show help. |
 
 For a complete list of parameters and options, use:
 
@@ -32,7 +59,7 @@ hana-cli adminHDIGroup --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli adminHDIGroup --action create --group myGroup
+hana-cli adminHDIGroup --action create --group myGroup
 ```
 
 Execute the command
