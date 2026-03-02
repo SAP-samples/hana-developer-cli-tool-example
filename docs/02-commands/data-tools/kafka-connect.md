@@ -20,34 +20,86 @@ hana-cli kafkaConnect [action] [options]
 - `kafkaAdapter`
 - `kafkasub`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    A[hana-cli kafkaConnect] --> B{action}
+    
+    B -->|list| C[List All Connectors]
+    B -->|create| D[Create Connector]
+    B -->|delete| E[Delete Connector]
+    B -->|status| F[Check Status]
+    B -->|test| G[Test Connection]
+    B -->|info| H[Get Info]
+    
+    C --> Common[Common Options]
+    
+    D --> D1["Required:<br/>--name, -n<br/>--brokers, -b<br/>--topic, -t"]
+    D1 --> D2["Optional:<br/>--config, -c"]
+    D2 --> Common
+    
+    E --> E1["Required:<br/>--name, -n"]
+    E1 --> Common
+    
+    F --> F1["Required:<br/>--name, -n"]
+    F1 --> Common
+    
+    G --> G1["Required:<br/>--name, -n"]
+    G1 --> Common
+    
+    H --> H1["Required:<br/>--name, -n"]
+    H1 --> Common
+    
+    Common --> Conn["Connection:<br/>--admin<br/>--conn"]
+    Common --> Debug["Troubleshooting:<br/>--disableVerbose/--quiet<br/>--debug"]
+    
+    style A fill:#e1f5ff
+    style B fill:#fff4e1
+    style D fill:#ffe1e1
+    style E fill:#ffe1e1
+    style F fill:#e1ffe1
+    style G fill:#e1ffe1
+    style H fill:#e1ffe1
+    style C fill:#e1ffe1
+```
+
 ## Parameters
 
-### Positional Parameters
+| Parameter   | Aliases           | Type   | Default | Required For                                 | Description                                                                                                                                              |
+|-------------|-------------------|--------|---------|----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `action`   | `-a`, `--action`  | string | `list`  | All actions                                  | Action to perform on Kafka connectors. **Choices:** `list`, `create`, `delete`, `status`, `test`, `info`                                               |
+| `--name`   | `-n`, `--Name`    | string | -       | `create`, `delete`, `status`, `test`, `info` | Kafka Connector Name. Unique identifier for the connector.                                                                                               |
+| `--brokers` | `-b`, `--Brokers` | string | -       | `create`                                     | Kafka Brokers (comma-separated). Format: `hostname:port,hostname:port`. Example: `kafka1.example.com:9092,kafka2.example.com:9092`                     |
+| `--topic`  | `-t`, `--Topic`   | string | -       | `create`                                     | Kafka Topic Name. Must exist in the Kafka cluster before connector creation.                                                                             |
+| `--config` | `-c`, `--Config`  | string | -       | Optional                                     | Path to configuration file containing connector settings.                                                                                                |
 
-- **action** (string): Action to perform
-  - Default: `list`
-  - Alias: `-a, --Action`
-  - Choices: `list`, `create`, `delete`, `status`, `test`, `info`
+### Connection Parameters
 
-### Optional Parameters
+| Parameter | Aliases | Type   | Default | Description                                                                       |
+| --------- | ------- | ------ | ------- | --------------------------------------------------------------------------------- |
+| `--admin` | -       | string | `false` | Connect via admin using `default-env-admin.json` instead of standard connection.  |
+| `--conn`  | -       | string | -       | Connection filename to override the default `default-env.json`.                   |
 
-- **--name, -n** (string): Kafka Connector Name
-  - Alias: `--Name`
-  - Required for: `create`, `delete`, `test`, `info` actions
+### Troubleshooting Parameters
 
-- **--brokers, -b** (string): Kafka Brokers (comma-separated)
-  - Format: `broker1:port,broker2:port`
-  - Required for: `create` action
-  - Alias: `--Brokers`
+| Parameter          | Aliases   | Type    | Default | Description                                                                                                                      |
+|------------------- | --------- | ------- | ------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output. Removes all extra output that is only helpful to human-readable interface. Useful for scripting commands. |
+| `--debug`          | `-d`      | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details. Use for troubleshooting command issues.                   |
+| `--help`           | `-h`      | boolean | -       | Show help information for the command.                                                                                            |
 
-- **--topic, -t** (string): Kafka Topic Name
-  - Required for: `create` action
-  - Alias: `--Topic`
+### Parameter Notes
 
-- **--config, -c** (string): Path to configuration file
-  - Alias: `--Config`
+- **Action Parameter**: Can be specified as positional argument or using `-a`/`--action` flag
+- **Required Parameters**: Vary by action:
+  - `list`: No additional parameters required
+  - `create`: Requires `--name`, `--brokers`, and `--topic`
+  - `delete`, `status`, `test`, `info`: Require `--name`
+- **Comma-separated Values**: When specifying multiple brokers, use commas without spaces
+- **Configuration File**: JSON file containing advanced connector settings (schema mappings, batch sizes, etc.)
 
-For a complete list of parameters and options, use:
+For a complete list of parameters and real-time help, use:
 
 ```bash
 hana-cli kafkaConnect --help

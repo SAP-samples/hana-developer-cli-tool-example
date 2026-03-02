@@ -22,6 +22,80 @@ hana-cli export [options]
 - `downloadData`
 - `downloaddata`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    A["<b>hana-cli export</b><br/>Export table/view data to CSV, Excel, or JSON"]
+    
+    A --> B["<b>Connection Parameters</b>"]
+    A --> C["<b>Troubleshooting Options</b>"]
+    A --> D["<b>Data Selection & Filtering</b>"]
+    A --> E["<b>Output Format & Control</b>"]
+    A --> F["<b>Performance & Limits</b>"]
+    
+    B --> B1["-a, --admin<br/>Connect via admin"]
+    B --> B2["--conn<br/>Override default-env.json"]
+    
+    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output"]
+    C --> C2["-d, --debug<br/>Debug output"]
+    
+    D --> D1["-t, --table<br/>Source table name"]
+    D --> D2["-s, --schema<br/>DEFAULT: **CURRENT_SCHEMA**"]
+    D --> D3["-w, --where<br/>WHERE clause filter"]
+    D --> D4["-l, --limit<br/>Max rows to export"]
+    D --> D5["--orderby, --ob<br/>ORDER BY clause"]
+    D --> D6["-c, --columns<br/>Comma-separated columns<br/>DEFAULT: *"]
+    
+    E --> E1["-f, --format<br/>csv|excel|json<br/>DEFAULT: csv"]
+    E --> E2["-d, --delimiter<br/>CSV delimiter<br/>DEFAULT: ,"]
+    E --> E3["--includeHeaders, --ih<br/>Include header row<br/>DEFAULT: true"]
+    E --> E4["--nullValue, --nv<br/>Value for NULL cells<br/>DEFAULT: ''"]
+    E --> E5["-o, --output<br/>Output file path"]
+    
+    F --> F1["--maxRows, --mr<br/>Max rows allowed<br/>DEFAULT: 1000000"]
+    F --> F2["--timeout, --to<br/>Timeout in seconds<br/>DEFAULT: 3600"]
+    F --> F3["-p, --profile<br/>CDS Profile"]
+    F --> F4["-h, --help<br/>Show help"]
+    
+    style A fill:#4CAF50,stroke:#2E7D32,color:#fff,stroke-width:3px
+    style B fill:#2196F3,stroke:#1565C0,color:#fff
+    style C fill:#FF9800,stroke:#E65100,color:#fff
+    style D fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style E fill:#F44336,stroke:#C62828,color:#fff
+    style F fill:#00BCD4,stroke:#00838F,color:#fff
+```
+
+## Complete Parameters Reference
+
+| Parameter | Short | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| **Connection Parameters** | | | | |
+| `--admin` | `-a` | boolean | `false` | Connect via admin credentials (default-env-admin.json) |
+| `--conn` | | string | | Connection filename to override default-env.json |
+| **Troubleshooting Options** | | | | |
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output; removes extra output helpful only for human-readable interface; useful for scripting |
+| `--debug` | `-d` | string | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details |
+| **Data Selection & Filtering** | | | | |
+| `--table` | `-t` | string | | Source table or view name (required) |
+| `--schema` | `-s` | string | `**CURRENT_SCHEMA**` | Source schema name |
+| `--where` | `-w` | string | | WHERE clause for filtering rows (optional) |
+| `--limit` | `-l` | number | | Maximum number of rows to export |
+| `--orderby` | `--ob` | string | | ORDER BY clause for sorting (optional) |
+| `--columns` | `-c` | string | `*` | Comma-separated list of specific columns to export (optional) |
+| **Output File & Format** | | | | |
+| `--output` | `-o` | string | | Output file path (required) |
+| `--format` | `-f` | string | `csv` | Export format: `csv`, `excel`, `json` |
+| `--delimiter` | `-d` | string | `,` | CSV delimiter character |
+| `--includeHeaders` | `--ih` | boolean | `true` | Include header row in CSV export |
+| `--nullValue` | `--nv` | string | `` (empty) | Value to use for NULL/empty cells |
+| **Performance & Limits** | | | | |
+| `--maxRows` | `--mr` | number | `1000000` | Maximum rows allowed to prevent excessive exports |
+| `--timeout` | `--to` | number | `3600` | Operation timeout in seconds |
+| **Profile & Help** | | | | |
+| `--profile` | `-p` | string | | CDS profile for connections (auto-detected if not specified) |
+| `--help` | `-h` | boolean | | Show help information |
+
 ## Required Parameters
 
 - **-t, --table** (string): Source database table or view to export from. Can be specified as:
@@ -89,6 +163,7 @@ hana-cli export [options]
 - NULL values appear as empty cells or custom value (with `--nullValue`)
 
 Example output:
+
 ```csv
 EMPLOYEE_ID,NAME,SALARY,HIRE_DATE
 E001,John Smith,85000,2020-01-15
@@ -112,6 +187,7 @@ E002,Jane Doe,72000,2019-06-20
 - Easy to parse programmatically
 
 Example output:
+
 ```json
 [
   {
@@ -221,7 +297,7 @@ hana-cli export -t CUSTOMERS -o ./output/customers.csv --nullValue "N/A"
 hana-cli export -t CRITICAL_TABLE -s PRODUCTION -o ./backup/critical_$(date +\%Y\%m\%d).csv -f excel
 ```
 
-2. **Later, restore by importing into new environment**:
+1. **Later, restore by importing into new environment**:
 
 ```bash
 hana-cli import -n ./backup/critical_20260215.csv -t CRITICAL_TABLE -s STAGING -m name
@@ -235,13 +311,13 @@ hana-cli import -n ./backup/critical_20260215.csv -t CRITICAL_TABLE -s STAGING -
 hana-cli export -t PRODUCTS -s SOURCE_DB -o ./migration/products.json -f json
 ```
 
-2. **Review and modify if needed**:
+1. **Review and modify if needed**:
 
 ```bash
 # Edit products.json as needed
 ```
 
-3. **Import to target**:
+1. **Import to target**:
 
 ```bash
 hana-cli import -n ./migration/products.json -t PRODUCTS -s TARGET_DB
@@ -315,7 +391,7 @@ hana-cli export \
 ## Performance Considerations
 
 | Factor | Recommendation |
-|--------|-----------------|
+| --------- | ------------------- |
 | **Large datasets** | Use `--limit` to test, then export in batches |
 | **Specific columns** | Use `-c` to reduce file size and export time |
 | **Long-running exports** | Increase `--timeout` for millions of rows |
@@ -326,7 +402,7 @@ hana-cli export \
 ## Error Handling
 
 | Error | Cause | Solution |
-|-------|-------|----------|
+| --- | --- | --- |
 | `Table not found` | Table doesn't exist or wrong schema | Verify table name and schema via `hana-cli inspectTable -t TABLE` |
 | `Column not found` | Column doesn't exist | Check column names with `hana-cli inspectTable -t SCHEMA.TABLE` |
 | `File write failed` | Permission denied or invalid path | Ensure output directory exists and is writable |
@@ -391,7 +467,7 @@ hana-cli export -t LARGE_TABLE -o ./sample.csv -l 100
 
 1. **Always test first**: Use `-l 100` to preview data before full export
 2. **Include timestamps**: Add timestamps to filenames for version tracking
-3. **Choose format wisely**: 
+3. **Choose format wisely**:
    - CSV for data analysis tools
    - Excel for business users
    - JSON for APIs and web applications
@@ -420,6 +496,7 @@ Limited by available disk space and the `--maxRows` setting (default 1,000,000 r
 ### Can I export to a remote location?
 
 Yes, use network paths:
+
 - **Windows**: `//server/share/file.csv`
 - **Linux/Mac**: `/mnt/remote/file.csv` or `smb://server/share/file.csv`
 
@@ -430,11 +507,13 @@ CSV export automatically handles special characters in headers and data with pro
 ### Can I schedule regular exports?
 
 Yes, use your system's scheduler:
+
 - **Linux/Mac**: `crontab -e`
 - **Windows**: Task Scheduler
 - **Cloud**: Cloud Functions or Scheduled Tasks
 
 Example cron job:
+
 ```bash
 # Export employees daily at 2 AM
 0 2 * * * hana-cli export -t HR.EMPLOYEES -o /backups/employees_$(date +\%Y\%m\%d).csv

@@ -20,32 +20,56 @@ hana-cli dataSync [options]
 - `syncData`
 - `sync`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    A["hana-cli dataSync<br/>(Synchronize data between systems or tables)"] --> B["Connection Parameters"]
+    A --> C["Troubleshooting Options"]
+    A --> D["Sync Configuration"]
+    
+    B --> B1["-a, --admin<br/>Connect via admin<br/>(default: false)"]
+    B --> B2["--conn<br/>Connection Filename<br/>(override default-env.json)"]
+    
+    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output<br/>(default: false)"]
+    C --> C2["-d, --debug<br/>Debug output with details<br/>(default: false)"]
+    
+    D --> D1["--sourceConnection, --sc<br/>Source connection profile<br/>(string)"]
+    D --> D2["--targetConnection, --tc<br/>Target connection profile<br/>(string)"]
+    D --> D3["-s, --schema<br/>Schema name<br/>(default: **CURRENT_SCHEMA**)"]
+    D --> D4["-t, --table<br/>Table name to synchronize<br/>(string)"]
+    D --> D5["-m, --syncMode<br/>full | incremental<br/>(default: full)"]
+    D --> D6["-b, --batchSize<br/>Batch size for processing<br/>(default: 1000)"]
+    D --> D7["--conflictResolution, --cr<br/>source | target | skip<br/>(default: source)"]
+    D --> D8["-k, --keyColumns<br/>Key columns for row matching<br/>(string)"]
+    D --> D9["--timeout, --to<br/>Operation timeout (seconds)<br/>(default: 3600)"]
+    D --> D10["-p, --profile<br/>CDS Profile<br/>(string)"]
+    
+    style A fill:#4a90e2,stroke:#2c5aa0,color:#fff
+    style B fill:#7b68ee,stroke:#5a4a8a,color:#fff
+    style C fill:#ff6b6b,stroke:#cc5555,color:#fff
+    style D fill:#51cf66,stroke:#3d9b4a,color:#fff
+```
+
 ## Parameters
 
-### Required Parameters
-
-- **-t, --table** (string): Table name to synchronize
-- **-k, --keyColumns** (string): Comma-separated key columns for row matching
-
-### Optional Parameters
-
-- **-sc, --sourceConnection** (string): Source connection profile or connection string
-  - If not provided, uses current connection
-- **-tc, --targetConnection** (string): Target connection profile or connection string
-  - If not provided, uses current connection
-- **-s, --schema** (string): Schema name containing the table
-  - Default: `**CURRENT_SCHEMA**`
-- **-m, --syncMode** (string): Synchronization mode
-  - Choices: `full`, `incremental`
-  - Default: `full`
-- **-b, --batchSize** (number): Number of rows to process in each batch
-  - Default: `1000`
-- **-cr, --conflictResolution** (string): How to resolve conflicts
-  - Choices: `source` (source wins), `target` (target wins), `skip` (skip conflict)
-  - Default: `source`
-- **--timeout, --to** (number): Operation timeout in seconds
-  - Default: `3600`
-- **-p, --profile**: Connection profile
+| Flag | Long Form | Type | Description | Choices | Default | Required |
+| --- | --- | --- | --- | --- | --- | --- |
+| `-a` | `--admin` | boolean | Connect via admin (uses default-env-admin.json) | - | `false` | No |
+| `-t` | `--table` | string | Table name to synchronize | - | - | **Yes** |
+| `-k` | `--keyColumns` | string | Comma-separated key columns for row matching | - | - | **Yes** |
+| `-sc` | `--sourceConnection` | string | Source connection profile or connection string | - | Current connection | No |
+| `-tc` | `--targetConnection` | string | Target connection profile or connection string | - | Current connection | No |
+| `-s` | `--schema` | string | Schema name containing the table | - | `**CURRENT_SCHEMA**` | No |
+| `-m` | `--syncMode` | string | Synchronization mode | `full`, `incremental` | `full` | No |
+| `-b` | `--batchSize` | number | Number of rows to process in each batch | - | `1000` | No |
+| `-cr` | `--conflictResolution` | string | How to resolve conflicts | `source`, `target`, `skip` | `source` | No |
+| `--to` | `--timeout` | number | Operation timeout in seconds | - | `3600` | No |
+| `-p` | `--profile` | string | CDS connection profile | - | - | No |
+| `-d` | `--debug` | boolean | Debug hana-cli with detailed output | - | `false` | No |
+| `-h` | `--help` | boolean | Show help information | - | - | No |
+| - | `--conn` | string | Connection filename to override default-env.json | - | - | No |
+| - | `--disableVerbose` / `--quiet` | boolean | Disable verbose output for scripting | - | `false` | No |
 
 For a complete list of parameters and options, use:
 

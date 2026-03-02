@@ -20,6 +20,43 @@ hana-cli dataValidator [options]
 - `validateData`
 - `dataValidation`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    A["<b>hana-cli dataValidator</b><br/>Validate data against business rules and constraints"]
+    
+    A --> B["<b>Connection Parameters</b>"]
+    A --> C["<b>Troubleshooting Options</b>"]
+    A --> D["<b>Validation Configuration</b>"]
+    A --> E["<b>Output & Control</b>"]
+    
+    B --> B1["-a, --admin<br/>Connect via admin<br/>(default: false)"]
+    B --> B2["--conn<br/>Connection Filename<br/>(override default-env.json)"]
+    
+    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output<br/>(default: false)"]
+    C --> C2["-d, --debug<br/>Debug output with details<br/>(default: false)"]
+    
+    D --> D1["-t, --table<br/>Table Name to Validate<br/>(string)"]
+    D --> D2["-s, --schema<br/>Schema for Table<br/>(default: **CURRENT_SCHEMA**)"]
+    D --> D3["-r, --rules<br/>Validation Rules<br/>(column:rule format)"]
+    D --> D4["--rulesFile, --rf<br/>Path to Validation Rules File<br/>(string)"]
+    D --> D5["-c, --columns<br/>Columns to Validate<br/>(comma-separated, optional)"]
+    
+    E --> E1["-o, --output<br/>Output Report File Path<br/>(string)"]
+    E --> E2["-f, --format<br/>Report Format<br/>(json, csv, summary, detailed)<br/>(default: json)"]
+    E --> E3["-l, --limit<br/>Maximum Rows to Validate<br/>(default: 10000)"]
+    E --> E4["--stopOnFirstError, --sfe<br/>Stop After First Error<br/>(default: false)"]
+    E --> E5["--timeout, --to<br/>Operation Timeout (seconds)<br/>(default: 3600)"]
+    E --> E6["-p, --profile<br/>CDS Profile<br/>(string)"]
+    
+    style A fill:#4a90e2,stroke:#2c5aa0,color:#fff,stroke-width:3px
+    style B fill:#2196F3,stroke:#1565C0,color:#fff
+    style C fill:#FF9800,stroke:#E65100,color:#fff
+    style D fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style E fill:#F44336,stroke:#C62828,color:#fff
+```
+
 ## Parameters
 
 | Option | Alias | Type | Default | Description |

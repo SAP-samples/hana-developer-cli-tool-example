@@ -22,6 +22,124 @@ hana-cli import [options]
 - `uploadData`
 - `uploaddata`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    A["hana-cli import"] --> B["FILE INPUT<br/>(Required)"]
+    A --> C["INPUT OPTIONS"]
+    A --> D["PERFORMANCE<br/>OPTIONS"]
+    A --> E["CONNECTION &<br/>CREDENTIALS"]
+    A --> F["TROUBLESHOOTING"]
+    A --> G["HELP"]
+    
+    B --> B1["-n, --filename<br/>Path to CSV/Excel"]
+    B --> B2["-t, --table<br/>Target table"]
+    
+    C --> C1["-o, --output<br/>csv | excel"]
+    C --> C2["-m, --matchMode<br/>order | name | auto"]
+    C --> C3["-s, --schema<br/>Import schema"]
+    C --> C4["EXCEL-SPECIFIC"]
+    C --> C5["DATA CONTROL"]
+    
+    C4 --> C4A["-w, --worksheet<br/>Worksheet number"]
+    C4 --> C4B["--startRow, --sr<br/>Header row"]
+    C4 --> C4C["--skipEmptyRows, --se<br/>Skip empty rows"]
+    C4 --> C4D["--excelCacheMode, --ec<br/>cache | emit | ignore"]
+    
+    C5 --> C5A["--truncate, --tr<br/>Truncate before import"]
+    C5 --> C5B["--nullValues, --nv<br/>Values to treat as NULL"]
+    
+    D --> D1["-b, --batchSize<br/>Rows per batch"]
+    D --> D2["--maxFileSizeMB, --mfs<br/>Max file size"]
+    D --> D3["--timeoutSeconds, --ts<br/>Operation timeout"]
+    D --> D4["--maxErrorsAllowed, --mea<br/>Max errors allowed"]
+    
+    E --> E1["-p, --profile<br/>CDS profile"]
+    E --> E2["-a, --admin<br/>Admin credentials"]
+    E --> E3["--conn<br/>Connection file"]
+    
+    F --> F1["-d, --debug<br/>Debug output"]
+    F --> F2["--disableVerbose, --quiet<br/>Scripting mode"]
+    F --> F3["--dryRun, --dr<br/>Preview mode"]
+    F --> F4["--skipWithErrors, --swe<br/>Continue on errors"]
+    
+    G --> G1["-h, --help<br/>Show help"]
+    
+    style A fill:#4A90E2,stroke:#2E5C8A,stroke-width:3px,color:#fff
+    style B fill:#FF6B6B,stroke:#C12121,stroke-width:2px,color:#fff
+    style C fill:#FFA500,stroke:#CC8400,stroke-width:2px,color:#fff
+    style D fill:#50C878,stroke:#2D7A4A,stroke-width:2px,color:#fff
+    style E fill:#9B59B6,stroke:#6C3A7C,stroke-width:2px,color:#fff
+    style F fill:#3498DB,stroke:#1F5F8F,stroke-width:2px,color:#fff
+    style G fill:#95A5A6,stroke:#5D7A82,stroke-width:2px,color:#fff
+```
+
+## Parameter Reference
+
+### File Input (Required)
+
+| Parameter | Short | Type | Default | Choices | Description |
+| --- | --- | --- | --- | --- | --- |
+| filename | -n | string | *required* | — | Path to the CSV or Excel file to import |
+| table | -t | string | *required* | — | Target database table (SCHEMA.TABLE or TABLE) |
+
+### Input & Format Options
+
+| Parameter | Short | Type | Default | Choices | Description |
+| --- | --- | --- | --- | --- | --- |
+| output | -o | string | csv | csv, excel | File format |
+| matchMode | -m | string | auto | order, name, auto | Column matching strategy |
+| schema | -s | string | **CURRENT_SCHEMA** | — | Import schema |
+
+### Excel Processing Options
+
+| Parameter | Short | Type | Default | Choices | Description |
+| --- | --- | --- | --- | --- | --- |
+| worksheet | -w | number | 1 | — | Excel worksheet number (1-based) |
+| startRow | --sr | number | 1 | — | Starting row number in Excel (1-based) |
+| skipEmptyRows | --se | boolean | true | — | Skip empty rows in Excel files |
+| excelCacheMode | --ec | string | cache | cache, emit, ignore | Excel shared strings cache mode |
+
+### Data Processing & Control
+
+| Parameter | Short | Type | Default | Choices | Description |
+| --- | --- | --- | --- | --- | --- |
+| truncate | --tr | boolean | false | — | Truncate target table before import |
+| nullValues | --nv | string | null,NULL,#N/A, | — | Comma-separated values to treat as NULL |
+
+### Batch & Performance Tuning
+
+| Parameter | Short | Type | Default | Choices | Description |
+| --- | --- | --- | --- | --- | --- |
+| batchSize | -b | number | 1000 | 1-10000 | Rows per batch insert |
+| maxFileSizeMB | --mfs | number | 500 | — | Maximum file size in MB |
+| timeoutSeconds | --ts | number | 3600 | — | Import operation timeout in seconds |
+| maxErrorsAllowed | --mea | number | -1 | — | Maximum errors allowed (-1 = unlimited) |
+
+### Connection & Credentials
+
+| Parameter | Short | Type | Default | Choices | Description |
+| --- | --- | --- | --- | --- | --- |
+| profile | -p | string | — | — | CDS profile for connection |
+| admin | -a | boolean | false | — | Connect via admin credentials (default-env-admin.json) |
+| conn | — | string | — | — | Connection filename to override default-env.json |
+
+### Troubleshooting
+
+| Parameter | Short | Type | Default | Choices | Description |
+| --- | --- | --- | --- | --- | --- |
+| debug | -d | boolean | false | — | Debug hana-cli with detailed output |
+| disableVerbose | --quiet | boolean | false | — | Disable verbose output (scripting mode) |
+| dryRun | --dr | boolean | false | — | Preview import results without database commit |
+| skipWithErrors | --swe | boolean | false | — | Continue import even if errors exceed threshold |
+
+### Help
+
+| Parameter | Short | Type | Default | Choices | Description |
+| --- | --- | --- | --- | --- | --- |
+| help | -h | boolean | — | — | Show help information |
+
 ## Required Parameters
 
 - **-n, --filename** (string): Path to the CSV or Excel file to import
