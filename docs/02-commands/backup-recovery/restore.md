@@ -87,7 +87,7 @@ hana-cli restore --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli restore --backupFile backup.db
+hana-cli restore --backupFile backup.db
 ```
 
 Execute the command

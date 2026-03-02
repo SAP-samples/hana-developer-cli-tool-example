@@ -1,7 +1,7 @@
 # reclaim
 
 > Command: `reclaim`  
-> Category: **System Tools**  
+> Category: **Backup & Recovery**  
 > Status: Production Ready
 
 ## Description
@@ -71,7 +71,7 @@ hana-cli reclaim --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli reclaim
+hana-cli reclaim
 ```
 
 Execute the command
@@ -82,5 +82,5 @@ See the [Commands Reference](../all-commands.md) for other commands in this cate
 
 ## See Also
 
-- [Category: System Tools](..)
+- [Category: Backup & Recovery](..)
 - [All Commands A-Z](../all-commands.md)

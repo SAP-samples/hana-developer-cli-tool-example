@@ -1,7 +1,7 @@
 # kafkaConnect
 
 > Command: `kafkaConnect`  
-> Category: **Connection & Auth**  
+> Category: **Data Tools**  
 > Status: Production Ready
 
 ## Description
@@ -249,5 +249,5 @@ See the [Commands Reference](../all-commands.md) for other commands in this cate
 
 ## See Also
 
-- [Category: Connection & Auth](..)
+- [Category: Data Tools](..)
 - [All Commands A-Z](../all-commands.md)

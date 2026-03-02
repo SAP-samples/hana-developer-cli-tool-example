@@ -1,7 +1,7 @@
 # openDBExplorer
 
 > Command: `openDBExplorer`  
-> Category: **System Tools**  
+> Category: **BTP Integration**  
 > Status: Production Ready
 
 ## Description
@@ -95,5 +95,5 @@ See the [Commands Reference](../all-commands.md) for other commands in this cate
 
 ## See Also
 
-- [Category: System Tools](..)
+- [Category: BTP Integration](..)
 - [All Commands A-Z](../all-commands.md)
