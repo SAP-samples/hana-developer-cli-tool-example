@@ -22,12 +22,34 @@ hana-cli ups [options]
 - `listups`
 - `upsservices`
 
+## Command Diagram
+
+```mermaid
+flowchart TD
+    A["hana-cli ups"] --> B["List all Cloud Foundry user provided service instances in your target Space"]
+
+    A --> C{"Troubleshooting"}
+    C --> C1["--disableVerbose, --quiet\nDisable verbose/extra human-readable output\nUseful for scripting\nDefault: false"]
+    C --> C2["-d, --debug\nDebug hana-cli with detailed intermediate output\nDefault: false"]
+
+    A --> D{"Options"}
+    D --> D1["-h, --help\nShow help"]
+    D --> D2["-c, --cf, --cmd\nCloud Foundry mode\nDefault: true"]
+```
+
 ## Parameters
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `--disableVerbose`, `--quiet` | `boolean` | `false` | Disable verbose output by removing extra human-readable output. Useful for scripting commands. |
+| `-d`, `--debug` | `boolean` | `false` | Debug `hana-cli` itself by adding lots of intermediate detail output. |
+| `-h`, `--help` | `boolean` | _(none)_ | Show help. |
+| `-c`, `--cf`, `--cmd` | `boolean` | `true` | Cloud Foundry mode. |
 
 For a complete list of parameters and options, use:
 
 ```bash
-hana-cli hanaCloudUPSInstances --help
+hana-cli ups --help
 ```
 
 ## Examples
@@ -35,7 +57,7 @@ hana-cli hanaCloudUPSInstances --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli ups --cf
+hana-cli ups --cf
 ```
 
 Execute the command
@@ -68,13 +90,13 @@ hana-cli upsUI [options]
 For a complete list of parameters and options, use:
 
 ```bash
-hana-cli hanaCloudUPSInstancesUI --help
+hana-cli upsUI --help
 ```
 
 **Example Usage:**
 
 ```bash
-hana-cli hanaCloudUPSInstancesUI
+hana-cli upsUI
 ```
 
 Execute the command

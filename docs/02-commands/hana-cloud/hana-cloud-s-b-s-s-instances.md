@@ -23,7 +23,26 @@ hana-cli sbss [options]
 - `sbssservices`
 - `sbsss`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    A["hana-cli sbss"] --> B["Options"]
+    B --> C["-c, --cf, --cmd<br/>Cloud Foundry<br/>default: true"]
+    B --> D["-h, --help<br/>Show help"]
+    B --> E["--disableVerbose, --quiet<br/>Disable Verbose output<br/>default: false"]
+    B --> F["-d, --debug<br/>Debug hana-cli<br/>default: false"]
+    A --> G["List all SAP HANA Cloud<br/>SBSS service instances"]
+```
+
 ## Parameters
+
+| Option | Description | Type | Default |
+| --- | --- | --- | --- |
+| `-c, --cf, --cmd` | Cloud Foundry | boolean | true |
+| `-h, --help` | Show help | boolean | - |
+| `-d, --debug` | Debug hana-cli itself by adding output of LOTS of intermediate details | boolean | false |
+| `--disableVerbose, --quiet` | Disable Verbose output - removes all extra output that is only helpful to human readable interface. Useful for scripting commands. | boolean | false |
 
 For a complete list of parameters and options, use:
 
@@ -36,7 +55,7 @@ hana-cli hanaCloudSBSSInstances --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli sbss --cf
+hana-cli sbss --cf
 ```
 
 Execute the command
@@ -70,13 +89,13 @@ hana-cli sbssUI [options]
 For a complete list of parameters and options, use:
 
 ```bash
-hana-cli hanaCloudSBSSInstancesUI --help
+hana-cli sbssUI --help
 ```
 
 **Example Usage:**
 
 ```bash
-hana-cli hanaCloudSBSSInstancesUI
+hana-cli sbssUI
 ```
 
 Execute the command

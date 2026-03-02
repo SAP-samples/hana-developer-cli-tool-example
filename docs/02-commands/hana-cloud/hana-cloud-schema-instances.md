@@ -21,12 +21,31 @@ hana-cli schemaInstances [options]
 - `listschemas`
 - `schemaservices`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    A["hana-cli schemaInstances"] --> B["Options"]
+    B --> C["-c, --cf, --cmd<br/>Cloud Foundry<br/>default: true"]
+    B --> D["-h, --help<br/>Show help"]
+    B --> E["--disableVerbose, --quiet<br/>Disable Verbose output<br/>default: false"]
+    B --> F["-d, --debug<br/>Debug hana-cli<br/>default: false"]
+    A --> G["List all SAP HANA Cloud<br/>Schema service instances"]
+```
+
 ## Parameters
+
+| Flag | Description | Type | Default |
+| --- | --- | --- | --- |
+| `-h, --help` | Show help | boolean | - |
+| `-c, --cf, --cmd` | Cloud Foundry? | boolean | `true` |
+| `--disableVerbose, --quiet` | Disable Verbose output - removes all extra output that is only helpful to human readable interface. Useful for scripting commands. | boolean | `false` |
+| `-d, --debug` | Debug hana-cli itself by adding output of LOTS of intermediate details | boolean | `false` |
 
 For a complete list of parameters and options, use:
 
 ```bash
-hana-cli hanaCloudSchemaInstances --help
+hana-cli schemaInstances --help
 ```
 
 ## Examples
@@ -34,7 +53,7 @@ hana-cli hanaCloudSchemaInstances --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli schemaInstances --cf
+hana-cli schemaInstances --cf
 ```
 
 Execute the command
@@ -72,7 +91,7 @@ hana-cli hanaCloudSchemaInstancesUI --help
 **Example Usage:**
 
 ```bash
-hana-cli hanaCloudSchemaInstancesUI
+hana-cli schemaInstancesUI
 ```
 
 Execute the command

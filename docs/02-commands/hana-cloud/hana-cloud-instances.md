@@ -22,6 +22,20 @@ hana-cli hc [name] [options]
 - `listhc`
 - `hcinstances`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    A["hana-cli hc [name]<br/>List HANA Cloud instances in your target Space"]
+    A --> B["-n, --name<br/>SAP HANA Cloud Instance name<br/>default: **default**"]
+    A --> C["🛠️ Troubleshooting"]
+    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output (script-friendly)"]
+    C --> C2["-d, --debug<br/>Debug hana-cli (extra details)"]
+    A --> D["-h, --help<br/>Show help"]
+    style A fill:#1f6feb,stroke:#0b1f3a,color:#fff
+    style D fill:#222,stroke:#555,color:#fff
+```
+
 ## Parameters
 
 For a complete list of parameters and options, use:
@@ -30,12 +44,19 @@ For a complete list of parameters and options, use:
 hana-cli hanaCloudInstances --help
 ```
 
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output (removes extra human-readable output; useful for scripting). |
+| `--debug` | `-d` | boolean | `false` | Debug hana-cli by adding lots of intermediate details. |
+| `--help` | `-h` | boolean | `—` | Show help. |
+| `--name` | `-n` | string | `**default**` | SAP HANA Cloud instance name. |
+
 ## Examples
 
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli hc --name myInstance
+hana-cli hc --name myInstance
 ```
 
 Execute the command
