@@ -1,7 +1,7 @@
 # changeLog
 
 > Command: `changeLog`  
-> Category: **System Tools**  
+> Category: **Developer Tools**  
 > Status: Production Ready
 
 ## Description
@@ -82,5 +82,5 @@ See the [Commands Reference](../all-commands.md) for other commands in this cate
 
 ## See Also
 
-- [Category: System Tools](..)
+- [Category: Developer Tools](..)
 - [All Commands A-Z](../all-commands.md)

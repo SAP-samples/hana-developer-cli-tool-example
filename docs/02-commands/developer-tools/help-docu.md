@@ -48,12 +48,12 @@ All of the following will open the same documentation:
 hana-cli docs
 hana-cli documentation
 hana-cli openDocu
-``` 
+```
 
 ## Documentation Site
 
 This command opens the SAP HANA Developer CLI documentation site at:
-https://sap-samples.github.io/hana-developer-cli-tool-example/
+<https://sap-samples.github.io/hana-developer-cli-tool-example/>
 
 ## Related Commands
 

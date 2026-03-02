@@ -1,7 +1,7 @@
 # issue
 
 > Command: `issue`  
-> Category: **System Tools**  
+> Category: **Developer Tools**  
 > Status: Production Ready
 
 ## Description
@@ -35,7 +35,7 @@ hana-cli issue --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli issue
+hana-cli issue
 ```
 
 Execute the command
@@ -46,5 +46,5 @@ See the [Commands Reference](../all-commands.md) for other commands in this cate
 
 ## See Also
 
-- [Category: System Tools](..)
+- [Category: Developer Tools](..)
 - [All Commands A-Z](../all-commands.md)

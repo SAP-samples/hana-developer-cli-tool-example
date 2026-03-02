@@ -1,12 +1,12 @@
 # hdbsql
 
 > Command: `hdbsql`  
-> Category: **System Tools**  
+> Category: **Developer Tools**  
 > Status: Production Ready
 
 ## Description
 
-Launch the hdbsql tool (if installed separately) using the locally persisted credentials default-env*.json. You can install hdbsql as part of the SAP HANA Client here https://tools.hana.ondemand.com/#hanatools
+Launch the hdbsql tool (if installed separately) using the locally persisted credentials default-env*.json. You can install hdbsql as part of the SAP HANA Client [https://tools.hana.ondemand.com/#hanatools](https://tools.hana.ondemand.com/#hanatools)
 
 ## Syntax
 
@@ -31,7 +31,7 @@ hana-cli hdbsql --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli hdbsql
+hana-cli hdbsql
 ```
 
 Execute the command
@@ -42,5 +42,5 @@ See the [Commands Reference](../all-commands.md) for other commands in this cate
 
 ## See Also
 
-- [Category: System Tools](..)
+- [Category: Developer Tools](..)
 - [All Commands A-Z](../all-commands.md)
