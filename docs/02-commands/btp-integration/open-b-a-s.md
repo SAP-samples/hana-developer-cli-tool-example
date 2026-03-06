@@ -1,6 +1,6 @@
-# openBAS
+# openbas
 
-> Command: `openBAS`  
+> Command: `openbas`  
 > Category: **BTP Integration**  
 > Status: Production Ready
 
@@ -29,35 +29,38 @@ hana-cli openbas [options]
 
 ```mermaid
 graph TD
-    A["hana-cli openbas"] --> B["Troubleshooting Options"]
-    A --> C["Main Options"]
-    
-    B --> B1["--disableVerbose, --quiet<br/>Disable verbose output"]
-    B --> B2["-d, --debug<br/>Debug mode"]
-    
-    C --> C1["-h, --help<br/>Show help"]
+    Start([hana-cli openbas]) --> Inputs{Inputs}
+    Inputs -->|--debug/--disableVerbose| Debug[Diagnostics options]
+    Inputs --> Resolve[Resolve BAS or SAP Build URL]
+    Resolve --> Open[Open URL in default browser]
+    Open --> Output[Print URL]
+    Output --> Complete([Command Complete])
+
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Inputs fill:#f39c12
 ```
 
 ## Parameters
 
-### Troubleshooting Options
+### Positional Arguments
 
-| Parameter | Aliases | Description | Type | Default |
+None.
+
+### Options
+
+None.
+
+### Connection Parameters
+
+None.
+
+### Troubleshooting
+
+| Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |
-| `--disableVerbose` | `--quiet` | Disable verbose output - removes all extra output that is only helpful for human-readable interface. Useful for scripting commands. | boolean | `false` |
-| `--debug` | `-d` | Debug hana-cli itself by adding output of many intermediate details | boolean | `false` |
-
-### Main Options
-
-| Parameter | Aliases | Description | Type | Default |
-| --- | --- | --- | --- | --- |
-| `--help` | `-h` | Show help | boolean | |
-
-For a complete list of parameters and options, use:
-
-```bash
-hana-cli openBAS --help
-```
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable Verbose output - removes all extra output that is only helpful to human readable interface. Useful for scripting commands. |
+| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details. |
 
 ## Examples
 
@@ -67,11 +70,12 @@ hana-cli openBAS --help
 hana-cli openBAS
 ```
 
-Execute the command
+Open Business Application Studio (or SAP Build) in your browser.
 
 ## Related Commands
 
-See the [Commands Reference](../all-commands.md) for other commands in this category.
+- [cds](../developer-tools/cds.md)
+- [activateHDI](../hdi-management/activate-h-d-i.md)
 
 ## See Also
 

@@ -1,6 +1,6 @@
-# openDBExplorer
+# opendbx
 
-> Command: `openDBExplorer`  
+> Command: `opendbx`  
 > Category: **BTP Integration**  
 > Status: Production Ready
 
@@ -37,61 +37,70 @@ hana-cli opendbx [options]
 ## Command Diagram
 
 ```mermaid
-graph TD
-    A["hana-cli opendbx"] --> B["Connection Parameters"]
-    A --> C["Troubleshooting Options"]
-    A --> D["Main Options"]
-    
-    B --> B1["-a, --admin<br/>Connect via admin"]
-    B --> B2["--conn<br/>Connection filename"]
-    
-    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output"]
-    C --> C2["-d, --debug<br/>Debug mode"]
-    
-    D --> D1["-h, --help<br/>Show help"]
+flowchart TD
+    Start["hana-cli opendbx"]
+    Inputs["Inputs"]
+    Conn["Connection options (fallback)"]
+    Debug["Diagnostics options"]
+    Lookup["Find DB Explorer URL"]
+    BTPURL["Build URL from dashboard"]
+    DBQuery["Query M_INIFILE_CONTENTS for xscontroller.ini api_url"]
+    Open["Open URL in default browser"]
+    Output["Print URL"]
+    Complete["Command Complete"]
+
+    Start --> Inputs
+    Inputs --> Conn
+    Inputs --> Debug
+    Inputs --> Lookup
+    Lookup --> BTPURL
+    Lookup --> DBQuery
+    DBQuery --> Conn
+    BTPURL --> Open
+    Conn --> Open
+    Open --> Output
+    Output --> Complete
 ```
 
 ## Parameters
 
+### Positional Arguments
+
+None.
+
+### Options
+
+None.
+
 ### Connection Parameters
 
-| Parameter | Aliases | Description | Type | Default |
+| Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |
-| `--admin` | `-a` | Connect via admin (using default-env-admin.json) | boolean | `false` |
-| `--conn` | | Connection filename to override default-env.json | string | |
+| `--admin` | `-a` | boolean | `false` | Connect via admin (default-env-admin.json). |
+| `--conn` | - | string | - | Connection filename to override default-env.json. |
 
-### Troubleshooting Options
+### Troubleshooting
 
-| Parameter | Aliases | Description | Type | Default |
+| Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |
-| `--disableVerbose` | `--quiet` | Disable verbose output - removes all extra output that is only helpful for human-readable interface. Useful for scripting commands. | boolean | `false` |
-| `--debug` | `-d` | Debug hana-cli itself by adding output of many intermediate details | boolean | `false` |
-
-### Main Options
-
-| Parameter | Aliases | Description | Type | Default |
-| --- | --- | --- | --- | --- |
-| `--help` | `-h` | Show help | boolean | |
-
-For a complete list of parameters and options, use:
-
-```bash
-hana-cli openDBExplorer --help
-```
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable Verbose output - removes all extra output that is only helpful to human readable interface. Useful for scripting commands. |
+| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details. |
 
 ## Examples
 
 ### Basic Usage
 
 ```bash
-hana-cli openDBExplorer
+hana-cli opendbx
 ```
 
-Execute the command
+Open DB Explorer in your default browser.
 
 ## Related Commands
 
-See the [Commands Reference](../all-commands.md) for other commands in this category.
+- [tables](../object-inspection/tables.md)
+- [schemas](../object-inspection/schemas.md)
+- [objects](../object-inspection/objects.md)
 
 ## See Also
 

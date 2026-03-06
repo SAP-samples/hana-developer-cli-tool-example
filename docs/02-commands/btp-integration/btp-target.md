@@ -21,42 +21,43 @@ hana-cli btpTarget [options]
 ## Command Diagram
 
 ```mermaid
-graph TD
-    A["hana-cli btpTarget"] --> B["Arguments"]
-    A --> C["Troubleshooting Options"]
-    A --> D["Main Options"]
-    
-    B --> B1["[directory]<br/>Optional"]
-    B --> B2["[subaccount]<br/>Optional"]
-    
-    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output"]
-    C --> C2["-d, --debug<br/>Debug mode"]
-    
-    D --> D1["--subaccount, --sa<br/>Subaccount ID"]
-    D --> D2["-h, --help<br/>Show help"]
+flowchart TD
+    Start["hana-cli btpTarget"]
+    Inputs["Inputs"]
+    Debug["Diagnostics options"]
+    Fetch["Fetch BTP hierarchy"]
+    Current["Include current target (if set)"]
+    Output["Output hierarchy JSON"]
+    Complete["Command Complete"]
+
+    Start --> Inputs
+    Inputs --> Debug
+    Inputs --> Fetch
+    Fetch --> Current
+    Current --> Output
+    Output --> Complete
 ```
 
 ## Parameters
 
-### Troubleshooting Options
+### Positional Arguments
 
-| Parameter | Aliases | Description | Type | Default |
+None.
+
+### Options
+
+None.
+
+### Connection Parameters
+
+None.
+
+### Troubleshooting
+
+| Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |
-| `--disableVerbose` | `--quiet` | Disable verbose output - removes all extra output that is only helpful for human-readable interface. Useful for scripting commands. | boolean | `false` |
-| `--debug` | `-d` | Debug hana-cli itself by adding output of many intermediate details | boolean | `false` |
-
-### Main Options
-
-| Parameter | Aliases | Description | Type | Default |
-| --- | --- | --- | --- | --- |
-| `--subaccount` | `--sa` | The ID of the subaccount to be targeted | string | |
-| `--help` | `-h` | Show help | boolean | |
-
-For a complete list of parameters and options, use:
-
-```bash
-hana-cli btpTarget --help
-```
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable Verbose output - removes all extra output that is only helpful to human readable interface. Useful for scripting commands. |
+| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details. |
 
 ## Examples
 
@@ -66,11 +67,13 @@ hana-cli btpTarget --help
 hana-cli btpTarget
 ```
 
-Execute the command
+Return the BTP hierarchy data used by the UI.
 
 ## Related Commands
 
-See the [Commands Reference](../all-commands.md) for other commands in this category.
+- [btp](btp.md)
+- [btpInfo](btp-info.md)
+- [btpSubs](btp-subs.md)
 
 ## See Also
 

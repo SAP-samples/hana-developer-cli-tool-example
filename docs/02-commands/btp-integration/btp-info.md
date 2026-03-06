@@ -22,37 +22,37 @@ hana-cli btpInfo [options]
 
 ```mermaid
 graph TD
-    A["hana-cli btpInfo"] --> B["Troubleshooting Options"]
-    A --> C["Main Options"]
-    
-    B --> B1["--disableVerbose, --quiet<br/>Disable verbose output"]
-    B --> B2["-d, --debug<br/>Debug mode"]
-    
-    C --> C1["-h, --help<br/>Show help"]
-    C --> C2["-o, --output<br/>Output format: tbl/json"]
+    Start([hana-cli btpInfo]) --> Inputs{Inputs}
+    Inputs -->|--output / -o| OutputFmt[Output format<br/>tbl or json]
+    Inputs -->|--debug/--disableVerbose| Debug[Diagnostics options]
+    OutputFmt --> Fetch[Fetch BTP CLI target info]
+    Debug --> Fetch
+    Fetch --> Render[Render output]
+    Render --> Complete([Command Complete])
+
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Inputs fill:#f39c12
 ```
 
 ## Parameters
 
-### Troubleshooting Options
+### Positional Arguments
 
-| Parameter | Aliases | Description | Type | Default |
+None.
+
+### Options
+
+| Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |
-| `--disableVerbose` | `--quiet` | Disable verbose output - removes all extra output that is only helpful for human-readable interface. Useful for scripting commands. | boolean | `false` |
-| `--debug` | `-d` | Debug hana-cli itself by adding output of many intermediate details | boolean | `false` |
+| `--output` | `-o` | string | `tbl` | Output format. Choices: `tbl`, `json`. |
 
-### Main Options
+### Troubleshooting
 
-| Parameter | Aliases | Description | Type | Default |
+| Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |
-| `--output` | `-o` | Output format for inspection. Available formats: `tbl` (table), `json` | string | `tbl` |
-| `--help` | `-h` | Show help | boolean | |
-
-For a complete list of parameters and options, use:
-
-```bash
-hana-cli btpInfo --help
-```
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable Verbose output - removes all extra output that is only helpful to human readable interface. Useful for scripting commands. |
+| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details. |
 
 ## Examples
 
@@ -62,48 +62,80 @@ hana-cli btpInfo --help
 hana-cli btpInfo --output json
 ```
 
-Execute the command
+Output the current BTP target information in JSON format.
 
 ---
 
 ## btpInfoUI (UI Variant)
 
 > Command: `btpInfoUI`  
+> Category: **BTP Integration**  
 > Status: Production Ready
 
-**Description:** Execute btpInfoUI command - UI version of BTP information display
+### UI Description
 
-**Syntax:**
+Execute btpInfoUI command - UI version of BTP information display
+
+### UI Syntax
 
 ```bash
 hana-cli btpInfoUI [options]
 ```
 
-**Aliases:**
+### UI Aliases
 
 - `btpinfoUI`
 - `btpui`
 - `btpInfoui`
 
-**Parameters:**
+### UI Command Diagram
 
-For a complete list of parameters and options, use:
+```mermaid
+graph TD
+    Start([hana-cli btpInfoUI]) --> Inputs{Inputs}
+    Inputs -->|--output / -o| OutputFmt[Output format<br/>tbl or json]
+    Inputs -->|--debug/--disableVerbose| Debug[Diagnostics options]
+    OutputFmt --> Launch[Launch BTP Info UI]
+    Debug --> Launch
+    Launch --> Complete([Command Complete])
 
-```bash
-hana-cli btpInfoUI --help
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Inputs fill:#f39c12
 ```
 
-**Example Usage:**
+### UI Parameters
+
+#### UI Positional Arguments
+
+None.
+
+#### UI Options
+
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--output` | `-o` | string | `tbl` | Output format. Choices: `tbl`, `json`. |
+
+#### UI Troubleshooting
+
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable Verbose output - removes all extra output that is only helpful to human readable interface. Useful for scripting commands. |
+| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details. |
+
+### UI Examples
 
 ```bash
 hana-cli btpInfoUI
 ```
 
-Execute the command
+Launch the UI for BTP configuration details.
 
 ## Related Commands
 
-See the [Commands Reference](../all-commands.md) for other commands in this category.
+- [btp](btp.md)
+- [btpTarget](btp-target.md)
+- [btpSubs](btp-subs.md)
 
 ## See Also
 

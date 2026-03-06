@@ -1,6 +1,6 @@
-# btpSubs
+# sub
 
-> Command: `btpSubs`  
+> Command: `sub`  
 > Category: **BTP Integration**  
 > Status: Production Ready
 
@@ -11,7 +11,7 @@ BTP Active Subscriptions and their URL
 ## Syntax
 
 ```bash
-hana-cli btpSubs [options]
+hana-cli sub [options]
 ```
 
 ## Aliases
@@ -30,49 +30,54 @@ hana-cli btpSubs [options]
 
 ```mermaid
 graph TD
-    A["hana-cli sub"] --> B["Troubleshooting Options"]
-    A --> C["Main Options"]
-    
-    B --> B1["--disableVerbose, --quiet<br/>Disable verbose output"]
-    B --> B2["-d, --debug<br/>Debug mode"]
-    
-    C --> C1["-h, --help<br/>Show help"]
+    Start([hana-cli sub]) --> Inputs{Inputs}
+    Inputs -->|--debug/--disableVerbose| Debug[Diagnostics options]
+    Inputs --> Fetch[Fetch BTP subscriptions]
+    Fetch --> Filter[Filter to subscribed apps]
+    Filter --> Output[Print app names and URLs]
+    Output --> Complete([Command Complete])
+
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Inputs fill:#f39c12
 ```
 
 ## Parameters
 
-### Troubleshooting Options
+### Positional Arguments
 
-| Parameter | Aliases | Description | Type | Default |
+None.
+
+### Options
+
+None.
+
+### Connection Parameters
+
+None.
+
+### Troubleshooting
+
+| Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |
-| `--disableVerbose` | `--quiet` | Disable verbose output - removes all extra output that is only helpful for human-readable interface. Useful for scripting commands. | boolean | `false` |
-| `--debug` | `-d` | Debug hana-cli itself by adding output of many intermediate details | boolean | `false` |
-
-### Main Options
-
-| Parameter | Aliases | Description | Type | Default |
-| --- | --- | --- | --- | --- |
-| `--help` | `-h` | Show help | boolean | |
-
-For a complete list of parameters and options, use:
-
-```bash
-hana-cli btpSubs --help
-```
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable Verbose output - removes all extra output that is only helpful to human readable interface. Useful for scripting commands. |
+| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details. |
 
 ## Examples
 
 ### Basic Usage
 
 ```bash
-hana-cli btpSubs
+hana-cli sub
 ```
 
-Execute the command
+List active BTP subscriptions and their URLs.
 
 ## Related Commands
 
-See the [Commands Reference](../all-commands.md) for other commands in this category.
+- [btp](btp.md)
+- [btpInfo](btp-info.md)
+- [hanaCloudInstances](../hana-cloud/hana-cloud-instances.md)
 
 ## See Also
 

@@ -23,56 +23,69 @@ hana-cli btp [directory] [subaccount] [options]
 ## Command Diagram
 
 ```mermaid
-graph TD
-    A["hana-cli btp"] --> B["Arguments"]
-    A --> C["Troubleshooting Options"]
-    A --> D["Main Options"]
-    
-    B --> B1["[directory]<br/>Optional"]
-    B --> B2["[subaccount]<br/>Optional"]
-    
-    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output"]
-    C --> C2["-d, --debug<br/>Debug mode"]
-    
-    D --> D1["--subaccount, --sa<br/>Subaccount ID"]
-    D --> D2["-h, --help<br/>Show help"]
+flowchart TD
+    Start["hana-cli btp"]
+    Inputs["Inputs"]
+    Dir["Directory ID (optional)"]
+    SubArg["Subaccount ID (optional)"]
+    SubOpt["Subaccount ID option"]
+    Debug["Diagnostics options"]
+    Resolve["Resolve target hierarchy"]
+    Target["Set BTP target subaccount"]
+    Output["Print target confirmation"]
+    Complete["Command Complete"]
+
+    Start --> Inputs
+    Inputs --> Dir
+    Inputs --> SubArg
+    Inputs --> SubOpt
+    Inputs --> Debug
+    Dir --> Resolve
+    SubArg --> Resolve
+    SubOpt --> Resolve
+    Resolve --> Target
+    Target --> Output
+    Output --> Complete
 ```
 
 ## Parameters
 
-### Troubleshooting Options
+### Positional Arguments
 
-| Parameter | Aliases | Description | Type | Default |
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `directory` | string | Directory ID to target in the BTP hierarchy (optional). |
+| `subaccount` | string | Subaccount ID to target in the BTP hierarchy (optional). |
+
+### Options
+
+| Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |
-| `--disableVerbose` | `--quiet` | Disable verbose output - removes all extra output that is only helpful for human-readable interface. Useful for scripting commands. | boolean | `false` |
-| `--debug` | `-d` | Debug hana-cli itself by adding output of many intermediate details | boolean | `false` |
+| `--subaccount` | `--sa` | string | - | The ID of the subaccount to be targeted. |
 
-### Main Options
+### Troubleshooting
 
-| Parameter | Aliases | Description | Type | Default |
+| Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |
-| `--subaccount` | `--sa` | The ID of the subaccount to be targeted | string | |
-| `--help` | `-h` | Show help | boolean | |
-
-For a complete list of parameters and options, use:
-
-```bash
-hana-cli btp --help
-```
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable Verbose output - removes all extra output that is only helpful to human readable interface. Useful for scripting commands. |
+| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details. |
 
 ## Examples
 
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli btp --subaccount mySubaccount
+hana-cli btp --subaccount mySubaccount
 ```
 
-Execute the command
+Set the active BTP target to the specified subaccount.
 
 ## Related Commands
 
-See the [Commands Reference](../all-commands.md) for other commands in this category.
+- [btpInfo](btp-info.md)
+- [btpTarget](btp-target.md)
+- [btpSubs](btp-subs.md)
+- [hanaCloudInstances](../hana-cloud/hana-cloud-instances.md)
 
 ## See Also
 
