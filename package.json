@@ -30,7 +30,9 @@
     "changelog": "node CHANGELOG",
     "types": "tsc  --declaration --allowJs --emitDeclarationOnly --outDir types --skipLibCheck",
     "postinstall": "node scripts/postinstall.js",
-    "build:docs-index": "node scripts/build-docs-index.js"
+    "build:docs-index": "node scripts/build-docs-index.js",
+    "validate:i18n": "node scripts/validate-i18n.js",
+    "validate:i18n:quiet": "node scripts/validate-i18n.js --quiet"
   },
   "repository": {
     "type": "git",

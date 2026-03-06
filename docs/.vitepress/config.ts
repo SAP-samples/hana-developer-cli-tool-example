@@ -413,6 +413,12 @@ export default withMermaid(
           text: 'Development Guide',
           items: [
             { text: 'Overview', link: '/05-development/' },
+            { text: 'Copilot Customization', link: '/05-development/copilot' },
+            { text: 'Copilot Workspace Instructions', link: '/05-development/copilot/workspace-instructions' },
+            { text: 'Copilot Prompts', link: '/05-development/copilot/prompts' },
+            { text: 'Copilot Agents', link: '/05-development/copilot/agents' },
+            { text: 'Copilot Skills', link: '/05-development/copilot/skills' },
+            { text: 'Copilot Hooks', link: '/05-development/copilot/hooks' },
             { text: 'Testing & QA', link: '/05-development/testing' },
             { text: 'Implementation Guide', link: '/05-development/implementation' },
           ]

@@ -29,6 +29,7 @@ The Model Context Protocol implementation for AI integration.
 Learn how to work on the project documentation built with VitePress.
 
 - [Documentation Structure & Development](./documentation.md) - Complete guide to building, editing, and deploying the documentation site
+- [Copilot Customization](./copilot.md) - How Copilot is configured in this repository (instructions, prompts, agents, skills, hooks)
 
 ## Command Deep Dives
 
