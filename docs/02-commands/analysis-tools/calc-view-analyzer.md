@@ -230,7 +230,7 @@ Understand:
 ## Syntax
 
 ```bash
-hana-cli calcViewAnalyzer [schema] [view] [options]
+hana-cli calcViewAnalyzer [schema] [view]
 ```
 
 ## Aliases
@@ -243,106 +243,106 @@ hana-cli calcViewAnalyzer [schema] [view] [options]
 
 ```mermaid
 graph TD
-    A["🔷 hana-cli calcViewAnalyzer"]
-    A --> B["📋 Arguments"]
-    B --> B1["[schema]: CURRENT_SCHEMA"]
-    B1 --> B2["[view]: default *"]
-    B2 --> C["🔌 Connection Parameters"]
-    C --> C1["-a, --admin: Connect via admin"]
-    C1 --> C2["--conn: Connection file override"]
-    C2 --> D["⚙️ Options"]
-    D --> D1["-v, --view: Database view name"]
-    D1 --> D2["-s, --schema: Schema name"]
-    D2 --> D3["-m, --metrics: Performance metrics"]
-    D3 --> D4["-l, --limit: Result limit"]
-    D4 --> D5["-p, --profile: CDS Profile"]
-    D5 --> E["🔍 Troubleshooting"]
-    E --> E1["--disableVerbose, --quiet"]
-    E1 --> E2["-d, --debug: Debug mode"]
-    E2 --> F["✅ Help: -h, --help"]
-    
-    style A fill:#0070C0,color:#fff,stroke:#fff,stroke-width:2px
-    style F fill:#51CF66,color:#fff,stroke:#fff,stroke-width:2px
+    Start([hana-cli calcViewAnalyzer]) --> Input{Input Parameters}
+    Input -->|schema/view| Connect[Create DB connection]
+
+    Connect --> Query[Query SYS.VIEWS<br/>where VIEW_TYPE = 'CALC']
+    Query --> Limit{Apply --limit?}
+    Limit -->|yes| Limited[Append LIMIT clause]
+    Limit -->|no| Main[Run base query]
+
+    Limited --> Metrics{--metrics enabled?}
+    Main --> Metrics
+    Metrics -->|yes| Extra[Run additional query<br/>sorted by CREATE_TIME DESC]
+    Metrics -->|no| Output[Render main output table]
+
+    Extra --> Output
+    Output --> Complete([Command Complete])
+
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Input fill:#f39c12
+    style Limit fill:#f39c12
+    style Metrics fill:#f39c12
 ```
 
 ## Parameters
 
-| Option | Alias | Type | Default | Description |
-| --- | --- | --- | --- | --- |
-| `--schema` | `-s` | string | **CURRENT_SCHEMA** | Schema name containing the calculation view |
-| `--view` | `-v` | string | * | Calculation view name (supports wildcards) |
-| `--metrics` | `-m` | boolean | false | Include detailed performance metrics |
-| `--limit` | `-l` | number | 100 | Maximum number of results to return |
-| `--profile` | `-p` | string | optional | CDS Profile |
-| `--admin` | `-a` | boolean | false | Connect via admin (default-env-admin.json) |
-| `--conn` | - | string | optional | Connection filename override |
-| `--disableVerbose` | `--quiet` | boolean | false | Disable verbose output |
-| `--debug` | `-d` | boolean | false | Debug mode - adds detailed output |
-| `--help` | `-h` | boolean | - | Show help message |
+### Positional Arguments
 
-For a complete list of parameters and options, use:
+| Parameter | Type   | Description                                  |
+|-----------|--------|----------------------------------------------|
+| `schema`  | string | Schema filter. Default: `**CURRENT_SCHEMA**` |
+| `view`    | string | View filter. Default: `*`                    |
+
+### Options
+
+| Option      | Alias | Type    | Default              | Description                          |
+|-------------|-------|---------|----------------------|--------------------------------------|
+| `--view`    | `-v`  | string  | `*`                  | Database view                        |
+| `--schema`  | `-s`  | string  | `**CURRENT_SCHEMA**` | Schema                               |
+| `--metrics` | `-m`  | boolean | `false`              | Include detailed performance metrics |
+| `--limit`   | `-l`  | number  | `100`                | Limit results                        |
+| `--profile` | `-p`  | string  | -                    | CDS Profile                          |
+
+### Connection Parameters
+
+| Option    | Alias | Type    | Default | Description                                      |
+|-----------|-------|---------|---------|--------------------------------------------------|
+| `--admin` | `-a`  | boolean | `false` | Connect via admin (default-env-admin.json)       |
+| `--conn`  | -     | string  | -       | Connection filename to override default-env.json |
+
+### Troubleshooting
+
+| Option             | Alias     | Type    | Default | Description            |
+|--------------------|-----------|---------|---------|------------------------|
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output |
+| `--debug`          | `-d`      | boolean | `false` | Enable debug output    |
+
+For the runtime-generated option list, run:
 
 ```bash
 hana-cli calcViewAnalyzer --help
 ```
 
-## Output
-
-Returns calculation view metadata including:
-
-- Schema name
-- View name
-- View type
-- Comments
-- Validity status (IS_VALID)
-- Creation time (CREATE_TIME)
-
-When `--metrics` flag is enabled, includes performance-sorted results for analysis.
-
 ## Examples
 
-### 1. List All Calculation Views in Current Schema
+### Basic Usage
 
 ```bash
 hana-cli calcViewAnalyzer
 ```
 
-### 2. Analyze Specific Calculation View
+List calculation views in the current schema.
+
+### Filter by Schema and View Pattern
 
 ```bash
-hana-cli cva -s MYSCHEMA -v MY_CALC_VIEW
+hana-cli calcViewAnalyzer --schema MYSCHEMA --view SALES_%
 ```
 
-### 3. Get Performance Metrics
+Return calculation views in `MYSCHEMA` that match `SALES_%`.
+
+### Use Alias with Limit
 
 ```bash
-hana-cli calcViewAnalyzer --schema PRODUCTION --metrics
+hana-cli cva -s SYS -v "*" -l 50
 ```
 
-### 4. List Calculation Views with Limit
+Use the short alias and cap result rows.
+
+### Include Metrics Output
 
 ```bash
-hana-cli analyzeCalcView -s SYS --limit 50
+hana-cli analyzeCalcView --schema ANALYTICS --metrics
 ```
 
-## Use Cases
-
-- **Performance Troubleshooting**: Identify slow or inefficient calculation views
-- **Capacity Planning**: Understand calculation view resource usage
-- **Maintenance**: Track calculation view creation and modification history
-- **Migration**: Verify calculation views have been migrated correctly
-
-## Notes
-
-- Calculation views may require specific privileges to analyze
-- Performance metrics may not be available for all views
-- This command provides metadata analysis, not runtime profiling
+Run the additional metrics result set along with the base output.
 
 ## Related Commands
 
-- `views` - List all database views
-- `evaluatePerformance` - General database performance analysis
-- `inspectView` - Get detailed view metadata
+- `views` - List database views
+- `erdDiagram` - Generate schema relationship diagrams
 
 See the [Commands Reference](../all-commands.md) for other commands in this category.
 
