@@ -199,7 +199,25 @@ hana-cli massConvert --help
 hana-cli massConvert --schema MYSCHEMA --output cds
 ```
 
-Convert all tables in MYSCHEMA to CAP CDS format in the current directory.
+### Convert with Namespace and HDI Format
+
+```bash
+hana-cli massConvert --schema MYSCHEMA --table % --output hdbtable --namespace my.app --folder db/src/
+```
+
+### Convert Tables to CDS with Type Preservation
+
+```bash
+hana-cli massConvert --schema MYSCHEMA --table "%" --output cds --useHanaTypes --useCatalogPure
+```
+
+### Convert Specific Tables with Limit
+
+```bash
+hana-cli massConvert -s MYSCHEMA -t "CUSTOMER%" -o cds -ns myapp --limit 10
+```
+
+Convert tables in MYSCHEMA to CAP CDS format in the current directory.
 
 ### Convert Specific Tables to HDI Format
 
@@ -497,8 +515,10 @@ The browser-based UI provides:
 
 ## Related Commands
 
-- [massExport](./mass-export.md) - Export database objects in various formats
-- [massRename](./mass-rename.md) - Rename fields in CDS-based export files
+- [massDelete](mass-delete.md) - Bulk delete database objects
+- [massExport](mass-export.md) - Export database objects in various formats
+- [massRename](mass-rename.md) - Rename fields in CDS-based export files
+- [massUpdate](mass-update.md) - Bulk update database records
 - [cds](../developer-tools/cds.md) - Display database objects via CDS
 - [createModule](../developer-tools/create-module.md) - Create new DB module structure
 

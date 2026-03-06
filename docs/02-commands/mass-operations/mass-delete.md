@@ -193,12 +193,6 @@ hana-cli massDelete --schema CLEANUP_SCHEMA --object % --log --force
 
 Delete all objects and write progress log to file. Continues on errors instead of stopping.
 
-### Using Positional Arguments
-
-```bash
-hana-cli massDelete MYSCHEMA "TEMP_%"
-```
-
 Shorthand syntax using positional arguments (schema and object pattern).
 
 ### Complex Pattern Matching
@@ -309,9 +303,10 @@ Successfully deleted 3 objects
 
 ## Related Commands
 
-- [massExport](./mass-export.md) - Export multiple objects before deletion
-- [massUpdate](./mass-update.md) - Bulk update operations
-- [massRename](./mass-rename.md) - Rename database objects with pattern matching
+- [massExport](mass-export.md) - Export multiple objects before deletion
+- [massConvert](mass-convert.md) - Convert objects to different formats
+- [massUpdate](mass-update.md) - Bulk update operations
+- [massRename](mass-rename.md) - Rename database objects
 - [objects](../object-inspection/objects.md) - Search and list database objects
 
 See the [Commands Reference](../all-commands.md) for other commands in this category.
