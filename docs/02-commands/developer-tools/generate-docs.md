@@ -6,7 +6,7 @@
 
 ## Description
 
-Auto-generate database documentation
+Auto-generate comprehensive database documentation from schema objects. This command creates documentation for tables, views, procedures, and functions with optional data statistics, grants, indexes, and triggers. Output can be generated in markdown, HTML, or PDF format with an automatically generated table of contents.
 
 ## Syntax
 
@@ -16,75 +16,94 @@ hana-cli generateDocs [options]
 
 ## Aliases
 
-- `docs`
 - `gendocs`
 - `generateDocumentation`
 
 ## Command Diagram
 
 ```mermaid
-flowchart TD
-    A[hana-cli generateDocs] --> B[Auto-generate database documentation]
-
-    A --> C{Connection Parameters}
-    C --> C1[-a, --admin<br/>Connect via admin profile<br/>default: false]
-    C --> C2[--conn<br/>Override default-env.json with connection file]
-
-    A --> D{Troubleshooting}
-    D --> D1[--disableVerbose, --quiet<br/>Disable verbose/human-readable extras<br/>default: false]
-    D --> D2[-d, --debug<br/>Debug hana-cli internals with detailed output<br/>default: false]
-
-    A --> E{Options}
-    E --> E1[-h, --help]
-    E --> E2[-s, --schema<br/>Schema to document]
-    E --> E3[-o, --objects<br/>tables | views | procedures | functions | all<br/>default: all]
-    E --> E4[-f, --output<br/>Documentation output path]
-    E --> E5[--format, --fmt<br/>markdown | html | pdf<br/>default: markdown]
-    E --> E6[--includeData, --id<br/>Include data statistics<br/>default: false]
-    E --> E7[--includeGrants, --ig<br/>Include grants<br/>default: true]
-    E --> E8[--includeIndexes, --ii<br/>Include indexes<br/>default: true]
-    E --> E9[--includeTriggers, --it<br/>Include triggers<br/>default: true]
-    E --> E10[--generateTOC, --toc<br/>Generate table of contents<br/>default: true]
-    E --> E11[-p, --profile<br/>CDS profile]
+graph TD
+    Start([hana-cli generateDocs]) --> SchemaInput[Specify Schema]
+    SchemaInput --> ObjectType{Select Object Types}
+    
+    ObjectType -->|tables| Tables[Document Tables]
+    ObjectType -->|views| Views[Document Views]
+    ObjectType -->|procedures| Procedures[Document Procedures]
+    ObjectType -->|functions| Functions[Document Functions]
+    ObjectType -->|all| AllObjects[Document All Objects]
+    
+    Tables --> Connect[Connect to Database]
+    Views --> Connect
+    Procedures --> Connect
+    Functions --> Connect
+    AllObjects --> Connect
+    
+    Connect --> Retrieve[Retrieve Object Metadata]
+    Retrieve --> Options{Include Options}
+    
+    Options -->|--includeData| AddData[Add Data Statistics]
+    Options -->|--includeGrants| AddGrants[Add Grants Info]
+    Options -->|--includeIndexes| AddIndexes[Add Index Info]
+    Options -->|--includeTriggers| AddTriggers[Add Trigger Info]
+    
+    AddData --> Format{Select Format}
+    AddGrants --> Format
+    AddIndexes --> Format
+    AddTriggers --> Format
+    Options --> Format
+    
+    Format -->|markdown| Markdown[Generate Markdown]
+    Format -->|html| HTML[Generate HTML]
+    Format -->|pdf| PDF[Generate PDF]
+    
+    Markdown --> TOC{Generate TOC?}
+    HTML --> TOC
+    PDF --> TOC
+    
+    TOC -->|Yes| AddTOC[Add Table of Contents]
+    TOC -->|No| Output
+    AddTOC --> Output[Write to Output Path]
+    
+    Output --> Complete([Complete])
+    
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style ObjectType fill:#f39c12
+    style Options fill:#f39c12
+    style Format fill:#f39c12
+    style TOC fill:#f39c12
 ```
 
 ## Parameters
 
+### Options
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--schema` | `-s` | string | - | Schema to document |
+| `--objects` | `-o` | string | `all` | Object types to document. Choices: `tables`, `views`, `procedures`, `functions`, `all` |
+| `--output` | `-f` | string | - | Documentation output file path |
+| `--format` | `--fmt` | string | `markdown` | Output format. Choices: `markdown`, `html`, `pdf` |
+| `--includeData` | `--id` | boolean | `false` | Include data statistics in documentation |
+| `--includeGrants` | `--ig` | boolean | `true` | Include grants information |
+| `--includeIndexes` | `--ii` | boolean | `true` | Include index information |
+| `--includeTriggers` | `--it` | boolean | `true` | Include trigger information |
+| `--generateTOC` | `--toc` | boolean | `true` | Generate table of contents |
+| `--profile` | `-p` | string | - | CDS Profile for connection |
+
 ### Connection Parameters
 
 | Option | Alias | Type | Default | Description |
-| --- | --- | --- | --- | --- |
-| `--admin` | `-a` | `boolean` | `false` | Connect via admin (`default-env-admin.json`). |
-| `--conn` | `-` | `string` | `-` | Connection filename to override `default-env.json`. |
+|--------|-------|------|---------|-------------|
+| `--admin` | `-a` | boolean | `false` | Connect via admin (default-env-admin.json) |
+| `--conn` | - | string | - | Connection filename to override default-env.json |
 
 ### Troubleshooting
 
 | Option | Alias | Type | Default | Description |
-| --- | --- | --- | --- | --- |
-| `--disableVerbose` | `--quiet` | `boolean` | `false` | Disable verbose output and remove extra human-readable output; useful for scripting commands. |
-| `--debug` | `-d` | `boolean` | `false` | Debug `hana-cli` by adding lots of intermediate detail output. |
-
-### Options
-
-| Option | Alias | Type | Default | Description |
-| --- | --- | --- | --- | --- |
-| `--help` | `-h` | `boolean` | `-` | Show help. |
-| `--schema` | `-s` | `string` | `-` | Schema to document. |
-| `--objects` | `-o` | `string` | `"all"` | Object types to document. Choices: `tables`, `views`, `procedures`, `functions`, `all`. |
-| `--output` | `-f` | `string` | `-` | Documentation output file path. |
-| `--format` | `--fmt` | `string` | `"markdown"` | Documentation format. Choices: `markdown`, `html`, `pdf`. |
-| `--includeData` | `--id` | `boolean` | `false` | Include data statistics in documentation. |
-| `--includeGrants` | `--ig` | `boolean` | `true` | Include grant information. |
-| `--includeIndexes` | `--ii` | `boolean` | `true` | Include index information. |
-| `--includeTriggers` | `--it` | `boolean` | `true` | Include trigger information. |
-| `--generateTOC` | `--toc` | `boolean` | `true` | Generate table of contents. |
-| `--profile` | `-p` | `string` | `-` | CDS Profile. |
-
-For a complete list of parameters and options, use:
-
-```bash
-hana-cli generateDocs --help
-```
+|--------|-------|------|---------|-------------|
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output - removes all extra output that is only helpful to human readable interface |
+| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details |
 
 ## Examples
 
@@ -94,7 +113,39 @@ hana-cli generateDocs --help
 hana-cli generateDocs --schema MYSCHEMA --format markdown --output docs/
 ```
 
-Execute the command
+Generates markdown documentation for all objects in MYSCHEMA schema and saves to the docs/ folder.
+
+### Document Only Tables and Views
+
+```bash
+hana-cli generateDocs --schema MYSCHEMA --objects tables,views
+```
+
+Generates documentation for only tables and views, excluding procedures and functions.
+
+### Generate HTML with Data Statistics
+
+```bash
+hana-cli generateDocs --schema MYSCHEMA --format html --includeData --output schema-docs.html
+```
+
+Creates HTML documentation including data statistics for the schema.
+
+### Generate PDF without TOC
+
+```bash
+hana-cli generateDocs --schema MYSCHEMA --format pdf --generateTOC false --output schema.pdf
+```
+
+Generates PDF documentation without a table of contents.
+
+### Minimal Documentation
+
+```bash
+hana-cli generateDocs --schema MYSCHEMA --includeGrants false --includeIndexes false --includeTriggers false
+```
+
+Generates minimal documentation with only basic object information, excluding grants, indexes, and triggers.
 
 ## Related Commands
 
@@ -104,3 +155,5 @@ See the [Commands Reference](../all-commands.md) for other commands in this cate
 
 - [Category: Developer Tools](..)
 - [All Commands A-Z](../all-commands.md)
+- [helpDocu](./help-docu.md) - Open online documentation
+- [readMe](./read-me.md) - Display README in terminal

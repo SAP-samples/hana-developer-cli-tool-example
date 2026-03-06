@@ -6,7 +6,7 @@
 
 ## Description
 
-Call a stored procedure and display the results
+Call a stored procedure and display the results. The command retrieves procedure metadata from the database, builds the appropriate input parameters based on the procedure signature, executes the stored procedure, and displays any output scalars and result sets returned by the procedure.
 
 ## Syntax
 
@@ -27,53 +27,80 @@ hana-cli callProcedure [schema] [procedure] [options]
 
 ```mermaid
 graph TD
-    A["hana-cli callProcedure"] --> B["[schema] [procedure]"]
-    A --> C["Procedure Options"]
-    A --> D["Connection Parameters"]
-    A --> E["Troubleshooting"]
-    A --> F["Help"]
+    Start([hana-cli callProcedure]) --> Input{Schema & Procedure}
+    Input -->|schema| Schema[Schema Name<br/>Default: CURRENT_SCHEMA]
+    Input -->|procedure| Proc[Procedure Name<br/>To Execute]
     
-    C --> C1["-p, --procedure, --sp<br/>Stored Procedure<br/>string"]
-    C --> C2["-s, --schema<br/>Schema<br/>default: **CURRENT_SCHEMA**"]
-    C --> C3["-p, --profile<br/>CDS Profile<br/>string"]
+    Schema --> Profile{Profile Specified?}
+    Proc --> Profile
     
-    D --> D1["-a, --admin<br/>Connect via admin<br/>default: false"]
-    D --> D2["--conn<br/>Connection Filename"]
+    Profile -->|Yes| ProfileConn[Use CDS Profile Connection]
+    Profile -->|No| DefaultConn[Use default-env.json Connection]
     
-    E --> E1["--disableVerbose, --quiet<br/>Disable Verbose Output<br/>default: false"]
-    E --> E2["-d, --debug<br/>Debug Mode<br/>default: false"]
+    ProfileConn --> Connect[Connect to Database]
+    DefaultConn --> Connect
     
-    F --> F1["-h, --help<br/>Show Help"]
+    Connect --> GetMeta[Retrieve Procedure Metadata]
+    GetMeta --> BuildParams[Build Input Parameters<br/>Based on Signature]
+    BuildParams --> Execute[Execute Stored Procedure]
+    Execute --> OutputScalar{Has Scalar Output?}
+    
+    OutputScalar -->|Yes| DisplayScalar[Display Output Scalars]
+    OutputScalar -->|No| OutputTable{Has Table Results?}
+    
+    DisplayScalar --> OutputTable
+    OutputTable -->|Yes| DisplayResults[Display Result Sets]
+    OutputTable -->|No| Complete
+    DisplayResults --> Complete([Complete])
+    
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Input fill:#f39c12
+    style Profile fill:#f39c12
+    style OutputScalar fill:#f39c12
+    style OutputTable fill:#f39c12
 ```
 
 ## Parameters
 
+### Positional Arguments
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `schema` | string | Schema containing the stored procedure (optional, defaults to `**CURRENT_SCHEMA**`) |
+| `procedure` | string | Name of the stored procedure to call (optional if using `--procedure`) |
+
+### Options
+
 | Option | Alias | Type | Default | Description |
-| --- | --- | --- | --- | --- |
-| `--procedure` | `--sp`, `-p` | string | - | Stored Procedure to call |
+|--------|-------|------|---------|-------------|
+| `--procedure` | `--sp`, `-p` | string | - | Stored procedure to call |
 | `--schema` | `-s` | string | `**CURRENT_SCHEMA**` | Schema containing the stored procedure |
-| `--profile` | `-p` | string | - | CDS Profile |
+| `--profile` | - | string | - | CDS Profile for connection |
+
+### Connection Parameters
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
 | `--admin` | `-a` | boolean | `false` | Connect via admin (default-env-admin.json) |
 | `--conn` | - | string | - | Connection filename to override default-env.json |
-| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output - useful for scripting commands |
+
+### Troubleshooting
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output - removes all extra output that is only helpful to human readable interface |
 | `--debug` | `-d` | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details |
-| `--help` | `-h` | boolean | - | Show help information |
-
-For a complete list of parameters and options, use:
-
-```bash
-hana-cli callProcedure --help
-```
 
 ## Examples
 
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli callProcedure --procedure myProc --schema MYSCHEMA
+hana-cli callProcedure --procedure myProc --schema MYSCHEMA
 ```
 
-Execute the command
+Executes the stored procedure `myProc` in the `MYSCHEMA` schema and displays the results.
 
 ## Related Commands
 

@@ -6,7 +6,7 @@
 
 ## Description
 
-Create DB Module
+Create a new database module with proper structure for SAP HANA development. This command scaffolds a database module folder with the necessary configuration files including package.json with @sap/hdi-deploy dependency, build scripts, and proper settings for SAP HANA Cloud or on-premise deployments.
 
 ## Syntax
 
@@ -23,26 +23,43 @@ hana-cli createModule [options]
 
 ```mermaid
 graph TD
-    A["hana-cli createModule [options]"]
+    Start([hana-cli createModule]) --> FolderName[Specify Folder Name<br/>Default: db]
+    FolderName --> CloudCheck{HANA Cloud Mode?}
     
-    A --> B["Module Options"]
-    A --> C["Troubleshooting"]
+    CloudCheck -->|Yes --hanaCloud| CloudSetup[Setup HANA Cloud Module]
+    CloudCheck -->|No| OnPremSetup[Setup On-Premise Module]
     
-    B --> B1["--hanaCloud, --hc<br/>Build Module for SAP HANA Cloud?<br/>default: true"]
-    B --> B2["-h, --help<br/>Show help"]
+    CloudSetup --> CreateFolder[Create Module Folder]
+    OnPremSetup --> CreateFolder
     
-    C --> C1["--disableVerbose, --quiet<br/>Disable Verbose output<br/>default: false"]
-    C --> C2["-d, --debug<br/>Debug hana-cli output<br/>default: false"]
+    CreateFolder --> GeneratePackage[Generate package.json<br/>with @sap/hdi-deploy]
+    GeneratePackage --> LatestVersion[Fetch Latest HDI Deploy Version]
+    LatestVersion --> WritePackage[Write package.json<br/>with Latest Version]
+    
+    WritePackage --> GenerateBuild[Generate .build.js Script]
+    GenerateBuild --> WriteFiles[Write All Files]
+    WriteFiles --> Complete([Module Created])
+    
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style CloudCheck fill:#f39c12
 ```
 
 ## Parameters
 
-| Parameter | Short/Aliases | Type | Default | Description |
-| --- | --- | --- | --- | --- |
-| `--hanaCloud` | `--hc`, `--hana-cloud`, `--hanacloud` | boolean | true | Build Module for SAP HANA Cloud? |
-| `--disableVerbose` | `--quiet` | boolean | false | Disable Verbose output (removes extra output helpful for human readable interface, useful for scripting) |
-| `--debug` | `-d` | boolean | false | Debug hana-cli itself by adding output of LOTS of intermediate details |
-| `--help` | `-h` | boolean | - | Show help |
+### Options
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--folder` | `-f` | string | `db` | Folder name for the database module |
+| `--hanaCloud` | `--hc`, `--hana-cloud`, `--hanacloud` | boolean | `true` | Build module for SAP HANA Cloud (vs on-premise) |
+
+### Troubleshooting
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output - removes all extra output that is only helpful to human readable interface |
+| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details |
 
 ## Examples
 
@@ -52,7 +69,35 @@ graph TD
 hana-cli createModule --folder db
 ```
 
-Execute the command
+Creates a new database module in the `db` folder configured for SAP HANA Cloud.
+
+### Create On-Premise Module
+
+```bash
+hana-cli createModule --folder database --hanaCloud false
+```
+
+Creates a database module configured for SAP HANA on-premise instead of Cloud.
+
+### Create with Custom Folder Name
+
+```bash
+hana-cli createModule --folder db-artifacts
+```
+
+Creates the database module in a custom folder named `db-artifacts`.
+
+## What Gets Created
+
+The command creates the following structure:
+
+- **package.json**: Contains @sap/hdi-deploy dependency with latest version
+  - Node.js engine requirements: ^12.18.0 || ^14.0.0 || ^16.0.0 || ^18.0.0
+  - Start script: Executes HDI deployment with auto-undeploy option
+- **.build.js**: Build script for CDS compilation
+  - Checks for parent package.json existence
+  - Runs `npm install && npm run build` from parent directory
+  - Handles both build-time and CF staging scenarios
 
 ## Related Commands
 

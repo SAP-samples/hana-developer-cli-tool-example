@@ -6,7 +6,7 @@
 
 ## Description
 
-Display Read Me in CLI
+Display the project README.md file in the terminal with formatted markdown rendering. This command uses the `marked` and `marked-terminal` packages to render the README with proper terminal formatting, making it easy to view project information, installation instructions, and quick start guide directly from the command line without leaving the terminal.
 
 ## Syntax
 
@@ -18,60 +18,63 @@ hana-cli readMe [options]
 
 - `readme`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    Start([hana-cli readMe]) --> LoadMarkdown[Load Marked & Marked-Terminal]
+    LoadMarkdown --> ConfigTerminal[Configure Terminal Rendering]
+    ConfigTerminal --> ReadFile[Read README.md]
+    ReadFile --> RenderMarkdown[Render to Terminal Format]
+    RenderMarkdown --> Display[Display in Console]
+    Display --> Complete([Complete])
+    
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+```
+
 ## Parameters
 
-For a complete list of parameters and options, use:
-
-```bash
-hana-cli readMe --help
-```
+This command does not accept any command-specific parameters.
 
 ## Examples
 
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli readMe
+hana-cli readMe
 ```
 
-Execute the command
+Displays the README.md file with terminal-formatted markdown.
 
----
-
-## readMeUI (UI Variant)
-
-> Command: `readMeUI`  
-> Status: Production Ready
-
-**Description:** Display Read Me in CLI with UI interface
-
-**Syntax:**
+### Using Alias
 
 ```bash
-hana-cli readMeUI [options]
+hana-cli readme
 ```
 
-**Aliases:**
+Same as above, using the alias.
 
-- `readmeui`
-- `readMeUi`
-- `readmeUI`
+## What is Displayed
 
-**Parameters:**
+The command displays the README.md content including:
 
-For a complete list of parameters and options, use:
+- **Project title and description**
+- **Installation instructions**
+- **Quick start guide**
+- **Feature highlights**
+- **Usage examples**
+- **Requirements and prerequisites**
+- **Links to documentation**
+- **License information**
 
-```bash
-hana-cli readMeUI --help
-```
+All markdown formatting is rendered appropriately for terminal display:
 
-**Example Usage:**
-
-```bash
-hana-cli readMeUI
-```
-
-Execute the command
+- Headings are styled and highlighted
+- Code blocks are formatted
+- Lists are properly indented
+- Links are preserved
+- Bold and italic text is rendered
 
 ## Related Commands
 
@@ -81,3 +84,6 @@ See the [Commands Reference](../all-commands.md) for other commands in this cate
 
 - [Category: Developer Tools](..)
 - [All Commands A-Z](../all-commands.md)
+- [openReadMe](./open-read-me.md) - Open README on GitHub
+- [helpDocu](./help-docu.md) - Open online documentation
+- [changes](./change-log.md) - Display changelog in terminal
