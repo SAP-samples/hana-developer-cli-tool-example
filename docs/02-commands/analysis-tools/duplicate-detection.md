@@ -76,7 +76,7 @@ hana-cli duplicateDetection \
   --table CUSTOMERS \
   --keyColumns FIRST_NAME,LAST_NAME \
   --mode fuzzy \
-  --threshold 85
+  --threshold 0.85
 ```
 
 Discover records that are similar but not identical (85% match threshold).
@@ -101,7 +101,7 @@ hana-cli duplicateDetection \
   --table SUPPLIERS \
   --keyColumns SUPPLIER_NAME,COUNTRY \
   --mode fuzzy \
-  --threshold 90 \
+  --threshold 0.90 \
   --format json \
   --output duplicates-analysis.json
 ```
@@ -166,20 +166,43 @@ graph TD
     style H fill:#51CF66,color:#fff,stroke:#fff,stroke-width:2px
 ```
 
+## Parameters
+
+### Positional Arguments
+
+This command has no positional arguments.
+
+### Options
+
 | Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |
 | `--table` | `-t` | string | required | Name of the table to check |
-| `--schema` | `-s` | string | optional | Schema name (uses current if omitted) |
+| `--schema` | `-s` | string | `**CURRENT_SCHEMA**` | Schema for table |
 | `--keyColumns` | `-k` | string | required | Comma-separated key columns for matching |
-| `--checkColumns` | `-c` | string | optional | Specific columns to compare (if omitted, all are used) |
-| `--excludeColumns` | `-e` | string | optional | Columns to skip during duplicate detection |
-| `--mode` | `-m` | string | exact | Detection mode: `exact`, `fuzzy`, `partial` |
-| `--threshold` | `-th` | number | 0.95 | Similarity threshold for fuzzy matching (0-1) |
-| `--output` | `-o` | string | optional | Output file path for the report |
-| `--format` | `-f` | string | summary | Report format: `json`, `csv`, `summary` |
-| `--limit` | `-l` | number | 10000 | Maximum rows to check |
-| `--timeout` | `-to` | number | 3600 | Operation timeout in seconds |
-| `--profile` | `-p` | string | optional | Connection profile to use |
+| `--checkColumns` | `-c` | string | - | Columns to Check for Duplicates (comma-separated, optional) |
+| `--excludeColumns` | `-e` | string | - | Columns to Exclude from Check (comma-separated, optional) |
+| `--mode` | `-m` | string | `exact` | Detection Mode. Choices: `exact`, `fuzzy`, `partial` |
+| `--threshold` | `--th` | number | `0.95` | Similarity Threshold for Fuzzy Matching (0-1) |
+| `--output` | `-o` | string | - | Output Report File Path |
+| `--format` | `-f` | string | `summary` | Report Format. Choices: `json`, `csv`, `summary` |
+| `--limit` | `-l` | number | `10000` | Maximum Rows to Check |
+| `--timeout` | `--to` | number | `3600` | Operation Timeout in Seconds |
+| `--profile` | `-p` | string | - | CDS Profile |
+| `--help` | `-h` | boolean | - | Show help |
+
+### Connection Parameters
+
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--admin` | `-a` | boolean | `false` | Connect via admin (default-env-admin.json) |
+| `--conn` | - | string | - | Connection Filename to override default-env.json |
+
+### Troubleshooting
+
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output - removes extra output mainly intended for human-readable usage |
+| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself by adding lots of intermediate details |
 
 For a complete list of parameters and options, use:
 
@@ -353,8 +376,6 @@ hana-cli duplicateDetection --table CUSTOMERS \
 ## Related Commands
 
 - `dataValidator` - Validate data against business rules
-- `referentialCheck` - Verify referential integrity
-- `dataLineage` - Trace data lineage and transformations
 - `dataProfile` - Generate statistical profiles
 
 See the [Commands Reference](../all-commands.md) for other commands in this category.

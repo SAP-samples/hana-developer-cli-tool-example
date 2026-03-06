@@ -186,6 +186,12 @@ graph TD
 
 ## Parameters
 
+### Positional Arguments
+
+This command has no positional arguments.
+
+### Options
+
 | Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |
 | `--schema` | `-s` | string | **CURRENT_SCHEMA** | Schema to diagram |
@@ -196,11 +202,21 @@ graph TD
 | `--showColumns` | `--cols` | boolean | true | Show table columns in diagram |
 | `--excludeColumns` | `--ec` | string | optional | Comma-separated columns to exclude |
 | `--profile` | `-p` | string | optional | CDS Profile |
-| `--admin` | `-a` | boolean | false | Connect via admin (default-env-admin.json) |
-| `--conn` | - | string | optional | Connection filename override |
-| `--disableVerbose` | `--quiet` | boolean | false | Disable verbose output |
-| `--debug` | `-d` | boolean | false | Debug mode - adds detailed output |
 | `--help` | `-h` | boolean | - | Show help message |
+
+### Connection Parameters
+
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--admin` | `-a` | boolean | `false` | Connect via admin (default-env-admin.json) |
+| `--conn` | - | string | - | Connection filename to override default-env.json |
+
+### Troubleshooting
+
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output - removes extra output mainly intended for human-readable usage |
+| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself by adding lots of intermediate details |
 
 For a complete list of parameters and options, use:
 
@@ -338,6 +354,10 @@ hana-cli erdDiagram --schema MYSCHEMA --format mermaid --output erd.md
 ```
 
 ## Related Commands
+
+- `calcViewAnalyzer` - Analyze calculation view performance and metadata
+- `schemaClone` - Clone schema structure and related artifacts
+- `graphWorkspaces` - Work with graph workspace metadata and relationships
 
 See the [Commands Reference](../all-commands.md) for other commands in this category.
 

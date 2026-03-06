@@ -27,7 +27,7 @@ Understanding table hotspots is crucial for database performance management:
 ## Syntax
 
 ```bash
-hana-cli tableHotspots [options]
+hana-cli tableHotspots [schema] [table]
 ```
 
 ## Aliases
@@ -60,12 +60,21 @@ graph TD
 
 ## Parameters
 
+### Positional Arguments
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `schema` | string | Schema filter. Default: `**CURRENT_SCHEMA**` |
+| `table` | string | Table filter. Default: `*` |
+
+### Options
+
 | Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |
 | `--schema` | `-s` | string | **CURRENT_SCHEMA** | Schema name |
 | `--table` | `-t` | string | * | Table name (supports wildcards) |
-| `--includePartitions` | `-p` | boolean | true | Include partition information |
-| `--limit` | `-l` | number | 200 | Limit results |
+| `--includePartitions` | `-p`, `--Partitions` | boolean | true | Include partition-level statistics |
+| `--limit` | `-l`, `--Limit` | number | 200 | Limit results |
 | `--profile` | `-p` | string | optional | CDS profile for connections |
 | `--admin` | `-a` | boolean | false | Connect via admin (default-env-admin.json) |
 | `--conn` | - | string | optional | Connection filename override |
@@ -147,10 +156,13 @@ hana-cli tableHotspots --help
 
 ## Related Commands
 
-- [All Commands A-Z](../all-commands.md)
-- [Commands Overview](..)
+- `columnStats` - Analyze column-store statistics for tables/columns
+- `indexes` - Inspect index metadata and usage patterns
+- `inspectTable` - Inspect table structure and metadata in detail
+
+See the [Commands Reference](../all-commands.md) for other commands in this category.
 
 ## See Also
 
 - [Category: Analysis Tools](..)
-- [Command Reference](../all-commands.md)
+- [All Commands A-Z](../all-commands.md)

@@ -93,6 +93,12 @@ graph TD
 
 ## Parameters
 
+### Positional Arguments
+
+This command has no positional arguments.
+
+### Options
+
 | Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |
 | `--table` | `-t` | string | required | Table name to check |
@@ -282,10 +288,9 @@ fi
 
 ## Related Commands
 
+- `tables` - List tables and quickly inspect available objects
+- `compareData` - Compare table data and inspect row-level differences
 - `dataValidator` - Validate data against business rules
-- `duplicateDetection` - Find duplicate records
-- `dataLineage` - Trace data lineage and transformations
-- `dataProfile` - Generate statistical profiles
 
 See the [Commands Reference](../all-commands.md) for other commands in this category.
 

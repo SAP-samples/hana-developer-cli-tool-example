@@ -108,7 +108,7 @@ Create accurate documentation of real data characteristics.
 
 ```bash
 # Compare profiles before and after migration
-hana-cli dataProfile --schema PRODUCTION --limit 1000000
+hana-cli dataProfile --schema PRODUCTION --sampleSize 1000000
 ```
 
 Verify data integrity after system migration.
@@ -125,7 +125,7 @@ Verify that key columns contain expected data.
 ## Syntax
 
 ```bash
-hana-cli dataProfile [options]
+hana-cli dataProfile
 ```
 
 ## Aliases
@@ -138,57 +138,77 @@ hana-cli dataProfile [options]
 
 ```mermaid
 graph TD
-    A["🔷 hana-cli dataProfile"]
-    A --> B["📋 Required Parameters"]
-    B --> B1["-t, --table: Target table"]
-    B1 --> C["📍 Schema & Connection"]
-    C --> C1["-s, --schema: Target schema"]
-    C1 --> C2["-a, --admin: Connect via admin"]
-    C2 --> C3["--conn: Connection file override"]
-    C3 --> D["📊 Column Selection"]
-    D --> D1["-c, --columns: Columns to profile"]
-    D1 --> E["🔬 Analysis Options"]
-    E --> E1["--nullAnalysis, --na: NULL analysis"]
-    E1 --> E2["--cardinalityAnalysis, --ca: Distinct values"]
-    E2 --> E3["--statisticalAnalysis, --sa: Min/Max/Avg"]
-    E3 --> E4["--patternAnalysis, --pa: String patterns"]
-    E4 --> F["🚀 Performance Options"]
-    F --> F1["--sampleSize, --ss: Max rows"]
-    F1 --> F2["--timeout, --to: Timeout"]
-    F2 --> G["🔢 Output & Format"]
-    G --> G1["-o, --output: Report file"]
-    G1 --> G2["-f, --format: Report format"]
-    G2 --> G3["-p, --profile: CDS Profile"]
-    G3 --> H["🔍 Troubleshooting"]
-    H --> H1["--disableVerbose, --quiet"]
-    H1 --> H2["-d, --debug: Debug mode"]
-    H2 --> I["✅ Help: -h, --help"]
-    
-    style A fill:#0070C0,color:#fff,stroke:#fff,stroke-width:2px
-    style I fill:#51CF66,color:#fff,stroke:#fff,stroke-width:2px
+  Start([hana-cli dataProfile]) --> Input{Table Provided?}
+  Input -->|No| Err[Exit with Error<br/>Table not found]
+  Input -->|Yes| Connect[Connect to Database]
+
+  Connect --> Schema{Schema uses CURRENT_SCHEMA token?}
+  Schema -->|Yes| Resolve[Resolve Current Schema]
+  Schema -->|No| UseSchema[Use Provided Schema]
+
+  Resolve --> Columns[Load Table Columns]
+  UseSchema --> Columns
+
+  Columns --> Filter{Columns option specified?}
+  Filter -->|Yes| Selected[Filter to Selected Columns]
+  Filter -->|No| AllCols[Profile All Columns]
+
+  Selected --> Analyze[Run Analyses<br/>NULL/Cardinality/Stats/Pattern]
+  AllCols --> Analyze
+
+  Analyze --> Output{Output Target}
+  Output -->|Console| Print[Display summary/csv/json]
+  Output -->|File path| Save[Write report file]
+
+  Print --> Complete([Command Complete])
+  Save --> Complete
+
+  style Start fill:#0092d1
+  style Complete fill:#2ecc71
+  style Input fill:#f39c12
+  style Schema fill:#f39c12
+  style Filter fill:#f39c12
+  style Output fill:#f39c12
+  style Err fill:#9b59b6
 ```
 
 ## Parameters
 
+### Positional Arguments
+
+This command has no positional arguments.
+
+### Options
+
 | Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |
-| `--table` | `-t` | string | required | Table to profile |
-| `--schema` | `-s` | string | **CURRENT_SCHEMA** | Schema containing the table |
-| `--columns` | `-c` | string | optional | Specific columns to profile (comma-separated) |
-| `--nullAnalysis` | `--na` | boolean | true | Include NULL value analysis |
-| `--cardinalityAnalysis` | `--ca` | boolean | true | Include distinct value count |
-| `--statisticalAnalysis` | `--sa` | boolean | true | Include min/max/avg analysis |
-| `--patternAnalysis` | `--pa` | boolean | false | Include string length analysis |
-| `--sampleSize` | `--ss` | number | 10000 | Maximum rows to analyze |
-| `--timeout` | `--to` | number | 3600 | Operation timeout in seconds |
-| `--output` | `-o` | string | optional | File path to save profile report |
-| `--format` | `-f` | string | summary | Report output format (json, csv, summary) |
-| `--profile` | `-p` | string | optional | CDS profile for connections |
-| `--admin` | `-a` | boolean | false | Connect via admin (default-env-admin.json) |
-| `--conn` | - | string | optional | Connection filename override |
-| `--disableVerbose` | `--quiet` | boolean | false | Disable verbose output |
-| `--debug` | `-d` | boolean | false | Debug mode - adds detailed output |
-| `--help` | `-h` | boolean | - | Show help message |
+| `--table` | `-t` | string | - | Target Table Name. Required for successful execution. |
+| `--schema` | `-s` | string | `**CURRENT_SCHEMA**` | Target Schema Name. |
+| `--columns` | `-c` | string | - | Columns to Profile (comma-separated, optional). |
+| `--output` | `-o` | string | - | Output Report File Path. If omitted, output is printed to console. |
+| `--format` | `-f` | string | `summary` | Report Format. Choices: `json`, `csv`, `summary`. |
+| `--nullAnalysis` | `--na` | boolean | `true` | Include NULL Value Analysis. |
+| `--cardinalityAnalysis` | `--ca` | boolean | `true` | Include Cardinality Analysis. |
+| `--statisticalAnalysis` | `--sa` | boolean | `true` | Include Statistical Analysis (min, max, avg). |
+| `--patternAnalysis` | `--pa` | boolean | `false` | Include Pattern Analysis (length statistics). |
+| `--sampleSize` | `--ss` | number | `10000` | Maximum Rows to Analyze. |
+| `--timeout` | `--to` | number | `3600` | Operation Timeout in Seconds. |
+| `--profile` | `-p` | string | - | CDS Profile. |
+| `--help` | `-h` | boolean | - | Show help. |
+
+### Connection Parameters
+
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--admin` | `-a` | boolean | `false` | Connect via admin (default-env-admin.json). |
+| `--conn` | - | string | - | Connection Filename to override default-env.json. |
+
+### Troubleshooting
+
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable Verbose output - removes extra output primarily intended for human-readable usage. |
+| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself by adding lots of intermediate details. |
 
 For a complete list of parameters and options, use:
 
@@ -260,6 +280,22 @@ Structured format with complete metrics and metadata:
 ### CSV Format
 
 Tabular format for analysis and comparison.
+
+## Special Default Values
+
+| Token | Resolves To | Description |
+| --- | --- | --- |
+| `**CURRENT_SCHEMA**` | Current user schema | Default for `--schema` when not explicitly provided. |
+
+## Interactive Mode
+
+This command can be used in interactive mode:
+
+```bash
+hana-cli interactive --category data-tools
+```
+
+When choosing `dataProfile` interactively, `table` is prompted as required and `schema` is optional. Most advanced options are available but skipped by default unless explicitly provided.
 
 ## Examples
 
@@ -411,11 +447,8 @@ Use profile results to assess data quality:
 
 ## Related Commands
 
-- **`compareData`** - Compare data between tables
-- **`dataDiff`** - Show detailed row differences
-- **`compareSchema`** - Compare schema structures
-- **`export`** - Export data for external analysis
-- **`querySimple`** - Run custom analytical queries
+- **`dataValidator`** - Validate table data against business rules and constraints
+- **`duplicateDetection`** - Detect duplicate records using configurable matching strategies
 
 See the [Commands Reference](../all-commands.md) for other commands in this category.
 

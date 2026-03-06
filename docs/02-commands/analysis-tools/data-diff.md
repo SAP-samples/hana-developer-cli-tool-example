@@ -252,31 +252,78 @@ graph TD
 
 ## Parameters
 
-| Option | Alias | Type | Default | Description |
-| --- | --- | --- | --- | --- |
-| `--table1` | `-t1` | string | required | First table to compare |
-| `--table2` | `-t2` | string | required | Second table to compare |
-| `--keyColumns` | `-k` | string | required | Comma-separated columns for row matching (must uniquely identify rows) |
-| `--schema1` | `-s1` | string | **CURRENT_SCHEMA** | Schema for first table |
-| `--schema2` | `-s2` | string | **CURRENT_SCHEMA** | Schema for second table |
-| `--compareColumns` | `-c` | string | optional | Specific columns to compare (comma-separated) |
-| `--showValues` | `--sv` | boolean | false | Include actual values in report |
-| `--limit` | `-l` | number | 10000 | Maximum rows to compare |
-| `--timeout` | `--to` | number | 3600 | Operation timeout in seconds |
-| `--output` | `-o` | string | optional | File path for diff report |
-| `--format` | `-f` | string | summary | Report output format (json, csv, summary) |
-| `--dryRun` | `--dr, --preview` | boolean | false | Dry run mode (show what would happen) |
-| `--profile` | `-p` | string | optional | CDS profile for connections |
-| `--admin` | `-a` | boolean | false | Connect via admin (default-env-admin.json) |
-| `--conn` | - | string | optional | Connection filename override |
-| `--disableVerbose` | `--quiet` | boolean | false | Disable verbose output |
-| `--debug` | `-d` | boolean | false | Debug mode - adds detailed output |
-| `--help` | `-h` | boolean | - | Show help message |
+### Positional Arguments
 
-For a complete list of parameters and options, use:
+This command has no positional arguments.
+
+### Required Parameters
+
+| Parameter      | Alias | Type   | Description                                                             |
+|----------------|-------|--------|-------------------------------------------------------------------------|
+| `--table1`     | `-t1` | string | First table to compare                                                  |
+| `--table2`     | `-t2` | string | Second table to compare                                                 |
+| `--keyColumns` | `-k`  | string | Comma-separated columns for row matching (must uniquely identify rows) |
+
+### Schema Parameters
+
+| Option       | Alias | Type   | Default                | Description                 |
+|--------------|-------|--------|------------------------|-----------------------------|
+| `--schema1`  | `-s1` | string | `**CURRENT_SCHEMA**`   | Schema for first table      |
+| `--schema2`  | `-s2` | string | `**CURRENT_SCHEMA**`   | Schema for second table     |
+
+### Comparison Options
+
+| Option              | Alias  | Type    | Default | Description                                        |
+|---------------------|--------|---------|---------|----------------------------------------------------|
+| `--compareColumns`  | `-c`   | string  | -       | Specific columns to compare (comma-separated)      |
+| `--showValues`      | `--sv` | boolean | `false` | Include actual values in report                    |
+| `--limit`           | `-l`   | number  | `10000` | Maximum rows to compare                            |
+| `--timeout`         | `--to` | number  | `3600`  | Operation timeout in seconds                       |
+
+### Output Options
+
+| Option      | Alias               | Type    | Default     | Description                                                   |
+|-------------|---------------------|---------|-------------|---------------------------------------------------------------|
+| `--output`  | `-o`                | string  | -           | File path for diff report                                     |
+| `--format`  | `-f`                | string  | `summary`   | Report output format. Choices: `json`, `csv`, `summary`       |
+| `--dryRun`  | `--dr`, `--preview` | boolean | `false`     | Dry run mode (show what would happen)                         |
+
+### Additional Options
+
+| Option      | Alias | Type   | Default | Description                   |
+|-------------|-------|--------|---------|-------------------------------|
+| `--profile` | `-p`  | string | -       | CDS profile for connections   |
+
+### Connection Parameters
+
+| Option     | Alias | Type    | Default | Description                                              |
+|------------|-------|---------|---------|----------------------------------------------------------|
+| `--admin`  | `-a`  | boolean | `false` | Connect via admin (default-env-admin.json)               |
+| `--conn`   | -     | string  | -       | Connection filename to override default-env.json         |
+
+### Troubleshooting
+
+| Option              | Alias     | Type    | Default | Description                                                                                              |
+|---------------------|-----------|---------|---------|----------------------------------------------------------------------------------------------------------|
+| `--disableVerbose`  | `--quiet` | boolean | `false` | Disable verbose output - removes all extra output that is only helpful to human readable interface       |
+| `--debug`           | `-d`      | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details                                   |
+
+## Special Default Values
+
+| Token | Resolves To | Description |
+|-------|-------------|-------------|
+| `**CURRENT_SCHEMA**` | Current user's schema | Used as default for schema1 and schema2 parameters |
+
+### Usage
+
+When `--schema1` or `--schema2` is not specified, the command automatically uses the current user's default schema. This allows for simplified commands:
 
 ```bash
-hana-cli dataDiff --help
+# Compare tables in current schema
+hana-cli dataDiff -t1 CUSTOMERS -t2 CUSTOMERS_BACKUP -k CUSTOMER_ID
+
+# Explicit schema specification
+hana-cli dataDiff -t1 CUSTOMERS -s1 PRODUCTION -t2 CUSTOMERS -s2 STAGING -k CUSTOMER_ID
 ```
 
 ## Output Formats
@@ -468,14 +515,20 @@ hana-cli dataDiff \
 
 ## Related Commands
 
-- **`compareData`** - High-level data comparison by matching rows
-- **`compareSchema`** - Compare schema structures
-- **`export`** - Export data for external analysis
-- **`querySimple`** - Run custom SQL queries
-
 See the [Commands Reference](../all-commands.md) for other commands in this category.
+
+### Primary Related Commands
+
+- **[compareData](../data-tools/compare-data.md)** - High-level data comparison by matching rows and identifying differences
+- **[dataValidator](../data-tools/data-validator.md)** - Validate data quality and integrity with rule-based validation
+
+### Additional Related Commands
+
+- **[export](../data-tools/export.md)** - Export data for external analysis
+- **[compareSchema](../schema-tools/compare-schema.md)** - Compare schema structures between databases
 
 ## See Also
 
 - [Category: Analysis Tools](..)
+- [Category: Data Tools](../data-tools/)
 - [All Commands A-Z](../all-commands.md)

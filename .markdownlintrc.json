@@ -1,6 +1,7 @@
 {
   "extends": "default",
   "rules": {
-    "MD033": false
+    "MD033": false,
+    "MD060": false
   }
 }

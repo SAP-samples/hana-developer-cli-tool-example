@@ -184,42 +184,72 @@ hana-cli dataLineage [options]
 
 ```mermaid
 graph TD
-    A["🔷 hana-cli dataLineage"]
-    A --> B["📋 Required Parameters"]
-    B --> B1["-t, --table: Table to trace"]
-    B1 --> C["📍 Schema & Connection"]
-    C --> C1["-s, --schema: Schema for table"]
-    C1 --> C2["-a, --admin: Connect via admin"]
-    C2 --> C3["--conn: Connection file override"]
-    C3 --> D["🔬 Lineage Analysis Options"]
-    D --> D1["--direction, --dir: upstream|downstream|bidirectional"]
-    D1 --> D2["--depth, --dp: Max lineage depth"]
-    D2 --> D3["--includeTransformations, --it: Include views & procedures"]
-    D3 --> D4["--timeout, --to: Timeout"]
-    D4 --> E["🔢 Output & Format"]
-    E --> E1["-o, --output: Report file"]
-    E1 --> E2["-f, --format: Report format"]
-    E2 --> E3["-p, --profile: CDS Profile"]
-    E3 --> F["🔍 Troubleshooting"]
-    F --> F1["--disableVerbose, --quiet"]
-    F1 --> F2["-d, --debug: Debug mode"]
-    F2 --> G["✅ Help: -h, --help"]
+    Start([hana-cli dataLineage]) --> Input{Input Parameters}
+    Input -->|--table| Param1["Table Name<br/>Required"]
+    Input -->|--schema| Param2["Schema Name<br/>Default: CURRENT_SCHEMA"]
+    Input -->|--direction| Param3["Lineage Direction<br/>upstream/downstream/bidirectional"]
     
-    style A fill:#0070C0,color:#fff,stroke:#fff,stroke-width:2px
-    style G fill:#51CF66,color:#fff,stroke:#fff,stroke-width:2px
+    Param1 --> Process["Query Lineage<br/>Trace Dependencies"]
+    Param2 --> Process
+    Param3 --> Process
+    
+    Process --> Options{Analysis Options}
+    Options -->|--depth| Opt1["Set Max Depth<br/>Default: 5 levels"]
+    Options -->|--includeTransformations| Opt2["Include Views<br/>and Procedures<br/>Default: true"]
+    Options -->|--timeout| Opt3["Set Timeout<br/>Default: 3600s"]
+    
+    Opt1 --> Format{Output Format}
+    Opt2 --> Format
+    Opt3 --> Format
+    
+    Format -->|--format| FormatOpt["Choose Format<br/>summary/json/csv/graphml<br/>Default: summary"]
+    Format -->|--output| OutputOpt["Save to File<br/>Optional"]
+    
+    FormatOpt --> Output["Display Lineage<br/>Show Dependencies<br/>and Transformations"]
+    OutputOpt --> Output
+    
+    Output --> Complete([Command Complete])
+    
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Options fill:#f39c12
+    style Format fill:#f39c12
 ```
 
-| Option | Alias | Type | Default | Description |
-| --- | --- | --- | --- | --- |
-| `--table` | `-t` | string | required | Name of the table to trace lineage for |
-| `--schema` | `-s` | string | optional | Schema name (uses current if omitted) |
-| `--direction` | `-d` | string | upstream | Direction: `upstream`, `downstream`, `bidirectional` |
-| `--depth` | `-dp` | number | 5 | Maximum lineage depth to trace |
-| `--includeTransformations` | `-t` | boolean | true | Include views, procedures, and transformations |
-| `--output` | `-o` | string | optional | Output file path for the report |
-| `--format` | `-f` | string | summary | Format: `json`, `csv`, `graphml`, `summary` |
-| `--timeout` | `-to` | number | 3600 | Operation timeout in seconds |
-| `--profile` | `-p` | string | optional | Connection profile to use |
+## Parameters
+
+### Positional Arguments
+
+This command has no positional arguments.
+
+### Options
+
+| Option                     | Alias   | Type    | Default              | Description                                                           |
+|----------------------------|---------|---------|----------------------|-----------------------------------------------------------------------|
+| `--table`                  | `-t`    | string  | -                    | Name of the table to trace lineage for                               |
+| `--schema`                 | `-s`    | string  | `**CURRENT_SCHEMA**` | Schema name containing the table                                      |
+| `--direction`              | `--dir` | string  | `upstream`           | Lineage direction. Choices: `upstream`, `downstream`, `bidirectional` |
+| `--depth`                  | `--dp`  | number  | `5`                  | Maximum lineage depth to trace                                        |
+| `--includeTransformations` | `--it`  | boolean | `true`               | Include views, procedures, and transformations in lineage             |
+| `--output`                 | `-o`    | string  | -                    | Output file path for the lineage report                               |
+| `--format`                 | `-f`    | string  | `summary`            | Output format. Choices: `summary`, `json`, `csv`, `graphml`           |
+| `--timeout`                | `--to`  | number  | `3600`               | Operation timeout in seconds                                          |
+| `--profile`                | `-p`    | string  | -                    | Connection profile to use                                             |
+
+### Connection Parameters
+
+| Option    | Alias | Type    | Default | Description                                          |
+|-----------|-------|---------|---------|------------------------------------------------------|
+| `--admin` | `-a`  | boolean | `false` | Connect via admin (default-env-admin.json)           |
+| `--conn`  | -     | string  | -       | Connection filename to override default-env.json     |
+
+### Troubleshooting
+
+| Option              | Alias     | Type    | Default | Description                                                                                              |
+|---------------------|-----------|---------|---------|----------------------------------------------------------------------------------------------------------|
+| `--disableVerbose`  | `--quiet` | boolean | `false` | Disable verbose output - removes all extra output that is only helpful to human readable interface       |
+| `--debug`           | `-d`      | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details                                   |
+| `--help`            | `-h`      | boolean | -       | Show help message                                                                                        |
 
 For a complete list of parameters and options, use:
 
@@ -487,11 +517,8 @@ hana-cli dataLineage --table SALES_ORDERS \
 
 ## Related Commands
 
-- `dataValidator` - Validate data against business rules
-- `referentialCheck` - Verify referential integrity
-- `duplicateDetection` - Find duplicate records
 - `dataProfile` - Generate statistical profiles
-- `dependencies` - Show object dependencies
+- `compareData` - Compare table data with configurable matching and reporting
 
 See the [Commands Reference](../all-commands.md) for other commands in this category.
 

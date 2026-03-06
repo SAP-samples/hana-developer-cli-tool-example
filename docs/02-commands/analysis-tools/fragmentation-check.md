@@ -136,6 +136,12 @@ graph TD
 
 ## Parameters
 
+### Positional Arguments
+
+This command has no positional arguments.
+
+### Options
+
 | Option | Alias | Type | Default | Description |
 | --- | --- | --- | --- | --- |
 | `--schema` | `-s` | string | **CURRENT_SCHEMA** | Schema name |
@@ -203,6 +209,9 @@ The report shows:
 - **Compressed (MB)**: Compressed table size
 
 ## Related Commands
+
+- `reclaim` - Reclaim space and trigger storage optimization workflows
+- `healthCheck` - Run broader system health diagnostics
 
 See the [Commands Reference](../all-commands.md) for other commands in this category.
 

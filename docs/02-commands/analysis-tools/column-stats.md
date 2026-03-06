@@ -1,7 +1,7 @@
 # columnStats
 
 > Command: `columnStats`  
-> Category: **Performance Monitoring**  
+> Category: **Analysis Tools**  
 > Status: Production Ready
 
 ## Description
