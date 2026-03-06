@@ -6,7 +6,7 @@
 
 ## Description
 
-Clones an entire schema including tables, views, and optionally data and grants. This is useful for creating development environments, backups, or sandbox schemas for testing.
+Clones schema tables (and optionally table data) from a source schema to a target schema. This is useful for creating development environments, backups, or sandbox schemas for testing.
 
 ## Syntax
 
@@ -20,31 +20,71 @@ hana-cli schemaClone [options]
 - `cloneSchema`
 - `copyschema`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    Start([hana-cli schemaClone]) --> Input{Source/Target Schema}
+    Input --> Src[--sourceSchema / -ss<br/>Default: **CURRENT_SCHEMA**]
+    Input --> Tgt[--targetSchema / -ts<br/>Default: **CURRENT_SCHEMA**]
+    Src --> Plan[Discover source tables/views]
+    Tgt --> Plan
+    Plan --> Excl{--excludeTables?}
+    Excl -->|yes| Filter[Filter excluded tables]
+    Excl -->|no| Keep[Use all source tables]
+    Filter --> Clone[Clone table structure]
+    Keep --> Clone
+    Clone --> Data{--includeData?}
+    Data -->|yes| Copy[Copy table data]
+    Data -->|no| SkipData[Skip data copy]
+    Copy --> Grants{--includeGrants?}
+    SkipData --> Grants
+    Grants -->|yes| GrantStep[Clone grants metadata]
+    Grants -->|no| Summary[Build summary]
+    GrantStep --> Summary
+    Summary --> End([Schema clone complete])
+
+    style Start fill:#0092d1
+    style End fill:#2ecc71
+    style Input fill:#f39c12
+    style Excl fill:#f39c12
+    style Data fill:#f39c12
+    style Grants fill:#f39c12
+```
+
 ## Parameters
 
-### Required Parameters
+### Positional Arguments
 
-- **-ss, --sourceSchema** (string): Source schema name to clone from
-- **-ts, --targetSchema** (string): Target schema name to clone to
+This command has no positional arguments.
 
-### Optional Parameters
+### Options
 
-- **-id, --includeData** (boolean): Clone table data along with structure
-  - Default: `false`
-- **-ig, --includeGrants** (boolean): Copy grants and privileges
-  - Default: `false`
-- **-par, --parallel** (number): Number of parallel cloning operations
-  - Default: `1`
-- **-et, --excludeTables** (string): Comma-separated list of tables to exclude
-- **--timeout, --to** (number): Operation timeout in seconds
-  - Default: `7200` (2 hours)
-- **-p, --profile**: Connection profile
+| Option | Alias | Type | Default | Description |
+|---|---|---|---|---|
+| `--sourceSchema` | `-ss` | string | `**CURRENT_SCHEMA**` | Source schema to clone from. |
+| `--targetSchema` | `-ts` | string | `**CURRENT_SCHEMA**` | Target schema to clone to. |
+| `--includeData` | `-id` | boolean | `false` | Copy table data in addition to structure. |
+| `--includeGrants` | `-ig` | boolean | `false` | Include grant discovery/reporting workflow. |
+| `--parallel` | `-par` | number | `1` | Accepted parallelism parameter for clone workflows. |
+| `--excludeTables` | `-et` | string | - | Comma-separated tables to exclude. |
+| `--dryRun` | `-dr`, `--preview` | boolean | `false` | Accepted preview flag for dry-run workflows. |
+| `--timeout` | `--to` | number | `7200` | Operation timeout in seconds. |
+| `--profile` | `-p` | string | - | Connection profile to use. |
 
-For a complete list of parameters and options, use:
+### Connection Parameters
 
-```bash
-hana-cli schemaClone --help
-```
+| Option | Alias | Type | Default | Description |
+|---|---|---|---|---|
+| `--admin` | `-a` | boolean | `false` | Use admin connection settings. |
+| `--conn` | - | string | Config-dependent | Override connection file. |
+
+### Troubleshooting
+
+| Option | Alias | Type | Default | Description |
+|---|---|---|---|---|
+| `--disableVerbose` | `--quiet` | boolean | `false` | Reduce verbose output. |
+| `--debug` | `-d` | boolean | `false` | Enable debug output. |
 
 ## Cloning Process
 
@@ -57,7 +97,7 @@ The command performs these steps:
 5. **Structure Cloning**: Creates table structures using `CREATE TABLE ... LIKE`
 6. **Data Copying**: Copies data if `--includeData` specified
 7. **View Cloning**: Identifies views (manual recreation may be needed)
-8. **Grant Cloning**: Copies privileges if `--includeGrants` specified
+8. **Grant Processing**: Reads grant metadata when `--includeGrants` is specified
 9. **Summary Report**: Displays cloning statistics
 
 ## Object Types Cloned
@@ -79,6 +119,7 @@ The command performs these steps:
 - ⚠️ Synonyms
 - ⚠️ Triggers
 - ⚠️ Foreign key constraints
+- ⚠️ Privilege replay (grant application)
 
 ## Output Format
 
@@ -223,7 +264,7 @@ hana-cli schemaClone \
 - Indexes are created automatically with table structure
 - Partitioning is preserved in table structure
 
-## Troubleshooting
+## Troubleshooting Scenarios
 
 ### Error: Source schema not found
 
@@ -248,6 +289,10 @@ hana-cli schemaClone \
 - Exclude unnecessary tables
 
 ## Related Commands
+
+- `schemas` - List available schemas.
+- `tables` - Inspect tables in schemas.
+- `export` - Export schema/table data.
 
 See the [Commands Reference](../all-commands.md) for other commands in this category.
 

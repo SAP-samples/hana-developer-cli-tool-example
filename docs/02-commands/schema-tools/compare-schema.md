@@ -6,7 +6,7 @@
 
 ## Description
 
-Compares database schema structures across different environments or schemas. It identifies differences in tables, columns, indexes, triggers, and constraints—useful for environment validation, migration verification, and identifying schema drift.
+Compares schema structures between two schemas and reports structural differences. The command highlights table, column, index, and trigger differences to support migration validation, environment checks, and drift detection.
 
 ## Syntax
 
@@ -20,32 +20,67 @@ hana-cli compareSchema [options]
 - `schemaCompare`
 - `compareschema`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    Start([hana-cli compareSchema]) --> Input{Source/Target Schema}
+    Input --> Source[--sourceSchema / -s<br/>Default: **CURRENT_SCHEMA**]
+    Input --> Target[--targetSchema / -t<br/>Default: **CURRENT_SCHEMA**]
+  Source --> Compare[Compare table structures]
+  Target --> Compare
+    Compare --> Opts{Include Extra Objects}
+    Opts -->|--compareIndexes| Idx[Compare indexes]
+    Opts -->|--compareTriggers| Trg[Compare triggers]
+    Opts -->|--compareConstraints| Cns[Compare constraints flag]
+    Idx --> Output{Output Mode}
+    Trg --> Output
+    Cns --> Output
+    Output -->|--output| File[Write JSON report]
+    Output -->|no --output| Console[Print console report]
+    File --> End([Comparison complete])
+    Console --> End
+
+    style Start fill:#0092d1
+    style End fill:#2ecc71
+    style Input fill:#f39c12
+    style Opts fill:#f39c12
+    style Output fill:#f39c12
+```
+
 ## Parameters
 
-### Required Parameters
+### Positional Arguments
 
-- **-ss, --sourceSchema** (string): First schema to compare
-- **-ts, --targetSchema** (string): Second schema to compare
+This command has no positional arguments.
 
-### Optional Parameters
+### Options
 
-- **--tables, --tb** (string): Comma-separated list of specific tables to compare (filters all tables if omitted)
-- **--compareIndexes, --ci** (boolean): Include indexes in comparison
-  - Default: `true`
-- **--compareTriggers, --ct** (boolean): Include triggers in comparison
-  - Default: `true`
-- **--compareConstraints, --cc** (boolean): Include constraints in comparison
-  - Default: `true`
-- **-o, --output** (string): File path to save comparison report (displays in console if omitted)
-- **--timeout, --to** (number): Operation timeout in seconds
-  - Default: `3600`
-- **-p, --profile**: CDS profile for connections
+| Option | Alias | Type | Default | Description |
+|---|---|---|---|---|
+| `--sourceSchema` | `-s` | string | `**CURRENT_SCHEMA**` | Source schema to compare. |
+| `--targetSchema` | `-t` | string | `**CURRENT_SCHEMA**` | Target schema to compare. |
+| `--tables` | `--tb` | string | - | Optional comma-separated table list parameter. |
+| `--compareIndexes` | `--ci` | boolean | `true` | Include index comparison. |
+| `--compareTriggers` | `--ct` | boolean | `true` | Include trigger comparison. |
+| `--compareConstraints` | `--cc` | boolean | `true` | Constraint comparison toggle. |
+| `--output` | `-o` | string | - | Write comparison output to a file (JSON). |
+| `--timeout` | `--to` | number | `3600` | Operation timeout in seconds. |
+| `--profile` | `-p` | string | - | Connection profile to use. |
 
-For a complete list of parameters and options, use:
+### Connection Parameters
 
-```bash
-hana-cli compareSchema --help
-```
+| Option | Alias | Type | Default | Description |
+|---|---|---|---|---|
+| `--admin` | `-a` | boolean | `false` | Use admin connection settings. |
+| `--conn` | - | string | Config-dependent | Override connection file. |
+
+### Troubleshooting
+
+| Option | Alias | Type | Default | Description |
+|---|---|---|---|---|
+| `--disableVerbose` | `--quiet` | boolean | `false` | Reduce verbose output. |
+| `--debug` | `-d` | boolean | `false` | Enable debug output. |
 
 ## Output Details
 
@@ -75,10 +110,7 @@ The comparison report includes:
 
 ### Constraint Comparison
 
-- **Primary key differences**
-- **Foreign key differences**
-- **Unique constraint changes**
-- **Check constraint changes**
+The command exposes a `--compareConstraints` flag for schema-comparison workflows. Detailed constraint-diff output is currently limited compared to table/index/trigger reporting.
 
 ## Examples
 
@@ -87,16 +119,16 @@ The comparison report includes:
 Compare two schemas:
 
 ```bash
-hana-cli compareSchema -ss PRODUCTION -ts STAGING
+hana-cli compareSchema -s PRODUCTION -t STAGING
 ```
 
-### 2. Specific Table Comparison
+### 2. Using a Table List Parameter
 
-Compare only certain tables:
+Pass a comma-separated table list parameter:
 
 ```bash
 hana-cli compareSchema \
-  -ss PRODUCTION -ts STAGING \
+  -s PRODUCTION -t STAGING \
   --tables CUSTOMERS,ORDERS,PRODUCTS
 ```
 
@@ -106,7 +138,7 @@ Quick comparison focusing on table structure:
 
 ```bash
 hana-cli compareSchema \
-  -ss PRODUCTION -ts STAGING \
+  -s PRODUCTION -t STAGING \
   --compareIndexes false \
   --compareTriggers false
 ```
@@ -117,7 +149,7 @@ Save detailed comparison report:
 
 ```bash
 hana-cli compareSchema \
-  -ss SOURCE_DB -ts TARGET_DB \
+  -s SOURCE_DB -t TARGET_DB \
   -o ./reports/schema_comparison.json
 ```
 
@@ -127,7 +159,7 @@ Verify schemas match before migration:
 
 ```bash
 hana-cli compareSchema \
-  -ss LEGACY_SYSTEM -ts NEW_SYSTEM
+  -s LEGACY_SYSTEM -t NEW_SYSTEM
 ```
 
 ## Use Cases
@@ -138,7 +170,7 @@ Ensure target environment matches source before migration:
 
 ```bash
 hana-cli compareSchema \
-  -ss CURRENT_PRODUCTION -ts MIGRATION_TARGET \
+  -s CURRENT_PRODUCTION -t MIGRATION_TARGET \
   -o ./migration_check.json
 ```
 
@@ -147,8 +179,8 @@ hana-cli compareSchema \
 Check if development, staging, and production are in sync:
 
 ```bash
-hana-cli compareSchema -ss DEV -ts STAGING
-hana-cli compareSchema -ss STAGING -ts PRODUCTION
+hana-cli compareSchema -s DEV -t STAGING
+hana-cli compareSchema -s STAGING -t PRODUCTION
 ```
 
 ### Schema Drift Detection
@@ -157,8 +189,8 @@ Monitor whether schemas have diverged:
 
 ```bash
 hana-cli compareSchema \
-  -ss BASELINE_SCHEMA \
-  -ts CURRENT_SCHEMA \
+  -s BASELINE_SCHEMA \
+  -t CURRENT_SCHEMA \
   -o ./drift_report.json
 ```
 
@@ -168,8 +200,8 @@ After applying schema changes, verify they match expected state:
 
 ```bash
 hana-cli compareSchema \
-  -ss EXPECTED_STATE \
-  -ts DEPLOYED_STATE
+  -s EXPECTED_STATE \
+  -t DEPLOYED_STATE
 ```
 
 ## Migration Workflow Example
@@ -177,7 +209,7 @@ hana-cli compareSchema \
 ```bash
 # 1. Compare schemas before migration
 hana-cli compareSchema \
-  -ss LEGACY_SYSTEM -ts NEW_SYSTEM \
+  -s LEGACY_SYSTEM -t NEW_SYSTEM \
   -o ./pre_migration_schema.json
 
 # 2. Review report and address any differences
@@ -186,7 +218,7 @@ hana-cli compareSchema \
 
 # 4. Re-run comparison to verify matching schemas
 hana-cli compareSchema \
-  -ss LEGACY_SYSTEM -ts NEW_SYSTEM \
+  -s LEGACY_SYSTEM -t NEW_SYSTEM \
   -o ./post_migration_schema.json
 
 # 5. Compare data after applying schema changes
@@ -198,7 +230,7 @@ hana-cli compareData \
 
 ## Performance Considerations
 
-- **Table filtering**: Use `--tables` to limit scope for large schemas
+- **Table filtering parameter**: `--tables` is available as a command option for scoped workflows
 - **Comparison scope**: Disable unnecessary comparisons (indexes, triggers) if not needed
 - **Timeout**: Increase `--timeout` for very large schemas
 - **Network latency**: Cross-database comparisons may be slower
@@ -232,10 +264,7 @@ hana-cli compareData \
 ## Related Commands
 
 - **`compareData`** - Compare data between tables
-- **`dataDiff`** - Show detailed row-level differences
-- **`schemas`** - List all schemas
-- **`tables`** - List tables with schema filter
-- **`inspectTable`** - View detailed table structure
+- **`schemaClone`** - Clone schema structures and optional data
 
 See the [Commands Reference](../all-commands.md) for other commands in this category.
 

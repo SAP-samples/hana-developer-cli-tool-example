@@ -1,7 +1,7 @@
 # tableCopy
 
 > Command: `tableCopy`  
-> Category: **Object Inspection**  
+> Category: **Schema Tools**  
 > Status: Production Ready
 
 ## Description
@@ -20,36 +20,73 @@ hana-cli tableCopy [options]
 - `copyTable`
 - `copytable`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    Start([hana-cli tableCopy]) --> Input{Source/Target Tables}
+    Input --> SrcT[--sourceTable / -st]
+    Input --> TgtT[--targetTable / -tt]
+    SrcT --> Schemas[Resolve source/target schema<br/>Defaults: **CURRENT_SCHEMA**]
+    TgtT --> Schemas
+    Schemas --> Mode{Copy Mode}
+    Mode -->|default| Both[Copy structure and data]
+    Mode -->|--structureOnly| Struct[Copy structure only]
+    Mode -->|--dataOnly| DataOnly[Copy data only]
+    Both --> Filter{Optional filters}
+    DataOnly --> Filter
+    Struct --> Output
+    Filter -->|--where| Where[Apply WHERE condition]
+    Filter -->|--limit| Limit[Apply row limit]
+    Where --> Batch[Insert rows in batches<br/>--batchSize]
+    Limit --> Batch
+    Batch --> Output{Summary Output}
+    Output --> End([Table copy complete])
+
+    style Start fill:#0092d1
+    style End fill:#2ecc71
+    style Input fill:#f39c12
+    style Mode fill:#f39c12
+    style Filter fill:#f39c12
+    style Output fill:#f39c12
+```
+
 ## Parameters
 
-### Required Parameters
+### Positional Arguments
 
-- **-st, --sourceTable** (string): Source table name to copy from
-- **-tt, --targetTable** (string): Target table name to copy to
+This command has no positional arguments.
 
-### Optional Parameters
+### Options
 
-- **-ss, --sourceSchema** (string): Source schema name
-  - Default: `**CURRENT_SCHEMA**`
-- **-ts, --targetSchema** (string): Target schema name
-  - Default: `**CURRENT_SCHEMA**`
-- **-so, --structureOnly** (boolean): Copy only table structure (no data)
-  - Default: `false`
-- **-do, --dataOnly** (boolean): Copy only data (table must exist)
-  - Default: `false`
-- **-w, --where** (string): WHERE clause to filter rows during copy
-- **-l, --limit** (number): Maximum number of rows to copy
-- **-b, --batchSize** (number): Number of rows to insert in each batch
-  - Default: `1000`
-- **--timeout, --to** (number): Operation timeout in seconds
-  - Default: `3600`
-- **-p, --profile**: Connection profile
+| Option | Alias | Type | Default | Description |
+|---|---|---|---|---|
+| `--sourceTable` | `-st` | string | - | Source table name. |
+| `--targetTable` | `-tt` | string | - | Target table name. |
+| `--sourceSchema` | `-ss` | string | `**CURRENT_SCHEMA**` | Source schema name. |
+| `--targetSchema` | `-ts` | string | `**CURRENT_SCHEMA**` | Target schema name. |
+| `--structureOnly` | `-so` | boolean | `false` | Copy table structure only. |
+| `--dataOnly` | `-do` | boolean | `false` | Copy data only (target table must exist). |
+| `--where` | `-w` | string | - | SQL WHERE clause (without `WHERE`). |
+| `--limit` | `-l` | number | - | Maximum number of rows to copy. |
+| `--batchSize` | `-b`, `--batch` | number | `1000` | Batch size for row inserts. |
+| `--dryRun` | `-dr`, `--preview` | boolean | `false` | Accepted preview flag for dry-run workflows. |
+| `--timeout` | `--to` | number | `3600` | Operation timeout in seconds. |
+| `--profile` | `-p` | string | - | Connection profile to use. |
 
-For a complete list of parameters and options, use:
+### Connection Parameters
 
-```bash
-hana-cli tableCopy --help
-```
+| Option | Alias | Type | Default | Description |
+|---|---|---|---|---|
+| `--admin` | `-a` | boolean | `false` | Use admin connection settings. |
+| `--conn` | - | string | Config-dependent | Override connection file. |
+
+### Troubleshooting
+
+| Option | Alias | Type | Default | Description |
+|---|---|---|---|---|
+| `--disableVerbose` | `--quiet` | boolean | `false` | Reduce verbose output. |
+| `--debug` | `-d` | boolean | `false` | Enable debug output. |
 
 ## Copy Modes
 
@@ -316,14 +353,13 @@ hana-cli tableCopy \
 
 ## Related Commands
 
-- `schemaClone` - Clone entire schemas
-- `compareData` - Compare source and target after copy
-- `tables` - List available tables
-- `inspectTable` - View table structure details
+- `export` - Export data after validation or copy.
+- `import` - Load exported data into a target environment.
+- `tables` - List and verify source/target tables.
 
 See the [Commands Reference](../all-commands.md) for other commands in this category.
 
 ## See Also
 
-- [Category: Object Inspection](..)
+- [Category: Schema Tools](..)
 - [All Commands A-Z](../all-commands.md)
