@@ -43,7 +43,7 @@ const auditLogOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(auditLogOptions)).wrap(160).example('hana-cli auditLog --table AUDIT_TABLE --limit 1000', baseLite.bundle.getText("auditLogExample")).wrap(160).epilog(buildDocEpilogue('auditLog', 'security', ['systemInfo', 'securityScan']))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(auditLogOptions)).wrap(160).example('hana-cli auditLog --days 7 --level ERROR', baseLite.bundle.getText("auditLogExample")).wrap(160).epilog(buildDocEpilogue('auditLog', 'security', ['systemInfo', 'securityScan']))
 
 export const auditLogBuilderOptions = baseLite.getBuilder(auditLogOptions)
 

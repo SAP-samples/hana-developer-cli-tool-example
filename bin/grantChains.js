@@ -32,7 +32,7 @@ const grantChainsOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(grantChainsOptions)).wrap(160).example('hana-cli grantChains --user DBUSER', baseLite.bundle.getText("grantChainsExample")).wrap(160).epilog(buildDocEpilogue('grantChains', 'analysis-tools', ['privilegeAnalysis', 'privilegeError', 'roles']))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(grantChainsOptions)).wrap(160).example('hana-cli grantChains --user DBUSER', baseLite.bundle.getText("grantChainsExample")).wrap(160).epilog(buildDocEpilogue('grantChains', 'security', ['privilegeAnalysis', 'privilegeError', 'roles']))
 
 export const grantChainsBuilderOptions = baseLite.getBuilder(grantChainsOptions)
 

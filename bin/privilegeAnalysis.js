@@ -31,7 +31,7 @@ const privilegeAnalysisOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(privilegeAnalysisOptions)).wrap(160).example('hana-cli privilegeAnalysis --user TESTUSER --suggest', baseLite.bundle.getText("privilegeAnalysisExample")).wrap(160).epilog(buildDocEpilogue('privilegeAnalysis', 'analysis-tools', ['roles', 'users', 'grantChains']))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(privilegeAnalysisOptions)).wrap(160).example('hana-cli privilegeAnalysis --user TESTUSER --suggest', baseLite.bundle.getText("privilegeAnalysisExample")).wrap(160).epilog(buildDocEpilogue('privilegeAnalysis', 'security', ['roles', 'users', 'grantChains']))
 
 export const privilegeAnalysisBuilderOptions = baseLite.getBuilder(privilegeAnalysisOptions)
 

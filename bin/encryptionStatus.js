@@ -22,7 +22,7 @@ const encryptionStatusOptions = {
   }
 }
 
-export const builder = (yargs) => yargs.options(baseLite.getBuilder(encryptionStatusOptions)).wrap(160).example('hana-cli encryptionStatus --table myTable', baseLite.bundle.getText("encryptionStatusExample")).wrap(160).epilog(buildDocEpilogue('encryptionStatus', 'security', ['certificates', 'healthCheck']))
+export const builder = (yargs) => yargs.options(baseLite.getBuilder(encryptionStatusOptions)).wrap(160).example('hana-cli encryptionStatus --scope backup --details', baseLite.bundle.getText("encryptionStatusExample")).wrap(160).epilog(buildDocEpilogue('encryptionStatus', 'security', ['certificates', 'healthCheck']))
 
 export const encryptionStatusBuilderOptions = baseLite.getBuilder(encryptionStatusOptions)
 
