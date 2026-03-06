@@ -6,7 +6,7 @@
 
 ## Description
 
-List all Cloud Foundry user provided service instances in your target Space
+List Cloud Foundry user-provided service instances in the current target space. By default, the command uses the Cloud Foundry API; set the flag to false to use XS-based service APIs.
 
 ## Syntax
 
@@ -25,26 +25,38 @@ hana-cli ups [options]
 ## Command Diagram
 
 ```mermaid
-flowchart TD
-    A["hana-cli ups"] --> B["List all Cloud Foundry user provided service instances in your target Space"]
+graph TD
+    Start([hana-cli ups]) --> Mode{Cloud Foundry mode?}
+    Mode -->|--cf true| CF["List UPS instances<br/>via Cloud Foundry"]
+    Mode -->|--cf false| XS["List UPS instances<br/>via XS services"]
+    CF --> Output["Display instance list"]
+    XS --> Output
+    Start --> Options{Troubleshooting}
+    Options --> Quiet["--quiet / --disableVerbose"]
+    Options --> Debug["--debug"]
+    Output --> Complete([Command Complete])
 
-    A --> C{"Troubleshooting"}
-    C --> C1["--disableVerbose, --quiet\nDisable verbose/extra human-readable output\nUseful for scripting\nDefault: false"]
-    C --> C2["-d, --debug\nDebug hana-cli with detailed intermediate output\nDefault: false"]
-
-    A --> D{"Options"}
-    D --> D1["-h, --help\nShow help"]
-    D --> D2["-c, --cf, --cmd\nCloud Foundry mode\nDefault: true"]
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Mode fill:#f39c12
+    style Options fill:#f39c12
 ```
 
 ## Parameters
 
-| Option | Type | Default | Description |
-| --- | --- | --- | --- |
-| `--disableVerbose`, `--quiet` | `boolean` | `false` | Disable verbose output by removing extra human-readable output. Useful for scripting commands. |
-| `-d`, `--debug` | `boolean` | `false` | Debug `hana-cli` itself by adding lots of intermediate detail output. |
-| `-h`, `--help` | `boolean` | _(none)_ | Show help. |
-| `-c`, `--cf`, `--cmd` | `boolean` | `true` | Cloud Foundry mode. |
+### Options
+
+| Option  | Alias         | Type    | Default | Description                                                     |
+|---------|---------------|---------|---------|-----------------------------------------------------------------|
+| `--cf`  | `-c`, `--cmd` | boolean | `true`  | Cloud Foundry mode (set to `false` for XS-based service APIs).   |
+
+### Troubleshooting
+
+| Option             | Alias     | Type    | Default | Description                                         |
+|--------------------|-----------|---------|---------|-----------------------------------------------------|
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output for script-friendly results. |
+| `--debug`          | `-d`      | boolean | `false` | Enable debug output with intermediate details.      |
+| `--help`           | `-h`      | boolean | -       | Show help.                                          |
 
 For a complete list of parameters and options, use:
 
@@ -60,24 +72,35 @@ hana-cli ups --help
 hana-cli ups --cf
 ```
 
-Execute the command
+List user-provided service instances using Cloud Foundry mode.
+
+## Interactive Mode
+
+This command can be run in interactive mode, which prompts for optional inputs.
+
+| Parameter | Required | Prompted | Notes                                           |
+|-----------|----------|----------|-------------------------------------------------|
+| `cf`      | No       | Always   | Cloud Foundry mode (default: `true`).          |
 
 ---
 
 ## hanaCloudUPSInstancesUI (UI Variant)
 
 > Command: `hanaCloudUPSInstancesUI`  
+> Category: **HANA Cloud**  
 > Status: Production Ready
 
-**Description:** Execute hanaCloudUPSInstancesUI command - UI version for listing user-provided service instances
+### UI Description
 
-**Syntax:**
+Launch the UPS instances UI for the current target space.
+
+### UI Syntax
 
 ```bash
 hana-cli upsUI [options]
 ```
 
-**Aliases:**
+### UI Aliases
 
 - `upsInstancesUI`
 - `upsinstancesui`
@@ -85,7 +108,41 @@ hana-cli upsUI [options]
 - `listupsui`
 - `upsservicesui`
 
-**Parameters:**
+### UI Command Diagram
+
+```mermaid
+graph TD
+    Start([hana-cli upsUI]) --> Mode{Cloud Foundry mode?}
+    Mode -->|--cf true| CF["Launch UI (Cloud Foundry)"]
+    Mode -->|--cf false| XS["Launch UI (XS services)"]
+    Start --> Options{Troubleshooting}
+    Options --> Quiet["--quiet / --disableVerbose"]
+    Options --> Debug["--debug"]
+    CF --> Running["UI running in browser"]
+    XS --> Running
+    Running --> Complete([Command Complete])
+
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Mode fill:#f39c12
+    style Options fill:#f39c12
+```
+
+### UI Parameters
+
+#### UI Options
+
+| Option  | Alias         | Type    | Default | Description                                                     |
+|---------|---------------|---------|---------|-----------------------------------------------------------------|
+| `--cf`  | `-c`, `--cmd` | boolean | `true`  | Cloud Foundry mode (set to `false` for XS-based service APIs).   |
+
+#### UI Troubleshooting
+
+| Option             | Alias     | Type    | Default | Description                                         |
+|--------------------|-----------|---------|---------|-----------------------------------------------------|
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output for script-friendly results. |
+| `--debug`          | `-d`      | boolean | `false` | Enable debug output with intermediate details.      |
+| `--help`           | `-h`      | boolean | -       | Show help.                                          |
 
 For a complete list of parameters and options, use:
 
@@ -93,17 +150,21 @@ For a complete list of parameters and options, use:
 hana-cli upsUI --help
 ```
 
-**Example Usage:**
+### UI Examples
 
 ```bash
 hana-cli upsUI
 ```
 
-Execute the command
+Open the UPS instances UI.
 
 ## Related Commands
 
-See the [Commands Reference](../all-commands.md) for other commands in this category.
+Related commands from HANA Cloud:
+
+- `hanaCloudInstances` - List HANA Cloud instances
+
+See the [Commands Reference](../all-commands.md) for all available commands.
 
 ## See Also
 

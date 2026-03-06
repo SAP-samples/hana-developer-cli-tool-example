@@ -11,7 +11,9 @@ Requirements:
 - If the target is under `docs/02-commands/`, follow the command-doc rules in [command documentation instructions](../instructions/command-documentation.instructions.md).
 - Keep changes minimal and consistent with existing structure.
 - Use accurate terminology that matches the CLI and the repository.
+- After updates, perform a consistency-only cross-check against the current command implementations and document structure (no command execution unless explicitly requested).
 
 Output:
 - Apply edits to the specified Markdown file(s).
 - Provide a concise summary of what changed and why.
+- Report the cross-check results (consistency and alignment findings).

@@ -6,7 +6,7 @@
 
 ## Description
 
-List all SAP HANA Cloud instances in your target Space
+List SAP HANA Cloud instances in the current target space, optionally filtered by instance name. The command queries both SAP BTP multi-environment and Cloud Foundry instances and prints status, URLs, and resource details when available.
 
 ## Syntax
 
@@ -26,30 +26,48 @@ hana-cli hc [name] [options]
 
 ```mermaid
 graph TD
-    A["hana-cli hc [name]<br/>List HANA Cloud instances in your target Space"]
-    A --> B["-n, --name<br/>SAP HANA Cloud Instance name<br/>default: **default**"]
-    A --> C["🛠️ Troubleshooting"]
-    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output (script-friendly)"]
-    C --> C2["-d, --debug<br/>Debug hana-cli (extra details)"]
-    A --> D["-h, --help<br/>Show help"]
-    style A fill:#1f6feb,stroke:#0b1f3a,color:#fff
-    style D fill:#222,stroke:#555,color:#fff
+    Start([hana-cli hc]) --> Input{Instance filter}
+    Input -->|name / --name| Name["Instance name<br/>Default: **default**"]
+    Name --> Fetch["Fetch instances from<br/>BTP and Cloud Foundry"]
+    Start --> Options{Troubleshooting}
+    Options --> Quiet["--quiet / --disableVerbose"]
+    Options --> Debug["--debug"]
+    Fetch --> Output["Print instance details<br/>status, URLs, resources"]
+    Output --> Complete([Command Complete])
+
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Input fill:#f39c12
+    style Options fill:#f39c12
 ```
 
 ## Parameters
+
+### Positional Arguments
+
+| Parameter | Type   | Description                                      |
+|-----------|--------|--------------------------------------------------|
+| `name`    | string | Instance name filter (default: `**default**`).   |
+
+### Options
+
+| Option    | Alias | Type   | Default        | Description                      |
+|-----------|-------|--------|----------------|----------------------------------|
+| `--name`  | `-n`  | string | `**default**`  | SAP HANA Cloud instance name.    |
+
+### Troubleshooting
+
+| Option             | Alias     | Type    | Default | Description                                         |
+|--------------------|-----------|---------|---------|-----------------------------------------------------|
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output for script-friendly results. |
+| `--debug`          | `-d`      | boolean | `false` | Enable debug output with intermediate details.      |
+| `--help`           | `-h`      | boolean | -       | Show help.                                          |
 
 For a complete list of parameters and options, use:
 
 ```bash
 hana-cli hanaCloudInstances --help
 ```
-
-| Option | Alias | Type | Default | Description |
-| --- | --- | --- | --- | --- |
-| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output (removes extra human-readable output; useful for scripting). |
-| `--debug` | `-d` | boolean | `false` | Debug hana-cli by adding lots of intermediate details. |
-| `--help` | `-h` | boolean | `—` | Show help. |
-| `--name` | `-n` | string | `**default**` | SAP HANA Cloud instance name. |
 
 ## Examples
 
@@ -59,11 +77,25 @@ hana-cli hanaCloudInstances --help
 hana-cli hc --name myInstance
 ```
 
-Execute the command
+List details for a specific SAP HANA Cloud instance.
+
+## Interactive Mode
+
+This command can be run in interactive mode, which prompts for required inputs.
+
+| Parameter | Required | Prompted | Notes                                         |
+|-----------|----------|----------|-----------------------------------------------|
+| `name`    | Yes      | Always   | Instance name filter (default: `**default**`). |
 
 ## Related Commands
 
-See the [Commands Reference](../all-commands.md) for other commands in this category.
+Related commands from HANA Cloud:
+
+- `hanaCloudStart` - Start a HANA Cloud instance
+- `hanaCloudStop` - Stop a HANA Cloud instance
+- `hanaCloudHDIInstances` - List HANA Cloud HDI service instances
+
+See the [Commands Reference](../all-commands.md) for all available commands.
 
 ## See Also
 

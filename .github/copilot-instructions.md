@@ -18,6 +18,7 @@ These instructions apply to all work in this repository.
 - Run targeted tests only when needed; do not run the full suite unless requested.
 - For docs changes, consider regenerating the docs index or building VitePress.
 - For i18n changes, validate using the existing i18n validation script.
+- For documentation creation or updates, perform a consistency-only cross-check against current sources (no command execution unless explicitly requested).
 
 ## Tooling Preferences
 - Use the existing scripts in `scripts/` and root automation scripts when available.

@@ -6,7 +6,7 @@
 
 ## Description
 
-List all SAP HANA Cloud SBSS service instances in your target Space
+List SAP HANA Cloud SBSS service instances in the current target space. By default, the command uses the Cloud Foundry API; set the flag to false to use XS-based service APIs.
 
 ## Syntax
 
@@ -27,22 +27,37 @@ hana-cli sbss [options]
 
 ```mermaid
 graph TD
-    A["hana-cli sbss"] --> B["Options"]
-    B --> C["-c, --cf, --cmd<br/>Cloud Foundry<br/>default: true"]
-    B --> D["-h, --help<br/>Show help"]
-    B --> E["--disableVerbose, --quiet<br/>Disable Verbose output<br/>default: false"]
-    B --> F["-d, --debug<br/>Debug hana-cli<br/>default: false"]
-    A --> G["List all SAP HANA Cloud<br/>SBSS service instances"]
+    Start([hana-cli sbss]) --> Mode{Cloud Foundry mode?}
+    Mode -->|--cf true| CF["List SBSS instances<br/>via Cloud Foundry"]
+    Mode -->|--cf false| XS["List SBSS instances<br/>via XS services"]
+    CF --> Output["Display instance list"]
+    XS --> Output
+    Start --> Options{Troubleshooting}
+    Options --> Quiet["--quiet / --disableVerbose"]
+    Options --> Debug["--debug"]
+    Output --> Complete([Command Complete])
+
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Mode fill:#f39c12
+    style Options fill:#f39c12
 ```
 
 ## Parameters
 
-| Option | Description | Type | Default |
-| --- | --- | --- | --- |
-| `-c, --cf, --cmd` | Cloud Foundry | boolean | true |
-| `-h, --help` | Show help | boolean | - |
-| `-d, --debug` | Debug hana-cli itself by adding output of LOTS of intermediate details | boolean | false |
-| `--disableVerbose, --quiet` | Disable Verbose output - removes all extra output that is only helpful to human readable interface. Useful for scripting commands. | boolean | false |
+### Options
+
+| Option  | Alias         | Type    | Default | Description                                                     |
+|---------|---------------|---------|---------|-----------------------------------------------------------------|
+| `--cf`  | `-c`, `--cmd` | boolean | `true`  | Cloud Foundry mode (set to `false` for XS-based service APIs).   |
+
+### Troubleshooting
+
+| Option             | Alias     | Type    | Default | Description                                         |
+|--------------------|-----------|---------|---------|-----------------------------------------------------|
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output for script-friendly results. |
+| `--debug`          | `-d`      | boolean | `false` | Enable debug output with intermediate details.      |
+| `--help`           | `-h`      | boolean | -       | Show help.                                          |
 
 For a complete list of parameters and options, use:
 
@@ -58,24 +73,35 @@ hana-cli hanaCloudSBSSInstances --help
 hana-cli sbss --cf
 ```
 
-Execute the command
+List SBSS instances using Cloud Foundry mode.
+
+## Interactive Mode
+
+This command can be run in interactive mode, which prompts for optional inputs.
+
+| Parameter | Required | Prompted | Notes                                           |
+|-----------|----------|----------|-------------------------------------------------|
+| `cf`      | No       | Always   | Cloud Foundry mode (default: `true`).          |
 
 ---
 
 ## hanaCloudSBSSInstancesUI (UI Variant)
 
 > Command: `hanaCloudSBSSInstancesUI`  
+> Category: **HANA Cloud**  
 > Status: Production Ready
 
-**Description:** Execute hanaCloudSBSSInstancesUI command - UI version for listing SAP HANA Cloud SBSS instances
+### UI Description
 
-**Syntax:**
+Launch the SBSS instances UI for the current target space.
+
+### UI Syntax
 
 ```bash
 hana-cli sbssUI [options]
 ```
 
-**Aliases:**
+### UI Aliases
 
 - `sbssInstancesUI`
 - `sbssinstancesui`
@@ -84,7 +110,41 @@ hana-cli sbssUI [options]
 - `sbssservicesui`
 - `sbsssui`
 
-**Parameters:**
+### UI Command Diagram
+
+```mermaid
+graph TD
+    Start([hana-cli sbssUI]) --> Mode{Cloud Foundry mode?}
+    Mode -->|--cf true| CF["Launch UI (Cloud Foundry)"]
+    Mode -->|--cf false| XS["Launch UI (XS services)"]
+    Start --> Options{Troubleshooting}
+    Options --> Quiet["--quiet / --disableVerbose"]
+    Options --> Debug["--debug"]
+    CF --> Running["UI running in browser"]
+    XS --> Running
+    Running --> Complete([Command Complete])
+
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Mode fill:#f39c12
+    style Options fill:#f39c12
+```
+
+### UI Parameters
+
+#### UI Options
+
+| Option  | Alias         | Type    | Default | Description                                                     |
+|---------|---------------|---------|---------|-----------------------------------------------------------------|
+| `--cf`  | `-c`, `--cmd` | boolean | `true`  | Cloud Foundry mode (set to `false` for XS-based service APIs).   |
+
+#### UI Troubleshooting
+
+| Option             | Alias     | Type    | Default | Description                                         |
+|--------------------|-----------|---------|---------|-----------------------------------------------------|
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output for script-friendly results. |
+| `--debug`          | `-d`      | boolean | `false` | Enable debug output with intermediate details.      |
+| `--help`           | `-h`      | boolean | -       | Show help.                                          |
 
 For a complete list of parameters and options, use:
 
@@ -92,17 +152,21 @@ For a complete list of parameters and options, use:
 hana-cli sbssUI --help
 ```
 
-**Example Usage:**
+### UI Examples
 
 ```bash
 hana-cli sbssUI
 ```
 
-Execute the command
+Open the SBSS instances UI.
 
 ## Related Commands
 
-See the [Commands Reference](../all-commands.md) for other commands in this category.
+Related commands from HANA Cloud:
+
+- `hanaCloudInstances` - List HANA Cloud instances
+
+See the [Commands Reference](../all-commands.md) for all available commands.
 
 ## See Also
 
