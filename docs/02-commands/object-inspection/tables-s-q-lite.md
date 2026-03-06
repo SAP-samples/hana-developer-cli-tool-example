@@ -6,7 +6,7 @@
 
 ## Description
 
-Get a list of all tables from SQLite
+Get a list of tables from a SQLite profile
 
 ## Syntax
 
@@ -23,27 +23,65 @@ hana-cli tablesSQLite [table] [options]
 - `tables-sql`
 - `tablesSQL`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    Start([hana-cli tablesSQLite]) --> Inputs{Inputs}
+    Inputs --> Table[Table pattern<br/>default *]
+    Inputs --> Profile[Profile<br/>default sqlite]
+    Inputs --> Limit[Limit<br/>default 200]
+    Table --> Query[List tables via sqlite profile]
+    Profile --> Query
+    Limit --> Query
+    Query --> Output[Render results table]
+    Output --> Done([Command Complete])
+
+    style Start fill:#0092d1
+    style Done fill:#2ecc71
+    style Inputs fill:#f39c12
+```
+
 ## Parameters
 
-For a complete list of parameters and options, use:
+### Positional Arguments
 
-```bash
-hana-cli tablesSQLite --help
-```
+| Parameter | Type | Description |
+|---|---|---|
+| `table` | string | Table name filter (optional positional input). |
+
+### Options
+
+| Option | Alias | Type | Default | Description |
+|---|---|---|---|---|
+| `--table` | `-t` | string | `*` | SQLite table name pattern to match. |
+| `--profile` | `-p` | string | `sqlite` | Profile used to route execution to SQLite mode. |
+| `--limit` | `-l` | number | `200` | Maximum number of rows returned. |
+
+For additional shared options from the common command builder, use `hana-cli tablesSQLite --help`.
 
 ## Examples
 
 ### Basic Usage
 
 ```bash
-hana-cli tablesSQLite
+hana-cli tablesSQLite --table "*" --profile sqlite
 ```
 
-Execute the command
+List SQLite tables matching the provided table pattern.
+
+### Default Profile Behavior
+
+```bash
+hana-cli tablesSQLite --table "SALES_*"
+```
+
+Use the command's default `sqlite` profile and filter by table name pattern.
 
 ## Related Commands
 
-See the [Commands Reference](../all-commands.md) for other commands in this category.
+- [`tables`](tables.md)
+- [`tablesPG`](tables-p-g.md)
 
 ## See Also
 

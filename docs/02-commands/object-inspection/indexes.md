@@ -1,7 +1,7 @@
 # indexes
 
 > Command: `indexes`  
-> Category: **System Tools**  
+> Category: **Object Inspection**  
 > Status: Production Ready
 
 ## Description
@@ -23,23 +23,62 @@ hana-cli indexes [schema] [indexes] [options]
 - `Listind`
 - `listfindexes`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    Start([hana-cli indexes]) --> Inputs{Inputs}
+    Inputs --> Schema[Schema<br/>default **CURRENT_SCHEMA**]
+    Inputs --> Index[Index pattern<br/>default *]
+    Inputs --> Limit[Limit<br/>default 200]
+    Schema --> Query[Query INDEXES view]
+    Index --> Query
+    Limit --> Query
+    Query --> Output[Render results table]
+    Output --> Done([Command Complete])
+
+    style Start fill:#0092d1
+    style Done fill:#2ecc71
+    style Inputs fill:#f39c12
+```
+
 ## Parameters
 
-For a complete list of parameters and options, use:
+### Positional Arguments
 
-```bash
-hana-cli indexes --help
-```
+| Parameter | Type | Description |
+|---|---|---|
+| `schema` | string | Schema name filter (optional positional input). |
+| `indexes` | string | Index name filter (optional positional input). |
+
+### Options
+
+| Option | Alias | Type | Default | Description |
+|---|---|---|---|---|
+| `--indexes` | `-i` | string | `*` | Index name pattern to match. |
+| `--schema` | `-s` | string | `**CURRENT_SCHEMA**` | Schema name or pattern to match. |
+| `--limit` | `-l` | number | `200` | Maximum number of rows returned. |
+| `--profile` | `-p` | string | - | Connection profile override. |
+
+For additional shared options from the common command builder, use `hana-cli indexes --help`.
 
 ## Examples
 
 ### Basic Usage
 
 ```bash
-hana-cli indexes
+hana-cli indexes --indexes myIndex --schema MYSCHEMA
 ```
 
-Execute the command
+List indexes matching the schema and index filters.
+
+### Limit Results
+
+```bash
+hana-cli indexes --schema MYSCHEMA --limit 50
+```
+
+Return only the first 50 matching rows.
 
 ---
 
@@ -84,9 +123,11 @@ Execute the command
 
 ## Related Commands
 
-See the [Commands Reference](../all-commands.md) for other commands in this category.
+- `inspectIndex`
+- [`tables`](tables.md)
+- `tableHotspots`
 
 ## See Also
 
-- [Category: System Tools](..)
+- [Category: Object Inspection](..)
 - [All Commands A-Z](../all-commands.md)

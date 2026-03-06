@@ -6,7 +6,7 @@
 
 ## Description
 
-Get a list of all views
+Get a list of views for a schema and view name pattern.
 
 ## Syntax
 
@@ -20,27 +20,76 @@ hana-cli views [schema] [view] [options]
 - `listViews`
 - `listviews`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    Start([hana-cli views]) --> Inputs{Inputs}
+    Inputs --> Schema[Schema<br/>default **CURRENT_SCHEMA**]
+    Inputs --> View[View pattern<br/>default *]
+    Inputs --> Limit[Limit<br/>default 200]
+    Schema --> Query[Query VIEWS view<br/>with LIKE filters]
+    View --> Query
+    Limit --> Query
+    Query --> Output[Render results table]
+    Output --> Done([Command Complete])
+
+    style Start fill:#0092d1
+    style Done fill:#2ecc71
+    style Inputs fill:#f39c12
+```
+
 ## Parameters
 
-For a complete list of parameters and options, use:
+### Positional Arguments
 
-```bash
-hana-cli views --help
-```
+| Parameter | Type | Description |
+|---|---|---|
+| `schema` | string | Schema name filter (optional positional input). |
+| `view` | string | View name filter (optional positional input). |
+
+### Options
+
+| Option | Alias | Type | Default | Description |
+|---|---|---|---|---|
+| `--view` | `-v` | string | `*` | View name pattern to match. |
+| `--schema` | `-s` | string | `**CURRENT_SCHEMA**` | Schema name or pattern to match. |
+| `--limit` | `-l` | number | `200` | Maximum number of rows returned. |
+| `--profile` | `-p` | string | - | Connection profile override. |
+
+For additional shared options from the common command builder, use `hana-cli views --help`.
 
 ## Examples
 
 ### Basic Usage
 
 ```bash
-hana-cli views
+hana-cli views --view myView --schema MYSCHEMA
 ```
 
-Execute the command
+List views matching the provided schema and view pattern.
+
+### Wildcard Search
+
+```bash
+hana-cli views --view "VW_%" --schema MYSCHEMA
+```
+
+List views whose names start with `VW_`.
+
+### Limit Results
+
+```bash
+hana-cli views --schema MYSCHEMA --limit 50
+```
+
+Return only the first 50 matching rows.
 
 ## Related Commands
 
-See the [Commands Reference](../all-commands.md) for other commands in this category.
+- [`inspectView`](inspect-view.md)
+- [`tables`](tables.md)
+- [`procedures`](procedures.md)
 
 ## See Also
 

@@ -22,27 +22,64 @@ hana-cli inspectProcedure [schema] [procedure] [options]
 - `inspectprocedure`
 - `inspectsp`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    Start([hana-cli inspectProcedure]) --> Inputs{Inputs}
+    Inputs --> Schema[Schema<br/>default **CURRENT_SCHEMA**]
+    Inputs --> Name[Procedure name]
+    Inputs --> OutputType[Output<br/>tbl or sql]
+    Schema --> Inspect[Read procedure metadata]
+    Name --> Inspect
+    OutputType --> Inspect
+    Inspect --> Done([Command Complete])
+
+    style Start fill:#0092d1
+    style Done fill:#2ecc71
+    style Inputs fill:#f39c12
+```
+
 ## Parameters
 
-For a complete list of parameters and options, use:
+### Positional Arguments
 
-```bash
-hana-cli inspectProcedure --help
-```
+| Parameter | Type | Description |
+|---|---|---|
+| `schema` | string | Target schema (optional positional input). |
+| `procedure` | string | Procedure name (optional positional input). |
+
+### Options
+
+| Option | Alias | Type | Default | Description |
+|---|---|---|---|---|
+| `--procedure` | `-p`, `--sp` | string | - | Procedure name to inspect. |
+| `--schema` | `-s` | string | `**CURRENT_SCHEMA**` | Schema that contains the procedure. |
+| `--output` | `-o` | string | `tbl` | Output format. Choices: `tbl`, `sql`. |
 
 ## Examples
 
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli inspectProcedure --procedure myProcedure --schema MYSCHEMA
+hana-cli inspectProcedure --procedure myProcedure --schema MYSCHEMA
 ```
 
 Execute the command
 
+### SQL Definition Output
+
+```bash
+hana-cli inspectProcedure --procedure myProcedure --schema MYSCHEMA --output sql
+```
+
+Display the procedure definition in SQL format.
+
 ## Related Commands
 
-See the [Commands Reference](../all-commands.md) for other commands in this category.
+- [`procedures`](procedures.md)
+- [`inspectFunction`](inspect-function.md)
+- `callProcedure`
 
 ## See Also
 

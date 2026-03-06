@@ -21,27 +21,63 @@ hana-cli inspectFunction [schema] [function] [options]
 - `insFunc`
 - `inspectfunction`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    Start([hana-cli inspectFunction]) --> Inputs{Inputs}
+    Inputs --> Schema[Schema<br/>default **CURRENT_SCHEMA**]
+    Inputs --> Name[Function name]
+    Inputs --> OutputType[Output<br/>tbl or sql]
+    Schema --> Inspect[Read function metadata]
+    Name --> Inspect
+    OutputType --> Inspect
+    Inspect --> Done([Command Complete])
+
+    style Start fill:#0092d1
+    style Done fill:#2ecc71
+    style Inputs fill:#f39c12
+```
+
 ## Parameters
 
-For a complete list of parameters and options, use:
+### Positional Arguments
 
-```bash
-hana-cli inspectFunction --help
-```
+| Parameter | Type | Description |
+|---|---|---|
+| `schema` | string | Target schema (optional positional input). |
+| `function` | string | Function name (optional positional input). |
+
+### Options
+
+| Option | Alias | Type | Default | Description |
+|---|---|---|---|---|
+| `--function` | `-f` | string | - | Function name to inspect. |
+| `--schema` | `-s` | string | `**CURRENT_SCHEMA**` | Schema that contains the function. |
+| `--output` | `-o` | string | `tbl` | Output format. Choices: `tbl`, `sql`. |
 
 ## Examples
 
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli inspectFunction --function myFunction --schema MYSCHEMA
+hana-cli inspectFunction --function myFunction --schema MYSCHEMA
 ```
 
 Execute the command
 
+### SQL Definition Output
+
+```bash
+hana-cli inspectFunction --function myFunction --schema MYSCHEMA --output sql
+```
+
+Display the function definition in SQL format.
+
 ## Related Commands
 
-See the [Commands Reference](../all-commands.md) for other commands in this category.
+- [`functions`](functions.md)
+- [`inspectProcedure`](inspect-procedure.md)
 
 ## See Also
 

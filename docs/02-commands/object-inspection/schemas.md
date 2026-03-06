@@ -1,7 +1,7 @@
 # schemas
 
 > Command: `schemas`  
-> Category: **System Tools**  
+> Category: **Object Inspection**  
 > Status: Production Ready
 
 ## Description
@@ -21,23 +21,52 @@ hana-cli schemas [schema] [options]
 - `listSchemas`
 - `s`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    Start([hana-cli schemas]) --> Inputs{Inputs}
+    Inputs --> Schema[Schema pattern<br/>default *]
+    Inputs --> IncludeAll[All schemas flag]
+    Inputs --> Limit[Limit<br/>default 200]
+    Schema --> Query[Query SCHEMAS view]
+    IncludeAll --> Query
+    Limit --> Query
+    Query --> Output[Render results table]
+    Output --> Done([Command Complete])
+
+    style Start fill:#0092d1
+    style Done fill:#2ecc71
+    style Inputs fill:#f39c12
+```
+
 ## Parameters
 
-For a complete list of parameters and options, use:
+### Positional Arguments
 
-```bash
-hana-cli schemas --help
-```
+| Parameter | Type | Description |
+|---|---|---|
+| `schema` | string | Schema name pattern (optional positional input). |
+
+### Options
+
+| Option | Alias | Type | Default | Description |
+|---|---|---|---|---|
+| `--schema` | `-s` | string | `*` | Schema name pattern to match. |
+| `--limit` | `-l` | number | `200` | Maximum number of rows returned. |
+| `--all` | `--al`, `--allSchemas` | boolean | `false` | Include schemas without direct privileges. |
+
+For additional shared options from the common command builder, use `hana-cli schemas --help`.
 
 ## Examples
 
 ### Basic Usage
 
 ```bash
-hana-cli schemas
+hana-cli schemas --schema MYSCHEMA
 ```
 
-Execute the command
+List schemas matching the provided schema pattern.
 
 ---
 
@@ -81,9 +110,11 @@ Execute the command
 
 ## Related Commands
 
-See the [Commands Reference](../all-commands.md) for other commands in this category.
+- [`objects`](objects.md)
+- `schemaClone`
+- [`tables`](tables.md)
 
 ## See Also
 
-- [Category: System Tools](..)
+- [Category: Object Inspection](..)
 - [All Commands A-Z](../all-commands.md)
