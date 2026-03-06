@@ -6,7 +6,7 @@
 
 ## Description
 
-Validates data in HANA tables against business rules and constraints. It helps identify data quality issues by applying various validation rules to specified columns.
+Validate table data against business rules and constraints. You can supply rules inline or via a rules file and optionally limit validation to specific columns.
 
 ## Syntax
 
@@ -24,64 +24,69 @@ hana-cli dataValidator [options]
 
 ```mermaid
 graph TD
-    A["<b>hana-cli dataValidator</b><br/>Validate data against business rules and constraints"]
-    
-    A --> B["<b>Connection Parameters</b>"]
-    A --> C["<b>Troubleshooting Options</b>"]
-    A --> D["<b>Validation Configuration</b>"]
-    A --> E["<b>Output & Control</b>"]
-    
-    B --> B1["-a, --admin<br/>Connect via admin<br/>(default: false)"]
-    B --> B2["--conn<br/>Connection Filename<br/>(override default-env.json)"]
-    
-    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output<br/>(default: false)"]
-    C --> C2["-d, --debug<br/>Debug output with details<br/>(default: false)"]
-    
-    D --> D1["-t, --table<br/>Table Name to Validate<br/>(string)"]
-    D --> D2["-s, --schema<br/>Schema for Table<br/>(default: **CURRENT_SCHEMA**)"]
-    D --> D3["-r, --rules<br/>Validation Rules<br/>(column:rule format)"]
-    D --> D4["--rulesFile, --rf<br/>Path to Validation Rules File<br/>(string)"]
-    D --> D5["-c, --columns<br/>Columns to Validate<br/>(comma-separated, optional)"]
-    
-    E --> E1["-o, --output<br/>Output Report File Path<br/>(string)"]
-    E --> E2["-f, --format<br/>Report Format<br/>(json, csv, summary, detailed)<br/>(default: json)"]
-    E --> E3["-l, --limit<br/>Maximum Rows to Validate<br/>(default: 10000)"]
-    E --> E4["--stopOnFirstError, --sfe<br/>Stop After First Error<br/>(default: false)"]
-    E --> E5["--timeout, --to<br/>Operation Timeout (seconds)<br/>(default: 3600)"]
-    E --> E6["-p, --profile<br/>CDS Profile<br/>(string)"]
-    
-    style A fill:#4a90e2,stroke:#2c5aa0,color:#fff,stroke-width:3px
-    style B fill:#2196F3,stroke:#1565C0,color:#fff
-    style C fill:#FF9800,stroke:#E65100,color:#fff
-    style D fill:#9C27B0,stroke:#6A1B9A,color:#fff
-    style E fill:#F44336,stroke:#C62828,color:#fff
+    Start([hana-cli dataValidator]) --> Inputs{Input Parameters}
+    Inputs -->|--table| Table[Table to validate]
+    Inputs -->|--schema| Schema[Schema<br/>default: **CURRENT_SCHEMA**]
+    Inputs -->|--rules/--rulesFile| Rules[Validation rules]
+    Inputs -->|--columns| Columns[Column filter<br/>optional]
+    Inputs --> Validate[Validate rows]
+    Validate --> OutputChoice{Output target}
+    OutputChoice -->|--output| FileOut[Write report]
+    OutputChoice -->|console| ConsoleOut[Print report]
+    FileOut --> Complete([Command complete])
+    ConsoleOut --> Complete([Command complete])
+
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Inputs fill:#f39c12
+    style OutputChoice fill:#f39c12
 ```
 
 ## Parameters
 
+### Positional Arguments
+
+None.
+
+### Options
+
 | Option | Alias | Type | Default | Description |
-| -------- | ------- | -------- | --------- | ------------- |
-| `--table` | `-t` | string | required | Name of the table to validate |
-| `--schema` | `-s` | string | optional | Schema name (uses current if omitted) |
-| `--rules` | `-r` | string | auto (default preset) | Validation rules in format: `column:rule1,rule2;column2:rule3` |
-| `--rulesFile` | `-rf` | string | optional | Path to file containing validation rules |
-| `--columns` | `-c` | string | optional | Comma-separated list of specific columns to validate |
-| `--output` | `-o` | string | optional | Output file path for the report |
-| `--format` | `-f` | string | summary | Report format: `json`, `csv`, `summary`, `detailed` |
-| `--limit` | `-l` | number | 10000 | Maximum number of rows to validate |
-| `--stopOnFirstError` | `-sfe` | boolean | false | Stop validation after first error |
-| `--timeout` | `-to` | number | 3600 | Operation timeout in seconds |
-| `--profile` | `-p` | string | optional | Connection profile to use |
+| --- | --- | --- | --- | --- |
+| `--table` | `-t` | string | - | Name of the table to validate. |
+| `--schema` | `-s` | string | `**CURRENT_SCHEMA**` | Schema name (uses current schema if omitted). |
+| `--rules` | `-r` | string | - | Validation rules string in `column:rule1,rule2;column2:rule3` format. |
+| `--rulesFile` | `--rf` | string | - | Path to a rules file containing the rules string. |
+| `--columns` | `-c` | string | - | Comma-separated list of columns to validate. |
+| `--output` | `-o` | string | - | Output file path for the report. |
+| `--format` | `-f` | string | `json` | Report format. Choices: `json`, `csv`, `summary`, `detailed`. |
+| `--limit` | `-l` | number | `10000` | Maximum number of rows to validate. |
+| `--stopOnFirstError` | `--sfe` | boolean | `false` | Stop validation after the first error. |
+| `--timeout` | `--to` | number | `3600` | Operation timeout in seconds. |
+| `--profile` | `-p` | string | - | Connection profile to use. |
 
-For a complete list of parameters and options, use:
+### Connection Parameters
 
-```bash
-hana-cli dataValidator --help
-```
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--admin` | `-a` | boolean | `false` | Connect via admin (default-env-admin.json). |
+| `--conn` | - | string | - | Connection filename to override default-env.json. |
+
+### Troubleshooting
+
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output for scripting. |
+| `--debug` | `-d` | boolean | `false` | Debug hana-cli with detailed intermediate output. |
+
+### Special Default Values
+
+| Token | Resolves To | Description |
+| --- | --- | --- |
+| `**CURRENT_SCHEMA**` | Current user's schema | Used as default for `--schema`. |
 
 ## Validation Rules
 
-Rules are specified in the format: `column:rule1,rule2;column2:rule3`
+Rules are specified in the format: `column:rule1,rule2;column2:rule3`.
 
 Supported rules:
 
@@ -93,7 +98,7 @@ Supported rules:
 - `pattern:regex` - Column must match the specified regex pattern
 - `range:min:max` - Numeric column must be between min and max
 
-### Default rules preset
+### Default Rules Preset
 
 If you omit both `--rules` and `--rulesFile`, the command generates a default rules preset based on column names:
 
@@ -104,98 +109,41 @@ If you omit both `--rules` and `--rulesFile`, the command generates a default ru
 
 If no columns match these patterns, the first column is validated as `required`.
 
-## Rules File Format
+### Rules File Format
 
-Create a text file with validation rules, one rule per line or use semicolons to separate:
+The rules file must contain the same rules string format as `--rules` (semicolon-separated pairs).
 
-```bash
-email:required,email
-firstName:required,length:1:50
-lastName:required,length:1:50
-age:numeric,range:18:120
-zipcode:pattern:^\d{5}(-\d{4})?$
+```text
+email:required,email;firstName:required,length:1:50;lastName:required,length:1:50;age:numeric,range:18:120;zipcode:pattern:^\d{5}(-\d{4})?$
 ```
 
 ## Output Formats
 
-### Summary (default)
+- **json**: Full JSON results object.
+- **csv**: CSV error rows (`Row,Column,Value,Rule,Error`).
+- **summary**: Text summary report.
+- **detailed**: JSON printed to console (file output uses the summary report format).
 
-```bash
-Data Validation Report
-=======================
+## Interactive Mode
 
-Total Rows:  1000
-Valid Rows:  950
-Invalid Rows: 50
-Total Errors: 75
+In interactive mode, you are prompted for:
 
-Errors:
-  Row 15, Column email: Column email must be valid email
-  Row 27, Column name: Column name is required
-  ...
-```
-
-### JSON
-
-```json
-{
-  "totalRows": 1000,
-  "validRows": 950,
-  "invalidRows": 50,
-  "totalErrors": 75,
-  "errors": [
-    {
-      "rowNumber": 15,
-      "column": "email",
-      "value": "invalid-email",
-      "rule": "email",
-      "error": "Column email must be valid email"
-    }
-  ]
-}
-```
-
-### CSV
-
-```csv
-Row,Column,Value,Rule,Error
-15,"email","invalid@email","email","Column email must be valid email"
-27,"name","","required","Column name is required"
-```
+| Parameter | Required | Prompted | Notes |
+| --- | --- | --- | --- |
+| `table` | Yes | Always | Table to validate. |
+| `schema` | No | Always | Defaults to current schema if omitted. |
+| `rules` | No | Skipped | Use `--rules` or `--rulesFile`. |
+| `columns` | No | Skipped | Use `--columns` to limit validation. |
+| `output` | No | Skipped | Use `--output` to write a file. |
+| `format` | No | Skipped | Use `--format` to select output. |
+| `limit` | No | Skipped | Use `--limit` to cap rows. |
+| `timeout` | No | Skipped | Use `--timeout` to cap runtime. |
+| `profile` | No | Always | Optional CDS profile. |
 
 ## Examples
 
-### Simple validation
-
 ```bash
-hana-cli dataValidator --table EMPLOYEES --schema HR --rules "name:required;salary:numeric"
-```
-
-### Complex validation with multiple rules
-
-```bash
-hana-cli dataValidator --table CUSTOMERS \
-  --rules "email:required,email;firstName:required,length:1:50;age:numeric,range:18:120" \
-  --format json \
-  --output validation-report.json
-```
-
-### Validation from file
-
-```bash
-hana-cli dataValidator --table ORDERS --rulesFile ./validation-rules.txt --limit 50000
-```
-
-### Use default rules preset
-
-```bash
-hana-cli dataValidator --table CUSTOMERS --schema SALES
-```
-
-### Stop on first error
-
-```bash
-hana-cli dataValidator --table PRODUCTS --rules "sku:required;price:numeric" --stopOnFirstError
+hana-cli dataValidator --table myTable --rules validation.json
 ```
 
 ## Return Codes
@@ -205,33 +153,12 @@ hana-cli dataValidator --table PRODUCTS --rules "sku:required;price:numeric" --s
 
 ## Performance Tips
 
-1. Use `--limit` parameter to validate a subset of rows first
-2. Use `--stopOnFirstError` to quickly identify issues
-3. Specify only required columns with `--columns` to reduce processing
-4. Use `--timeout` to prevent long-running validations
-
-## Integration with CI/CD
-
-Use the JSON format output for automated validation in pipelines:
-
-```bash
-hana-cli dataValidator --table EMPLOYEES \
-  --rules "email:email" \
-  --format json \
-  --output validation.json
-
-# Check result
-if [ -s validation.json ]; then
-  echo "Validation errors found"
-  exit 1
-fi
-```
+1. Use `--limit` to validate a subset of rows first.
+2. Use `--stopOnFirstError` to quickly identify issues.
+3. Specify only required columns with `--columns` to reduce processing.
+4. Use `--timeout` to prevent long-running validations.
 
 ## Related Commands
-
-- `dataProfile` - Generate statistical profiles of table data
-- `dataDiff` - Compare data between two tables
-- `duplicateDetection` - Find duplicate records
 
 See the [Commands Reference](../all-commands.md) for other commands in this category.
 

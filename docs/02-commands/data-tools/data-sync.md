@@ -6,7 +6,7 @@
 
 ## Description
 
-Synchronizes data between systems or tables. This is useful for keeping development and production environments in sync, replicating data changes, and maintaining data consistency across systems.
+Synchronize data between systems or tables by reading rows from a source table and applying a sync strategy. You supply key columns to match rows and can select a sync mode and conflict resolution strategy.
 
 ## Syntax
 
@@ -24,165 +24,92 @@ hana-cli dataSync [options]
 
 ```mermaid
 graph TD
-    A["hana-cli dataSync<br/>(Synchronize data between systems or tables)"] --> B["Connection Parameters"]
-    A --> C["Troubleshooting Options"]
-    A --> D["Sync Configuration"]
-    
-    B --> B1["-a, --admin<br/>Connect via admin<br/>(default: false)"]
-    B --> B2["--conn<br/>Connection Filename<br/>(override default-env.json)"]
-    
-    C --> C1["--disableVerbose, --quiet<br/>Disable verbose output<br/>(default: false)"]
-    C --> C2["-d, --debug<br/>Debug output with details<br/>(default: false)"]
-    
-    D --> D1["--sourceConnection, --sc<br/>Source connection profile<br/>(string)"]
-    D --> D2["--targetConnection, --tc<br/>Target connection profile<br/>(string)"]
-    D --> D3["-s, --schema<br/>Schema name<br/>(default: **CURRENT_SCHEMA**)"]
-    D --> D4["-t, --table<br/>Table name to synchronize<br/>(string)"]
-    D --> D5["-m, --syncMode<br/>full | incremental<br/>(default: full)"]
-    D --> D6["-b, --batchSize<br/>Batch size for processing<br/>(default: 1000)"]
-    D --> D7["--conflictResolution, --cr<br/>source | target | skip<br/>(default: source)"]
-    D --> D8["-k, --keyColumns<br/>Key columns for row matching<br/>(string)"]
-    D --> D9["--timeout, --to<br/>Operation timeout (seconds)<br/>(default: 3600)"]
-    D --> D10["-p, --profile<br/>CDS Profile<br/>(string)"]
-    
-    style A fill:#4a90e2,stroke:#2c5aa0,color:#fff
-    style B fill:#7b68ee,stroke:#5a4a8a,color:#fff
-    style C fill:#ff6b6b,stroke:#cc5555,color:#fff
-    style D fill:#51cf66,stroke:#3d9b4a,color:#fff
+    Start([hana-cli dataSync]) --> Inputs{Input Parameters}
+    Inputs -->|--table| Table[Table name]
+    Inputs -->|--schema| Schema[Schema<br/>default: **CURRENT_SCHEMA**]
+    Inputs -->|--keyColumns| Keys[Key columns<br/>comma-separated]
+    Inputs -->|--syncMode| Mode[Sync mode<br/>full / incremental]
+    Inputs -->|--conflictResolution| Conflict[Conflict resolution<br/>source / target / skip]
+    Inputs -->|--batchSize| Batch[Batch size<br/>default: 1000]
+    Inputs -->|--sourceConnection| SourceConn[Source connection profile]
+    Inputs -->|--targetConnection| TargetConn[Target connection profile]
+    Inputs --> SyncStep[Read source rows]
+    SyncStep --> Complete([Command complete])
+
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Inputs fill:#f39c12
 ```
 
 ## Parameters
 
-| Flag | Long Form | Type | Description | Choices | Default | Required |
-| --- | --- | --- | --- | --- | --- | --- |
-| `-a` | `--admin` | boolean | Connect via admin (uses default-env-admin.json) | - | `false` | No |
-| `-t` | `--table` | string | Table name to synchronize | - | - | **Yes** |
-| `-k` | `--keyColumns` | string | Comma-separated key columns for row matching | - | - | **Yes** |
-| `-sc` | `--sourceConnection` | string | Source connection profile or connection string | - | Current connection | No |
-| `-tc` | `--targetConnection` | string | Target connection profile or connection string | - | Current connection | No |
-| `-s` | `--schema` | string | Schema name containing the table | - | `**CURRENT_SCHEMA**` | No |
-| `-m` | `--syncMode` | string | Synchronization mode | `full`, `incremental` | `full` | No |
-| `-b` | `--batchSize` | number | Number of rows to process in each batch | - | `1000` | No |
-| `-cr` | `--conflictResolution` | string | How to resolve conflicts | `source`, `target`, `skip` | `source` | No |
-| `--to` | `--timeout` | number | Operation timeout in seconds | - | `3600` | No |
-| `-p` | `--profile` | string | CDS connection profile | - | - | No |
-| `-d` | `--debug` | boolean | Debug hana-cli with detailed output | - | `false` | No |
-| `-h` | `--help` | boolean | Show help information | - | - | No |
-| - | `--conn` | string | Connection filename to override default-env.json | - | - | No |
-| - | `--disableVerbose` / `--quiet` | boolean | Disable verbose output for scripting | - | `false` | No |
+### Positional Arguments
 
-For a complete list of parameters and options, use:
+None.
 
-```bash
-hana-cli dataSync --help
-```
+### Options
 
-## Output Format
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--sourceConnection` | `--sc` | string | - | Source connection profile. |
+| `--targetConnection` | `--tc` | string | - | Target connection profile. |
+| `--schema` | `-s` | string | `**CURRENT_SCHEMA**` | Schema name containing the table. |
+| `--table` | `-t` | string | - | Table name to synchronize. |
+| `--syncMode` | `-m` | string | `full` | Synchronization mode. Choices: `full`, `incremental`. |
+| `--batchSize` | `-b` | number | `1000` | Number of rows to process in each batch. |
+| `--conflictResolution` | `--cr` | string | `source` | Conflict resolution strategy. Choices: `source`, `target`, `skip`. |
+| `--keyColumns` | `-k` | string | - | Key columns for row matching (comma-separated). |
+| `--timeout` | `--to` | number | `3600` | Operation timeout in seconds. |
+| `--profile` | `-p` | string | - | CDS profile for connections. |
 
-The command displays:
+### Connection Parameters
 
-- Number of rows read from source
-- Synchronization mode used
-- Number of rows synchronized
-- Batch size and conflict resolution strategy
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--admin` | `-a` | boolean | `false` | Connect via admin (default-env-admin.json). |
+| `--conn` | - | string | - | Connection filename to override default-env.json. |
 
-Example output:
+### Troubleshooting
 
-```bash
-Starting data synchronization for PRODUCTION.CUSTOMERS
-Read 15,432 rows from source table
-Using full synchronization mode
-Synchronization complete. 15,432 rows synced to table CUSTOMERS
+| Option | Alias | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output for scripting. |
+| `--debug` | `-d` | boolean | `false` | Debug hana-cli with detailed intermediate output. |
 
-┌──────────┬────────────────┬───────────┬─────────────┬────────────┬─────────────────────┐
-│ TABLE    │ SCHEMA         │ SYNC_MODE │ ROWS_SYNCED │ BATCH_SIZE │ CONFLICT_RESOLUTION │
-├──────────┼────────────────┼───────────┼─────────────┼────────────┼─────────────────────┤
-│ CUSTOMERS│ PRODUCTION     │ full      │ 15432       │ 1000       │ source              │
-└──────────┴────────────────┴───────────┴─────────────┴────────────┴─────────────────────┘
-```
+### Special Default Values
+
+| Token | Resolves To | Description |
+| --- | --- | --- |
+| `**CURRENT_SCHEMA**` | Current user's schema | Used as default for `--schema`. |
+
+## Output
+
+The command reports rows read and a summary table showing sync mode, rows synced, batch size, and conflict resolution strategy.
+
+## Interactive Mode
+
+In interactive mode, you are prompted for:
+
+| Parameter | Required | Prompted | Notes |
+| --- | --- | --- | --- |
+| `schema` | No | Always | Defaults to current schema if omitted. |
+| `table` | Yes | Always | Target table to synchronize. |
+| `keyColumns` | Yes | Always | Comma-separated key columns. |
+| `sourceConnection` | No | Skipped | Use `--sourceConnection` when needed. |
+| `targetConnection` | No | Skipped | Use `--targetConnection` when needed. |
+| `syncMode` | No | Skipped | Use `--syncMode` to switch modes. |
+| `timeout` | No | Skipped | Use `--timeout` to cap runtime. |
+| `profile` | No | Always | Optional CDS profile. |
 
 ## Examples
 
-### 1. Basic Full Synchronization
-
-Synchronize all data in a table:
-
 ```bash
-hana-cli dataSync -t CUSTOMERS -k CUSTOMER_ID
+hana-cli dataSync --sourceConnection conn1 --targetConnection conn2 --table myTable
 ```
 
-### 2. Incremental Synchronization
+## Current Behavior Notes
 
-Sync only changes since last sync:
-
-```bash
-hana-cli dataSync \
-  -t ORDERS \
-  -k ORDER_ID \
-  -m incremental
-```
-
-### 3. Cross-System Synchronization
-
-Sync data between different systems:
-
-```bash
-hana-cli dataSync \
-  -sc DEV_PROFILE \
-  -tc PROD_PROFILE \
-  -t PRODUCTS \
-  -k PRODUCT_ID
-```
-
-### 4. Batch Processing
-
-Process large tables in smaller batches:
-
-```bash
-hana-cli dataSync \
-  -t TRANSACTIONS \
-  -k TRANSACTION_ID \
-  -b 5000
-```
-
-### 5. Conflict Resolution Strategy
-
-Handle conflicts by preferring target values:
-
-```bash
-hana-cli dataSync \
-  -t INVENTORY \
-  -k ITEM_ID \
-  -cr target
-```
-
-### 6. Schema-Specific Sync
-
-Sync table in specific schema:
-
-```bash
-hana-cli dataSync \
-  -s SALES_SCHEMA \
-  -t MONTHLY_SALES \
-  -k MONTH,REGION
-```
-
-## Use Cases
-
-1. **Environment Synchronization**: Keep development environments in sync with production data
-2. **Data Replication**: Replicate data changes between systems
-3. **Disaster Recovery**: Sync data for backup and recovery purposes
-4. **Testing**: Copy production data to test environments
-5. **Data Migration**: Move data between different HANA instances
-6. **Multi-Region Sync**: Maintain data consistency across geographical regions
-
-## Notes
-
-- Use `incremental` mode for better performance on large tables with timestamp columns
-- Adjust `batchSize` based on table size and network performance
-- Key columns must uniquely identify rows for proper matching
-- Conflict resolution applies when same row exists in both source and target
-- Consider using timeout parameter for very large synchronizations
+The current implementation reads data from the source table and reports sync progress but does not yet apply changes to a target system. Options like `--targetConnection`, `--syncMode`, and `--conflictResolution` are accepted and reported in output but are not currently used to apply updates.
 
 ## Related Commands
 
