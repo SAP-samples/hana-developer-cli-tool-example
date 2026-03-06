@@ -23,38 +23,56 @@ hana-cli connections [options]
 
 ```mermaid
 graph TD
-    A["hana-cli connections"] --> B["Connection Parameters"]
-    A --> C["Filter Options"]
-    A --> D["Troubleshooting"]
-    A --> E["Help"]
+    Start([hana-cli connections]) --> Connect[Connect to Database]
     
-    B --> B1["-a, --admin<br/>Connect via admin<br/>default: false"]
-    B --> B2["--conn<br/>Connection Filename"]
+    Connect --> Query{Apply Filters?}
     
-    C --> C1["-l, --limit<br/>Limit results<br/>default: 100"]
-    C --> C2["-u, --user<br/>Filter by user"]
-    C --> C3["-a, --application<br/>Filter by application name"]
-    C --> C4["-i, --idle<br/>Include idle connections<br/>default: false"]
+    Query -->|User Filter| UserFilter[Filter by User<br/>--user]
+    Query -->|Application Filter| AppFilter[Filter by Application<br/>--application]
+    Query -->|Include Idle| IdleFilter[Include Idle<br/>Connections]
+    Query -->|No Filter| NoFilter[All Active<br/>Connections]
     
-    D --> D1["--disableVerbose<br/>Disable Verbose Output"]
-    D --> D2["-d, --debug<br/>Debug Mode"]
+    UserFilter --> Execute[Execute Query]
+    AppFilter --> Execute
+    IdleFilter --> Execute
+    NoFilter --> Execute
     
-    E --> E1["-h, --help<br/>Show Help"]
+    Execute --> Limit[Apply Limit<br/>default: 100]
+    
+    Limit --> Results[Display Results]
+    Results --> Stats[Show Statistics<br/>Total/Active/Idle]
+    
+    Stats --> Complete([Command Complete])
+    
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Query fill:#f39c12
 ```
 
 ## Parameters
 
-| Option | Alias | Type | Default | Description |
-| --- | --- | --- | --- | --- |
-| `--admin` | `-a` | boolean | `false` | Connect via admin (default-env-admin.json) |
-| `--conn` | - | string | - | Connection filename to override default-env.json |
-| `--limit` | `-l` | number | `100` | Limit number of results |
-| `--user` | `-u` | string | - | Filter connections by user |
-| `--application` | `-a` | string | - | Filter connections by application name |
-| `--idle` | `-i` | boolean | `false` | Include idle connections |
-| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output - useful for scripting |
-| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself with detailed intermediate output |
-| `--help` | `-h` | boolean | - | Show help information |
+### Filter Options
+
+| Option          | Alias | Type    | Default | Description                                                              |
+|-----------------|-------|---------|---------|--------------------------------------------------------------------------|
+| `--limit`       | `-l`  | number  | `100`   | Maximum number of connections to display                                 |
+| `--user`        | `-u`  | string  | -       | Filter connections by user name (supports SQL LIKE patterns)             |
+| `--application` | `-a`  | string  | -       | Filter connections by application name (supports SQL LIKE patterns)      |
+| `--idle`        | `-i`  | boolean | `false` | Include idle connections in results (by default only active are shown)   |
+
+### Connection Parameters
+
+| Option    | Alias | Type    | Default | Description                                          |
+|-----------|-------|---------|---------|------------------------------------------------------|
+| `--admin` | `-a`  | boolean | `false` | Connect via admin (default-env-admin.json)           |
+| `--conn`  | -     | string  | -       | Connection filename to override default-env.json     |
+
+### Troubleshooting
+
+| Option              | Alias     | Type    | Default | Description                                                                                              |
+|---------------------|-----------|---------|---------|----------------------------------------------------------------------------------------------------------|
+| `--disableVerbose`  | `--quiet` | boolean | `false` | Disable verbose output - removes all extra output that is only helpful to human readable interface       |
+| `--debug`           | `-d`      | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details                                   |
 
 For a complete list of parameters and options, use:
 
@@ -70,7 +88,39 @@ hana-cli connections --help
 hana-cli connections
 ```
 
-Execute the command
+Display all active database connections with default limit of 100 connections. Shows connection details including user, application, status, and idle time.
+
+### List Connections for Specific User
+
+```bash
+hana-cli connections --user DBADMIN
+```
+
+Show all active connections for a specific user.
+
+### Filter by Application Name
+
+```bash
+hana-cli connections --application "SAP HANA Studio"
+```
+
+Display connections from a specific application.
+
+### Include Idle Connections
+
+```bash
+hana-cli connections --idle --limit 200
+```
+
+Show both active and idle connections, with increased limit to 200.
+
+### Using Pattern Matching
+
+```bash
+hana-cli connections --user "USER_%" --application "%Studio%"
+```
+
+Filter connections using SQL LIKE patterns to match multiple users or applications.
 
 ## Related Commands
 

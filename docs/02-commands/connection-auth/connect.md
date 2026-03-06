@@ -23,43 +23,67 @@ hana-cli connect [user] [password] [options]
 
 ```mermaid
 graph TD
-    A["hana-cli connect"] --> B["[user] [password]"]
-    A --> C["Connection Options"]
-    A --> D["Security Options"]
-    A --> E["Output Options"]
+    Start([hana-cli connect]) --> Input{Authentication Method}
     
-    C --> C1["-n, --connection<br/>Connection String"]
-    C --> C2["-u, --user<br/>User"]
-    C --> C3["-p, --password<br/>Password"]
-    C --> C4["--userstorekey<br/>HDB User Store Key"]
+    Input -->|User/Password| Creds[User & Password<br/>Parameters]
+    Input -->|Userstore Key| UK[Userstore Key<br/>Parameter]
     
-    D --> D1["-e, --encrypt<br/>SSL Encryption"]
-    D --> D2["-t, --trustStore<br/>SSL Trust Store"]
+    Creds --> ConnStr[Connection String<br/>host:port]
+    UK --> Process[Validate Connection]
+    ConnStr --> Process
     
-    E --> E1["-s, --save<br/>Save Credentials<br/>default: true"]
+    Process --> Options{Security Options}
+    Options -->|Encrypt| SSL[SSL Encryption<br/>--encrypt]
+    Options -->|Trust Store| Trust[Trust Store Path<br/>--trustStore]
+    Options -->|No SSL| NoSSL[Unencrypted]
     
-    A --> F["Troubleshooting"]
-    F --> F1["--disableVerbose<br/>Disable Verbose Output"]
-    F --> F2["-d, --debug<br/>Debug Mode"]
+    SSL --> Save{Save Credentials?}
+    Trust --> Save
+    NoSSL --> Save
     
-    A --> G["Help"]
-    G --> G1["-h, --help<br/>Show Help"]
+    Save -->|Yes default| SaveFile[Write to<br/>default-env-admin.json]
+    Save -->|No| NoSave[Session Only]
+    
+    SaveFile --> Connect[Connect to Database]
+    NoSave --> Connect
+    
+    Connect --> Output[Display Current User<br/>& Session Context]
+    Output --> Complete([Connection Complete])
+    
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style Input fill:#f39c12
+    style Options fill:#f39c12
+    style Save fill:#f39c12
 ```
 
 ## Parameters
 
-| Option | Alias | Type | Default | Description |
-| --- | --- | --- | --- | --- |
-| `--connection` | `-n` | string | - | Connection String in format `<host>[:<port>]` |
-| `--user` | `-u` | string | - | Database user |
-| `--password` | `-p` | string | - | Database password |
-| `--userstorekey` | `--uk`, `--userstore` | string | - | HDB User Store Key - Overrides all other connection parameters |
-| `--save` | `-s` | boolean | `true` | Save credentials to default-env-admin.json |
-| `--encrypt` | `-e`, `--ssl` | boolean | `false` | Encrypt connections (required for SAP HANA service on SAP BTP or SAP HANA Cloud) |
-| `--trustStore` | `-t`, `--trust`, `--truststore` | string | - | SSL Trust Store path |
-| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output - useful for scripting |
-| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself with detailed intermediate output |
-| `--help` | `-h` | boolean | - | Show help information |
+### Positional Arguments
+
+| Parameter  | Type   | Description                                    |
+|------------|--------|------------------------------------------------|
+| `user`     | string | Database user (optional if using userstorekey) |
+| `password` | string | Database password (optional if using userstorekey) |
+
+### Options
+
+| Option           | Alias                      | Type    | Default | Description                                                                                    |
+|------------------|----------------------------|---------|---------|------------------------------------------------------------------------------------------------|
+| `--connection`   | `-n`                       | string  | -       | Connection String in format `<host>[:<port>]` (e.g., localhost:30015)                        |
+| `--user`         | `-u`                       | string  | -       | Database user                                                                                  |
+| `--password`     | `-p`                       | string  | -       | Database password                                                                              |
+| `--userstorekey` | `--uk`, `--userstore`      | string  | -       | HDB User Store Key - Overrides all other connection parameters                                |
+| `--save`         | `-s`                       | boolean | `true`  | Save credentials to default-env-admin.json file                                                |
+| `--encrypt`      | `-e`, `--ssl`              | boolean | `false` | Encrypt connections using SSL/TLS (required for SAP HANA Cloud and SAP BTP)                   |
+| `--trustStore`   | `-t`, `--trust`, `--truststore` | string  | -       | Path to SSL Trust Store file for certificate validation                                       |
+
+### Troubleshooting
+
+| Option              | Alias     | Type    | Default | Description                                                                                              |
+|---------------------|-----------|---------|---------|----------------------------------------------------------------------------------------------------------|
+| `--disableVerbose`  | `--quiet` | boolean | `false` | Disable verbose output - removes all extra output that is only helpful to human readable interface       |
+| `--debug`           | `-d`      | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details                                   |
 
 For a complete list of parameters and options, use:
 
@@ -72,10 +96,42 @@ hana-cli connect --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli connect --connection localhost:30015 --user DBUSER
+hana-cli connect --connection localhost:30015 --user DBUSER
 ```
 
-Execute the command
+Connect to a local HANA database on port 30015. You will be prompted for the password.
+
+### Using Userstore Key
+
+```bash
+hana-cli connect --userstorekey MYKEY
+```
+
+Connect using a pre-configured HDB Userstore key. This method is secure and doesn't require entering credentials.
+
+### Connect with SSL/TLS Encryption
+
+```bash
+hana-cli connect --connection myserver.hana.ondemand.com:443 --user DBUSER --encrypt
+```
+
+Connect to SAP HANA Cloud or SAP BTP with SSL encryption enabled (required for cloud environments).
+
+### Connect Without Saving Credentials
+
+```bash
+hana-cli connect --connection localhost:30015 --user DBUSER --save false
+```
+
+Connect for a single session without saving credentials to default-env-admin.json.
+
+### Using Custom Trust Store
+
+```bash
+hana-cli connect --connection myserver.com:443 --user DBUSER --encrypt --trustStore /path/to/truststore.pem
+```
+
+Connect with SSL and specify a custom trust store for certificate validation.
 
 ## Related Commands
 

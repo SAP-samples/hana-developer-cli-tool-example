@@ -6,7 +6,7 @@
 
 ## Description
 
-Return metadata about a User
+Return comprehensive metadata about a database user including user details, parameters, granted roles, and privileges. This command is useful for security audits, troubleshooting access issues, and understanding user configurations.
 
 ## Syntax
 
@@ -25,35 +25,56 @@ hana-cli inspectUser [user] [options]
 
 ```mermaid
 graph TD
-    A["hana-cli inspectUser"] --> B["[user]"]
-    A --> C["Connection Parameters"]
-    A --> D["User Option"]
-    A --> E["Troubleshooting"]
-    A --> F["Help"]
+    Start([hana-cli inspectUser]) --> Input[User Parameter]
     
-    B --> B1["user<br/>User to inspect"]
+    Input --> Connect[Connect to Database]
     
-    C --> C1["-a, --admin<br/>Connect via admin<br/>default: false"]
-    C --> C2["--conn<br/>Connection Filename"]
+    Connect --> Query1[Query USERS Table<br/>Get User Details]
     
-    D --> D1["-u, --user<br/>User"]
+    Query1 --> Display1[Display User<br/>Basic Information]
     
-    E --> E1["--disableVerbose<br/>Disable Verbose Output"]
-    E --> E2["-d, --debug<br/>Debug Mode"]
+    Display1 --> Query2[Query USER_PARAMETERS<br/>Get User Parameters]
+    Query2 --> Display2[Display User<br/>Parameters]
     
-    F --> F1["-h, --help<br/>Show Help"]
+    Display2 --> Query3[Query GRANTED_ROLES<br/>Get Assigned Roles]
+    Query3 --> Display3[Display Granted<br/>Roles]
+    
+    Display3 --> Query4[Query GRANTED_PRIVILEGES<br/>Get Direct Privileges]
+    Query4 --> Display4[Display Granted<br/>Privileges]
+    
+    Display4 --> Complete([Inspection Complete])
+    
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
 ```
 
 ## Parameters
 
-| Option | Alias | Type | Default | Description |
-| --- | --- | --- | --- | --- |
-| `--admin` | `-a` | boolean | `false` | Connect via admin (default-env-admin.json) |
-| `--conn` | - | string | - | Connection filename to override default-env.json |
-| `--user` | `-u` | string | - | User to inspect |
-| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output - useful for scripting |
-| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself with detailed intermediate output |
-| `--help` | `-h` | boolean | - | Show help information |
+### Positional Arguments
+
+| Parameter | Type   | Description                  |
+|-----------|--------|------------------------------|
+| `user`    | string | Database user name to inspect |
+
+### Options
+
+| Option   | Alias | Type   | Default | Description                  |
+|----------|-------|--------|---------|------------------------------|
+| `--user` | `-u`  | string | -       | Database user name to inspect |
+
+### Connection Parameters
+
+| Option    | Alias | Type    | Default | Description                                          |
+|-----------|-------|---------|---------|------------------------------------------------------|
+| `--admin` | `-a`  | boolean | `false` | Connect via admin (default-env-admin.json)           |
+| `--conn`  | -     | string  | -       | Connection filename to override default-env.json     |
+
+### Troubleshooting
+
+| Option              | Alias     | Type    | Default | Description                                                                                              |
+|---------------------|-----------|---------|---------|----------------------------------------------------------------------------------------------------------|
+| `--disableVerbose`  | `--quiet` | boolean | `false` | Disable verbose output - removes all extra output that is only helpful to human readable interface       |
+| `--debug`           | `-d`      | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details                                   |
 
 For a complete list of parameters and options, use:
 
@@ -69,50 +90,38 @@ hana-cli inspectUser --help
 hana-cli inspectUser --user SYSTEM
 ```
 
-**Output:**
+Inspect the SYSTEM user and display comprehensive information including basic user details, parameters, granted roles, and privileges.
 
-```text
-Using Connection Configuration loaded via default-env.json
+### Using Positional Argument
 
-User: SYSTEM
-
-╭─────────────────────────────────────────────────────────────────────────────────────────╮
-│ USER_NAME: SYSTEM                                                                       │
-│ USER_ID: 131074                                                                         │
-│ USERGROUP_NAME: (empty)                                                                 │
-│ USER_MODE: (empty)                                                                      │
-│ EXTERNAL_IDENTITY: (empty)                                                              │
-│ CREATOR: (empty)                                                                        │
-│ CREATED_TIME: (empty)                                                                   │
-│ VALID_ID_FROM: (empty)                                                                  │
-│ VALID_ID_UNTIL: (empty)                                                                 │
-│ LAST_SUCCESSFUL_CONNECT: (empty)                                                        │
-│ LAST_INVALID_CONNECT_ATTEMPT: (empty)                                                   │
-│ INVALID_CONNECT_ATTEMPTS: (empty)                                                       │
-│ ADMIN_GIVEN_PASSWORD: (empty)                                                           │
-│ LAST_PASSWORD_CHANGE_TIME: (empty)                                                      │
-│ PASSWORD_CHANGE_NEEDED: (empty)                                                         │
-│ IS_PASSWORD_LIFE_TIME_CHECK_ENABLED: (empty)                                            │
-│ USER_DEACTIVATION_TIME: (empty)                                                         │
-│ IS_PASSWORD_ENABLED: (empty)                                                            │
-│ IS_KERBEROS_ENABLED: (empty)                                                            │
-│ IS_SAML_ENABLED: (empty)                                                                │
-╰─────────────────────────────────────────────────────────────────────────────────────────╯
-
-📋 User Parameters
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-No data found for this query
-
-🔐 Roles Granted to the Current User
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-No data found for this query
-
-⚡ Privileges Granted to the Current User
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-No data found for this query
+```bash
+hana-cli inspectUser DBADMIN
 ```
 
-Execute the command
+Inspect a user by providing the username as a positional argument.
+
+### Inspect Current User
+
+```bash
+hana-cli inspectUser --user $(whoami)
+```
+
+Inspect the currently connected user's configuration.
+
+## Output Sections
+
+The command displays four sections of information:
+
+1. **User Basic Information**: USER_NAME, USER_ID, USERGROUP_NAME, CREATE_TIME, etc.
+2. **User Parameters**: Configuration parameters specific to the user
+3. **Granted Roles**: All roles assigned to the user with grantor information
+4. **Granted Privileges**: Direct privileges assigned to the user
+
+For a complete list of parameters and options, use:
+
+```bash
+hana-cli inspectUser --help
+```
 
 ## Related Commands
 
