@@ -60,13 +60,37 @@ hana-cli dropContainer --help
 
 ## Examples
 
-### Basic Usage
+### Drop Container from Default Group
 
 ```bash
-hana-cli dropContainer --container myContainer
+hana-cli dropContainer myContainer
 ```
 
-Execute the command
+Drops the HDI container named `myContainer` from the default group.
+
+### Drop Container from Specific Group
+
+```bash
+hana-cli dropContainer myContainer myGroup
+```
+
+Drops the HDI container named `myContainer` from the group `myGroup`.
+
+### Using Named Parameters
+
+```bash
+hana-cli dropContainer --container myContainer --group myGroup
+```
+
+Drop container using named option parameters.
+
+### With Admin Connection
+
+```bash
+hana-cli dropContainer myContainer --admin
+```
+
+Drops an HDI container using admin credentials from `default-env-admin.json`.
 
 ## Related Commands
 

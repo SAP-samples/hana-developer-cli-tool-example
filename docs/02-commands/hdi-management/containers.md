@@ -66,13 +66,37 @@ hana-cli containers --help
 
 ## Examples
 
-### Basic Usage
+### List All HDI Containers
 
 ```bash
-hana-cli hana-cli containers --container myContainer
+hana-cli containers
 ```
 
-Execute the command
+Lists all HDI containers in the system.
+
+### Filter by Container Name
+
+```bash
+hana-cli containers --container myContainer
+```
+
+Lists HDI containers matching the name `myContainer`.
+
+### Filter by Container Group
+
+```bash
+hana-cli containers --containerGroup myGroup
+```
+
+Lists all HDI containers in the specified container group.
+
+### With Custom Limit
+
+```bash
+hana-cli containers --limit 50
+```
+
+Limits the results to 50 containers.
 
 ---
 

@@ -62,13 +62,37 @@ hana-cli createContainer --help
 
 ## Examples
 
-### Basic Usage
+### Create Container in Default Group
 
 ```bash
-hana-cli createContainer --container myContainer
+hana-cli createContainer myContainer
 ```
 
-Execute the command
+Creates a new HDI container named `myContainer` in the default group.
+
+### Create Container in Specific Group
+
+```bash
+hana-cli createContainer myContainer myGroup
+```
+
+Creates a new HDI container named `myContainer` in the group `myGroup`.
+
+### Using Named Parameters
+
+```bash
+hana-cli createContainer --container myContainer --group myGroup
+```
+
+Create container using named option parameters.
+
+### Without Saving Credentials
+
+```bash
+hana-cli createContainer myContainer --save false
+```
+
+Creates an HDI container without saving credentials to `default-env.json`.
 
 ## Related Commands
 

@@ -34,6 +34,7 @@ flowchart TD
     E --> E2["-d, --debug\nDebug hana-cli with lots of intermediate details\nDefault: false"]
     A --> O{"Options"}
     O --> O1["-h, --help\nShow help"]
+    O --> O2["-c, --create\nCreate new user\nDefault: true"]
 ```
 
 ## Parameters
@@ -47,6 +48,9 @@ flowchart TD
 | `--disableVerbose`, `--quiet` | `boolean` | `false` | Troubleshooting | Disable verbose output by removing extra human-readable output. Useful for scripting commands. |
 | `-d`, `--debug` | `boolean` | `false` | Troubleshooting | Debug `hana-cli` itself by adding lots of intermediate details. |
 | `-h`, `--help` | `boolean` | _(none)_ | Options | Show help. |
+| `-c`, `--create` | `boolean` | `true` | Options | Create new user. Set to `false` to assign privileges to an existing user without creating a new one. |
+| `-u`, `--user` | `string` | _(none)_ | Options | User to be created/assigned as HDI Admin. |
+| `-p`, `--password` | `string` | _(none)_ | Options | Password for the new HDI Admin user. |
 
 For a complete list of parameters and options, use:
 
@@ -56,13 +60,29 @@ hana-cli adminHDI --help
 
 ## Examples
 
-### Basic Usage
+### Create New HDI Admin User
 
 ```bash
-hana-cli adminHDI --action list
+hana-cli adminHDI HDI_ADMIN MySecurePassword123
 ```
 
-Execute the command
+Creates a new user named `HDI_ADMIN` with HDI administrator privileges.
+
+### Assign HDI Admin Privileges to Existing User
+
+```bash
+hana-cli adminHDI EXISTING_USER MyPassword --create false
+```
+
+Assigns HDI admin privileges to an existing user without creating a new user.
+
+### Using Named Parameters
+
+```bash
+hana-cli adminHDI --user HDI_ADMIN --password MySecurePassword123
+```
+
+Create HDI admin user using named option parameters.
 
 ## Related Commands
 

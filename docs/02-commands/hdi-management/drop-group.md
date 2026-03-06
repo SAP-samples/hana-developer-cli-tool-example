@@ -1,7 +1,7 @@
 # dropGroup
 
 > Command: `dropGroup`  
-> Category: **System Tools**  
+> Category: **HDI Management**  
 > Status: Production Ready
 
 ## Description
@@ -59,10 +59,26 @@ hana-cli dropGroup --help
 ### Basic Usage
 
 ```bash
+hana-cli dropGroup myGroup
+```
+
+Drops the HDI container group named `myGroup`.
+
+### Using Named Parameter
+
+```bash
 hana-cli dropGroup --group myGroup
 ```
 
-Execute the command
+Drop container group using named option parameter.
+
+### With Admin Connection
+
+```bash
+hana-cli dropGroup myGroup --admin
+```
+
+Drop container group using admin credentials from `default-env-admin.json`.
 
 ## Related Commands
 

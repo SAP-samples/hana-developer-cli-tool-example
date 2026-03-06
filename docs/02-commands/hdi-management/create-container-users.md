@@ -57,13 +57,37 @@ hana-cli createContainerUsers --help
 
 ## Examples
 
-### Basic Usage
+### Create Users for Container
+
+```bash
+hana-cli createContainerUsers myContainer
+```
+
+Creates technical users for the existing HDI container `myContainer` and saves credentials to `default-env.json`.
+
+### Using Named Parameter
 
 ```bash
 hana-cli createContainerUsers --container myContainer
 ```
 
-Execute the command
+Create container users using named option parameter.
+
+### Without Saving Credentials
+
+```bash
+hana-cli createContainerUsers myContainer --save false
+```
+
+Creates technical users without saving credentials to `default-env.json`.
+
+### With Encrypted Connection
+
+```bash
+hana-cli createContainerUsers myContainer --encrypt
+```
+
+Creates users with SSL encryption enabled (required for SAP HANA Cloud).
 
 ## Related Commands
 

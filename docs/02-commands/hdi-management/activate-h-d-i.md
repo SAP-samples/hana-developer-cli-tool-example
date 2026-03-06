@@ -6,7 +6,7 @@
 
 ## Description
 
-Activate the HDI service in a particluar SAP HANA Tenant (Must be ran in the SYSTEMDB)
+Activate the HDI service in a particular SAP HANA Tenant (Must be ran in the SYSTEMDB)
 
 ## Syntax
 
@@ -63,10 +63,26 @@ hana-cli activateHDI --help
 ### Basic Usage
 
 ```bash
-hana-cli activateHDI --container hdi_container
+hana-cli activateHDI TenantDB
 ```
 
-Execute the command
+Activates the HDI service in the specified tenant database.
+
+### Using Option Flag
+
+```bash
+hana-cli activateHDI --tenant TenantDB
+```
+
+Activate HDI service using the named option parameter.
+
+### With Admin Connection
+
+```bash
+hana-cli activateHDI TenantDB --admin
+```
+
+Activate HDI service using admin credentials from `default-env-admin.json`.
 
 ## Related Commands
 

@@ -1,7 +1,7 @@
 # hanaCloudHDIInstances
 
 > Command: `hanaCloudHDIInstances`  
-> Category: **HANA Cloud**  
+> Category: **HDI Management**  
 > Status: Production Ready
 
 ## Description
@@ -54,13 +54,29 @@ hana-cli hanaCloudHDIInstances --help
 
 ## Examples
 
-### Basic Usage
+### List HDI Instances in Cloud Foundry
 
 ```bash
 hana-cli hdi --cf
 ```
 
-Execute the command
+Lists all SAP HANA Cloud HDI service instances in your targeted Cloud Foundry space.
+
+### List HDI Instances (Short Command)
+
+```bash
+hana-cli hdi
+```
+
+Lists HDI instances using the default Cloud Foundry mode.
+
+### Using Alias
+
+```bash
+hana-cli hdis
+```
+
+Lists HDI instances using a shorter alias command.
 
 ---
 

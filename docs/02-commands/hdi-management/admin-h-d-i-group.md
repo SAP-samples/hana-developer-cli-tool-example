@@ -59,10 +59,26 @@ hana-cli adminHDIGroup --help
 ### Basic Usage
 
 ```bash
-hana-cli adminHDIGroup --action create --group myGroup
+hana-cli adminHDIGroup HDI_USER myGroup
 ```
 
-Execute the command
+Adds `HDI_USER` as an administrator of the HDI group `myGroup`.
+
+### Using Named Parameters
+
+```bash
+hana-cli adminHDIGroup --user HDI_USER --group myGroup
+```
+
+Add user as HDI group admin using named option parameters.
+
+### With Admin Connection
+
+```bash
+hana-cli adminHDIGroup HDI_USER myGroup --admin
+```
+
+Add user as HDI group admin using admin credentials from `default-env-admin.json`.
 
 ## Related Commands
 

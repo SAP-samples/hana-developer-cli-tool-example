@@ -1,7 +1,7 @@
 # createGroup
 
 > Command: `createGroup`  
-> Category: **System Tools**  
+> Category: **HDI Management**  
 > Status: Production Ready
 
 ## Description
@@ -59,10 +59,26 @@ hana-cli createGroup --help
 ### Basic Usage
 
 ```bash
+hana-cli createGroup myGroup
+```
+
+Creates a new HDI container group named `myGroup`.
+
+### Using Named Parameter
+
+```bash
 hana-cli createGroup --group myGroup
 ```
 
-Execute the command
+Create container group using named option parameter.
+
+### With Admin Connection
+
+```bash
+hana-cli createGroup myGroup --admin
+```
+
+Create container group using admin credentials from `default-env-admin.json`.
 
 ## Related Commands
 
