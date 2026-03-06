@@ -12,6 +12,14 @@ export default withMermaid(
     appearance: 'dark',
     lastUpdated: true,
   
+  markdown: {
+    // Map CDS to TypeScript for syntax highlighting
+    // CDS entity definitions are structurally similar (entity keyword, type annotations)
+    languageAlias: {
+      cds: 'typescript'
+    }
+  },
+  
   head: [
     ['link', { rel: 'icon', href: '/hana-developer-cli-tool-example/favicon.ico' }],
     ['meta', { name: 'theme-color', content: '#0092d1' }],
@@ -563,42 +571,38 @@ export default withMermaid(
     mermaidConfig: {
       theme: 'dark',
       startOnLoad: true,
-      securityLevel: 'loose',
+      securityLevel: 'antiscript',
+      htmlLabels: true,
       flowchart: {
         useMaxWidth: true,
-        maxWidth: 500,
+        htmlLabels: true,
         // Encourage vertical arrangement of nodes
         padding: 50,
         nodeSpacing: 50,
         rankSpacing: 60,
-        curve: 'linear',
+        curve: 'basis',
         diagramMarginX: 20,
         diagramMarginY: 20,
       },
       sequenceDiagram: {
         useMaxWidth: true,
-        maxWidth: 500,
         padding: 50,
         mirrorActors: true,
       },
       gantt: {
         useMaxWidth: true,
-        maxWidth: 500,
         padding: 50,
         fontSize: 14,
       },
       classDiagram: {
         useMaxWidth: true,
-        maxWidth: 500,
         padding: 50,
       },
       stateDiagram: {
         useMaxWidth: true,
-        maxWidth: 500,
         padding: 50,
       },
     },
     logLevel: 'error',
-    securityLevel: 'loose',
   }
 )

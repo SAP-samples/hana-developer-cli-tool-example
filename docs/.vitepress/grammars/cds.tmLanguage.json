@@ -1,0 +1,81 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "CDS",
+  "scopeName": "source.cds",
+  "fileTypes": ["cds"],
+  "patterns": [
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#types"
+    }
+  ],
+  "repository": {
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.cds",
+          "match": "\\b(namespace|using|context|service|entity|type|aspect|annotation|extend|annotate|view|key|virtual|as|where|on|select|from|into|distinct|order by|group by|having)\\b"
+        },
+        {
+          "name": "keyword.other.cds",
+          "match": "\\b(managed|aspect|composition|association|many|optional|not null|default|enum)\\b"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "storage.type.cds",
+          "match": "\\b(String|Integer|Int32|Int64|Decimal|Double|Boolean|Date|Time|DateTime|Timestamp|Binary|LargeBinary|LargeString|UUID|UInt8|Int16|LocalDate|LocalTime)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.single.cds",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.cds",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.double.cds",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.cds",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.cds",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.cds",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    }
+  }
+}
