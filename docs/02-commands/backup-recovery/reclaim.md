@@ -16,55 +16,53 @@ hana-cli reclaim [options]
 
 ## Aliases
 
-- No aliases
+- `re`
 
 ## Command Diagram
 
 ```mermaid
 graph TD
-    A["🔷 hana-cli reclaim"]
-    A --> B["📋 Description: Reclaim LOB, Log, and Data Volume space"]
-    B --> C["🔌 Connection Parameters"]
-    C --> C1["-a, --admin: Connect via admin"]
-    C1 --> C2["--conn: Connection filename override"]
-    C2 --> D["🔧 Troubleshooting Options"]
-    D --> D1["--disableVerbose, --quiet: Disable verbose output"]
-    D1 --> D2["-d, --debug: Debug hana-cli with detailed output"]
-    D2 --> E["✅ Help"]
-    E --> E1["-h, --help: Show help message"]
+    Start([hana-cli reclaim]) --> Connect[Establish Connection<br/>Database Connection]
     
-    style A fill:#0070C0,color:#fff,stroke:#fff,stroke-width:2px
-    style B fill:#f39c12,color:#fff,stroke:#fff,stroke-width:2px
-    style E1 fill:#51CF66,color:#fff,stroke:#fff,stroke-width:2px
+    Connect --> LOB[Reclaim LOB Space<br/>ALTER SYSTEM RECLAIM LOB SPACE]
+    LOB --> Log[Reclaim Log Space<br/>ALTER SYSTEM RECLAIM LOG]
+    Log --> Data[Reclaim Data Volume<br/>ALTER SYSTEM RECLAIM DATAVOLUME<br/>105 DEFRAGMENT]
+    
+    Data --> Results[Display Results<br/>Show reclaim operation results]
+    Results --> Complete([Command Complete])
+    
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+    style LOB fill:#9b59b6
+    style Log fill:#9b59b6
+    style Data fill:#9b59b6
 ```
 
 ## Parameters
 
 ### Connection Parameters
 
-| Option | Alias | Type | Default | Description |
-| --- | --- | --- | --- | --- |
-| `--admin` | `-a` | boolean | `false` | Connect via admin (default-env-admin.json) |
-| `--conn` | | string | | Connection filename to override default-env.json |
+| Option    | Alias | Type    | Default | Description                                          |
+|-----------|-------|---------|---------|------------------------------------------------------|
+| `--admin` | `-a`  | boolean | `false` | Connect via admin (default-env-admin.json)           |
+| `--conn`  | -     | string  | -       | Connection filename to override default-env.json     |
 
-### Troubleshooting Options
+### Troubleshooting
 
-| Option | Alias | Type | Default | Description |
-| --- | --- | --- | --- | --- |
-| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output - removes all extra output that is only helpful to human-readable interface. Useful for scripting commands. |
-| `--debug` | `-d` | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details |
+| Option              | Alias     | Type    | Default | Description                                                                                              |
+|---------------------|-----------|---------|---------|----------------------------------------------------------------------------------------------------------|
+| `--disableVerbose`  | `--quiet` | boolean | `false` | Disable verbose output - removes all extra output that is only helpful to human readable interface       |
+| `--debug`           | `-d`      | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details                                   |
 
-### General Options
+## What Does This Command Do?
 
-| Option | Alias | Type | Description |
-| --- | --- | --- | --- |
-| `--help` | `-h` | boolean | Show help message |
+The `reclaim` command performs three cleanup operations to free up disk space in your HANA database:
 
-For a complete list of parameters and options, use:
+1. **LOB Space Reclamation**: Frees up unused space in LOB (Large Object) storage
+2. **Log Reclamation**: Reclaims space from transaction logs that are no longer needed
+3. **Data Volume Defragmentation**: Defragments data volume 105 to optimize storage
 
-```bash
-hana-cli reclaim --help
-```
+This command is particularly useful after large delete operations or when disk space is running low.
 
 ## Examples
 
@@ -74,7 +72,31 @@ hana-cli reclaim --help
 hana-cli reclaim
 ```
 
-Execute the command
+Execute all three reclaim operations with default connection.
+
+### Using Admin Connection
+
+```bash
+hana-cli reclaim --admin
+```
+
+Execute reclaim operations using admin credentials for full system access.
+
+### With Custom Connection
+
+```bash
+hana-cli reclaim --conn my-db-connection.json
+```
+
+Execute reclaim operations using a custom connection file.
+
+### Quiet Mode for Scripting
+
+```bash
+hana-cli reclaim --quiet
+```
+
+Run reclaim operations with minimal output for use in scripts.
 
 ## Related Commands
 

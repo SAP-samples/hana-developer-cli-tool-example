@@ -88,7 +88,7 @@ graph TD
 | `--format` | `-f` | string | `"csv"` | Backup file format. Choices: `csv`, `binary`, `parquet` |
 | `--destination` | `--dest` | string | - | Backup destination directory |
 | `--compress` | `-c` | boolean | `true` | Compress backup files (gzip) |
-| `--schema` | `-s` | string | Current schema | Schema to use for the backup operation |
+| `--schema` | `-s` | string | `**CURRENT_SCHEMA**` | Schema to use for the backup operation |
 | `--withData` | `--wd` | boolean | `true` | Include data in backup (not just metadata) |
 | `--overwrite` | `--ow` | boolean | `false` | Overwrite existing backup file if it exists |
 
@@ -99,13 +99,18 @@ graph TD
 | `--admin` | `-a` | boolean | `false` | Connect via admin (default-env-admin.json) |
 | `--conn` | - | string | - | Connection filename to override default-env.json |
 
-### Troubleshooting Options
+### Troubleshooting
 
-| Option | Alias | Type | Default | Description |
-| -------- | ------- | ------ | --------- | ------------- |
-| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output - useful for scripting |
-| `--debug` | `-d` | boolean | `false` | Debug hana-cli with detailed intermediate output |
-| `--help` | `-h` | boolean | - | Show help information |
+| Option              | Alias     | Type    | Default | Description                                                                                              |
+|---------------------|-----------|---------|---------|----------------------------------------------------------------------------------------------------------|
+| `--disableVerbose`  | `--quiet` | boolean | `false` | Disable verbose output - removes all extra output that is only helpful to human readable interface       |
+| `--debug`           | `-d`      | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details                                   |
+
+## Special Default Values
+
+| Token | Resolves To | Description |
+|-------|-------------|-------------|
+| `**CURRENT_SCHEMA**` | Current user's schema | Used as default for schema parameter when not specified |
 
 ### Backup Types
 

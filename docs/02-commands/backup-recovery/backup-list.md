@@ -115,10 +115,50 @@ graph TD
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli backupList --backupPath /backups
+hana-cli backupList
 ```
 
-Execute the command
+List all backups in the default directory (~/.hana-cli/backups) sorted by date.
+
+### List Backups in Custom Directory
+
+```bash
+hana-cli backupList --directory /backups
+```
+
+List backups from a specific directory.
+
+### Filter by Backup Type
+
+```bash
+hana-cli backupList --type table
+```
+
+Show only table backups.
+
+### Sort and Limit Results
+
+```bash
+hana-cli backupList --sortBy size --order desc --limit 10
+```
+
+Show the 10 largest backups sorted by size.
+
+### Show Detailed Information
+
+```bash
+hana-cli backupList --showDetails
+```
+
+Display full metadata for each backup including timestamps and file information.
+
+### Combined Filters
+
+```bash
+hana-cli backupList --dir /data/backups --type schema --sortBy name --limit 20
+```
+
+List schema backups from a specific directory, sorted by name, limited to 20 results.
 
 ## Related Commands
 

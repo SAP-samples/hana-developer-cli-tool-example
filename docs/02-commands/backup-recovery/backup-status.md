@@ -103,13 +103,12 @@ graph TD
 | `--status` | `--st` | string | `"all"` | Filter by backup status. Choices: `successful`, `running`, `failed`, `canceled`, `all` |
 | `--days` | `-d` | number | `7` | Show backups from the last N days |
 
-### Troubleshooting Options
+### Troubleshooting
 
-| Option | Alias | Type | Default | Description |
-| -------- | ------- | ------ | --------- | ------------- |
-| `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output - removes extra output useful only for human-readable interface. Useful for scripting |
-| `--debug` | `-d` | number | `false` | Debug hana-cli by adding output of lots of intermediate details |
-| `--help` | `-h` | boolean | - | Show help information |
+| Option              | Alias     | Type    | Default | Description                                                                                              |
+|---------------------|-----------|---------|---------|----------------------------------------------------------------------------------------------------------|
+| `--disableVerbose`  | `--quiet` | boolean | `false` | Disable verbose output - removes all extra output that is only helpful to human readable interface       |
+| `--debug`           | `-d`      | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details                                   |
 
 ### Backup Types
 
