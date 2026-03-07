@@ -20,6 +20,10 @@ This repository provides specialized Copilot agents to keep changes consistent w
   - Use for MCP server code in `mcp-server/src/**`.
   - Ensures JSON-RPC compliance and tool registration patterns.
 
+- **Version Maintenance Agent** (`.github/agents/version-maintenance.agent.md`)
+  - Use for version bumps, release preparation, and maintenance version changes.
+  - Handles package.json versions, SAPUI5 updates, changelog management, and documentation synchronization.
+
 ## Usage tips
 
 - Pick the most specific agent for the task.

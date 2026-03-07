@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [4.202603.0] - 2026-03-07
+
+**Changed**
+
+- Update SAPUI5 version to 1.145.0
+- Maintenance version update for March 2026
+- Various dependency updates and security patches
+- Improved stability and performance optimizations
+
 ## [4.202602.0] - 2026-02-16
 
 **Changed**

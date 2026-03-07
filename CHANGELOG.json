@@ -1,4 +1,14 @@
 [{
+        "date": "2026-03-07",
+        "version": "4.202603.0",
+        "Changed": [
+            "Update SAPUI5 version to 1.145.0",
+            "Maintenance version update for March 2026",
+            "Various dependency updates and security patches",
+            "Improved stability and performance optimizations"
+        ]
+    },
+    {
         "date": "2026-02-16",
         "version": "4.202602.0",
         "Changed": [
