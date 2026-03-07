@@ -1,5 +1,7 @@
 # Troubleshooting
 
+Use this guide to troubleshoot common hana-cli errors, verify fixes, and get back to work quickly. If you are just getting started, see the [Installation Guide](./installation.md) and [Configuration Guide](./configuration.md).
+
 ## Quick Links
 
 - [Connection issues](#connection-issues)
@@ -8,6 +10,7 @@
 - [Output & format issues](#output--format-issues)
 - [Performance issues](#performance-issues)
 - [Language & localization](#language--localization)
+- [Business Application Studio](#business-application-studio-bas)
 - [Getting help](#getting-help)
 - [Tips & tricks](#tips--tricks)
 - [MCP server issues](./mcp.md)
@@ -15,6 +18,13 @@
 ## Common Issues & Solutions
 
 ### Connection Issues
+
+If you suspect a connection problem, start with a fast sanity check:
+
+```bash
+hana-cli status
+hana-cli systemInfo --output basic
+```
 
 #### Cannot Connect to Database
 
@@ -27,9 +37,16 @@
    ```bash
    # Check default-env.json exists and is valid JSON
    cat default-env.json | jq '.'
-   
+
    # Or check environment variables
    echo $HANA_HOST $HANA_PORT $HANA_USER
+   ```
+
+   On Windows (PowerShell):
+
+   ```powershell
+   Get-Content .\default-env.json | ConvertFrom-Json
+   "$env:HANA_HOST $env:HANA_PORT $env:HANA_USER"
    ```
 
 2. **Test network connectivity**
@@ -67,9 +84,16 @@
    hana-cli systemInfo
    ```
 
+   On Windows (PowerShell):
+
+   ```powershell
+   $env:HANA_CONNECTION_TIMEOUT = 60000
+   hana-cli systemInfo
+   ```
+
 3. **Check HANA service is running**
    - Contact HANA administrator
-   - Verify service status on HANA administrative web ui
+   - Verify service status on HANA administrative web UI
 
 #### SSL Certificate Error
 
@@ -127,7 +151,7 @@
 
 3. **If using CAP bindings**
    - Ensure `.cdsrc-private.json` exists in the project or a parent directory
-   - Run `cds bind` and re-try the command
+   - Run `cds bind` and retry the command
 
 4. **Verify CDS bind connection**
 
@@ -177,6 +201,22 @@
    - Install the corporate CA certificate
    - Use the `--trustStore` option when connecting: `hana-cli connect --trustStore /path/to/ca-cert.pem`
    - Or add `sslTrustStore` to your connection configuration file
+
+4. **Verify proxy variables**
+
+   Linux/macOS:
+
+   ```bash
+   echo $HTTPS_PROXY
+   echo $HTTP_PROXY
+   ```
+
+   Windows (PowerShell):
+
+   ```powershell
+   $env:HTTPS_PROXY
+   $env:HTTP_PROXY
+   ```
 
 #### Central Certificate Installation
 
@@ -318,6 +358,18 @@ npm config set cafile /path/to/company-ca.pem
 
 ### Command Execution Issues
 
+If a command fails unexpectedly, re-run it with debug output to capture context:
+
+```bash
+hana-cli <command> --debug --verbose
+```
+
+On Windows (PowerShell), you can capture output to a file for sharing:
+
+```powershell
+hana-cli <command> --debug --verbose | Tee-Object -FilePath hana-cli-debug.log
+```
+
 #### Command Not Found
 
 **Error:** `hana-cli: command not found`
@@ -332,7 +384,7 @@ npm config set cafile /path/to/company-ca.pem
    ```
 
 2. **Review the Commands documentation**
-   - Visit the [Commands documentation](/docs/) for a complete list of available commands and their usage
+   - Visit the [Commands documentation](/02-commands/) for a complete list of available commands and their usage
 
 3. **Verify command spelling**
    - Ensure you're using the correct command name (case-sensitive)
@@ -455,6 +507,7 @@ npm config set cafile /path/to/company-ca.pem
 
 2. **Upgrade to the required version**
    - hana-cli requires Node.js 20.19.0 or later
+   - See the [Installation Guide](./installation.md) for platform-specific steps
 
 #### Insufficient Privileges
 
@@ -471,8 +524,10 @@ npm config set cafile /path/to/company-ca.pem
    Use the SAP HANA system procedure to identify exactly which privileges are missing:
 
    ```bash
-   hana-cli callProcedure -s SYS -p GET_INSUFFICIENT_PRIVILEGE_ERROR_DETAILS
+   hana-cli callProcedure -s SYS -p GET_INSUFFICIENT_PRIVILEGE_ERROR_DETAILS --parameters GUID
    ```
+
+   Replace `GUID` with the value from the original error message.
 
    This stored procedure will provide detailed information about missing authorizations and help guide your DBA in granting the correct privileges.
 
@@ -510,7 +565,7 @@ npm config set cafile /path/to/company-ca.pem
    ```bash
    # Windows
    dir data.csv
-   
+
    # Linux/Mac
    ls -la data.csv
    ```
@@ -520,7 +575,12 @@ npm config set cafile /path/to/company-ca.pem
    ```bash
    # Show current directory
    pwd  # Linux/Mac
-   cd   # Windows
+   ```
+
+   Windows (PowerShell):
+
+   ```powershell
+   Get-Location
    ```
 
 #### CSV Encoding Issues
@@ -558,7 +618,8 @@ hana-cli import -n output.csv -t TABLE
 
 3. **Prepare data file**
    - Ensure headers match table columns
-   - Use --truncate if starting fresh
+   - Use `--truncate` if starting fresh
+   - Preview table metadata with `hana-cli inspectTable --schema SCHEMA --table TABLE`
 
 ---
 
@@ -620,13 +681,19 @@ hana-cli export -s SCHEMA -t TABLE --output text
    hana-cli dataProfile -s SCHEMA -t TABLE --debug
    ```
 
-2. **Check table size**
+2. **Check table size and access patterns**
 
    ```bash
-   hana-cli systemInfo -t TABLE
+   hana-cli tableHotspots --schema SCHEMA --table TABLE
    ```
 
-3. **Use limit for large tables**
+3. **Inspect expensive tables**
+
+   ```bash
+   hana-cli inspectTable --schema SCHEMA --table TABLE
+   ```
+
+4. **Use limit for large tables**
 
    ```bash
    hana-cli export -s SCHEMA -t TABLE --limit 1000
@@ -646,6 +713,12 @@ hana-cli export -s SCHEMA -t TABLE --output text
 
    ```bash
    node --max-old-space-size=4096 $(which hana-cli) export ...
+   ```
+
+   On Windows (PowerShell):
+
+   ```powershell
+   node --max-old-space-size=4096 (Get-Command hana-cli).Source export ...
    ```
 
 ---
@@ -698,6 +771,472 @@ source ~/.bashrc
 
 ---
 
+### Business Application Studio (BAS)
+
+This section covers troubleshooting tips specific to running hana-cli within SAP Business Application Studio (BAS), the cloud-native development environment integrated with SAP BTP.
+
+#### hana-cli Not Found in BAS Terminal
+
+**Symptoms:** Running `hana-cli` in the BAS integrated terminal returns "command not found" or similar error
+
+**Solutions:**
+
+1. **Install hana-cli in the workspace**
+
+   If hana-cli is not pre-installed in your BAS workspace, install it locally:
+
+   ```bash
+   npm install hana-cli
+   ```
+
+   Then run it via npx:
+
+   ```bash
+   npx hana-cli systemInfo
+   ```
+
+2. **Install globally in the dev container** (if using a custom dev container)
+
+   Edit your `.devcontainer/devcontainer.json`:
+
+   ```json
+   {
+     "postCreateCommand": "npm install -g hana-cli"
+   }
+   ```
+
+   Then rebuild the container in VS Code.
+
+3. **Verify the workspace has Node.js installed**
+
+   ```bash
+   node --version
+   npm --version
+   ```
+
+   If Node.js is not available, request a workspace with the necessary runtime environment from your BAS administrator.
+
+#### CDS Binding Not Found in BAS
+
+**Symptoms:** Error: `❌ No Connection Configuration Found` when running commands in a CAP project
+
+**Solutions:**
+
+1. **Ensure project uses `cds bind`** (recommended)
+
+   In your CAP project root:
+
+   ```bash
+   # List available service instances in your BTP subaccount
+   cds add hana --ucap
+   
+   # Bind to a specific HANA instance
+   cds bind --to my-hana-service-instance
+   ```
+
+   This creates `.cdsrc-private.json` in your workspace with connection credentials.
+
+2. **Verify `.cdsrc-private.json` exists**
+
+   ```bash
+   # Check if the binding file exists
+   ls -la .cdsrc-private.json
+   
+   # Validate it contains hana credentials
+   cat .cdsrc-private.json | jq '.requires.db.credentials'
+   ```
+
+3. **Re-bind if credentials are stale**
+
+   ```bash
+   # Remove the old binding
+   rm .cdsrc-private.json
+   
+   # Create a fresh binding
+   cds bind --to my-hana-service-instance
+   
+   # Test the connection
+   hana-cli status
+   ```
+
+4. **Check BTP service instance is accessible**
+
+   Use BTP CLI to verify the service instance exists in your target subaccount:
+
+   ```bash
+   btp login
+   btp target --subaccount <subaccount-ID>
+   btp list services/instances
+   ```
+
+   If the instance is not listed, verify you have the correct subaccount targeted and the service instance hasn't been deleted.
+
+#### Workspace Is Read-Only / Permission Denied Errors
+
+**Symptoms:** `EACCES: permission denied`, `EROFS: read-only file system`, or file modification fails in BAS
+
+**Solutions:**
+
+1. **Check workspace storage quota**
+
+   In BAS, the workspace storage is limited. Run:
+
+   ```bash
+   # Check disk usage
+   df -h
+   
+   # Check workspace size
+   du -sh ~
+   ```
+
+   If you're near quota, contact your BAS administrator to request increased storage.
+
+2. **Verify file permissions on imported data**
+
+   If you imported CSV files or created configuration files outside BAS:
+
+   ```bash
+   # Check current permissions
+   ls -la data.csv
+   
+   # Fix if needed (Linux/Mac)
+   chmod 644 data.csv
+   ```
+
+3. **Workspace might be locked by another session**
+
+   If multiple windows or sessions have the same workspace open:
+
+   - Close all other editor windows/tabs for this workspace
+   - Reload the current window: Press `F1` → search for "Reload Window"
+
+4. **Clear BAS cache if issues persist**
+
+   - In BAS UI, go to **File** → **Preferences** → **Settings**
+   - Search for "Exclude Patterns" and ensure data directories are not excluded
+   - Restart the workspace
+
+#### BAS Workspace Timeout During Long-Running Commands
+
+**Symptoms:** Commands time out, connection drops, or commands don't complete in BAS terminal
+
+**Solutions:**
+
+1. **Increase command timeout for long operations**
+
+   Set environment variables in the BAS terminal:
+
+   ```bash
+   # Increase connection timeout to 2 minutes
+   export HANA_CONNECTION_TIMEOUT=120000
+   
+   # For export operations with large datasets
+   export HANA_QUERY_TIMEOUT=300000
+   
+   # Then run your command
+   hana-cli export -s SCHEMA -t LARGE_TABLE -o output.csv
+   ```
+
+2. **Use pagination for large exports instead of single operations**
+
+   ```bash
+   # Export in batches to avoid timeout
+   hana-cli export -s SCHEMA -t LARGE_TABLE --offset 0 --limit 100000 -o part1.csv
+   hana-cli export -s SCHEMA -t LARGE_TABLE --offset 100000 --limit 100000 -o part2.csv
+   ```
+
+3. **Keep BAS workspace active**
+
+   The workspace may suspend idle sessions:
+
+   - Keep the terminal open and active
+   - Avoid leaving long-running commands unattended for extended periods
+   - Consider running large operations during off-peak hours if the system is heavily used
+
+4. **Check BAS network connectivity**
+
+   If timeouts are frequent:
+
+   ```bash
+   # Test network connectivity
+   ping hana.example.com
+   
+   # Test DNS resolution
+   nslookup hana.example.com
+   ```
+
+   If connectivity is unstable, contact your network/BTP administrator.
+
+#### Environment Variables Not Persisting in BAS Terminal
+
+**Symptoms:** Environment variables set in one terminal session vanish in a new tab or after closing the terminal
+
+**Solutions:**
+
+1. **Set variables persistently in `.bashrc` or `.zshrc`**
+
+   Add variables to your shell profile:
+
+   ```bash
+   # Open or create ~/.bashrc
+   cat >> ~/.bashrc << 'EOF'
+   export HANA_HOST=hana.example.com
+   export HANA_PORT=30015
+   export HANA_USER=myuser
+   EOF
+   
+   # Source the file in current session
+   source ~/.bashrc
+   ```
+
+2. **For CAP projects, use `.env` file**
+
+   Create a `.env` file in your project root (this persists across terminal sessions):
+
+   ```bash
+   HANA_HOST=hana.example.com
+   HANA_PORT=30015
+   HANA_USER=myuser
+   HANA_PASSWORD=mypassword
+   ```
+
+   Then load it in your terminal:
+
+   ```bash
+   source .env
+   hana-cli status
+   ```
+
+3. **For BAS workspace-wide settings, use workspace settings**
+
+   Edit `.vscode/settings.json` in your workspace root to document environment setup (for team reference):
+
+   ```json
+   {
+     "terminal.integrated.env.linux": {
+       "HANA_HOST": "hana.example.com",
+       "HANA_PORT": "30015"
+     }
+   }
+   ```
+
+   Then set secrets / passwords separately using BAS Secrets feature.
+
+#### Git / Source Control Issues in BAS when using hana-cli
+
+**Symptoms:** Adding configuration files to Git, credential leaks, or merge conflicts with generated files
+
+**Solutions:**
+
+1. **Protect sensitive configuration files**
+
+   Add connection config files to `.gitignore`:
+
+   ```bash
+   # In your .gitignore
+   default-env.json
+   default-env-admin.json
+   .env
+   .cdsrc-private.json  # Already done by CAP
+   ~/.hana-cli/        # Home directory configs
+   ```
+
+   Use `.cdsrc-private.json` for credentials (handled by CAP) or CAP's config management for secrets.
+
+2. **Commit only non-sensitive files**
+
+   ```bash
+   # Commit sample/template config without credentials
+   git add .cdsrc-template.json
+   git commit -m "Add sample CDS config template"
+   
+   # .cdsrc-private.json with credentials is git-ignored
+   ```
+
+3. **Resolve merge conflicts in package-lock.json**
+
+   If two developers run `npm install` and conflict:
+
+   ```bash
+   npm install
+   git add package-lock.json
+   git commit -m "Resolve package-lock merge conflict"
+   ```
+
+#### Default HANA Connection Not Detected in CAP Project
+
+**Symptoms:** `hana-cli` works outside a CAP project but fails inside, returning connection not found errors
+
+**Solutions:**
+
+1. **Verify CAP project structure**
+
+   A valid CAP project contains `package.json` with `@sap/cds` dependency and a `db/` or `srv/` folder:
+
+   ```bash
+   ls -la package.json db/ srv/
+   ```
+
+2. **Check `.cdsrc-private.json` is in the project root**
+
+   ```bash
+   # Should be at project root level, not in subdirectories
+   ls -la .cdsrc-private.json
+   cat .cdsrc-private.json | jq '.requires.db.credentials'
+   ```
+
+3. **Ensure CDS finds the binding**
+
+   ```bash
+   # Verify CDS can read the binding
+   cds env get requires.db
+   ```
+
+   If this returns undefined, re-run `cds bind`.
+
+4. **If using a workspace with multiple projects, specify the project**
+
+   Navigate to the correct CAP project directory before running hana-cli:
+
+   ```bash
+   cd my-cap-project/
+   hana-cli systemInfo
+   ```
+
+#### Connection Credentials Exposed in BAS Terminal Output
+
+**Symptoms:** Terminal history shows connection passwords, API tokens, or other credentials
+
+**Solutions:**
+
+1. **Clear terminal history**
+
+   ```bash
+   # Clear current terminal output
+   clear
+   
+   # Or use history management
+   history -c  # Clear history (bash)
+   ```
+
+2. **Use secure environment variable assignments**
+
+   Instead of typing passwords on the command line:
+
+   ```bash
+   # Prompt for password (not visible in history)
+   read -sp "Enter HANA password: " HANA_PASSWORD
+   export HANA_PASSWORD
+   
+   # Use with hana-cli
+   hana-cli systemInfo
+   ```
+
+3. **Leverage BAS Secrets for credentials**
+
+   BAS provides a secure secrets management feature:
+
+   - Access **Settings** → **Secrets** in BAS
+   - Store sensitive values there instead of in files or env vars
+   - Reference them in your configuration as needed
+
+4. **Use `.cdsrc-private.json` instead of command-line parameters**
+
+   Credentials in files stay out of shell history:
+
+   ```bash
+   # Good - credentials in .cdsrc-private.json (git-ignored)
+   cds bind --to my-hana-service-instance
+   hana-cli status
+   
+   # Avoid - passwords visible in command history
+   hana-cli status -n myhost -p mypassword
+   ```
+
+#### BAS and Docker / Dev Container Issues
+
+**Symptoms:** hana-cli works on local machine but fails in BAS dev container setup, or dev container won't start
+
+**Solutions:**
+
+1. **Ensure dev container includes Node.js**
+
+   In `.devcontainer/devcontainer.json`:
+
+   ```json
+   {
+     "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
+     "postCreateCommand": "npm install -g hana-cli @sap/cds-dk"
+   }
+   ```
+
+2. **Rebuild dev container after changes**
+
+   - Press `F1` in BAS
+   - Search for "Dev Containers: Rebuild and Reopen in Container"
+   - Wait for container to rebuild
+
+3. **Check Volume Mounts**
+
+   If workspace files aren't visible in the container:
+
+   ```json
+   {
+     "mounts": [
+       "source=${localEnv:HOME}${localEnv:USERPROFILE}/.hana-cli,target=/root/.hana-cli,type=bind"
+     ]
+   }
+   ```
+
+4. **Forward HANA connection through BAS network**
+
+   If HANA is on a private network, ensure BAS has connectivity:
+
+   ```bash
+   # Inside container, test connectivity
+   ping hana.example.com
+   nc -zv hana.example.com 30015
+   ```
+
+#### Performance Issues in BAS
+
+**Symptoms:** Commands run slowly, output is delayed, or UI becomes unresponsive during operations
+
+**Solutions:**
+
+1. **Check available memory and CPU in workspace**
+
+   ```bash
+   # Check memory
+   free -h
+   
+   # Check CPU info
+   nproc
+   ```
+
+2. **Limit output verbosity for large results**
+
+   ```bash
+   # Instead of full debug output
+   hana-cli export -s SCHEMA -t TABLE -o data.csv
+   
+   # Avoid excessive logging
+   hana-cli export -s SCHEMA -t TABLE -o data.csv  # without --debug
+   ```
+
+3. **Use pagination and filters to reduce data transfer**
+
+   ```bash
+   # Reduce output size
+   hana-cli export -s SCHEMA -t TABLE --limit 1000 -o sample.csv
+   ```
+
+4. **Close unused editor tabs and extensions**
+
+   The BAS UI consumes resources; closing unused windows frees memory for CLI operations.
+
+---
+
 ## Getting Help
 
 ### Check Documentation
@@ -709,7 +1248,7 @@ source ~/.bashrc
    ```
 
 2. **Search documentation**
-   - See [Documentation Hub](/docs/)
+   - See [Documentation Hub](/)
 
 3. **Knowledge base**
 
@@ -760,6 +1299,34 @@ cat $HANA_LOG_FILE
 - [GitHub Issues](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues)
 - Include: error message, command executed, environment details - also consider using the command `hana-cli issue` to automatically gather and format information for you.
 
+---
+
+## MCP Server Issues (Quick Checks)
+
+If you are using the Model Context Protocol (MCP) server integration, run these quick checks first:
+
+1. **Verify the MCP server is installed**
+
+   ```bash
+   cd mcp-server
+   npm install
+   ```
+
+2. **Start the MCP server in debug mode**
+
+   ```bash
+   npm run dev -- --debug
+   ```
+
+3. **Validate CLI connectivity separately**
+
+   ```bash
+   hana-cli status
+   hana-cli systemInfo --output basic
+   ```
+
+For full MCP troubleshooting, see [MCP Server Issues](./mcp.md).
+
 ## Tips & Tricks
 
 ### Test Your Connection
@@ -796,4 +1363,5 @@ done
 - [MCP Server Issues](./mcp.md)
 - [Configuration Guide](./configuration.md)
 - [Installation Guide](./installation.md)
+- [Commands documentation](/02-commands/)
 - [GitHub Repository](https://github.com/SAP-samples/hana-developer-cli-tool-example)

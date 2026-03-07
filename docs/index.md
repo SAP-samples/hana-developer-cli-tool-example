@@ -29,7 +29,7 @@ New to hana-cli? Start here with installation and first steps.
 
 ### 📚 Commands
 
-Explore all available commands organized by category.
+Explore 155 commands organized by category.
 [Browse Commands →](/02-commands/)
 
 </div>
@@ -73,6 +73,7 @@ HANA CLI (pronounced "HAN-uh C-L-I") is a powerful command-line tool designed fo
 - [Quick Start Tutorial](/01-getting-started/quick-start.md)
 - [Import Data from CSV](/02-commands/data-tools/import.md)
 - [Compare Database Schemas](/02-commands/schema-tools/compare-schema.md)
+- [Data Profiling & Analysis](/02-commands/analysis-tools/data-profile.md)
 - [Set Up MCP Server](/03-features/mcp-integration.md)
 
 ## 🎥 Videos
@@ -110,7 +111,7 @@ HANA CLI (pronounced "HAN-uh C-L-I") is a powerful command-line tool designed fo
 ## 📝 Need Help?
 
 - Check the [Frequently Asked Questions](./99-reference/faq-extended.md)
-- Review [Troubleshooting Guide](./troubleshooting.md)
+- Review [Troubleshooting Guide](./troubleshooting/)
 - Search the documentation above
 - Open an issue on [GitHub](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues)
 

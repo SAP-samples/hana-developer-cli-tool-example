@@ -8,23 +8,23 @@ Additional reference materials and project history.
 - [Command Reference](./command-reference.md) - Complete command reference
 - [FAQ](./faq-extended.md) - Frequently asked questions
 
-## Troubleshooting & Issues
+## Troubleshooting
 
-- [Known Issues](./known-issues.md) - Tracked issues and workarounds
-- [Troubleshooting Guide](../troubleshooting.md) - Solutions to common problems
+- [Troubleshooting Guide](../troubleshooting/) - Solutions to common problems
 
-## Additional Resources
+## Project Documentation
 
-Root-level reference documentation:
+Main project documentation:
 
-- [COMMAND_REFERENCE.md](../../COMMAND_REFERENCE.md)
-- [README.md](../../README.md)
-- [Project Analysis & Planning](../../ISSUE_ANALYSIS.md)
+- [README.md](../../README.md) - Project overview and quick start
 
-## Performance & Optimization
+## Developer Resources
 
-- [Optimization Patterns](../../OPTIMIZATION_PATTERN.md)
-- [Test Coverage Analysis](../../TEST_COVERAGE_ANALYSIS.md)
+Internal development documentation:
+
+- [Issue Analysis & Planning](../developer-notes/issue-analysis.md)
+- [Optimization Patterns](../developer-notes/optimization-patterns.md)
+- [Test Coverage Analysis](../developer-notes/test-coverage-analysis.md)
 
 ## API & Integration
 
@@ -34,7 +34,7 @@ Root-level reference documentation:
 
 ## See Also
 
-- [Getting Started Guide](../01-getting-started/)
-- [Commands Reference](../02-commands/)
-- [Features](../03-features/)
-- [Development Guide](../05-development/)
+- [Getting Started Guide](../01-getting-started/) - Installation and configuration
+- [Commands Reference](../02-commands/) - Complete command documentation
+- [Features](../03-features/) - Advanced capabilities and integrations
+- [Development Guide](../05-development/) - Architecture and contributor guide

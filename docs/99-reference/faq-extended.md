@@ -15,7 +15,7 @@ Answers for common questions from users and contributors.
 
 ### Q: What's the minimum Node.js version required?
 
-**A:** Node.js 22 or higher.
+**A:** Node.js 20.19.0 or higher.
 
 ```bash
 node --version
@@ -47,10 +47,18 @@ See [Configuration Guide](../01-getting-started/configuration.md)
 
 ### Q: What's the difference between `export` and `querySimple`?
 
-**A:** They're the same command. `querySimple` is an older alias. Use `export`:
+**A:** They are two different commands:
+
+- **`export`**: Exports table data to a file (CSV, Excel, or JSON). Use WHERE clauses to filter rows.
 
 ```bash
 hana-cli export -s SCHEMA -t TABLE -o output.csv
+```
+
+- **`querySimple`**: Executes SQL queries and displays results in various formats.
+
+```bash
+hana-cli querySimple --query "SELECT * FROM SCHEMA.TABLE" --output csv
 ```
 
 ### Q: How do I import data from JSON?
@@ -143,7 +151,7 @@ hana-cli export -s SCHEMA -t TABLE -w "STATUS='ACTIVE'" -o active.csv
 - CSV (comma-separated values)
 - Excel (.xlsx files)
 
-Use `-o excel` for Excel files.
+Use `-o excel` for Excel files when importing from Excel format.
 
 ### Q: What if my data types don't match?
 
@@ -220,16 +228,15 @@ hana-cli dbInfo
 
 ### Q: How do I enable verbose logging?
 
-**A:** Use --debug or --verbose flags:
+**A:** Use `--debug` flag to enable detailed logging:
 
 ```bash
-# Debug mode
+# Debug mode shows execution details
 hana-cli import -n data.csv -t TABLE --debug
 
-# Verbose output
-hana-cli dataProfile -s SCHEMA -t TABLE --verbose
+hana-cli dataProfile -s SCHEMA -t TABLE --debug
 
-# Or set environment variable
+# Or set logging level via environment variable
 export HANA_LOG_LEVEL=debug
 hana-cli dbInfo
 ```
@@ -308,9 +315,11 @@ See [MCP Integration Guide](../03-features/mcp-integration.md)
 ### Q: How do I use German localization?
 
 ```bash
-export HANA_LANG=de
+export LANG=de
 hana-cli dbInfo
 ```
+
+Alternatively, use standard locale variables: `LC_ALL`, `LC_MESSAGES`, or `LANGUAGE`.
 
 ### Q: How do I contribute translations?
 

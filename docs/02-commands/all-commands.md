@@ -1,6 +1,6 @@
 # Complete Command Reference (A-Z)
 
-**186 Total Commands** organized alphabetically with links to detailed documentation.
+**155 Total Commands** organized alphabetically with links to detailed documentation.
 
 ## Commands by Letter
 
@@ -219,6 +219,7 @@
 | --------- | ---------- | --- |
 | Schema Clone | Schema Tools | [schema-clone.md](./schema-tools/schema-clone.md) |
 | Schemas | Object Inspection | [schemas.md](./object-inspection/schemas.md) |
+| SDI Tasks | System Tools | [sdi-tasks.md](./system-tools/sdi-tasks.md) |
 | Security Scan | Security | [security-scan.md](./security/security-scan.md) |
 | Sequences | Object Inspection | [sequences.md](./object-inspection/sequences.md) |
 | Spatial Data | System Tools | [spatial-data.md](./system-tools/spatial-data.md) |
@@ -237,7 +238,7 @@
 | Tables PG | Object Inspection | [tables-p-g.md](./object-inspection/tables-p-g.md) |
 | Tables SQLite | Object Inspection | [tables-s-q-lite.md](./object-inspection/tables-s-q-lite.md) |
 | Test | System Tools | [test.md](./system-tools/test.md) |
-| Timeseries Tools | System Tools | [timeseries-tools.md](./system-tools/timeseries-tools.md) |
+| Time Series Tools | System Tools | [time-series-tools.md](./system-tools/time-series-tools.md) |
 | Trace Contents | Performance Monitoring | [trace-contents.md](./performance-monitoring/trace-contents.md) |
 | Traces | Performance Monitoring | [traces.md](./performance-monitoring/traces.md) |
 | Triggers | Object Inspection | [triggers.md](./object-inspection/triggers.md) |

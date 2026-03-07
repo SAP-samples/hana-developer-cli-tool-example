@@ -1,6 +1,9 @@
 # SAP HANA CLI Command Structure Reference
 
-This document provides visual diagrams and quick reference guides for the most commonly used hana-cli commands. Each command diagram shows the command structure, parameters, and typical usage patterns.
+This document provides visual diagrams and quick reference guides for commonly used `hana-cli` commands. Each command diagram shows the command structure, key parameters, and typical usage patterns.
+
+> [!NOTE]
+> This page is a high-level reference. For authoritative command syntax and full option details, use `hana-cli [command] --help` and the command pages under `/02-commands/`.
 
 ## Table of Contents
 
@@ -27,7 +30,7 @@ graph TB
     B --> B1["-n, --connection<br/>host:port"]
     B --> B2["-u, --user<br/>username"]
     B --> B3["-p, --password<br/>password"]
-    B --> B4["-U, --userstorekey<br/>HDB key"]
+    B --> B4["--uk, --userstorekey<br/>HDB key"]
     B --> B5["-e, --encrypt<br/>SSL/TLS"]
     B --> B6["-t, --trustStore<br/>Trust cert"]
     
@@ -53,7 +56,7 @@ hana-cli connect
 hana-cli connect -n localhost:30013 -u DBUSER -p mypassword -s
 
 # Using HDB Userstore key
-hana-cli connect -U MYHDBKEY -s
+hana-cli connect --uk MYHDBKEY -s
 ```
 
 **Aliases**: `c`, `login`
@@ -75,6 +78,10 @@ graph TB
     style B fill:#0070C0,color:#fff
     style E fill:#51CF66,color:#fff
 ```
+
+---
+
+**Aliases**: `copyDefaultEnv`, `copyDefault-Env`, `copy2defaultenv`, `copydefaultenv`, `copydefault-env`
 
 ---
 
@@ -124,7 +131,7 @@ hana-cli export -t ORDERS -f csv --preview
 hana-cli export -t TABLE -p production
 ```
 
-**Aliases**: `exp`, `exportData`
+**Aliases**: `exp`, `downloadData`, `downloaddata`
 
 ---
 
@@ -135,20 +142,20 @@ hana-cli export -t TABLE -p production
 ```mermaid
 graph TD
     A["hana-cli import"] --> B["Source File"]
-    B --> B1["-f, --file<br/>input file"]
-    B --> B2["-fmt, --format<br/>csv/json/parquet"]
-    B --> B3["-h, --header<br/>has headers"]
+    B --> B1["-n, --filename<br/>input file"]
+    B --> B2["-o, --output<br/>csv/excel"]
+    B --> B3["--worksheet<br/>sheet index"]
     
     A --> C["Target Configuration"]
     C --> C1["-t, --table<br/>target table"]
     C --> C2["-s, --schema<br/>**CURRENT_SCHEMA**"]
-    C --> C3["-p, --profile<br/>database profile"]
+    C --> C3["-m, --matchMode<br/>auto/order/name"]
     
     A --> D["Import Options"]
-    D --> D1["-ow, --overwrite<br/>replace data"]
-    D --> D2["-ap, --append<br/>add to table"]
-    D --> D3["-b, --batch<br/>1000 records"]
-    D --> D4["-dr, --dryRun<br/>preview"]
+    D --> D1["--truncate<br/>truncate target"]
+    D --> D2["-b, --batchSize<br/>1000 records"]
+    D --> D3["-dr, --dryRun<br/>preview"]
+    D --> D4["--maxErrorsAllowed<br/>-1 unlimited"]
     
     A --> E["Result"]
     E --> F["Data Imported"]
@@ -160,20 +167,20 @@ graph TD
 **Import Quick Examples**:
 
 ```bash
-# Import CSV file with headers
-hana-cli import -f users.csv -t USERS -h
+# Import CSV into a target table
+hana-cli import -n users.csv -t USERS
 
-# Import JSON and append to existing data
-hana-cli import -f orders.json -t ORDERS -ap
+# Import Excel file from worksheet 1
+hana-cli import -n orders.xlsx -t ORDERS --worksheet 1
 
 # Import with dry-run preview
-hana-cli import -f data.csv -t MYTABLE --preview
+hana-cli import -n data.csv -t MYTABLE --preview
 
-# Import specific number of records
-hana-cli import -f large.csv -t TABLE -l 1000
+# Import with explicit match mode
+hana-cli import -n large.csv -t TABLE -m name
 ```
 
-**Aliases**: `imp`, `importData`
+**Aliases**: `imp`, `uploadData`, `uploaddata`
 
 ---
 
@@ -225,7 +232,7 @@ hana-cli tableCopy -st PROD.CUSTOMERS -tt DEV.CUSTOMERS
 hana-cli tableCopy --sourceTable ORDERS --targetTable ORDERS_BKP --preview
 ```
 
-**Aliases**: `tc`, `copyTable`
+**Aliases**: `tablecopy`, `copyTable`, `copytable`
 
 ---
 
@@ -236,23 +243,23 @@ hana-cli tableCopy --sourceTable ORDERS --targetTable ORDERS_BKP --preview
 ```mermaid
 graph TD
     A["hana-cli dataSync"] --> B["Source"]
-    B --> B1["--sourceTable/-st"]
-    B --> B2["--sourceSchema/-ss"]
+    B --> B1["--sourceConnection/-sc"]
+    B --> B2["-s, --schema"]
     
     A --> C["Target"]
-    C --> C1["--targetTable/-tt"]
-    C --> C2["--targetSchema/-ts"]
+    C --> C1["--targetConnection/-tc"]
+    C --> C2["-t, --table"]
     
     A --> D["Sync Strategy"]
-    D --> D1["--mode<br/>merge/replace/sync"]
-    D --> D2["--key<br/>primary key"]
-    D --> D3["--matchOn<br/>columns"]
+    D --> D1["-m, --syncMode<br/>full/incremental"]
+    D --> D2["-k, --keyColumns<br/>matching keys"]
+    D --> D3["--cr, --conflictResolution<br/>source/target/skip"]
     
     A --> E["Options"]
-    E --> E1["-dr, --dryRun<br/>preview"]
-    E --> E2["-b, --batch<br/>size"]
-    E --> E3["--log<br/>logging"]
-    E --> E4["-to, --timeout<br/>3600 seconds"]
+    E --> E1["-b, --batchSize<br/>size"]
+    E --> E2["--validationMode<br/>full/sample/none"]
+    E --> E3["--syncDelete<br/>sync deletes"]
+    E --> E4["--dryRun<br/>preview"]
     
     style A fill:#0070C0,color:#fff
 ```
@@ -393,7 +400,7 @@ graph TB
     style E fill:#51CF66,color:#fff
 ```
 
-**Aliases**: `proc`, `sp`, `listProcedures`
+**Aliases**: `p`, `listProcs`, `ListProc`, `listprocs`, `Listproc`, `listProcedures`, `listprocedures`, `sp`
 
 ---
 
@@ -409,9 +416,8 @@ graph TD
     B --> B1["-c, --container<br/>name pattern"]
     B --> B2["-g, --group<br/>container group"]
     
-    A --> C["Output Options"]
+    A --> C["Execution Options"]
     C --> C1["-l, --limit<br/>200"]
-    C --> C2["-o, --output<br/>format"]
     
     A --> D["Result"]
     D --> E["Container List"]
@@ -451,8 +457,8 @@ graph TD
     B --> B2["-g, --group<br/>group name"]
     
     A --> C["Options"]
-    C --> C1["--adminUser<br/>admin name"]
-    C --> C2["--adminPassword<br/>password"]
+    C --> C1["-s, --save<br/>save default-env"]
+    C --> C2["-e, --encrypt<br/>SSL/TLS"]
     
     A --> D["Result"]
     D --> E["Container Created"]
@@ -470,11 +476,11 @@ hana-cli createContainer MYCONTAINER
 # Create with specific group
 hana-cli createContainer MYCONTAINER -g MYGROUP
 
-# Create with admin user
-hana-cli createContainer HC01 -g APPS --adminUser ADMIN
+# Create with encryption enabled
+hana-cli createContainer HC01 -g APPS -e
 ```
 
-**Aliases**: `cc`, `createHDI`
+**Aliases**: `cc`, `cCont`
 
 ---
 
@@ -487,14 +493,14 @@ hana-cli createContainer HC01 -g APPS --adminUser ADMIN
 ```mermaid
 graph TD
     A["hana-cli backup<br/>[target] [name]"] --> B["Backup Scope"]
-    B --> B1["--type<br/>table/schema/database"]
-    B --> B2["--target<br/>object name"]
+    B --> B1["--backupType, --type<br/>table/schema/database"]
+    B --> B2["--target, --tgt<br/>object name"]
     B --> B3["-s, --schema<br/>**CURRENT_SCHEMA**"]
     
     A --> C["Backup Options"]
     C --> C1["-f, --format<br/>csv/binary/parquet"]
     C --> C2["-c, --compress<br/>true/false"]
-    C --> C3["--destination<br/>directory"]
+    C --> C3["--destination, --dest<br/>directory"]
     C --> C4["-n, --name<br/>backup name"]
     
     A --> D["Data Options"]
@@ -513,13 +519,13 @@ graph TD
 
 ```bash
 # Backup a table
-hana-cli backup -t CUSTOMERS -s SALES
+hana-cli backup --target CUSTOMERS -s SALES
 
 # Backup entire schema
 hana-cli backup PRODUCTION --type schema
 
 # Backup with compression
-hana-cli backup -t TABLE -f csv -c true -d ./backups
+hana-cli backup --target TABLE -f csv -c true --dest ./backups
 
 # Backup without data
 hana-cli backup MYSCHEMA --type schema --withData false
@@ -560,13 +566,13 @@ graph TD
 
 ```bash
 # Restore from backup file
-hana-cli restore --backupFile customers.csv -t CUSTOMERS
+hana-cli restore --backupFile customers.csv --target CUSTOMERS
 
 # Restore with overwrite
-hana-cli restore --backupFile ./backups/data.csv -t TABLE -ow
+hana-cli restore --backupFile ./backups/data.csv --target TABLE -ow
 
 # Restore to different schema
-hana-cli restore --backupFile backup.csv -t TABLE -s ALTERNATIVE_SCHEMA
+hana-cli restore --backupFile backup.csv --target TABLE -s ALTERNATIVE_SCHEMA
 
 # Dry-run restore
 hana-cli restore --backupFile data.csv -t TABLE --preview
@@ -586,14 +592,9 @@ hana-cli restore --backupFile data.csv -t TABLE --preview
 graph TD
     A["hana-cli queryPlan"] --> B["Query Input"]
     B --> B1["-q, --sql<br/>SQL statement"]
-    
-    A --> C["Options"]
-    C --> C1["--explain<br/>explain flag"]
-    C --> C2["-o, --output<br/>json/table"]
-    
     A --> D["Result"]
     D --> E["Execution Plan"]
-    D --> F["Cost Analysis"]
+    D --> F["Operator & Cost Details"]
     
     style A fill:#0070C0,color:#fff
     style E fill:#FFD93D,color:#000
@@ -607,8 +608,10 @@ graph TD
 hana-cli queryPlan -q "SELECT * FROM CUSTOMERS WHERE ID = 1"
 
 # Get JSON output
-hana-cli queryPlan --sql "SELECT * FROM ORDERS" -o json
+hana-cli queryPlan --sql "SELECT * FROM ORDERS"
 ```
+
+**Aliases**: _None_
 
 ---
 
@@ -619,8 +622,10 @@ hana-cli queryPlan --sql "SELECT * FROM ORDERS" -o json
 ```mermaid
 graph TD
     A["hana-cli alerts"] --> B["Filter Options"]
-    B --> B1["-sev, --severity<br/>ALL/HIGH/MEDIUM/LOW"]
-    B --> B2["-l, --limit<br/>50"]
+    B --> B1["-s, --severity<br/>all/CRITICAL/WARNING/INFO"]
+    B --> B2["-l, --limit<br/>100"]
+    B --> B3["--ack, --acknowledge<br/>alert id"]
+    B --> B4["--del, --delete<br/>alert id"]
     
     A --> C["Result"]
     C --> C1["Alert List"]
@@ -638,13 +643,13 @@ graph TD
 hana-cli alerts
 
 # Show only high severity
-hana-cli alerts -sev HIGH
+hana-cli alerts -s CRITICAL
 
 # Limit to 20 results
 hana-cli alerts -l 20
 ```
 
-**Aliases**: `alrt`, `alert`
+**Aliases**: `a`, `alert`
 
 ---
 
@@ -660,7 +665,7 @@ graph TD
     B --> B3["-p, --profile<br/>database"]
     
     A --> C["Statistics"]
-    C --> C1["-inc, --includePartitions<br/>true"]
+    C --> C1["--includePartitions<br/>true"]
     C --> C2["-l, --limit<br/>200"]
     
     A --> D["Result"]
@@ -718,7 +723,7 @@ hana-cli massConvert -s PRODUCTION -f hdbTable -d ./artifacts
 hana-cli massConvert -o "CUST*" -f cds
 ```
 
-**Aliases**: `mc`, `massConvertUI`
+**Aliases**: `mc`, `massconvert`, `massConv`, `massconv`
 
 ---
 
@@ -762,13 +767,13 @@ hana-cli massGrant -s SCHEMA -g ADMIN -p "SELECT,INSERT" --withGrantOption
 hana-cli massGrant -o "TABLE*" -g USERS -p SELECT --log
 ```
 
-**Aliases**: `mg`, `massPermission`
+**Aliases**: `mg`, `massgrant`, `massGrn`, `massgrn`
 
 ---
 
 ### massDelete
 
-**Purpose**: Delete rows from multiple tables
+**Purpose**: Bulk-delete database objects that match filters and patterns
 
 ```mermaid
 graph TD
@@ -777,13 +782,14 @@ graph TD
     B --> B2["-o, --object<br/>pattern"]
     
     A --> C["Delete Criteria"]
-    C --> C1["-w, --where<br/>condition"]
-    C --> C2["--limit<br/>rows"]
+    C --> C1["-t, --objectType<br/>TABLE/VIEW/etc"]
+    C --> C2["-l, --limit<br/>1000 objects"]
     
     A --> D["Options"]
     D --> D1["-dr, --dryRun<br/>preview"]
-    D --> D2["-b, --batch<br/>size"]
+    D --> D2["-f, --force<br/>skip confirmation"]
     D --> D3["--log<br/>logging"]
+    D --> D4["-i, --includeSystem<br/>include system objects"]
     
     A --> E["Result"]
     E --> E1["Rows Deleted"]
@@ -795,14 +801,14 @@ graph TD
 **Quick Examples**:
 
 ```bash
-# Delete old records (preview)
-hana-cli massDelete -o "ARCHIVE_*" -w "CREATE_DATE < '2023-01-01'" --preview
+# Preview delete for matching objects
+hana-cli massDelete -o "ARCHIVE_*" --preview
 
-# Delete with batch processing
-hana-cli massDelete -s STAGING -o TEMP* -b 500
+# Force delete including system objects
+hana-cli massDelete -s STAGING -o TEMP* -f -i
 ```
 
-**Aliases**: `md`, `massRemove`
+**Aliases**: `md`, `massdelete`, `massDel`, `massdel`
 
 ---
 
@@ -820,8 +826,8 @@ graph TB
     B --> B3["Subaccount"]
     
     A --> C["Configuration"]
-    C --> C1["--subaccount/-sa<br/>account ID"]
-    C --> C2["--directory<br/>directory ID"]
+    C --> C1["--subaccount/-sa<br/>subaccount ID"]
+    C --> C2["[directory] [subaccount]<br/>positional args"]
     
     A --> D["Result"]
     D --> E["BTP Context Set"]
@@ -836,16 +842,16 @@ graph TB
 
 ```bash
 # Set subaccount target
-hana-cli btp --subaccount myaccount
+hana-cli btp --sa myaccount
 
-# Set directory target
-hana-cli btp --directory mydirectory
+# Set directory + subaccount using positional args
+hana-cli btp mydirectory myaccount
 
 # Show current BTP context
 hana-cli btpInfo
 ```
 
-**Aliases**: None
+**Aliases**: `btpTarget`, `btptarget`, `btp`
 
 ---
 
@@ -871,7 +877,7 @@ graph TB
 
 ### List Commands Pattern
 
-All list commands follow this standard pattern:
+Many list commands follow this general pattern:
 
 ```mermaid
 graph TB
@@ -892,13 +898,13 @@ graph TB
     style E fill:#51CF66,color:#fff
 ```
 
-**Applies to**: `tables`, `views`, `procedures`, `functions`, `indexes`, `schemas`, `users`, `roles`, `sequences`, `synonyms`, `partitions`, `columnStats`, `spatialData`, `ftIndexes`, `graphWorkspaces`, `tableHotspots`, `tableGroups`, `calcViewAnalyzer`
+**Examples include**: `tables`, `views`, `procedures`, `functions`, `indexes`, `schemas`, `users`, `roles`, `sequences`, `synonyms`, `partitions`, `columnStats`, `spatialData`, `ftIndexes`, `graphWorkspaces`, `tableHotspots`, `tableGroups`, `calcViewAnalyzer`
 
 ---
 
 ### Data Operation Pattern
 
-All data operations follow this standard pattern:
+Many data operations follow this general pattern:
 
 ```mermaid
 graph TD
@@ -923,7 +929,7 @@ graph TD
     style E1 fill:#51CF66,color:#fff
 ```
 
-**Applies to**: `export`, `import`, `dataSync`, `compareData`, `compareSchema`, `tableCopy`, `dataProfile`, `dataDiff`, `duplicateDetection`
+**Examples include**: `export`, `import`, `dataSync`, `compareData`, `compareSchema`, `tableCopy`, `dataProfile`, `dataDiff`, `duplicateDetection`
 
 ---
 
@@ -934,7 +940,7 @@ graph TD
     A["Global Parameters"] --> A1["-a, --admin"]
     A --> A2["--conn<br/>connection file"]
     A --> A3["-d, --debug"]
-    A --> A4["--quiet"]
+    A --> A4["--quiet/--disableVerbose"]
     
     A --> B["Standard Parameters"]
     B --> B1["-s, --schema"]
@@ -1016,10 +1022,10 @@ graph TD
 | `--output` | `-o` | string | tbl | Output format |
 | `--dryRun` | `-dr`, `--preview` | boolean | false | Preview without executing |
 | `--format` | `-f` | string | csv | Output/input format |
-| `--batchSize` | `-b`, `--batch` | number | 1000 | Records per batch |
+| `--batchSize` | `-b` (sometimes `--batch`) | number | 1000 | Records per batch |
 | `--timeout` | `-to` | number | 3600 | Operation timeout (sec) |
 | `--debug` | `-d` | boolean | false | Debug output |
-| `--quiet` | `--disableVerbose` | boolean | false | Minimal output |
+| `--quiet` | `--disableVerbose` | boolean | false | Minimal output (command-dependent) |
 
 ---
 
@@ -1042,10 +1048,12 @@ hana-cli
 
 ---
 
-## Links to Related Documentation
+## See Also
 
-- [Main README](README.md) - Overview and features
-- [Utils Documentation](utils/README.md) - Internal utilities
-- [Routes Documentation](routes/README.md) - HTTP API endpoints
+- [Main README](../../README.md) - Overview and features
+- [Commands Index](/02-commands/) - Full command documentation
+- [All Commands A-Z](/02-commands/all-commands) - Complete command catalog
+- [Utils Documentation](../../utils/README.md) - Internal utilities
+- [Routes Documentation](../../routes/README.md) - HTTP API endpoints
 - [Swagger/OpenAPI](http://localhost:3010/api-docs) - Interactive API docs
-- [Web Applications](app/README.md) - Web UI documentation
+- [Web Applications](../../app/README.md) - Web UI documentation

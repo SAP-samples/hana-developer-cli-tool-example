@@ -1,6 +1,17 @@
 # MCP Troubleshooting
 
-Solutions for common MCP server issues.
+Resolve common issues when using the Model Context Protocol (MCP) server integration with HANA CLI. This guide covers startup problems, connectivity issues, command execution failures, and AI integration challenges.
+
+## Quick Links
+
+- [MCP Server Won't Start](#mcp-server-wont-start)
+- [Can't Connect to Database](#cant-connect-to-database)
+- [Project Context Not Working](#project-context-not-working)
+- [Command Execution Errors](#command-execution-errors)
+- [Permission Denied](#permission-denied)
+- [AI Integration Issues](#ai-assistant-issues)
+- [Performance Issues](#slow-queries)
+- [Debugging](#enable-debug-logging)
 
 ## Connection Issues
 
@@ -13,7 +24,15 @@ Solutions for common MCP server issues.
 1. Verify Node.js is installed: `node --version`
 2. Check dependencies are installed: `npm install`
 3. Rebuild TypeScript: `npm run build`
-4. Check for port conflicts: `lsof -i :3000`
+4. Check for port conflicts:
+
+   ```bash
+   # macOS/Linux
+   lsof -i :3000
+   
+   # Windows (PowerShell)
+   Get-NetTCPConnection -LocalPort 3000
+   ```
 
 ### Can't Connect to Database
 
@@ -24,7 +43,7 @@ Solutions for common MCP server issues.
 1. Verify connection file exists in project: `ls .env` or `ls default-env.json`
 2. Check credentials in connection file are correct
 3. Verify network access to HANA server
-4. Test direct connection: `hana-cli connect -s`
+4. Test direct connection with CLI: `hana-cli status`
 
 ### Project Context Not Working
 
@@ -87,27 +106,29 @@ Solutions for common MCP server issues.
 
 ## AI Assistant Issues
 
-### Claude/AI Can't Call MCP Tools
+### Claude/LLM Integration Issues
 
-**Problem:** AI assistant doesn't see available tools
-
-**Solutions:**
-
-1. Restart Claude Desktop if using it
-2. Verify MCP server is running
-3. Check claude_desktop_config.json configuration
-4. Ensure correct path to MCP executable
-
-### AI Gives Wrong Results
-
-**Problem:** AI assistant returns incorrect data
+**Problem:** AI assistant doesn't see available MCP tools
 
 **Solutions:**
 
-1. Verify schema/table names are correct
-2. Check project path in context is right project
-3. Review data in database directly to confirm
-4. Pass explicit parameters instead of relying on defaults
+1. Restart Claude Desktop or your AI IDE extension
+2. Verify MCP server is running: `npm run dev`
+3. Check your IDE's MCP configuration file (e.g., `claude_desktop_config.json`)
+4. Ensure the correct path to the MCP executable is configured
+5. Verify the MCP server is accessible on the expected port
+
+### AI Returns Incorrect Results
+
+**Problem:** AI assistant generates incorrect schema names, table names, or commands
+
+**Solutions:**
+
+1. Verify schema and table names exist: `hana-cli inspectTable <schema> <table>`
+2. Verify the correct project path is set in the context
+3. Review actual data in the database to confirm expectations
+4. Provide explicit parameters instead of relying on AI inference
+5. Ask the AI tool to verify the database metadata first
 
 ## Debug & Logs
 
@@ -134,14 +155,19 @@ Look for messages starting with:
 
 ## Getting Help
 
-- Review error message carefully for clues
-- Enable debug logging to see what's happening
-- Check [MCP Architecture](./architecture.md) documentation
-- Review [Connection Guide](./connection-guide.md)
-- Open issue on [GitHub](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues)
+1. **Review error messages carefully** - Error output often includes hints about the root cause
+2. **Enable debug logging** - Use `DEBUG=hana-cli:*` to see detailed execution flow
+3. **Check project structure** - Verify configuration files exist and contain valid JSON
+4. **Test CLI separately** - Run `hana-cli status` and `hana-cli systemInfo` independently to isolate MCP issues
+5. **Review related documentation**:
+   - [MCP Integration Guide](../03-features/mcp-integration.md)
+   - [Configuration Guide](../01-getting-started/configuration.md)
+   - [API Server Documentation](../03-features/api-server.md)
 
 ## See Also
 
-- [Server Usage](./server-usage.md)
-- [Connection Guide](./connection-guide.md)
-- [Architecture](./architecture.md)
+- [MCP Integration Overview](../03-features/mcp-integration.md)
+- [Configuration Guide](../01-getting-started/configuration.md)
+- [Installation Guide](../01-getting-started/installation.md)
+- [Main Troubleshooting Guide](./index.md)
+- [GitHub Issues](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues)
