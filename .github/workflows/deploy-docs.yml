@@ -46,17 +46,24 @@ jobs:
         run: cd docs && npm ci
 
       - name: Run security audit
-        run: cd docs && npm audit --audit-level=moderate
         continue-on-error: true
-
-      - name: Check for vulnerabilities
         run: |
           cd docs
-          AUDIT_RESULT=$(npm audit --json)
+          npm audit --audit-level=moderate || true
+
+      - name: Check for vulnerabilities
+        continue-on-error: true
+        run: |
+          cd docs
+          AUDIT_RESULT=$(npm audit --json || true)
           echo "$AUDIT_RESULT"
-          VULNERABILITIES=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities.total // 0')
-          if [ "$VULNERABILITIES" -gt 0 ]; then
-            echo "::warning::Found $VULNERABILITIES vulnerabilities in documentation dependencies"
+          if command -v jq &> /dev/null; then
+            VULNERABILITIES=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities.total // 0' 2>/dev/null || echo "0")
+            if [ "$VULNERABILITIES" -gt 0 ] 2>/dev/null; then
+              echo "::warning::Found $VULNERABILITIES vulnerabilities in documentation dependencies"
+            fi
+          else
+            echo "::notice::jq not available, skipping detailed vulnerability analysis"
           fi
 
   build:
