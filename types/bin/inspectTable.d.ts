@@ -10,7 +10,7 @@ export function tableInspect(prompts: any): Promise<{
 export const command: "inspectTable [schema] [table]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace table {
         let description: string;

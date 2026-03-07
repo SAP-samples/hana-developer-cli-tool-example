@@ -13,7 +13,7 @@ export function listBackups(prompts: object): Promise<any[]>;
 export const command: "backupList [directory]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace directory {
         let description: string;

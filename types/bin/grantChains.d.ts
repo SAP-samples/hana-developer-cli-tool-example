@@ -13,7 +13,8 @@ export function visualizeGrantChains(prompts: object): Promise<void>;
 export const command: "grantChains";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
+export const grantChainsBuilderOptions: any;
 export namespace inputPrompts {
     namespace user {
         let description: string;

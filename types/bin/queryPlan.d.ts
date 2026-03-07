@@ -13,7 +13,7 @@ export function getQueryPlan(prompts: object): Promise<any[]>;
 export const command: "queryPlan";
 export const aliases: any[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace sql {
         let description: string;

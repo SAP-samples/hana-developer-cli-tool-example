@@ -13,7 +13,7 @@ export function dataValidatorMain(prompts: object): Promise<void>;
 export const command: "dataValidator";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace table {
         let description: string;
@@ -74,6 +74,8 @@ export namespace inputPrompts {
         export { type_6 as type };
         let required_6: boolean;
         export { required_6 as required };
+        let _default: number;
+        export { _default as default };
         export function ask_4(): boolean;
         export { ask_4 as ask };
     }
@@ -84,6 +86,8 @@ export namespace inputPrompts {
         export { type_7 as type };
         let required_7: boolean;
         export { required_7 as required };
+        let _default_1: number;
+        export { _default_1 as default };
         export function ask_5(): boolean;
         export { ask_5 as ask };
     }

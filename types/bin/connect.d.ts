@@ -19,4 +19,4 @@ export function saveEnv(options: object): Promise<void>;
 export const command: "connect [user] [password]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;

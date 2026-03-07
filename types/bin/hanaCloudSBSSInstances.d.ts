@@ -6,7 +6,7 @@ export function listInstances(prompts: any): Promise<{
 export const command: "sbss";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace cf {
         export let description: string;

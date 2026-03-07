@@ -13,7 +13,8 @@ export function generateTestDataMain(prompts: object): Promise<void>;
 export const command: "generateTestData";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
+export const generateTestDataBuilderOptions: any;
 export namespace inputPrompts {
     namespace table {
         let description: string;

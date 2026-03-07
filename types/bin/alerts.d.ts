@@ -13,7 +13,7 @@ export function listAlerts(prompts: object): Promise<void>;
 export const command: "alerts";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace limit {
         let description: string;

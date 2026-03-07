@@ -13,7 +13,7 @@ export function analyzeCalcView(prompts: object): Promise<any[]>;
 export const command: "calcViewAnalyzer [schema] [view]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace view {
         let description: string;

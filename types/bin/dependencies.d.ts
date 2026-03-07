@@ -13,7 +13,8 @@ export function dependenciesMain(prompts: object): Promise<void>;
 export const command: "dependencies";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
+export const dependenciesBuilderOptions: any;
 export namespace inputPrompts {
     namespace schema {
         let description: string;

@@ -13,7 +13,7 @@ export function restoreBackup(prompts: object): Promise<object>;
 export const command: "restore [backupFile]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace backupFile {
         let description: string;

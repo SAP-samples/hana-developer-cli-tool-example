@@ -14,7 +14,7 @@ export function getContainersInt(containerGroup: any, container: any, client: an
 export const command: "containers [containerGroup] [container]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace container {
         let description: string;

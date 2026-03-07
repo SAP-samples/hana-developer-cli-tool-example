@@ -13,7 +13,7 @@ export function tableCopyMain(prompts: object): Promise<void>;
 export const command: "tableCopy";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace sourceTable {
         let description: string;
@@ -80,6 +80,8 @@ export namespace inputPrompts {
         export { type_7 as type };
         let required_7: boolean;
         export { required_7 as required };
+        let _default: number;
+        export { _default as default };
         export function ask_3(): boolean;
         export { ask_3 as ask };
     }

@@ -3,4 +3,4 @@ export function hcStop(prompts: any): Promise<void>;
 export const command: "hcStop [name]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;

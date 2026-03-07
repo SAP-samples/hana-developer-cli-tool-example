@@ -13,7 +13,8 @@ export function scanForVulnerabilities(prompts: object): Promise<void>;
 export const command: "securityScan";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
+export const securityScanBuilderOptions: any;
 export namespace inputPrompts {
     namespace category {
         let description: string;

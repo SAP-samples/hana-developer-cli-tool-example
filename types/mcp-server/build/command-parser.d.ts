@@ -10,6 +10,10 @@ export function extractCommandInfo(commandModule: any): {
     name: any;
     aliases: any;
     description: any;
+    category: string;
+    tags: string[];
+    useCases: string[];
+    relatedCommands: string[];
     schema: {
         type: string;
         properties: {};

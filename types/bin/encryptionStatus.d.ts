@@ -13,7 +13,8 @@ export function checkEncryptionStatus(prompts: object): Promise<void>;
 export const command: "encryptionStatus";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
+export const encryptionStatusBuilderOptions: any;
 export namespace inputPrompts {
     namespace scope {
         let description: string;

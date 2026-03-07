@@ -13,7 +13,7 @@ export function manageXSAServices(prompts: object): Promise<void>;
 export const command: "xsaServices [action]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace action {
         let description: string;

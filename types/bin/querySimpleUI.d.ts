@@ -3,4 +3,4 @@ export function dbQuery(prompts: any): Promise<void>;
 export const command: "querySimpleUI";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export const builder: (yargs: any) => any;

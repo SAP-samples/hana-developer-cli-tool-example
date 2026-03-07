@@ -3,4 +3,4 @@ export function iniFiles(prompts: any): Promise<any>;
 export const command: "iniFiles";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;

@@ -8,4 +8,4 @@ export function getViews(prompts: object): Promise<any[]>;
 export const command: "views [schema] [view]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;

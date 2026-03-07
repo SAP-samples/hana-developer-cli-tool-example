@@ -6,4 +6,4 @@ export function getVersionUI(): Promise<{}>;
 export const command: "version";
 export const aliases: "ver";
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;

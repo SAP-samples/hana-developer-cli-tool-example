@@ -13,7 +13,7 @@ export function compareDataMain(prompts: object): Promise<void>;
 export const command: "compareData";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace sourceTable {
         let description: string;
@@ -88,6 +88,8 @@ export namespace inputPrompts {
         export { type_8 as type };
         let required_8: boolean;
         export { required_8 as required };
+        let _default: number;
+        export { _default as default };
         export function ask_3(): boolean;
         export { ask_3 as ask };
     }

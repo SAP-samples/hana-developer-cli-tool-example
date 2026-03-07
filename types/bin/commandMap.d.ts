@@ -43,6 +43,8 @@ export const commandMap: {
     certificates: string;
     certificatesUI: string;
     cds: string;
+    config: string;
+    cfg: string;
     columnStats: string;
     openChangeLog: string;
     changeLog: string;
@@ -135,6 +137,8 @@ export const commandMap: {
     downloadData: string;
     downloaddata: string;
     expensiveStatements: string;
+    examples: string;
+    example: string;
     features: string;
     featuresUI: string;
     featureUsage: string;
@@ -151,7 +155,6 @@ export const commandMap: {
     fulltext: string;
     fulltextIndexes: string;
     generateDocs: string;
-    docs: string;
     gendocs: string;
     generateDocumentation: string;
     generateTestData: string;
@@ -166,6 +169,14 @@ export const commandMap: {
     graphs: string;
     graphWorkspace: string;
     graphws: string;
+    helpDocu: string;
+    openDocu: string;
+    openDocumentation: string;
+    documentation: string;
+    docu: string;
+    viewDocs: string;
+    docs: string;
+    doc: string;
     hanaCloudHDIInstances: string;
     hanaCloudHDIInstancesUI: string;
     hanaCloudInstances: string;
@@ -198,6 +209,10 @@ export const commandMap: {
     inspectUser: string;
     inspectView: string;
     iv: string;
+    interactive: string;
+    i: string;
+    repl: string;
+    shell: string;
     issue: string;
     libraries: string;
     longRunning: string;

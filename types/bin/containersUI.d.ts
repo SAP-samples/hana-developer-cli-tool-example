@@ -3,4 +3,4 @@ export function getContainers(prompts: any): Promise<void>;
 export const command: "containersUI [containerGroup] [container]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export const builder: (yargs: any) => any;

@@ -16,7 +16,7 @@ export function getCacheStats(prompts: object): Promise<{
 export const command: "cacheStats";
 export const aliases: any[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace cacheType {
         let description: string;

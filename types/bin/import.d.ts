@@ -13,7 +13,7 @@ export function importData(prompts: object): Promise<object>;
 export const command: "import";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace filename {
         let description: string;

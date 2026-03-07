@@ -13,7 +13,7 @@ export function checkFragmentation(prompts: object): Promise<void>;
 export const command: "fragmentationCheck";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace schema {
         let description: string;

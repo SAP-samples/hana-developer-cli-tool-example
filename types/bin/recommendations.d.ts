@@ -13,7 +13,7 @@ export function getRecommendations(prompts: object): Promise<void>;
 export const command: "recommendations";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace category {
         let description: string;

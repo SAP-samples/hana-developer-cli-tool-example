@@ -13,7 +13,7 @@ export function compareSchemaMain(prompts: object): Promise<void>;
 export const command: "compareSchema";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace sourceSchema {
         let description: string;

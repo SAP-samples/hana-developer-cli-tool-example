@@ -13,7 +13,7 @@ export function exportData(prompts: object): Promise<void>;
 export const command: "export";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace table {
         let description: string;
@@ -113,24 +113,38 @@ export namespace inputPrompts {
         export function ask_6(): boolean;
         export { ask_6 as ask };
     }
-    namespace timeout {
+    namespace maxRows {
         let description_11: string;
         export { description_11 as description };
         let type_11: string;
         export { type_11 as type };
         let required_11: boolean;
         export { required_11 as required };
+        let _default: number;
+        export { _default as default };
         export function ask_7(): boolean;
         export { ask_7 as ask };
     }
-    namespace profile {
+    namespace timeout {
         let description_12: string;
         export { description_12 as description };
         let type_12: string;
         export { type_12 as type };
         let required_12: boolean;
         export { required_12 as required };
-        export function ask_8(): void;
+        let _default_1: number;
+        export { _default_1 as default };
+        export function ask_8(): boolean;
         export { ask_8 as ask };
+    }
+    namespace profile {
+        let description_13: string;
+        export { description_13 as description };
+        let type_13: string;
+        export { type_13 as type };
+        let required_13: boolean;
+        export { required_13 as required };
+        export function ask_9(): void;
+        export { ask_9 as ask };
     }
 }

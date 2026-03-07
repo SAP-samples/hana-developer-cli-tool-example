@@ -13,7 +13,7 @@ export function getBackupStatus(prompts: object): Promise<object>;
 export const command: "backupStatus";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace catalogOnly {
         let description: string;

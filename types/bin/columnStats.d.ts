@@ -13,7 +13,7 @@ export function getColumnStats(prompts: object): Promise<any[]>;
 export const command: "columnStats [schema] [table]";
 export const aliases: any[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace table {
         let description: string;

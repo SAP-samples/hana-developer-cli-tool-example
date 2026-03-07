@@ -13,7 +13,7 @@ export function getMemoryAnalysis(prompts: object): Promise<any[]>;
 export const command: "memoryAnalysis";
 export const aliases: any[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace component {
         let description: string;

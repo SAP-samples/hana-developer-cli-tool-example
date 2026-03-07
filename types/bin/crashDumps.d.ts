@@ -13,7 +13,7 @@ export function listCrashDumps(prompts: object): Promise<void>;
 export const command: "crashDumps";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     export namespace days {
         let description: string;

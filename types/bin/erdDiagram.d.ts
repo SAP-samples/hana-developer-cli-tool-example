@@ -13,7 +13,8 @@ export function erdDiagramMain(prompts: object): Promise<void>;
 export const command: "erdDiagram";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
+export const erdDiagramBuilderOptions: any;
 export namespace inputPrompts {
     namespace schema {
         let description: string;
@@ -51,15 +52,45 @@ export namespace inputPrompts {
         export function ask_3(): boolean;
         export { ask_3 as ask };
     }
-    namespace profile {
+    namespace showCardinality {
         let description_4: string;
         export { description_4 as description };
         let type_4: string;
         export { type_4 as type };
         let required_4: boolean;
         export { required_4 as required };
-        export function ask_4(): void;
+        export function ask_4(): boolean;
         export { ask_4 as ask };
+    }
+    namespace showColumns {
+        let description_5: string;
+        export { description_5 as description };
+        let type_5: string;
+        export { type_5 as type };
+        let required_5: boolean;
+        export { required_5 as required };
+        export function ask_5(): boolean;
+        export { ask_5 as ask };
+    }
+    namespace excludeColumns {
+        let description_6: string;
+        export { description_6 as description };
+        let type_6: string;
+        export { type_6 as type };
+        let required_6: boolean;
+        export { required_6 as required };
+        export function ask_6(): boolean;
+        export { ask_6 as ask };
+    }
+    namespace profile {
+        let description_7: string;
+        export { description_7 as description };
+        let type_7: string;
+        export { type_7 as type };
+        let required_7: boolean;
+        export { required_7 as required };
+        export function ask_7(): void;
+        export { ask_7 as ask };
     }
 }
 declare namespace _default {

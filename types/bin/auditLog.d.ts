@@ -13,7 +13,8 @@ export function viewAuditLog(prompts: object): Promise<void>;
 export const command: "auditLog";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
+export const auditLogBuilderOptions: any;
 export namespace inputPrompts {
     namespace limit {
         let description: string;

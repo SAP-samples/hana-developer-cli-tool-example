@@ -13,7 +13,8 @@ export function codeTemplateMain(prompts: object): Promise<void>;
 export const command: "codeTemplate";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
+export const codeTemplateBuilderOptions: any;
 export namespace inputPrompts {
     namespace pattern {
         let description: string;

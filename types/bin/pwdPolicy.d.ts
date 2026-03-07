@@ -13,7 +13,8 @@ export function managePasswordPolicies(prompts: object): Promise<void>;
 export const command: "pwdPolicy";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
+export const pwdPolicyBuilderOptions: any;
 export namespace inputPrompts {
     namespace list {
         let description: string;

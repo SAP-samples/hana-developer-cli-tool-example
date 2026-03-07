@@ -13,7 +13,7 @@ export function getFullTextIndexes(prompts: object): Promise<any[]>;
 export const command: "ftIndexes [schema] [index]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace index {
         let description: string;

@@ -13,7 +13,7 @@ export function createBackup(prompts: object): Promise<object>;
 export const command: "backup [target] [name]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace target {
         let description: string;

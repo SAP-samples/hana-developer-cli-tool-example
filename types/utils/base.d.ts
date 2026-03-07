@@ -188,7 +188,7 @@ export const dbClass: typeof dbClassDef;
 export const sqlInjection: typeof sqlInjectionDef;
 export const sqlInjectionUtils: typeof sqlInjectionDef;
 export const colors: import("chalk").ChalkInstance;
-export const debug: any;
+export function debug(...args: any[]): any;
 /** @type string */
 export let hanaBin: string;
 /** @typeof TextBundle - instance of sap/textbundle */

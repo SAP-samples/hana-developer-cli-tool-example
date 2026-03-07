@@ -13,7 +13,7 @@ export function getExpensiveStatements(prompts: object): Promise<any[]>;
 export const command: "expensiveStatements";
 export const aliases: any[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace limit {
         let description: string;

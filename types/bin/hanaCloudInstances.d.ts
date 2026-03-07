@@ -13,4 +13,4 @@ export function listInstances(prompts: object): Promise<void>;
 export const command: "hc [name]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;

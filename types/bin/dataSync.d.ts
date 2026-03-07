@@ -13,7 +13,7 @@ export function dataSyncMain(prompts: object): Promise<void>;
 export const command: "dataSync";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace sourceConnection {
         let description: string;
@@ -72,6 +72,8 @@ export namespace inputPrompts {
         export { type_6 as type };
         let required_6: boolean;
         export { required_6 as required };
+        let _default: number;
+        export { _default as default };
         export function ask_3(): boolean;
         export { ask_3 as ask };
     }

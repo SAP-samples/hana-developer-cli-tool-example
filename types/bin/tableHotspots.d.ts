@@ -14,9 +14,9 @@ export function getTableHotspots(prompts: object): Promise<{
     partitions?: any[];
 }>;
 export const command: "tableHotspots [schema] [table]";
-export const aliases: any[];
+export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace table {
         let description: string;

@@ -13,7 +13,8 @@ export function analyzePrivileges(prompts: object): Promise<void>;
 export const command: "privilegeAnalysis";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
+export const privilegeAnalysisBuilderOptions: any;
 export namespace inputPrompts {
     namespace user {
         let description: string;

@@ -13,7 +13,7 @@ export function viewInspect(prompts: object): Promise<any>;
 export const command: "inspectView [schema] [view]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace view {
         let description: string;

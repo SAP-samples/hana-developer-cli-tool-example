@@ -13,7 +13,7 @@ export function getBlockingSessions(prompts: object): Promise<void>;
 export const command: "blocking";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace limit {
         let description: string;

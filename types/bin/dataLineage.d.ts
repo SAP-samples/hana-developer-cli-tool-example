@@ -13,7 +13,7 @@ export function dataLineageMain(prompts: object): Promise<void>;
 export const command: "dataLineage";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace table {
         let description: string;
@@ -47,17 +47,19 @@ export namespace inputPrompts {
         export function ask_1(): boolean;
         export { ask_1 as ask };
     }
-    namespace output {
+    namespace includeTransformations {
         let description_4: string;
         export { description_4 as description };
         let type_4: string;
         export { type_4 as type };
         let required_4: boolean;
         export { required_4 as required };
+        let _default: boolean;
+        export { _default as default };
         export function ask_2(): boolean;
         export { ask_2 as ask };
     }
-    namespace format {
+    namespace output {
         let description_5: string;
         export { description_5 as description };
         let type_5: string;
@@ -67,7 +69,7 @@ export namespace inputPrompts {
         export function ask_3(): boolean;
         export { ask_3 as ask };
     }
-    namespace timeout {
+    namespace format {
         let description_6: string;
         export { description_6 as description };
         let type_6: string;
@@ -77,14 +79,26 @@ export namespace inputPrompts {
         export function ask_4(): boolean;
         export { ask_4 as ask };
     }
-    namespace profile {
+    namespace timeout {
         let description_7: string;
         export { description_7 as description };
         let type_7: string;
         export { type_7 as type };
         let required_7: boolean;
         export { required_7 as required };
-        export function ask_5(): void;
+        let _default_1: number;
+        export { _default_1 as default };
+        export function ask_5(): boolean;
         export { ask_5 as ask };
+    }
+    namespace profile {
+        let description_8: string;
+        export { description_8 as description };
+        let type_8: string;
+        export { type_8 as type };
+        let required_8: boolean;
+        export { required_8 as required };
+        export function ask_6(): void;
+        export { ask_6 as ask };
     }
 }

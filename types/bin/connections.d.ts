@@ -13,7 +13,7 @@ export function getConnectionDetails(prompts: object): Promise<void>;
 export const command: "connections";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace limit {
         let description: string;

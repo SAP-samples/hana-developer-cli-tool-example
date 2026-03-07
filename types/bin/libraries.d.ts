@@ -13,4 +13,4 @@ export function getLibraries(prompts: object): Promise<any[]>;
 export const command: "libraries [schema] [library]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;

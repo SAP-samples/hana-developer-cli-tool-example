@@ -13,7 +13,7 @@ export function replicationStatusMain(prompts: object): Promise<void>;
 export const command: "replicationStatus";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace type {
         export let description: string;

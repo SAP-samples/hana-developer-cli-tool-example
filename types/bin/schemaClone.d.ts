@@ -13,7 +13,7 @@ export function schemaCloneMain(prompts: object): Promise<void>;
 export const command: "schemaClone";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace sourceSchema {
         let description: string;
@@ -37,16 +37,6 @@ export namespace inputPrompts {
         export { required_2 as required };
         export function ask(): boolean;
     }
-    namespace profile {
-        let description_3: string;
-        export { description_3 as description };
-        let type_3: string;
-        export { type_3 as type };
-        let required_3: boolean;
-        export { required_3 as required };
-        export function ask_1(): void;
-        export { ask_1 as ask };
-    }
     namespace timeout {
         let description_3: string;
         export { description_3 as description };
@@ -54,10 +44,12 @@ export namespace inputPrompts {
         export { type_3 as type };
         let required_3: boolean;
         export { required_3 as required };
+        let _default: number;
+        export { _default as default };
         export function ask_1(): boolean;
         export { ask_1 as ask };
     }
-    namespace dryRun {
+    namespace profile {
         let description_4: string;
         export { description_4 as description };
         let type_4: string;
@@ -67,7 +59,7 @@ export namespace inputPrompts {
         export function ask_2(): void;
         export { ask_2 as ask };
     }
-}
+    namespace dryRun {
         let description_5: string;
         export { description_5 as description };
         let type_5: string;
@@ -76,3 +68,5 @@ export namespace inputPrompts {
         export { required_5 as required };
         export function ask_3(): boolean;
         export { ask_3 as ask };
+    }
+}
