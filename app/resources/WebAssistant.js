@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+ 
 'use strict';
 sap.ui.require([ ], () => {
     const head = document.getElementsByTagName('head')[0]

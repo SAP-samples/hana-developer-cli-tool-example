@@ -29,6 +29,8 @@
     "coverage:check": "nyc check-coverage --lines 80 --functions 80 --branches 80",
     "changelog": "node CHANGELOG",
     "types": "tsc  --declaration --allowJs --emitDeclarationOnly --outDir types --skipLibCheck",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "postinstall": "node scripts/postinstall.js",
     "build:docs-index": "node scripts/build-docs-index.js",
     "validate:i18n": "node scripts/validate-i18n.js",

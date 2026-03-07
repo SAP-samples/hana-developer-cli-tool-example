@@ -1,5 +1,4 @@
 /*eslint no-console: 0 */
-/*eslint-env node, es6 */
 // @ts-check
 
 import * as btp from "./utils/btp.js"

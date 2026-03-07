@@ -1,4 +1,3 @@
-/*eslint-env node, es6 */
 // @ts-check
 
 import * as base from './base.js'

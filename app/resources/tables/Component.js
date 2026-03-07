@@ -1,5 +1,4 @@
-/* eslint-disable no-undef */
-/*eslint-env es6 */
+ 
 sap.ui.define([
     "sap/hanacli/common/Component",
     "sap/base/util/UriParameters"
