@@ -36,7 +36,7 @@ npm run build
 
 This generates:
 
-- `build/index.js` - Main MCP server entry point
+- `build/index.js` - Main MCP Server entry point
 - `build/src/` - All TypeScript source files compiled to JavaScript
 
 All dependencies are installed automatically via the `prepare` script.
@@ -56,7 +56,7 @@ ls -la build/
 
 ## Database Connection Setup
 
-The MCP server requires a valid SAP HANA database connection. Choose one of these methods:
+The MCP Server requires a valid SAP HANA database connection. Choose one of these methods:
 
 ### Method 1: SAP BTP Service Key (Recommended)
 

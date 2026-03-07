@@ -1,12 +1,12 @@
 # MCP Server Features Overview
 
-Complete documentation of all features available in the SAP HANA CLI MCP Server.
+Complete documentation of all features available in the HANA CLI MCP Server.
 
 ## Core Features
 
 ### 1. Commands (150+ Tools)
 
-All SAP HANA CLI commands are exposed as standardized MCP tools with the `hana_` prefix.
+All HANA CLI commands are exposed as standardized MCP tools with the `hana_` prefix.
 
 **Command Categories:**
 

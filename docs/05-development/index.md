@@ -14,10 +14,10 @@ Technical documentation for developers and contributors.
 
 The Model Context Protocol implementation for AI integration.
 
-- [MCP Server README](./mcp-server/index)
-- [Phase 1: Implementation](./mcp-server/implementation-phases)
-- [Phase 2: Implementation](./mcp-server/implementation-phases)
-- [Phase 3: Implementation](./mcp-server/implementation-phases)
+- [MCP Server Overview](./mcp-server/index.md)
+- [Phase 1: Implementation](./mcp-server/implementation-phases.md#phase-1-core-features-discovery--examples)
+- [Phase 2: Implementation](./mcp-server/implementation-phases.md#phase-2-discovery--guidance)
+- [Phase 3: Implementation](./mcp-server/implementation-phases.md#phase-3-advanced-features--automation)
 - [Troubleshooting](./mcp-server/troubleshooting.md)
 
 ## Contributing

@@ -79,7 +79,7 @@ The `utils/` folder contains reusable utility modules that provide core function
 
 **Environment Variables Supported:**
 
-- `HANA_CLI_PROJECT_PATH` - Project directory for MCP server context
+- `HANA_CLI_PROJECT_PATH` - Project directory for MCP Server context
 - `HANA_CLI_CONN_FILE` - Connection file name
 - `HANA_CLI_HOST` - Direct database host
 - `HANA_CLI_PORT` - Direct database port (default: 30013)

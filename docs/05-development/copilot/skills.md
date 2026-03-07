@@ -15,7 +15,7 @@ Skills package workflow instructions and references for recurring task categorie
   - Supports creating/updating CLI commands, routes, utilities, tests, and i18n-aligned text.
 
 - **mcp-server-workflows**
-  - Supports MCP server tools, JSON-RPC handlers, and tool registration workflows.
+  - Supports MCP Server tools, JSON-RPC handlers, and tool registration workflows.
 
 ## When to use skills
 

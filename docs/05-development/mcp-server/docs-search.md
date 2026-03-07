@@ -1,10 +1,10 @@
 # Documentation Search Integration
 
-Access all 279 project documentation pages with full-text search capabilities built directly into the MCP server.
+Access all 279 project documentation pages with full-text search capabilities built directly into the MCP Server.
 
 ## Overview
 
-The MCP server includes a comprehensive documentation index of all project documentation, enabling AI agents to search and retrieve relevant guides, tutorials, and references without leaving the MCP interface.
+The MCP Server includes a comprehensive documentation index of all project documentation, enabling AI agents to search and retrieve relevant guides, tutorials, and references without leaving the MCP interface.
 
 ### Key Features
 
@@ -426,7 +426,7 @@ If you add or update documentation:
 # Rebuild the index
 npm run build:docs-index
 
-# Rebuild MCP server
+# Rebuild MCP Server
 cd mcp-server
 npm run build
 

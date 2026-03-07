@@ -21,7 +21,7 @@ Agents provide domain-specific behavior for multi-file tasks with consistent con
   - Emphasizes cross-platform compatibility and CI/CD safety.
 
 - **MCP Agent** (`.github/agents/mcp.agent.md`)
-  - Use for MCP server code in `mcp-server/src/**`.
+  - Use for MCP Server code in `mcp-server/src/**`.
   - Ensures JSON-RPC compliance and tool registration patterns.
 
 ## Usage tips

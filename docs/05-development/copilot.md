@@ -45,7 +45,7 @@ Use agents when the task spans multiple files in a domain or needs consistent de
 - **DocOps Agent**: Documentation and VitePress changes
 - **CLI Agent**: CLI commands, routes, utilities, tests, i18n
 - **Tooling Agent**: configs, scripts, workflows
-- **MCP Agent**: MCP server implementation
+- **MCP Agent**: MCP Server implementation
 
 See agent details: [Agents](./copilot/agents.md)
 
@@ -55,7 +55,7 @@ Skills bundle repeatable workflows with supporting references:
 
 - **docs-automation**: command docs generation and sidebar updates
 - **cli-command-development**: CLI command and route workflows
-- **mcp-server-workflows**: MCP server updates and tool registration
+- **mcp-server-workflows**: MCP Server updates and tool registration
 
 See skill details: [Skills](./copilot/skills.md)
 

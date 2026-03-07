@@ -488,7 +488,7 @@ Common issues and solutions for the MCP Server.
 
 ### MCP Server Not Starting
 
-**Symptom:** Claude Dev can't connect to MCP server or "Connection refused"
+**Symptom:** Claude Dev can't connect to MCP Server or "Connection refused"
 
 **Causes:**
 
@@ -634,7 +634,7 @@ hana-cli <command>
    - SAP BTP community
 
 3. **Documentation**
-   - [Getting Started Guide](../01-getting-started/)
+   - [Getting Started Guide](../../01-getting-started/)
    - [Features Overview](./features.md)
    - [All Documentation](./docs-search.md)
 
@@ -646,7 +646,7 @@ When reporting issues, include:
 - [ ] Command that failed
 - [ ] Debug output (`--debug` flag)
 - [ ] Operating system and Node.js version
-- [ ] MCP server version
+- [ ] MCP Server version
 - [ ] Connection details (host, port, schema)
 - [ ] Database version
 - [ ] Steps to reproduce

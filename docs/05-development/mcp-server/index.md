@@ -4,7 +4,7 @@ The Model Context Protocol (MCP) Server implementation for HANA CLI provides AI 
 
 ## What is MCP Server?
 
-The MCP Server exposes all SAP HANA CLI commands as tools that can be used by AI assistants like Claude, enabling:
+The MCP Server exposes all HANA CLI commands as tools that can be used by AI assistants like Claude, enabling:
 
 - **AI-assisted database queries** - Natural language interface to database operations
 - **Automated schema analysis** - Intelligent exploration and analysis workflows
@@ -14,7 +14,7 @@ The MCP Server exposes all SAP HANA CLI commands as tools that can be used by AI
 
 ## Key Features
 
-- **150+ Tools** - All hana-cli commands accessible via standardized MCP interface
+- **150+ Tools** - All `hana-cli` commands accessible via standardized MCP interface
 - **📚 Resources** - Browsable documentation and metadata resources
 - **🎬 Prompts** - Guided conversation workflows for common tasks
 - **🔍 Discovery Tools** - Intent-based recommendations and smart search
@@ -135,7 +135,7 @@ MCP Server
 
 ### 1. Tools (Commands)
 
-All hana-cli commands are exposed as MCP tools with the `hana_` prefix:
+All `hana-cli` commands are exposed as MCP tools with the `hana_` prefix:
 
 - `hana_status` - Connection and user information
 - `hana_tables` - List database tables
@@ -156,7 +156,7 @@ AI agents can browse documentation:
 - `hana://docs/overview` - Project overview
 - `hana://docs/commands/import` - Command-specific guides
 - `hana://docs/categories/data-quality` - Category guides
-- And 274 more...
+- And 276 more...
 
 ### 4. Prompts
 

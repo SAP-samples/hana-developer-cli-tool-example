@@ -69,7 +69,7 @@ Pre-built sequences of commands that work together to accomplish a goal.
 
 ### Built-In Workflows
 
-The MCP server includes 20+ professional workflows:
+The MCP Server includes 20+ professional workflows:
 
 #### 1. Data Validation Workflows
 

@@ -539,7 +539,7 @@ TypeScript Source → npm run build → JavaScript Output
 
 ### Load Time
 
-- MCP server startup: <1 second
+- MCP Server startup: <1 second
 - Documentation index load: <500ms
 - Command recommendations: <100ms
 - Search ranking: <50ms per query

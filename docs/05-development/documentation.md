@@ -1,10 +1,10 @@
 # Documentation Structure
 
-This folder contains the complete documentation for SAP HANA Developer CLI, structured and built with VitePress.
+This page explains how documentation is organized and maintained for SAP HANA Developer CLI using VitePress.
 
 ## Quick Start
 
-### Build & Serve Locally
+### Build and serve locally
 
 ```bash
 cd docs
@@ -14,294 +14,178 @@ npm install
 
 # Start development server
 npm run docs:dev
-# Visit http://localhost:5173
 
-# Or build for production
+# Build static site
 npm run docs:build
 
-# Serve built docs
+# Preview locally
 npm run docs:serve
 ```
 
+Development server default URL: <http://localhost:5173>
+
 ## Folder Structure
 
-```bash
+Current high-level structure:
+
+```text
 docs/
-├── .vitepress/
-│   ├── config.ts              # VitePress configuration
-│   └── theme/
-│       ├── index.ts           # Theme customization
-│       └── style.css          # Custom styles
-│
-├── 01-getting-started/        # Getting Started Section
-│   ├── index.md               # Overview
-│   ├── installation.md        # Installation guide
-│   ├── quick-start.md         # Quick start tutorial
-│   ├── configuration.md       # Configuration guide
-│   └── environments.md        # Supported environments
-│
-├── 02-commands/               # Commands Reference
-│   ├── index.md               # Commands overview
-│   ├── analysis-tools/        # Data analysis commands
-│   ├── data-tools/            # Data manipulation commands
-│   ├── schema-tools/          # Schema operations
-│   └── system-tools/          # System administration
-│
-├── 03-features/               # Features & Guides
-│   ├── index.md               # Features overview
-│   ├── cli-features.md        # CLI capabilities
-│   ├── api-server.md          # REST API server
-│   ├── mcp-integration.md     # AI integration
-│   ├── output-formats.md      # Output formats
-│   ├── internationalization.md# Multi-language support
-│   └── knowledge-base.md      # Built-in help
-│
-├── 04-api-reference/          # API Documentation
-│   ├── index.md               # API overview
-│   ├── swagger.md             # Swagger/OpenAPI docs
-│   ├── http-routes.md         # REST HTTP routes
-│   ├── command-flows.md       # Command flow diagrams
-│   └── swagger-implementation.md
-│
-├── index.md                   # Home/landing page
-├── faq.md                     # Frequently asked questions
-├── troubleshooting.md         # Troubleshooting guide
-├── package.json               # npm configuration
-└── README.md                  # This file
+├── .vitepress/               # VitePress configuration and theme
+├── 01-getting-started/       # Onboarding, installation, configuration
+├── 02-commands/              # Command reference, grouped by category
+├── 03-features/              # Feature guides (API server, MCP, output formats, etc.)
+├── 04-api-reference/         # API and route documentation
+├── 05-development/           # Contributor and implementation docs
+├── 99-reference/             # FAQ, changelog, reference material
+├── troubleshooting/          # Troubleshooting index and topic pages
+├── developer-notes/          # Internal-oriented technical notes
+├── index.md                  # Documentation landing page
+└── package.json              # Docs-specific scripts and dependencies
 ```
 
 ## Configuration
 
-### config.ts
+### `.vitepress/config.ts`
 
-Main VitePress configuration with:
+The VitePress config currently includes:
 
-- Site title and metadata
-- Navigation sidebar structure
-- Theme colors (SAP HANA blue)
-- Search configuration
-- GitHub integration
+- Site metadata (`title`, `description`, `lang`)
+- Navigation and sidebar definitions
+- Local search (`provider: 'local'`)
+- Edit links targeting branch `Feb2026`
+- Mermaid integration through `vitepress-plugin-mermaid`
+- `cleanUrls: true` and `lastUpdated` support
 
-### theme/
+### `.vitepress/theme/`
 
-Custom styling to match SAP HANA branding.
+Theme customizations and styles are defined in the theme directory.
 
 ## Navigation Structure
 
-The sidebar navigation is intelligently organized:
+Top-level navigation currently links to:
 
-1. **Getting Started** - For new users
-2. **Commands** - Organized by category
-3. **Features** - Advanced capabilities
-4. **API Reference** - For developers
+1. Home
+2. Getting Started
+3. Commands
+4. Features
+5. API Reference
+6. Development
+7. References (includes Troubleshooting)
 
-Each section has clear hierarchies and cross-links.
+Command documentation under `02-commands/` is grouped into multiple categories (for example: Analysis Tools, Data Tools, Schema Tools, System Tools, Security, and others).
 
-## Building & Deploying
+## Build and Deployment Notes
 
-### Local Development
+### Local development
+
+Use:
 
 ```bash
 npm run docs:dev
 ```
 
-Open <http://localhost:5173> to view.
+### Production build
 
-### Production Build
+Use:
 
 ```bash
 npm run docs:build
 ```
 
-Generates static site in `dist/` folder.
+With the current setup, static files are generated in `.vitepress/dist/`.
 
-### Deploy to GitHub Pages
+### GitHub Pages deployment (manual example)
+
+If deploying via subtree, push the built output folder:
 
 ```bash
-# After building
 npm run docs:build
-
-# Push dist folder to gh-pages branch
-git add dist
+git add docs/.vitepress/dist
 git commit -m "docs: build for deployment"
-git subtree push --prefix docs/dist origin gh-pages
+git subtree push --prefix docs/.vitepress/dist origin gh-pages
 ```
+
+:::warning
+If your deployment workflow uses a different output path or GitHub Actions workflow, align the path with that workflow instead of this manual example.
+:::
 
 ## Content Guidelines
 
-When adding documentation:
+When updating docs:
 
-1. **Use clear headings** - Start with `#`
-2. **Add examples** - All guides should have examples
-3. **Link related docs** - Use `[Link](./path.md)` for cross-references
-4. **Format code blocks** - Include language: ` ```bash`, ` ```json`, etc.
-5. **Use tables** - Organize options/parameters in tables
-6. **Add warnings** - Use `:::warning` for important notes
-7. **Include See Also sections** - Link to related topics
+1. Use one `#` heading per page
+2. Keep heading levels sequential (`##`, then `###`)
+3. Use language-tagged code blocks (`bash`, `json`, `text`, etc.)
+4. Prefer internal links that match existing docs routes
+5. Include practical examples for workflows
+6. Add `## See Also` links where helpful
 
-### Example Template
+## VitePress Markdown Features
 
-```markdown
-# Command Name
-
-> [!NOTE]
-> Introductory sentence with purpose.
-
-## Quick Start
-
-Include basic usage example.
-
-## Options
-
-| Option | Type | Description |
-| ------ | ---- | ----------- |
-
-## Examples
-
-Provide real-world examples.
-
-## See Also
-
-- [Related Topic](./path.md)
-```
-
-## Styling Features
-
-VitePress supports:
-
-### Info Box
+### Admonitions
 
 ```markdown
 :::info
-This is informational content.
+Informational note.
 :::
-```
 
-### Warning Box
-
-```markdown
 :::warning
-This is important!
+Important caveat.
 :::
-```
 
-### Danger Box
-
-```markdown
 :::danger
-This could be destructive.
+Potentially destructive action.
 :::
 ```
 
-### Details/Expandable
+### Expandable details
 
 ```markdown
 <details>
 <summary>Click to expand</summary>
 
-Hidden content here.
+Additional content.
 
 </details>
 ```
-
-## Search
-
-Full-text search is enabled in the documentation:
-
-- Uses local search provider
-- No external dependencies
-- Indexes all content
-- Fast and responsive
-
-## Git Integration
-
-The config includes:
-
-- Edit on GitHub links
-- View on GitHub links
-- Automatic branch detection (Feb2026)
-
-## SEO & Metadata
-
-Built-in SEO features:
-
-- Proper OpenGraph metadata
-- Semantic HTML
-- Clean URLs (cleanUrls: true)
-- Sitemap generation
-
-## Customization
-
-To customize further:
-
-1. **Colors** - Edit `:root` in `theme/style.css`
-2. **Logo** - Add `public/logo.png`
-3. **Fonts** - Modify `theme/style.css`
-4. **Layout** - Extend `theme/index.ts`
-
-## FAQ About VitePress
-
-**Q: Why VitePress?**
-A: Fast, lightweight, Vue-powered, perfect for technical documentation.
-
-**Q: How do I update?**
-A: `npm install vitepress@latest` then rebuild.
-
-**Q: Can I add custom components?**
-A: Yes, in `.vitepress/theme/` add Vue components.
-
-**Q: Mobile support?**
-A: Yes, fully responsive by default.
 
 ## Troubleshooting
 
 ### Build fails
 
-```bash
-rm -rf node_modules dist
-npm install
-npm run docs:build
-```
+- Reinstall dependencies in `docs/`
+- Re-run `npm run docs:build`
+- Review build output for broken links or Markdown issues
 
-### Search not working
+### Search expectations
 
-- Rebuild with `npm run docs:build`
-- Search only works in built version, not dev mode
+- Search is configured with the local provider in VitePress config
+- Rebuild if newly added pages are not appearing as expected
 
-### Style issues
+### Styling issues
 
-- Check `theme/style.css`
-- Clear browser cache
-- Run `npm run docs:build` to test production
+- Check `.vitepress/theme/style.css`
+- Hard refresh the browser cache
+- Verify behavior using the production build output
 
 ## Resources
 
 - [VitePress Documentation](https://vitepress.dev/)
-- [Vue 3 Guide](https://vuejs.org/)
-- [Markdown Extensions](https://vitepress.dev/guide/markdown)
+- [VitePress Markdown Guide](https://vitepress.dev/guide/markdown)
+- [Vue 3 Documentation](https://vuejs.org/)
 
 ## Maintenance
 
-The documentation typically needs updates when:
+Update documentation when:
 
-- New commands are added
-- Command syntax changes
-- Bug fixes or improvements
-- New features are released
+- Commands or options change
+- New features are introduced
+- API behavior changes
+- Navigation or section taxonomy is updated
 
-Update frequency: As needed per release cycle.
+## See Also
 
-## Contributing
-
-To contribute documentation:
-
-1. Edit markdown files
-2. Test locally: `npm run docs:dev`
-3. Submit pull request
-4. Review and merge
-
----
-
-**Last Updated:** February 2026
-**Version:** 1.0.0
-**Next:** Deploy to production
+- [Development Guide](./index.md)
+- [Documentation Home](../index.md)
+- [Commands Overview](../02-commands/index.md)
+- [Troubleshooting](../troubleshooting/index.md)

@@ -15,9 +15,9 @@ The MCP Server exposes HANA CLI functionality to AI coding assistants like Claud
 
 Complete technical documentation is available in the project:
 
-- **Main README:** [mcp-server/README.md](../../../mcp-server/README.md)
-- **Troubleshooting Guide:** [mcp-server/TROUBLESHOOTING.md](../../../mcp-server/TROUBLESHOOTING.md)
-- **Complete Overview:** See [mcp-server/](../../../mcp-server/) directory
+- **Main Overview:** [MCP Server Development Index](./index.md)
+- **Troubleshooting Guide:** [MCP Server Troubleshooting](./troubleshooting.md)
+- **Complete Overview:** See the [MCP Server docs section](./index.md)
 
 ## Quick Start
 
@@ -74,7 +74,7 @@ In your IDE (VS Code with Claude Extension):
 
 ### Phase 1: Core Implementation
 
-Basic MCP server setup with fundamental tools and resources.
+Basic MCP Server setup with fundamental tools and resources.
 
 ### Phase 2: Enhancement
 
@@ -88,7 +88,7 @@ Full IDE integration, optimization, production readiness.
 
 For common issues and solutions, see:
 
-- [MCP Server Troubleshooting Guide](../../../mcp-server/TROUBLESHOOTING.md)
+- [MCP Server Troubleshooting Guide](./troubleshooting.md)
 
 Common issues:
 
@@ -140,8 +140,8 @@ Interested in improving MCP Server? See:
 
 ## Support
 
-- [MCP Server README](../../../mcp-server/README.md) - Complete documentation
-- [Troubleshooting](../../../mcp-server/TROUBLESHOOTING.md) - Problem solving
+- [MCP Server Documentation](./index.md) - Complete documentation
+- [Troubleshooting](./troubleshooting.md) - Problem solving
 - [GitHub Issues](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues) - Report bugs
 
 ## See Also

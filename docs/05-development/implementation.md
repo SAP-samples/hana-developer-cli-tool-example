@@ -57,11 +57,11 @@ Details: [INTERNATIONALIZATION_UPDATES.md](../../03-features/internationalizatio
 
 AI-first integration enabling natural language commands.
 
-Details: [MCP_SERVER_IMPLEMENTATION_COMPLETE.md](../../03-features/mcp/index.md)
+Details: [MCP_SERVER_IMPLEMENTATION_COMPLETE.md](../../03-features/mcp/server-implementation-complete.md)
 
 **Architecture:**
 
-- Standalone Node.js MCP server
+- Standalone Node.js MCP Server
 - Exposes HANA CLI tools
 - Provides database introspection
 - Enables Claude/AI integration
@@ -107,7 +107,7 @@ Details: [KNOWLEDGE_BASE_INTEGRATION_SUMMARY.md](../../03-features/knowledge-bas
 
 Advanced import capabilities.
 
-Details: [IMPORT_ENHANCEMENTS_SUMMARY.md](../../03-features/import.md)
+Details: [Import Command Documentation](../../02-commands/data-tools/import.md)
 
 **Enhancements:**
 

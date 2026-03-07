@@ -4,7 +4,7 @@ Extended documentation for complex commands with examples and edge cases.
 
 ## Import Command Deep Dive
 
-For complete documentation, see: [docs/IMPORT_COMMAND.md](../../02-commands/data-tools/import.md)
+For complete documentation, see: [Import Command Guide](../../02-commands/data-tools/import.md)
 
 **Topics Covered:**
 
@@ -25,7 +25,7 @@ For complete documentation, see: [docs/IMPORT_COMMAND.md](../../02-commands/data
 
 ## Export Command Deep Dive
 
-For complete documentation, see: [docs/EXPORT_COMMAND.md](../../02-commands/data-tools/export.md)
+For complete documentation, see: [Export Command Guide](../../02-commands/data-tools/export.md)
 
 **Topics Covered:**
 
@@ -45,7 +45,7 @@ For complete documentation, see: [docs/EXPORT_COMMAND.md](../../02-commands/data
 
 ## Compare Schema Deep Dive
 
-For complete documentation, see: [docs/COMPARE_SCHEMA_COMMAND.md](../../02-commands/data-tools/compareSchema.md)
+For complete documentation, see: [Compare Schema Guide](../../02-commands/schema-tools/compare-schema.md)
 
 **Topics Covered:**
 
@@ -65,7 +65,7 @@ For complete documentation, see: [docs/COMPARE_SCHEMA_COMMAND.md](../../02-comma
 
 ## Data Profile Deep Dive
 
-For complete documentation, see: [docs/DATA_PROFILE_COMMAND.md](../../02-commands/analysis-tools/dataProfile.md)
+For complete documentation, see: [Data Profile Guide](../../02-commands/analysis-tools/data-profile.md)
 
 **Topics Covered:**
 
@@ -145,4 +145,4 @@ hana-cli duplicateDetection -s SCHEMA -t TABLE -c ID
 See Also:
 
 - [Command Index](../../02-commands/)
-- [Troubleshooting](../../troubleshooting.md)
+- [Troubleshooting](../../troubleshooting/)

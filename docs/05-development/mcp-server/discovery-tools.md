@@ -70,7 +70,7 @@ The recommendation system matches your intent to commands using:
 
 ## Smart Search (`hana_smart_search`)
 
-Comprehensive search across all resources in the MCP server.
+Comprehensive search across all resources in the MCP Server.
 
 ### Search Scope
 
@@ -184,7 +184,7 @@ Results are sorted by total relevance score.
 
 ## Quick Start Guide (`hana_quickstart`)
 
-Perfect for users new to HANA CLI and the MCP server.
+Perfect for users new to HANA CLI and the MCP Server.
 
 ### The 6 Essential Commands
 

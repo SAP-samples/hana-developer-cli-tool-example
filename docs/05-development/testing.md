@@ -365,4 +365,4 @@ See Also:
 
 - [Development Guide](./index.md)
 - [Architecture](./architecture/)
-- [Troubleshooting](../../troubleshooting.md)
+- [Troubleshooting](../../troubleshooting/)
