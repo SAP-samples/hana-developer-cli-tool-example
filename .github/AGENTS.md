@@ -24,6 +24,11 @@ This repository provides specialized Copilot agents to keep changes consistent w
   - Use for version bumps, release preparation, and maintenance version changes.
   - Handles package.json versions, SAPUI5 updates, changelog management, and documentation synchronization.
 
+- **E2E Test Agent** (`.github/agents/e2e-test-agent/e2e-test-agent.agent.md`)
+  - Use for creating, running, and validating interactive end-to-end tests for CLI commands.
+  - Specializes in multi-step workflow testing, prompt validation, output verification, and test fixtures.
+  - Perfect for writing comprehensive tests that span multiple commands or complex workflows.
+
 ## Usage tips
 
 - Pick the most specific agent for the task.
