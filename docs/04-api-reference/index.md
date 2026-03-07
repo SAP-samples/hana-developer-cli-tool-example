@@ -19,6 +19,13 @@ HANA CLI can run as an HTTP server, exposing all commands through REST endpoints
 ## Starting the API Server
 
 ```bash
+hana-cli UI
+```
+
+You can also use aliases:
+
+```bash
+hana-cli ui
 hana-cli server
 ```
 
@@ -34,7 +41,7 @@ http://localhost:3010/api-docs
 
 ```bash
 # Start the server
-hana-cli server
+hana-cli UI
 
 # In another terminal, get current configuration
 curl http://localhost:3010/
@@ -54,10 +61,10 @@ Customize the server with command-line options:
 
 ```bash
 # Custom port
-hana-cli server --port 8080
+hana-cli UI --port 8080
 
 # Custom host
-hana-cli server --host 0.0.0.0 --port 8080
+hana-cli UI --host 0.0.0.0 --port 8080
 ```
 
 See [Swagger documentation](./swagger.md) for API details.
