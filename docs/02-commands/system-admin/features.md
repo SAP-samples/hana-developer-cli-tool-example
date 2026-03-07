@@ -1,12 +1,12 @@
 # features
 
 > Command: `features`  
-> Category: **System Tools**  
+> Category: **System Admin**  
 > Status: Production Ready
 
 ## Description
 
-SAP HANA Features and Version
+Display all available SAP HANA features and their version information from the `M_FEATURES` system view. This command provides details about installed features, components, and their status.
 
 ## Syntax
 
@@ -19,23 +19,47 @@ hana-cli features [options]
 - `fe`
 - `Features`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    Start([hana-cli features]) --> Connect[Connect to Database]
+    Connect --> Query[Query M_FEATURES<br/>System View]
+    
+    Query --> Results[Retrieve Feature List<br/>with Version Info]
+    Results --> Display[Display Features Table]
+    
+    Display --> Complete([Command Complete])
+    
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+```
+
 ## Parameters
 
-For a complete list of parameters and options, use:
+### Connection Parameters
 
-```bash
-hana-cli features --help
-```
+| Option    | Alias | Type    | Default | Description                                          |
+|-----------|-------|---------|---------|------------------------------------------------------|
+| `--admin` | `-a`  | boolean | `false` | Connect via admin (default-env-admin.json)           |
+| `--conn`  | -     | string  | -       | Connection filename to override default-env.json     |
+
+### Troubleshooting
+
+| Option              | Alias     | Type    | Default | Description                                                                                              |
+|---------------------|-----------|---------|---------|----------------------------------------------------------------------------------------------------------|
+| `--disableVerbose`  | `--quiet` | boolean | `false` | Disable verbose output - removes all extra output that is only helpful to human readable interface       |
+| `--debug`           | `-d`      | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details                                   |
 
 ## Examples
 
-### Basic Usage
+### List All Features
 
 ```bash
-hana-cli hana-cli features
+hana-cli features
 ```
 
-Execute the command
+Display all installed SAP HANA features and their version information.
 
 ---
 

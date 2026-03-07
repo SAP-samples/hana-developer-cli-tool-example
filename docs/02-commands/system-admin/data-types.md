@@ -1,12 +1,12 @@
 # dataTypes
 
 > Command: `dataTypes`  
-> Category: **System Tools**  
+> Category: **System Admin**  
 > Status: Production Ready
 
 ## Description
 
-Execute dataTypes command
+Display all available data types in SAP HANA from the `DATA_TYPES` system view. This command shows type names, column sizes, and creation parameters for each supported data type, useful for schema design and column type selection.
 
 ## Syntax
 
@@ -21,23 +21,47 @@ hana-cli dataTypes [options]
 - `dataType`
 - `datatype`
 
+## Command Diagram
+
+```mermaid
+graph TD
+    Start([hana-cli dataTypes]) --> Connect[Connect to Database]
+    Connect --> Query[Query DATA_TYPES<br/>System View]
+    
+    Query --> Extract[Extract Type Name,<br/>Column Size, Create Params]
+    Extract --> Display[Display Data Types Table]
+    
+    Display --> Complete([Command Complete])
+    
+    style Start fill:#0092d1
+    style Complete fill:#2ecc71
+```
+
 ## Parameters
 
-For a complete list of parameters and options, use:
+### Connection Parameters
 
-```bash
-hana-cli dataTypes --help
-```
+| Option    | Alias | Type    | Default | Description                                          |
+|-----------|-------|---------|---------|------------------------------------------------------|
+| `--admin` | `-a`  | boolean | `false` | Connect via admin (default-env-admin.json)           |
+| `--conn`  | -     | string  | -       | Connection filename to override default-env.json     |
+
+### Troubleshooting
+
+| Option              | Alias     | Type    | Default | Description                                                                                              |
+|---------------------|-----------|---------|---------|----------------------------------------------------------------------------------------------------------|
+| `--disableVerbose`  | `--quiet` | boolean | `false` | Disable verbose output - removes all extra output that is only helpful to human readable interface       |
+| `--debug`           | `-d`      | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details                                   |
 
 ## Examples
 
-### Basic Usage
+### List All Data Types
 
 ```bash
-hana-cli hana-cli dataTypes
+hana-cli dataTypes
 ```
 
-Execute the command
+Display all SAP HANA data types with their specifications.
 
 ---
 
