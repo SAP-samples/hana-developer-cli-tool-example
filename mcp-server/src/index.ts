@@ -219,7 +219,7 @@ class HanaCliMcpServer {
           properties: {
             category: {
               type: 'string',
-              description: 'The category to query (e.g., "database-info", "data-quality", "performance-analysis", "schema-management", "security", "backup-recovery", "system-admin", "cloud-management", "hdi-management", "monitoring-diagnostics", "utilities")',
+              description: 'The category to query (e.g., "data-tools", "schema-tools", "object-inspection", "analysis-tools", "performance-monitoring", "backup-recovery", "system-admin", "system-tools", "security", "mass-operations", "connection-auth", "btp-integration", "hana-cloud", "hdi-management", "developer-tools")',
             },
           },
           required: ['category'],

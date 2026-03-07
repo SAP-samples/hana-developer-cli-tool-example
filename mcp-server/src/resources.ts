@@ -8,7 +8,6 @@
 import { readFile } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { ReadmeKnowledgeBase } from './readme-knowledge-base.js';
 import { docsSearch } from './docs-search.js';
 import { getCommandExamples, getCommandPresets } from './examples-presets.js';
 
@@ -33,6 +32,18 @@ export function listResources(): Resource[] {
       name: 'Project Overview',
       description: 'What is hana-cli? Complete overview, introduction, and capabilities',
       mimeType: 'text/markdown',
+    },
+    {
+      uri: 'hana://project/version',
+      name: 'Project Version',
+      description: 'Package metadata and current version information',
+      mimeType: 'application/json',
+    },
+    {
+      uri: 'hana://project/changelog',
+      name: 'Project Changelog',
+      description: 'Structured changelog for recent releases and updates',
+      mimeType: 'application/json',
     },
     {
       uri: 'hana://docs/getting-started',
@@ -145,17 +156,63 @@ export function listResources(): Resource[] {
 export async function readResource(uri: string): Promise<{ uri: string; mimeType: string; text: string }> {
   // Core documentation
   if (uri === 'hana://docs/overview') {
-    const readmePath = join(__dirname, '../../README.md');
-    const content = await readFile(readmePath, 'utf-8');
+    const docsOverviewPath = join(__dirname, '../../docs/README.md');
+    const content = await readFile(docsOverviewPath, 'utf-8');
     return {
       uri,
       mimeType: 'text/markdown',
       text: content,
     };
   }
+
+  if (uri === 'hana://project/version') {
+    const packagePath = join(__dirname, '../../package.json');
+    const packageContent = await readFile(packagePath, 'utf-8');
+    const packageJson = JSON.parse(packageContent) as {
+      name?: string;
+      version?: string;
+      description?: string;
+      license?: string;
+      engines?: Record<string, string>;
+      repository?: unknown;
+    };
+
+    return {
+      uri,
+      mimeType: 'application/json',
+      text: JSON.stringify({
+        name: packageJson.name,
+        version: packageJson.version,
+        description: packageJson.description,
+        license: packageJson.license,
+        engines: packageJson.engines,
+        repository: packageJson.repository,
+      }, null, 2),
+    };
+  }
+
+  if (uri === 'hana://project/changelog') {
+    const changelogJsonPath = join(__dirname, '../../CHANGELOG.json');
+    try {
+      const changelogContent = await readFile(changelogJsonPath, 'utf-8');
+      return {
+        uri,
+        mimeType: 'application/json',
+        text: changelogContent,
+      };
+    } catch {
+      const changelogMdPath = join(__dirname, '../../CHANGELOG.md');
+      const changelogContent = await readFile(changelogMdPath, 'utf-8');
+      return {
+        uri,
+        mimeType: 'text/markdown',
+        text: changelogContent,
+      };
+    }
+  }
   
   if (uri === 'hana://docs/getting-started') {
-    const gettingStartedPath = join(__dirname, '../../docs/01-getting-started/README.md');
+    const gettingStartedPath = join(__dirname, '../../docs/01-getting-started/index.md');
     try {
       const content = await readFile(gettingStartedPath, 'utf-8');
       return {
@@ -164,21 +221,19 @@ export async function readResource(uri: string): Promise<{ uri: string; mimeType
         text: content,
       };
     } catch {
-      // Fallback to README sections
-      const readmePath = join(__dirname, '../../README.md');
-      const content = await readFile(readmePath, 'utf-8');
-      const sections = content.split('## ');
-      const installSection = sections.find(s => s.startsWith('Requirements') || s.startsWith('Installation'));
+      const fallbackPath = join(__dirname, '../../docs/01-getting-started/installation.md');
+      const content = await readFile(fallbackPath, 'utf-8');
       return {
         uri,
         mimeType: 'text/markdown',
-        text: `# Getting Started\n\n## ${installSection || 'See README.md for installation instructions'}`,
+        text: content,
       };
     }
   }
   
   if (uri === 'hana://docs/connection-guide') {
-    const guide = ReadmeKnowledgeBase.getConnectionGuide();
+    const guidePath = join(__dirname, '../../docs/01-getting-started/configuration.md');
+    const guide = await readFile(guidePath, 'utf-8');
     return {
       uri,
       mimeType: 'text/markdown',
@@ -187,7 +242,8 @@ export async function readResource(uri: string): Promise<{ uri: string; mimeType
   }
   
   if (uri === 'hana://docs/security') {
-    const guide = ReadmeKnowledgeBase.getSecurityGuidelines();
+    const guidePath = join(__dirname, '../../docs/03-features/knowledge-base.md');
+    const guide = await readFile(guidePath, 'utf-8');
     return {
       uri,
       mimeType: 'text/markdown',
@@ -196,19 +252,8 @@ export async function readResource(uri: string): Promise<{ uri: string; mimeType
   }
   
   if (uri === 'hana://docs/parameters') {
-    // Combine parameters from major categories
-    let text = '# Standard Parameters Guide\n\n';
-    text += 'This guide shows standardized parameter conventions used across hana-cli commands.\n\n';
-    text += '## Global Parameters\n\n';
-    text += 'Available in all commands:\n\n';
-    ReadmeKnowledgeBase.GLOBAL_PARAMETERS.forEach(p => {
-      text += `- **${p.name}**${p.alias ? ` (${p.alias})` : ''} - ${p.description}\n`;
-    });
-    text += '\n## Category-Specific Parameters\n\n';
-    Object.keys(ReadmeKnowledgeBase.COMMAND_CATEGORIES).forEach(cat => {
-      const category = ReadmeKnowledgeBase.COMMAND_CATEGORIES[cat];
-      text += `### ${category.name}\n\n${category.description}\n\n`;
-    });
+    const paramsPath = join(__dirname, '../../docs/03-features/cli-features.md');
+    const text = await readFile(paramsPath, 'utf-8');
     return {
       uri,
       mimeType: 'text/markdown',
@@ -217,7 +262,8 @@ export async function readResource(uri: string): Promise<{ uri: string; mimeType
   }
   
   if (uri === 'hana://docs/best-practices') {
-    const guide = ReadmeKnowledgeBase.getBestPractices();
+    const guidePath = join(__dirname, '../../docs/03-features/knowledge-base.md');
+    const guide = await readFile(guidePath, 'utf-8');
     return {
       uri,
       mimeType: 'text/markdown',
@@ -226,7 +272,8 @@ export async function readResource(uri: string): Promise<{ uri: string; mimeType
   }
   
   if (uri === 'hana://docs/project-structure') {
-    const structure = ReadmeKnowledgeBase.getProjectStructure();
+    const structurePath = join(__dirname, '../../docs/05-development/index.md');
+    const structure = await readFile(structurePath, 'utf-8');
     return {
       uri,
       mimeType: 'text/markdown',
