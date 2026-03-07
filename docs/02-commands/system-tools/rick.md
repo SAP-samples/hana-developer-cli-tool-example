@@ -6,7 +6,7 @@
 
 ## Description
 
-For expert users only
+Interactive easter-egg command for expert users.
 
 ## Syntax
 
@@ -14,11 +14,34 @@ For expert users only
 hana-cli rick [options]
 ```
 
+## Command Diagram
+
+```mermaid
+    graph TD
+        Start([hana-cli rick]) --> Confirm1{First confirmation}
+        Confirm1 -->|No| Complete([Command Complete])
+        Confirm1 -->|Yes| Confirm2{Second confirmation}
+        Confirm2 -->|No| Complete
+        Confirm2 -->|Yes| Open[Open help video URL]
+        Open --> Complete
+
+        style Start fill:#0092d1
+        style Complete fill:#2ecc71
+        style Confirm1 fill:#f39c12
+        style Confirm2 fill:#f39c12
+```
+
 ## Aliases
 
 - No aliases
 
 ## Parameters
+
+### Options
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--help` | `-h` | boolean | `false` | Show command help |
 
 For a complete list of parameters and options, use:
 
@@ -31,10 +54,10 @@ hana-cli rick --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli rick
+hana-cli rick
 ```
 
-Execute the command
+Run the interactive confirmation flow.
 
 ## Related Commands
 

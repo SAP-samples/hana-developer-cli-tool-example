@@ -14,6 +14,25 @@ Manages Smart Data Integration (SDI) tasks and flowgraphs in SAP HANA. This comm
 hana-cli sdiTasks [options]
 ```
 
+## Command Diagram
+
+```mermaid
+graph TD
+  Start([hana-cli sdiTasks]) --> Action{action}
+  Action -->|list| List[List SDI tasks]
+  Action -->|start| StartTask[Start task]
+  Action -->|stop| StopTask[Stop task]
+  Action -->|status| Status[Show task status]
+  List --> Complete([Command Complete])
+  StartTask --> Complete
+  StopTask --> Complete
+  Status --> Complete
+
+  style Start fill:#0092d1
+  style Complete fill:#2ecc71
+  style Action fill:#f39c12
+```
+
 ## Aliases
 
 - `sditasks`
@@ -22,21 +41,16 @@ hana-cli sdiTasks [options]
 
 ## Parameters
 
-### Required Parameters
+### Options
 
-None - default action is `list`
-
-### Optional Parameters
-
-- **-a, --action** (string): Action to perform
-  - Choices: `list`, `start`, `stop`, `status`
-  - Default: `list`
-- **-tn, --taskName** (string): SDI task name (required for start, stop, status actions)
-- **-fg, --flowgraph** (string): Flowgraph name
-- **-an, --agentName** (string): SDI agent name for filtering
-- **-s, --schema** (string): Schema name
-  - Default: `**CURRENT_SCHEMA**`
-- **-p, --profile**: Connection profile
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--action` | `-a` | string | `list` | Action. Choices: `list`, `start`, `stop`, `status` |
+| `--taskName` | `-tn` | string | - | SDI task name (required for `start`, `stop`, `status`) |
+| `--flowgraph` | `-fg` | string | - | Flowgraph name filter |
+| `--agentName` | `-an` | string | - | SDI agent filter |
+| `--schema` | `-s` | string | `**CURRENT_SCHEMA**` | Schema name |
+| `--profile` | `-p` | string | - | Connection profile |
 
 For a complete list of parameters and options, use:
 
@@ -140,8 +154,6 @@ hana-cli sdiTasks -an AGENT_001
 The command queries these HANA system views:
 
 - `SYS.DI_TASKS` - SDI task definitions and state
-- `SYS.DI_TASK_RUNS` - Task execution history
-- `SYS.M_REMOTE_SOURCES` - Remote source configurations
 
 ## Prerequisites
 

@@ -2,7 +2,7 @@
 
 > Command: `export`  
 > Aliases: `exp`, `downloadData`, `downloaddata`  
-> Category: **Data Tools**  
+> Category: **System Tools**  
 > Status: Production Ready
 
 ## ⚠️ Redirect Notice

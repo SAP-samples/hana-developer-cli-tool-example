@@ -6,12 +6,26 @@
 
 ## Description
 
-Return metadata about an Index
+Return metadata about an index.
 
 ## Syntax
 
 ```bash
 hana-cli inspectIndex [schema] [index] [options]
+```
+
+## Command Diagram
+
+```mermaid
+    graph TD
+        Start([hana-cli inspectIndex]) --> Inputs[Read schema/index]
+        Inputs --> QueryIndex[Query INDEXES metadata]
+        QueryIndex --> QueryCols[Query INDEX_COLUMNS metadata]
+        QueryCols --> Output[Render index and column details]
+        Output --> Complete([Command Complete])
+
+        style Start fill:#0092d1
+        style Complete fill:#2ecc71
 ```
 
 ## Aliases
@@ -22,6 +36,20 @@ hana-cli inspectIndex [schema] [index] [options]
 - `inspectindex`
 
 ## Parameters
+
+### Positional Arguments
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `schema` | string | Schema name (optional) |
+| `index` | string | Index name (optional) |
+
+### Options
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--index` | `-i` | string | - | Index name |
+| `--schema` | `-s` | string | `**CURRENT_SCHEMA**` | Schema name |
 
 For a complete list of parameters and options, use:
 
@@ -34,10 +62,10 @@ hana-cli inspectIndex --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli inspectIndex --index myIndex --schema MYSCHEMA
+hana-cli inspectIndex --index myIndex --schema MYSCHEMA
 ```
 
-Execute the command
+Show index definition and indexed columns.
 
 ## Related Commands
 

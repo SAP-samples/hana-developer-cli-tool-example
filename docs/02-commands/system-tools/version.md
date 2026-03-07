@@ -6,7 +6,7 @@
 
 ## Description
 
-Version details
+Display hana-cli and related tool versions.
 
 ## Syntax
 
@@ -14,11 +14,32 @@ Version details
 hana-cli version [options]
 ```
 
+## Command Diagram
+
+```mermaid
+    graph TD
+        Start([hana-cli version]) --> Gather[Gather local package versions]
+        Gather --> CliCheck[Check cf-cli and btp-cli versions]
+        CliCheck --> Latest[Fetch latest hana-cli version]
+        Latest --> Output[Render version report]
+        Output --> Complete([Command Complete])
+
+        style Start fill:#0092d1
+        style Complete fill:#2ecc71
+```
+
 ## Aliases
 
-- No aliases
+- `ver`
 
 ## Parameters
+
+### Options
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--help` | `-h` | boolean | `false` | Show command help |
+| `--version` | `-V` | boolean | `false` | Show version command output shortcut |
 
 For a complete list of parameters and options, use:
 
@@ -31,10 +52,10 @@ hana-cli version --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli version
+hana-cli version
 ```
 
-Version details
+Print local and latest version information.
 
 ## Related Commands
 

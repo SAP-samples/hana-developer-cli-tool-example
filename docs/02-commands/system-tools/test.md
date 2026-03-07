@@ -6,7 +6,7 @@
 
 ## Description
 
-Dummy Command to help test new features quickly
+Diagnostic command used to test CLI plumbing and connection setup.
 
 ## Syntax
 
@@ -14,11 +14,29 @@ Dummy Command to help test new features quickly
 hana-cli test [options]
 ```
 
+## Command Diagram
+
+```mermaid
+    graph TD
+        Start([hana-cli test]) --> Connect[Create test connection]
+        Connect --> Output[Print connection object/result]
+        Output --> Complete([Command Complete])
+
+        style Start fill:#0092d1
+        style Complete fill:#2ecc71
+```
+
 ## Aliases
 
 - No aliases
 
 ## Parameters
+
+### Options
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--help` | `-h` | boolean | `false` | Show command help |
 
 For a complete list of parameters and options, use:
 
@@ -31,10 +49,10 @@ hana-cli test --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli test
+hana-cli test
 ```
 
-Dummy Command to help test new features quickly
+Run a quick diagnostic connection test.
 
 ## Related Commands
 

@@ -2,7 +2,7 @@
 
 > Command: `import`  
 > Aliases: `imp`, `uploadData`, `uploaddata`  
-> Category: **Data Tools**  
+> Category: **System Tools**  
 > Status: Production Ready
 
 ## ⚠️ Redirect Notice
@@ -77,7 +77,7 @@ hana-cli importUI --help
 hana-cli importUI
 ```
 
-Execute the command
+Launch the browser-based import UI.
 
 ## Related Commands
 

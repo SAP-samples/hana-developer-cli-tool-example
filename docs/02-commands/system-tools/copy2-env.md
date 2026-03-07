@@ -14,6 +14,19 @@ Copy default-env.json contents to .env and reformat
 hana-cli copy2Env [options]
 ```
 
+## Command Diagram
+
+```mermaid
+    graph TD
+        Start([hana-cli copy2Env]) --> Resolve[Resolve env source file]
+        Resolve --> Load[Load VCAP_SERVICES]
+        Load --> Write[Write .env with VCAP_SERVICES]
+        Write --> Complete([Command Complete])
+
+        style Start fill:#0092d1
+        style Complete fill:#2ecc71
+```
+
 ## Aliases
 
 - `copyEnv`
@@ -21,6 +34,12 @@ hana-cli copy2Env [options]
 - `copy2env`
 
 ## Parameters
+
+### Options
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| - | - | - | - | No command-specific options |
 
 For a complete list of parameters and options, use:
 
@@ -33,7 +52,7 @@ hana-cli copy2Env --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli copy2Env
+hana-cli copy2Env
 ```
 
 Copy default-env.json contents to .env and reformat

@@ -6,12 +6,27 @@
 
 ## Description
 
-Data Volumes
+Inspect HANA data volume usage and statistics.
 
 ## Syntax
 
 ```bash
 hana-cli dataVolumes [options]
+```
+
+## Command Diagram
+
+```mermaid
+    graph TD
+        Start([hana-cli dataVolumes]) --> Connect[Connect to database]
+        Connect --> Query1[Query SYS.M_DATA_VOLUMES]
+        Query1 --> Query2[Query SYS.M_DATA_VOLUME_STATISTICS]
+        Query2 --> Query3[Query SYS.M_DATA_VOLUME_PAGE_STATISTICS]
+        Query3 --> Output[Render result tables]
+        Output --> Complete([Command Complete])
+
+        style Start fill:#0092d1
+        style Complete fill:#2ecc71
 ```
 
 ## Aliases
@@ -20,6 +35,12 @@ hana-cli dataVolumes [options]
 - `datavolumes`
 
 ## Parameters
+
+### Options
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| - | - | - | - | No command-specific options |
 
 For a complete list of parameters and options, use:
 
@@ -32,10 +53,10 @@ hana-cli dataVolumes --help
 ### Basic Usage
 
 ```bash
-hana-cli hana-cli dataVolumes
+hana-cli dataVolumes
 ```
 
-Execute the command
+Show data volume, volume statistics, and page statistics.
 
 ## Related Commands
 

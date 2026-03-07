@@ -1,17 +1,37 @@
 # commandMap
 
-> Command: `commandMap`  
+> Command: `commandMap` (internal module)  
 > Category: **System Tools**  
 > Status: Production Ready
 
 ## Description
 
-Execute commandMap command
+Internal lazy-loading map used by the CLI to resolve command and alias names to implementation files in `bin/`.
+
+## ⚠️ Redirect Notice
+
+This is an internal runtime module, not a user-invokable command.
 
 ## Syntax
 
 ```bash
-hana-cli commandMap [options]
+not a standalone CLI command
+```
+
+## Command Diagram
+
+```mermaid
+    graph TD
+        Start([CLI receives command]) --> Lookup{commandMap lookup}
+        Lookup -->|Match| Module[Resolve bin module path]
+        Lookup -->|No match| Fallback[Load full command index]
+        Module --> Yargs[Register command in yargs]
+        Fallback --> Yargs
+        Yargs --> Complete([Command Complete])
+
+        style Start fill:#0092d1
+        style Complete fill:#2ecc71
+        style Lookup fill:#f39c12
 ```
 
 ## Aliases
@@ -20,10 +40,24 @@ hana-cli commandMap [options]
 
 ## Parameters
 
-For a complete list of parameters and options, use:
+### Positional Arguments
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `commandName` | string | Internal lookup key used by the CLI runtime |
+
+### Options
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| - | - | - | - | No user-facing options; internal module only |
+
+This module has no user-facing parameters.
+
+Use the command list instead:
 
 ```bash
-hana-cli commandMap --help
+hana-cli --help
 ```
 
 ## Examples
@@ -31,10 +65,10 @@ hana-cli commandMap --help
 ### Basic Usage
 
 ```bash
-hana-cli commandMap
+hana-cli --help
 ```
 
-Execute the command
+Inspect available routed commands from the main CLI help.
 
 ## Related Commands
 

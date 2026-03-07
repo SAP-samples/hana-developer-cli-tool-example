@@ -1,4 +1,4 @@
-# cacheContents
+# cacheStats
 
 > Command: `cacheStats`  
 > Category: **System Tools**  
@@ -14,13 +14,40 @@ This page exists for the `/cache-contents` route. Use `cacheStats` to view SQL p
 hana-cli cacheStats [options]
 ```
 
+## Command Diagram
+
+```mermaid
+    graph TD
+        Start([hana-cli cacheStats]) --> Inputs{Read options}
+        Inputs --> CacheType[cacheType: plan/result/all]
+        Inputs --> Limit[limit: max rows]
+        CacheType --> QueryPlan[Query SYS.M_SQL_PLAN_CACHE when needed]
+        CacheType --> QueryResult[Query SYS.M_RESULT_CACHE when needed]
+        Limit --> QueryPlan
+        Limit --> QueryResult
+        QueryPlan --> Output[Render results]
+        QueryResult --> Output
+        Output --> Complete([Command Complete])
+
+        style Start fill:#0092d1
+        style Complete fill:#2ecc71
+        style Inputs fill:#f39c12
+```
+
 ## Aliases
 
-- ``
+- No aliases
 
 ## Parameters
 
-For a complete list of parameters and options, use:
+### Options
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--cacheType` | `-t` | string | `all` | Cache type to query. Choices: `plan`, `result`, `all` |
+| `--limit` | `-l` | number | `50` | Maximum rows returned per cache query |
+
+For complete option output, use:
 
 ```bash
 hana-cli cacheStats --help

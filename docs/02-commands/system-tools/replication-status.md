@@ -14,6 +14,30 @@ Monitors SAP HANA system replication status. This command displays real-time inf
 hana-cli replicationStatus [options]
 ```
 
+## Command Diagram
+
+```mermaid
+graph TD
+  Start([hana-cli replicationStatus]) --> Mode{type}
+  Mode -->|system| SysQuery[Query system replication status]
+  Mode -->|service| SvcQuery[Query service replication status]
+  SysQuery --> Details{detailed?}
+  SvcQuery --> Details
+  Details -->|Yes| DetailQuery[Query detailed replication data]
+  Details -->|No| Output[Render status table]
+  DetailQuery --> Output
+  Output --> Watch{watch?}
+  Watch -->|Yes| Loop[Refresh every 5s]
+  Watch -->|No| Complete([Command Complete])
+  Loop --> Output
+
+  style Start fill:#0092d1
+  style Complete fill:#2ecc71
+  style Mode fill:#f39c12
+  style Details fill:#f39c12
+  style Watch fill:#f39c12
+```
+
 ## Aliases
 
 - `replstatus`
@@ -22,21 +46,15 @@ hana-cli replicationStatus [options]
 
 ## Parameters
 
-### Required Parameters
+### Options
 
-None - default type is `system`
-
-### Optional Parameters
-
-- **-ty, --type** (string): Replication type to monitor
-  - Choices: `system`, `service`
-  - Default: `system`
-- **-sn, --serviceName** (string): Filter by specific service name (used with type=service)
-- **-d, --detailed** (boolean): Show detailed replication information
-  - Default: `false`
-- **-w, --watch** (boolean): Enable continuous monitoring (refreshes every 5 seconds)
-  - Default: `false`
-- **-p, --profile**: Connection profile
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--type` | `-ty` | string | `system` | Replication mode. Choices: `system`, `service` |
+| `--serviceName` | `-sn` | string | - | Filter by service name (for `service` mode) |
+| `--detailed` | `-d` | boolean | `false` | Include detailed replication output |
+| `--watch` | `-w` | boolean | `false` | Refresh continuously every 5 seconds |
+| `--profile` | `-p` | string | - | Connection profile |
 
 For a complete list of parameters and options, use:
 
@@ -177,8 +195,6 @@ The command queries these HANA system views:
 
 - `SYS.M_SERVICE_REPLICATION` - Service replication status
 - `SYS.M_SERVICE_REPLICATION_STATISTICS` - Replication statistics
-- `SYS.M_SYSTEM_REPLICATION` - System replication overview
-- `SYS.M_SYSTEM_REPLICATION_ASYNC_BUFFER_USAGE` - Buffer usage metrics
 
 ## Prerequisites
 

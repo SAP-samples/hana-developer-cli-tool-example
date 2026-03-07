@@ -1,17 +1,23 @@
 # indexTest
 
-> Command: `indexTest`  
+> Command: `indexTest` (not a standalone command)  
 > Category: **System Tools**  
 > Status: Production Ready
 
 ## Description
 
-Execute indexTest command
+Compatibility placeholder topic for historical references.
+
+## ⚠️ Redirect Notice
+
+`indexTest` is not exposed as a standalone CLI command in the current command map.
+
+**👉 [Go to Inspect Index Documentation](./inspect-index.md)**
 
 ## Syntax
 
 ```bash
-hana-cli indexTest [options]
+not available as a standalone CLI command
 ```
 
 ## Aliases
@@ -20,10 +26,10 @@ hana-cli indexTest [options]
 
 ## Parameters
 
-For a complete list of parameters and options, use:
+Use these related commands instead:
 
 ```bash
-hana-cli indexTest --help
+hana-cli inspectIndex --help
 ```
 
 ## Examples
@@ -31,10 +37,10 @@ hana-cli indexTest --help
 ### Basic Usage
 
 ```bash
-hana-cli indexTest
+hana-cli inspectIndex --help
 ```
 
-Execute the command
+Display help for index inspection workflows.
 
 ## Related Commands
 
