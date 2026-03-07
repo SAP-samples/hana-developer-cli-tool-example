@@ -62,6 +62,8 @@ describe('@all @referentialCheck', () => {
       const mockYargs = {
         options: (opts) => mockYargs,
         example: (cmd, desc) => mockYargs,
+        wrap: (columns) => mockYargs,
+        epilog: (text) => mockYargs,
         option: () => mockYargs
       }
       const options = referentialCheckCmd.builder(mockYargs)

@@ -956,6 +956,7 @@ function checkUnknownOptions(argv, inputSchema, iConn, iDebug, builderOptions) {
     
     // Warn about unknown options
     if (unknownOptions.length > 0) {
+        const warnedOptions = new Set()
         // Build list of available options for suggestions (exclude standard yargs options)
         const availableOptions = Array.from(knownOptions).filter(k => 
             k !== '$0' && k !== '_' && k !== 'help' && k !== 'h' && k !== 'version' && k !== 'V'
@@ -963,6 +964,11 @@ function checkUnknownOptions(argv, inputSchema, iConn, iDebug, builderOptions) {
         
         unknownOptions.forEach(opt => {
             if (opt && opt.trim()) {  // Only warn if option name is not empty
+                const normalizedOpt = toKebabCase(opt)
+                if (warnedOptions.has(normalizedOpt)) {
+                    return
+                }
+                warnedOptions.add(normalizedOpt)
                 const warningMsg = bundle.getText("warning.unknownOption", [opt])
                 console.warn(colors.yellow(warningMsg))
                 

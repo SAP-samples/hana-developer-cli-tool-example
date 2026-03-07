@@ -9,13 +9,13 @@ export const describe = baseLite.bundle.getText("tables")
 
 export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
-    alias: ['t'],
+    alias: ['t', 'Table'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("table")
   },
   schema: {
-    alias: ['s'],
+    alias: ['s', 'Schema'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")

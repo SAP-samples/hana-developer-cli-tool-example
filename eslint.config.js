@@ -9,7 +9,8 @@ export default [
       '**/build/**',
       '**/types/**',
       '**/mochawesome-report/**',
-      '**/.nyc_output/**'
+      '**/.nyc_output/**',
+      '**/docs/.vitepress/cache/**'
     ]
   },
   cdsPlugin.configs.recommended,

@@ -235,7 +235,7 @@ export function getBuilder(input, iConn = true, iDebug = true) {
     if (iConn) {
         grpConn = {
             admin: {
-                alias: ['a'],
+                alias: ['a', 'Admin'],
                 type: 'boolean',
                 default: getConfigValue('admin', false),
                 group: bundle.getText("grpConn"),
@@ -259,7 +259,7 @@ export function getBuilder(input, iConn = true, iDebug = true) {
                 desc: bundle.getText("disableVerbose")
             },
             debug: {
-                alias: ['d'],
+                alias: ['d', 'Debug'],
                 group: bundle.getText("grpDebug"),
                 type: 'boolean',
                 default: getConfigValue('debug', false),
@@ -274,6 +274,25 @@ export function getBuilder(input, iConn = true, iDebug = true) {
         ...grpConn,
         ...grpDebug
     }
+
+    const ensureAlias = (option, aliasValue) => {
+        if (!option || !aliasValue) {
+            return
+        }
+        if (!option.alias) {
+            option.alias = []
+        }
+        if (typeof option.alias === 'string') {
+            option.alias = [option.alias]
+        }
+        if (!option.alias.includes(aliasValue)) {
+            option.alias.push(aliasValue)
+        }
+    }
+
+    ensureAlias(builder.schema, 'Schema')
+    ensureAlias(builder.table, 'Table')
+    ensureAlias(builder.debug, 'Debug')
     
     // Apply config defaults to input options - only if not already set in input
     for (const [key, option] of Object.entries(builder)) {

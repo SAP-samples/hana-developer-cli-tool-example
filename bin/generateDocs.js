@@ -4,7 +4,7 @@ import dbClientClass from "../utils/database/index.js"
 
 import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'generateDocs'
-export const aliases = ['gendocs', 'generateDocumentation']
+export const aliases = ['docs', 'gendocs', 'generateDocumentation']
 export const describe = baseLite.bundle.getText("generateDocs")
 
 const generateDocsOptions = {

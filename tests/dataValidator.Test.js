@@ -61,6 +61,8 @@ describe('@all @dataValidator', () => {
       const mockYargs = {
         options: (opts) => mockYargs,
         example: (cmd, desc) => mockYargs,
+        wrap: (columns) => mockYargs,
+        epilog: (text) => mockYargs,
         option: () => mockYargs
       }
       const options = dataValidatorCmd.builder(mockYargs)
@@ -105,6 +107,8 @@ describe('@all @dataValidator', () => {
       const mockYargs = {
         options: (opts) => mockYargs,
         example: (cmd, desc) => mockYargs,
+        wrap: (columns) => mockYargs,
+        epilog: (text) => mockYargs,
         option: () => mockYargs
       }
       const builder = dataValidatorCmd.builder(mockYargs)
