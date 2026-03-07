@@ -1,16 +1,18 @@
 # Getting Started
 
-Welcome! This section covers everything you need to get started with the SAP HANA Developer CLI.
+Welcome to HANA CLI! This section guides you through installation, initial configuration, and your first commands. Whether you're working locally with SAP HANA Express, in SAP Business Application Studio, or with SAP HANA Cloud, you'll find everything you need to get productive quickly.
 
 ## Installation
 
-HANA CLI is available through npm for quick installation:
+HANA CLI is a command-line tool that works on Windows, macOS, and Linux. Installation is straightforward through npm or by building from source.
+
+**Quick install via npm:**
 
 ```bash
 npm install -g hana-cli
 ```
 
-Or build from source:
+**Or build from source:**
 
 ```bash
 git clone https://github.com/SAP-samples/hana-developer-cli-tool-example
@@ -19,16 +21,16 @@ npm install
 npm link
 ```
 
-### Requirements
+**Requirements:**
 
 - [Node.js 20.19.0 or later](https://nodejs.org/)
-- Access to a SAP HANA database
+- Access to a SAP HANA database instance
 
 [Full Installation Guide →](./installation.md)
 
 ## Quick Start
 
-Get up and running in 5 minutes:
+Get up and running in 5 minutes with basic commands:
 
 ```bash
 # Verify installation
@@ -37,15 +39,17 @@ hana-cli --version
 # Show available commands
 hana-cli --help
 
-# Connect to your HANA instance
-hana-cli connect --host your-hana-server.com --port 30013 --user DBUSER --password ****
+# Check database connection
+hana-cli systemInfo
 ```
+
+This quick tutorial walks you through essential first steps including data import, schema comparison, and common operations.
 
 [Quick Start Tutorial →](./quick-start.md)
 
 ## Configuration
 
-Set up connection details via `default-env.json`:
+Before running commands, configure your database credentials. The recommended approach is to create a `default-env.json` file in your project directory:
 
 ```json
 {
@@ -62,18 +66,23 @@ Set up connection details via `default-env.json`:
 }
 ```
 
+This file can be created manually or via the `hana-cli connect` command. Other options include environment variables and command-line arguments.
+
 [Configuration Guide →](./configuration.md)
 
 ## Supported Environments
 
-- **Local Development**: VSCode with SAP HANA Express
-- **Cloud**: SAP Business Application Studio, Google Cloud Shell, AWS Cloud9
+HANA CLI runs on any system with Node.js, from your local machine to cloud environments:
+
+- **Local Development**: VSCode, SAP HANA Express, Remote HANA servers
+- **Cloud IDEs**: SAP Business Application Studio, Google Cloud Shell, AWS Cloud9, GitHub Codespaces
 - **Services**: SAP BTP HANA, SAP HANA Cloud
 
 [Environments Guide →](./environments.md)
 
-## Next Steps
+## See Also
 
-- [Explore Commands](/02-commands/)
-- [Learn Features](/03-features/)
-- [View API Reference](/04-api-reference/)
+- [Command Reference](/02-commands/) - All 170+ commands
+- [Features & Guides](/03-features/)
+- [API Reference](/04-api-reference/)
+- [Troubleshooting](../troubleshooting.md)

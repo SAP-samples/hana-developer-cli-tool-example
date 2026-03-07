@@ -42,15 +42,19 @@ npm run build
       "command": "node",
       "args": ["../mcp-server/build/index.js"],
       "env": {
-        "HANA_HOST": "your-server.com",
-        "HANA_PORT": "30013",
-        "HANA_USER": "dbuser",
-        "HANA_PASSWORD": "password"
+        "HANA_CLI_HOST": "your-server.com",
+        "HANA_CLI_PORT": "30013",
+        "HANA_CLI_USER": "dbuser",
+        "HANA_CLI_PASSWORD": "password"
       }
     }
   }
 }
 ```
+
+:::info
+Connection credentials can be provided through environment variables (as shown above) or passed through tool arguments by the AI agent. Environment variables are optional but provide fallback credentials when not specified in tool calls.
+:::
 
 ## Available Tools
 

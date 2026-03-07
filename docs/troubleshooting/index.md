@@ -39,14 +39,14 @@ hana-cli systemInfo --output basic
    cat default-env.json | jq '.'
 
    # Or check environment variables
-   echo $HANA_HOST $HANA_PORT $HANA_USER
+   echo $HANA_CLI_HOST $HANA_CLI_PORT $HANA_CLI_USER
    ```
 
    On Windows (PowerShell):
 
    ```powershell
    Get-Content .\default-env.json | ConvertFrom-Json
-   "$env:HANA_HOST $env:HANA_PORT $env:HANA_USER"
+   "$env:HANA_CLI_HOST $env:HANA_CLI_PORT $env:HANA_CLI_USER"
    ```
 
 2. **Test network connectivity**
@@ -980,9 +980,9 @@ This section covers troubleshooting tips specific to running hana-cli within SAP
    ```bash
    # Open or create ~/.bashrc
    cat >> ~/.bashrc << 'EOF'
-   export HANA_HOST=hana.example.com
-   export HANA_PORT=30015
-   export HANA_USER=myuser
+   export HANA_CLI_HOST=hana.example.com
+   export HANA_CLI_PORT=30015
+   export HANA_CLI_USER=myuser
    EOF
    
    # Source the file in current session
@@ -994,10 +994,10 @@ This section covers troubleshooting tips specific to running hana-cli within SAP
    Create a `.env` file in your project root (this persists across terminal sessions):
 
    ```bash
-   HANA_HOST=hana.example.com
-   HANA_PORT=30015
-   HANA_USER=myuser
-   HANA_PASSWORD=mypassword
+   HANA_CLI_HOST=hana.example.com
+   HANA_CLI_PORT=30015
+   HANA_CLI_USER=myuser
+   HANA_CLI_PASSWORD=mypassword
    ```
 
    Then load it in your terminal:
@@ -1014,8 +1014,8 @@ This section covers troubleshooting tips specific to running hana-cli within SAP
    ```json
    {
      "terminal.integrated.env.linux": {
-       "HANA_HOST": "hana.example.com",
-       "HANA_PORT": "30015"
+       "HANA_CLI_HOST": "hana.example.com",
+       "HANA_CLI_PORT": "30015"
      }
    }
    ```
@@ -1125,8 +1125,8 @@ This section covers troubleshooting tips specific to running hana-cli within SAP
 
    ```bash
    # Prompt for password (not visible in history)
-   read -sp "Enter HANA password: " HANA_PASSWORD
-   export HANA_PASSWORD
+   read -sp "Enter HANA password: " HANA_CLI_PASSWORD
+   export HANA_CLI_PASSWORD
    
    # Use with hana-cli
    hana-cli systemInfo

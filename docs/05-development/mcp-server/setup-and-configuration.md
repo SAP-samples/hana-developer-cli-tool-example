@@ -138,12 +138,12 @@ Create a `default-env.json` file in your project root:
 Set connection details via environment variables:
 
 ```bash
-export HANA_HOST="your-host.hanacloud.ondemand.com"
-export HANA_PORT="443"
-export HANA_USER="DBADMIN"
-export HANA_PASSWORD="YourPassword123!"
-export HANA_SCHEMA="YOURSCHEMA"
-export HANA_ENCRYPT="true"
+export HANA_CLI_HOST="your-host.hanacloud.ondemand.com"
+export HANA_CLI_PORT="443"
+export HANA_CLI_USER="DBADMIN"
+export HANA_CLI_PASSWORD="YourPassword123!"
+export HANA_CLI_SCHEMA="YOURSCHEMA"
+export HANA_CLI_ENCRYPT="true"
 
 npm run build
 ```
@@ -358,10 +358,10 @@ For high-concurrency scenarios:
 
 ```bash
 # ❌ Bad - hardcoded password
-export HANA_PASSWORD="SecretPassword123!"
+export HANA_CLI_PASSWORD="SecretPassword123!"
 
 # ✅ Good - read from secure location
-export HANA_PASSWORD=$(aws secretsmanager get-secret-value --secret-id hana-password)
+export HANA_CLI_PASSWORD=$(aws secretsmanager get-secret-value --secret-id hana-password)
 
 # ✅ Good - use default-env.json (git-ignored)
 cat default-env.json  # Contains credentials

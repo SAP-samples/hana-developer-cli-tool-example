@@ -16,10 +16,10 @@ Ensure you have a `default-env.json` file with HANA credentials (see [Configurat
 Test the connection:
 
 ```bash
-hana-cli alerts -h
+hana-cli systemInfo
 ```
 
-If this shows alerts without errors, you're connected!
+If this displays database information without errors, you're connected!
 
 ## Step 3: Try Basic Commands
 
@@ -108,7 +108,7 @@ hana-cli dataProfile --help
 
 ## Next Steps
 
-- [Explore all Commands](/02-commands/)
+- [Explore All Commands](/02-commands/) - View all 170+ commands
 - [Features & Integration](/03-features/)
 - [Full API Reference](/04-api-reference/)
 - [Configuration Guide](./configuration.md)

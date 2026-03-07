@@ -4,7 +4,27 @@ Configure HANA CLI for your development environment.
 
 ## Connection Configuration
 
-### Method 1: default-env.json
+:::info Recommended for CAP projects
+If you are working in a SAP CAP project, use the CDS bind approach first. It is the most secure option because credentials are resolved dynamically from your Cloud Foundry or Kubernetes environment instead of being stored locally.
+:::
+
+### Method 1: CAP CDS bind (Recommended)
+
+When a `.cdsrc-private.json` file exists (created by `cds bind`), hana-cli automatically detects it in the current directory or parent directories and reuses those credentials.
+
+```bash
+# From your CAP project root
+cds bind --to <service-instance-name>
+
+# Run any hana-cli command after binding
+hana-cli alerts
+```
+
+If you already have a `.cdsrc-private.json` file, you can skip `cds bind` and just run hana-cli commands from within the project directory.
+
+For setup details, see [Installation Guide](./installation.md#cap-cds-bindings-recommended-for-cap-projects).
+
+### Method 2: default-env.json
 
 Create a `default-env.json` file in your working directory manually or via `hana-cli connect` command.
 
@@ -34,34 +54,34 @@ Create a `default-env.json` file in your working directory manually or via `hana
 | `password` | string | Yes | Database password |
 | `database` | string | No | Database name (default: HDB) |
 
-### Method 2: Environment Variables
+### Method 3: Environment Variables
 
 ```bash
-export HANA_HOST=your-hana-server.com
-export HANA_PORT=30013
-export HANA_USER=DBADMIN
-export HANA_PASSWORD=yourpassword
-export HANA_DATABASE=HDB
+export HANA_CLI_HOST=your-hana-server.com
+export HANA_CLI_PORT=30013
+export HANA_CLI_USER=DBADMIN
+export HANA_CLI_PASSWORD=yourpassword
+export HANA_CLI_DATABASE=HDB
 ```
 
-### Method 3: Command Line Arguments
+### Method 4: Command Line Arguments
 
 Pass connection details with each command:
 
 ```bash
-hana-cli dbInfo \
+hana-cli systemInfo \
   --host hana.example.com \
   --port 30013 \
   --user DBADMIN \
   --password password
 ```
 
-## CDS Profiles (Recommended as the best practice)
+## Named Profiles
 
-Use CDS profiles for different environments:
+Use named profiles when you want multiple connection presets stored in a configuration file. These are not CDS bindings; they are explicit profile entries you define under `profiles` in your config.
 
 ```bash
-# Use specific profile
+# Use a specific named profile from your config
 hana-cli tables -s SCHEMA --profile production
 ```
 
@@ -82,13 +102,14 @@ Create `default-env-admin.json` manually or via `hana-cli connect` command.
         "password": "AdminPassword123!"
       }
     }]
+  }
 }
 ```
 
 Use with commands:
 
 ```bash
-hana-cli schemaClone -s SOURCE -t TARGET --admin
+hana-cli schemaClone --sourceSchema SOURCE --targetSchema TARGET --admin
 ```
 
 ## Connection Options
@@ -223,7 +244,7 @@ module.exports = {
       host: 'prod-hana.company.com',
       port: 30013,
       user: 'prod_user',
-      password: process.env.HANA_PASSWORD
+      password: process.env.HANA_CLI_PASSWORD
     }
   }
 };
@@ -287,7 +308,7 @@ The `config` command automatically:
 | Option | Type | Description |
 | ------ | ---- | ----------- |
 | `defaultSchema` | string | Default schema for commands (e.g., `tables -s SCHEMA`) |
-| `defaultProfile` | string | Default CDS profile for commands (e.g., `tables --profile production`) |
+| `defaultProfile` | string | Default named profile for commands (e.g., `tables --profile production`) |
 | `outputFormat` | string | Default output format (e.g., `json`, `csv`, `table`) |
 | `language` | string | UI language (e.g., `en`, `de`, `fr`) |
 | `logLevel` | string | Logging level (`error`, `warn`, `info`, `debug`, `trace`) |
@@ -307,8 +328,8 @@ The `config` command automatically:
 export HANA_LOG_LEVEL=debug
 
 # Use local HANA instance
-export HANA_HOST=localhost
-export HANA_PORT=30013
+export HANA_CLI_HOST=localhost
+export HANA_CLI_PORT=30013
 ```
 
 ### Production
@@ -318,8 +339,8 @@ export HANA_PORT=30013
 export NODE_ENV=production
 
 # Production HANA instance
-export HANA_HOST=prod-hana.company.com
-export HANA_USER=prod_user
+export HANA_CLI_HOST=prod-hana.company.com
+export HANA_CLI_USER=prod_user
 
 # Enable encryption
 export HANA_ENCRYPT=true
@@ -329,11 +350,11 @@ export HANA_ENCRYPT=true
 
 ```bash
 # Use test database
-export HANA_DATABASE=TEST_HDB
+export HANA_CLI_DATABASE=TEST_HDB
 
 # Test credentials
-export HANA_USER=test_user
-export HANA_PASSWORD=test_password
+export HANA_CLI_USER=test_user
+export HANA_CLI_PASSWORD=test_password
 ```
 
 ## Troubleshooting Configuration

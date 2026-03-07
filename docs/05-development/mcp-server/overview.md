@@ -40,10 +40,10 @@ In your IDE (VS Code with Claude Extension):
       "command": "node",
       "args": ["../mcp-server/build/index.js"],
       "env": {
-        "HANA_HOST": "your-server.com",
-        "HANA_PORT": "30013",
-        "HANA_USER": "dbuser",
-        "HANA_PASSWORD": "password"
+        "HANA_CLI_HOST": "your-server.com",
+        "HANA_CLI_PORT": "30013",
+        "HANA_CLI_USER": "dbuser",
+        "HANA_CLI_PASSWORD": "password"
       }
     }
   }

@@ -107,10 +107,10 @@ Create file in working directory:
 ### Using Environment Variables
 
 ```bash
-export HANA_HOST=your-hana-server.com
-export HANA_PORT=30013
-export HANA_USER=DBUSER
-export HANA_PASSWORD=password
+export HANA_CLI_HOST=your-hana-server.com
+export HANA_CLI_PORT=30013
+export HANA_CLI_USER=DBUSER
+export HANA_CLI_PASSWORD=password
 ```
 
 ## Tips & Tricks

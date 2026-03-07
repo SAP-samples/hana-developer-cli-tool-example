@@ -2,8 +2,8 @@
 
 ## Prerequisites
 
-- **Node.js**: [Node.js 20.19.0 or later](https://nodejs.org/)
-  - Download from [nodejs.org](https://nodejs.org/en/download/)
+- **Node.js**: Version 20.19.0 or later
+  - Download from [nodejs.org](https://nodejs.org/)
   - Verify: `node --version`
 
 - **SAP HANA Database**: One of these options
@@ -37,8 +37,6 @@ graph TB
     style B1b fill:#51CF66,color:#fff
     style B2d fill:#51CF66,color:#fff
 ```
-
-[![asciicast](https://asciinema.org/a/301560.svg)](https://asciinema.org/a/301560)
 
 ### Method 1: NPM Package (Recommended)
 
