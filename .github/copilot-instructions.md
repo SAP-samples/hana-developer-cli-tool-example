@@ -3,6 +3,17 @@
 These instructions apply to all work in this repository.
 
 ## Project Context
+
+**For comprehensive architecture and design patterns**, refer to [project-overview.instructions.md](instructions/project-overview.instructions.md). It contains:
+- Project purpose, mission, and use cases
+- Complete architecture overview with diagrams
+- Technology stack and framework details
+- Operating modes (CLI, Interactive, API Server, MCP Server)
+- Key architectural patterns (lazy loading, database abstraction, i18n, etc.)
+- Testing strategy and documentation system
+- Critical development rules and common workflows
+
+**Quick Reference:**
 - Node.js ESM project ("type": "module"); prefer ESM import/export patterns.
 - CLI uses i18n; all user-facing text must go through text bundles.
 - Docs are VitePress-based; keep structure and taxonomy consistent.
