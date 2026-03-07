@@ -7,6 +7,19 @@ import * as importLib from '../bin/import.js'
 
 export function route(app, server) {
 	base.debug('WebSockets Route')
+	const isTestMode = process.env.NODE_ENV === 'test'
+	const logInfo = (message) => {
+		if (!isTestMode) {
+			console.log(message)
+		}
+		base.debug(message)
+	}
+	const logError = (message) => {
+		if (!isTestMode) {
+			console.error(base.colors.red(message))
+		}
+		base.debug(message)
+	}
 	/**
 	 * @swagger
 	 * /websockets:
@@ -62,13 +75,11 @@ export function route(app, server) {
 				try {
 					client.send(message, (error) => {
 						if (error !== null && typeof error !== "undefined") {
-							console.error(base.colors.red(`${base.bundle.getText("sendError")}: ${error}`))
-							base.debug(`${base.bundle.getText("sendError")}: ${error}`)
+							logError(`${base.bundle.getText("sendError")}: ${error}`)
 						}
 					})
 				} catch (e) {
-					console.error(base.colors.red(`${base.bundle.getText("broadcastError")}: ${e}`))
-					base.debug(`${base.bundle.getText("broadcastError")}: ${e}`)
+					logError(`${base.bundle.getText("broadcastError")}: ${e}`)
 				}
 			})
 			base.debug(`${base.bundle.getText("sent")}: ${message}`)
@@ -76,8 +87,7 @@ export function route(app, server) {
 
 
 		wss.on("error", (error) => {
-			console.error(base.colors.red(`${base.bundle.getText("websocketError")}: ${error}`))
-			base.debug(`${base.bundle.getText("websocketError")}: ${error}`)
+			logError(`${base.bundle.getText("websocketError")}: ${error}`)
 		})
 
 		wss.on("connection", (ws) => {
@@ -91,7 +101,7 @@ export function route(app, server) {
 						case "massConvert":
 							// Skip massConvert in test environment to avoid terminal output issues
 							if (process.env.NODE_ENV === 'test') {
-								console.log(base.bundle.getText("test.skipMassConvert"))
+									logInfo(base.bundle.getText("test.skipMassConvert"))
 								try {
 									ws.send(JSON.stringify({
 										text: base.bundle.getText("test.massConvertSkipped")
@@ -104,8 +114,7 @@ export function route(app, server) {
 							// Run mass convert async, catch any errors
 							try {
 								massConvertLib.convert(wss).catch((error) => {
-									console.error(base.colors.red(`${base.bundle.getText("generalError")}: ${error}`))
-									base.debug(`${base.bundle.getText("generalError")}: ${error}`)
+										logError(`${base.bundle.getText("generalError")}: ${error}`)
 									try {
 										wss.broadcast(base.bundle.getText("error.massConvertFailed", [error.message || error]))
 									} catch (broadcastError) {
@@ -113,8 +122,7 @@ export function route(app, server) {
 									}
 								})
 							} catch (syncError) {
-								console.error(base.colors.red(`${base.bundle.getText("generalError")}: ${syncError}`))
-								base.debug(`${base.bundle.getText("generalError")}: ${syncError}`)
+									logError(`${base.bundle.getText("generalError")}: ${syncError}`)
 								try {
 									wss.broadcast(base.bundle.getText("error.massConvertFailed", [syncError.message || syncError]))
 								} catch (broadcastError) {
@@ -125,7 +133,7 @@ export function route(app, server) {
 						case "import":
 							// Skip import in test environment to avoid terminal output issues
 							if (process.env.NODE_ENV === 'test') {
-								console.log(base.bundle.getText("test.skipImport"))
+									logInfo(base.bundle.getText("test.skipImport"))
 								try {
 									ws.send(JSON.stringify({
 										text: base.bundle.getText("test.importSkipped")
@@ -140,8 +148,7 @@ export function route(app, server) {
 								importLib.importData(base.getPrompts()).then(() => {
 									wss.broadcast(base.bundle.getText("success.importComplete"))
 								}).catch((error) => {
-									console.error(base.colors.red(`${base.bundle.getText("generalError")}: ${error}`))
-									base.debug(`${base.bundle.getText("generalError")}: ${error}`)
+										logError(`${base.bundle.getText("generalError")}: ${error}`)
 									try {
 										wss.broadcast(base.bundle.getText("error.import", [error.message || error]))
 									} catch (broadcastError) {
@@ -149,8 +156,7 @@ export function route(app, server) {
 									}
 								})
 							} catch (syncError) {
-								console.error(base.colors.red(`${base.bundle.getText("generalError")}: ${syncError}`))
-								base.debug(`${base.bundle.getText("generalError")}: ${syncError}`)
+									logError(`${base.bundle.getText("generalError")}: ${syncError}`)
 								try {
 									wss.broadcast(base.bundle.getText("error.import", [syncError.message || syncError]))
 								} catch (broadcastError) {
@@ -159,14 +165,12 @@ export function route(app, server) {
 							}
 							break
 						default:
-							console.error(base.colors.red(`${base.bundle.getText("errorUndefinedAction")}: ${data.action}`))
-							base.debug(`${base.bundle.getText("errorUndefinedAction")}: ${data.action}`)
+								logError(`${base.bundle.getText("errorUndefinedAction")}: ${data.action}`)
 							wss.broadcast(`${base.bundle.getText("errorUndefinedAction")}: ${data.action}`)
 							break
 					}
 				} catch (parseError) {
-					console.error(base.colors.red(`${base.bundle.getText("generalError")}: ${parseError.message}`))
-					base.debug(`${base.bundle.getText("generalError")}: ${parseError.message}`)
+					logError(`${base.bundle.getText("generalError")}: ${parseError.message}`)
 					try {
 						ws.send(JSON.stringify({
 							text: base.bundle.getText("error.parseError", [parseError.message])
@@ -182,24 +186,21 @@ export function route(app, server) {
 			})
 
 			ws.on("error", (error) => {
-				console.error(base.colors.red(`${base.bundle.getText("websocketError")}: ${error}`))
-				base.debug(`${base.bundle.getText("websocketError")}: ${error}`)
+				logError(`${base.bundle.getText("websocketError")}: ${error}`)
 			})
 
 			ws.send(JSON.stringify({
 				text: base.bundle.getText("connectedToProcess")
 			}), (error) => {
 				if (error !== null && typeof error !== "undefined") {
-					console.error(base.colors.red(`${base.bundle.getText("sendError")}: ${error}`))
-					base.debug(`${base.bundle.getText("sendError")}: ${error}`)
+					logError(`${base.bundle.getText("sendError")}: ${error}`)
 				}
 			})
 		})
 
 
 	} catch (e) {
-		console.error(base.colors.red(`${base.bundle.getText("generalError")}: ${e}`))
-		base.debug(`${base.bundle.getText("generalError")}: ${e}`)
+		logError(`${base.bundle.getText("generalError")}: ${e}`)
 	}
 	return app
 }

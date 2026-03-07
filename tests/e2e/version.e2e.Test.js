@@ -1,6 +1,6 @@
 // @ts-check
 import { describe, it } from 'mocha'
-import * as base from './base.js'
+import * as base from '../base.js'
 import { expect } from 'chai'
 
 describe('version command - E2E Tests', function () {

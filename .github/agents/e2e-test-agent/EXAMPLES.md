@@ -296,5 +296,5 @@ npm run test:sequential
 npm run test:report
 
 # Run specific test file
-npm test tests/export.e2e.Test.js
+npm run test:e2e:single -- tests/e2e/export.e2e.Test.js
 ```

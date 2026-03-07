@@ -12,12 +12,12 @@
  */
 
 import { describe, it, before, after, beforeEach, afterEach } from 'mocha'
-import { assert } from '../base.js'
+import { assert } from '../../base.js'
 import express from 'express'
 import { createServer } from 'http'
 import http from 'http'
 import { WebSocket } from 'ws'
-import { route } from '../../routes/webSocket.js'
+import { route } from '../../../routes/webSocket.js'
 
 describe('WebSocket End-to-End Message Handling Tests', function () {
     let app

@@ -1,6 +1,6 @@
 ---
 description: "Use when creating end-to-end (E2E) tests for CLI commands. Enforces consistent test structure, subprocess execution patterns, output validation, flag testing, and integration testing. Covers complete command workflows from execution through verification."
-applyTo: "tests/**/*.e2e.Test.js"
+applyTo: "tests/e2e/**/*.e2e.Test.js"
 ---
 
 # End-to-End (E2E) Test Creation Guide
@@ -32,13 +32,13 @@ E2E tests are subprocess-based tests that:
 ## File Naming and Organization
 
 - **Naming Convention**: `commandName.e2e.Test.js`
-- **Location**: `tests/` directory (same level as other test files)
-- **Pattern**: Files matching `tests/**/*.e2e.Test.js` are discovered and run by E2E test scripts
+- **Location**: `tests/e2e/` directory (use `tests/e2e/routes/` for route/WebSocket E2E tests)
+- **Pattern**: Files matching `tests/e2e/**/*.e2e.Test.js` are discovered and run by E2E test scripts
 
 **Examples:**
-- `tests/version.e2e.Test.js` - E2E tests for version command
-- `tests/tables.e2e.Test.js` - E2E tests for tables command
-- `tests/status.e2e.Test.js` - E2E tests for status command
+- `tests/e2e/version.e2e.Test.js` - E2E tests for version command
+- `tests/e2e/tables.e2e.Test.js` - E2E tests for tables command
+- `tests/e2e/status.e2e.Test.js` - E2E tests for status command
 
 ## Test Infrastructure
 
@@ -47,7 +47,7 @@ E2E tests are subprocess-based tests that:
 The `base.js` module provides core functionality for E2E tests:
 
 ```javascript
-import * as base from './base.js'
+import * as base from '../base.js'
 
 // Execute a CLI command and capture output
 base.exec(command, (error, stdout, stderr) => {
@@ -89,16 +89,16 @@ E2E tests run using `.mocharc.json`:
 Standard npm scripts for running E2E tests:
 ```json
 {
-  "test:e2e": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json \"./tests/version.e2e.Test.js\"",
-  "test:e2e:single": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json \"./tests/**/*.e2e.Test.js\"",
-  "test:e2e:grep": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json \"./tests/**/*.e2e.Test.js\" --grep"
+  "test:e2e": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json \"./tests/e2e/**/*.e2e.Test.js\"",
+  "test:e2e:single": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json \"./tests/e2e/**/*.e2e.Test.js\"",
+  "test:e2e:grep": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json \"./tests/e2e/**/*.e2e.Test.js\" --grep"
 }
 ```
 
 **Usage:**
 ```bash
-npm run test:e2e                    # Run single specific test
-npm run test:e2e:single             # Run all E2E tests
+npm run test:e2e                    # Run all E2E tests
+npm run test:e2e:single             # Run all E2E tests (same as test:e2e)
 npm run test:e2e:grep "pattern"     # Run E2E tests matching pattern
 ```
 
@@ -120,7 +120,7 @@ npm run test:e2e:grep "pattern"     # Run E2E tests matching pattern
  */
 
 import { describe, it } from 'mocha'
-import * as base from './base.js'
+import * as base from '../base.js'
 import { expect } from 'chai'
 
 describe('commandName command - E2E Tests', function () {
@@ -470,12 +470,12 @@ describe('commandName command - E2E Tests', function () {
 
 ### Run all E2E tests:
 ```bash
-npm run test:e2e:single
+npm run test:e2e
 ```
 
 ### Run specific E2E test file:
 ```bash
-npm run test:e2e  # Runs ./tests/version.e2e.Test.js (currently configured)
+npm run test:e2e:single -- tests/e2e/version.e2e.Test.js
 ```
 
 ### Run E2E tests matching a pattern:
@@ -493,12 +493,12 @@ npm run test:e2e:grep "Flags"
 
 ### Run with verbose output:
 ```bash
-NODE_ENV=test npx mocha tests/commandName.e2e.Test.js --reporter spec
+NODE_ENV=test npx mocha tests/e2e/commandName.e2e.Test.js --reporter spec
 ```
 
 ### Run a single test:
 ```bash
-NODE_ENV=test npx mocha tests/commandName.e2e.Test.js --grep "test name"
+NODE_ENV=test npx mocha tests/e2e/commandName.e2e.Test.js --grep "test name"
 ```
 
 ### Manual command execution:
@@ -523,7 +523,7 @@ it('debug test', function (done) {
 
 ## Example from version.e2e.Test.js
 
-The [version.e2e.Test.js](../../tests/version.e2e.Test.js) file demonstrates these patterns:
+The [version.e2e.Test.js](../../tests/e2e/version.e2e.Test.js) file demonstrates these patterns:
 
 - **Test structure**: Organized into logical groups (Basic execution, Help outputs, Version components, etc.)
 - **Output validation**: Uses both `include()` and `match()` for flexible assertions
@@ -553,6 +553,6 @@ E2E tests in CI/CD pipelines:
 ---
 
 **For additional test patterns, see:**
-- [version.e2e.Test.js](../../tests/version.e2e.Test.js) - Complete working example
+- [version.e2e.Test.js](../../tests/e2e/version.e2e.Test.js) - Complete working example
 - [testing.instructions.md](./testing.instructions.md) - General testing guidelines
 - [test-utilities-reuse.instructions.md](./test-utilities-reuse.instructions.md) - Reusing test helpers

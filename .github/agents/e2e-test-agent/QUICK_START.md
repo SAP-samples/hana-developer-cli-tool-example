@@ -8,13 +8,13 @@ You now have a specialized Copilot agent that helps you create, run, and debug i
 
 In VS Code Chat, use the **E2E Test Agent** by mentioning it in your chat:
 
-```
+```text
 @E2E Test Agent Create E2E test for the export workflow
 ```
 
 Or simply ask questions that reference E2E testing:
 
-```
+```text
 I need an E2E test that validates the complete data pipeline
 ```
 
@@ -26,7 +26,7 @@ The agent will recognize your intent and activate automatically.
 
 Ask the agent to create a complete test file:
 
-```
+```text
 @E2E Test Agent Create E2E tests for the connect command, including:
 - Testing with username/password
 - Testing with userstore key
@@ -35,6 +35,7 @@ Ask the agent to create a complete test file:
 ```
 
 The agent will generate:
+
 - ✅ Complete test file with proper structure
 - ✅ Fixture data if needed
 - ✅ Examples for both CLI args and interactive prompts
@@ -43,7 +44,7 @@ The agent will generate:
 
 ### Test an Interactive Workflow
 
-```
+```text
 @E2E Test Agent Write E2E tests for this workflow:
 1. Connect to HANA database
 2. Run data validation
@@ -55,10 +56,10 @@ Include tests for both CLI args and interactive mode.
 
 ### Debug a Failing E2E Test
 
-```
+```text
 @E2E Test Agent Why is my E2E test failing?
 
-Test: tests/export.e2e.Test.js
+Test: tests/e2e/export.e2e.Test.js
 Error: "Cannot find module 'chai'"
 
 My test code:
@@ -66,6 +67,7 @@ My test code:
 ```
 
 The agent will:
+
 - 🔍 Analyze the error
 - 💡 Suggest fixes
 - 📝 Show corrected code
@@ -73,7 +75,7 @@ The agent will:
 
 ### Test Error Scenarios
 
-```
+```text
 @E2E Test Agent Create E2E tests for error handling in the export command:
 - Invalid table name
 - Connection timeout
@@ -84,7 +86,7 @@ The agent will:
 
 ### Validate Test Coverage
 
-```
+```text
 @E2E Test Agent Review E2E test coverage for the data tools.
 Which workflows are untested? What should I test next?
 ```
@@ -108,7 +110,7 @@ The agent understands:
 
 When interacting with the E2E Test Agent, try these direct asks:
 
-```
+```text
 // Creating tests
 "Create E2E test for [command/workflow]"
 "Write tests for [feature] including error scenarios"
@@ -139,9 +141,9 @@ When interacting with the E2E Test Agent, try these direct asks:
 3. **Refine** based on results or additional requirements
 4. **Expand coverage** with more test scenarios
 
-### Example Session:
+### Example Session
 
-```
+```text
 You:   "Create E2E tests for the complete export workflow"
 Agent: [Generates test file with fixtures]
 
@@ -175,9 +177,12 @@ Agent: [Recommends additional test scenarios based on command options]
 
 Tests created by the agent will be organized like this:
 
-```
+```text
 tests/
-├── [command].e2e.Test.js          # E2E tests for a command
+├── e2e/
+│   ├── [command].e2e.Test.js      # E2E tests for a command
+│   └── routes/
+│       └── [route].e2e.Test.js    # Route-level E2E tests
 ├── workflows/
 │   └── [workflow].Test.js         # Multi-command workflow tests
 ├── fixtures/
@@ -193,10 +198,10 @@ Tests can be run using your existing npm scripts:
 
 ```bash
 # Run all E2E tests
-npm test -- --grep "E2E|e2e"
+npm run test:e2e
 
 # Run specific test file
-npm test tests/export.e2e.Test.js
+npm run test:e2e:single -- tests/e2e/export.e2e.Test.js
 
 # Run with coverage
 npm run coverage
@@ -212,7 +217,7 @@ npm run test:sequential
 
 You can always ask the agent for help:
 
-```
+```text
 "I'm not sure how to test [feature]. What's the right approach?"
 "Show me an example of testing [pattern]"
 "What test utilities are available in this project?"
@@ -222,17 +227,20 @@ You can always ask the agent for help:
 
 ## 10. Integration with Your Workflow
 
-### For Development:
+### For Development
+
 - Write new command? **Ask the agent to create E2E tests**
 - Modify command behavior? **Ask agent to update related E2E tests**
 - Fix a bug? **Ask agent to create a test that reproduces the issue**
 
-### For Code Review:
+### For Code Review
+
 - Review E2E test quality
 - Identify untested workflows
 - Suggest test improvements
 
-### For Maintenance:
+### For Maintenance
+
 - Keep E2E tests updated as commands evolve
 - Maintain test fixtures and data
 - Monitor test coverage

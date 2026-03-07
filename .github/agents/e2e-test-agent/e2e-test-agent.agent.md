@@ -88,7 +88,7 @@ promptHandler(argv, handler, {
 ### Test Utilities Available
 
 ```javascript
-import * as base from '../tests/base.js'
+import * as base from '../base.js'
 
 // Run CLI command and capture output
 base.myTest('node bin/export.js --help', done)
@@ -165,28 +165,28 @@ it('handles connection errors', async function () {
 
 ## Test Organization
 
-- **CLI E2E tests**: `tests/*.e2e.Test.js` or `tests/*E2E.Test.js`
-- **Route E2E tests**: `tests/routes/*.e2e.Test.js`
+- **CLI E2E tests**: `tests/e2e/*.e2e.Test.js`
+- **Route E2E tests**: `tests/e2e/routes/*.e2e.Test.js`
 - **Workflow tests**: `tests/workflows/*.Test.js` (if created)
 - **Fixtures**: `tests/fixtures/` or `tests/data/`
 
 ## Related Files & Utilities
 
-- [CLI commands](bin/) — Command definitions and handlers
-- [Test base utilities](tests/base.js) — myTest(), exec(), fork() helpers
-- [Test helper](tests/helper.js) — Global hooks and setup
-- [App factory](tests/appFactory.js) — createApp(), createMinimalApp()
+- [CLI commands](../../../bin/) — Command definitions and handlers
+- [Test base utilities](../../../tests/base.js) — myTest(), exec(), fork() helpers
+- [Test helper](../../../tests/helper.js) — Global hooks and setup
+- [App factory](../../../tests/appFactory.js) — createApp(), createMinimalApp()
 - [CLI instructions](../../instructions/cli-command-development.instructions.md)
 - [Testing instructions](../../instructions/testing.instructions.md)
-- [i18n bundles](_i18n/) — For translatable strings
+- [i18n bundles](../../../_i18n/) — For translatable strings
 
 ## Examples in Repository
 
 Look at existing test patterns:
 - `tests/connect.Test.js` — Connection command testing
 - `tests/export.Test.js` — Data export testing
-- `tests/routes/export.e2e.Test.js` — Route-level E2E testing
-- `tests/routes/webSocket.e2e.Test.js` — WebSocket E2E patterns
+- `tests/e2e/routes/export.e2e.Test.js` — Route-level E2E testing
+- `tests/e2e/routes/webSocket.e2e.Test.js` — WebSocket E2E patterns
 
 ## Success Criteria
 

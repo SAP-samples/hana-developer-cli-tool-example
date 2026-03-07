@@ -201,7 +201,7 @@ npm test tests/utils/connections.Test.js
 npm test tests/routes/index.Test.js
 
 # WebSocket end-to-end
-npm test tests/routes/webSocket.e2e.Test.js
+npm test tests/e2e/routes/webSocket.e2e.Test.js
 ```
 
 ### Run HTTP Integration Tests
