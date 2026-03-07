@@ -195,3 +195,9 @@ flowchart TB
 3. **Update MCP tools** → Pass context from handler
 4. **Update CLI** → Check env vars in `connections.js`
 5. **Test & Deploy** → Backward compatible, no breaking changes
+
+## See Also
+
+- [Architecture](./architecture.md)
+- [Connection Guide](./connection-guide.md)
+- [Server Usage](./server-usage.md)

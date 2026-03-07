@@ -284,4 +284,4 @@ Want to add support for a new language? Or encounter a translation issue? See th
 ## See Also
 
 - [CLI Features](./cli-features.md)
-- [Documentation](/docs/)
+- [Documentation Home](/)

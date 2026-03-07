@@ -2,7 +2,7 @@
 
 ## Command Syntax
 
-All hana-cli commands follow this pattern:
+All HANA CLI commands follow this pattern:
 
 ```bash
 hana-cli <command> [options]

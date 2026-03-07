@@ -134,7 +134,7 @@ Edit `claude_desktop_config.json`:
   "mcpServers": {
     "hana-cli": {
       "command": "node",
-      "args": ["/path/to/mcp-server/dist/src/index.js"],
+      "args": ["/path/to/mcp-server/build/index.js"],
       "env": {
         "HANA_CLI_PROJECT_PATH": "/default/project/path"
       }
@@ -165,7 +165,7 @@ await mcpClient.call('hana_tables', {
 A: Pass absolute path to projectPath. Check file exists: `ls /path/to/project/.env`
 
 **Q: Still using wrong connection**  
-A: Verify the context is being passed. Enable debug: `DEBUG=hana-cli:* node mcp-server/dist/src/index.js`
+A: Verify the context is being passed. Enable debug: `DEBUG=hana-cli:* node mcp-server/build/index.js`
 
 **Q: Different project, same schema name**  
 A: Confirm projectPath is correct for each call. MCP uses projectPath to resolve connections.

@@ -90,7 +90,7 @@ See also:
 
 ## Examples Library
 
-Built-in examples for 20+ common commands:
+Built-in examples library with practical use cases for common commands:
 
 ```bash
 # Show all available commands with examples
@@ -109,7 +109,7 @@ hana-cli examples --search csv
 hana-cli examples --format json
 ```
 
-The `examples` command includes examples for core operations like import/export, data analysis, schema comparison, and more.
+The `examples` command (alias: `example`) provides ready-to-use examples for core operations like import/export, data analysis, schema comparison, and more. Examples include usage syntax and descriptions for each command.
 
 ## Interactive Mode
 
@@ -320,46 +320,60 @@ Your history and presets are automatically saved to `.interactive-state.json` (g
 
 Interactive mode organizes commands into these categories:
 
+- **Analysis Tools** - Dependencies, recommendations, privilege analysis
+- **Backup Recovery** - Backup, restore, replication status
+- **BTP Integration** - BTP services and subscriptions
+- **Connection Auth** - Database connection and authentication
 - **Data Tools** - Import, export, data analysis, validation
-- **Schema Tools** - Tables, views, schemas, objects
+- **Developer Tools** - Code generation, templates, testing, documentation
+- **Hana Cloud** - SAP HANA Cloud instance management
+- **HDI Management** - Container and service management
+- **Mass Operations** - Bulk updates, exports, grants
 - **Object Inspection** - Detailed metadata exploration
 - **Performance Monitoring** - Query analysis, diagnostics
-- **HDI Management** - Container and service management
-- **Developer Tools** - Code generation, templates, testing
+- **Schema Tools** - Tables, views, schemas, objects
 - **Security** - User management, certificates, privileges
-- **System Tools** - Configuration, monitoring, administration
-- **Analysis Tools** - Dependencies, recommendations
-- **Mass Operations** - Bulk updates, exports, grants
-- **Cloud Management** - SAP HANA Cloud instance management
+- **System Admin** - System administration and diagnostics
+- **System Tools** - Configuration, monitoring, utilities
 
 ### Integration with Other Features
 
 Interactive mode works seamlessly with:
 
 - **Examples** - Choose from pre-configured command examples
-- **Knowledge Base** - Search help topics from within workflows
-- **Help Documentation** - Access command-specific help during parameter collection
+- **Knowledge Base** - Search help topics via the `kb` command
+- **Help Documentation** - Access command-specific help using `--help` flag
 
 Presets persist across sessions and can be loaded from the main menu.
 
-## Offline Documentation
+## Documentation Commands
 
-Full documentation available locally:
+Access documentation through these commands:
 
 ```bash
-# View documentation index
-hana-cli docs
+# View README in terminal
+hana-cli readMe
 
-# List all available topics
-hana-cli docs --list
+# View README in browser
+hana-cli readMeUI
 
-# View specific doc
-hana-cli docs import
-hana-cli docs troubleshooting
+# View CHANGELOG in terminal
+hana-cli changeLog
 
-# Search documentation
-hana-cli docs --search "import csv"
+# View CHANGELOG in browser  
+hana-cli changeLogUI
+
+# Open full online documentation
+hana-cli helpDocu
 ```
+
+**Aliases:**
+
+- `readMe`: `readme`
+- `readMeUI`: `readmeui`, `readMeUi`, `readmeUI`
+- `changeLog`: `chg`, `changelog`, `changes`
+- `changeLogUI`: `chgUI`, `chgui`, `changelogui`
+- `helpDocu`: `openDocu`, `openDocumentation`, `documentation`, `docu`
 
 ## Online Resources
 

@@ -582,7 +582,7 @@ Theme is auto-selected based on system preferences and can be changed via user s
 
 ## See Also
 
-- [REST API Server](../api-server/)
+- [REST API Endpoint Map](../api-server/)
 - [HTTP Routes Documentation](../../04-api-reference/http-routes) - Backend API endpoints
 - [Getting Started](../../01-getting-started/)
 - [Features Guide](../)

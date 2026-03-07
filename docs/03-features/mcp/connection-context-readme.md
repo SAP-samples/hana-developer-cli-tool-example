@@ -6,62 +6,54 @@
 
 **A**: Currently, the MCP server always uses connection files from the install path (`~/.hana-cli/default.json`) or user home directory. The solution is to pass project-specific context through MCP tool parameters, which the executor then applies as the working directory and environment variables when spawning the CLI.
 
-**Key Files to Modify**:
-
-- `mcp-server/src/executor.ts` - Add context parameter and environment setup
-- `mcp-server/src/index.ts` - Extract context from tool parameters and pass it
-- `utils/connections.js` - Check for context environment variables
-- Create `mcp-server/src/connection-context.ts` - Define the interface
-
 ---
 
-## Documentation Files Created
+## Documentation Guide
 
-### 1. **MCP_VISUAL_SUMMARY.md** ← START HERE
+This directory contains comprehensive documentation for implementing project-specific connection context in the MCP server. Choose your starting point based on your role:
 
-**Best for**: Visual learners, quick understanding
+### 🎯 Quick Start (5-10 minutes)
 
-- Problem visualization (before/after diagrams)
-- Architecture flows
+**[visual-summary.md](./visual-summary.md)** - Problem visualization and architecture flows
+
+- Before/after diagrams
 - Data flow examples
-- Testing matrix
-- 5-step quick reference
+- Quick reference diagrams
 
-**Read this if**: You want to understand the problem quickly without deep technical details
+**Best for**: Getting a mental model quickly
 
 ---
 
-### 2. **MCP_IMPLEMENTATION_GUIDE.md** ← IMPLEMENTATION CHECKLIST
+### 👨‍💻 Implementation (2-3 hours)
 
-**Best for**: Developers implementing the solution
+**[implementation-guide.md](./implementation-guide.md)** - Step-by-step checklist
 
-- Exact code changes needed
-- Line-by-line modifications
+- Exact code changes with line numbers
 - Before/after code snippets
 - Testing checklist
 - Validation steps
 
-**Read this if**: You're ready to code the solution
+**Best for**: Developers ready to implement the solution
 
 ---
 
-### 3. **MCP_CONNECTION_CONTEXT_SOLUTION.md** ← DETAILED WALKTHROUGH
+### 📚 Understanding (30-60 minutes)
 
-**Best for**: Understanding the full solution approach
+**[connection-context-solution.md](./connection-context-solution.md)** - Detailed walkthrough
 
 - Current flow explanation with code
-- Key code locations identified
-- Step-by-step implementation with code
+- Key code locations
+- Step-by-step implementation walkthrough
 - Real usage examples
 - Files to modify summary
 
-**Read this if**: You want detailed explanation of changes and examples
+**Best for**: Understanding the complete solution approach
 
 ---
 
-### 4. **MCP_CONNECTION_CONTEXT_ANALYSIS.md** ← DEEP DIVE
+### 🏗️ Architecture (1 hour)
 
-**Best for**: Architects, decision makers
+**[connection-context-analysis.md](./connection-context-analysis.md)** - Deep architectural analysis
 
 - Multiple implementation options
 - Pros/cons of each approach
@@ -70,7 +62,35 @@
 - Future enhancements
 - Migration strategies
 
-**Read this if**: You want to understand all possible approaches and make design decisions
+**Best for**: Architects and decision makers
+
+---
+
+### 📋 Historical Reference
+
+**[implementation-complete.md](./implementation-complete.md)** - Implementation status snapshot (Feb 2026)
+
+- Historical snapshot of what was implemented
+- Specific code changes made
+- Build status from Feb 2026
+- Usage examples from initial implementation
+
+**Note**: This is a historical document. For current implementation, use the guides above.
+
+---
+
+## Related Documentation
+
+**MCP Server Core:**
+
+- [Architecture](./architecture.md) - Overall MCP technical architecture
+- [Server Usage](./server-usage.md) - Running and configuring the MCP server
+- [Connection Guide](./connection-guide.md) - General connection configuration
+
+**Other Features:**
+
+- [MCP Index](./index.md) - Main MCP documentation hub
+- [Server Updates](./server-updates.md) - Recent MCP server enhancements
 
 ---
 
@@ -78,20 +98,20 @@
 
 ### For Quick Understanding (15 minutes)
 
-1. Read **MCP_VISUAL_SUMMARY.md** - Get mental model
-2. Skim **MCP_IMPLEMENTATION_GUIDE.md** - See what needs to change
+1. Read **visual-summary.md** - Get mental model
+2. Skim **implementation-guide.md** - See what needs to change
 
 ### For Implementation (2-3 hours)
 
-1. Read **MCP_IMPLEMENTATION_GUIDE.md** - Follow step-by-step
-2. Reference **MCP_CONNECTION_CONTEXT_SOLUTION.md** - For detailed explanations
-3. Reference **MCP_VISUAL_SUMMARY.md** - If confused about flow
+1. Read **implementation-guide.md** - Follow step-by-step
+2. Reference **connection-context-solution.md** - For detailed explanations
+3. Reference **visual-summary.md** - If confused about flow
 
 ### For Design Review (1 hour)
 
-1. Read **MCP_CONNECTION_CONTEXT_ANALYSIS.md** - Understand all options
-2. Review **MCP_VISUAL_SUMMARY.md** - Verify architecture
-3. Check **MCP_IMPLEMENTATION_GUIDE.md** - Assess effort
+1. Read **connection-context-analysis.md** - Understand all options
+2. Review **visual-summary.md** - Verify architecture
+3. Check **implementation-guide.md** - Assess effort
 
 ---
 
@@ -280,11 +300,11 @@ Connection Resolution ← UPDATED
 
 **Q: What's the simplest way to implement this?**
 
-- Follow **MCP_IMPLEMENTATION_GUIDE.md** step 1-5
+- Follow **implementation-guide.md** step 1-5
 
 **Q: How do I test if it works?**
 
-- See validation checklist in **MCP_IMPLEMENTATION_GUIDE.md**
+- See validation checklist in **implementation-guide.md**
 
 ---
 
@@ -292,32 +312,33 @@ Connection Resolution ← UPDATED
 
 ### 👨‍💼 Project Manager / Decision Maker
 
-→ Start with: **MCP_VISUAL_SUMMARY.md**
+→ Start with: **visual-summary.md**
 → Decision: 15 minutes, understand scope and benefits
 
 ### 👨‍💻 Developer / Implementation
 
-→ Start with: **MCP_IMPLEMENTATION_GUIDE.md**
+→ Start with: **implementation-guide.md**
 → Implement: 2-3 hours, line-by-line code changes
 
 ### 🏗️ Architect / Technical Lead
 
-→ Start with: **MCP_CONNECTION_CONTEXT_ANALYSIS.md**
+→ Start with: **connection-context-analysis.md**
 → Design: 1 hour, evaluate options and approach
 
 ### 🔎 Code Reviewer
 
-→ Check against: **MCP_IMPLEMENTATION_GUIDE.md** checklist
+→ Check against: **implementation-guide.md** checklist
 → Review: Cross-verify all modified files
 
 ### 🤔 Understanding Decision
 
 → Read in order:
 
-  1. **MCP_VISUAL_SUMMARY.md** (5 min)
-  2. **MCP_CONNECTION_CONTEXT_SOLUTION.md** (15 min)
-  3. **MCP_IMPLEMENTATION_GUIDE.md** (10 min)
-  → Total: 30 minutes for complete understanding
+1. **visual-summary.md** (5 min)
+2. **connection-context-solution.md** (15 min)
+3. **implementation-guide.md** (10 min)
+
+→ Total: 30 minutes for complete understanding
 
 ---
 
@@ -338,12 +359,12 @@ After implementation, you should be able to:
 
 | Issue | Solution | Document |
 | -------- | -------- | -------- |
-| "What's the problem?" | Start here | MCP_VISUAL_SUMMARY.md |
-| "How do I fix it?" | Code changes | MCP_IMPLEMENTATION_GUIDE.md |
-| "Walk me through it" | Detailed explanation | MCP_CONNECTION_CONTEXT_SOLUTION.md |
-| "What about X?" | Design considerations | MCP_CONNECTION_CONTEXT_ANALYSIS.md |
-| "Show me diagrams" | Visual explanations | MCP_VISUAL_SUMMARY.md |
-| "I need the code" | Exact changes | MCP_IMPLEMENTATION_GUIDE.md |
+| "What's the problem?" | Start here | visual-summary.md |
+| "How do I fix it?" | Code changes | implementation-guide.md |
+| "Walk me through it" | Detailed explanation | connection-context-solution.md |
+| "What about X?" | Design considerations | connection-context-analysis.md |
+| "Show me diagrams" | Visual explanations | visual-summary.md |
+| "I need the code" | Exact changes | implementation-guide.md |
 
 ---
 
@@ -362,10 +383,10 @@ After implementation, you should be able to:
 
 | Document | Purpose | Time |
 | -------- | ------- | ---- |
-| 📊 [MCP_VISUAL_SUMMARY.md](./MCP_VISUAL_SUMMARY.md) | Diagrams & quick overview | 15 min |
-| 🛠️ [MCP_IMPLEMENTATION_GUIDE.md](./MCP_IMPLEMENTATION_GUIDE.md) | Code changes & checklist | 2-3 hrs |
-| 📝 [MCP_CONNECTION_CONTEXT_SOLUTION.md](./MCP_CONNECTION_CONTEXT_SOLUTION.md) | Detailed walkthrough | 30 min |
-| 🎯 [MCP_CONNECTION_CONTEXT_ANALYSIS.md](./MCP_CONNECTION_CONTEXT_ANALYSIS.md) | Full analysis & options | 1 hour |
+| 📊 [visual-summary.md](./visual-summary.md) | Diagrams & quick overview | 15 min |
+| 🛠️ [implementation-guide.md](./implementation-guide.md) | Code changes & checklist | 2-3 hrs |
+| 📝 [connection-context-solution.md](./connection-context-solution.md) | Detailed walkthrough | 30 min |
+| 🎯 [connection-context-analysis.md](./connection-context-analysis.md) | Full analysis & options | 1 hour |
 
 ---
 
@@ -373,9 +394,9 @@ After implementation, you should be able to:
 
 If you have questions about:
 
-- **The problem**: Check MCP_VISUAL_SUMMARY.md diagrams
-- **The implementation**: Check MCP_IMPLEMENTATION_GUIDE.md code sections
-- **The design choices**: Check MCP_CONNECTION_CONTEXT_ANALYSIS.md options
-- **The flow**: Check MCP_CONNECTION_CONTEXT_SOLUTION.md walkthrough
+- **The problem**: Check visual-summary.md diagrams
+- **The implementation**: Check implementation-guide.md code sections
+- **The design choices**: Check connection-context-analysis.md options
+- **The flow**: Check connection-context-solution.md walkthrough
 
 All documents include examples, diagrams, and detailed explanations for different learning styles.

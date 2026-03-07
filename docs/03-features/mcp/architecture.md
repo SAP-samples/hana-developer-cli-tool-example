@@ -12,7 +12,7 @@ Previously, the MCP server always used connection files from the install path (`
 
 ## Architecture Flow
 
-```
+```text
 AI Agent Request
   ↓
 {"schema": "MY_SCHEMA", 
@@ -53,18 +53,21 @@ After project context is applied, connections are resolved in this order:
 
 ### Files Modified
 
-**mcp-server/src/executor.ts**
+### `mcp-server/src/executor.ts`
+
 - Accepts optional `ConnectionContext` parameter
 - Extracts project path from context
 - Sets environment variables for CLI to detect
 - Updates `spawn()` call with environment and working directory
 
-**mcp-server/src/index.ts**
+### `mcp-server/src/index.ts`
+
 - Extracts `__projectContext` from tool arguments
 - Removes context from args before calling CLI (it's metadata, not a parameter)
 - Passes context to `executeCommand()`
 
-**utils/connections.js**
+### `utils/connections.js`
+
 - Checks `process.env.HANA_CLI_PROJECT_PATH`
 - Changes working directory if context provided
 - Falls back to home/install paths if not found
@@ -129,7 +132,7 @@ To test connection context:
 
 ```bash
 # Start MCP server with debug
-DEBUG=hana-cli:* node mcp-server/dist/src/index.js
+DEBUG=hana-cli:* node mcp-server/build/index.js
 
 # In AI agent, call with context
 hana_tables {

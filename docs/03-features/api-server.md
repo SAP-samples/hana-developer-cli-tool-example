@@ -8,6 +8,9 @@ Run HANA CLI as an HTTP server for programmatic access.
 # Start on default port 3010
 hana-cli server
 
+# Equivalent command
+hana-cli ui
+
 # Start on custom port
 hana-cli server --port 8080
 
@@ -32,6 +35,12 @@ hana-cli server --host 0.0.0.0 --port 8080
 http://localhost:3010/api-docs
 ```
 
+### OpenAPI JSON
+
+```bash
+http://localhost:3010/api-docs.json
+```
+
 ### Base URL
 
 All routes are served from the root path:
@@ -52,11 +61,14 @@ curl http://localhost:3010/
 
 ```json
 {
-  "schema": "**CURRENT_SCHEMA**",
-  "table": "*",
+  "schema": "MYSCHEMA",
+  "table": "EMPLOYEES",
+  "view": "",
   "port": 3010
 }
 ```
+
+The response reflects the current runtime prompt/configuration object and may include additional properties.
 
 #### Update Configuration
 
@@ -69,12 +81,20 @@ curl -X PUT http://localhost:3010/ \
   }'
 ```
 
+**Response:**
+
+```json
+{
+  "status": "ok"
+}
+```
+
 #### Access Web UI
 
 The server also provides a browser-based UI:
 
 ```bash
-http://localhost:3010/ui/
+http://localhost:3010/ui/#Shell-home
 ```
 
 ## Error Handling
@@ -87,6 +107,8 @@ The server returns standard HTTP status codes:
 
 Error responses include a JSON body:
 
+`404` (not found):
+
 ```json
 {
   "error": {
@@ -97,8 +119,18 @@ Error responses include a JSON body:
 }
 ```
 
+`500` (and other server errors):
+
+```json
+{
+  "message": "Internal server error",
+  "status": 500
+}
+```
+
 ## See Also
 
+- [REST API Endpoint Map](./api-server/)
 - [API Reference](/04-api-reference/)
 - [Swagger Documentation](/04-api-reference/swagger.md)
 - [CLI Features](./cli-features.md)

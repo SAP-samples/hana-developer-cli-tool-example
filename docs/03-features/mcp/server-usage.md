@@ -21,13 +21,13 @@ npm run build
 
 ```bash
 # Start MCP server (listens on stdio)
-node dist/src/index.js
+node build/index.js
 
 # With debug logging
-DEBUG=hana-cli:* node dist/src/index.js
+DEBUG=hana-cli:* node build/index.js
 
-# Specify custom port (for testing)
-PORT=3000 node dist/src/index.js
+# With larger heap for very large workloads
+NODE_OPTIONS="--max-old-space-size=4096" node build/index.js
 ```
 
 ## How It Works
@@ -62,7 +62,7 @@ The MCP server exposes 150+ HANA CLI tools:
   "mcpServers": {
     "hana-cli": {
       "command": "node",
-      "args": ["/path/to/mcp-server/dist/src/index.js"],
+      "args": ["/path/to/mcp-server/build/index.js"],
       "env": {
         "DEBUG": "hana-cli:*"
       }
@@ -123,15 +123,15 @@ The MCP server exposes 150+ HANA CLI tools:
 
 1. **Verify Installation**
 
-   - Open the VSCode output panel (View → Output)
-   - Select "Copilot" from the dropdown
-   - You should see messages like:
+  Open the VSCode output panel (View → Output), then select **Copilot** from the dropdown.
 
-   ```text
-   [MCP] Loaded 168 command modules from hana-cli
-   [MCP] Registered 764 tools
-   [MCP] SAP HANA CLI MCP Server running on stdio
-   ```
+  You should see messages like:
+
+  `[MCP] Loaded ... command modules from hana-cli`
+
+  `[MCP] Registered ... unique commands with ... processed modules`
+
+  `[MCP] SAP HANA CLI MCP Server running on stdio`
 
 1. **Use with Copilot**
 
@@ -150,7 +150,7 @@ The MCP server exposes 150+ HANA CLI tools:
 const { exec } = require('child_process');
 
 // Start MCP server
-const server = exec('node mcp-server/dist/src/index.js');
+const server = exec('node mcp-server/build/index.js');
 
 // Send tool call
 server.stdin.write(JSON.stringify({
@@ -233,7 +233,7 @@ Try: Check schema name is correct and you have permissions
 
 ### Performance Tuning
 
-- Increase node heap: `NODE_OPTIONS="--max-old-space-size=4096" node dist/src/index.js`
+- Increase node heap: `NODE_OPTIONS="--max-old-space-size=4096" node build/index.js`
 - Use connection pooling for multiple queries
 - Batch operations for better performance
 

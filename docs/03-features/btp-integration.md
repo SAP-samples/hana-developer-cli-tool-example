@@ -4,11 +4,13 @@ Integration with SAP Business Technology Platform for cloud database management.
 
 ## Overview
 
-HANA CLI includes commands to manage SAP HANA on SAP BTP and SAP Business Technology Platform resources.
+HANA CLI includes commands to manage SAP HANA Cloud and SAP BTP resources.
 
 ## BTP CLI Requirement
 
-All BTP-related functionality requires the [SAP BTP Command Line Interface](https://help.sap.com/docs/btp/btp-cli-command-reference/btp-cli-command-reference?locale=en-US&version=LATEST) to be installed.
+The `btp`, `btpInfo`, and `sub` commands require the [SAP BTP Command Line Interface](https://help.sap.com/docs/btp/btp-cli-command-reference/btp-cli-command-reference?locale=en-US&version=LATEST) to be installed.
+
+`hc`, `hcStart`, and `hcStop` first try BTP APIs and can fall back to Cloud Foundry APIs when needed.
 
 ### Installation
 
@@ -89,7 +91,7 @@ hana-cli hdi
 3. **Connect to instance:**
 
    ```bash
-   hana-cli connect -d <host> -u <user> -p <password> -s
+   hana-cli connect --connection <host:port> --user <user> --password <password> --save
    ```
 
 4. **Use HANA CLI normally:**
