@@ -4,6 +4,12 @@
 > Category: **System Tools**  
 > Status: Production Ready
 
+## ⚠️ Redirect Notice
+
+This page is a legacy compatibility alias.
+
+**👉 [Go to Kafka Connect Documentation](../data-tools/kafka-connect.md)**
+
 ## Description
 
 The `kafkaConnect` command performs operations related to system tools.

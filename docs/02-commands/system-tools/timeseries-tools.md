@@ -6,7 +6,7 @@
 
 ## ⚠️ Redirect Notice
 
-This page is a compatibility alias.
+This page is a legacy compatibility alias.
 
 **👉 [Go to Time Series Tools Documentation](./time-series-tools.md)**
 

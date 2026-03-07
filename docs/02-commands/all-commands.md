@@ -38,12 +38,13 @@
 | CDS | Developer Tools | [cds.md](./developer-tools/cds.md) |
 | Certificates | Security | [certificates.md](./security/certificates.md) |
 | Change Log | Developer Tools | [change-log.md](./developer-tools/change-log.md) |
-| CLI | System Tools | [cli.md](./system-tools/cli.md) |
+| CLI (Internal) | System Tools | [cli.md](./system-tools/cli.md) |
 | Code Template | Developer Tools | [code-template.md](./developer-tools/code-template.md) |
 | Column Stats | Analysis Tools | [column-stats.md](./analysis-tools/column-stats.md) |
-| Command Map | System Tools | [command-map.md](./system-tools/command-map.md) |
+| Command Map (Internal) | System Tools | [command-map.md](./system-tools/command-map.md) |
 | Compare Data | Data Tools | [compare-data.md](./data-tools/compare-data.md) |
 | Compare Schema | Schema Tools | [compare-schema.md](./schema-tools/compare-schema.md) |
+| Compare Schema (Legacy Alias) | System Tools | [compare-schema.md](./system-tools/compare-schema.md) |
 | Connect | Connection & Auth | [connect.md](./connection-auth/connect.md) |
 | Connect via Service Key | Connection & Auth | [connect-via-service-key.md](./connection-auth/connect-via-service-key.md) |
 | Connections | Connection & Auth | [connections.md](./connection-auth/connections.md) |
@@ -86,6 +87,7 @@
 | Encryption Status | Security | [encryption-status.md](./security/encryption-status.md) |
 | Expensive Statements | Performance Monitoring | [expensive-statements.md](./performance-monitoring/expensive-statements.md) |
 | Export | Data Tools | [export.md](./data-tools/export.md) |
+| Export (Legacy Alias) | System Tools | [export.md](./system-tools/export.md) |
 | ERD Diagram | Analysis Tools | [erd-diagram.md](./analysis-tools/erd-diagram.md) |
 
 ### F
@@ -129,7 +131,8 @@
 | Command | Category | Documentation |
 | --------- | ---------- | --- |
 | Import | Data Tools | [import.md](./data-tools/import.md) |
-| Index Test | System Tools | [index-test.md](./system-tools/index-test.md) |
+| Import (Legacy Alias) | System Tools | [import.md](./system-tools/import.md) |
+| Index Test (Legacy Placeholder) | System Tools | [index-test.md](./system-tools/index-test.md) |
 | Indexes | Object Inspection | [indexes.md](./object-inspection/indexes.md) |
 | INI Contents | System Admin | [ini-contents.md](./system-admin/ini-contents.md) |
 | INI Files | System Admin | [ini-files.md](./system-admin/ini-files.md) |
@@ -150,6 +153,7 @@
 | Command | Category | Documentation |
 | --------- | ---------- | --- |
 | Kafka Connect | Data Tools | [kafka-connect.md](./data-tools/kafka-connect.md) |
+| Kafka Connect (Legacy Alias) | System Tools | [kafka-connect.md](./system-tools/kafka-connect.md) |
 
 ### L
 
@@ -239,6 +243,7 @@
 | Tables SQLite | Object Inspection | [tables-s-q-lite.md](./object-inspection/tables-s-q-lite.md) |
 | Test | System Tools | [test.md](./system-tools/test.md) |
 | Time Series Tools | System Tools | [time-series-tools.md](./system-tools/time-series-tools.md) |
+| Time Series Tools (Legacy Alias) | System Tools | [timeseries-tools.md](./system-tools/timeseries-tools.md) |
 | Trace Contents | Performance Monitoring | [trace-contents.md](./performance-monitoring/trace-contents.md) |
 | Traces | Performance Monitoring | [traces.md](./performance-monitoring/traces.md) |
 | Triggers | Object Inspection | [triggers.md](./object-inspection/triggers.md) |

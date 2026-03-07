@@ -7,7 +7,7 @@
 
 ## ⚠️ Redirect Notice
 
-The `import` command documentation has been relocated to the **Data Tools** category.
+This page is a legacy compatibility alias. The `import` command documentation has been relocated to the **Data Tools** category.
 
 **👉 [Go to Import Command Documentation](../data-tools/import.md)**
 

@@ -7,7 +7,7 @@
 
 ## ⚠️ Redirect Notice
 
-The `export` command documentation has been relocated to the **Data Tools** category.
+This page is a legacy compatibility alias. The `export` command documentation has been relocated to the **Data Tools** category.
 
 **👉 [Go to Export Command Documentation](../data-tools/export.md)**
 

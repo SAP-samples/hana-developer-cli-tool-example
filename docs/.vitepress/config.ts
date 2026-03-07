@@ -19,6 +19,22 @@ export default withMermaid(
       cds: 'typescript'
     }
   },
+
+  // Mermaid plugin configuration for improved diagram readability
+  mermaid: {
+    theme: 'dark',
+    startOnLoad: true,
+    securityLevel: 'antiscript',
+    flowchart: {
+      useMaxWidth: true,
+      htmlLabels: true,
+      // Encourage vertical arrangement of nodes
+      nodeSpacing: 50,
+      rankSpacing: 60,
+      curve: 'basis',
+    },
+    logLevel: 'error',
+  },
   
   head: [
     ['link', { rel: 'icon', href: '/hana-developer-cli-tool-example/favicon.ico' }],
@@ -220,6 +236,7 @@ export default withMermaid(
             { text: 'Indexes', link: '/02-commands/object-inspection/indexes' },
             { text: 'Inspect Function', link: '/02-commands/object-inspection/inspect-function' },
             { text: 'Inspect Library', link: '/02-commands/object-inspection/inspect-library' },
+            { text: 'Inspect Library Member', link: '/02-commands/object-inspection/inspect-lib-member' },
             { text: 'Inspect Procedure', link: '/02-commands/object-inspection/inspect-procedure' },
             { text: 'Inspect Table', link: '/02-commands/object-inspection/inspect-table' },
             { text: 'Inspect Trigger', link: '/02-commands/object-inspection/inspect-trigger' },
@@ -231,6 +248,8 @@ export default withMermaid(
             { text: 'Schemas', link: '/02-commands/object-inspection/schemas' },
             { text: 'Sequences', link: '/02-commands/object-inspection/sequences' },
             { text: 'Tables', link: '/02-commands/object-inspection/tables' },
+            { text: 'Tables (PostgreSQL)', link: '/02-commands/object-inspection/tables-p-g' },
+            { text: 'Tables (SQLite)', link: '/02-commands/object-inspection/tables-s-q-lite' },
             { text: 'Triggers', link: '/02-commands/object-inspection/triggers' },
             { text: 'Views', link: '/02-commands/object-inspection/views' }
           ]
@@ -305,18 +324,22 @@ export default withMermaid(
           collapsed: true,
           items: [
             { text: 'Cache Contents', link: '/02-commands/system-tools/cache-contents' },
-            { text: 'CLI', link: '/02-commands/system-tools/cli' },
-            { text: 'Command Map', link: '/02-commands/system-tools/command-map' },
+            { text: 'CLI (Internal)', link: '/02-commands/system-tools/cli' },
+            { text: 'Command Map (Internal)', link: '/02-commands/system-tools/command-map' },
+            { text: 'Compare Schema (Legacy Alias)', link: '/02-commands/system-tools/compare-schema' },
             { text: 'Copy2 Default Env', link: '/02-commands/system-tools/copy2-default-env' },
             { text: 'Copy2 Env', link: '/02-commands/system-tools/copy2-env' },
             { text: 'Copy2 Secrets', link: '/02-commands/system-tools/copy2-secrets' },
             { text: 'Data Mask', link: '/02-commands/system-tools/data-mask' },
             { text: 'Data Volumes', link: '/02-commands/system-tools/data-volumes' },
+            { text: 'Export (Legacy Alias)', link: '/02-commands/system-tools/export' },
             { text: 'Ft Indexes', link: '/02-commands/system-tools/ft-indexes' },
             { text: 'Generate Test Data', link: '/02-commands/system-tools/generate-test-data' },
             { text: 'Graph Workspaces', link: '/02-commands/system-tools/graph-workspaces' },
-            { text: 'Index Test', link: '/02-commands/system-tools/index-test' },
+            { text: 'Import (Legacy Alias)', link: '/02-commands/system-tools/import' },
+            { text: 'Index Test (Legacy Placeholder)', link: '/02-commands/system-tools/index-test' },
             { text: 'Inspect Index', link: '/02-commands/system-tools/inspect-index' },
+            { text: 'Kafka Connect (Legacy Alias)', link: '/02-commands/system-tools/kafka-connect' },
             { text: 'Replication Status', link: '/02-commands/system-tools/replication-status' },
             { text: 'RICK', link: '/02-commands/system-tools/rick' },
             { text: 'Schema Clone', link: '/02-commands/system-tools/schema-clone' },
@@ -325,7 +348,8 @@ export default withMermaid(
             { text: 'Synonyms', link: '/02-commands/system-tools/synonyms' },
             { text: 'Table Groups', link: '/02-commands/system-tools/table-groups' },
             { text: 'Test', link: '/02-commands/system-tools/test' },
-            { text: 'Timeseries Tools', link: '/02-commands/system-tools/timeseries-tools' },
+            { text: 'Timeseries Tools', link: '/02-commands/system-tools/time-series-tools' },
+            { text: 'Timeseries Tools (Legacy Alias)', link: '/02-commands/system-tools/timeseries-tools' },
             { text: 'UI', link: '/02-commands/system-tools/u-i' },
             { text: 'Version', link: '/02-commands/system-tools/version' },
             { text: 'XSA Services', link: '/02-commands/system-tools/xsa-services' }
@@ -420,6 +444,7 @@ export default withMermaid(
             { text: 'Copilot Skills', link: '/05-development/copilot/skills' },
             { text: 'Copilot Hooks', link: '/05-development/copilot/hooks' },
             { text: 'Testing & QA', link: '/05-development/testing' },
+            { text: 'Documentation', link: '/05-development/documentation' },
             { text: 'Implementation Guide', link: '/05-development/implementation' },
           ]
         },
@@ -448,6 +473,7 @@ export default withMermaid(
           text: 'MCP Server',
           items: [
             { text: 'Overview', link: '/05-development/mcp-server/' },
+            { text: 'Development Overview', link: '/05-development/mcp-server/overview' },
             { text: 'Features', link: '/05-development/mcp-server/features' },
             { text: 'Setup & Configuration', link: '/05-development/mcp-server/setup-and-configuration' },
             { text: 'Troubleshooting', link: '/05-development/mcp-server/troubleshooting' },
@@ -571,44 +597,5 @@ export default withMermaid(
       chunkSizeWarningLimit: 2000, // Increased from default 500KB to 2MB for large documentation pages (changelog, command reference, etc.)
     }
   }
-  }),
-  // Mermaid plugin configuration for improved diagram readability
-  {
-    mermaidConfig: {
-      theme: 'dark',
-      startOnLoad: true,
-      securityLevel: 'antiscript',
-      htmlLabels: true,
-      flowchart: {
-        useMaxWidth: true,
-        htmlLabels: true,
-        // Encourage vertical arrangement of nodes
-        padding: 50,
-        nodeSpacing: 50,
-        rankSpacing: 60,
-        curve: 'basis',
-        diagramMarginX: 20,
-        diagramMarginY: 20,
-      },
-      sequenceDiagram: {
-        useMaxWidth: true,
-        padding: 50,
-        mirrorActors: true,
-      },
-      gantt: {
-        useMaxWidth: true,
-        padding: 50,
-        fontSize: 14,
-      },
-      classDiagram: {
-        useMaxWidth: true,
-        padding: 50,
-      },
-      stateDiagram: {
-        useMaxWidth: true,
-        padding: 50,
-      },
-    },
-    logLevel: 'error',
-  }
+  })
 )

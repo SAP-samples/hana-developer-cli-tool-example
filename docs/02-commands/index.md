@@ -124,12 +124,20 @@ All commands: [Cache Contents](./system-admin/cache-contents.md), [Crash Dumps](
 
 Administrative and system-level commands.
 
+- **[CLI (Internal)](./system-tools/cli.md)** - CLI launcher entrypoint (not a standalone subcommand)
+- **[Command Map (Internal)](./system-tools/command-map.md)** - Internal lazy-loading map for CLI routing
+- **[Index Test (Legacy Placeholder)](./system-tools/index-test.md)** - Historical placeholder (use Inspect Index)
 - **[Replication Status](./system-tools/replication-status.md)** - Check replication status and health indicators
 - **[SDI Tasks](./system-tools/sdi-tasks.md)** - Monitor and manage SDI task execution
 - **[XSA Services](./system-tools/xsa-services.md)** - Inspect and manage XSA services
 - **[Time Series Tools](./system-tools/time-series-tools.md)** - Query and analyze time-series data
+- **[Time Series Tools (Legacy Alias)](./system-tools/timeseries-tools.md)** - Compatibility alias for the canonical Time Series Tools documentation
+- **[Compare Schema (Legacy Alias)](./system-tools/compare-schema.md)** - Legacy alias for the Schema Tools documentation
+- **[Export (Legacy Alias)](./system-tools/export.md)** - Legacy alias for the Data Tools documentation
+- **[Import (Legacy Alias)](./system-tools/import.md)** - Legacy alias for the Data Tools documentation
+- **[Kafka Connect (Legacy Alias)](./system-tools/kafka-connect.md)** - Legacy alias for the Data Tools documentation
 
-All commands: [CLI](./system-tools/cli.md), [Command Map](./system-tools/command-map.md), [Copy2 Default Env](./system-tools/copy2-default-env.md), [Copy2 Env](./system-tools/copy2-env.md), [Copy2 Secrets](./system-tools/copy2-secrets.md), [Data Mask](./system-tools/data-mask.md), [Data Volumes](./system-tools/data-volumes.md), [FT Indexes](./system-tools/ft-indexes.md), [Generate Test Data](./system-tools/generate-test-data.md), [Graph Workspaces](./system-tools/graph-workspaces.md), [Index Test](./system-tools/index-test.md), [Inspect Index](./system-tools/inspect-index.md), [RICK](./system-tools/rick.md), [Replication Status](./system-tools/replication-status.md), [SDI Tasks](./system-tools/sdi-tasks.md), [Spatial Data](./system-tools/spatial-data.md), [Synonyms](./system-tools/synonyms.md), [Table Groups](./system-tools/table-groups.md), [Test](./system-tools/test.md), [Time Series Tools](./system-tools/time-series-tools.md), [UI](./system-tools/u-i.md), [Version](./system-tools/version.md), [XSA Services](./system-tools/xsa-services.md).
+All commands: [CLI (Internal)](./system-tools/cli.md), [Command Map (Internal)](./system-tools/command-map.md), [Compare Schema (Legacy Alias)](./system-tools/compare-schema.md), [Copy2 Default Env](./system-tools/copy2-default-env.md), [Copy2 Env](./system-tools/copy2-env.md), [Copy2 Secrets](./system-tools/copy2-secrets.md), [Data Mask](./system-tools/data-mask.md), [Data Volumes](./system-tools/data-volumes.md), [Export (Legacy Alias)](./system-tools/export.md), [FT Indexes](./system-tools/ft-indexes.md), [Generate Test Data](./system-tools/generate-test-data.md), [Graph Workspaces](./system-tools/graph-workspaces.md), [Import (Legacy Alias)](./system-tools/import.md), [Index Test (Legacy Placeholder)](./system-tools/index-test.md), [Inspect Index](./system-tools/inspect-index.md), [Kafka Connect (Legacy Alias)](./system-tools/kafka-connect.md), [RICK](./system-tools/rick.md), [Replication Status](./system-tools/replication-status.md), [SDI Tasks](./system-tools/sdi-tasks.md), [Spatial Data](./system-tools/spatial-data.md), [Synonyms](./system-tools/synonyms.md), [Table Groups](./system-tools/table-groups.md), [Test](./system-tools/test.md), [Time Series Tools](./system-tools/time-series-tools.md), [Time Series Tools (Legacy Alias)](./system-tools/timeseries-tools.md), [UI](./system-tools/u-i.md), [Version](./system-tools/version.md), [XSA Services](./system-tools/xsa-services.md).
 
 ## 🔍 Quick Search
 

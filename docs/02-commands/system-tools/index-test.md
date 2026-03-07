@@ -10,7 +10,7 @@ Compatibility placeholder topic for historical references.
 
 ## ⚠️ Redirect Notice
 
-`indexTest` is not exposed as a standalone CLI command in the current command map.
+`indexTest` is not exposed as a standalone CLI command in the current command map. This page is a legacy compatibility placeholder.
 
 **👉 [Go to Inspect Index Documentation](./inspect-index.md)**
 

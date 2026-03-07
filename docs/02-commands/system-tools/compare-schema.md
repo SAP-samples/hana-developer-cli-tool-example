@@ -4,6 +4,12 @@
 > Category: **System Tools**  
 > Status: Production Ready
 
+## ⚠️ Redirect Notice
+
+This page is a legacy compatibility alias.
+
+**👉 [Go to Compare Schema Documentation](../schema-tools/compare-schema.md)**
+
 ## Description
 
 Compare the structure of two schemas (tables, columns, and optionally indexes, triggers, and constraints).
