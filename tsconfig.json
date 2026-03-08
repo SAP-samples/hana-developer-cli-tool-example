@@ -20,6 +20,8 @@
       "module": "es2022",
       "allowSyntheticDefaultImports": true,
       "resolveJsonModule": true,
+      "forceConsistentCasingInFileNames": true,
+      "strict": true,
       "types": ["node", "mocha"]
     },
     "exclude": ["node_modules", "types", "**/*.test.js"]

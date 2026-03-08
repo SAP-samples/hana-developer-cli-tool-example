@@ -443,7 +443,7 @@ export default withMermaid(
             { text: 'Copilot Agents', link: '/05-development/copilot/agents' },
             { text: 'Copilot Skills', link: '/05-development/copilot/skills' },
             { text: 'Copilot Hooks', link: '/05-development/copilot/hooks' },
-            { text: 'Testing & QA', link: '/05-development/testing' },
+            { text: 'Testing & QA (E2E + UI)', link: '/05-development/testing' },
             { text: 'Documentation', link: '/05-development/documentation' },
             { text: 'Implementation Guide', link: '/05-development/implementation' },
           ]

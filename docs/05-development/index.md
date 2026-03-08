@@ -41,7 +41,9 @@ Detailed implementation and usage examples for each command.
 
 ## Testing & Quality Assurance
 
-- [Testing & QA Guide](./testing.md)
+- [Testing & QA Guide](./testing.md) - Includes E2E CLI tests and WDI5 UI automation setup
+- [E2E CLI Tests](./testing.md#end-to-end-e2e-cli-tests)
+- [UI Automation with WDI5](./testing.md#ui-automation-tests-with-wdi5)
 - [Test Coverage Details](../99-reference/changelog.md)
 
 ## Implementation & Decisions

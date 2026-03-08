@@ -52,6 +52,15 @@ Integration guides and API documentation.
 
 </div>
 
+<div style="border: 1px solid #e3e6f0; border-radius: 8px; padding: 20px;">
+
+### 🧪 Testing & QA
+
+Run E2E CLI tests and WDI5 UI automation.
+[Testing Guide →](/05-development/testing.md)
+
+</div>
+
 </div>
 
 ## What is HANA CLI?
@@ -75,6 +84,7 @@ HANA CLI (pronounced "HAN-uh C-L-I") is a powerful command-line tool designed fo
 - [Compare Database Schemas](/02-commands/schema-tools/compare-schema.md)
 - [Data Profiling & Analysis](/02-commands/analysis-tools/data-profile.md)
 - [Set Up MCP Server](/03-features/mcp-integration.md)
+- [Testing & QA (E2E + UI)](/05-development/testing.md)
 
 ## 🎥 Videos
 
