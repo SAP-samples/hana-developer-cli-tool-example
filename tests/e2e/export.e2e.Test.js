@@ -4,42 +4,8 @@ import * as base from '../base.js'
 import { expect } from 'chai'
 import fs from 'fs'
 import path from 'path'
+import { getLocalConnectionCredentials, getLiveTestControl, gateLiveTestInCI, skipOrFailLiveTest } from './helpers.js'
 
-/**
- * @returns {{connection: string, user: string, password: string} | null}
- */
-function getLocalConnectionCredentials() {
-  const candidateFiles = ['default-env-admin.json', 'default-env.json']
-
-  for (const fileName of candidateFiles) {
-    const filePath = path.resolve(process.cwd(), fileName)
-    if (!fs.existsSync(filePath)) {
-      continue
-    }
-
-    try {
-      const content = fs.readFileSync(filePath, 'utf-8')
-      const parsed = JSON.parse(content)
-      const credentials = parsed?.VCAP_SERVICES?.hana?.[0]?.credentials
-      const host = credentials?.host
-      const port = credentials?.port
-      const user = credentials?.user
-      const password = credentials?.password
-
-      if (host && port && user && password) {
-        return {
-          connection: `${host}:${port}`,
-          user,
-          password
-        }
-      }
-    } catch {
-      // Ignore invalid files and continue to next candidate
-    }
-  }
-
-  return null
-}
 
 describe('export command - E2E Tests', function () {
   this.timeout(20000)
@@ -105,49 +71,47 @@ describe('export command - E2E Tests', function () {
     it('exports one row from SYS.DUMMY to JSON file', function (done) {
       this.timeout(30000)
 
-      const forceLiveInCI = process.env.HANA_CLI_E2E_LIVE_EXPORT === 'true'
-      const isCI = process.env.CI === 'true'
-      if (isCI && !forceLiveInCI) {
-        this.skip()
-        return done()
+      const liveControl = getLiveTestControl('HANA_CLI_E2E_LIVE_EXPORT')
+      if (!gateLiveTestInCI(this, done, liveControl, 'export live E2E')) {
+        return
       }
 
-      const creds = getLocalConnectionCredentials()
-      if (!creds) {
-        this.skip()
-        return done()
-      }
-
-      const tmpDir = path.resolve(process.cwd(), 'tests', '.tmp')
-      fs.mkdirSync(tmpDir, { recursive: true })
-
-      const outputFile = path.resolve(tmpDir, `e2e-export-${Date.now()}.json`)
-      const outputFileCliPath = outputFile.replace(/\\/g, '/')
-
-      const command = `node bin/cli.js export --schema SYS --table DUMMY --output "${outputFileCliPath}" --format json --limit 1 --quiet`
-
-      base.exec(command, (error, stdout, stderr) => {
-        const output = `${stdout || ''}\n${stderr || ''}`
-        base.addContext(this, { title: 'Live export output', value: output })
-
-        try {
-          expect(error).to.be.null
-          expect(output).to.match(/Starting export for table:\s+DUMMY/i)
-          expect(output).to.match(/Export complete:\s+1\s+rows exported/i)
-          expect(fs.existsSync(outputFile)).to.equal(true)
-
-          const content = fs.readFileSync(outputFile, 'utf-8')
-          const parsed = JSON.parse(content)
-          expect(parsed).to.be.an('array').that.is.not.empty
-          expect(parsed[0]).to.have.property('DUMMY')
-        } finally {
-          if (fs.existsSync(outputFile)) {
-            fs.unlinkSync(outputFile)
-          }
+      getLocalConnectionCredentials().then((creds) => {
+        if (!creds || creds.kind !== 'hana') {
+          return skipOrFailLiveTest(this, done, liveControl, 'Live export E2E prerequisites not met: no HANA credentials resolved.')
         }
 
-        done()
-      })
+        const tmpDir = path.resolve(process.cwd(), 'tests', '.tmp')
+        fs.mkdirSync(tmpDir, { recursive: true })
+
+        const outputFile = path.resolve(tmpDir, `e2e-export-${Date.now()}.json`)
+        const outputFileCliPath = outputFile.replace(/\\/g, '/')
+
+        const command = `node bin/cli.js export --schema SYS --table DUMMY --output "${outputFileCliPath}" --format json --limit 1 --quiet`
+
+        base.exec(command, (error, stdout, stderr) => {
+          const output = `${stdout || ''}\n${stderr || ''}`
+          base.addContext(this, { title: 'Live export output', value: output })
+
+          try {
+            expect(error).to.be.null
+            expect(output).to.match(/Starting export for table:\s+DUMMY/i)
+            expect(output).to.match(/Export complete:\s+1\s+rows exported/i)
+            expect(fs.existsSync(outputFile)).to.equal(true)
+
+            const content = fs.readFileSync(outputFile, 'utf-8')
+            const parsed = JSON.parse(content)
+            expect(parsed).to.be.an('array').that.is.not.empty
+            expect(parsed[0]).to.have.property('DUMMY')
+          } finally {
+            if (fs.existsSync(outputFile)) {
+              fs.unlinkSync(outputFile)
+            }
+          }
+
+          done()
+        })
+      }).catch(done)
     })
   })
 })

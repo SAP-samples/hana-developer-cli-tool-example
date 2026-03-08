@@ -64,6 +64,34 @@ import { expect } from 'chai'
 expect(value).to.equal(expected)
 ```
 
+### Shared Live Credential Helper (`tests/e2e/helpers.js`)
+
+For optional live E2E tests that require database credentials, use the shared helper instead of re-implementing credential lookup logic in each test file.
+
+```javascript
+import { getLocalConnectionCredentials } from './helpers.js'
+
+it('runs live test when credentials are available', function (done) {
+  getLocalConnectionCredentials().then((creds) => {
+    if (!creds || creds.kind !== 'hana') {
+      this.skip()
+      return done()
+    }
+
+    base.exec('node bin/cli.js commandName --quiet', (error, stdout) => {
+      expect(error).to.be.null
+      expect(stdout.length).to.be.greaterThan(0)
+      done()
+    })
+  }).catch(done)
+})
+```
+
+Helper behavior and priority:
+- Resolves credentials in this order: **CDS bind (`.cdsrc-private.json`) → `default-env-admin.json` → `default-env.json`**
+- Returns normalized credentials with `kind` (`hana`, `postgres`, `sqlite`) and connection fields
+- Live tests for HANA-only commands should skip unless `creds.kind === 'hana'`
+
 ### Mocha Configuration
 
 E2E tests run using `.mocharc.json`:
@@ -353,6 +381,34 @@ it('works in command chains', function (done) {
 })
 ```
 
+### Pattern 8: Mocha Async Style (Critical)
+
+Use **exactly one** async completion style per test:
+
+- **Callback style**: `function (done)` and call `done()` / `done(err)`
+- **Promise/async style**: `async function ()` or `return promise`
+
+Do **not** combine them (`async function (done)`), which causes:
+`Resolution method is overspecified. Specify a callback or return a Promise; not both.`
+
+Correct callback-based pattern when helper returns a Promise:
+
+```javascript
+it('live test pattern', function (done) {
+  getLocalConnectionCredentials().then((creds) => {
+    if (!creds) {
+      this.skip()
+      return done()
+    }
+
+    base.exec('node bin/cli.js commandName --quiet', (error) => {
+      expect(error).to.be.null
+      done()
+    })
+  }).catch(done)
+})
+```
+
 ## Assertion Patterns
 
 ### Using Chai Expect
@@ -454,6 +510,8 @@ describe('commandName command - E2E Tests', function () {
 - ✅ Always test help output (validates command registration)
 - ✅ Use regex for flexible pattern matching (case-insensitive where appropriate)
 - ✅ Use `done` callback for async operations
+- ✅ Use `tests/e2e/helpers.js` (`getLocalConnectionCredentials`) for optional live credential discovery
+- ✅ Pick one Mocha async style per test (callback *or* async/promise)
 - ✅ Set appropriate timeouts for slow commands
 
 ### DON'T:
@@ -465,6 +523,8 @@ describe('commandName command - E2E Tests', function () {
 - ❌ Create overly complex assertions (break into multiple tests)
 - ❌ Assume output format without validation
 - ❌ Mix unit tests and E2E tests in the same file
+- ❌ Re-implement credential file parsing (`default-env*.json`) in every E2E file
+- ❌ Use `async function (done)` (Mocha overspecified resolution error)
 
 ## Running E2E Tests
 

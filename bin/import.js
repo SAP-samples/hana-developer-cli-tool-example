@@ -806,8 +806,8 @@ async function getTableMetadata(dbClient, schema, table, dbKind) {
       SELECT 
         COLUMN_NAME, 
         POSITION, 
-        DATA_TYPE,
-        NULLABLE,
+        DATA_TYPE_NAME AS DATA_TYPE,
+        IS_NULLABLE AS NULLABLE,
         DEFAULT_VALUE
       FROM SYS.TABLE_COLUMNS 
       WHERE SCHEMA_NAME = ? 
@@ -826,7 +826,7 @@ async function getTableMetadata(dbClient, schema, table, dbKind) {
   const normalizedColumns = columns.reduce((acc, col) => {
     const columnName = col.COLUMN_NAME ?? col.column_name ?? col.name
     const position = Number(col.POSITION ?? col.ordinal_position ?? col.position ?? col.cid ?? 0) || 0
-    const dataType = col.DATA_TYPE ?? col.data_type ?? col.type ?? ''
+    const dataType = col.DATA_TYPE ?? col.DATA_TYPE_NAME ?? col.data_type ?? col.type ?? ''
     const defaultValue = col.DEFAULT_VALUE ?? col.column_default ?? col.dflt_value
 
     let nullable = true
@@ -1111,10 +1111,14 @@ export async function importData(prompts) {
     const tableMetadata = await getTableMetadata(dbClient, schema, table, dbKind)
     base.debug(baseLite.bundle.getText("debug.tableMetadataLoaded"))
 
-    // Start transaction
+    // Start transaction when supported by the active DB kind
     base.debug(baseLite.bundle.getText("debug.startingTransaction"))
-    const beginStatement = dbKind === 'hana' ? 'BEGIN TRANSACTION' : 'BEGIN'
-    await dbClient.execSQL(beginStatement)
+    const shouldUseExplicitTransaction = dbKind !== 'hana'
+    if (shouldUseExplicitTransaction) {
+      await dbClient.execSQL('BEGIN')
+    } else {
+      base.debug('Skipping explicit BEGIN for HANA import flow')
+    }
     
     // Log truncate operation for audit trail
     const operationLog = []  
@@ -1276,18 +1280,24 @@ export async function importData(prompts) {
         return { success: false, rowsProcessed: 0 }
       }
 
-      // Commit transaction (or rollback if dry-run)
-      if (dryRun) {
-        await dbClient.execSQL('ROLLBACK')
-        base.debug('Dry-run completed - transaction rolled back')
-      } else {
-        await dbClient.execSQL('COMMIT')
-        base.debug(baseLite.bundle.getText("debug.transactionCommitted"))
+      // Commit transaction (or rollback if dry-run) for DBs using explicit transactions
+      if (shouldUseExplicitTransaction) {
+        if (dryRun) {
+          await dbClient.execSQL('ROLLBACK')
+          base.debug('Dry-run completed - transaction rolled back')
+        } else {
+          await dbClient.execSQL('COMMIT')
+          base.debug(baseLite.bundle.getText("debug.transactionCommitted"))
+        }
+      } else if (dryRun) {
+        base.debug('Dry-run requested on HANA without explicit transaction support; skipping commit')
       }
     } catch (error) {
-      // Rollback on error
-      base.debug(baseLite.bundle.getText("debug.rollingBack"))
-      await dbClient.execSQL('ROLLBACK')
+      // Rollback on error for DBs using explicit transactions
+      if (shouldUseExplicitTransaction) {
+        base.debug(baseLite.bundle.getText("debug.rollingBack"))
+        await dbClient.execSQL('ROLLBACK')
+      }
       throw error
     }
 

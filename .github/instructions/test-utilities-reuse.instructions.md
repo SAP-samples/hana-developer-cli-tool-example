@@ -79,6 +79,33 @@ import { assert, addContext, exec, fork, myTest } from '../base.js'
 - **Use `myTest`**: For CLI command tests that need stderr filtering and automatic context injection
 - **Use `exec` directly**: For custom subprocess testing with non-standard output handling
 
+### E2E-Specific Shared Helper (`tests/e2e/helpers.js`)
+
+For optional **live E2E tests**, reuse `tests/e2e/helpers.js` instead of duplicating credential discovery logic.
+
+```javascript
+import { getLocalConnectionCredentials } from './helpers.js'
+
+it('live test pattern', function (done) {
+    getLocalConnectionCredentials().then((creds) => {
+        if (!creds || creds.kind !== 'hana') {
+            this.skip()
+            return done()
+        }
+
+        // run live command assertions
+        done()
+    }).catch(done)
+})
+```
+
+Credential resolution order used by the helper:
+1. `.cdsrc-private.json` (CDS bind)
+2. `default-env-admin.json`
+3. `default-env.json`
+
+Important Mocha rule for these tests: use **one** async completion style only. Do not use `async function (done)`.
+
 ## Mocking Libraries and Patterns
 
 ### ESM Module Mocking with `esmock`
@@ -879,9 +906,12 @@ When creating a new test file:
 - [ ] Add context with `addContext` for debugging
 - [ ] Use descriptive test names
 - [ ] Follow the established file naming pattern (`*.Test.js` or `*.test.js`)
+- [ ] For optional live E2E tests, use `tests/e2e/helpers.js` (`getLocalConnectionCredentials`) instead of local credential parsers
+- [ ] Avoid Mocha overspecification: do not combine `async` and `done` in the same test
 
 ## Related Guidelines
 
 - See [testing.instructions.md](testing.instructions.md) for general test structure and organization
+- See [e2e-test-creation.instructions.md](e2e-test-creation.instructions.md) for E2E-specific patterns and live helper usage
 - See CLI command examples in `tests/*.Test.js` for subprocess testing patterns
 - See `tests/helper.js` for global test setup

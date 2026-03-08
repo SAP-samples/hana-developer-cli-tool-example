@@ -93,6 +93,44 @@ export const getEnv = () => getFileCheckParents('.env')
 export const getCdsrcPrivate = () => getFileCheckParents('.cdsrc-private.json')
 
 /**
+ * Resolve CDS binding credentials from .cdsrc-private.json only
+ * @param {object} prompts
+ * @returns {Promise<object|undefined>}
+ */
+export async function getCdsrcBindingOptions(prompts) {
+    const cdsrcPrivate = prompts?.admin ? undefined : getCdsrcPrivate()
+    if (!cdsrcPrivate) {
+        return undefined
+    }
+
+    try {
+        let object = cdsrcPrivateCache.get(cdsrcPrivate)
+        if (!object) {
+            const data = fs.readFileSync(cdsrcPrivate, { encoding: 'utf8', flag: 'r' })
+            object = JSON.parse(data)
+            cdsrcPrivateCache.set(cdsrcPrivate, object)
+        }
+
+        const binding = object?.requires?.['[hybrid]']?.db?.binding
+        if (!binding) {
+            return undefined
+        }
+
+        const resolveBinding = require('@sap/cds-dk/lib/bind/cf')
+        const resolvedService = await resolveBinding.resolve(null, binding)
+        const options = { hana: resolvedService.credentials }
+        base.debug(options)
+        if (base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile2")} .cdsrc-private.json\n`) }
+        return options
+    }
+    catch (e) {
+        if (e.code !== 'MODULE_NOT_FOUND') throw e
+    }
+
+    return undefined
+}
+
+/**
  * Resolve Environment by deciding which option between default-env and default-env-admin we should take
  * @param {object} options 
  * @returns {string} - the file path if found 
@@ -142,26 +180,9 @@ export async function getConnOptions(prompts) {
     delete process.env.VCAP_SERVICES
 
     // Try .cdsrc-private.json with CDS binding first
-    const cdsrcPrivate = prompts?.admin ? undefined : getCdsrcPrivate()
-    if (cdsrcPrivate) {
-        try {
-            let object = cdsrcPrivateCache.get(cdsrcPrivate)
-            if (!object) {
-                const data = fs.readFileSync(cdsrcPrivate, { encoding: 'utf8', flag: 'r' })
-                object = JSON.parse(data)
-                cdsrcPrivateCache.set(cdsrcPrivate, object)
-            }
-            const resolveBinding = require('@sap/cds-dk/lib/bind/cf')
-            const resolvedService = await resolveBinding.resolve(null, object.requires['[hybrid]'].db.binding)
-            const options = { hana: resolvedService.credentials }
-            base.debug(options)
-            if (base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile2")} .cdsrc-private.json\n`) }
-            return options
-        }
-        catch (e) {
-            if (e.code !== 'MODULE_NOT_FOUND') throw e
-            // Fall through to other options if module not found
-        }
+    const cdsrcOptions = await getCdsrcBindingOptions(prompts)
+    if (cdsrcOptions) {
+        return cdsrcOptions
     }
 
     // Determine which env file to load
