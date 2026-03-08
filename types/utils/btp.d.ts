@@ -7,7 +7,7 @@ export function getVersion(): Promise<string>;
  * Get btp CLI info
  * @returns {Promise<Object>}
  */
-export function getInfo(): Promise<any>;
+export function getInfo(): Promise<Object>;
 /**
  * Read central configuration file for BTP CLI
  * @returns {Promise<object>}

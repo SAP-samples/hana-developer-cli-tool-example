@@ -2,12 +2,12 @@
  * Set global configuration (called from cli.js at startup)
  * @param {Object} config Configuration object
  */
-export function setConfig(config: any): void;
+export function setConfig(config: Object): void;
 /**
  * Get global configuration
  * @returns {Object} Configuration object
  */
-export function getConfig(): any;
+export function getConfig(): Object;
 /**
  * Get a specific configuration value with dot notation support
  * @param {string} key Configuration key (supports dot notation for nested access)

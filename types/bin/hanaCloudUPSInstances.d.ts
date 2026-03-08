@@ -5,7 +5,7 @@ export function listInstances(prompts: any): Promise<({
 } | {
     name: any;
     credentials: string;
-})[]>;
+})[] | undefined>;
 export const command: "ups";
 export const aliases: string[];
 export const describe: string;

@@ -1,7 +1,7 @@
 /**
- * README Knowledge Base
+ * Documentation Knowledge Base
  *
- * Aggregates and indexes all documentation from the project's markdown files
+ * Aggregates and indexes documentation from the project's docs/ folder
  * to provide context-aware guidance and parameter information for the MCP server.
  */
 interface ParameterInfo {

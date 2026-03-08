@@ -6,6 +6,12 @@
  */
 export function getFileCheckParents(filename: string, maxDepth?: number): string | undefined;
 /**
+ * Resolve CDS binding credentials from .cdsrc-private.json only
+ * @param {object} prompts
+ * @returns {Promise<object|undefined>}
+ */
+export function getCdsrcBindingOptions(prompts: object): Promise<object | undefined>;
+/**
  * Resolve Environment by deciding which option between default-env and default-env-admin we should take
  * @param {object} options
  * @returns {string} - the file path if found

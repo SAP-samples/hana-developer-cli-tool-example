@@ -14,7 +14,7 @@ export const command: "privilegeAnalysis";
 export const aliases: string[];
 export const describe: string;
 export function builder(yargs: any): any;
-export const privilegeAnalysisBuilderOptions: any;
+export const privilegeAnalysisBuilderOptions: object;
 export namespace inputPrompts {
     namespace user {
         let description: string;

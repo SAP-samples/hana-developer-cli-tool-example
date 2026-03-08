@@ -4,7 +4,7 @@
 export function yargsBuilderToJsonSchema(builder: any): {
     type: string;
     properties: {};
-    required: string[];
+    required: string[] | undefined;
 };
 export function extractCommandInfo(commandModule: any): {
     name: any;
@@ -12,11 +12,11 @@ export function extractCommandInfo(commandModule: any): {
     description: any;
     category: string;
     tags: string[];
-    useCases: string[];
-    relatedCommands: string[];
+    useCases: string[] | undefined;
+    relatedCommands: string[] | undefined;
     schema: {
         type: string;
         properties: {};
-        required: string[];
+        required: string[] | undefined;
     };
 };

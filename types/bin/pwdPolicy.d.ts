@@ -14,7 +14,7 @@ export const command: "pwdPolicy";
 export const aliases: string[];
 export const describe: string;
 export function builder(yargs: any): any;
-export const pwdPolicyBuilderOptions: any;
+export const pwdPolicyBuilderOptions: object;
 export namespace inputPrompts {
     namespace list {
         let description: string;

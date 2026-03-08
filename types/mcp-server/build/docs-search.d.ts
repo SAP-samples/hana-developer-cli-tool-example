@@ -7,7 +7,7 @@
  * which writes to stderr and won't interfere with MCP communication.
  */
 export class DocsSearch {
-    index: any;
+    index: null;
     documentsMap: Map<any, any>;
     docsDir: string;
     /**
@@ -58,7 +58,7 @@ export class DocsSearch {
     /**
      * Get full document content
      */
-    getDocumentContent(path: any): string;
+    getDocumentContent(path: any): string | null;
     /**
      * List all documents in a category
      */

@@ -14,7 +14,7 @@ export const command: "generateTestData";
 export const aliases: string[];
 export const describe: string;
 export function builder(yargs: any): any;
-export const generateTestDataBuilderOptions: any;
+export const generateTestDataBuilderOptions: object;
 export namespace inputPrompts {
     namespace table {
         let description: string;

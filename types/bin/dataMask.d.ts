@@ -14,7 +14,7 @@ export const command: "dataMask";
 export const aliases: string[];
 export const describe: string;
 export function builder(yargs: any): any;
-export const dataMaskBuilderOptions: any;
+export const dataMaskBuilderOptions: object;
 export namespace inputPrompts {
     namespace schema {
         let description: string;

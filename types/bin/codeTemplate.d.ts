@@ -14,7 +14,7 @@ export const command: "codeTemplate";
 export const aliases: string[];
 export const describe: string;
 export function builder(yargs: any): any;
-export const codeTemplateBuilderOptions: any;
+export const codeTemplateBuilderOptions: object;
 export namespace inputPrompts {
     namespace pattern {
         let description: string;

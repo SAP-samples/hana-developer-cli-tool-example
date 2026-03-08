@@ -6,7 +6,7 @@
  * @param context - Optional connection context for project-specific connections
  * @returns Promise with execution result including the command name for formatting
  */
-export function executeCommand(commandName: any, args: {}, context: any): Promise<any>;
+export function executeCommand(commandName: any, args: {} | undefined, context: any): Promise<any>;
 /**
  * Validates that required environment variables are set for database connection
  */

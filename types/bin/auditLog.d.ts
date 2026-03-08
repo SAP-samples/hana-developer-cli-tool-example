@@ -14,7 +14,7 @@ export const command: "auditLog";
 export const aliases: string[];
 export const describe: string;
 export function builder(yargs: any): any;
-export const auditLogBuilderOptions: any;
+export const auditLogBuilderOptions: object;
 export namespace inputPrompts {
     namespace limit {
         let description: string;

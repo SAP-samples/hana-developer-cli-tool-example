@@ -1,12 +1,12 @@
 export function handler(argv: any): Promise<void>;
 export function tableInspect(prompts: any): Promise<{
     basic: any;
-    fields: any;
+    fields: object;
     constraints: any;
     sql: string;
     cds: string;
     hdbtable: any;
-}>;
+} | undefined>;
 export const command: "inspectTable [schema] [table]";
 export const aliases: string[];
 export const describe: string;

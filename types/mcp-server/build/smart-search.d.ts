@@ -11,7 +11,7 @@ export function smartSearch(query: any, scope?: string, limit?: number): {
         description: string;
         howToUse: string;
     }[];
-    suggestions: string[];
+    suggestions: string[] | undefined;
 };
 /**
  * Get search suggestions based on partial query

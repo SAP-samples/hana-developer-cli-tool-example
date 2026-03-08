@@ -14,7 +14,7 @@ export const command: "grantChains";
 export const aliases: string[];
 export const describe: string;
 export function builder(yargs: any): any;
-export const grantChainsBuilderOptions: any;
+export const grantChainsBuilderOptions: object;
 export namespace inputPrompts {
     namespace user {
         let description: string;

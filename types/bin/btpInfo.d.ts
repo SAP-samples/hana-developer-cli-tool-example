@@ -10,7 +10,7 @@ export function getBTPInfoUI(prompts: any): Promise<{
     DirectoryID: string;
     SubAccount: string;
     SubAccountID: string;
-}>;
+} | undefined>;
 export const command: "btpInfo";
 export const aliases: string[];
 export const describe: string;

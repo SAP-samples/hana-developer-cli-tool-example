@@ -14,7 +14,7 @@ export const command: "generateDocs";
 export const aliases: string[];
 export const describe: string;
 export function builder(yargs: any): any;
-export const generateDocsBuilderOptions: any;
+export const generateDocsBuilderOptions: object;
 export namespace inputPrompts {
     namespace schema {
         let description: string;

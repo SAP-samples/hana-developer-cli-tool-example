@@ -14,7 +14,7 @@ export function executeWorkflow(workflowId: any, parameters: any, stopOnError?: 
     workflowName: string;
     totalSteps: number;
     completedSteps: number;
-    results: any[];
+    results: never[];
     success: boolean;
     error: string;
     failedStep?: undefined;
@@ -24,7 +24,7 @@ export function executeWorkflow(workflowId: any, parameters: any, stopOnError?: 
     workflowName: string;
     totalSteps: number;
     completedSteps: number;
-    failedStep: number;
+    failedStep: number | undefined;
     results: {
         step: number;
         command: string;
@@ -54,7 +54,7 @@ export function previewWorkflow(workflowId: any, parameters: any): {
     name: string;
     description: string;
     goal: string;
-    estimatedTime: string;
+    estimatedTime: string | undefined;
     validation: {
         valid: boolean;
         missingParameters: any[];
@@ -64,7 +64,7 @@ export function previewWorkflow(workflowId: any, parameters: any): {
         command: string;
         description: string;
         parameters: {};
-        expectedOutput: string;
+        expectedOutput: string | undefined;
     }[];
     error?: undefined;
 };

@@ -14,7 +14,7 @@ export const command: "securityScan";
 export const aliases: string[];
 export const describe: string;
 export function builder(yargs: any): any;
-export const securityScanBuilderOptions: any;
+export const securityScanBuilderOptions: object;
 export namespace inputPrompts {
     namespace category {
         let description: string;

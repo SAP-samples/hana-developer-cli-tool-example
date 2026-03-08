@@ -14,7 +14,7 @@ export const command: "dependencies";
 export const aliases: string[];
 export const describe: string;
 export function builder(yargs: any): any;
-export const dependenciesBuilderOptions: any;
+export const dependenciesBuilderOptions: object;
 export namespace inputPrompts {
     namespace schema {
         let description: string;

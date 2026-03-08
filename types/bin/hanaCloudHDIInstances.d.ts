@@ -2,7 +2,7 @@ export function handler(argv: any): Promise<void>;
 export function listInstances(prompts: any): Promise<{
     name: any;
     last_operation: string;
-}[]>;
+}[] | undefined>;
 export const command: "hdi";
 export const aliases: string[];
 export const describe: string;

@@ -7,7 +7,7 @@ export function recommendCommands(intent: any, limit?: number): {
     reason: string;
     category: string;
     tags: string[];
-    useCases: string[];
+    useCases: string[] | undefined;
     exampleParameters: any;
 }[];
 export function getQuickStartGuide(): ({

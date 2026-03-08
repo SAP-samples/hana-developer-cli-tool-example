@@ -147,14 +147,14 @@ export function output(content: any): void;
  * @param {Object} res - Express response object
  * @param {Function} next - Express next middleware function
  */
-export function globalErrorHandler(err: Error, req: any, res: any, next: Function): void;
+export function globalErrorHandler(err: Error, req: Object, res: Object, next: Function): void;
 /**
  * 404 Not Found handler
  * Must be placed after all other route definitions
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  */
-export function notFoundHandler(req: any, res: any): void;
+export function notFoundHandler(req: Object, res: Object): void;
 /**
  * Setup Express and Launch Browser
  * @param {string} urlPath - URL Path to Launch

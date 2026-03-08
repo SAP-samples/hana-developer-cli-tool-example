@@ -3,7 +3,7 @@
  * @param {string} commandName - The command name (including aliases)
  * @returns {Object|null} Metadata object or null if not found
  */
-export function getCommandMetadata(commandName: string): any | null;
+export function getCommandMetadata(commandName: string): Object | null;
 /**
  * Get primary command name from alias
  * @param {string} commandOrAlias - The command or alias name

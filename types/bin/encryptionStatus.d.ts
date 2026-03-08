@@ -14,7 +14,7 @@ export const command: "encryptionStatus";
 export const aliases: string[];
 export const describe: string;
 export function builder(yargs: any): any;
-export const encryptionStatusBuilderOptions: any;
+export const encryptionStatusBuilderOptions: object;
 export namespace inputPrompts {
     namespace scope {
         let description: string;

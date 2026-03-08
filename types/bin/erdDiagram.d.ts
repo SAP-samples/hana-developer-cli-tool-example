@@ -14,7 +14,7 @@ export const command: "erdDiagram";
 export const aliases: string[];
 export const describe: string;
 export function builder(yargs: any): any;
-export const erdDiagramBuilderOptions: any;
+export const erdDiagramBuilderOptions: object;
 export namespace inputPrompts {
     namespace schema {
         let description: string;
