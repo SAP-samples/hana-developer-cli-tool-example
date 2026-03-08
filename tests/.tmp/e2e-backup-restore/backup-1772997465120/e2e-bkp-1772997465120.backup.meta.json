@@ -1,0 +1,13 @@
+{
+  "name": "e2e-bkp-1772997465120",
+  "timestamp": "2026-03-08T19:17:52.549Z",
+  "type": "table",
+  "target": "E2E_BKP_SRC_1772997465120",
+  "schema": "14DA6AFA0FF948D7BC914D8DF43B1E67",
+  "format": "binary",
+  "compressed": false,
+  "withData": true,
+  "path": "D:\\projects\\hana-developer-cli-tool-example\\tests\\.tmp\\e2e-backup-restore\\backup-1772997465120\\e2e-bkp-1772997465120.backup",
+  "status": "completed",
+  "completedAt": "2026-03-08T19:17:52.729Z"
+}

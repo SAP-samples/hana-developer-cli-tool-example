@@ -10,7 +10,6 @@
  * - Connection and debug parameter injection
  */
 
-import { describe, it, beforeEach, afterEach } from 'mocha'
 import { assert } from '../base.js'
 import * as base from '../../utils/base.js'
 

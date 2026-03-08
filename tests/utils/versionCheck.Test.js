@@ -3,7 +3,6 @@
  * @module VersionCheck Tests - Unit tests for version checking utilities
  */
 
-import { describe, it } from 'mocha'
 import { assert } from '../base.js'
 import { checkVersion } from '../../utils/versionCheck.js'
 

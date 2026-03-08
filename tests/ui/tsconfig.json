@@ -1,0 +1,25 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "node",
+      "mocha",
+      "@wdio/globals/types",
+      "webdriverio/async"
+    ],
+    "lib": ["ES2022", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ES2022",
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "**/*.js",
+    "**/*.test.js",
+    "global.d.ts"
+  ]
+}

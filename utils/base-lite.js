@@ -268,11 +268,23 @@ export function getBuilder(input, iConn = true, iDebug = true) {
         }
     }
     
-    // Merge input options and apply config defaults to input options as well
+    // Merge strategy: defaults (grpConn, grpDebug) are overridden by command-specific input
+    // Only add default profile if not already defined in input
+    let grpConnFinal = { ...grpConn }
+    if (!input.profile && iConn) {
+        grpConnFinal.profile = {
+            alias: ['p'],
+            type: 'string',
+            default: getConfigValue('profile'),
+            group: bundle.getText("grpConn"),
+            desc: bundle.getText("profile")
+        }
+    }
+    
     let builder = {
-        ...input,
-        ...grpConn,
-        ...grpDebug
+        ...grpConnFinal,
+        ...grpDebug,
+        ...input  // Input options override defaults
     }
 
     const ensureAlias = (option, aliasValue) => {

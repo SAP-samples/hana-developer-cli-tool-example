@@ -3,7 +3,6 @@
  * @module Locale Tests - Unit tests for locale utilities
  */
 
-import { describe, it } from 'mocha'
 import { assert } from '../base.js'
 import { getLocale, normalizeLocale } from '../../utils/locale.js'
 

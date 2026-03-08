@@ -3,7 +3,6 @@
  * @module Excel Functionality Tests - Unit tests for Excel export data generation and validation
  */
 
-import { describe, it } from 'mocha'
 import { assert } from './base.js'
 
 /**

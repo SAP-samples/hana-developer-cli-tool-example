@@ -3,7 +3,6 @@
  * @module Routes Swagger Tests - Integration tests for swagger route with mocked requests/responses
  */
 
-import { describe, it, beforeEach } from 'mocha'
 import { assert } from '../base.js'
 import express from 'express'
 import { route } from '../../routes/swagger.js'

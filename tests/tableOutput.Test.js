@@ -10,7 +10,6 @@
  * Tests cover both terminal output (outputTableFancy) and file output (formatAsTextTable)
  */
 
-import { describe, it, beforeEach, afterEach } from 'mocha'
 import { assert } from './base.js'
 import * as base from '../utils/base.js'
 import * as querySimple from '../bin/querySimple.js'

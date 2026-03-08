@@ -22,6 +22,9 @@
     "test:e2e:single": "node -e \"if(process.env.CI==='true'){console.log('Skipping E2E tests in CI');process.exit(0)}process.exit(1)\" || cross-env NODE_ENV=test mocha --config=tests/.mocharc.e2e.json \"./tests/e2e/**/*.e2e.Test.js\"",
     "test:e2e:grep": "node -e \"if(process.env.CI==='true'){console.log('Skipping E2E tests in CI');process.exit(0)}process.exit(1)\" || cross-env NODE_ENV=test mocha --config=tests/.mocharc.e2e.json \"./tests/e2e/**/*.e2e.Test.js\" --grep",
     "test:e2e:strict": "node -e \"if(process.env.CI==='true'){console.log('Skipping E2E tests in CI');process.exit(0)}process.exit(1)\" || cross-env NODE_ENV=test mocha --config=tests/.mocharc.e2e.json --forbid-pending \"./tests/e2e/**/*.e2e.Test.js\"",
+    "test:ui": "wdio run wdio.conf.js",
+    "test:ui:debug": "wdio run wdio.conf.js --debug",
+    "test:ui:single": "wdio run wdio.conf.js --spec",
     "test:platform": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json \"./tests/platform*.Test.js\"",
     "test:windows": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json --grep \"@windows|@all\" \"./tests/**/*.Test.js\"",
     "test:unix": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json --grep \"@unix|@all\" \"./tests/**/*.Test.js\"",
@@ -119,8 +122,14 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^25.2.3",
     "@types/yargs": "^17.0.31",
+    "@wdio/cli": "^9.24.0",
+    "@wdio/globals": "^9.23.0",
+    "@wdio/local-runner": "^9.24.0",
+    "@wdio/mocha-framework": "^9.24.0",
+    "@wdio/spec-reporter": "^9.24.0",
     "chai": "^6.2.2",
     "chai-as-promised": "^8.0.2",
+    "chromedriver": "^145.0.6",
     "cross-env": "^10.1.0",
     "eslint": "^9.39.2",
     "esmock": "^2.7.3",
@@ -131,7 +140,10 @@
     "sinon": "^21.0.1",
     "stringify-changelog": "^0.2.1",
     "supertest": "^7.2.2",
-    "vitepress-plugin-mermaid": "^2.0.17"
+    "vitepress-plugin-mermaid": "^2.0.17",
+    "wdio-chromedriver-service": "^8.1.1",
+    "wdio-ui5-service": "^3.0.8",
+    "webdriverio": "^9.24.0"
   },
   "cds": {
     "preview": {

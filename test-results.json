@@ -1,0 +1,1003 @@
+npm warn "json" is being parsed as a normal command line argument.
+npm warn Unknown cli config "--reporter". This will stop working in the next major version of npm.
+
+> hana-cli@4.202603.0 test:e2e
+> node -e "if(process.env.CI==='true'){console.log('Skipping E2E tests in CI');process.exit(0)}process.exit(1)" || cross-env NODE_ENV=test mocha --config=tests/.mocharc.e2e.json "./tests/e2e/**/*.e2e.Test.js" json
+
+Warning: Cannot find any files matching pattern "json"
+
+
+  backup command - E2E Tests
+    Help output and validation
+      Γ£ö shows help with --help flag
+      Γ£ö supports alias "bkp"
+      Γ£ö rejects invalid backupType values
+    Live backup side effects (optional)
+      Γ£ö creates backup artifacts for a live table backup (12028ms)
+
+
+  connect command - E2E Tests
+    Help output
+      Γ£ö shows help via cli command
+      Γ£ö lists connect-specific options in help
+      Γ£ö includes documentation and related command links
+    Aliases
+      Γ£ö supports alias "c"
+      Γ£ö supports alias "login" (8545ms)
+    Live connection (optional)
+      Γ£ö performs an actual DB connection using local credentials (3876ms)
+
+
+  dataValidator command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag
+      Γ£ö includes documentation and related command links (2628ms)
+    Aliases
+      Γ£ö supports alias "dval" (3081ms)
+      Γ£ö supports alias "validateData" (2975ms)
+    Validation
+      Γ£ö rejects unsupported format values (2558ms)
+    Live validation (optional)
+      Γ£ö validates one row from SYS.DUMMY using default rules (3911ms)
+
+
+  compareSchema command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag (2939ms)
+      Γ£ö includes documentation and related command links (2644ms)
+    Aliases
+      Γ£ö supports alias "cmpschema" (3439ms)
+      Γ£ö supports alias "schemaCompare" (2535ms)
+      Γ£ö supports alias "compareschema" (3084ms)
+    Live validation (optional)
+      Γ£ö compares SYS schema with itself (5564ms)
+
+
+  compareData command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag (2612ms)
+      Γ£ö includes documentation and related command links (2508ms)
+    Aliases
+      Γ£ö supports alias "cmpdata" (3907ms)
+      Γ£ö supports alias "compardata" (2707ms)
+      Γ£ö supports alias "dataCompare" (8444ms)
+    Live validation (optional)
+      - compares data between SYS.DUMMY and itself
+
+
+  dataProfile command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag
+      Γ£ö includes documentation and related command links (2758ms)
+    Aliases
+      Γ£ö supports alias "prof" (2957ms)
+      Γ£ö supports alias "profileData" (2796ms)
+      Γ£ö supports alias "dataStats" (2929ms)
+    Validation
+      Γ£ö rejects unsupported format values
+    Live profiling (optional)
+      Γ£ö returns metrics output for SYS.DUMMY in summary format (3615ms)
+
+
+  dataDiff command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag (3057ms)
+      Γ£ö includes documentation and related command links
+    Aliases
+      Γ£ö supports alias "ddiff" (3396ms)
+      Γ£ö supports alias "diffData" (2759ms)
+      Γ£ö supports alias "dataCompare" (8165ms)
+    Validation
+      Γ£ö rejects unsupported format values (3381ms)
+    Live validation (optional)
+      - compares data between SYS.DUMMY and itself with dry-run
+
+
+  duplicateDetection command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag (2719ms)
+      Γ£ö includes documentation and related command links
+    Aliases
+      Γ£ö supports alias "dupdetect" (2984ms)
+      Γ£ö supports alias "findDuplicates" (2738ms)
+      Γ£ö supports alias "duplicates" (2767ms)
+    Validation
+      Γ£ö rejects unsupported format values (2569ms)
+    Live data quality workflow (optional)
+      Γ£ö runs exact, fuzzy, and partial duplicate analysis workflow on SYS.DUMMY (12267ms)
+
+
+  featuresUI command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag
+      Γ£ö includes documentation links
+      Γ£ö displays command examples
+      Γ£ö indicates this is a UI command
+    Aliases
+      Γ£ö supports case-insensitive alias (8196ms)
+      Γ£ö supports related base command
+    Feature browsing options
+      Γ£ö inherits options from base features command
+      Γ£ö provides interactive database feature exploration
+    Web server integration (optional)
+      Γ£ö starts server with proper routing (3162ms)
+      Γ£ö provides SAPUI5 component initialization
+    Database operations
+      Γ£ö accepts profile parameter for database selection
+    Error handling
+      Γ£ö handles database connection errors gracefully (5075ms)
+
+
+  indexTest legacy placeholder - E2E Tests
+    Command availability
+      Γ£ö returns an unknown command message via hana-cli (9413ms)
+
+
+  dataTypesUI command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag
+      Γ£ö includes documentation links
+      Γ£ö displays command examples
+      Γ£ö indicates this is a UI command
+    Aliases
+      Γ£ö supports case-insensitive alias (9013ms)
+      Γ£ö supports related base command
+    Data type exploration options
+      Γ£ö inherits options from base dataTypes command
+      Γ£ö displays database data type information
+    Web server integration (optional)
+      Γ£ö starts server with proper routing (3115ms)
+    Database operations
+      Γ£ö accepts profile parameter for database selection
+      Γ£ö queries database metadata for data types
+    Error handling
+      Γ£ö handles database connection errors gracefully (5146ms)
+
+
+  containersUI command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag
+      Γ£ö includes documentation links
+      Γ£ö displays command examples
+      Γ£ö indicates this is a UI command
+    Aliases
+      Γ£ö supports case-insensitive alias (8455ms)
+      Γ£ö supports related base command
+    Container management options
+      Γ£ö inherits options from base containers command
+      Γ£ö provides interactive container browsing
+    Web server integration (optional)
+      Γ£ö starts server with proper routing (3103ms)
+      Γ£ö provides SAPUI5 component initialization
+    Container operations
+      Γ£ö accepts profile parameter for database selection
+      Γ£ö manages container list display
+    Error handling
+      Γ£ö handles database connection errors gracefully (5123ms)
+      Γ£ö validates server configuration
+
+
+  interactive command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag
+    Menu-driven command discovery
+      - shows main menu and handles empty search results
+      - searches and executes a command from the menu
+
+
+  export command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag (4824ms)
+      Γ£ö includes documentation and related command links (5813ms)
+    Aliases
+      Γ£ö supports alias "exp" (6219ms)
+      Γ£ö supports alias "downloadData" (6495ms)
+    Validation
+      Γ£ö rejects unsupported format values (6128ms)
+    Live export (optional)
+      Γ£ö exports one row from SYS.DUMMY to JSON file (6190ms)
+
+
+  WebSocket End-to-End Message Handling Tests
+    Connection Establishment
+      Γ£ö should successfully establish WebSocket connection
+      Γ£ö should receive initial connection message
+      Γ£ö should handle multiple simultaneous connections
+    Message Sending and Receiving
+      Γ£ö should send and process massConvert action
+      Γ£ö should handle unknown action with error response
+      Γ£ö should handle empty message gracefully
+      Γ£ö should handle malformed JSON
+      Γ£ö should handle message with missing action
+    Broadcast Functionality
+      Γ£ö should broadcast messages to all connected clients
+      Γ£ö should handle broadcast with varying client states
+    Connection Lifecycle
+      Γ£ö should handle client disconnect gracefully
+      Γ£ö should handle rapid connect-disconnect cycles
+      Γ£ö should clean up closed connections
+    Error Handling
+      Γ£ö should handle client errors without crashing server
+      Γ£ö should continue serving after message processing errors
+    Message Format Validation
+      Γ£ö should handle messages with extra fields
+      Γ£ö should handle numeric action values
+      Γ£ö should handle null action
+      Γ£ö should handle array instead of object
+    HTTP GET Endpoint
+      Γ£ö should serve HTML page on GET /websockets
+    Performance and Stress Tests
+      Γ£ö should handle large message payload
+      Γ£ö should handle rapid message sending
+
+    CDS server started at http://localhost:3103
+
+  massExport command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag
+      Γ£ö includes documentation and related command links
+    Aliases
+      Γ£ö supports alias "me"
+      Γ£ö supports alias "mexport"
+      Γ£ö supports alias "massExp"
+      Γ£ö supports alias "massexp"
+    Live smoke run (optional)
+      Γ£ö executes with explicit arguments and returns a non-crashing result (3721ms)
+
+
+  dependencies command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag (2586ms)
+      Γ£ö includes documentation links and examples
+      Γ£ö shows available format choices (3026ms)
+    Aliases
+      Γ£ö supports alias "deps"
+      Γ£ö supports alias "dependency-graph" (3229ms)
+    Flag validation
+      Γ£ö accepts --direction flag with choices (2852ms)
+      Γ£ö accepts --depth flag
+      Γ£ö accepts --includeViews and --includeProcedures flags (3341ms)
+      Γ£ö rejects invalid format values
+    Live dependency graphing (optional)
+      Γ£ö generates tree output for SYS.DUMMY when credentials available (4395ms)
+      Γ£ö emits JSON format with root and arrays (4177ms)
+      Γ£ö emits mermaid output (3295ms)
+      Γ£ö emits graphviz output (3726ms)
+
+    Γ£ô Homepage loaded successfully
+    Γ£ô OData service document retrieved
+
+  functionsUI command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag
+      Γ£ö includes documentation links
+      Γ£ö displays command examples
+      Γ£ö indicates this is a UI command
+    Aliases
+      Γ£ö supports case-insensitive alias (10535ms)
+      Γ£ö supports related base command
+    Function browsing options
+      Γ£ö inherits options from base functions command
+      Γ£ö supports schema filtering
+    Web server integration (optional)
+      Γ£ö starts server with proper routing (3118ms)
+    Database operations
+      Γ£ö accepts profile parameter for database selection
+      Γ£ö handles schema filtering for functions
+    Error handling
+      Γ£ö handles database connection errors gracefully (5087ms)
+
+    ΓÜá Test failed but not in forced mode: expected 500 to equal 200
+
+  featureUsageUI command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag
+      1) includes documentation and related command links
+      Γ£ö displays command examples
+      Γ£ö indicates this is a UI command
+    Aliases
+      Γ£ö supports case-insensitive alias (8552ms)
+      Γ£ö supports related base command
+    Feature analysis options
+      Γ£ö provides feature usage metrics display
+      Γ£ö inherits options from base featureUsage command
+      Γ£ö provides filtering options for feature analysis
+    Web server integration (optional)
+      Γ£ö starts server with proper routing (3101ms)
+      Γ£ö provides real-time feature analytics
+      Γ£ö provides SAPUI5 component initialization
+    Analytics and reporting
+      Γ£ö displays feature usage statistics
+      Γ£ö provides time-based analysis options
+      Γ£ö supports customizable reporting timeframes
+    Database operations
+      Γ£ö accepts profile parameter for database selection
+      Γ£ö queries feature usage metrics from database
+      Γ£ö handles aggregated data queries efficiently
+    Data visualization
+      Γ£ö provides interactive charts in UI
+      Γ£ö displays trend analysis over time
+      Γ£ö supports data export or reporting
+    Error handling
+      Γ£ö handles database connection errors (5082ms)
+      Γ£ö handles missing feature usage data
+      Γ£ö provides helpful error messages
+      2) validates port availability for web server
+    Performance and scalability
+      Γ£ö handles large datasets efficiently
+      Γ£ö provides pagination for large result sets
+
+    CDS server started at http://localhost:3198
+    Γ£ô Server started on custom port 3955
+Using Connection Configuration loaded via default-env.json
+
+
+  status command - E2E Tests
+    Help output
+      Γ£ö shows help via cli command
+      Γ£ö supports aliases in help mode (9356ms)
+    System health check and output formatting (optional live)
+      Γ£ö returns session and role context with readable table-like output (4118ms)
+      Γ£ö includes granted privileges when --priv is enabled (4070ms)
+    Connection validation
+      Γ£ö accepts explicit connection credentials and returns session context (3425ms)
+
+    ΓÜá Test skipped: expected [ 200, 301, 302 ] to include 404
+    Γ£ô Server responding on custom port
+
+  tableCopy command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag (2963ms)
+      Γ£ö includes documentation and related command links (3735ms)
+    Aliases
+      Γ£ö supports alias "tablecopy" (2846ms)
+      Γ£ö supports alias "copyTable" (4087ms)
+    Validation
+      Γ£ö rejects non-numeric limit values (3655ms)
+    Live multi-step workflow with validation (optional)
+      - copies sourceΓåÆtarget in two steps (structure then filtered data) and validates result
+
+
+  config command - E2E Tests
+    Basic execution
+      Γ£ö displays current configuration (3863ms)
+      Γ£ö works with alias "cfg" (2625ms)
+      Γ£ö runs without errors (3492ms)
+    Help outputs
+      Γ£ö shows help with --help flag
+      Γ£ö displays command examples
+      Γ£ö describes edit flag
+      Γ£ö describes global flag
+      Γ£ö describes path flag
+      Γ£ö describes reset flag
+    Configuration display
+      Γ£ö shows project config status
+      Γ£ö shows global config status (2820ms)
+      Γ£ö displays helpful hints (2936ms)
+    Path action and flag
+      Γ£ö shows config paths with --path flag (3671ms)
+      Γ£ö works with short flag -p (3048ms)
+      Γ£ö shows config paths with "paths" action (3125ms)
+      Γ£ö displays .hana-cli-config file locations
+      Γ£ö displays hana-cli.config.js file locations (2732ms)
+      Γ£ö runs without errors when showing paths (3116ms)
+    Show action (default)
+      Γ£ö displays config with "show" action (2548ms)
+      Γ£ö defaults to show action when no action specified (3150ms)
+    Output validation
+      Γ£ö produces meaningful output (2552ms)
+      Γ£ö outputs UTF-8 text (3282ms)
+      Γ£ö includes section separators (2872ms)
+    Flag combinations
+      Γ£ö handles --help with any flag (2528ms)
+    Error handling
+      Γ£ö handles invalid action gracefully (2914ms)
+    Exit codes
+      Γ£ö returns 0 on success (2883ms)
+      Γ£ö returns 0 for help
+
+    CDS server started for view at http://localhost:3816
+
+  restore command - E2E Tests
+    Help output and validation
+      Γ£ö shows help with --help flag
+      Γ£ö supports alias "rst"
+      Γ£ö fails with clear message when backup file does not exist
+    Dry-run safety checks
+      Γ£ö reads metadata in dry-run mode without requiring a database connection (2711ms)
+    Live restore side effects (optional)
+      Γ£ö restores backup data into a target table (33126ms)
+
+    ΓÜá Test skipped: expected 500 to equal 200
+
+  cds command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag (2816ms)
+      Γ£ö includes documentation and related command links
+      Γ£ö shows example usage (3518ms)
+    Aliases
+      Γ£ö supports alias "cdsPreview" (8774ms)
+    Validation
+      Γ£ö rejects missing required table parameter (with --quiet) (3005ms)
+      Γ£ö accepts valid port number (4312ms)
+    Live server tests (optional)
+      3) starts CDS preview server and serves OData endpoints
+      - serves API documentation at /api-docs
+      - accepts custom port via --port flag
+      - handles --view flag for CDS view generation
+
+
+  systemInfoUI command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag
+      Γ£ö includes documentation and related command links
+      Γ£ö displays command examples
+      Γ£ö indicates this is a UI command
+    Aliases
+      Γ£ö supports base command alias "systemInfo" (2915ms)
+      Γ£ö supports UI-specific short alias
+      Γ£ö supports case-insensitive alias (8588ms)
+    Command options
+      Γ£ö inherits options from base systemInfo command
+      4) accepts port configuration for web server
+      Γ£ö respects quiet mode flag
+    Web server integration (optional)
+      Γ£ö starts server with proper routing (3116ms)
+      5) accepts custom port configuration
+      Γ£ö provides SAPUI5 component initialization
+    Database connectivity
+      Γ£ö requires database connection configuration
+      Γ£ö handles profile parameter for database selection
+    Error handling
+      Γ£ö provides meaningful error for invalid profile (5091ms)
+      Γ£ö handles missing database credentials gracefully (5103ms)
+      6) recovers from server port conflicts
+
+
+  querySimple command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag (5460ms)
+      Γ£ö supports alias "qs" (8413ms)
+    Live query execution and result formatting (optional)
+      Γ£ö executes query with table output when HANA credentials are available (9085ms)
+      Γ£ö formats output as JSON for live query (8973ms)
+      - formats output as CSV with semicolon delimiter for live query
+    Error handling
+      Γ£ö rejects invalid output format value (5000ms)
+      Γ£ö rejects missing required query when --quiet is used (6397ms)
+      Γ£ö handles invalid SQL syntax gracefully in live mode (7215ms)
+
+
+  tables command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag
+      Γ£ö includes documentation and related command links
+      Γ£ö displays command examples
+    Aliases
+      Γ£ö supports alias "t"
+      Γ£ö supports alias "listTables"
+      Γ£ö supports alias "listtables" (case-insensitive)
+    Flag validation
+      Γ£ö accepts --schema flag
+      Γ£ö accepts --table flag (with alias -t)
+      Γ£ö accepts --limit flag (with alias -l)
+      Γ£ö accepts --profile flag
+      Γ£ö validates limit parameter is numeric (3848ms)
+      Γ£ö rejects negative limit values (4006ms)
+    Profile-specific behavior
+      Γ£ö shows profile option in help
+      Γ£ö accepts profile values for different database types
+    Live tables query (optional)
+      Γ£ö lists tables from SYS schema when credentials available (3552ms)
+      - respects limit parameter in live query
+      Γ£ö filters tables by name pattern when specified (3773ms)
+    Output format
+      Γ£ö produces consistent output structure on repeated calls (7102ms)
+    Error handling
+      Γ£ö provides help text for invalid schema format (3360ms)
+      Γ£ö handles missing connection gracefully without --quiet
+
+
+  massConvertUI command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag (2925ms)
+      7) includes documentation and related command links
+      8) displays command examples
+      Γ£ö indicates this is a UI command
+    Aliases
+      Γ£ö supports case-insensitive alias (8859ms)
+      Γ£ö supports related base command (2694ms)
+    Conversion options
+      9) inherits options from base massConvert command
+      Γ£ö provides schema/table selection for conversion (2921ms)
+      Γ£ö includes conversion type parameters (3066ms)
+    Web server integration (optional)
+      Γ£ö starts server with proper routing (3135ms)
+      Γ£ö provides real-time conversion progress feedback (2794ms)
+      Γ£ö provides SAPUI5 component initialization (2795ms)
+    Batch operation support
+      Γ£ö supports multiple object selection
+      Γ£ö provides batch operation progress tracking
+      Γ£ö supports rollback on conversion failure
+    Database operations
+      10) accepts profile parameter for database selection
+      Γ£ö handles schema selection for batch conversion
+      Γ£ö provides conversion confirmation before execution (2707ms)
+    Error handling
+      Γ£ö handles database connection errors (5114ms)
+      Γ£ö validates conversion parameters
+      Γ£ö provides meaningful error messages for failed conversions
+      Γ£ö handles server port conflicts gracefully
+
+
+  inspectTableUI command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag (3121ms)
+      11) includes documentation and related command links
+      Γ£ö displays command examples (3007ms)
+      Γ£ö indicates this is a UI command (3283ms)
+    Aliases
+      Γ£ö supports case-insensitive alias (7489ms)
+      Γ£ö supports related base command (3090ms)
+    Table inspection options
+      Γ£ö requires schema and table parameters (3790ms)
+      Γ£ö accepts positional schema argument (2952ms)
+      Γ£ö accepts positional table argument (4017ms)
+      Γ£ö inherits options from base inspectTable command (2697ms)
+    Web server integration (optional)
+      Γ£ö starts server with proper routing (3108ms)
+      Γ£ö provides real-time table analysis display (3090ms)
+      Γ£ö provides SAPUI5 component initialization (2622ms)
+    Table analysis capabilities
+      Γ£ö provides column information display (2835ms)
+      Γ£ö shows index information in UI
+      Γ£ö displays table statistics and metadata
+    Database operations
+      Γ£ö accepts profile parameter for database selection
+      Γ£ö handles schema selection via parameter
+      Γ£ö handles table selection via parameter (2857ms)
+    Error handling
+      Γ£ö validates schema parameter is provided (2587ms)
+      Γ£ö validates table parameter is provided (2943ms)
+      Γ£ö handles database connection errors (5076ms)
+      Γ£ö handles non-existent table gracefully
+      Γ£ö provides helpful error messages for invalid schema
+
+
+  schemas command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag
+      Γ£ö includes documentation and related command links
+      Γ£ö displays command examples
+    Aliases
+      Γ£ö supports alias "sch" (8244ms)
+      Γ£ö supports alias "getSchemas" (9688ms)
+      Γ£ö supports alias "listSchemas" (9012ms)
+      Γ£ö supports alias "s"
+    Flag validation
+      Γ£ö accepts --schema flag (with alias -s)
+      Γ£ö accepts --limit flag (with alias -l)
+      Γ£ö accepts --all flag (with alias --allSchemas or --al)
+      Γ£ö validates limit parameter is numeric (3258ms)
+      Γ£ö rejects negative limit values (3311ms)
+    All schemas flag behavior
+      Γ£ö allows --all flag to include all schemas
+      Γ£ö defaults to showing only schemas with privileges
+    Live schemas query (optional)
+      Γ£ö lists schemas when credentials available (3938ms)
+      - respects default limit parameter in live query
+      Γ£ö filters schemas by name pattern when specified (3409ms)
+      - includes all schemas when --all flag is used
+    Output format
+      Γ£ö produces consistent output structure on repeated calls (4951ms)
+    Error handling
+      Γ£ö provides help text for invalid flags
+      Γ£ö handles missing connection gracefully without --quiet
+
+
+  indexes command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag
+      Γ£ö includes documentation and related command links
+      Γ£ö displays command examples
+    Aliases
+      Γ£ö supports alias "ind" (10162ms)
+      Γ£ö supports alias "listIndexes" (8300ms)
+      Γ£ö supports alias "ListInd" (8752ms)
+      Γ£ö supports alias "listind" (8705ms)
+      Γ£ö supports alias "Listind" (9343ms)
+      Γ£ö supports alias "listfindexes" (7240ms)
+    Flag validation
+      Γ£ö accepts --indexes flag (with alias -i)
+      Γ£ö accepts --schema flag (with alias -s)
+      Γ£ö accepts --limit flag (with alias -l)
+      Γ£ö accepts --profile flag
+      Γ£ö validates limit parameter is numeric (4188ms)
+      Γ£ö rejects negative limit values (3184ms)
+    Live index query (optional)
+      Γ£ö lists indexes from SYS schema when credentials available (3884ms)
+      Γ£ö respects limit parameter in live query (2762ms)
+    Output format
+      Γ£ö produces consistent output structure on repeated calls (4947ms)
+    Error handling
+      Γ£ö provides help text for invalid flags (3815ms)
+
+
+  import command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag (6359ms)
+      Γ£ö includes documentation and related command links (6282ms)
+      Γ£ö shows all key options in help (5070ms)
+    Aliases
+      Γ£ö supports alias "imp" (5085ms)
+      Γ£ö supports alias "uploadData" (5531ms)
+    Validation
+      Γ£ö rejects unsupported output format values (5217ms)
+      Γ£ö rejects unsupported matchMode values (6133ms)
+      Γ£ö rejects unsupported excelCacheMode values (6359ms)
+      Γ£ö validates that filename is required (7169ms)
+      Γ£ö validates that table is required (6391ms)
+    Flag combinations
+      Γ£ö accepts valid combination of all flags (6681ms)
+      Γ£ö shows correct default values (4798ms)
+    Dry run mode
+      Γ£ö accepts --dryRun flag without database connection (5592ms)
+    Live import (optional)
+      Γ£ö imports CSV data into a test table (7408ms)
+      Γ£ö validates truncate flag behavior (10981ms)
+
+
+  tablesUI command - E2E Tests
+    Help output
+      Γ£ö shows help with --help flag
+      12) includes documentation and related command links
+      Γ£ö displays command examples
+      Γ£ö specifies that this is a UI command
+    Aliases
+      Γ£ö supports alias "tui" (9987ms)
+      Γ£ö supports alias "listTablesUI" (7861ms)
+      Γ£ö supports alias "listtablesui" (case-insensitive) (7717ms)
+      Γ£ö supports alias "tablesui" (case-insensitive) (8015ms)
+    Flag validation
+      Γ£ö accepts --schema flag
+      Γ£ö accepts --table flag (with optional alias)
+      Γ£ö inherits flags from base tables command
+      Γ£ö accepts positional schema argument
+      Γ£ö accepts positional table argument
+    Server configuration
+      13) includes port configuration in help
+      Γ£ö describes UI endpoint routing
+    Web server integration (optional)
+      Γ£ö starts server with proper routing (3068ms)
+      14) accepts custom port configuration
+      Γ£ö provides SAPUI5 component initialization
+    Parameter inheritance from base command
+      Γ£ö inherits schema parameter from tables command
+      Γ£ö inherits table parameter from tables command
+    Error handling
+      Γ£ö handles invalid profile gracefully (4155ms)
+      Γ£ö provides meaningful error messages for missing credentials (3843ms)
+
+
+  systemInfo command - E2E Tests
+    Basic execution
+      Γ£ö displays system information (4341ms)
+      Γ£ö works with alias "sys" (11482ms)
+      Γ£ö works with alias "sysinfo" (10144ms)
+      Γ£ö runs without errors (3649ms)
+    Output format options
+      Γ£ö displays basic output (default) (3433ms)
+      Γ£ö displays environment output (2629ms)
+      Γ£ö displays dbx output (3073ms)
+      Γ£ö accepts output alias "-o" (3588ms)
+    Help outputs
+      Γ£ö shows help with --help flag (2834ms)
+      Γ£ö displays command examples (2769ms)
+      Γ£ö displays available output choices
+    Aliases
+      Γ£ö works with alias "sys" (7869ms)
+      Γ£ö works with alias "sysinfo" (5941ms)
+      Γ£ö works with alias "sysInfo" (5828ms)
+      Γ£ö works with alias "systeminfo" (5170ms)
+      Γ£ö works with alias "system-information" (4356ms)
+      Γ£ö works with alias "dbInfo" (3935ms)
+      Γ£ö works with alias "dbinfo" (3658ms)
+
+
+  importUI command - E2E Tests
+    Help output
+      15) shows help with --help flag
+      16) includes documentation and related command links
+      17) displays command examples
+      Γ£ö indicates this is a UI command (11263ms)
+    Aliases
+      18) supports alias "importui"
+      Γ£ö supports related base command (4708ms)
+    Import-specific options
+      Γ£ö provides file upload configuration (9610ms)
+      19) includes schema parameter for import target
+      20) includes table parameter for import target
+      21) inherits options from base import command
+    Web server integration (optional)
+      Γ£ö starts server with proper routing (3077ms)
+      Γ£ö configures file upload endpoint (4507ms)
+      Γ£ö provides SAPUI5 component initialization (3710ms)
+    Data handling and validation
+      22) accepts profile parameter for database selection
+      Γ£ö provides error handling for invalid input data (3427ms)
+      Γ£ö documents import transaction behavior (3236ms)
+    File handling
+      Γ£ö accepts CSV file uploads (3097ms)
+      Γ£ö provides feedback on import progress (2972ms)
+    Error handling
+      Γ£ö handles database connection errors
+      Γ£ö handles missing required parameters (3115ms)
+      23) validates port availability for web server
+
+
+  version command - E2E Tests
+    Basic execution
+      Γ£ö displays version information (12334ms)
+      Γ£ö works with alias "ver" (13532ms)
+      Γ£ö runs without errors (8716ms)
+    Help outputs
+      Γ£ö shows help with --help flag
+      Γ£ö displays command examples
+    Version components
+      Γ£ö shows hana-cli version in semver format (6798ms)
+      Γ£ö displays Node.js version (6356ms)
+      Γ£ö includes changelog URL (5151ms)
+    Version checking
+      Γ£ö checks latest available version (4892ms)
+      Γ£ö returns version information regardless of network (3895ms)
+    Dependencies
+      Γ£ö shows cf-cli version or missing status (4125ms)
+      Γ£ö shows btp-cli version or missing status (4189ms)
+      Γ£ö displays SAP package versions (3454ms)
+      Γ£ö includes database driver info (3267ms)
+    Output format
+      Γ£ö outputs multiple lines (3678ms)
+      Γ£ö uses consistent name: value format (4543ms)
+    Integration
+      Γ£ö works in command sequence (11631ms)
+      Γ£ö returns consistent version on repeated calls (11433ms)
+      Γ£ö does not require database connection (3171ms)
+    Error handling
+      Γ£ö completes without errors (3403ms)
+      Γ£ö handles global flags gracefully (3033ms)
+      Γ£ö alias works with options
+
+
+  426 passing (3m)
+  12 pending
+  23 failing
+
+  1) featureUsageUI command - E2E Tests
+       Help output
+         includes documentation and related command links:
+     Uncaught AssertionError: expected 'hana-cli featureUsageUI\n\nUsage StatΓÇª' to include 'hana-cli featureUsage --help'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/featureUsageUI.e2e.Test.js:36:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  2) featureUsageUI command - E2E Tests
+       Error handling
+         validates port availability for web server:
+     Uncaught AssertionError: expected 'hana-cli featureUsageUI\n\nUsage StatΓÇª' to include '--port'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/featureUsageUI.e2e.Test.js:237:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  3) cds command - E2E Tests
+       Live server tests (optional)
+         starts CDS preview server and serves OData endpoints:
+     Error: Timeout of 20000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (D:\projects\hana-developer-cli-tool-example\tests\e2e\cds.e2e.Test.js)
+      at listOnTimeout (node:internal/timers:605:17)
+      at process.processTimers (node:internal/timers:541:7)
+
+  4) systemInfoUI command - E2E Tests
+       Command options
+         accepts port configuration for web server:
+     Uncaught AssertionError: expected 'hana-cli systemInfoUI\n\nGeneral SystΓÇª' to include '--port'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/systemInfoUI.e2e.Test.js:95:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  5) systemInfoUI command - E2E Tests
+       Web server integration (optional)
+         accepts custom port configuration:
+     Uncaught AssertionError: expected 'hana-cli systemInfoUI\n\nGeneral SystΓÇª' to include '--port'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/systemInfoUI.e2e.Test.js:132:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  6) systemInfoUI command - E2E Tests
+       Error handling
+         recovers from server port conflicts:
+     Uncaught AssertionError: expected 'hana-cli systemInfoUI\n\nGeneral SystΓÇª' to include '--port'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/systemInfoUI.e2e.Test.js:185:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  7) massConvertUI command - E2E Tests
+       Help output
+         includes documentation and related command links:
+     Uncaught AssertionError: expected 'hana-cli massConvertUI [schema] [tablΓÇª' to match /Documentation:\s+https:\/\/sap-samples\.github\.io\/hana-developer-cli-tool-example/i
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/massConvertUI.e2e.Test.js:35:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  8) massConvertUI command - E2E Tests
+       Help output
+         displays command examples:
+     Uncaught AssertionError: expected 'hana-cli massConvertUI [schema] [tablΓÇª' to match /Examples:|EXAMPLES/i
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/massConvertUI.e2e.Test.js:44:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  9) massConvertUI command - E2E Tests
+       Conversion options
+         inherits options from base massConvert command:
+     Uncaught AssertionError: expected 'hana-cli massConvertUI [schema] [tablΓÇª' to include '--profile'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/massConvertUI.e2e.Test.js:81:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  10) massConvertUI command - E2E Tests
+       Database operations
+         accepts profile parameter for database selection:
+     Uncaught AssertionError: expected 'hana-cli massConvertUI [schema] [tablΓÇª' to include '--profile'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/massConvertUI.e2e.Test.js:168:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  11) inspectTableUI command - E2E Tests
+       Help output
+         includes documentation and related command links:
+     Uncaught AssertionError: expected 'hana-cli inspectTableUI [schema] [tabΓÇª' to include 'hana-cli inspectTable --help'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/inspectTableUI.e2e.Test.js:36:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  12) tablesUI command - E2E Tests
+       Help output
+         includes documentation and related command links:
+     Uncaught AssertionError: expected 'hana-cli tablesUI [schema] [table]\n\ΓÇª' to include 'hana-cli tables --help'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/tablesUI.e2e.Test.js:37:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  13) tablesUI command - E2E Tests
+       Server configuration
+         includes port configuration in help:
+     Uncaught AssertionError: expected 'hana-cli tablesUI [schema] [table]\n\ΓÇª' to include '--port'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/tablesUI.e2e.Test.js:139:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  14) tablesUI command - E2E Tests
+       Web server integration (optional)
+         accepts custom port configuration:
+     Uncaught AssertionError: expected 'hana-cli tablesUI [schema] [table]\n\ΓÇª' to include '--port'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/tablesUI.e2e.Test.js:182:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  15) importUI command - E2E Tests
+       Help output
+         shows help with --help flag:
+     Uncaught AssertionError: expected 'Usage: hana-cli <cmd> [options]\n\nCoΓÇª' to include 'hana-cli importUI'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/importUI.e2e.Test.js:25:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  16) importUI command - E2E Tests
+       Help output
+         includes documentation and related command links:
+     Uncaught AssertionError: expected 'Usage: hana-cli <cmd> [options]\n\nCoΓÇª' to match /Documentation:\s+https:\/\/sap-samples\.github\.io\/hana-developer-cli-tool-example/i
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/importUI.e2e.Test.js:35:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  17) importUI command - E2E Tests
+       Help output
+         displays command examples:
+     Uncaught AssertionError: expected 'Usage: hana-cli <cmd> [options]\n\nCoΓÇª' to include 'hana-cli importUI'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/importUI.e2e.Test.js:45:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  18) importUI command - E2E Tests
+       Aliases
+         supports alias "importui":
+     Uncaught AssertionError: expected 'Usage: hana-cli <cmd> [options]\n\nCoΓÇª' to include 'importUI'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/importUI.e2e.Test.js:64:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  19) importUI command - E2E Tests
+       Import-specific options
+         includes schema parameter for import target:
+     Uncaught AssertionError: expected 'Usage: hana-cli <cmd> [options]\n\nCoΓÇª' to include '--schema'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/importUI.e2e.Test.js:88:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  20) importUI command - E2E Tests
+       Import-specific options
+         includes table parameter for import target:
+     Uncaught AssertionError: expected 'Usage: hana-cli <cmd> [options]\n\nCoΓÇª' to include '--table'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/importUI.e2e.Test.js:95:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  21) importUI command - E2E Tests
+       Import-specific options
+         inherits options from base import command:
+     Uncaught AssertionError: expected 'Usage: hana-cli <cmd> [options]\n\nCoΓÇª' to include '--profile'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/importUI.e2e.Test.js:102:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  22) importUI command - E2E Tests
+       Data handling and validation
+         accepts profile parameter for database selection:
+     Uncaught AssertionError: expected 'Usage: hana-cli <cmd> [options]\n\nCoΓÇª' to include '--profile'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/importUI.e2e.Test.js:150:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+  23) importUI command - E2E Tests
+       Error handling
+         validates port availability for web server:
+     Uncaught AssertionError: expected 'Usage: hana-cli <cmd> [options]\n\nCoΓÇª' to include '--port'
+      at file:///D:/projects/hana-developer-cli-tool-example/tests/e2e/importUI.e2e.Test.js:205:27
+      at ChildProcess.exithandler (node:child_process:410:7)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at ChildProcess._handle.onexit (node:internal/child_process:305:5)
+
+
+

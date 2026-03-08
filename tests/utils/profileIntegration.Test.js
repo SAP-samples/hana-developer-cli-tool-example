@@ -4,7 +4,6 @@
  * Tests the actual database client behavior with different profiles
  */
 
-import { describe, it, before, after } from 'mocha'
 import { assert, addContext, exec } from '../base.js'
 import dbClientClass from '../../utils/database/index.js'
 import PostgresClient from '../../utils/database/postgres.js'

@@ -10,7 +10,6 @@
  * - Optional live database testing
  */
 
-import { describe, it } from 'mocha'
 import * as base from '../base.js'
 import { expect } from 'chai'
 import { getLocalConnectionCredentials, getLiveTestControl, gateLiveTestInCI, skipOrFailLiveTest } from './helpers.js'

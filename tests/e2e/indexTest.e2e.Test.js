@@ -7,7 +7,6 @@
  * - User receives an unknown command message
  */
 
-import { describe, it } from 'mocha'
 import * as base from '../base.js'
 import { expect } from 'chai'
 

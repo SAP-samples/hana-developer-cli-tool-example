@@ -1,5 +1,4 @@
 // @ts-check
-import { describe, it } from 'mocha'
 import * as base from '../base.js'
 import { expect } from 'chai'
 import { execFile } from 'child_process'

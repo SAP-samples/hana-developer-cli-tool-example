@@ -3,7 +3,6 @@
  * @module Routes HANA Inspect Tests - Integration tests for HANA inspect routes with mocked requests/responses
  */
 
-import { describe, it, beforeEach } from 'mocha'  
 import { assert } from '../base.js'
 import express from 'express'
 import { route, querySimpleHandler, inspectTableHandler, inspectViewHandler } from '../../routes/hanaInspect.js'

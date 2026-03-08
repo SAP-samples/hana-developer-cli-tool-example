@@ -3,7 +3,6 @@
  * @module Routes WebSocket Tests - Integration tests for WebSocket routes with mocked requests/responses
  */
 
-import { describe, it, beforeEach } from 'mocha'
 import { assert } from '../base.js'
 import express from 'express'
 import { route } from '../../routes/webSocket.js'

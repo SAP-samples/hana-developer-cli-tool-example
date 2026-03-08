@@ -1,7 +1,6 @@
 // @ts-nocheck
 import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
-import { describe, it, beforeEach, afterEach } from 'mocha'
 import sinon from 'sinon'
 
 chai.use(chaiAsPromised.default)
