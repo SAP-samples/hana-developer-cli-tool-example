@@ -156,7 +156,7 @@ hana-cli import -n large.xlsx -o excel -t BIGTABLE \
 3. **Flexibility**: Support for complex Excel file structures
 4. **User Control**: Fine-grained tuning for specific use cases
 5. **Reliability**: Better error handling and validation
-6. **Global Support**: Full internationalization (English/German)
+6. **Global Support**: Full internationalization (English, German, Spanish, French, Japanese, Korean, Portuguese)
 
 ## Backward Compatibility
 
@@ -169,7 +169,7 @@ All enhancements are fully backward compatible:
 ## Testing
 
 - Added 15 new test cases covering all features
-- Validated internationalization for English and German
+- Validated internationalization for all supported languages
 - No compilation or linting errors
 - Existing functionality remains unchanged
 

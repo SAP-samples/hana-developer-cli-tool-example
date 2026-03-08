@@ -221,8 +221,9 @@ Internationalization files in `properties` format:
 - `messages_de.properties` - German
 - `messages_es.properties` - Spanish
 - `messages_fr.properties` - French
+- `messages_ja.properties` - Japanese
+- `messages_ko.properties` - Korean
 - `messages_pt.properties` - Portuguese
-- Additional languages as needed
 
 ## Code Flow Example: Import Command
 

@@ -310,12 +310,23 @@ See [MCP Integration Guide](../03-features/mcp-integration.md)
 
 ### Q: In what languages is HANA CLI available?
 
-**A:** English and German are fully supported. Help translate to more languages!
+**A:** English, German, Spanish, French, Japanese, Korean, and Portuguese are fully supported.
 
-### Q: How do I use German localization?
+### Q: How do I use localization?
+
+**Examples:**
 
 ```bash
+# German
 export LANG=de
+hana-cli dbInfo
+
+# Japanese
+export LANG=ja
+hana-cli dbInfo
+
+# Korean
+export LANG=ko
 hana-cli dbInfo
 ```
 

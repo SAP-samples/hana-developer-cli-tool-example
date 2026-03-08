@@ -766,8 +766,11 @@ source ~/.bashrc
 
 - `en_US.UTF-8` - English (United States)
 - `de_DE.UTF-8` - German (Germany)
-- `fr_FR.UTF-8` - French (France)
 - `es_ES.UTF-8` - Spanish (Spain)
+- `fr_FR.UTF-8` - French (France)
+- `ja_JP.UTF-8` - Japanese (Japan)
+- `ko_KR.UTF-8` - Korean (Korea)
+- `pt_PT.UTF-8` - Portuguese (Portugal)
 
 ---
 

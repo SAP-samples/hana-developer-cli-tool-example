@@ -25,18 +25,25 @@ Added 14 new error-related translation keys:
 - `error.generic` = An error occurred
 - `error.appInitFailed` = Failed to initialize application
 
-### 2. `_i18n/messages_de.properties` (German)
+### 2. `_i18n/messages_*.properties` (Translations)
 
-Added German translations for all 14 new error-related keys above.
+Added translations for all 14 new error-related keys in:
 
-### 3. UI Bundle Files (English and German)
+- German (`messages_de.properties`)
+- Spanish (`messages_es.properties`)
+- French (`messages_fr.properties`)
+- Japanese (`messages_ja.properties`)
+- Korean (`messages_ko.properties`)
+- Portuguese (`messages_pt.properties`)
+
+### 3. UI Bundle Files (All Languages)
 
 Centralized UI5 application bundles were added under `_i18n` and served via `/i18n`:
 
-- `systemInfo.properties` and `systemInfo_de.properties`
-- `tables.properties` and `tables_de.properties`
-- `inspect.properties` and `inspect_de.properties`
-- `massConvert.properties` and `massConvert_de.properties`
+- `systemInfo.properties` and translated variants
+- `tables.properties` and translated variants
+- `inspect.properties` and translated variants
+- `massConvert.properties` and translated variants
 
 ## Code Files Updated
 
@@ -136,12 +143,12 @@ MessageToast.show(message);
 3. **Parameterized Messages**: Support for dynamic substitution (e.g., control names, HTTP status codes)
 4. **Consistent Pattern**: All controllers follow the same i18n pattern
 5. **Easy Maintenance**: Adding new messages requires only updating the property files
-6. **Multi-language Ready**: German translations already included; easy to add more languages
+6. **Multi-language Ready**: Translations included for German, Spanish, French, Japanese, Korean, and Portuguese; easy to add more languages
 
 ## How to Add New Translations
 
 1. Add new key-value pair to `_i18n/messages.properties`
-2. Add corresponding German translation to `_i18n/messages_de.properties`
+2. Add corresponding translations to all language variants (`_de`, `_es`, `_fr`, `_ja`, `_ko`, `_pt`)
 3. Reference the key in your JavaScript code using `resourceBundle.getText("key.name")`
 4. For parameterized messages, pass an array as the second parameter
 

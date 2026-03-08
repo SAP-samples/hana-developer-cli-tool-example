@@ -45,6 +45,8 @@ Details: [INTERNATIONALIZATION_UPDATES.md](../../03-features/internationalizatio
 - German (de)
 - Spanish (es)
 - French (fr)
+- Japanese (ja)
+- Korean (ko)
 - Portuguese (pt)
 
 **Implementation:**

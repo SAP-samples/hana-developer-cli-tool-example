@@ -8,6 +8,8 @@ HANA CLI supports multiple languages for global accessibility.
 - **German** (de)
 - **Spanish** (es)
 - **French** (fr)
+- **Japanese** (ja)
+- **Korean** (ko)
 - **Portuguese** (pt)
 
 ## Language Selection
@@ -78,8 +80,8 @@ $env:LC_MESSAGES = "de_DE"
 
 Both language-only and full locale formats work:
 
-- **Language only**: `de`, `es`, `fr`, `pt`, `en`
-- **Full locale**: `de_DE`, `es_ES`, `fr_FR`, `pt_PT`, `en_US`
+- **Language only**: `de`, `es`, `fr`, `ja`, `ko`, `pt`, `en`
+- **Full locale**: `de_DE`, `es_ES`, `fr_FR`, `ja_JP`, `ko_KR`, `pt_PT`, `en_US`
 
 The CLI extracts the language code from the full locale automatically.
 
@@ -130,16 +132,22 @@ _i18n/
 ├── messages_de.properties        # German
 ├── messages_es.properties        # Spanish
 ├── messages_fr.properties        # French
+├── messages_ja.properties        # Japanese
+├── messages_ko.properties        # Korean
 ├── messages_pt.properties        # Portuguese
 ├── import.properties
 ├── import_de.properties
 ├── import_es.properties
 ├── import_fr.properties
+├── import_ja.properties
+├── import_ko.properties
 ├── import_pt.properties
 ├── export.properties
 ├── export_de.properties
 ├── export_es.properties
 ├── export_fr.properties
+├── export_ja.properties
+├── export_ko.properties
 ├── export_pt.properties
 └── ...
 ```
@@ -202,6 +210,39 @@ Beschreibung:
 Optionen:
   -n, --filename <file>    Eingabedateipfad
   -t, --table <table>      Zieltabelle
+```
+
+### Japanese
+
+**Bash/Zsh:**
+
+```bash
+LANG=ja_JP hana-cli import --help
+
+使用法: hana-cli import [オプション]
+
+説明:
+  CSVまたはExcelファイルからデータベーステーブルにデータをインポート
+
+オプション:
+  -n, --filename <file>    ソースファイル
+  -t, --table <table>      ターゲットテーブル
+```
+
+**PowerShell:**
+
+```powershell
+$env:LANG = "ja_JP"
+hana-cli import --help
+
+使用法: hana-cli import [オプション]
+
+説明:
+  CSVまたはExcelファイルからデータベーステーブルにデータをインポート
+
+オプション:
+  -n, --filename <file>    ソースファイル
+  -t, --table <table>      ターゲットテーブル
 ```
 
 ## Adding New Languages

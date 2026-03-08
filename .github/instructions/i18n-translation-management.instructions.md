@@ -1,5 +1,5 @@
 ---
-description: "Use when adding or updating text elements in _i18n/ translation files. Enforces consistent key-value structure, language completeness, and multi-file synchronization across all supported language variants (English, German, Spanish, French, Portuguese)."
+description: "Use when adding or updating text elements in _i18n/ translation files. Enforces consistent key-value structure, language completeness, and multi-file synchronization across all supported language variants (English, German, Spanish, French, Japanese, Korean, Portuguese)."
 applyTo: "_i18n/**/*.properties"
 ---
 
@@ -15,13 +15,15 @@ The `_i18n/` folder contains properties files for multi-language support:
   - `_de.properties` → German (Deutsch)
   - `_es.properties` → Spanish (Español)
   - `_fr.properties` → French (Français)
+  - `_ja.properties` → Japanese (日本語)
+  - `_ko.properties` → Korean (한국어)
   - `_pt.properties` → Portuguese (Português)
 
-Example: `examples.properties`, `examples_de.properties`, `examples_es.properties`, `examples_fr.properties`, `examples_pt.properties`
+Example: `examples.properties`, `examples_de.properties`, `examples_es.properties`, `examples_fr.properties`, `examples_ja.properties`, `examples_ko.properties`, `examples_pt.properties`
 
 ## Key Principle
 
-**ALL language files for a feature must contain identical keys.** When adding a key to the base file, you MUST add the same key to all four language variants with appropriate translations. Never create incomplete language sets.
+**ALL language files for a feature must contain identical keys.** When adding a key to the base file, you MUST add the same key to all six language variants with appropriate translations. Never create incomplete language sets.
 
 ## Adding New Text Elements
 
@@ -48,11 +50,28 @@ anotherKey=Ein weiterer deutscher String
 newKey=Texto en español aquí
 anotherKey=Otra cadena en español
 
+### Step 2: Add to All Language Variants
+
+For EACH language (`_de.properties`, `_es.properties`, `_fr.properties`, `_ja.properties`, `_ko.properties`, `_pt.properties`):
+
+```properties
+# _i18n/examples_de.properties
+newKey=Deutscher Text hier
+anotherKey=Ein weiterer deutscher String
+
+# _i18n/examples_es.properties
+newKey=Texto en español aquí
+anotherKey=Otra cadena en español
+
 # _i18n/examples_fr.properties
 newKey=Texte français ici
 anotherKey=Une autre chaîne en français
 
-# _i18n/examples_pt.Properties
+# _i18n/examples_ja.properties
+newKey=ここに日本語のテキスト
+anotherKey=別の日本語の文字列
+
+# _i18n/examples_pt.properties
 newKey=Texto em português aqui
 anotherKey=Outra string em português
 ```
@@ -60,7 +79,7 @@ anotherKey=Outra string em português
 ### Step 3: Verify Consistency
 
 Before committing, ensure:
-- All 5 files (base + 4 languages) have the same keys in the same order
+- All 7 files (base + 6 languages) have the same keys in the same order
 - No key is missing from any language file
 - Each key has a meaningful translation (not placeholders or English fallback)
 
@@ -69,10 +88,10 @@ Before committing, ensure:
 When updating an existing key's value:
 
 1. Update the English base file
-2. Update ALL four language variants with equivalent translations
+2. Update ALL six language variants with equivalent translations
 3. Ensure the key name remains consistent across all files
 
-**DO NOT** change a key name in only some files. If renaming is necessary, do it consistently across all 5 files.
+**DO NOT** change a key name in only some files. If renaming is necessary, do it consistently across all 7 files.
 
 ## Formatting Rules
 
@@ -97,10 +116,12 @@ warningKey=Warning message text
 
 ## Removing Text Elements
 
+## Removing Text Elements
+
 When removing a key:
 
 1. Remove the key from the English base file
-2. Remove the EXACT SAME key from all four language variants
+2. Remove the EXACT SAME key from all six language variants
 3. Verify no code references remain (search for `getText("{keyName}")`)
 
 ## Language File Organization
@@ -116,7 +137,7 @@ Maintain consistent organization within each language variant:
 Before finalizing changes to `_i18n/` files:
 
 - [ ] English base file has all new/updated keys
-- [ ] **All 4 language variants** have identical keys
+- [ ] **All 6 language variants** have identical keys
 - [ ] No key is missing from any language file
 - [ ] All values are translated (not English placeholders)
 - [ ] No trailing whitespace or formatting issues
@@ -136,8 +157,8 @@ Before finalizing changes to `_i18n/` files:
 
 When creating a new command:
 
-1. Create (or update) the feature-specific properties file file: `_i18n/featureName.properties`
-2. Add all 5 language variants immediately
+1. Create (or update) the feature-specific properties file: `_i18n/featureName.properties`
+2. Add all 7 language variants (base + 6 translations) immediately
 3. Register the bundle in `baseLite.js` or `base.js` if command-specific
 4. Use `baseLite.bundle.getText("key")` or `base.bundle.getText("key")` in code
 
@@ -153,9 +174,11 @@ _i18n/export.properties          # English
 _i18n/export_de.properties       # German
 _i18n/export_es.properties       # Spanish
 _i18n/export_fr.properties       # French
+_i18n/export_ja.properties       # Japanese
+_i18n/export_ko.properties       # Korean
 _i18n/export_pt.properties       # Portuguese
 ```
 
-**Commit message**: "i18n: Add export command translations (en, de, es, fr, pt)"
+**Commit message**: "i18n: Add export command translations (en, de, es, fr, ja, ko, pt)"
 
 This ensures all languages are updated consistently and completely.
