@@ -335,3 +335,34 @@ export function getBuilder(input, iConn = true, iDebug = true) {
     
     return builder
 }
+
+/**
+ * Extension of getBuilder for UI commands that require port and host options
+ * @param {Object} input - Command-specific parameters
+ * @param {boolean} [iConn=true] - Include connection parameters
+ * @param {boolean} [iDebug=true] - Include debug parameters
+ * @returns {Object} Builder configuration with UI-specific options (port, host)
+ */
+export function getUIBuilder(input = {}, iConn = true, iDebug = true) {
+    // Check if input has profile parameter (which uses 'p' alias)
+    const hasProfile = input.profile !== undefined
+    
+    const uiOptions = {
+        port: {
+            // Only use 'p' alias if profile is not in input or if iConn is false
+            alias: (!hasProfile && !iConn) ? ['p'] : [],
+            type: 'number',
+            default: 3010,
+            desc: bundle.getText("port") || 'Server port (default: 3010)'
+        },
+        host: {
+            type: 'string',
+            default: 'localhost',
+            desc: bundle.getText("host") || 'Server host (default: localhost)'
+        }
+    }
+    
+    // Merge input with UI options, input takes precedence
+    const mergedInput = { ...uiOptions, ...input }
+    return getBuilder(mergedInput, iConn, iDebug)
+}

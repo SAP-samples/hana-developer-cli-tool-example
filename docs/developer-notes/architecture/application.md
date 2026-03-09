@@ -107,6 +107,9 @@ Common endpoints include `/hana/*`, `/docs/*`, `/excel`, and `/api-docs`.
 - `messages_ja.properties` - Japanese bundle
 - `messages_ko.properties` - Korean bundle
 - `messages_pt.properties` - Portuguese bundle
+- `messages_zh.properties` - Simplified Chinese bundle
+- `messages_hi.properties` - Hindi bundle
+- `messages_pl.properties` - Polish bundle
 - Feature bundles like `compareData.properties`, `dataDiff.properties`, `export.properties`, etc.
 - Format: Properties file with `key=value` pairs
 

@@ -4,8 +4,8 @@
  * Validates i18n translation files for completeness and consistency.
  * 
  * This script checks that:
- * 1. All translation features have complete language file sets (EN + 4 languages)
- * 2. All keys are present in all 5 files for a feature
+ * 1. All translation features have complete language file sets (English + all configured locales)
+ * 2. All keys are present in all language files for a feature
  * 3. Key naming is consistent with the descriptive pattern
  * 4. No orphaned or incomplete language files exist
  * 
@@ -23,8 +23,8 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const I18N_DIR = path.join(__dirname, '../_i18n')
-const LANGUAGES = ['', '_de', '_es', '_fr', '_pt', '_ja', '_ko', '_zh', '_hi']
-const LANGUAGE_NAMES = { '': 'English', '_de': 'German', '_es': 'Spanish', '_fr': 'French', '_pt': 'Portuguese', '_ja': 'Japanese', '_ko': 'Korean', '_zh': 'Simplified Chinese', '_hi': 'Hindi' }
+const LANGUAGES = ['', '_de', '_es', '_fr', '_pt', '_ja', '_ko', '_zh', '_hi', '_pl']
+const LANGUAGE_NAMES = { '': 'English', '_de': 'German', '_es': 'Spanish', '_fr': 'French', '_pt': 'Portuguese', '_ja': 'Japanese', '_ko': 'Korean', '_zh': 'Simplified Chinese', '_hi': 'Hindi', '_pl': 'Polish' }
 
 // Parse arguments
 const args = process.argv.slice(2)

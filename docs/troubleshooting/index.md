@@ -771,6 +771,9 @@ source ~/.bashrc
 - `ja_JP.UTF-8` - Japanese (Japan)
 - `ko_KR.UTF-8` - Korean (Korea)
 - `pt_PT.UTF-8` - Portuguese (Portugal)
+- `zh_CN.UTF-8` - Simplified Chinese (China)
+- `hi_IN.UTF-8` - Hindi (India)
+- `pl_PL.UTF-8` - Polish (Poland)
 
 ---
 

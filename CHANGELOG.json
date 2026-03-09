@@ -5,7 +5,9 @@
             "Update SAPUI5 version to 1.145.0",
             "Maintenance version update for March 2026",
             "Various dependency updates and security patches",
-            "Improved stability and performance optimizations"
+            "Improved stability and performance optimizations",
+            "Expanded localization support with full translation bundles for Simplified Chinese (zh), Hindi (hi), and Polish (pl) across CLI and feature property files",
+            "Updated i18n validation and documentation to include the current supported language set and locale examples"
         ]
     },
     {

@@ -35,6 +35,9 @@ Added translations for all 14 new error-related keys in:
 - Japanese (`messages_ja.properties`)
 - Korean (`messages_ko.properties`)
 - Portuguese (`messages_pt.properties`)
+- Simplified Chinese (`messages_zh.properties`)
+- Hindi (`messages_hi.properties`)
+- Polish (`messages_pl.properties`)
 
 ### 3. UI Bundle Files (All Languages)
 
@@ -143,12 +146,12 @@ MessageToast.show(message);
 3. **Parameterized Messages**: Support for dynamic substitution (e.g., control names, HTTP status codes)
 4. **Consistent Pattern**: All controllers follow the same i18n pattern
 5. **Easy Maintenance**: Adding new messages requires only updating the property files
-6. **Multi-language Ready**: Translations included for German, Spanish, French, Japanese, Korean, and Portuguese; easy to add more languages
+6. **Multi-language Ready**: Translations included for German, Spanish, French, Japanese, Korean, Portuguese, Simplified Chinese, Hindi, and Polish; easy to add more languages
 
 ## How to Add New Translations
 
 1. Add new key-value pair to `_i18n/messages.properties`
-2. Add corresponding translations to all language variants (`_de`, `_es`, `_fr`, `_ja`, `_ko`, `_pt`)
+2. Add corresponding translations to all language variants (`_de`, `_es`, `_fr`, `_ja`, `_ko`, `_pt`, `_zh`, `_hi`, `_pl`)
 3. Reference the key in your JavaScript code using `resourceBundle.getText("key.name")`
 4. For parameterized messages, pass an array as the second parameter
 

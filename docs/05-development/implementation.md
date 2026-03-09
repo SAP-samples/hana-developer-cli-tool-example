@@ -48,6 +48,9 @@ Details: [INTERNATIONALIZATION_UPDATES.md](../../03-features/internationalizatio
 - Japanese (ja)
 - Korean (ko)
 - Portuguese (pt)
+- Simplified Chinese (zh)
+- Hindi (hi)
+- Polish (pl)
 
 **Implementation:**
 

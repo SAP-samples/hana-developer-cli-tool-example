@@ -11,6 +11,9 @@ HANA CLI supports multiple languages for global accessibility.
 - **Japanese** (ja)
 - **Korean** (ko)
 - **Portuguese** (pt)
+- **Simplified Chinese** (zh)
+- **Hindi** (hi)
+- **Polish** (pl)
 
 ## Language Selection
 
@@ -80,8 +83,8 @@ $env:LC_MESSAGES = "de_DE"
 
 Both language-only and full locale formats work:
 
-- **Language only**: `de`, `es`, `fr`, `ja`, `ko`, `pt`, `en`
-- **Full locale**: `de_DE`, `es_ES`, `fr_FR`, `ja_JP`, `ko_KR`, `pt_PT`, `en_US`
+- **Language only**: `de`, `es`, `fr`, `ja`, `ko`, `pt`, `zh`, `hi`, `pl`, `en`
+- **Full locale**: `de_DE`, `es_ES`, `fr_FR`, `ja_JP`, `ko_KR`, `pt_PT`, `zh_CN`, `hi_IN`, `pl_PL`, `en_US`
 
 The CLI extracts the language code from the full locale automatically.
 
@@ -135,6 +138,9 @@ _i18n/
 ├── messages_ja.properties        # Japanese
 ├── messages_ko.properties        # Korean
 ├── messages_pt.properties        # Portuguese
+├── messages_zh.properties        # Simplified Chinese
+├── messages_hi.properties        # Hindi
+├── messages_pl.properties        # Polish
 ├── import.properties
 ├── import_de.properties
 ├── import_es.properties
@@ -142,6 +148,9 @@ _i18n/
 ├── import_ja.properties
 ├── import_ko.properties
 ├── import_pt.properties
+├── import_zh.properties
+├── import_hi.properties
+├── import_pl.properties
 ├── export.properties
 ├── export_de.properties
 ├── export_es.properties
@@ -149,6 +158,9 @@ _i18n/
 ├── export_ja.properties
 ├── export_ko.properties
 ├── export_pt.properties
+├── export_zh.properties
+├── export_hi.properties
+├── export_pl.properties
 └── ...
 ```
 

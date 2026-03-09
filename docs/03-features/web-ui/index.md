@@ -356,7 +356,7 @@ ws.send(JSON.stringify({
 Supports multiple languages:
 
 - **English** - Primary language
-- **German**, **Spanish**, **French**, **Japanese**, **Korean**, **Portuguese** - Full translations
+- **German**, **Spanish**, **French**, **Japanese**, **Korean**, **Portuguese**, **Simplified Chinese**, **Hindi**, **Polish** - Full translations
 - **Extensible** - Easy to add more languages
 
 Text files: `/resources/*/i18n/*.properties`
