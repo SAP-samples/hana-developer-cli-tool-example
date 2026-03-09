@@ -9,9 +9,7 @@ export const aliases = ['mcui', 'massconvertui', 'massConvUI', 'massconvui']
 export const describe = baseLite.bundle.getText("massConvertUI")
 
 
-export const builder = (yargs) => yargs.options(getMassConvertBuilder(true)).wrap(160)
-  .example('hana-cli massConvertUI --schema MYSCHEMA', baseLite.bundle.getText("massConvertUI"))
-  .epilog(buildDocEpilogue('massConvertUI', 'mass-operations', ['massConvert']))
+export const builder = getMassConvertBuilder(true)
 
 
 export async function handler (argv) {
