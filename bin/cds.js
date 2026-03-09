@@ -332,6 +332,106 @@ async function cdsServerSetup(prompts, cdsSource) {
     const parsedModel = await cds.parse(cdsSource)
     compiledModel = cds.compile(parsedModel)
     
+    // Setup Swagger/OpenAPI documentation
+    try {
+      console.log("✓ Setting up API documentation...")
+      
+      // Generate basic OpenAPI spec manually since cds-dk OpenAPI compiler may not be available
+      const openAPISpec = {
+        openapi: '3.0.0',
+        info: {
+          title: 'HANA CLI CDS Service',
+          version: '1.0.0',
+          description: `CDS OData v4 service for ${entity}`
+        },
+        servers: [
+          {
+            url: `http://localhost:${port}`,
+            description: 'Development server'
+          }
+        ],
+        paths: {
+          [odataURL]: {
+            get: {
+              summary: 'Service Document',
+              description: 'Returns the OData service document',
+              responses: {
+                '200': {
+                  description: 'Service document',
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'object'
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          [`${odataURL}/${entity}`]: {
+            get: {
+              summary: `Get ${entity} entities`,
+              description: `Retrieve entities from ${entity}`,
+              responses: {
+                '200': {
+                  description: 'List of entities',
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'object',
+                        properties: {
+                          value: {
+                            type: 'array',
+                            items: {
+                              type: 'object'
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          [`${odataURL}/$metadata`]: {
+            get: {
+              summary: 'Service Metadata',
+              description: 'Returns the OData service metadata (EDMX)',
+              responses: {
+                '200': {
+                  description: 'Service metadata',
+                  content: {
+                    'application/xml': {
+                      schema: {
+                        type: 'string'
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      const swaggerUi = await import('swagger-ui-express')
+      console.log("✓ Swagger UI module loaded")
+      
+      // Mount Swagger UI using correct pattern
+      app.use('/api-docs', swaggerUi.serve)
+      app.get('/api-docs', swaggerUi.setup(openAPISpec, { 
+        explorer: true,
+        customSiteTitle: 'HANA CLI CDS API Documentation'
+      }))
+      
+      console.log("✓ API documentation configured at /api-docs")
+    } catch (swaggerErr) {
+      base.debug(baseLite.bundle.getText("debug.cds.swaggerSkipped", [swaggerErr.message]))
+      console.warn(`Warning: API documentation setup failed: ${swaggerErr.message}`)
+    }
+    
     // Debug: show what's in the compiled model
     console.log(t("cds.model.compiledDefinitions"))
     Object.keys(compiledModel.definitions || {}).forEach(key => {
@@ -449,27 +549,6 @@ async function cdsServerSetup(prompts, cdsSource) {
     // CDS OData - add homepage for preview
     // Serve homepage with links to available endpoints
     app.get('/', (_, res) => res.send(getIndex(odataURL, actualEntityName)))
-
-    // Setup Swagger UI for API documentation
-    try {
-      Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => base.require('@sap/cds-dk/lib/compile/to_openapi') })
-      // @ts-ignore
-      let metadata = await cds.compile.to.openapi(compiledModel, {
-        service: 'HanaCli',
-        servicePath: odataURL,
-        'openapi:url': odataURL,
-        'openapi:diagram': true,
-        to: 'openapi'
-      })
-
-      let serveOptions = {
-        explorer: true
-      }
-      const swaggerUi = await import('swagger-ui-express')
-      app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(metadata, serveOptions))
-    } catch (swaggerErr) {
-      base.debug(baseLite.bundle.getText("debug.cds.swaggerSkipped", [swaggerErr.message]))
-    }
 
     // Add error handling middleware
     app.use((err, req, res, next) => {
