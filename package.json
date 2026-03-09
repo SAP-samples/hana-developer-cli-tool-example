@@ -142,7 +142,6 @@
     "stringify-changelog": "^0.2.1",
     "supertest": "^7.2.2",
     "vitepress-plugin-mermaid": "^2.0.17",
-    "wdio-chromedriver-service": "^8.1.1",
     "wdio-ui5-service": "^3.0.8",
     "webdriverio": "^9.24.0"
   },
