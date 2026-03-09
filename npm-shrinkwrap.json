@@ -95,9 +95,6 @@
       },
       "engines": {
         "node": ">=20.19.0"
-      },
-      "peerDependencies": {
-        "@sap/cds-dk": ">=9.7.2"
       }
     },
     "node_modules/@antfu/install-pkg": {

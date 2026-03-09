@@ -7,8 +7,37 @@ import { fileURLToPath } from 'url'
 import { URL } from 'url'
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 import { createRequire } from 'module'
-// @ts-ignore
-export const require = createRequire(import.meta.url)
+import { execSync } from 'child_process'
+
+// Standard require for local modules
+const standardRequire = createRequire(import.meta.url)
+
+// Enhanced require that falls back to global modules
+let globalNodeModulesPath = null
+export function require(moduleId) {
+    try {
+        return standardRequire(moduleId)
+    } catch (error) {
+        if (error.code === 'MODULE_NOT_FOUND' && moduleId.startsWith('@sap/cds-dk')) {
+            // Try to resolve from global installation
+            if (!globalNodeModulesPath) {
+                try {
+                    globalNodeModulesPath = execSync('npm root -g', { encoding: 'utf8' }).trim()
+                } catch {
+                    throw error // Can't get global path, re-throw original error
+                }
+            }
+            
+            try {
+                const globalModulePath = path.join(globalNodeModulesPath, moduleId)
+                return standardRequire(globalModulePath)
+            } catch (globalError) {
+                throw error // Global resolution failed, throw original error
+            }
+        }
+        throw error
+    }
+}
 
 import * as path from 'path'
 import fs from 'fs'

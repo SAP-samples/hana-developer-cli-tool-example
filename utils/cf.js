@@ -51,7 +51,7 @@ async function executeCFCurl(endpoint) {
  * @private
  */
 async function getServiceInstancesByPlan(servicePlans, options = {}) {
-    if (!servicePlans) {
+    if (!servicePlans && !options.type) {
         throw new Error(bundle.getText("error.cfServicePlansRequired"))
     }
 

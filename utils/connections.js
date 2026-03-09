@@ -93,6 +93,127 @@ export const getEnv = () => getFileCheckParents('.env')
 export const getCdsrcPrivate = () => getFileCheckParents('.cdsrc-private.json')
 
 /**
+ * Extract the first available CDS binding or credentials from .cdsrc-private.json
+ * Supports multiple formats (profiled and unprofiled) for backwards compatibility.
+ * @param {object} config
+ * @returns {{ type: 'binding' | 'credentials', value: object } | undefined}
+ */
+function extractCdsBindingOrCredentials(config) {
+    const requires = config?.requires
+    if (!requires || typeof requires !== 'object') {
+        return undefined
+    }
+
+    /** @type {Array<any>} */
+    const candidates = []
+
+    if (requires['[hybrid]']) {
+        candidates.push(requires['[hybrid]'])
+    }
+    if (requires.db) {
+        candidates.push(requires.db)
+    }
+
+    for (const value of Object.values(requires)) {
+        if (value) {
+            candidates.push(value)
+        }
+    }
+
+    for (const candidate of candidates) {
+        const dbSection = candidate?.db || candidate
+        if (dbSection?.credentials) {
+            return { type: 'credentials', value: dbSection.credentials }
+        }
+        if (dbSection?.binding) {
+            return { type: 'binding', value: dbSection.binding }
+        }
+    }
+
+    return undefined
+}
+
+/**
+ * Resolve CDS binding using cds-dk (supports multiple module paths).
+ * @param {object} binding
+ * @returns {Promise<object>} resolved service with credentials
+ */
+async function resolveCdsBinding(binding) {
+    const bindingType = binding?.type || 'cf'
+    const candidates = [
+        `@sap/cds-dk/lib/bind/${bindingType}`,
+        '@sap/cds-dk/lib/bind/cf',
+        '@sap/cds-dk/lib/bind',
+        '@sap/cds-dk/lib/bindings/cf'
+    ]
+
+    let resolverModule
+    let loadError
+    for (const modulePath of candidates) {
+        try {
+            resolverModule = require(modulePath)
+            if (resolverModule) {
+                break
+            }
+        } catch (error) {
+            loadError = error
+        }
+    }
+    
+    // If not found locally, try to resolve from global installation
+    if (!resolverModule && loadError?.code === 'MODULE_NOT_FOUND') {
+        try {
+            const { execSync } = await import('child_process')
+            const globalPath = execSync('npm root -g', { encoding: 'utf8' }).trim()
+            const globalCandidates = candidates.map(p => path.join(globalPath, p))
+            
+            for (const modulePath of globalCandidates) {
+                try {
+                    resolverModule = require(modulePath)
+                    if (resolverModule) {
+                        break
+                    }
+                } catch (error) {
+                    // Continue trying
+                }
+            }
+        } catch (globalError) {
+            // Unable to resolve global path
+        }
+    }
+
+    const resolveFn = resolverModule?.resolve
+        || resolverModule?.default?.resolve
+
+    if (!resolveFn) {
+        if (loadError && loadError.code === 'MODULE_NOT_FOUND') {
+            throw new Error(base.bundle.getText("cds-dk2"))
+        }
+        throw loadError || new Error(base.bundle.getText("cds-dk2"))
+    }
+
+    try {
+        // The binding instance name (from binding.instance property)
+        const instanceName = binding.instance || 'db'
+        
+        // Call resolve with proper context - it's a method on the resolver instance
+        if (resolverModule.resolve) {
+            return await resolverModule.resolve(instanceName, binding)
+        } else if (resolverModule.default?.resolve) {
+            return await resolverModule.default.resolve(instanceName, binding)
+        }
+        
+        // Fallback to old behavior for other resolver types
+        if (resolveFn.length >= 2) {
+            return await resolveFn(null, binding)
+        }
+        return await resolveFn(binding)
+    } catch (error) {
+        throw error
+    }
+}
+
+/**
  * Resolve CDS binding credentials from .cdsrc-private.json only
  * @param {object} prompts
  * @returns {Promise<object|undefined>}
@@ -111,13 +232,19 @@ export async function getCdsrcBindingOptions(prompts) {
             cdsrcPrivateCache.set(cdsrcPrivate, object)
         }
 
-        const binding = object?.requires?.['[hybrid]']?.db?.binding
-        if (!binding) {
+        const bindingEntry = extractCdsBindingOrCredentials(object)
+        if (!bindingEntry) {
             return undefined
         }
 
-        const resolveBinding = require('@sap/cds-dk/lib/bind/cf')
-        const resolvedService = await resolveBinding.resolve(null, binding)
+        if (bindingEntry.type === 'credentials') {
+            const options = { hana: bindingEntry.value }
+            base.debug(options)
+            if (base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile2")} .cdsrc-private.json\n`) }
+            return options
+        }
+
+        const resolvedService = await resolveCdsBinding(bindingEntry.value)
         const options = { hana: resolvedService.credentials }
         base.debug(options)
         if (base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile2")} .cdsrc-private.json\n`) }
