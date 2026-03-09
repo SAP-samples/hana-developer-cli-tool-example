@@ -1,5 +1,16 @@
 # Installation Guide
 
+::: warning ⚠️ Important Notice - Major Updates (Feb/March 2026)
+**Version 4.x introduces significant changes** including Express 5 migration, refactored database connection handling, and major performance improvements. While we've tested extensively, please be aware of potential issues in your specific environment.
+
+**If you encounter problems:**
+
+- **Report Issues:** Please open an issue on our [GitHub Issues page](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues)
+- **Rollback:** Install the last stable version: `npm install -g hana-cli@3.202601.0`
+
+See the [Changelog](/99-reference/changelog) for complete details on all changes.
+:::
+
 ## Prerequisites
 
 - **Node.js**: Version 20.19.0 or later

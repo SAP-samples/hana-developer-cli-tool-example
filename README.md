@@ -2,7 +2,21 @@
 
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/hana-developer-cli-tool-example)](https://api.reuse.software/info/github.com/SAP-samples/hana-developer-cli-tool-example)
 
-The [change log](CHANGELOG.md) describes notable changes in this package.
+## ⚠️ Important Notice - Major Updates (Feb/March 2026)
+
+> **Version 4.x introduces significant changes including Express 5 migration, refactored database connection handling, and major performance improvements. While we've tested extensively, please be aware of potential issues in your specific environment.**
+
+**If you encounter problems:**
+
+- **Report Issues:** Please open an issue on our [GitHub Issues page](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues) with details about your environment and the problem you're experiencing.
+
+- **Rollback to Stable Version:** If you need to quickly revert to the last stable release before these major changes, you can install version 3.202601.0 (January 2026):
+
+  ```shell
+  npm install -g hana-cli@3.202601.0
+  ```
+
+**What's Changed:** The [change log](CHANGELOG.md) describes all notable changes including Express 5 migration, database connection refactoring, CLI startup performance optimization (60-77% faster), expanded test coverage (85%+ coverage), and the new VitePress documentation site.
 
 ## 📚 Documentation
 

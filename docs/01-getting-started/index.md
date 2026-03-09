@@ -2,6 +2,17 @@
 
 Welcome to HANA CLI! This section guides you through installation, initial configuration, and your first commands. Whether you're working locally with SAP HANA Express, in SAP Business Application Studio, or with SAP HANA Cloud, you'll find everything you need to get productive quickly.
 
+::: warning ⚠️ Important Notice - Major Updates (Feb/March 2026)
+**Version 4.x introduces significant changes** including Express 5 migration, refactored database connection handling, and major performance improvements. While we've tested extensively, please be aware of potential issues in your specific environment.
+
+**If you encounter problems:**
+
+- **Report Issues:** Please open an issue on our [GitHub Issues page](https://github.com/SAP-samples/hana-developer-cli-tool-example/issues)
+- **Rollback:** Install the last stable version: `npm install -g hana-cli@3.202601.0`
+
+See the [Changelog](/99-reference/changelog) for complete details on all changes.
+:::
+
 ## Installation
 
 HANA CLI is a command-line tool that works on Windows, macOS, and Linux. Installation is straightforward through npm or by building from source.
