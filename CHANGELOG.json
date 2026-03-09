@@ -7,7 +7,12 @@
             "Various dependency updates and security patches",
             "Improved stability and performance optimizations",
             "Expanded localization support with full translation bundles for Simplified Chinese (zh), Hindi (hi), and Polish (pl) across CLI and feature property files",
-            "Updated i18n validation and documentation to include the current supported language set and locale examples"
+            "Updated i18n validation and documentation to include the current supported language set and locale examples",
+            "Enhanced CLI UX with suggestions for unknown commands and unsupported options to help users recover quickly from typos",
+            "Added configuration management workflow to load and apply saved command settings across supported CLI operations",
+            "Improved analysis and comparison tooling with better current-schema handling and stronger error handling in compareSchema and duplicateDetection/dataValidator workflows",
+            "Enhanced UI command server configuration with prompt-driven host and port options for more flexible local startup",
+            "Improved CDS binding resolution and connection error handling by loading @sap/cds-dk from global node modules when needed"
         ]
     },
     {
