@@ -1,0 +1,211 @@
+name: Deploy Documentation to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - Feb2026  # Feature branch for February 2026 release preview
+    paths:
+      - 'docs/**'
+      - 'docs/package.json'
+      - '.github/workflows/deploy-docs.yml'
+      - 'CHANGELOG.md'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'docs/package.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'docs/package-lock.json'
+
+      - name: Install dependencies
+        run: cd docs && npm ci
+
+      - name: Run security audit
+        continue-on-error: true
+        run: |
+          cd docs
+          npm audit --audit-level=moderate || true
+
+      - name: Check for vulnerabilities
+        continue-on-error: true
+        run: |
+          cd docs
+          AUDIT_RESULT=$(npm audit --json || true)
+          echo "$AUDIT_RESULT"
+          if command -v jq &> /dev/null; then
+            VULNERABILITIES=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities.total // 0' 2>/dev/null || echo "0")
+            if [ "$VULNERABILITIES" -gt 0 ] 2>/dev/null; then
+              echo "::warning::Found $VULNERABILITIES vulnerabilities in documentation dependencies"
+            fi
+          else
+            echo "::notice::jq not available, skipping detailed vulnerability analysis"
+          fi
+
+  build:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+    needs: security-scan
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for VitePress lastUpdated feature
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'docs/package-lock.json'
+
+      - name: Cache VitePress build
+        uses: actions/cache@v4
+        with:
+          path: |
+            docs/.vitepress/.temp
+            docs/.vitepress/cache
+          key: ${{ runner.os }}-vitepress-${{ hashFiles('docs/**/*.md', 'docs/.vitepress/**') }}
+          restore-keys: |
+            ${{ runner.os }}-vitepress-
+
+      - name: Install dependencies
+        run: cd docs && npm ci
+
+      - name: Build VitePress documentation
+        run: cd docs && npm run docs:build
+
+      - name: Verify build output
+        run: |
+          if [ ! -d "docs/.vitepress/dist" ]; then
+            echo "Error: Build output directory not found"
+            exit 1
+          fi
+          if [ ! -f "docs/.vitepress/dist/index.html" ]; then
+            echo "Error: index.html not found in build output"
+            exit 1
+          fi
+          echo "Build verification successful"
+
+      - name: Check for broken links
+        id: link-check
+        continue-on-error: true
+        run: |
+          cd docs/.vitepress/dist
+          # Install broken-link-checker
+          npm install -g broken-link-checker
+          # Start a simple HTTP server in the background
+          npx http-server -p 8080 -s &
+          SERVER_PID=$!
+          sleep 5
+          # Check for broken links (excluding external links for speed)
+          blc http://localhost:8080 -ro --exclude external --filter-level 3 || true
+          # Clean up
+          kill $SERVER_PID || true
+
+      - name: Report link check results
+        if: steps.link-check.outcome == 'failure'
+        run: echo "::warning::Broken links detected in documentation"
+
+      - name: Setup GitHub Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/.vitepress/dist
+          retention-days: 1
+
+      - name: Upload PR preview artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-preview-${{ github.event.pull_request.number }}
+          path: docs/.vitepress/dist
+          retention-days: 7
+
+  deploy:
+    name: Deploy to GitHub Pages
+    if: github.event_name != 'pull_request'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  notify:
+    name: Deployment Notification
+    if: github.event_name != 'pull_request' && always()
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send deployment notification
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          DEPLOY_STATUS: ${{ needs.deploy.result }}
+          DEPLOY_URL: ${{ needs.deploy.outputs.page_url }}
+        run: |
+          if [ -n "$SLACK_WEBHOOK_URL" ]; then
+            EMOJI="✅"
+            COLOR="good"
+            if [ "$DEPLOY_STATUS" != "success" ]; then
+              EMOJI="❌"
+              COLOR="danger"
+            fi
+            DOCS_URL="${DEPLOY_URL:-https://sap-samples.github.io/hana-developer-cli-tool-example/}"
+            curl -X POST "$SLACK_WEBHOOK_URL" \
+              -H 'Content-Type: application/json' \
+              -d "{
+                \"text\": \"$EMOJI Documentation Deployment: $DEPLOY_STATUS\",
+                \"attachments\": [{
+                  \"color\": \"$COLOR\",
+                  \"fields\": [
+                    {\"title\": \"Repository\", \"value\": \"${{ github.repository }}\", \"short\": true},
+                    {\"title\": \"Branch\", \"value\": \"${{ github.ref_name }}\", \"short\": true},
+                    {\"title\": \"Commit\", \"value\": \"<${{ github.event.head_commit.url }}|${GITHUB_SHA:0:7}>\", \"short\": true},
+                    {\"title\": \"URL\", \"value\": \"<$DOCS_URL|View Documentation>\", \"short\": true}
+                  ]
+                }]
+              }"
+          else
+            echo "Slack webhook not configured. Skipping notification."
+            echo "To enable notifications, add SLACK_WEBHOOK_URL secret to repository settings."
+          fi
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "Documentation preview built successfully for PR #${{ github.event.pull_request.number }}"
+          echo "Artifact: pr-preview-${{ github.event.pull_request.number }}"

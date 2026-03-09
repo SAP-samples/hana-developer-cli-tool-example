@@ -1,18 +1,19 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'ups'
 export const aliases = ['upsInstances', 'upsinstances', 'upServices', 'listups', 'upsservices']
 export const describe = baseLite.bundle.getText("upsInstances")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     cf: {
         alias: ['c', 'cmd'],
         desc: baseLite.bundle.getText("cfxs"),
         type: 'boolean',
         default: true
     }
-}, false)
+}, false)).wrap(160).example('hana-cli ups --cf', baseLite.bundle.getText("upsExample")).wrap(160).epilog(buildDocEpilogue('hanaCloudUPSInstances', 'hana-cloud', ['hanaCloudInstances']))
 
 export let inputPrompts = {
     cf: {

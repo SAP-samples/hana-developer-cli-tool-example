@@ -1,18 +1,19 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'schemaInstances'
 export const aliases = ['schemainstances', 'schemaServices', 'listschemas', 'schemaservices']
 export const describe = baseLite.bundle.getText("schemaInstances")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     cf: {
         alias: ['c', 'cmd'],
         desc: baseLite.bundle.getText("cfxs"),
         type: 'boolean',
         default: true
     }
-}, false)
+}, false)).wrap(160).example('hana-cli schemaInstances --cf', baseLite.bundle.getText("schemaInstancesExample")).wrap(160).epilog(buildDocEpilogue('hanaCloudSchemaInstances', 'hana-cloud', ['hanaCloudInstances', 'schemas']))
 
 export let inputPrompts = {
     cf: {

@@ -40,7 +40,7 @@ export default class dbClientClass {
         this.#optionsCDS = optionsCDS
         base.setPrompts(prompts)
         base.debug(optionsCDS)
-        base.debug(`Database client generic class for profile: ${this.#prompts.profile}`)
+        base.debug(base.bundle.getText("debug.dbClientGenericProfile", [this.#prompts.profile]))
     }
 
     /**
@@ -58,8 +58,19 @@ export default class dbClientClass {
             process.env.CDS_ENV = prompts.profile
             process.env.NODE_ENV = prompts.profile
             let optionsCDS = cds.env.requires.db
-            if(!optionsCDS || !optionsCDS.kind){
-                throw new Error(`No CAP/CDS Project Configuration Found. Commands via Profiles can only be performed in CAP projects`)
+            if (!optionsCDS || !optionsCDS.kind) {
+                throw new Error(base.bundle.getText("error.cdsProjectMissing"))
+            }
+            const normalizedProfile = prompts.profile?.toLowerCase?.()
+            const profileKindMap = {
+                hana: 'hana',
+                postgres: 'postgres',
+                pg: 'postgres',
+                sqlite: 'sqlite'
+            }
+            const expectedKind = normalizedProfile ? profileKindMap[normalizedProfile] : undefined
+            if (expectedKind && optionsCDS.kind !== expectedKind) {
+                throw new Error(base.bundle.getText("error.cdsProjectMissing"))
             }
             if (optionsCDS.kind === 'sqlite') {  //SQLite CDS
                 // Load actual SQLite credentials and merge them into optionsCDS if needed
@@ -92,7 +103,7 @@ export default class dbClientClass {
                 childClass = new classAccess(prompts, optionsCDS)
             }
             else {
-                throw new Error(`Unknown or Unsupported database client type: ${optionsCDS.kind}`)
+                throw new Error(base.bundle.getText("error.unsupportedDbClient", [optionsCDS.kind]))
             }
         }
         return childClass
@@ -112,11 +123,11 @@ export default class dbClientClass {
     * Disconnect from the target database
     */
     async disconnect() {
-        base.debug(`Disconnect`)
-        base.debug(`In Gui: ${base.isGui(this.#prompts)}`)
+        base.debug(base.bundle.getText("debug.call", ["Disconnect"]))
+        base.debug(base.bundle.getText("debug.inGui", [base.isGui(this.#prompts)]))
         if (!base.isGui(this.#prompts)) {
             // Don't call base.end() as it exits the process
-            base.debug(`CDS Exit is Called`)
+            base.debug(base.bundle.getText("debug.cdsExitCalled"))
             await cds.exit()
         }
         // Connection cleanup handled naturally
@@ -142,7 +153,7 @@ export default class dbClientClass {
         if (!this.#prompts.debug) {
             cds.log('pool', 'log')
         }
-        if (base.verboseOutput(this.#prompts)) { console.log(`${base.bundle.getText("connFile2")} ${`CDS Profiles - ${this.#optionsCDS.kind}`} \n`) }
+        if (base.verboseOutput(this.#prompts)) { console.log(`${base.bundle.getText("connFile2")} ${base.bundle.getText("cds.profiles", [this.#optionsCDS.kind])} \n`) }
     }
 
     /**
@@ -150,7 +161,7 @@ export default class dbClientClass {
     * @param {String} input - database object name that needs wildcard handling
     */
     adjustWildcard(input) {
-        base.debug(`adjustWildcard`)
+        base.debug(base.bundle.getText("debug.call", ["adjustWildcard"]))
         if (input == "*") {
             input = "%"
         }
@@ -182,11 +193,15 @@ export default class dbClientClass {
 
     /**
      * Execute single SQL Statement and directly return result set
-     * @param {string} sql - SQL Statement
+     * @param {string} query - SQL Statement
+     * @param {Array<any>} [params] - Optional parameter bindings
      * @returns {Promise<any>} - result set object
      */
-    async execSQL(query){
-        base.debug(`execSQL for ${this.#clientType}`)
+    async execSQL(query, params){
+        base.debug(base.bundle.getText("debug.dbExecSqlForClient", [this.#clientType]))
+        if (params && Array.isArray(params) && params.length > 0) {
+            return await this.#db.run(query, params)
+        }
         let results = await this.#db.run(query)
         return results
     }

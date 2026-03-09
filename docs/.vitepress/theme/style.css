@@ -1,0 +1,86 @@
+/* Custom theme styling */
+
+:root {
+  --vp-c-brand: #0070C0;
+  --vp-c-brand-light: #1084D7;
+  --vp-c-brand-lighter: #3BA3E5;
+  --vp-c-brand-lightest: #5CB3FF;
+  --vp-c-brand-dark: #005399;
+  --vp-c-brand-darker: #003D6B;
+  --vp-sidebar-width: 300px;
+  --vp-nav-height: 44px;
+  --vp-c-brand-1: #088;
+  --vp-c-brand-2: #077;
+  --vp-c-brand-3: #0cc;
+  --vp-c-brand-soft: rgba(16, 179, 185, 0.16);
+
+  --vp-button-brand-active-text: var(--vp-c-text-1);
+  --vp-button-brand-active-bg: var(--vp-c-brand-3);
+  --vp-button-brand-hover-text: var(--vp-c-bg);
+  --vp-button-brand-hover-bg: var(--vp-c-brand-1);
+  --vp-button-brand-text: var(--vp-c-bg);
+  --vp-button-brand-bg: var(--vp-c-brand-2);
+  --vp-button-alt-active-text: var(--vp-c-text-1);
+  --vp-button-alt-active-bg: var(--vp-c-brand-3);
+  --vp-button-alt-hover-text: var(--vp-c-bg);
+  --vp-button-alt-hover-bg: var(--vp-c-brand-2);
+
+  --vp-local-search-highlight-bg: mark;
+  --vp-local-search-highlight-text: black;
+
+}
+
+
+
+/* Custom code block styling */
+div[class*='language-'] {
+  border-radius: 8px;
+}
+
+/* Mermaid diagram styling */
+.mermaid {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin: 20px 0;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 1200px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  /* Force narrow width to make diagrams stack vertically */
+  width: 100%;
+}
+
+/* Force SVG to be constrained width - this makes TD diagrams more vertical */
+.mermaid > svg {
+  max-width: 500px !important;
+  width: 500px !important;
+}
+
+/* Further constraint for very wide content */
+.mermaid foreignObject {
+  max-width: 300px !important;
+}
+
+/* Responsive - adjust for smaller screens */
+@media (max-width: 1024px) {
+  .mermaid > svg {
+    max-width: 400px !important;
+    width: 400px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .mermaid {
+    max-height: 900px;
+    padding: 15px;
+  }
+  
+  .mermaid > svg {
+    max-width: 350px !important;
+    width: 350px !important;
+  }
+}

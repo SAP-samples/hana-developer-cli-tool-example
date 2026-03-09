@@ -7,10 +7,40 @@ import { fileURLToPath } from 'url'
 import { URL } from 'url'
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 import { createRequire } from 'module'
-// @ts-ignore
-export const require = createRequire(import.meta.url)
+import { execSync } from 'child_process'
+
+// Standard require for local modules
+const standardRequire = createRequire(import.meta.url)
+
+// Enhanced require that falls back to global modules
+let globalNodeModulesPath = null
+export function require(moduleId) {
+    try {
+        return standardRequire(moduleId)
+    } catch (error) {
+        if (error.code === 'MODULE_NOT_FOUND' && moduleId.startsWith('@sap/cds-dk')) {
+            // Try to resolve from global installation
+            if (!globalNodeModulesPath) {
+                try {
+                    globalNodeModulesPath = execSync('npm root -g', { encoding: 'utf8' }).trim()
+                } catch {
+                    throw error // Can't get global path, re-throw original error
+                }
+            }
+            
+            try {
+                const globalModulePath = path.join(globalNodeModulesPath, moduleId)
+                return standardRequire(globalModulePath)
+            } catch (globalError) {
+                throw error // Global resolution failed, throw original error
+            }
+        }
+        throw error
+    }
+}
 
 import * as path from 'path'
+import fs from 'fs'
 
 // Database class is kept as eager load since it's only used in actual DB operations
 import dbClassDef from "sap-hdb-promisfied"
@@ -48,8 +78,33 @@ import { glob } from 'glob'
 import open from 'open'
 
 /** @type {typeof import("debug") } */
+// @ts-ignore
 import debugModule from 'debug'
-export const debug = new debugModule('hana-cli')
+
+// Create a lazy-loaded debug instance that can be refreshed at runtime
+let _debugInstance = null
+let _debugEnabled = false
+export const debug = (...args) => {
+    // Check if DEBUG was just enabled (e.g., by --debug flag at runtime)
+    if (process.env.DEBUG && !_debugEnabled) {
+        _debugInstance = null
+        _debugEnabled = true
+    }
+    
+    if (!_debugInstance) {
+        if (process.env.DEBUG) {
+            _debugInstance = debugModule('hana-cli')
+            _debugEnabled = true
+        } else {
+            // No-op function when debug is disabled
+            _debugInstance = () => {}
+            _debugEnabled = false
+        }
+    }
+    return _debugInstance(...args)
+}
+
+// @ts-ignore
 import setDebug from 'debug'
 
 import { inspect } from 'util'
@@ -66,9 +121,130 @@ let inGui = false
 let lastResults
 
 import * as locale from "../utils/locale.js"
+import * as commandSuggestions from "./commandSuggestions.js"
 const TextBundle = require('@sap/textbundle').TextBundle
+
+/**
+ * Parse .properties file content into a key-value map.
+ * @param {string} content
+ * @returns {Record<string, string>}
+ */
+function parseProperties(content) {
+    /** @type {Record<string, string>} */
+    const entries = {}
+    const lines = content.split(/\r?\n/)
+    for (const line of lines) {
+        const trimmed = line.trim()
+        if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('!')) {
+            continue
+        }
+
+        const separatorIndex = trimmed.search(/[:=]/)
+        if (separatorIndex === -1) {
+            continue
+        }
+
+        const key = trimmed.slice(0, separatorIndex).trim()
+        const value = trimmed.slice(separatorIndex + 1).trim()
+        if (key) {
+            entries[key] = value
+        }
+    }
+
+    return entries
+}
+
+/**
+ * Load .properties file content if present.
+ * @param {string} filePath
+ * @returns {Record<string, string>}
+ */
+function loadPropertiesFile(filePath) {
+    try {
+        if (!fs.existsSync(filePath)) {
+            return {}
+        }
+        const content = fs.readFileSync(filePath, 'utf-8')
+        return parseProperties(content)
+    } catch {
+        return {}
+    }
+}
+
+/**
+ * Load additional text resources for a given base name and locale.
+ * @param {string} baseName
+ * @param {string} localeTag
+ * @returns {Record<string, string>}
+ */
+function loadAdditionalTexts(baseName, localeTag) {
+    const basePath = path.join(__dirname, '..', '/_i18n', `${baseName}.properties`)
+    let texts = loadPropertiesFile(basePath)
+
+    const candidates = []
+    if (localeTag) {
+        candidates.push(localeTag)
+        const languageOnly = localeTag.split(/[_-]/)[0]
+        if (languageOnly && languageOnly !== localeTag) {
+            candidates.push(languageOnly)
+        }
+    }
+
+    for (const candidate of candidates) {
+        const localizedPath = path.join(__dirname, '..', '/_i18n', `${baseName}_${candidate}.properties`)
+        texts = { ...texts, ...loadPropertiesFile(localizedPath) }
+    }
+
+    return texts
+}
+
+/**
+ * Format text with {n} placeholders.
+ * @param {string} value
+ * @param {Array<any>} args
+ * @returns {string}
+ */
+function formatText(value, args) {
+    if (!args || args.length === 0) {
+        return value
+    }
+    return value.replace(/\{(\d+)\}/g, (match, index) => {
+        const replacement = args[Number(index)]
+        return replacement !== undefined ? String(replacement) : match
+    })
+}
+
+const normalizedLocale = locale.normalizeLocale(locale.getLocale())
+const baseBundle = new TextBundle(path.join(__dirname, '..', '/_i18n/messages'), normalizedLocale)
+const additionalBundles = [
+    'compareData',
+    'dataDiff',
+    'dataLineage',
+    'dataProfile',
+    'dataValidator',
+    'duplicateDetection',
+    'export',
+    'interactive',
+    'referentialCheck'
+]
+const additionalTexts = additionalBundles.reduce((acc, bundleName) => {
+    return { ...acc, ...loadAdditionalTexts(bundleName, normalizedLocale) }
+}, {})
+
 /** @typeof TextBundle - instance of sap/textbundle */
-export const bundle = new TextBundle(path.join(__dirname, '..', '/_i18n/messages'), locale.getLocale())
+export const bundle = new Proxy(baseBundle, {
+    get(target, prop) {
+        if (prop === 'getText') {
+            return (key, args) => {
+                if (Object.prototype.hasOwnProperty.call(additionalTexts, key)) {
+                    return formatText(additionalTexts[key], args)
+                }
+                return baseBundle.getText(key, args)
+            }
+        }
+        return target[prop]
+    }
+})
 
 
 /** @typedef {typeof import("ora")} Ora*/
@@ -107,6 +283,7 @@ export function stopSpinnerInt() {
 let terminalkitModule = null
 const getTerminalKit = async () => {
     if (!terminalkitModule) {
+        // @ts-ignore
         const module = await import('terminal-kit')
         terminalkitModule = module.default
     }
@@ -119,8 +296,48 @@ export const getTerminal = async () => {
 }
 
 // Import terminal-kit synchronously for backward compatibility with existing code
+// @ts-ignore
 import terminalKit from 'terminal-kit'
-export const terminal = terminalKit.terminal
+
+// Wrap terminal access to handle test environments where terminal may not be available
+let _terminal = null
+try {
+	if (process.env.NODE_ENV !== 'test') {
+		_terminal = terminalKit.terminal
+	} else {
+		// Provide stub terminal for test environment that outputs to console
+		_terminal = {
+			table: (data) => {
+				// In test mode, use console.table to ensure output is captured
+				if (data && Array.isArray(data) && data.length > 0) {
+					console.table(data)
+				}
+			},
+			progressBar: () => ({
+				startItem: () => {},
+				itemDone: () => {},
+				stop: () => {}
+			})
+		}
+	}
+} catch (error) {
+    console.warn(bundle.getText("warning.terminalKitInitFail", [error.message]))
+	// Provide stub terminal that outputs to console
+	_terminal = {
+		table: (data) => {
+			// Fallback: use console.table to ensure output
+			if (data && Array.isArray(data) && data.length > 0) {
+				console.table(data)
+			}
+		},
+		progressBar: () => ({
+			startItem: () => {},
+			itemDone: () => {},
+			stop: () => {}
+		})
+	}
+}
+export const terminal = _terminal
 
 export let tableOptions = {
     hasBorder: true,
@@ -143,6 +360,36 @@ export const MAX_DISPLAY_ROWS = 100
 export function blankLine(){
     console.log(`                                                                                        `)
 }
+
+/**
+ * Validate that a limit parameter is a valid positive number
+ * @param {any} limit - The limit value to validate
+ * @param {string} [paramName='limit'] - Parameter name for error messages
+ * @throws {Error} If limit is not a valid positive number
+ * @returns {number} The validated limit as a number
+ */
+export function validateLimit(limit, paramName = 'limit') {
+    // Check if limit is undefined or null
+    if (limit === undefined || limit === null) {
+        throw new Error(bundle.getText("validation.requiredParam", [paramName]))
+    }
+    
+    // Convert to number if it's a string
+    const numLimit = typeof limit === 'string' ? Number(limit) : limit
+    
+    // Check if it's NaN or not a number
+    if (typeof numLimit !== 'number' || isNaN(numLimit)) {
+        throw new Error(bundle.getText("validation.invalidNumber", [paramName, limit]))
+    }
+    
+    // Check if it's a positive integer
+    if (numLimit <= 0 || !Number.isInteger(numLimit)) {
+        throw new Error(bundle.getText("validation.positiveInteger", [paramName, limit]))
+    }
+    
+    return numLimit
+}
+
 /** type {object} - processed input prompts*/
 let prompts = {}
 /**
@@ -150,7 +397,7 @@ let prompts = {}
  * @param {object} newPrompts - processed input prompts
  */
 export function setPrompts(newPrompts) {
-    debug('Set Prompts')
+    debug(bundle.getText("debug.setPrompts"))
     prompts = newPrompts
     isDebug(prompts)
     isGui(prompts)
@@ -161,7 +408,7 @@ export function setPrompts(newPrompts) {
  * @returns {object} newPrompts - processed input prompts
  */
 export function getPrompts() {
-    debug('Get Prompts')
+    debug(bundle.getText("debug.getPrompts"))
 
     // @ts-ignore
     if (!prompts.schema) { prompts.schema = "**CURRENT_SCHEMA**" }
@@ -169,6 +416,8 @@ export function getPrompts() {
     if (!prompts.table) { prompts.table = "*" }
     // @ts-ignore
     if (!prompts.view) { prompts.view = "*" }
+    // @ts-ignore
+    if (!prompts.user) { prompts.user = "*" }
     // @ts-ignore
     if (!prompts.limit) { prompts.limit = 200 }
     // @ts-ignore
@@ -181,6 +430,8 @@ export function getPrompts() {
     if (!prompts.containerGroup) { prompts.containerGroup = "*" }
     // @ts-ignore
     if (!prompts.function) { prompts.function = "*" }
+    // @ts-ignore
+    if (!prompts.procedure) { prompts.procedure = "*" }
     // @ts-ignore
     if (!prompts.indexes) { prompts.indexes = "*" }
     // @ts-ignore
@@ -210,17 +461,30 @@ export async function clearConnection() {
 /**
  * @param {object} [options] - override the already set parameters with new connection options
  * @returns {Promise<hdbextPromiseInstance>} - hdbext instanced promisfied
+ * @throws {Error} If connection creation fails
  */
 export async function createDBConnection(options) {
     if (!dbConnection) {
-        let rawClient
-        if (options) {
-            rawClient = await conn.createConnection(options, true)
-        } else {
-            rawClient = await conn.createConnection(prompts, false)
+        try {
+            let rawClient
+            if (options) {
+                if (typeof options !== 'object') {
+                    throw new Error(bundle.getText("validation.invalidNumber", ["options", typeof options]))
+                }
+                rawClient = await conn.createConnection(options, true)
+            } else {
+                rawClient = await conn.createConnection(prompts, false)
+            }
+            if (!rawClient) {
+                throw new Error(bundle.getText("error.connectionFailed"))
+            }
+            dbClassInstance = new dbClass(rawClient)
+            dbConnection = dbClassInstance  // Store the wrapped instance
+        } catch (err) {
+            dbConnection = null
+            dbClassInstance = null
+            throw err
         }
-        dbClassInstance = new dbClass(rawClient)
-        dbConnection = dbClassInstance  // Store the wrapped instance
     }
     return dbConnection
 }
@@ -240,7 +504,7 @@ export function getBuilder(input, iConn = true, iDebug = true) {
     if (iConn) {
         grpConn = {
             admin: {
-                alias: ['a', 'Admin'],
+                alias: ['a'],
                 type: 'boolean',
                 default: false,
                 group: bundle.getText("grpConn"),
@@ -263,7 +527,7 @@ export function getBuilder(input, iConn = true, iDebug = true) {
                 desc: bundle.getText("disableVerbose")
             },
             debug: {
-                alias: ['Debug'],
+                alias: ['d'],
                 group: bundle.getText("grpDebug"),
                 type: 'boolean',
                 default: false,
@@ -288,18 +552,18 @@ export function getMassConvertBuilder(ui = false) {
     /** @type any */
     let parameters = {
         table: {
-            alias: ['t', 'Table'],
+            alias: ['t'],
             type: 'string',
             default: "*",
             desc: bundle.getText("table")
         },
         view: {
-            alias: ['v', 'View'],
+            alias: ['v'],
             type: 'string',
             desc: bundle.getText("view")
         },
         schema: {
-            alias: ['s', 'Schema'],
+            alias: ['s'],
             type: 'string',
             default: '**CURRENT_SCHEMA**',
             desc: bundle.getText("schema")
@@ -311,13 +575,13 @@ export function getMassConvertBuilder(ui = false) {
             desc: bundle.getText("limit")
         },
         folder: {
-            alias: ['f', 'Folder'],
+            alias: ['f'],
             type: 'string',
             default: './',
             desc: bundle.getText("folder")
         },
         filename: {
-            alias: ['n', 'Filename'],
+            alias: ['n'],
             type: 'string',
             desc: bundle.getText("filename")
         },
@@ -327,7 +591,7 @@ export function getMassConvertBuilder(ui = false) {
             desc: bundle.getText("mass.log")
         },
         output: {
-            alias: ['o', 'Output'],
+            alias: ['o'],
             choices: ["hdbtable", "cds", "hdbmigrationtable"],
             default: "cds",
             type: 'string',
@@ -352,7 +616,7 @@ export function getMassConvertBuilder(ui = false) {
             default: true
         },
         useQuoted: {
-            alias: ['q', 'quoted', 'quotedIdentifiers'],
+            alias: ['q', 'quoted'],
             desc: bundle.getText("gui.useQuoted"),
             type: 'boolean',
             default: false
@@ -377,11 +641,18 @@ export function getMassConvertBuilder(ui = false) {
             type: 'boolean',
             default: false,
             desc: bundle.getText("noColons")
+        },
+        profile: {
+            alias: ['p'],
+            type: 'string',
+            default: '',
+            desc: bundle.getText("profile")
         }
     }
+    const hasProfile = parameters.profile !== undefined
     if (ui) {
         parameters.port = {
-            alias: ['p'],
+            alias: hasProfile ? [] : ['p'],
             type: 'integer',
             default: false,
             desc: bundle.getText("port")
@@ -531,10 +802,10 @@ function transformPromptConfig(name, config, argv) {
     if (config.required || config.pattern) {
         promptConfig.validate = (value) => {
             if (config.required && (!value || value === '')) {
-                return config.message || `${name} is required`
+                return config.message || bundle.getText("validation.promptRequired", [name])
             }
             if (config.pattern && !config.pattern.test(value)) {
-                return config.message || `${name} does not match required pattern`
+                return config.message || bundle.getText("validation.promptPattern", [name])
             }
             return true
         }
@@ -608,30 +879,190 @@ export function askFalse() {
 }
 
 /**
+ * Check for unknown command-line options and warn the user
+ * @param {object} argv - Command line arguments from yargs
+ * @param {object} inputSchema - Command's input schema
+ * @param {boolean} iConn - Whether connection options are included
+ * @param {boolean} iDebug - Whether debug options are included
+ * @param {object} [builderOptions] - Command builder options (contains all option definitions)
+ */
+function checkUnknownOptions(argv, inputSchema, iConn, iDebug, builderOptions) {
+    if (!argv || typeof argv !== 'object') {
+        return
+    }
+
+    /**
+     * Convert camelCase to kebab-case
+     * @param {string} str 
+     * @returns {string}
+     */
+    const toKebabCase = (str) => {
+        return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+    }
+
+    // Build set of known options
+    const knownOptions = new Set()
+    
+    // Standard yargs options that should always be allowed
+    const standardYargsOptions = ['$0', '_', 'help', 'h', 'version', 'V']
+    standardYargsOptions.forEach(opt => knownOptions.add(opt))
+    
+    // Add options from builder (highest priority - includes command-specific options)
+    if (builderOptions && typeof builderOptions === 'object') {
+        Object.keys(builderOptions).forEach(key => {
+            knownOptions.add(key)
+            knownOptions.add(toKebabCase(key))
+            
+            // Add aliases from builder option definition
+            const optionDef = builderOptions[key]
+            if (optionDef && optionDef.alias) {
+                const aliases = Array.isArray(optionDef.alias) ? optionDef.alias : [optionDef.alias]
+                aliases.forEach(alias => {
+                    knownOptions.add(alias)
+                    knownOptions.add(toKebabCase(alias))
+                })
+            }
+        })
+    }
+    
+    // Add options from inputSchema
+    if (inputSchema && typeof inputSchema === 'object') {
+        Object.keys(inputSchema).forEach(key => {
+            knownOptions.add(key)
+            knownOptions.add(toKebabCase(key))
+        })
+    }
+    
+    // Add connection options if included
+    if (iConn) {
+        ['admin', 'a', 'conn'].forEach(opt => knownOptions.add(opt))
+    }
+    
+    // Add debug options if included
+    if (iDebug) {
+        ['disableVerbose', 'quiet', 'debug', 'd', 'disable-verbose'].forEach(opt => knownOptions.add(opt))
+    }
+    
+    // Build a map of values to option names to detect aliases
+    // When yargs creates aliases, multiple keys will have the same value in argv
+    const valueToOptions = new Map()
+    for (const key in argv) {
+        const value = argv[key]
+        // Create a string key for the value (primitive values and simple objects)
+        let valueKey
+        if (value === null || value === undefined) {
+            valueKey = String(value)
+        } else if (typeof value === 'object') {
+            // For objects/arrays, convert to JSON string - cleaner than stringify
+            try {
+                valueKey = JSON.stringify(value)
+            } catch {
+                // If stringify fails, use toString
+                valueKey = Object.prototype.toString.call(value)
+            }
+        } else {
+            valueKey = String(value)
+        }
+        
+        if (!valueToOptions.has(valueKey)) {
+            valueToOptions.set(valueKey, [])
+        }
+        valueToOptions.get(valueKey).push(key)
+    }
+    
+    // Options are likely aliases if they share a value with a known option
+    const likelyAliases = new Set()
+    for (const options of valueToOptions.values()) {
+        if (options.length > 1) {
+            // Multiple keys with same value - likely aliases
+            const hasKnownOption = options.some(opt => knownOptions.has(opt))
+            if (hasKnownOption) {
+                // If at least one is known, treat all as valid (aliases)
+                options.forEach(opt => likelyAliases.add(opt))
+            }
+        }
+    }
+    
+    // Check for unknown options
+    const unknownOptions = []
+    for (const key in argv) {
+        if (!knownOptions.has(key) && !likelyAliases.has(key)) {
+            unknownOptions.push(key)
+        }
+    }
+    
+    // Warn about unknown options
+    if (unknownOptions.length > 0) {
+        const warnedOptions = new Set()
+        // Build list of available options for suggestions (exclude standard yargs options)
+        const availableOptions = Array.from(knownOptions).filter(k => 
+            k !== '$0' && k !== '_' && k !== 'help' && k !== 'h' && k !== 'version' && k !== 'V'
+        )
+        
+        unknownOptions.forEach(opt => {
+            if (opt && opt.trim()) {  // Only warn if option name is not empty
+                const normalizedOpt = toKebabCase(opt)
+                if (warnedOptions.has(normalizedOpt)) {
+                    return
+                }
+                warnedOptions.add(normalizedOpt)
+                const warningMsg = bundle.getText("warning.unknownOption", [opt])
+                console.warn(colors.yellow(warningMsg))
+                
+                // Add suggestion if available
+                const suggestion = commandSuggestions.getOptionSuggestionMessage(opt, availableOptions, bundle)
+                if (suggestion) {
+                    console.warn(colors.cyan(suggestion))
+                }
+            }
+        })
+    }
+}
+
+/**
  * Prompts handler function
  * @param {import("yargs").CommandBuilder} argv - parameters for the command
  * @param {function} processingFunction - Function to call after prompts to continue command processing
  * @param {object} inputSchema - prompts current value
  * @param {boolean} [iConn=true] - Add Connection Group
  * @param {boolean} [iDebug=true] - Add Debug Group
+ * @param {object} [builderOptions] - Command builder options for validation
+ * @throws {Error} If required parameters are missing or invalid
  */
-export async function promptHandler(argv, processingFunction, inputSchema, iConn = true, iDebug = true) {
+export async function promptHandler(argv, processingFunction, inputSchema, iConn = true, iDebug = true, builderOptions) {
+    // Input validation
+    if (!processingFunction || typeof processingFunction !== 'function') {
+        throw new Error(bundle.getText("validation.invalidNumber", ["processingFunction", typeof processingFunction]))
+    }
+    if (!inputSchema || typeof inputSchema !== 'object') {
+        throw new Error(bundle.getText("validation.invalidNumber", ["inputSchema", typeof inputSchema]))
+    }
     try {
+        // Check for unknown options and warn user
+        checkUnknownOptions(argv, inputSchema, iConn, iDebug, builderOptions)
+        
         let schema = getPromptSchema(inputSchema, iConn, iDebug)
         let result = {}
+
+        // Check if we're in quiet mode (disableVerbose)
+        // @ts-ignore
+        const isQuietMode = argv && (argv.disableVerbose || argv.quiet)
 
         // First, copy all values from argv that are defined in schema
         if (schema.properties) {
             for (const [name, config] of Object.entries(schema.properties)) {
                 if (argv && argv[name] !== undefined && argv[name] !== null && argv[name] !== '') {
                     result[name] = argv[name]
+                } else if (isQuietMode && config.default !== undefined) {
+                    // In quiet mode, use defaults for empty/missing values
+                    result[name] = config.default
                 }
             }
         }
 
         // Transform schema and collect prompts
         const prompts = []
-        if (schema.properties) {
+        if (schema.properties && !isQuietMode) {
             for (const [name, config] of Object.entries(schema.properties)) {
                 const promptConfig = transformPromptConfig(name, config, argv)
                 if (promptConfig) {
@@ -640,7 +1071,7 @@ export async function promptHandler(argv, processingFunction, inputSchema, iConn
             }
         }
 
-        // Execute prompts based on type
+        // Execute prompts based on type (skip if in quiet mode)
         for (const { name, config: promptConfig } of prompts) {
             // Skip if already provided in argv
             if (argv && argv[name] !== undefined && argv[name] !== null && argv[name] !== '') {
@@ -690,7 +1121,7 @@ export async function promptHandler(argv, processingFunction, inputSchema, iConn
         if (err && err.message) {
             console.log(err.message)
         } else {
-            console.log('Prompt cancelled')
+            console.log(bundle.getText("prompt.cancelled"))
         }
     }
 }
@@ -700,34 +1131,27 @@ export async function promptHandler(argv, processingFunction, inputSchema, iConn
  * @param {*} error - Error Object
  */
 export async function error(error) {
-    debug(`Error`)
-    if (dbConnection && dbConnection.client && dbConnection.client._settings) {
-        debug(`HANA Disconnect Started`)
-        try {
-            await new Promise((resolve) => {
-                dbConnection.client.disconnect((err) => {
-                    if (err) {
-                        debug(`Disconnect Error: ${err}`)
-                    }
-                    debug(`HANA Disconnect Completed`)
-                    dbConnection = null
-                    resolve()
-                })
-            })
-        } catch (disconnectErr) {
-            debug(`Disconnect Exception: ${disconnectErr}`)
-            dbConnection = null
-        }
-    }
-    if (spinner) {
-        spinner.stop()
+    debug(bundle.getText("debug.errorHandler"))
+
+    const processCommand = (process.argv && process.argv[2]) ? String(process.argv[2]).toLowerCase() : ''
+    const isServerLikeCommand = processCommand === 'ui'
+        || processCommand === 'gui'
+        || processCommand === 'server'
+        || processCommand === 'launchpad'
+        || processCommand.endsWith('ui')
+
+    try {
+        // Attempt clean disconnect
+        await disconnectOnly()
+    } catch (disconnectErr) {
+        debug(bundle.getText("debug.errorHandlerDisconnectException", [disconnectErr]))
     }
     if (inDebug || inGui) {
         throw error
     } else {
         console.error(colors.red(`${error}`))
-        // Exit process after error in CLI mode
-        if (!inGui) {
+        // Exit process after error in CLI mode, but keep server/UI mode alive
+        if (!inGui && !isServerLikeCommand) {
             process.exit(1)
         }
     }
@@ -738,40 +1162,60 @@ export async function error(error) {
  * @returns {Promise<void>}
  */
 export async function disconnectOnly() {
-    debug(`Disconnect Only`)
-    if (dbConnection && dbConnection.client && dbConnection.client._settings) {
-        debug(`HANA Disconnect Started`)
-        return new Promise((resolve, reject) => {
-            try {
+    debug(bundle.getText("debug.disconnectOnly"))
+    try {
+        if (dbConnection && dbConnection.client && dbConnection.client._settings) {
+            debug(bundle.getText("debug.hanaDisconnectStarted"))
+            return new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    debug(bundle.getText("debug.disconnectTimeoutExceeded"))
+                    dbConnection = null
+                    stopSpinner()
+                    resolve()
+                }, 5000)
+
                 dbConnection.client.disconnect((err) => {
+                    clearTimeout(timeout)
                     if (err) {
-                        debug(`Disconnect Error: ${err}`)
-                        dbConnection = null
+                        debug(bundle.getText("debug.disconnectError", [err]))
+                    } else {
+                        debug(bundle.getText("debug.hanaDisconnectCompleted"))
+                    }
+                    dbConnection = null
+                    stopSpinner()
+                    if (err) {
                         reject(err)
                     } else {
-                        debug(`HANA Disconnect Completed`)
-                        dbConnection = null
-                        if (spinner) {
-                            spinner.stop()
-                        }
                         resolve()
                     }
                 })
-            } catch (disconnectErr) {
-                debug(`Disconnect Exception: ${disconnectErr}`)
-                if (spinner) {
-                    spinner.stop()
-                }
-                dbConnection = null
-                reject(disconnectErr)
-            }
-        })
-    } else {
-        debug(`No connection to disconnect`)
-        if (spinner) {
-            spinner.stop()
+            })
+        } else {
+            debug(bundle.getText("debug.noConnectionToDisconnect"))
+            stopSpinner()
+            return Promise.resolve()
         }
-        return Promise.resolve()
+    } catch (disconnectErr) {
+        debug(bundle.getText("debug.disconnectException", [disconnectErr]))
+        dbConnection = null
+        stopSpinner()
+        throw disconnectErr
+    }
+}
+
+/**
+ * Stop the spinner safely
+ * @returns {void}
+ */
+function stopSpinner() {
+    if (spinner) {
+        try {
+            spinner.stop()
+        } catch (err) {
+            debug(bundle.getText("debug.spinnerStopError", [err]))
+        } finally {
+            spinner = null
+        }
     }
 }
 
@@ -779,43 +1223,18 @@ export async function disconnectOnly() {
  * Normal processing end and cleanup for single command
  */
 export async function end() {
-    debug(`Natural End`)
-    if (dbConnection && dbConnection.client && dbConnection.client._settings) {
-        debug(`HANA Disconnect Started`)
-        try {
-            dbConnection.client.disconnect((err) => {
-                if (err) {
-                    dbConnection = null
-                    debug(`Disconnect Error: ${err}`)
-                }
-                debug(`HANA Disconnect Completed`)
-                dbConnection = null
-                if (spinner) {
-                    spinner.stop()
-                }
-                // Only exit the process when running from CLI (not from MCP/programmatic contexts)
-                if (!inGui) {
-                    process.exit(0)
-                }
-            })
-        } catch (disconnectErr) {
-            debug(`Disconnect Exception: ${disconnectErr}`)
-            if (spinner) {
-                spinner.stop()
-            }
-            // Only exit the process when running from CLI
-            if (!inGui) {
-                process.exit(1)
-            }
-        }
-    } else {
-        // No connection to clean up, just stop spinner and exit if needed
-        if (spinner) {
-            spinner.stop()
-        }
-        // Only exit the process when running from CLI
+    debug(bundle.getText("debug.normalEnd"))
+    try {
+        await disconnectOnly()
+        // Only exit the process when running from CLI (not from MCP/programmatic contexts)
         if (!inGui) {
             process.exit(0)
+        }
+    } catch (err) {
+        debug(bundle.getText("debug.endCleanupError", [err]))
+        // Only exit the process when running from CLI
+        if (!inGui) {
+            process.exit(1)
         }
     }
 }
@@ -848,6 +1267,11 @@ export function verboseOutput(prompts) {
 export function isDebug(prompts) {
     if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'debug') && prompts.debug) {
         inDebug = true
+        // Enable debug module output when debug flag is set
+        process.env.DEBUG = 'hana-cli*'
+        // Re-enable the debug module with the new setting
+        const debugModule = require('debug')
+        debugModule.enable('hana-cli*')
         return true
     }
     else {
@@ -917,31 +1341,31 @@ function convertJsonToTableArray(jsonArray) {
  * @returns {Promise<void>}
  */
 export async function outputTableFancy(content) {
-    if (content.length < 1) {
+    if (!content || !Array.isArray(content) || content.length < 1) {
         console.log(bundle.getText('noData'))
-    } else {
-        if (verboseOutput(prompts)) {
-            try {
-                const terminal = await getTerminal()
-                // Handle large datasets with pagination
-                if (content.length > MAX_DISPLAY_ROWS) {
-                    console.log(colors.yellow(`\nShowing first ${MAX_DISPLAY_ROWS} of ${content.length} rows (use --output json with --filename to save all results)\n`))
-                    return terminal.table(convertJsonToTableArray(content.slice(0, MAX_DISPLAY_ROWS)), tableOptions)
-                } else {
-                    return terminal.table(convertJsonToTableArray(content), tableOptions)
-                }
-            } catch (error) {
-                // Fallback to console.table if terminal.table fails (e.g., buffer allocation errors)
-                console.error(colors.yellow('Warning: terminal.table failed, falling back to console.table:'), error.message)
-                if (content.length > MAX_DISPLAY_ROWS) {
-                    console.log(colors.yellow(`Showing first ${MAX_DISPLAY_ROWS} of ${content.length} rows`))
-                    return console.table(content.slice(0, MAX_DISPLAY_ROWS))
-                }
-                return console.table(content)
+        return
+    }
+
+    if (verboseOutput(prompts)) {
+        try {
+            // Handle large datasets with pagination
+            if (content.length > MAX_DISPLAY_ROWS) {
+                console.log(colors.yellow(`\n${bundle.getText("output.truncatedWithHint", [MAX_DISPLAY_ROWS, content.length])}\n`))
+                return terminal.table(convertJsonToTableArray(content.slice(0, MAX_DISPLAY_ROWS)), tableOptions)
+            } else {
+                return terminal.table(convertJsonToTableArray(content), tableOptions)
             }
-        } else {
-            return console.log(inspect(content, { maxArrayLength: null }))
+        } catch (error) {
+            // Fallback to console.table if terminal.table fails (e.g., buffer allocation errors)
+            console.error(colors.yellow(bundle.getText("warning.terminalTableFallback")), error.message)
+            if (content.length > MAX_DISPLAY_ROWS) {
+                console.log(colors.yellow(bundle.getText("output.truncated", [MAX_DISPLAY_ROWS, content.length])))
+                return console.table(content.slice(0, MAX_DISPLAY_ROWS))
+            }
+            return console.table(content)
         }
+    } else {
+        return console.log(inspect(content, { maxArrayLength: null }))
     }
 }
 
@@ -967,16 +1391,17 @@ export function output(content) {
  * @param {Object} res - Express response object
  * @param {Function} next - Express next middleware function
  */
+// @ts-ignore
 export function globalErrorHandler(err, req, res, next) {
     // Log error without calling base.error() which would exit the process in CLI mode
-    console.error(colors.red(`Unhandled error: ${err.message}`))
-    debug(`Unhandled error: ${err.message}`)
+    console.error(colors.red(bundle.getText("error.unhandled", [err && err.message ? err.message : bundle.getText("error.internalServerError")]) ))
+    debug(bundle.getText("error.unhandled", [err && err.message ? err.message : bundle.getText("error.internalServerError")]))
     debug(err.stack)
     
     // @ts-ignore
     const statusCode = err.statusCode || err.status || 500
     // Always send the actual error message to help users diagnose issues
-    const message = err.message || 'Internal Server Error'
+    const message = err.message || bundle.getText("error.internalServerError")
     
     // Don't call next() after sending response (Express 5 requirement)
     res.status(statusCode).json({
@@ -995,7 +1420,7 @@ export function globalErrorHandler(err, req, res, next) {
 export function notFoundHandler(req, res) {
     res.status(404).json({
         error: {
-            message: 'Route not found',
+            message: bundle.getText("error.routeNotFound"),
             status: 404,
             path: req.path
         }
@@ -1009,13 +1434,23 @@ export function notFoundHandler(req, res) {
  */
 export async function webServerSetup(urlPath) {
     const path = await import('path')
+    // @ts-ignore
     const expressModule = await import('express')
     const express = expressModule.default
     const http = await import('http')
     
-    debug('serverSetup')
+    debug(bundle.getText("debug.serverSetup"))
+    // Ensure GUI mode to prevent process exit on errors in UI/server context
+    const currentPrompts = getPrompts()
+    if (!currentPrompts.isGui) {
+        setPrompts({
+            ...currentPrompts,
+            isGui: true
+        })
+    }
     // @ts-ignore
     const port = process.env.PORT || prompts.port || 3010
+    const host = process.env.HOST || prompts.host || 'localhost'
 
     if (!(/^[1-9]\d*$/.test(port) && 1 <= 1 * port && 1 * port <= 65535)) {
         return error(`${port} ${bundle.getText("errPort")}`)
@@ -1047,11 +1482,11 @@ export async function webServerSetup(urlPath) {
 
     // Start the Server
     server.on("request", app)
-    server.listen(port, async function () {
+    server.listen(port, host, async function () {
         // @ts-ignore
-        let serverAddr = `http://localhost:${server.address().port}${urlPath}`
+        let serverAddr = `http://${host}:${server.address().port}${urlPath}`
         debug(serverAddr)
-        console.info(`HTTP Server: ${serverAddr}`)
+        console.info(bundle.getText("server.httpServer", [serverAddr]))
         startSpinnerInt()
         await open(serverAddr, {wait: true})
     })
@@ -1089,10 +1524,10 @@ export async function getUserName() {
         const options = await conn.getConnOptions(prompts)
         if (options && options.hana && options.hana.user) {
             userName = options.hana.user
-            debug('Username of db connection: ' + userName)
+            debug(bundle.getText("debug.dbUserName", [userName]))
         }
     } catch (error) {
-        debug('Could not retrieve username: ' + error.message)
+        debug(bundle.getText("debug.dbUserNameError", [error.message]))
     }
 
     return userName

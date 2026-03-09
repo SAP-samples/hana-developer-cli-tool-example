@@ -1,26 +1,27 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'adminHDI [user] [password]'
 export const aliases = ['adHDI', 'adhdi']
 export const describe = baseLite.bundle.getText("adminHDI")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   user: {
-    alias: ['u', 'User'],
+    alias: ['u'],
     desc: baseLite.bundle.getText("user")
   },
   password: {
-    alias: ['p', 'Password'],
+    alias: ['p'],
     desc: baseLite.bundle.getText("password")
   },
   create: {
-    alias: ['c', 'Create'],
+    alias: ['c'],
     desc: baseLite.bundle.getText("createUser"),
     type: 'boolean',
     default: true
   }
-})
+})).wrap(160).example('hana-cli adminHDI --action list', baseLite.bundle.getText("adminHDIExample")).wrap(160).epilog(buildDocEpilogue('adminHDI', 'hdi-management', ['adminHDIGroup', 'hanaCloudHDIInstances']))
 
 /**
  * Command handler function
@@ -64,7 +65,7 @@ export async function activate(prompts) {
       console.table(results)
     }
     else
-      base.debug('do not create a new database user')
+      base.debug(base.bundle.getText("debug.adminHDI.skipCreate"))
 
     let resultsGrant = await dbStatus.execSQL(
       `CREATE LOCAL TEMPORARY TABLE #PRIVILEGES LIKE _SYS_DI.TT_API_PRIVILEGES;`)
@@ -89,7 +90,7 @@ export async function activate(prompts) {
       console.table(resultsGrant)
     }
     else
-      base.debug('Do not grant privieges to ' + prompts.user)
+      base.debug(base.bundle.getText("debug.adminHDI.skipGrant", [prompts.user]))
 
     return base.end()
 

@@ -4,4 +4,4 @@ export function saveEnv(options: any, container: any, userDT: any, userRT: any, 
 export const command: "createContainer [container] [group]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;

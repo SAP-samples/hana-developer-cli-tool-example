@@ -1,3 +1,4 @@
+import { ConnectionContext } from './connection-context.js';
 /**
  * Result of command execution
  */
@@ -11,9 +12,10 @@ export interface ExecutionResult {
  *
  * @param commandName - The command to execute (e.g., 'status', 'tables')
  * @param args - Arguments to pass to the command as key-value pairs
+ * @param context - Optional connection context for project-specific connections
  * @returns Promise with execution result including the command name for formatting
  */
-export declare function executeCommand(commandName: string, args?: Record<string, any>): Promise<ExecutionResult & {
+export declare function executeCommand(commandName: string, args?: Record<string, any>, context?: ConnectionContext): Promise<ExecutionResult & {
     commandName: string;
 }>;
 /**

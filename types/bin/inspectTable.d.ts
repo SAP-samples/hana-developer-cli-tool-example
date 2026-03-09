@@ -1,16 +1,16 @@
 export function handler(argv: any): Promise<void>;
 export function tableInspect(prompts: any): Promise<{
     basic: any;
-    fields: any;
+    fields: object;
     constraints: any;
     sql: string;
     cds: string;
     hdbtable: any;
-}>;
+} | undefined>;
 export const command: "inspectTable [schema] [table]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace table {
         let description: string;

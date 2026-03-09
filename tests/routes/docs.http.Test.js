@@ -4,7 +4,6 @@
  * Integration tests using supertest to test the docs route with real HTTP requests
  */
 
-import { describe, it, before } from 'mocha'
 import { expect } from 'chai'
 import request from 'supertest'
 import { createMinimalApp } from '../appFactory.js'

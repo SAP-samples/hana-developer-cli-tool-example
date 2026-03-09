@@ -84,3 +84,8 @@ yarn.lock
 
 #Test Results
 /mochawesome-report
+
+/.playwright-mcp
+
+# Interactive mode state
+.interactive-state.json

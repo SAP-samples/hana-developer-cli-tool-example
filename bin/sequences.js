@@ -1,19 +1,20 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'sequences [schema] [sequence]'
 export const aliases = ['seq', 'listSeqs', 'ListSeqs', 'listseqs', 'Listseq', "listSequences"]
 export const describe = baseLite.bundle.getText("sequences")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   sequence: {
-    alias: ['seq', 'Sequence'],
+    alias: ['seq'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("sequence")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
@@ -23,8 +24,13 @@ export const builder = baseLite.getBuilder({
     type: 'number',
     default: 200,
     desc: baseLite.bundle.getText("limit")
+  },
+  profile: {
+    alias: ['p'],
+    type: 'string',
+    desc: baseLite.bundle.getText("profile")
   }
-})
+})).wrap(160).example('hana-cli sequences --schema MYSCHEMA --sequence %', baseLite.bundle.getText('sequencesExample')).wrap(160).epilog(buildDocEpilogue('sequences', 'schema-tools', ['tables', 'objects']))
 
 /**
  * Command handler function
@@ -86,6 +92,7 @@ export async function getSequences(prompts) {
  */
 async function getSequencesInt(schema, sequence, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getSequencesInt ${schema} ${sequence} ${limit}`)
   sequence = base.dbClass.objectName(sequence)
   let query =

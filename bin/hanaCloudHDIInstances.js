@@ -1,19 +1,20 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'hdi'
 export const aliases = ['hdiInstances', 'hdiinstances', 'hdiServices', 'listhdi', 'hdiservices', 'hdis']
 export const describe = baseLite.bundle.getText("hdiInstances")
 
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     cf: {
         alias: ['c', 'cmd'],
         desc: baseLite.bundle.getText("cfxs"),
         type: 'boolean',
         default: true
     }
-}, false)
+}, false)).wrap(160).example('hana-cli hdi --cf', baseLite.bundle.getText("hdiExample")).wrap(160).epilog(buildDocEpilogue('hanaCloudHDIInstances', 'hana-cloud', ['hanaCloudInstances', 'adminHDI']))
 
 export let inputPrompts = {
     cf: {

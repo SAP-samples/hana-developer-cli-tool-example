@@ -1,0 +1,308 @@
+{
+    "id": "import-ui",
+    "appUrl": "import-ui",
+    "product": "HANA_CLI",
+    "version": "Cloud",
+    "locale": "en-US",
+    "state": "PRODUCTION",
+    "system": "",
+    "environment": "",
+    "loio": "",
+    "contextType": "HELP",
+    "title": "Import data from CSV or Excel files into a database table",
+    "shortDescription": "",
+    "alias": "",
+    "editable": "true",
+    "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+    "tiles": [
+        {
+            "id": "1",
+            "loio": "",
+            "title": "About This Screen",
+            "summaryText": "General information related to this screen.",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": null,
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"unknown\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"CIRCLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 1,
+            "pageUrl": null
+        },
+        {
+            "id": "beginImport",
+            "loio": "",
+            "title": "Begin Import",
+            "summaryText": "Initiates the import process with the selected configuration",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": null,
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 2,
+            "pageUrl": null
+        },
+        {
+            "id": "Filename",
+            "loio": "",
+            "title": "Source File",
+            "summaryText": "Path to the source file containing data to import",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1GaWxlbmFtZSclNUQlMjIlMkMlMjJydWxlJTIyJTNBJTIySWRTZWxlY3RvclVJNSUyMiUyQyUyMm9mZnNldCUyMiUzQSU3QiUyMnglMjIlM0EwLjUlMkMlMjJ5JTIyJTNBMC4yODEyJTdEJTdE",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 3,
+            "pageUrl": null
+        },
+        {
+            "id": "Table",
+            "loio": "",
+            "title": "Target Table",
+            "summaryText": "Target HANA table name where data will be imported",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1UYWJsZSclNUQlMjIlMkMlMjJydWxlJTIyJTNBJTIySWRTZWxlY3RvclVJNSUyMiUyQyUyMm9mZnNldCUyMiUzQSU3QiUyMnglMjIlM0EwLjUlMkMlMjJ5JTIyJTNBMC4yODEyJTdEJTdE",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 4,
+            "pageUrl": null
+        },
+        {
+            "id": "outputFormat",
+            "loio": "",
+            "title": "Output Format",
+            "summaryText": "Output format for the import operation",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1vdXRwdXRGb3JtYXQnJTVEJTIyJTJDJTIycnVsZSUyMiUzQSUyMklkU2VsZWN0b3JVSTUlMjIlMkMlMjJvZmZzZXQlMjIlM0ElN0IlMjJ4JTIyJTNBMC41JTJDJTIyeSUyMiUzQTAuMjgxMiU3RCU3RA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 5,
+            "pageUrl": null
+        },
+        {
+            "id": "matchMode",
+            "loio": "",
+            "title": "Match Mode",
+            "summaryText": "Column matching strategy for import data",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1tYXRjaE1vZGUnJTVEJTIyJTJDJTIycnVsZSUyMiUzQSUyMklkU2VsZWN0b3JVSTUlMjIlMkMlMjJvZmZzZXQlMjIlM0ElN0IlMjJ4JTIyJTNBMC41JTJDJTIyeSUyMiUzQTAuMjgxMiU3RCU3RA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 6,
+            "pageUrl": null
+        },
+        {
+            "id": "chkTruncate",
+            "loio": "",
+            "title": "Truncate Table",
+            "summaryText": "Delete existing data before importing",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1jaGtUcnVuY2F0ZSclNUQlMjIlMkMlMjJydWxlJTIyJTNBJTIySWRTZWxlY3RvclVJNSUyMiUyQyUyMm9mZnNldCUyMiUzQSU3QiUyMnglMjIlM0EwLjUlMkMlMjJ5JTIyJTNBMC4yODEyJTdEJTdE",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 7,
+            "pageUrl": null
+        },
+        {
+            "id": "inputBatchSize",
+            "loio": "",
+            "title": "Batch Size",
+            "summaryText": "Number of rows to process in each batch",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1pbnB1dEJhdGNoU2l6ZSclNUQlMjIlMkMlMjJydWxlJTIyJTNBJTIySWRTZWxlY3RvclVJNSUyMiUyQyUyMm9mZnNldCUyMiUzQSU3QiUyMnglMjIlM0EwLjUlMkMlMjJ5JTIyJTNBMC4yODEyJTdEJTdE",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 8,
+            "pageUrl": null
+        },
+        {
+            "id": "inputWorksheet",
+            "loio": "",
+            "title": "Worksheet",
+            "summaryText": "Excel worksheet name to import from",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1pbnB1dFdvcmtzaGVldCclNUQlMjIlMkMlMjJydWxlJTIyJTNBJTIySWRTZWxlY3RvclVJNSUyMiUyQyUyMm9mZnNldCUyMiUzQSU3QiUyMnglMjIlM0EwLjUlMkMlMjJ5JTIyJTNBMC4yODEyJTdEJTdE",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 9,
+            "pageUrl": null
+        },
+        {
+            "id": "inputStartRow",
+            "loio": "",
+            "title": "Start Row",
+            "summaryText": "Row number to begin importing from",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1pbnB1dFN0YXJ0Um93JyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 10,
+            "pageUrl": null
+        },
+        {
+            "id": "chkSkipEmptyRows",
+            "loio": "",
+            "title": "Skip Empty Rows",
+            "summaryText": "Ignore rows that contain no data",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1jaGtTa2lwRW1wdHlSb3dzJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 11,
+            "pageUrl": null
+        },
+        {
+            "id": "excelCacheMode",
+            "loio": "",
+            "title": "Excel Cache Mode",
+            "summaryText": "Caching strategy for Excel file processing",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1leGNlbENhY2hlTW9kZSclNUQlMjIlMkMlMjJydWxlJTIyJTNBJTIySWRTZWxlY3RvclVJNSUyMiUyQyUyMm9mZnNldCUyMiUzQSU3QiUyMnglMjIlM0EwLjUlMkMlMjJ5JTIyJTNBMC4yODEyJTdEJTdE",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 12,
+            "pageUrl": null
+        },
+        {
+            "id": "chkDryRun",
+            "loio": "",
+            "title": "Dry Run",
+            "summaryText": "Preview import without modifying database",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1jaGtEcnlSdW4nJTVEJTIyJTJDJTIycnVsZSUyMiUzQSUyMklkU2VsZWN0b3JVSTUlMjIlMkMlMjJvZmZzZXQlMjIlM0ElN0IlMjJ4JTIyJTNBMC41JTJDJTIyeSUyMiUzQTAuMjgxMiU3RCU3RA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 13,
+            "pageUrl": null
+        },
+        {
+            "id": "inputMaxFileSizeMB",
+            "loio": "",
+            "title": "Max File Size (MB)",
+            "summaryText": "Maximum size of input file in megabytes",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1pbnB1dE1heEZpbGVTaXplTUInJTVEJTIyJTJDJTIycnVsZSUyMiUzQSUyMklkU2VsZWN0b3JVSTUlMjIlMkMlMjJvZmZzZXQlMjIlM0ElN0IlMjJ4JTIyJTNBMC41JTJDJTIyeSUyMiUzQTAuMjgxMiU3RCU3RA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 14,
+            "pageUrl": null
+        },
+        {
+            "id": "inputTimeoutSeconds",
+            "loio": "",
+            "title": "Timeout (seconds)",
+            "summaryText": "Maximum time to wait for import operation",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1pbnB1dFRpbWVvdXRTZWNvbmRzJyU1RCUyMiUyQyUyMnJ1bGUlMjIlM0ElMjJJZFNlbGVjdG9yVUk1JTIyJTJDJTIyb2Zmc2V0JTIyJTNBJTdCJTIyeCUyMiUzQTAuNSUyQyUyMnklMjIlM0EwLjI4MTIlN0QlN0Q=",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 15,
+            "pageUrl": null
+        },
+        {
+            "id": "inputNullValues",
+            "loio": "",
+            "title": "Null Values",
+            "summaryText": "Values to treat as NULL during import",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1pbnB1dE51bGxWYWx1ZXMnJTVEJTIyJTJDJTIycnVsZSUyMiUzQSUyMklkU2VsZWN0b3JVSTUlMjIlMkMlMjJvZmZzZXQlMjIlM0ElN0IlMjJ4JTIyJTNBMC41JTJDJTIyeSUyMiUzQTAuMjgxMiU3RCU3RA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 16,
+            "pageUrl": null
+        },
+        {
+            "id": "chkSkipWithErrors",
+            "loio": "",
+            "title": "Skip With Errors",
+            "summaryText": "Continue import even if errors occur",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1jaGtTa2lwV2l0aEVycm9ycyclNUQlMjIlMkMlMjJydWxlJTIyJTNBJTIySWRTZWxlY3RvclVJNSUyMiUyQyUyMm9mZnNldCUyMiUzQSU3QiUyMnglMjIlM0EwLjUlMkMlMjJ5JTIyJTNBMC4yODEyJTdEJTdE",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 17,
+            "pageUrl": null
+        },
+        {
+            "id": "inputMaxErrorsAllowed",
+            "loio": "",
+            "title": "Max Errors Allowed",
+            "summaryText": "Maximum number of errors before stopping import",
+            "content": "",
+            "lastModifiedDate": "2024-02-14 00:00:00 GMT+0000",
+            "hotspotAssignments": [
+                {
+                    "hotspotAnchor": "WA#2#JTdCJTIydmFsdWUlMjIlM0ElMjJESVYlNUJpZCUyNCUzRCdhcHBsaWNhdGlvbi1pbXBvcnQtdWktY29tcG9uZW50LS0tQXBwLS1pbnB1dE1heEVycm9yc0FsbG93ZWQnJTVEJTIyJTJDJTIycnVsZSUyMiUzQSUyMklkU2VsZWN0b3JVSTUlMjIlMkMlMjJvZmZzZXQlMjIlM0ElN0IlMjJ4JTIyJTNBMC41JTJDJTIyeSUyMiUzQTAuMjgxMiU3RCU3RA==",
+                    "displayProperties": "{\"misc\":{\"hidden\":false,\"bubbleOrientation\":\"auto\",\"bubbleType\":\"action\",\"bubbleOffset\":{\"left\":0,\"top\":0},\"bubbleSize\":\"s\",\"autoProgress\":[\"next\"],\"elementType\":\"click\",\"autoSkipStep\":false},\"showTitleBar\":true,\"hotspotSize\":\"2\",\"centered\":false,\"contentStyle\":\"RECTANGLE\",\"iconType\":\"info\",\"iconPos\":\"I\",\"rectDelta\":{\"width\":0,\"height\":0},\"manualOffset\":{\"left\":0,\"top\":0},\"offset\":true,\"showArrow\":true}"
+                }
+            ],
+            "tileOrder": 18,
+            "pageUrl": null
+        }
+    ]
+}
+

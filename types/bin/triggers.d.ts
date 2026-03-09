@@ -13,4 +13,4 @@ export function getTriggers(prompts: object): Promise<any[]>;
 export const command: "triggers [schema] [trigger] [target]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;

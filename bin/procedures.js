@@ -1,11 +1,12 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'procedures [schema] [procedure]'
-export const aliases = ['p', 'listProcs', 'ListProc', 'listprocs', 'Listproc', "listProcedures", "listprocedures"]
+export const aliases = ['p', 'listProcs', 'ListProc', 'listprocs', 'Listproc', "listProcedures", "listprocedures", 'sp']
 export const describe = baseLite.bundle.getText("procedures")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   procedure: {
     alias: ['p', 'Procedure'],
     type: 'string',
@@ -23,8 +24,16 @@ export const builder = baseLite.getBuilder({
     type: 'number',
     default: 200,
     desc: baseLite.bundle.getText("limit")
+  },
+  profile: {
+    alias: ['p'],
+    type: 'string',
+    desc: baseLite.bundle.getText("profile")
   }
-})
+})).wrap(160).example(
+  'hana-cli procedures --procedure myProcedure --schema MYSCHEMA',
+  baseLite.bundle.getText("proceduresExample")
+).epilog(buildDocEpilogue('procedures', 'schema-tools', ['inspectProcedure', 'functions', 'views']))
 
 /**
  * Command handler function
@@ -86,6 +95,7 @@ export async function getProcedures(prompts) {
  */
 async function getProceduresInt(schema, procedure, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getProceduresInt ${schema} ${procedure} ${limit}`)
   procedure = base.dbClass.objectName(procedure)
   let query =

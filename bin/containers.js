@@ -1,19 +1,20 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'containers [containerGroup] [container]'
 export const aliases = ['cont', 'listContainers', 'listcontainers']
 export const describe = baseLite.bundle.getText("containers")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   container: {
-    alias: ['c', 'Container'],
+    alias: ['c'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("container")
   },
   containerGroup: {
-    alias: ['g', 'Group', 'group', 'containergroup'],
+    alias: ['g', 'group', 'containergroup'],
     type: 'string',
     default: '*',
     desc: baseLite.bundle.getText("containerGroup")
@@ -24,7 +25,7 @@ export const builder = baseLite.getBuilder({
     default: 200,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).wrap(160).example('hana-cli containers --container myContainer', baseLite.bundle.getText("containersExample")).wrap(160).epilog(buildDocEpilogue('containers', 'hdi-management', ['createContainer', 'dropContainer', 'containersUI']))
 
 export let inputPrompts = {
   container: {
@@ -79,6 +80,7 @@ export async function getContainers(prompts) {
 
 export async function getContainersInt(containerGroup, container, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug('getContainersInt')
 
   let query =

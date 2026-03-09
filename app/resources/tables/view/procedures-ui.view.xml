@@ -1,0 +1,37 @@
+<mvc:View controllerName="sap.hanacli.tables.controller.procedures-ui" height="100%" width="100%"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+	<ScrollContainer id="scrollContainerProcedures" height="100%" width="100%" vertical="true" focusable="true">
+		<f:SimpleForm id="SimpleFormToolbarProcedures" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+			<f:toolbar>
+				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.toolbar" type="XML"/>
+			</f:toolbar>
+				<f:content>
+
+				<Toolbar id="targetToolbarProcedures" ariaLabelledBy="Title2Procedures">
+					<Title id="Title2Procedures" text="{i18nReuse>gui.target}"/>
+					<ToolbarSpacer id="spacerProcedures" />
+					<Button id="settingsButtonProcedures" icon="sap-icon://settings" tooltip="{i18nReuse>gui.targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
+				</Toolbar>
+
+				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.schema" type="XML"/>
+
+				<Label id="labelProcedure" text="{i18nReuse>procedure}" required="true"/>
+				<Input id="Procedure" value="{/procedure}" showSuggestion="true" suggest="loadProcedureFilter">
+				</Input>
+				<Label id="labelLimitProcedures" text="{i18nReuse>limit}" required="true"/>
+				<Input id="limitProcedures" value="{/limit}" />
+
+				<core:Fragment fragmentName="sap.hanacli.common.view.Connection" type="XML"/>
+				<core:Fragment fragmentName="sap.hanacli.common.view.Debug" type="XML"/>
+
+			</f:content>
+		</f:SimpleForm>
+
+	
+	<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.table" type="XML"/>
+	</ScrollContainer>
+</mvc:View>

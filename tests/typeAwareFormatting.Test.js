@@ -12,7 +12,6 @@
  * - Objects and arrays
  */
 
-import { describe, it } from 'mocha'
 import { assert } from './base.js'
 import * as fs from 'fs'
 import * as path from 'path'

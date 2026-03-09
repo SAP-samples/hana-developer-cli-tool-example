@@ -3,35 +3,36 @@ import * as baseLite from '../utils/base-lite.js'
 import * as conn from "../utils/connections.js"
 import * as xsenv from '@sap/xsenv'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'createContainer [container] [group]'
 export const aliases = ['cc', 'cCont']
 export const describe = baseLite.bundle.getText("createContainer")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   container: {
-    alias: ['c', 'Container'],
+    alias: ['c'],
     type: 'string',
     desc: baseLite.bundle.getText("container")
   },
   group: {
-    alias: ['g', 'Group'],
+    alias: ['g'],
     type: 'string',
     default: '',
     desc: baseLite.bundle.getText("group")
   },
   save: {
-    alias: ['s', 'Save'],
+    alias: ['s'],
     desc: baseLite.bundle.getText("saveHDI"),
     type: 'boolean',
     default: true
   },
   encrypt: {
-    alias: ['e', 'Encrypt', 'ssl'],
+    alias: ['e', 'ssl'],
     desc: baseLite.bundle.getText("encrypt"),
     type: 'boolean',
     default: false
   }
-})
+})).wrap(160).example('hana-cli createContainer --container myContainer', baseLite.bundle.getText("createContainerExample")).wrap(160).epilog(buildDocEpilogue('createContainer', 'hdi-management', ['dropContainer', 'containers', 'createContainerUsers']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')
@@ -70,11 +71,11 @@ export async function activate(prompts) {
 
     const testChars = ["!", `"`, "$", "%", "'", "(", ")", "*", "+", ",", ".", "/", ":", ";", "<", "=", ">", "?", "@", "[", "]", "\\", "^", "`", "{", "}", "|", "~"]
     if (testChars.some(r=> prompts.container.includes(r))){
-      base.error(`Illegal Characters in input name ${prompts.container}`)
+      base.error(base.bundle.getText("error.illegalCharsInContainerName", [prompts.container]))
       return
     }
     if (testChars.some(r=> prompts.group.includes(r))){
-      base.error(`Illegal Characters in input name ${prompts.group}`)
+      base.error(base.bundle.getText("error.illegalCharsInGroupName", [prompts.group]))
       return
     }
 

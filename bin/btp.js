@@ -2,19 +2,20 @@
 import * as baseLite from '../utils/base-lite.js'
 import * as btp from '../utils/btp.js'
 import { select } from '@inquirer/prompts'
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 const colors = baseLite.colors
 
 export const command = 'btp [directory] [subaccount]'
 export const aliases = ['btpTarget', 'btptarget', 'btp']
 export const describe = baseLite.bundle.getText("btpCmd")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     subaccount: {
         alias: ['sa'],
         type: 'string',
         desc: baseLite.bundle.getText("btpSa")
     }
-}, false)
+}, false)).wrap(160).example('hana-cli btp --subaccount mySubaccount', baseLite.bundle.getText('btpExample')).wrap(160).epilog(buildDocEpilogue('btp', 'btp-integration', ['btpInfo', 'btpTarget', 'btpSubs', 'hanaCloudInstances']))
 
 
 /**
@@ -32,10 +33,10 @@ export async function handler(argv) {
         }
     }
 
-    base.debug(`build inquirer prompts`)
+    base.debug(base.bundle.getText("debug.btp.buildPrompts"))
 
     try {
-        base.debug(`GetBTPGlobalAccount`)
+        base.debug(base.bundle.getText("debug.btp.getGlobalAccount"))
         base.startSpinnerInt()
         var account = await btp.getBTPGlobalAccount()
         base.debug(account)
@@ -96,7 +97,7 @@ export async function handler(argv) {
 
                 const firstSelection = await select({
                     message: folders.length > 0 && rootSubaccounts.length > 0 
-                        ? 'Select a folder or subaccount:' 
+                        ? base.bundle.getText("btp.selectFolderOrSubaccount") 
                         : base.bundle.getText("btpSa"),
                     choices: choices.map(choice => ({
                         name: choice.name,
@@ -116,7 +117,7 @@ export async function handler(argv) {
                         }))
 
                         selectedSubaccountGuid = await select({
-                            message: `Select subaccount from ${selectedFolder.name.replace('📁 ', '')}:`,
+                            message: base.bundle.getText("btp.selectSubaccountFromFolder", [selectedFolder.name.replace('📁 ', '')]),
                             choices: subaccountChoices
                         })
                     }
@@ -137,7 +138,7 @@ export async function handler(argv) {
                 base.debug(schema)
                 base.promptHandler(argv, callBTP, schema)
             } else {
-                base.error('No subaccount selected')
+                base.error(base.bundle.getText("btp.noSubaccountSelected"))
             }
         } catch (error) {
             base.error(error)
@@ -150,7 +151,7 @@ export async function handler(argv) {
 
 export async function callBTP(prompts) {
   const base = await import('../utils/base.js')
-    base.debug('callBTP')
+        base.debug(base.bundle.getText("debug.btp.callBTP"))
     base.startSpinnerInt()
     base.debug(prompts)
     try {

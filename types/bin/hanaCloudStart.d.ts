@@ -13,4 +13,4 @@ export function hcStart(prompts: object): Promise<void>;
 export const command: "hcStart [name]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;

@@ -3,7 +3,6 @@
  * @module Database Tests - Unit tests for database client utilities
  */
 
-import { describe, it } from 'mocha'
 import { assert } from '../base.js'
 import dbClientClass from '../../utils/database/index.js'
 

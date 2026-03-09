@@ -13,4 +13,4 @@ export function activate(prompts: object): Promise<void>;
 export const command: "adminHDI [user] [password]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;

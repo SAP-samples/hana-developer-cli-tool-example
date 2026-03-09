@@ -11,8 +11,8 @@
     "loio": "",
     "contextType": "HELP",
     "_standalone": true,
-    "title": "Convert a group of tables to CDS or HDBTable format",
-    "shortDescription": "Convert a group of tables to CDS or HDBTable format",
+    "title": "{i18n>dfa.massconvert.title}",
+    "shortDescription": "{i18n>dfa.massconvert.description}",
     "alias": "",
     "editable": "true",
     "lastModifiedDate": "2021-06-10 07:22:47 GMT+0000"

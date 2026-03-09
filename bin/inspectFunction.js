@@ -2,35 +2,36 @@
 import * as baseLite from '../utils/base-lite.js'
 import * as dbInspect from '../utils/dbInspect.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'inspectFunction [schema] [function]'
 export const aliases = ['if', 'function', 'insFunc', 'inspectfunction']
 export const describe = baseLite.bundle.getText("inspectFunction")
 
-export const builder = baseLite.getBuilder({
-  function: {
-    alias: ['f', 'Function'],
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
+  functionName: {
+    alias: ['f', 'function'],
     type: 'string',
     desc: baseLite.bundle.getText("function")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
   },
   output: {
-    alias: ['o', 'Output'],
+    alias: ['o'],
     choices: ["tbl", "sql"],
     default: "tbl",
     type: 'string',
     desc: baseLite.bundle.getText("outputType")
   }
-})
+})).wrap(160).example('hana-cli inspectFunction --function myFunction --schema MYSCHEMA', baseLite.bundle.getText("inspectFunctionExample")).wrap(160).epilog(buildDocEpilogue('inspectFunction', 'object-inspection', ['functions', 'inspectProcedure']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, functionInspect, {
-    function: {
+    functionName: {
       description: base.bundle.getText("function"),
       type: 'string',
       required: true
@@ -59,9 +60,9 @@ export async function functionInspect(prompts) {
   
 
     let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.debug(`${baseLite.bundle.getText("schema")}: ${schema}, ${baseLite.bundle.getText("function")}: ${prompts.function}`);
+    base.debug(`${baseLite.bundle.getText("schema")}: ${schema}, ${baseLite.bundle.getText("function")}: ${prompts.functionName}`);
 
-    let proc = await dbInspect.getFunction(db, schema, prompts.function);
+    let proc = await dbInspect.getFunction(db, schema, prompts.functionName);
     let parameters = await dbInspect.getFunctionPrams(db, proc[0].FUNCTION_OID)
     let columns = await dbInspect.getFunctionPramCols(db, proc[0].FUNCTION_OID)
 
@@ -72,7 +73,7 @@ export async function functionInspect(prompts) {
       base.outputTableFancy(parameters)
       base.outputTableFancy(columns)
     } else if (prompts.output === 'sql') {
-      let definition = await dbInspect.getDef(db, schema, prompts.function);
+      let definition = await dbInspect.getDef(db, schema, prompts.functionName);
       console.log(highlight(definition))
     }
     return base.end()

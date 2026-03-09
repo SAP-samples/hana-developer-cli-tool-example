@@ -1,11 +1,12 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'dataTypes'
 export const aliases = ['dt', 'datatypes', 'dataType', 'datatype']
 export const describe = baseLite.bundle.getText("dataTypes")
 
-export const builder = baseLite.getBuilder({})
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).wrap(160).example('hana-cli dataTypes', baseLite.bundle.getText("dataTypesExample")).wrap(160).epilog(buildDocEpilogue('dataTypes', 'schema-tools', ['dataTypesUI', 'tables']))
 export async function handler (argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, dbStatus, {})

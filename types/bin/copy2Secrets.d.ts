@@ -7,4 +7,4 @@ export function makeSecrets({ envFile, secretsFolder, filter }: {
 export const command: "copy2Secrets";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;

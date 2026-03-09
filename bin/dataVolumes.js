@@ -1,11 +1,12 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'dataVolumes'
 export const aliases = ['dv', 'datavolumes']
 export const describe = baseLite.bundle.getText("dataVolumes")
 
-export const builder = baseLite.getBuilder({})
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).wrap(160).example('hana-cli dataVolumes', baseLite.bundle.getText("dataVolumesExample")).wrap(160).epilog(buildDocEpilogue('dataVolumes', 'system-tools', ['disks', 'fragmentationCheck', 'reclaim']))
 export async function handler (argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, dbStatus, {})
@@ -19,15 +20,15 @@ export async function dbStatus(prompts) {
     const dbStatus = await base.createDBConnection()
 
     let results = await dbStatus.execSQL(
-      `SELECT * FROM M_DATA_VOLUMES`)
+      `SELECT * FROM SYS.M_DATA_VOLUMES`)
     base.outputTableFancy(results)
 
     results = await dbStatus.execSQL(
-      `SELECT * FROM M_DATA_VOLUME_STATISTICS`)
+      `SELECT * FROM SYS.M_DATA_VOLUME_STATISTICS`)
     base.outputTableFancy(results)
 
     results = await dbStatus.execSQL(
-      `SELECT * FROM M_DATA_VOLUME_PAGE_STATISTICS`)
+      `SELECT * FROM SYS.M_DATA_VOLUME_PAGE_STATISTICS`)
     base.outputTableFancy(results)
     return base.end()
   } catch (error) {

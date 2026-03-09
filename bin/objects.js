@@ -1,19 +1,20 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'objects [schema] [object]'
 export const aliases = ['o', 'listObjects', 'listobjects']
 export const describe = baseLite.bundle.getText("objects")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   object: {
-    alias: ['o', 'Object'],
+    alias: ['o'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("object")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
@@ -23,8 +24,13 @@ export const builder = baseLite.getBuilder({
     type: 'number',
     default: 200,
     desc: baseLite.bundle.getText("limit")
+  },
+  profile: {
+    alias: ['p'],
+    type: 'string',
+    desc: baseLite.bundle.getText("profile")
   }
-})
+})).wrap(160).example('hana-cli objects --schema MYSCHEMA --object % --limit 300', baseLite.bundle.getText('objectsExample')).wrap(160).epilog(buildDocEpilogue('objects', 'schema-tools', ['schemas', 'tables', 'views']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')
@@ -68,6 +74,7 @@ export async function getObjects(prompts) {
 
 async function getObjectsInt(schema, object, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getObjectsInt ${schema} ${object} ${limit}`)
   object = base.dbClass.objectName(object)
 

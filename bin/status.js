@@ -1,18 +1,22 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'status'
 export const aliases = ['s', 'whoami']
 export const describe = baseLite.bundle.getText("status")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   priv: {
     alias: ['p', 'privileges'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("privileges")
   }
-})
+})).wrap(160).example(
+  'hana-cli status --priv',
+  baseLite.bundle.getText("statusExample")
+).epilog(buildDocEpilogue('status', 'system-admin', ['systemInfo', 'healthCheck', 'connections']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

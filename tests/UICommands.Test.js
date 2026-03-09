@@ -32,7 +32,7 @@ describe('UI Commands', function () {
         })
 
         it('should export builder', function () {
-            assert.ok(typeof UI.builder === 'object')
+            assert.ok(typeof UI.builder === 'function')
         })
 
         it('should export handler function', function () {
@@ -97,7 +97,7 @@ describe('UI Commands', function () {
         })
 
         it('should export builder', function () {
-            assert.ok(typeof containersUI.builder === 'object')
+            assert.ok(typeof containersUI.builder === 'function')
         })
 
         it('should export handler function', function () {

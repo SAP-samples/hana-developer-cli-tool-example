@@ -1,17 +1,27 @@
-/* eslint-disable no-undef */
-/*eslint-env es6 */
-"use strict";
 sap.ui.define([
     "sap/hanacli/common/controller/BaseController"
-],
-     function (BaseController) {
+], function (BaseController) {
+    "use strict";
 
-        return BaseController.extend("sap.hanacli.systemInfo.controller.App", {
-            onInit: function () {
-                this.getHanaStatus()
-                let hanaModel = this.getModel("hanaModel")
-                this.getView().setModel(hanaModel)
+    return BaseController.extend("sap.hanacli.systemInfo.controller.App", {
+
+        onInit: function () {
+            try {
+                this.getHanaStatus();
+
+                const hanaModel = this.getModel("hanaModel");
+                if (!hanaModel) {
+                    const resourceBundle = this.getResourceBundle();
+                    console.error(resourceBundle.getText("error.hanaModelNotFound"));
+                    return;
+                }
+
+                this.getView().setModel(hanaModel);
+            } catch (error) {
+                const resourceBundle = this.getResourceBundle();
+                const errorMsg = resourceBundle.getText("error.initializationFailed", ["systemInfo"]);
+                console.error(errorMsg + ":", error);
             }
-        })
-    }
-)
+        }
+    });
+});

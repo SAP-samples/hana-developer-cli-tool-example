@@ -1,12 +1,13 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 const tables = await import("./tables.js")
 
 export const command = 'tablesSQLite [table]'
 export const aliases = ['tablessqlite', 'tablesqlite', 'tablesSqlite', 'tables-sqlite', 'tables-sql', 'tablesSQL']
 export const describe = baseLite.bundle.getText("tablesSQLite")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t', 'Table'],
     type: 'string',
@@ -25,7 +26,10 @@ export const builder = baseLite.getBuilder({
     default: 200,
     desc: baseLite.bundle.getText("limit")
   }
-}, false)
+}, false)).wrap(160).example(
+  'hana-cli tablesSQLite --table * --schema main',
+  baseLite.bundle.getText("tablesSQLiteExample")
+).epilog(buildDocEpilogue('tablesSQLite', 'schema-tools', ['tables', 'tablesPG']))
 
 export let inputPrompts = {
   table: {

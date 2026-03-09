@@ -3,10 +3,11 @@ import * as baseLite from '../utils/base-lite.js'
 import * as cf from '../utils/cf.js'
 import * as btp from '../utils/btp.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'version'
 export const aliases = 'ver'
 export const describe = baseLite.bundle.getText("version")
-export const builder = baseLite.getBuilder({}, false)
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).wrap(160).example('hana-cli version', baseLite.bundle.getText("version")).wrap(160).epilog(buildDocEpilogue('version', 'system-tools', ['systemInfo', 'status']))
 export async function handler(argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, verOutput, {}, false)
@@ -27,14 +28,14 @@ export async function verOutput() {
   const info = await getVersion()
   base.stopSpinnerInt()
   Object.keys(info).forEach(key => log(highlight(`${key}: ${info[key]}`)))
-  console.log(`Node.js: ${colors.green(process.version)}`)
-  console.log(`Change Log: ${colors.blue('https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/CHANGELOG.md')}`)
+  console.log(baseLite.bundle.getText("version.node", [colors.green(process.version)]))
+  console.log(baseLite.bundle.getText("version.changelog", [colors.blue('https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/CHANGELOG.md')]))
 
 
-  let selfVersion = await latestVersion('hana-cli')
-  console.log(`Latest hana-cli version available on npmjs.com: ${colors.green(selfVersion)}`)
-  if (info['hana-cli'] < selfVersion) {
-    console.log(`${colors.red('Local version of hana-cli is out of date.')} Consider upgrading with "${colors.green('npm upgrade -g hana-cli')}"`)
+  const selfVersion = await getLatestHanaCliVersionWithTimeout(latestVersion)
+  console.log(baseLite.bundle.getText("version.latestAvailable", [colors.green(selfVersion || baseLite.bundle.getText("version.latestUnavailable"))]))
+  if (selfVersion && info['hana-cli'] < selfVersion) {
+    console.log(`${colors.red(baseLite.bundle.getText("version.outOfDate"))} ${baseLite.bundle.getText("version.upgradeHint", [colors.green('npm upgrade -g hana-cli')])}`)
   }
   // No need to call base.end() as there's no DB connection to clean up
   // Let the process exit naturally to avoid Windows libuv assertion errors
@@ -76,14 +77,14 @@ export async function getVersion() {
     cfVer = cfVer.replace(/(\r\n|\n|\r)/gm, "")
     info['cf-cli'] = cfVer
   } catch (error) {
-    info['cf-cli'] = `Cloud Foundry CLI not installed`
+    info['cf-cli'] = baseLite.bundle.getText("version.cfCliMissing")
   }
   try {
     let btpVer = await btp.getVersion()
     btpVer = btpVer.replace(/(\r\n|\n|\r)/gm, "")
     info['btp-cli'] = btpVer
   } catch (error) {
-    info['btp-cli'] = `btp CLI not installed`
+    info['btp-cli'] = baseLite.bundle.getText("version.btpCliMissing")
   }
   Object.defineProperty(info, 'home', { value: __dirname })
   info['hana-cli home'] = info.home
@@ -91,4 +92,44 @@ export async function getVersion() {
   if (process.env.DEBUG) info['hana-cli initial home'] = info.initialHome
 
   return info
+}
+
+export async function getVersionUI() {
+  const info = await getVersion()
+  const { default: latestVersion } = await import('latest-version')
+  
+  // Add Node.js version
+  info['Node.js'] = process.version
+  
+  // Add latest version
+  const selfVersion = await getLatestHanaCliVersionWithTimeout(latestVersion)
+  info['latestVersion'] = selfVersion || baseLite.bundle.getText("version.latestUnavailable")
+  
+  return info
+}
+
+/**
+ * Resolve latest hana-cli version from npm with a bounded timeout.
+ * Prevents command hangs in slow/offline environments.
+ * @param {(pkg: string) => Promise<string>} latestVersion
+ * @param {number} timeoutMs
+ * @returns {Promise<string|null>}
+ */
+async function getLatestHanaCliVersionWithTimeout(latestVersion, timeoutMs = 8000) {
+  try {
+    /** @type {NodeJS.Timeout | undefined} */
+    let timeoutHandle
+    const timeoutPromise = new Promise((_, reject) => {
+      timeoutHandle = setTimeout(() => reject(new Error('latest-version timeout')), timeoutMs)
+    })
+
+    const latest = await Promise.race([latestVersion('hana-cli'), timeoutPromise])
+    if (timeoutHandle) {
+      clearTimeout(timeoutHandle)
+    }
+
+    return typeof latest === 'string' && latest.length > 0 ? latest : null
+  } catch {
+    return null
+  }
 }

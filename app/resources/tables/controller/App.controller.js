@@ -1,83 +1,154 @@
-/* eslint-disable no-undef */
-/*eslint-env es6 */
+ 
 "use strict";
 sap.ui.define([
     "sap/hanacli/common/controller/BaseController",
     "sap/m/Text",
     "sap/m/Link",
     "sap/ui/table/Column"
-],
-    function (BaseController, Text, Link, Column) {
+], function (BaseController, Text, Link, Column) {
 
-        return BaseController.extend("sap.hanacli.tables.controller.App", {
+    const I18N_KEYS = {
+        ERROR_HTTP: "error.httpError"
+    };
 
-            onAppInit: function () {
+    return BaseController.extend("sap.hanacli.tables.controller.App", {
 
-                this.getHanaStatus()
-                this.getPrompts()
-                let model = this.getModel("promptsModel")
-                this.getView().setModel(model)
+        onAppInit: function () {
+            this.getHanaStatus();
+            this.getPrompts().then(() => {
+                const promptsModel = this.getModel("promptsModel");
+                if (!promptsModel) {
+                    return;
+                }
+                if (!promptsModel.getProperty("/schema")) {
+                    promptsModel.setProperty("/schema", "**CURRENT_SCHEMA**");
+                }
+                if (!promptsModel.getProperty("/table")) {
+                    promptsModel.setProperty("/table", "*");
+                }
+                if (!promptsModel.getProperty("/view")) {
+                    promptsModel.setProperty("/view", "*");
+                }
+                if (!promptsModel.getProperty("/user")) {
+                    promptsModel.setProperty("/user", "*");
+                }
+                if (!promptsModel.getProperty("/limit")) {
+                    promptsModel.setProperty("/limit", 200);
+                }
+            });
+            let model = this.getModel("promptsModel");
+            this.getView().setModel(model);
+        },
 
-            },
+        downloadExcel: function () {
+            window.open("/excel");
+            return;
+        },
 
-            downloadExcel: function () {
-                //Excel Download
-                window.open("/excel")
-                return
-            },
+        executeCmd: async function () {
+            this.startBusy();
+            this.updatePrompts().then(() => {
+                let cmd = this.getModel("config").getProperty("/cmd");
+                let aUrl = `/hana/${cmd}/`;
 
-            executeCmd: async function () {
-                this.startBusy()
-                this.updatePrompts().then(() => {
-                    let cmd = this.getModel("config").getProperty("/cmd")
-                    let aUrl = `/hana/${cmd}/`
-
-                    let oController = this
-                    jQuery.ajax({
-                        url: aUrl,
-                        method: "GET",
-                        dataType: "json",
-                        success: function (myJSON) {
-                            oController.endBusy(oController)
-                            let model = oController.getModel("resultsModel")
-                            let metaData = []
-                            if (myJSON[0]) {
-                                for (const key of Object.keys(myJSON[0])) {
-                                    metaData.push({ property: key })
-                                }
-                            }
-                            let data = { rows: myJSON, columns: metaData }
-                            model.setData(data)
-
-                            let oTable = oController.getView().byId("table")
-
-                            oTable.bindColumns('resultsModel>/columns', function (sId, oContext) {
-                                var sColumnId = oContext.getObject().property
-                                let template = new Text({ "text": { path: "resultsModel>" + sColumnId } })
-                                if(cmd === 'tables-ui' && sColumnId === 'TABLE_NAME'){
-                                    template = new Link({ "text": { path: "resultsModel>" + sColumnId }, "target": "_blank", "href": { path: "resultsModel>" + sColumnId, formatter: function(value){return `/ui/?tbl=${value}#inspectTable-ui`}  }})
-                                }
-                                if(cmd === 'views-ui' && sColumnId === 'VIEW_NAME'){
-                                    template = new Link({ "text": { path: "resultsModel>" + sColumnId }, "target": "_blank", "href": { path: "resultsModel>" + sColumnId, formatter: function(value){return `/ui/?viewInput=${value}#inspectView-ui`}  }})
-                                }
-                                return new Column({
-                                    id: sColumnId,
-                                    label: sColumnId,
-                                    template: template,
-                                    sortProperty: sColumnId,
-                                    filterProperty: sColumnId
-                                })
-                            })
-
-                        },
-                        error: function (error) {
-                            oController.onErrorCall(error, oController)
-                        }
+                let oController = this;
+                const resourceBundle = this.getResourceBundle();
+                
+                fetch(aUrl)
+                    .then(response => {
+                        return response.json().then(data => ({
+                            status: response.status,
+                            ok: response.ok,
+                            body: data
+                        }));
                     })
-                })
-            }
+                    .then(result => {
+                        if (!result.ok) {
+                            const errorMsg = result.body.message || resourceBundle.getText(I18N_KEYS.ERROR_HTTP, [result.status]);
+                            const error = new Error(errorMsg);
+                            error.response = result.body;
+                            throw error;
+                        }
 
+                        oController.endBusy();
+                        let model = oController.getModel("resultsModel");
+                        let metaData = [];
+                        if (result.body[0]) {
+                            for (const key of Object.keys(result.body[0])) {
+                                metaData.push({ property: key });
+                            }
+                        }
+                        let data = { rows: result.body, columns: metaData };
+                        model.setData(data);
 
-        })
-    }
-)
+                        let oTable = oController.getView().byId("table");
+
+                        oTable.bindColumns("resultsModel>/columns", function (sId, oContext) {
+                            var sColumnId = oContext.getObject().property;
+                            let template = new Text({ text: { path: "resultsModel>" + sColumnId } });
+                            if (cmd === "btpSubs-ui" && /url/i.test(sColumnId)) {
+                                template = new Link({
+                                    text: { path: "resultsModel>" + sColumnId },
+                                    target: "_blank",
+                                    href: { path: "resultsModel>" + sColumnId }
+                                });
+                            }
+                            if (cmd === "tables-ui" && sColumnId === "TABLE_NAME") {
+                                template = new Link({
+                                    text: { path: "resultsModel>" + sColumnId },
+                                    target: "_blank",
+                                    href: { path: "resultsModel>" + sColumnId, formatter: function(value) { return "/ui/?tbl=" + value + "#inspectTable-ui"; } }
+                                });
+                            }
+                            if (cmd === "views-ui" && sColumnId === "VIEW_NAME") {
+                                template = new Link({
+                                    text: { path: "resultsModel>" + sColumnId },
+                                    target: "_blank",
+                                    href: { path: "resultsModel>" + sColumnId, formatter: function(value) { return "/ui/?viewInput=" + value + "#inspectView-ui"; } }
+                                });
+                            }
+                            if (cmd === "procedures-ui" && sColumnId === "PROCEDURE_NAME") {
+                                template = new Link({
+                                    text: { path: "resultsModel>" + sColumnId },
+                                    target: "_blank",
+                                    href: {
+                                        parts: [
+                                            { path: "resultsModel>PROCEDURE_NAME" },
+                                            { path: "resultsModel>SCHEMA_NAME" }
+                                        ],
+                                        formatter: function (procedureName, schemaName) {
+                                            if (!procedureName) {
+                                                return "";
+                                            }
+                                            const proc = encodeURIComponent(procedureName);
+                                            const schema = schemaName ? "&schema=" + encodeURIComponent(schemaName) : "";
+                                            return "/ui/?proc=" + proc + schema + "#callProcedure-ui";
+                                        }
+                                    }
+                                });
+                            }
+                            return new Column({
+                                id: sColumnId,
+                                label: sColumnId,
+                                template: template,
+                                sortProperty: sColumnId,
+                                filterProperty: sColumnId
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        oController.onErrorCall(error, oController);
+                        oController.endBusy();
+                    });
+            });
+        },
+
+        /**
+         * Navigate to BTP Target Selection UI
+         */
+        navigateToBtpTarget: function () {
+            window.location.hash = "btp-ui";
+        }
+    });
+});
+

@@ -1,0 +1,91 @@
+// @ts-check
+import * as baseLite from '../utils/base-lite.js'
+
+import { buildDocEpilogue } from '../utils/doc-linker.js'
+export const command = 'cacheStats'
+export const aliases = []
+export const describe = baseLite.bundle.getText("cacheStats")
+
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
+  cacheType: {
+    alias: ['t'],
+    type: 'string',
+    choices: ['plan', 'result', 'all'],
+    default: 'all',
+    desc: baseLite.bundle.getText("cacheType")
+  },
+  limit: {
+    alias: ['l'],
+    type: 'number',
+    default: 50,
+    desc: baseLite.bundle.getText("limit")
+  }
+})).wrap(160).example('hana-cli cacheStats --cacheType all', baseLite.bundle.getText("cacheStats")).wrap(160).epilog(buildDocEpilogue('cacheStats', 'system-tools', ['memoryAnalysis', 'systemInfo']))
+
+export let inputPrompts = {
+  cacheType: {
+    description: baseLite.bundle.getText("cacheType"),
+    type: 'string',
+    required: true
+  },
+  limit: {
+    description: baseLite.bundle.getText("limit"),
+    type: 'number',
+    required: true
+  }
+}
+
+/**
+ * Command handler function
+ * @param {object} argv - Command line arguments from yargs
+ * @returns {Promise<void>}
+ */
+export async function handler(argv) {
+  const base = await import('../utils/base.js')
+  base.promptHandler(argv, getCacheStats, inputPrompts)
+}
+
+/**
+ * View SQL plan cache and result cache statistics
+ * @param {object} prompts - Input prompts with cacheType and limit
+ * @returns {Promise<{planCache?: Array, resultCache?: Array}>}
+ */
+export async function getCacheStats(prompts) {
+  const base = await import('../utils/base.js')
+  base.debug('getCacheStats')
+  try {
+    base.setPrompts(prompts)
+    const db = await base.createDBConnection()
+
+    const limit = base.validateLimit(prompts.limit)
+    const cacheType = prompts.cacheType || 'all'
+
+    /** @type {{planCache?: Array, resultCache?: Array}} */
+    const results = {}
+
+    if (cacheType === 'plan' || cacheType === 'all') {
+      let planQuery = 'SELECT * FROM SYS.M_SQL_PLAN_CACHE'
+      if (limit || base.sqlInjection.isAcceptableParameter(limit.toString())) {
+        planQuery += ` LIMIT ${limit.toString()}`
+      }
+      const planResults = await db.execSQL(planQuery)
+      results.planCache = planResults
+      base.outputTableFancy(planResults)
+    }
+
+    if (cacheType === 'result' || cacheType === 'all') {
+      let resultQuery = 'SELECT * FROM SYS.M_RESULT_CACHE'
+      if (limit || base.sqlInjection.isAcceptableParameter(limit.toString())) {
+        resultQuery += ` LIMIT ${limit.toString()}`
+      }
+      const resultResults = await db.execSQL(resultQuery)
+      results.resultCache = resultResults
+      base.outputTableFancy(resultResults)
+    }
+
+    base.end()
+    return results
+  } catch (error) {
+    await base.error(error)
+  }
+}

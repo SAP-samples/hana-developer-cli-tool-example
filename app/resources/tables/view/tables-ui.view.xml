@@ -4,17 +4,17 @@
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core"
 	xmlns="sap.m">
-	<ScrollContainer id="scTable" height="100%" width="100%" vertical="true" focusable="true">
-		<f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+	<ScrollContainer id="scrollContainerTables" height="100%" width="100%" vertical="true" focusable="true">
+		<f:SimpleForm id="SimpleFormToolbarTables" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
 			<f:toolbar>
 				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.toolbar" type="XML"/>
 			</f:toolbar>
 			<f:content>
 
-				<Toolbar id="tbTable" ariaLabelledBy="Title2">
-					<Title id="Title2" text="{i18nReuse>gui.target}"/>
-					<ToolbarSpacer id="tbSpacerTable" />
-					<Button id="btnTargetDetails" icon="sap-icon://settings" tooltip="{i18nReuse>gui.targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
+				<Toolbar id="targetToolbarTables" ariaLabelledBy="Title2Tables">
+					<Title id="Title2Tables" text="{i18nReuse>gui.target}"/>
+					<ToolbarSpacer id="spacerTables" />
+					<Button id="settingsButtonTables" icon="sap-icon://settings" tooltip="{i18nReuse>gui.targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
 				</Toolbar>
 
 				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.schema" type="XML"/>

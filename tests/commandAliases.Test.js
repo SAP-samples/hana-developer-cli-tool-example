@@ -319,6 +319,131 @@ describe('Command Alias Tests', function () {
         })
     })
 
+    describe('backup and recovery command aliases', function () {
+        this.timeout(10000)
+
+        it('should work with backup command', function (done) {
+            child_process.exec('node bin/cli.js backup --help', 
+                (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const notRecognized = stderr.includes('Unknown command')
+                    base.assert.ok(!notRecognized, '"backup" command should work')
+                    done()
+                })
+        })
+
+        it('should work with "bkp" alias', function (done) {
+            child_process.exec('node bin/cli.js bkp --help', 
+                (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const notRecognized = stderr.includes('Unknown command')
+                    base.assert.ok(!notRecognized, '"bkp" alias should work')
+                    done()
+                })
+        })
+
+        it('should work with "createBackup" alias', function (done) {
+            child_process.exec('node bin/cli.js createBackup --help', 
+                (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const notRecognized = stderr.includes('Unknown command')
+                    base.assert.ok(!notRecognized, '"createBackup" alias should work')
+                    done()
+                })
+        })
+
+        it('should work with backupList command', function (done) {
+            child_process.exec('node bin/cli.js backupList --help', 
+                (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const notRecognized = stderr.includes('Unknown command')
+                    base.assert.ok(!notRecognized, '"backupList" command should work')
+                    done()
+                })
+        })
+
+        it('should work with "blist" alias', function (done) {
+            child_process.exec('node bin/cli.js blist --help', 
+                (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const notRecognized = stderr.includes('Unknown command')
+                    base.assert.ok(!notRecognized, '"blist" alias should work')
+                    done()
+                })
+        })
+
+        it('should work with "listBackups" alias', function (done) {
+            child_process.exec('node bin/cli.js listBackups --help', 
+                (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const notRecognized = stderr.includes('Unknown command')
+                    base.assert.ok(!notRecognized, '"listBackups" alias should work')
+                    done()
+                })
+        })
+
+        it('should work with "backups" alias', function (done) {
+            child_process.exec('node bin/cli.js backups --help', 
+                (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const notRecognized = stderr.includes('Unknown command')
+                    base.assert.ok(!notRecognized, '"backups" alias should work')
+                    done()
+                })
+        })
+
+        it('should work with backupStatus command', function (done) {
+            child_process.exec('node bin/cli.js backupStatus --help', 
+                (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const notRecognized = stderr.includes('Unknown command')
+                    base.assert.ok(!notRecognized, '"backupStatus" command should work')
+                    done()
+                })
+        })
+
+        it('should work with "bstatus" alias', function (done) {
+            child_process.exec('node bin/cli.js bstatus --help', 
+                (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const notRecognized = stderr.includes('Unknown command')
+                    base.assert.ok(!notRecognized, '"bstatus" alias should work')
+                    done()
+                })
+        })
+
+        it('should work with restore command', function (done) {
+            child_process.exec('node bin/cli.js restore --help', 
+                (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const notRecognized = stderr.includes('Unknown command')
+                    base.assert.ok(!notRecognized, '"restore" command should work')
+                    done()
+                })
+        })
+
+        it('should work with "rst" alias', function (done) {
+            child_process.exec('node bin/cli.js rst --help', 
+                (error, stdout, stderr) => {
+                    base.addContext(this, { title: 'Stdout', value: stdout })
+                    
+                    const notRecognized = stderr.includes('Unknown command')
+                    base.assert.ok(!notRecognized, '"rst" alias should work')
+                    done()
+                })
+        })
+    })
+
     describe('Alias consistency check', function () {
         this.timeout(10000)
 

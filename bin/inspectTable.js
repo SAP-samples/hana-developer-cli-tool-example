@@ -4,26 +4,27 @@ import * as dbInspect from '../utils/dbInspect.js'
 import dbClass from "sap-hdb-promisfied"
 import * as conn from "../utils/connections.js"
 import cds from '@sap/cds'
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 global.__xRef = []
 
 export const command = 'inspectTable [schema] [table]'
 export const aliases = ['it', 'table', 'insTbl', 'inspecttable', 'inspectable']
 export const describe = baseLite.bundle.getText("inspectTable")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
-    alias: ['t', 'Table'],
+    alias: ['t'],
     type: 'string',
     desc: baseLite.bundle.getText("table")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
   },
   output: {
-    alias: ['o', 'Output'],
+    alias: ['o'],
     choices: ["tbl", "sql", "sqlite", "cds", "json", "yaml", "cdl", "annos", "edm", "edmx", "swgr", "openapi", "hdbtable", "hdbmigrationtable", "hdbcds", "jsdoc", "graphql", "postgres"],
     default: "tbl",
     type: 'string',
@@ -42,7 +43,7 @@ export const builder = baseLite.getBuilder({
     default: true
   },
   useQuoted: {
-    alias: ['q', 'quoted', 'quotedIdentifiers'],
+    alias: ['q', 'quoted'],
     desc: baseLite.bundle.getText("gui.useQuoted"),
     type: 'boolean',
     default: false
@@ -52,7 +53,7 @@ export const builder = baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("noColons")
   }
-})
+})).wrap(160).example('hana-cli inspectTable --table myTable --schema MYSCHEMA', baseLite.bundle.getText("inspectTableExample")).wrap(160).epilog(buildDocEpilogue('inspectTable', 'object-inspection', ['tables', 'inspectView', 'columnStats']))
 
 export let inputPrompts = {
   table: {

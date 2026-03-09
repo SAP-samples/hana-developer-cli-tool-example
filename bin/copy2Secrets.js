@@ -4,11 +4,12 @@ import * as fs from 'fs'
 import * as path from 'path'
 import * as xsenv from '@sap/xsenv'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'copy2Secrets'
 export const aliases = ['secrets', 'make:secrets']
 export const describe = baseLite.bundle.getText("copy2Secrets")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     envJson: {
         alias: ['from-file'],
         type: 'string',
@@ -25,7 +26,10 @@ export const builder = baseLite.getBuilder({
         type: 'string',
         desc: baseLite.bundle.getText("secretsFilter")
     }
-}, false)
+}, false)).wrap(160).example(
+  'hana-cli copy2Secrets --secretsFolder ./secrets',
+  baseLite.bundle.getText("copy2SecretsExample")
+).epilog(buildDocEpilogue('copy2Secrets', 'connection-auth', ['connect', 'copy2Env']))
 
 
 export async function handler (argv) {
@@ -36,7 +40,7 @@ export async function handler (argv) {
 export async function makeSecrets({ envFile, secretsFolder, filter }) {
   const base = await import('../utils/base.js')
 
-    base.debug(`makeSecrets ${envFile} ${secretsFolder} ${filter}`)
+        base.debug(base.bundle.getText("debug.copy2Secrets.makeSecrets", [envFile, secretsFolder, filter]))
     xsenv.loadEnv(envFile)
 
     const VCAP_SERVICES = JSON.parse(process.env.VCAP_SERVICES)

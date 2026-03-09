@@ -1,0 +1,108 @@
+<mvc:View controllerName="sap.hanacli.tables.controller.btp-ui" height="100%" width="100%"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+	<ScrollContainer id="scrollContainerBtp" height="100%" width="100%" vertical="true" focusable="true">
+		<f:SimpleForm id="simpleFormToolbarBtp" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false">
+			<f:toolbar>
+				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.toolbar" type="XML"/>
+			</f:toolbar>
+			<f:content>
+			</f:content>
+		</f:SimpleForm>
+
+		<!-- Global Account Info Panel -->
+		<Panel id="panelGlobalAccount" headerText="{i18n>btp.globalAccountInfo}" expandable="true" expanded="true" class="sapUiResponsiveMargin">
+			<VBox id="vboxGlobalAccount" class="sapUiSmallMargin">
+				<HBox id="hboxGlobalAccountName" alignItems="Center" class="sapUiTinyMarginBottom">
+					<core:Icon id="iconBuilding" src="sap-icon://building" size="1.5rem" color="#0070f2" class="sapUiTinyMarginEnd"/>
+					<VBox id="vboxGlobalAccountName">
+						<Label id="lblGlobalAccountName" text="{i18n>btp.globalAccountName}" design="Bold"/>
+						<Text id="txtGlobalAccountName" text="{btpModel>/globalAccount/displayName}"/>
+					</VBox>
+				</HBox>
+				<HBox id="hboxGlobalAccountGuid" alignItems="Center" class="sapUiTinyMarginTop">
+					<core:Icon id="iconKeyGlobal" src="sap-icon://key" size="1.5rem" color="#0070f2" class="sapUiTinyMarginEnd"/>
+					<VBox id="vboxGlobalAccountGuid">
+						<Label id="lblGlobalAccountGuid" text="{i18n>btp.globalAccountGuid}" design="Bold"/>
+						<Text id="txtGlobalAccountGuid" text="{btpModel>/globalAccount/guid}"/>
+					</VBox>
+				</HBox>
+				<HBox id="hboxCurrentTarget" alignItems="Center" class="sapUiTinyMarginTop" visible="{= ${btpModel>/currentTarget} !== null }">
+					<core:Icon id="iconTargetGroup" src="sap-icon://target-group" size="1.5rem" color="#28a745" class="sapUiTinyMarginEnd"/>
+					<VBox id="vboxCurrentTarget">
+						<Label id="lblCurrentTarget" text="{i18n>btp.currentTarget}" design="Bold"/>
+						<Text id="txtCurrentTargetName" text="{btpModel>/currentTarget/displayName}"/>
+						<Text id="txtCurrentTargetGuid" text="{btpModel>/currentTarget/guid}" class="sapUiTinyText"/>
+					</VBox>
+				</HBox>
+			</VBox>
+		</Panel>
+
+		<!-- Tree Selection Panel -->
+		<Panel id="panelTreeSelection" headerText="{i18n>btp.selectSubaccount}" expandable="true" expanded="true" class="sapUiResponsiveMargin">
+			<VBox id="vboxTreeSelection" class="sapUiSmallMargin">
+				<Text id="txtTreeDescription" text="{i18n>btp.selectSubaccountDescription}" class="sapUiSmallMarginBottom"/>
+				
+				<Tree 
+					id="btpTree"
+					items="{
+						path: 'btpModel>/treeData',
+						parameters: {
+							arrayNames: ['nodes']
+						}
+					}"
+					mode="SingleSelectMaster"
+					selectionChange=".onTreeItemSelect">
+					<StandardTreeItem id="treeItem"
+						title="{btpModel>text}"
+						icon="{btpModel>icon}"						
+						type="{= ${btpModel>type} === 'subaccount' ? 'Active' : 'Inactive' }"/>
+				</Tree>
+
+				<Toolbar id="toolbarActions" class="sapUiTinyMarginTop">
+					<ToolbarSpacer id="toolbarSpacer"/>
+					<Button 
+						id="btnSetTarget"
+						text="{i18n>btp.setTarget}" 
+						type="Emphasized" 
+						press=".onSetTarget"
+						enabled="{= ${btpModel>/selectedSubaccount} !== null }"
+						icon="sap-icon://target-group"/>
+					<Button 
+						id="btnRefresh"
+						text="{i18n>btp.refresh}" 
+						press=".onRefresh"
+						icon="sap-icon://refresh"/>
+				</Toolbar>
+			</VBox>
+		</Panel>
+
+		<!-- Selected Subaccount Info Panel -->
+		<Panel id="panelSelectedSubaccount" 
+			headerText="{i18n>btp.selectedSubaccount}" 
+			expandable="true" 
+			expanded="true" 
+			visible="{= ${btpModel>/selectedSubaccount} !== null }"
+			class="sapUiResponsiveMargin">
+			<VBox id="vboxSelectedSubaccount" class="sapUiSmallMargin">
+				<HBox id="hboxSelectedSubaccountName" alignItems="Center" class="sapUiTinyMarginBottom">
+					<core:Icon id="iconPost" src="sap-icon://post" size="1.5rem" color="#0070f2" class="sapUiTinyMarginEnd"/>
+					<VBox id="vboxSelectedSubaccountName">
+						<Label id="lblSelectedSubaccountName" text="{i18n>btp.subaccountName}" design="Bold"/>
+						<Text id="txtSelectedSubaccountName" text="{btpModel>/selectedSubaccount/text}"/>
+					</VBox>
+				</HBox>
+				<HBox id="hboxSelectedSubaccountGuid" alignItems="Center" class="sapUiTinyMarginTop">
+					<core:Icon id="iconKeySelected" src="sap-icon://key" size="1.5rem" color="#0070f2" class="sapUiTinyMarginEnd"/>
+					<VBox id="vboxSelectedSubaccountGuid">
+						<Label id="lblSelectedSubaccountGuid" text="{i18n>btp.subaccountGuid}" design="Bold"/>
+						<Text id="txtSelectedSubaccountGuid" text="{btpModel>/selectedSubaccount/guid}"/>
+					</VBox>
+				</HBox>
+			</VBox>
+		</Panel>
+	</ScrollContainer>
+</mvc:View>

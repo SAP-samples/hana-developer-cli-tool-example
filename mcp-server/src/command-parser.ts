@@ -1,3 +1,5 @@
+import { COMMAND_METADATA_MAP } from './command-metadata.js';
+
 /**
  * JSON Schema type for MCP tool parameters
  */
@@ -84,7 +86,42 @@ export interface CommandInfo {
   name: string;
   aliases?: string[];
   description: string;
+  category?: string;
+  tags?: string[];
+  useCases?: string[];
+  relatedCommands?: string[];
   schema: JSONSchema;
+}
+
+/**
+ * Attempts to get the builder object from a command module
+ * Handles both direct object builders and function-based builders
+ */
+function getBuilderObject(commandModule: any): any {
+  if (!commandModule.builder) {
+    return {};
+  }
+
+  // If builder is an object, return it directly
+  if (typeof commandModule.builder === 'object' && typeof commandModule.builder !== 'function') {
+    return commandModule.builder;
+  }
+
+  // If builder is a function, try to call it to get the builder object
+  if (typeof commandModule.builder === 'function') {
+    try {
+      // Try calling without arguments first (many builders don't need args)
+      const result = commandModule.builder({});
+      if (result && typeof result === 'object') {
+        return result;
+      }
+    } catch (e) {
+      // If that fails, just return empty object
+      // Function-based builders will be handled at runtime
+    }
+  }
+
+  return {};
 }
 
 export function extractCommandInfo(commandModule: any): CommandInfo {
@@ -98,16 +135,21 @@ export function extractCommandInfo(commandModule: any): CommandInfo {
   
   const description = commandModule.describe || commandModule.description || `Execute ${name} command`;
   
-  const schema = yargsBuilderToJsonSchema(
-    typeof commandModule.builder === 'function' 
-      ? {} // Can't introspect function builders easily
-      : commandModule.builder || {}
-  );
+  // Get builder object, handling both direct objects and functions
+  const builderObject = getBuilderObject(commandModule);
+  const schema = yargsBuilderToJsonSchema(builderObject);
+
+  // Get metadata if available
+  const metadata = COMMAND_METADATA_MAP[name];
 
   return {
     name,
     aliases,
     description,
+    category: metadata?.category,
+    tags: metadata?.tags,
+    useCases: metadata?.useCases,
+    relatedCommands: metadata?.relatedCommands,
     schema
   };
 }

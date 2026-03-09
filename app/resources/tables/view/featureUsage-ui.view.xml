@@ -4,8 +4,8 @@
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core"
 	xmlns="sap.m">
-	<ScrollContainer height="100%" width="100%" vertical="true" focusable="true">
-		<f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+	<ScrollContainer id="scrollContainerFeatureUsage" height="100%" width="100%" vertical="true" focusable="true">
+		<f:SimpleForm id="SimpleFormToolbarFeatureUsage" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
 			<f:toolbar>
 				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.toolbar" type="XML"/>
 			</f:toolbar>

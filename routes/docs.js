@@ -9,6 +9,21 @@ import { fileURLToPath } from 'url'
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 export function route(app) {
+    /**
+     * @swagger
+     * /docs/readme:
+     *   get:
+     *     tags: [Documentation]
+     *     summary: Get README documentation
+     *     description: Returns the project README as HTML
+     *     responses:
+     *       200:
+     *         description: README content in HTML format
+     *         content:
+     *           text/html:
+     *             schema:
+     *               type: string
+     */
     app.get('/docs/readme', async (req, res, next) => {
         try {
             let mdReadMe = await fs.readFile(path.resolve(__dirname, "../README.md"), "utf-8")
@@ -21,6 +36,21 @@ export function route(app) {
         }
     })
 
+    /**
+     * @swagger
+     * /docs/changelog:
+     *   get:
+     *     tags: [Documentation]
+     *     summary: Get CHANGELOG documentation
+     *     description: Returns the project CHANGELOG as HTML
+     *     responses:
+     *       200:
+     *         description: CHANGELOG content in HTML format
+     *         content:
+     *           text/html:
+     *             schema:
+     *               type: string
+     */
     app.get('/docs/changelog', async (req, res, next) => {
         try {
             let mdChangeLog = await fs.readFile(path.resolve(__dirname, "../CHANGELOG.md"), "utf-8")

@@ -1,4 +1,3 @@
-/*eslint-env node, es6 */
 // @ts-check
 
 import * as base from './base.js'
@@ -9,6 +8,7 @@ import * as dbInspect from '../utils/dbInspect.js'
 import * as fs from 'fs'
 import JSZip from 'jszip'
 
+/** @type {any} */
 const progressBarOptionsTemplate = {
     // width: 80,
     eta: true,
@@ -22,7 +22,7 @@ const progressBarOptionsTemplate = {
  * @param {number} length
  */
 function getProcessBarTableOptions(prompts, length) {
-    let progressBarOptions = progressBarOptionsTemplate
+    let progressBarOptions = { ...progressBarOptionsTemplate }
     progressBarOptions.title = base.bundle.getText('mass.tblupd', [prompts.output])
     progressBarOptions.items = length
     return progressBarOptions
@@ -33,7 +33,7 @@ function getProcessBarTableOptions(prompts, length) {
  * @param {number} length
  */
 function getProcessBarViewOptions(prompts, length) {
-    let progressBarOptions = progressBarOptionsTemplate
+    let progressBarOptions = { ...progressBarOptionsTemplate }
     progressBarOptions.title = base.bundle.getText('mass.viewupd', [prompts.output])
     progressBarOptions.items = length
     return progressBarOptions
@@ -66,12 +66,12 @@ async function hdbtableTablesSQL(prompts, results, wss, db, schema, replacer, zi
             output = await removeCSTypes(db, output)
             await zip.file(table.TABLE_NAME.toString() + ".hdbtable", output + "\n\n")
             progressBar.itemDone(table.TABLE_NAME)
-            logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
+            logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
                 progressBar.itemDone(table.TABLE_NAME)
-                logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
+                logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 progressBar.stop()
                 base.error(error)
@@ -112,12 +112,12 @@ async function hdbtableViewsSQL(prompts, viewResults, wss, db, schema, replacer,
             output = await removeCSTypes(db, output)
             await zip.file(view.VIEW_NAME.toString() + ".hdbview", output + "\n\n")
             viewProgressBar.itemDone(view.VIEW_NAME)
-            logOutput.push({ object: view.VIEW_NAME, status: 'Success' })
+            logOutput.push({ object: view.VIEW_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
                 viewProgressBar.itemDone(view.VIEW_NAME)
-                logOutput.push({ object: view.VIEW_NAME, status: 'Error', message: error })
+                logOutput.push({ object: view.VIEW_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 viewProgressBar.stop()
                 base.error(error)
@@ -163,12 +163,12 @@ async function hdbtableTables(prompts, results, wss, db, schema, replacer, zip, 
             }
             await zip.file(table.TABLE_NAME.toString() + ".hdbtable", output + "\n\n")
             progressBar.itemDone(table.TABLE_NAME)
-            logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
+            logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
                 progressBar.itemDone(table.TABLE_NAME)
-                logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
+                logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 progressBar.stop()
                 base.error(error)
@@ -216,14 +216,14 @@ async function hdbtableViews(prompts, viewResults, wss, db, schema, replacer, zi
                 output = src
                 output = await addAssociations(db, schema, view.VIEW_NAME, output)
             }
-            await zip.file(view.VIEW_NAME.toString() + ".hdbtable", output + "\n\n")
+            await zip.file(view.VIEW_NAME.toString() + ".hdbview", output + "\n\n")
             viewProgressBar.itemDone(view.VIEW_NAME)
-            logOutput.push({ object: view.VIEW_NAME, status: 'Success' })
+            logOutput.push({ object: view.VIEW_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
                 viewProgressBar.itemDone(view.VIEW_NAME)
-                logOutput.push({ object: view.VIEW_NAME, status: 'Error', message: error })
+                logOutput.push({ object: view.VIEW_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 viewProgressBar.stop()
                 base.error(error)
@@ -263,12 +263,12 @@ async function hdbmigrationtableTablesSQL(prompts, results, wss, db, schema, rep
             output = await removeCSTypes(db, output)
             await zip.file(table.TABLE_NAME.toString() + ".hdbmigrationtable", output + "\n\n")
             progressBar.itemDone(table.TABLE_NAME)
-            logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
+            logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
                 progressBar.itemDone(table.TABLE_NAME)
-                logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
+                logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 progressBar.stop()
                 base.error(error)
@@ -315,12 +315,12 @@ async function hdbmigrationtableTables(prompts, results, wss, db, schema, replac
             }
             await zip.file(table.TABLE_NAME.toString() + ".hdbmigrationtable", output + "\n\n")
             progressBar.itemDone(table.TABLE_NAME)
-            logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
+            logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
                 progressBar.itemDone(table.TABLE_NAME)
-                logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
+                logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 progressBar.stop()
                 base.error(error)
@@ -363,12 +363,12 @@ async function cdsTables(prompts, results, wss, db, schema, cdsSource, logOutput
             }
             cdsSource += await dbInspect.formatCDS(db, object, fields, constraints, "table", schema, null) + '\n'
             progressBar.itemDone(table.TABLE_NAME)
-            logOutput.push({ object: table.TABLE_NAME, status: 'Success' })
+            logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
                 progressBar.itemDone(table.TABLE_NAME)
-                logOutput.push({ object: table.TABLE_NAME, status: 'Error', message: error })
+                logOutput.push({ object: table.TABLE_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 progressBar.stop()
                 base.error(error)
@@ -414,12 +414,12 @@ async function cdsViews(prompts, viewResults, wss, db, schema, cdsSource, logOut
             cdsSource += await dbInspect.formatCDS(db, object, fields, null, "view", schema, null, parameters)
 
             viewProgressBar.itemDone(view.VIEW_NAME)
-            logOutput.push({ object: view.VIEW_NAME, status: 'Success' })
+            logOutput.push({ object: view.VIEW_NAME, status: base.bundle.getText('status.success') })
         }
         catch (error) {
             if (prompts.log) {
                 viewProgressBar.itemDone(view.VIEW_NAME)
-                logOutput.push({ object: view.VIEW_NAME, status: 'Error', message: error })
+                logOutput.push({ object: view.VIEW_NAME, status: base.bundle.getText('status.error'), message: error })
             } else {
                 viewProgressBar.stop()
                 base.error(error)
@@ -443,15 +443,13 @@ async function cdsViews(prompts, viewResults, wss, db, schema, cdsSource, logOut
 async function writeZip(prompts, wss, zip, logOutput) {
     base.blankLine()
     let dir = prompts.folder
-    !fs.existsSync(dir) && fs.mkdirSync(dir)
+    await fsp.mkdir(dir, { recursive: true })
     let data = await zip.generateAsync({
         type: 'nodebuffer',
         compression: "DEFLATE"
     })
-    let filename = prompts.filename || dir + 'export.zip'
-    fs.writeFile(filename, data, 'binary', (err) => {
-        if (err) throw err
-    })
+    let filename = prompts.filename || path.join(dir, 'export.zip')
+    await fsp.writeFile(filename, data)
     let finishMessage = `${base.bundle.getText("contentWritten")}: ${filename}`
     if (prompts.log) {
         await writeLog(prompts, wss, dir, logOutput)
@@ -472,11 +470,9 @@ async function writeZip(prompts, wss, zip, logOutput) {
 async function writeCDS(prompts, wss, cdsSource, logOutput) {
     base.blankLine()
     let dir = prompts.folder
-    !fs.existsSync(dir) && fs.mkdirSync(dir)
-    let filename = prompts.filename || dir + 'export.cds'
-    fs.writeFile(filename, cdsSource, (err) => {
-        if (err) throw err
-    })
+    await fsp.mkdir(dir, { recursive: true })
+    let filename = prompts.filename || path.join(dir, 'export.cds')
+    await fsp.writeFile(filename, cdsSource)
     let finishMessage = `${base.bundle.getText("contentWritten")}: ${filename}`
     if (prompts.log) {
         await writeLog(prompts, wss, dir, logOutput)
@@ -503,7 +499,7 @@ async function writeSynonyms(prompts, wss) {
             prompts.synonyms,
             JSON.stringify(dbInspect.results.synonyms, null, '\t')
         )
-        let finishMessage2 = `Synonyms are written to ${prompts.synonyms} file`
+        let finishMessage2 = base.bundle.getText('massConvert.synonymsWritten', [prompts.synonyms])
         console.log(finishMessage2)
         broadcast(wss, finishMessage2, 100)
         return
@@ -520,11 +516,9 @@ async function writeSynonyms(prompts, wss) {
  */
 async function writeLog(prompts, wss, dir, logOutput) {
     base.outputTableFancy(logOutput)
-    let logFilename = prompts.filename || dir + 'log'
+    let logFilename = prompts.filename || path.join(dir, 'log')
     logFilename = `${logFilename}.json`
-    fs.writeFile(logFilename, JSON.stringify(logOutput), (err) => {
-        if (err) throw err
-    })
+    await fsp.writeFile(logFilename, JSON.stringify(logOutput))
     let logMessage = `${base.bundle.getText("logWritten")}: ${logFilename}`
     console.log(logMessage)
     broadcast(wss, logMessage, 100)
@@ -634,7 +628,7 @@ export async function convert(wss) {
  * @returns {Promise<any>} - Array of Table Info 
  */
 async function getTablesInt(schema, table, client, limit) {
-    base.debug(`getTablesInt ${schema} ${table} ${limit}`)
+    base.debug(base.bundle.getText("debug.callWithParams", ["getTablesInt", `${schema} ${table} ${limit}`]))
     table = base.dbClass.objectName(table)
     //            AND IS_USER_DEFINED_TYPE = 'FALSE'
     let query =
@@ -642,8 +636,9 @@ async function getTablesInt(schema, table, client, limit) {
             WHERE SCHEMA_NAME LIKE ? 
             AND TABLE_NAME LIKE ? 
             ORDER BY SCHEMA_NAME, TABLE_NAME `
-    if (limit || base.sqlInjectionUtils.isAcceptableParameter(limit.toString())) {
-        query += `LIMIT ${limit.toString()}`
+    const safeLimit = getSafeLimit(limit)
+    if (safeLimit !== undefined) {
+        query += `LIMIT ${safeLimit}`
     }
     let results = await client.statementExecPromisified(await client.preparePromisified(query), [schema, table])
     return results
@@ -658,18 +653,31 @@ async function getTablesInt(schema, table, client, limit) {
  * @returns {Promise<any>} - Array of View Info 
  */
 async function getViewsInt(schema, view, client, limit) {
-    base.debug(`getViewsInt ${schema} ${view} ${limit}`)
+    base.debug(base.bundle.getText("debug.callWithParams", ["getViewsInt", `${schema} ${view} ${limit}`]))
     view = base.dbClass.objectName(view)
     let query =
         `SELECT SCHEMA_NAME, VIEW_NAME, TO_NVARCHAR(VIEW_OID) AS VIEW_OID, COMMENTS  from VIEWS 
             WHERE SCHEMA_NAME LIKE ? 
             AND VIEW_NAME LIKE ? 
             ORDER BY SCHEMA_NAME, VIEW_NAME `
-    if (limit || base.sqlInjectionUtils.isAcceptableParameter(limit.toString())) {
-        query += `LIMIT ${limit.toString()}`
+    const safeLimit = getSafeLimit(limit)
+    if (safeLimit !== undefined) {
+        query += `LIMIT ${safeLimit}`
     }
     let results = await client.statementExecPromisified(await client.preparePromisified(query), [schema, view])
     return results
+}
+
+/**
+ * Validate and normalize limit values to avoid SQL injection
+ * @param {any} limit
+ * @returns {number|undefined}
+ */
+function getSafeLimit(limit) {
+    if (limit === undefined || limit === null || limit === '') {
+        return undefined
+    }
+    return base.validateLimit(limit, 'limit')
 }
 
 /**
@@ -689,13 +697,15 @@ async function escapeRegExp(string) {
  */
 function broadcast(wss, msg, progress) {
     if (wss) {
-        if (progress) {
+        if (progress !== undefined && progress !== null) {
             wss.broadcast(msg, progress)
         } else {
             wss.broadcast(msg)
         }
     }
 }
+
+let cachedCSTypes = null
 
 /**
  * Remove the HANA Column Store Types 
@@ -705,14 +715,16 @@ function broadcast(wss, msg, progress) {
  */
 async function removeCSTypes(client, output) {
     try {
-        base.debug(`removeCSTypes}`)
-        let query =
-            `SELECT DISTINCT CS_DATA_TYPE_NAME from TABLE_COLUMNS ORDER BY LENGTH(CS_DATA_TYPE_NAME) DESC`
-        let results = await client.statementExecPromisified(await client.preparePromisified(query))
-        for (let type of results) {
-            const search = `CS_${type.CS_DATA_TYPE_NAME}`
-            const replacer =
-                new RegExp(await escapeRegExp(search), 'g')
+        base.debug(base.bundle.getText("debug.call", ["removeCSTypes"]))
+        if (!cachedCSTypes) {
+            let query =
+                `SELECT DISTINCT CS_DATA_TYPE_NAME from TABLE_COLUMNS ORDER BY LENGTH(CS_DATA_TYPE_NAME) DESC`
+            let results = await client.statementExecPromisified(await client.preparePromisified(query))
+            cachedCSTypes = results.map(result => result.CS_DATA_TYPE_NAME)
+        }
+        for (let type of cachedCSTypes) {
+            const search = `CS_${type}`
+            const replacer = new RegExp(await escapeRegExp(search), 'g')
             output = output.replace(replacer, '')
         }
         return output
@@ -732,7 +744,7 @@ async function removeCSTypes(client, output) {
  */
 async function addAssociations(client, schema, table, output) {
     try {
-        base.debug(`addAssociations}`)
+        base.debug(base.bundle.getText("debug.call", ["addAssociations"]))
         let query =
             `SELECT * FROM ASSOCIATIONS WHERE SCHEMA_NAME = ? and OBJECT_NAME = ?`
         let results = await client.statementExecPromisified(await client.preparePromisified(query), [schema, table])

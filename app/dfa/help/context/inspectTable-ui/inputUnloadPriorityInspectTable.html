@@ -1,0 +1,18 @@
+<body>
+    <div class="body conbody">
+        <p class="shortdesc">Memory Unload Priority</p>
+        <p class="p">
+            This field displays the unload priority setting for the table, which determines the order in which tables 
+            are unloaded from memory when the system needs to free up memory resources.
+        </p>
+        <p class="p">
+            Unload priority is a numeric value (typically 0-9) where higher values indicate higher priority to remain 
+            in memory. Tables with higher priority are unloaded later, ensuring that frequently accessed or critical 
+            tables stay in memory longer.
+        </p>
+        <p class="p">
+            A priority of <span class="ph uicontrol">5</span> is the default. Setting a higher priority (6-9) keeps the 
+            table in memory longer, while a lower priority (0-4) allows it to be unloaded sooner when memory pressure occurs.
+        </p>
+    </div>
+</body>

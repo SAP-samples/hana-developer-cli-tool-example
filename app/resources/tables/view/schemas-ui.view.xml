@@ -4,25 +4,25 @@
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core"
 	xmlns="sap.m">
-	<ScrollContainer height="100%" width="100%" vertical="true" focusable="true">
-		<f:SimpleForm id="SimpleFormToolbar" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+	<ScrollContainer id="scrollContainerSchemas" height="100%" width="100%" vertical="true" focusable="true">
+		<f:SimpleForm id="SimpleFormToolbarSchemas" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
 			<f:toolbar>
 				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.toolbar" type="XML"/>
 			</f:toolbar>
 			 	<f:content>
 
-				<Toolbar ariaLabelledBy="Title2">
-					<Title id="Title2" text="{i18nReuse>gui.target}"/>
-					<ToolbarSpacer />
-					<Button icon="sap-icon://settings" tooltip="{i18nReuse>gui.targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
+				<Toolbar id="targetToolbarSchemas" ariaLabelledBy="Title2Schemas">
+					<Title id="Title2Schemas" text="{i18nReuse>gui.target}"/>
+					<ToolbarSpacer id="spacerSchemas" />
+					<Button id="settingsButtonSchemas" icon="sap-icon://settings" tooltip="{i18nReuse>gui.targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
 				</Toolbar>
 
 				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.schema" type="XML"/>
 
-				<Label text="{i18nReuse>limit}" required="true"/>
-				<Input value="{/limit}" />
-				<Label text="{i18nReuse>allSchemas}" />
-				<CheckBox selected="{/all}" />
+				<Label id="labelLimitSchemas" text="{i18nReuse>limit}" required="true"/>
+				<Input id="limitSchemas" value="{/limit}" />
+				<Label id="labelAllSchemas" text="{i18nReuse>allSchemas}" />
+				<CheckBox id="checkBoxAllSchemas" selected="{/all}" />
 
 				<core:Fragment fragmentName="sap.hanacli.common.view.Connection" type="XML"/>
 				<core:Fragment fragmentName="sap.hanacli.common.view.Debug" type="XML"/>

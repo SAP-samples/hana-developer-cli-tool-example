@@ -2,11 +2,18 @@
 import * as baseLite from '../utils/base-lite.js'
 import * as  conn from '../utils/connections.js'
 import * as xsenv from '@sap/xsenv'
-import { spawn } from 'child_process'
+import { spawn, spawnSync } from 'child_process'
+
+import { buildDocEpilogue } from '../utils/doc-linker.js'
+function isCommandAvailable(command) {
+  const checkCommand = process.platform === 'win32' ? 'where' : 'which'
+  const result = spawnSync(checkCommand, [command], { stdio: 'ignore' })
+  return result.status === 0
+}
 
 export const command = 'hdbsql'
 export const describe = baseLite.bundle.getText("hdbsql")
-export const builder = baseLite.getBuilder({})
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({})).wrap(160).example('hana-cli hdbsql', baseLite.bundle.getText("hdbsqlExample")).wrap(160).epilog(buildDocEpilogue('hdbsql', 'developer-tools', ['querySimple', 'callProcedure']))
 export async function handler (argv) {
   const base = await import('../utils/base.js')
   base.promptHandler(argv, launchHdbsql, {})
@@ -35,8 +42,11 @@ export async function launchHdbsql(prompts) {
       }
     }
     base.debug(options)
+    if (!isCommandAvailable('hdbsql')) {
+      throw new Error(`hdbsql not found in PATH. ${baseLite.bundle.getText("hdbsql")}`)
+    }
     let cmd = `hdbsql -u ${options.hana.user} -n ${options.hana.host + ":" + options.hana.port} -p ${options.hana.password} ${encrypt} -A -m -j`
-    await spawn(cmd, [], { shell: true, stdio: 'inherit' })
+    spawnSync(cmd, [], { shell: true, stdio: 'inherit' })
     return base.end()
   } catch (error) {
     await base.error(error)

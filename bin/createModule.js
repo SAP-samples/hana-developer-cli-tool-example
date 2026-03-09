@@ -3,13 +3,14 @@ import * as baseLite from '../utils/base-lite.js'
 import * as fs from 'fs'
 import latestVersion from 'latest-version'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'createModule'
 export const aliases = ['createDB', 'createDBModule']
 export const describe = baseLite.bundle.getText("createModule")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     folder: {
-        alias: ['f', 'Folder'],
+        alias: ['f', 'folder'],
         type: 'string',
         default: 'db',
         desc: baseLite.bundle.getText("folder")
@@ -20,7 +21,7 @@ export const builder = baseLite.getBuilder({
         default: true,
         desc: baseLite.bundle.getText("hanaCloud")
     }
-}, false)
+}, false)).wrap(160).example('hana-cli createModule --folder db', baseLite.bundle.getText("createModuleExample")).wrap(160).epilog(buildDocEpilogue('createModule', 'developer-tools', ['generateTestData', 'codeTemplate']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')
@@ -69,7 +70,7 @@ if (fs.existsSync('../package.json')) {
 
  
     let hdiVersion = await latestVersion('@sap/hdi-deploy')
-    base.debug(`HDI Version ${hdiVersion}`)
+    base.debug(base.bundle.getText("debug.createModule.hdiVersion", [hdiVersion]))
     var packageContent = ``
     if (prompts.hanaCloud) {
         packageContent = `
@@ -417,6 +418,6 @@ if (fs.existsSync('../package.json')) {
     fs.writeFile(dir + '/src/.hdiconfig', hdiconfig, (err) => {
         if (err) throw err
     })
-    console.log('Module Updated')
+    console.log(baseLite.bundle.getText("createModule.updated"))
     return base.end()
 }

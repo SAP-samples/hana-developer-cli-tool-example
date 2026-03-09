@@ -1,19 +1,20 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'indexes [schema] [indexes]'
 export const aliases = ['ind', 'listIndexes', 'ListInd', 'listind', 'Listind', "listfindexes"]
 export const describe = baseLite.bundle.getText("indexes")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   indexes: {
-    alias: ['i', 'Indexes'],
+    alias: ['i'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("function")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
@@ -23,8 +24,16 @@ export const builder = baseLite.getBuilder({
     type: 'number',
     default: 200,
     desc: baseLite.bundle.getText("limit")
+  },
+  profile: {
+    alias: ['p'],
+    type: 'string',
+    desc: baseLite.bundle.getText("profile")
   }
-})
+})).wrap(160).example(
+  'hana-cli indexes --indexes myIndex --schema MYSCHEMA',
+  baseLite.bundle.getText("indexesExample")
+).epilog(buildDocEpilogue('indexes', 'schema-tools', ['inspectIndex', 'tables', 'tableHotspots']))
 
 export let inputPrompts = {
   indexes: {
@@ -57,7 +66,7 @@ export async function getIndexes(prompts) {
     const db = await base.createDBConnection()
 
     let schema = await base.dbClass.schemaCalc(prompts, db)
-    base.output(`Schema: ${schema}, Index: ${prompts.indexes}`)
+    base.output(base.bundle.getText("log.schemaIndex", [schema, prompts.indexes]))
 
     let results = await getIndexesInt(schema, prompts.indexes, db, prompts.limit)
     base.outputTableFancy(results)
@@ -71,6 +80,7 @@ export async function getIndexes(prompts) {
 
 async function getIndexesInt(schema, indexes, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getIndexesInt ${schema} ${indexes} ${limit}`)
   indexes = base.dbClass.objectName(indexes)
 

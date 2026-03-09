@@ -1,0 +1,18 @@
+<body>
+    <div class="body conbody">
+        <p class="shortdesc">Preload Configuration</p>
+        <p class="p">
+            This field indicates whether the table is configured for preloading into memory during database startup. 
+            The value will be <span class="ph uicontrol">TRUE</span> if preload is enabled, or <span class="ph uicontrol">FALSE</span> otherwise.
+        </p>
+        <p class="p">
+            Preloading ensures that table data is loaded into memory immediately when the SAP HANA database starts, 
+            rather than waiting for the first query to access it. This can significantly improve the performance of 
+            initial queries against the table.
+        </p>
+        <p class="p">
+            Preload is typically enabled for frequently accessed tables where fast initial response time is critical. 
+            However, it increases database startup time and memory consumption.
+        </p>
+    </div>
+</body>

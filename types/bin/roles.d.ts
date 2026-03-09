@@ -13,4 +13,4 @@ export function getRoles(prompts: object): Promise<any[]>;
 export const command: "roles [schema] [role]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;

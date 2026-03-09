@@ -1,0 +1,5 @@
+
+> hana-cli@4.202603.0 test:e2e
+> node -e "if(process.env.CI==='true'){console.log('Skipping E2E tests in CI');process.exit(0)}process.exit(1)" || cross-env NODE_ENV=test mocha --config=tests/.mocharc.e2e.json "./tests/e2e/**/*.e2e.Test.js"
+
+

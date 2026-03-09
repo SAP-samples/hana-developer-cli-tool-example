@@ -3,4 +3,4 @@ export function rename(result: any): Promise<void>;
 export const command: "massRename";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;

@@ -1,5 +1,4 @@
-/*eslint-env node, es6, mocha */
-// @ts-check
+// @ts-nocheck
 
 /**
  * Unit tests for utils/dbInspect.js
@@ -11,6 +10,9 @@ import sinon from 'sinon'
 import * as dbInspect from '../../utils/dbInspect.js'
 
 describe('dbInspect.js - Database Inspection Functions', () => {
+    /**
+     * @type {object}
+     */
     let mockDb
 
     beforeEach(() => {
@@ -21,6 +23,7 @@ describe('dbInspect.js - Database Inspection Functions', () => {
             loadProcedurePromisified: sinon.stub(),
             callProcedurePromisified: sinon.stub()
         }
+		dbInspect.resetHANAVersionCache()
     })
 
     afterEach(() => {
@@ -98,7 +101,7 @@ describe('dbInspect.js - Database Inspection Functions', () => {
             mockDb.preparePromisified.resolves(mockStatement)
             mockDb.statementExecPromisified.resolves(mockVersion)
 
-            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'MY_VIEW')
+            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'MY_VIEW', { forceRefresh: true })
 
             expect(result).to.be.false
         })
@@ -120,7 +123,7 @@ describe('dbInspect.js - Database Inspection Functions', () => {
             mockDb.preparePromisified.onSecondCall().resolves(mockStatement)
             mockDb.statementExecPromisified.onSecondCall().resolves(mockCalcView)
 
-            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'MY_CALC_VIEW')
+            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'MY_CALC_VIEW', { forceRefresh: true })
 
             expect(result).to.be.true
         })
@@ -141,7 +144,7 @@ describe('dbInspect.js - Database Inspection Functions', () => {
                 VIEW_NAME: 'MY_VIEW'
             }])
 
-            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'MY_VIEW')
+            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'MY_VIEW', { forceRefresh: true })
 
             expect(result).to.be.true
         })
@@ -157,7 +160,7 @@ describe('dbInspect.js - Database Inspection Functions', () => {
             mockDb.statementExecPromisified.onSecondCall().resolves([])
             mockDb.statementExecPromisified.onThirdCall().resolves([])
 
-            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'NOT_A_CALC_VIEW')
+            const result = await dbInspect.isCalculationView(mockDb, 'MYSCHEMA', 'NOT_A_CALC_VIEW', { forceRefresh: true })
 
             expect(result).to.be.false
         })
@@ -581,5 +584,48 @@ describe('dbInspect.js - Module Exports', () => {
 
     it('should export getViewParameters function', () => {
         expect(dbInspect.getViewParameters).to.be.a('function')
+    })
+})
+
+describe('dbInspect.js - CDS Type Mapping Regression', () => {
+    beforeEach(() => {
+        dbInspect.options.useHanaTypes = true
+        dbInspect.options.useExists = false
+        dbInspect.options.useQuoted = false
+        dbInspect.options.noColons = false
+        dbInspect.options.keepPath = false
+    })
+
+    afterEach(() => {
+        dbInspect.options.useHanaTypes = false
+        dbInspect.options.useExists = true
+    })
+
+    it('should map common types when useHanaTypes is true', async () => {
+        global.__xRef = []
+        const object = [{
+            SCHEMA_NAME: 'MYSCHEMA',
+            TABLE_NAME: 'STAR_WARS_FILM',
+            HAS_PRIMARY_KEY: 'TRUE'
+        }]
+        const fields = [
+            { COLUMN_NAME: 'ID', DATA_TYPE_NAME: 'NVARCHAR', LENGTH: 36, SCALE: 0, IS_NULLABLE: 'FALSE', DEFAULT_VALUE: null, COMMENTS: null },
+            { COLUMN_NAME: 'CREATEDAT', DATA_TYPE_NAME: 'TIMESTAMP', LENGTH: 0, SCALE: 0, IS_NULLABLE: 'TRUE', DEFAULT_VALUE: null, COMMENTS: null },
+            { COLUMN_NAME: 'EPISODE_ID', DATA_TYPE_NAME: 'INTEGER', LENGTH: 10, SCALE: 0, IS_NULLABLE: 'TRUE', DEFAULT_VALUE: null, COMMENTS: null },
+            { COLUMN_NAME: 'RELEASE_DATE', DATA_TYPE_NAME: 'DATE', LENGTH: 0, SCALE: 0, IS_NULLABLE: 'TRUE', DEFAULT_VALUE: null, COMMENTS: null }
+        ]
+        const constraints = [{ COLUMN_NAME: 'ID' }]
+        const mockDb = {
+            preparePromisified: sinon.stub(),
+            statementExecPromisified: sinon.stub()
+        }
+
+        const cds = await dbInspect.formatCDS(mockDb, object, fields, constraints, 'hdbtable', 'MYSCHEMA', null)
+
+        expect(cds).to.include('ID: String(36)')
+        expect(cds).to.include('CREATEDAT: Timestamp')
+        expect(cds).to.include('EPISODE_ID: Integer')
+        expect(cds).to.include('RELEASE_DATE: Date')
+        expect(cds).to.not.include('**UNSUPPORTED TYPE')
     })
 })

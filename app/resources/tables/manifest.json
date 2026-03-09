@@ -3,7 +3,7 @@
 	"sap.app": {
 		"id": "sap.hanacli.tables",
 		"type": "application",
-		"i18n": "i18n/i18n.properties",
+		"i18n": "/i18n/tables.properties",
 		"applicationVersion": {
 			"version": "1.0.0"
 		},
@@ -80,7 +80,7 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "sap.hanacli.tables.i18n.i18n"
+					"bundleUrl": "/i18n/tables.properties"
 				}
 			},
 			"i18nReuse": {

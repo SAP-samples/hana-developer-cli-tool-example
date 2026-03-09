@@ -14,11 +14,10 @@ export default class _default extends DBClientClass {
      */
     listTables(): Promise<any[]>;
     /**
-     * Execute SQL query directly on HANA
-     * @param {string} query - SQL query string
-     * @returns {Promise<any>} - query results
+     * Report database kind for direct HANA connections
+     * @returns {string}
      */
-    execSQL(query: string): Promise<any>;
+    getKind(): string;
     #private;
 }
 import DBClientClass from "./index.js";

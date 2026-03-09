@@ -1,19 +1,20 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'roles [schema] [role]'
 export const aliases = ['r', 'listRoles', 'listroles']
 export const describe = baseLite.bundle.getText("roles")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   role: {
-    alias: ['r', 'Role'],
+    alias: ['r'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("role")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
@@ -23,8 +24,16 @@ export const builder = baseLite.getBuilder({
     type: 'number',
     default: 200,
     desc: baseLite.bundle.getText("limit")
+  },
+  profile: {
+    alias: ['p'],
+    type: 'string',
+    desc: baseLite.bundle.getText("profile")
   }
-})
+})).wrap(160).example(
+  'hana-cli roles --role myRole --schema MYSCHEMA',
+  baseLite.bundle.getText("rolesExample")
+).epilog(buildDocEpilogue('roles', 'security', ['users', 'inspectUser', 'grantChains']))
 
 /**
  * Command handler function
@@ -87,6 +96,7 @@ export async function getRoles(prompts) {
  */
 async function getRolesInt(schema, role, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getRolesInt ${schema} ${role} ${limit}`)
   role = base.dbClass.objectName(role)
   let query = ''

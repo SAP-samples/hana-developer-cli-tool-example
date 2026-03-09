@@ -1,30 +1,34 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'inspectLibrary [schema] [library]'
 export const aliases = ['il', 'library', 'insLib', 'inspectlibrary']
 export const describe = baseLite.bundle.getText("inspectLibrary")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   library: {
-    alias: ["lib", 'Library'],
+    alias: ["lib"],
     type: 'string',
     desc: baseLite.bundle.getText("library")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
   },
   output: {
-    alias: ['o', 'Output'],
+    alias: ['o'],
     choices: ["tbl", "sql"],
     default: "tbl",
     type: 'string',
     desc: baseLite.bundle.getText("outputType")
   }
-})
+})).wrap(160).example(
+  'hana-cli inspectLibrary --library myLib --schema MYSCHEMA',
+  baseLite.bundle.getText("inspectLibraryExample")
+).epilog(buildDocEpilogue('inspectLibrary', 'object-inspection', ['libraries', 'inspectLibMember']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

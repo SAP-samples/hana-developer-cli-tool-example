@@ -1,0 +1,24 @@
+<body>
+	<div class="body conbody">
+		<p class="shortdesc">Maximum number of errors allowed before stopping import</p>
+		<p class="p">
+			Sets a limit on how many errors can occur before the import is automatically stopped. This prevents a 
+			large number of problematic records from being processed.
+		</p>
+		<p class="p">
+			<strong>Recommended Values:</strong>
+		</p>
+		<ul>
+			<li>0 = Stop on first error (strict)</li>
+			<li>10 = Stop after 10 errors (moderate)</li>
+			<li>100 = Stop after 100 errors (lenient)</li>
+			<li>-1 = Unlimited errors (only with skipWithErrors enabled)</li>
+		</ul>
+		<p class="p">
+			<strong>Default:</strong> -1 (unlimited)
+		</p>
+		<p class="p">
+			<strong>Best Practice:</strong> Leave at -1 if skipWithErrors is enabled. Set to 0 for strict validation.
+		</p>
+	</div>
+</body>

@@ -3,7 +3,6 @@
  * @module Routes Excel Tests - Integration tests for excel route with mocked requests/responses
  */
 
-import { describe, it, beforeEach } from 'mocha'
 import { assert } from '../base.js'
 import express from 'express'
 import { route } from '../../routes/excel.js'

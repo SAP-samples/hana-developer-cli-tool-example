@@ -1,18 +1,19 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'libraries [schema] [library]'
 export const aliases = ['l', 'listLibs', 'ListLibs', 'listlibs', 'ListLib', "listLibraries", "listlibraries"]
 export const describe = baseLite.bundle.getText("libraries")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   library: {
-    alias: ['lib', 'Library'],
+    alias: ['lib'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("library")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
@@ -22,8 +23,13 @@ export const builder = baseLite.getBuilder({
     type: 'number',
     default: 200,
     desc: baseLite.bundle.getText("limit")
+  },
+  profile: {
+    alias: ['p'],
+    type: 'string',
+    desc: baseLite.bundle.getText("profile")
   }
-})
+})).wrap(160).example('hana-cli libraries --schema MYSCHEMA --library %', baseLite.bundle.getText('librariesExample')).wrap(160).epilog(buildDocEpilogue('libraries', 'schema-tools', ['inspectLibrary', 'inspectLibMember']))
 
 /**
  * Command handler function
@@ -85,6 +91,7 @@ export async function getLibraries(prompts) {
  */
 async function getLibrariesInt(schema, library, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getLibrariesInt ${schema} ${library} ${limit}`)
   library = base.dbClass.objectName(library)
   let query =

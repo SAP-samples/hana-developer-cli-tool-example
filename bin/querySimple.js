@@ -1,41 +1,43 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 import dbClientClass from "../utils/database/index.js"
+import ExcelJS from 'exceljs'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'querySimple'
 export const aliases = ['qs', "querysimple"]
 export const describe = baseLite.bundle.getText("querySimple")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   query: {
-    alias: ['q', 'Query'],
+    alias: ['q'],
     type: 'string',
     desc: baseLite.bundle.getText("query")
   },
   folder: {
-    alias: ['f', 'Folder'],
+    alias: ['f'],
     type: 'string',
     default: './',
     desc: baseLite.bundle.getText("folder")
   },
   filename: {
-    alias: ['n', 'Filename'],
+    alias: ['n'],
     type: 'string',
     desc: baseLite.bundle.getText("filename")
   },
   output: {
-    alias: ['o', 'Output'],
+    alias: ['o'],
     choices: ["table", "json", "excel", "csv"],
     default: "table",
     type: 'string',
     desc: baseLite.bundle.getText("outputTypeQuery")
   },
   profile: {
-    alias: ['p', 'Profile'],
+    alias: ['p'],
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).wrap(160).example('hana-cli querySimple --query "SELECT * FROM CUSTOMERS" --output csv', baseLite.bundle.getText('querySimpleExample')).wrap(160).epilog(buildDocEpilogue('querySimple', 'performance-monitoring', ['queryPlan', 'expensiveStatements']))
 
 export let inputPrompts = {
   query: {
@@ -127,28 +129,36 @@ export async function dbQuery(prompts) {
     switch (prompts.output) {
       case 'excel':
         if (prompts.filename) {
-          let out = []
-          //Column Headers
-          let header = []
-          for (const [key] of Object.entries(results[0])) {
-            header.push(key)
-          }
-          out.push(header)
+          const [{ default: fs }, { default: path }] = await Promise.all([
+            import('fs'),
+            import('path')
+          ])
+          const workbook = new ExcelJS.Workbook()
+          const worksheet = workbook.addWorksheet('Query Results')
 
+          // Add header row with bold formatting
+          const headers = Object.keys(results[0])
+          const headerRow = worksheet.addRow(headers)
+          headerRow.font = { bold: true }
+
+          // Add data rows
           for (let item of results) {
-            let innerItem = []
-            for (const [key] of Object.entries(item)) {
-              innerItem.push(item[key])
-            }
-            out.push(innerItem)
+            const rowData = headers.map(key => item[key])
+            worksheet.addRow(rowData)
           }
-          // @ts-ignore
-/*           let excelOutput = excel.build([{
-            name: "Query Results",
-            data: out
-          }]) */
-          throw new Error(`Excel Export temporarily disabled due to issue with install of required module in Business Application Studio`)
-          //await toFile(prompts.folder, prompts.filename, 'xlsx', excelOutput)
+
+          // Freeze the header row
+          worksheet.views = [{ state: 'frozen', ySplit: 1 }]
+
+          // Ensure directory exists
+          const dir = prompts.folder
+          !fs.existsSync(dir) && fs.mkdirSync(dir)
+          const filename = `${prompts.filename}.xlsx`
+          const filePath = path.join(dir, filename)
+
+          // Write to file
+          await workbook.xlsx.writeFile(filePath)
+          console.log(`${baseLite.bundle.getText("contentWritten")}: ${filePath}`)
         } else {
           base.error(baseLite.bundle.getText("errExcel"))
           await dbClient.disconnect()

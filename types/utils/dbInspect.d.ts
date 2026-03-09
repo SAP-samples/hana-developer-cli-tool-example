@@ -1,9 +1,10 @@
+export function resetHANAVersionCache(): void;
 /**
  * Return the HANA DB Version
  * @param {object} db - Database Connection
  * @returns {Promise<object>}
  */
-export function getHANAVersion(db: object): Promise<object>;
+export function getHANAVersion(db: object, options?: {}): Promise<object>;
 /**
  * Check if a view is a Calculation View
  * @param {object} db - Database Connection
@@ -11,7 +12,7 @@ export function getHANAVersion(db: object): Promise<object>;
  * @param {string} viewId - View Unique ID
  * @returns {Promise<boolean>}
  */
-export function isCalculationView(db: object, schema: string, viewId: string): Promise<boolean>;
+export function isCalculationView(db: object, schema: string, viewId: string, options?: {}): Promise<boolean>;
 /**
  * Get DB View details
  * @param {object} db - Database Connection

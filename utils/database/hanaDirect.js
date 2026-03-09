@@ -14,7 +14,7 @@ export default class extends DBClientClass {
      */
     constructor(prompts) {
         super(prompts)
-        base.debug(`Database client specific class for profile: ${prompts.profile}`)
+        base.debug(base.bundle.getText("debug.dbClientSpecificProfile", [prompts.profile]))
     }
 
     /**
@@ -34,7 +34,7 @@ export default class extends DBClientClass {
     async disconnect(){
         // Don't call base.end() as it exits the process
         // Instead use disconnectOnly to cleanup connection without exiting
-        base.debug(`hanaDirect disconnect called`)
+        base.debug(base.bundle.getText("debug.dbDisconnectCalled"))
         await base.disconnectOnly()
     }
 
@@ -43,21 +43,22 @@ export default class extends DBClientClass {
      * @returns {Promise<Array>} - array of table objects
      */
     async listTables() {
-        base.debug(`listTables for ${this.#clientType}`)
+        base.debug(base.bundle.getText("debug.dbListTablesForClient", [this.#clientType]))
         const db = super.getDB()
         const prompts = super.getPrompts()
 
+        prompts.limit = base.validateLimit(prompts.limit)
         this.#schema = await base.dbClass.schemaCalc(prompts, db)
         const table = super.adjustWildcard(prompts.table)
         base.debug(`${base.bundle.getText("schema")}: ${this.#schema}, ${base.bundle.getText("table")}: ${table}`)
 
-        base.debug(`getTablesInt ${this.#schema} ${table} ${prompts.limit}`)
+        base.debug(base.bundle.getText("debug.callWithParams", ["getTablesInt", `${this.#schema} ${table} ${prompts.limit}`]))
         let dbQuery =
             `SELECT SCHEMA_NAME, TABLE_NAME, TO_NVARCHAR(TABLE_OID) AS TABLE_OID, COMMENTS  from TABLES 
               WHERE SCHEMA_NAME LIKE ? 
                 AND TABLE_NAME LIKE ? 
               ORDER BY SCHEMA_NAME, TABLE_NAME `
-        if (prompts.limit | base.sqlInjectionUtils.isAcceptableParameter(prompts.limit)) {
+                if (prompts.limit || base.sqlInjectionUtils.isAcceptableParameter(prompts.limit)) {
             dbQuery += `LIMIT ${prompts.limit.toString()}`
         }
         base.debug(dbQuery)
@@ -68,13 +69,26 @@ export default class extends DBClientClass {
     /**
      * Execute SQL query directly on HANA
      * @param {string} query - SQL query string
+     * @param {Array<any>} [params] - Optional parameter bindings
      * @returns {Promise<any>} - query results
      */
-    async execSQL(query){
-        base.debug(`execSQL for ${this.#clientType}`)
+    async execSQL(query, params){
+        base.debug(base.bundle.getText("debug.dbExecSqlForClient", [this.#clientType]))
         const db = super.getDB()
+        if (params && Array.isArray(params) && params.length > 0) {
+            const statement = await db.preparePromisified(query)
+            return await db.statementExecPromisified(statement, params)
+        }
         let results = await db.execSQL(query)
         return results
+    }
+
+    /**
+     * Report database kind for direct HANA connections
+     * @returns {string}
+     */
+    getKind() {
+        return 'hana'
     }
 
 }

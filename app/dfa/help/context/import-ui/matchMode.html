@@ -1,0 +1,23 @@
+<body>
+	<div class="body conbody">
+		<p class="shortdesc">Column matching strategy for import data</p>
+		<p class="p">
+			Determines how columns in the source file are matched to columns in the target table.
+		</p>
+		<p class="p">
+			<strong>Options:</strong>
+		</p>
+		<ul>
+			<li><strong>auto</strong> - Automatically match columns by name (recommended for most cases)</li>
+			<li><strong>strict</strong> - Require exact match of column names and order</li>
+			<li><strong>manual</strong> - Manually specify column mapping</li>
+		</ul>
+		<p class="p">
+			<strong>Default:</strong> auto
+		</p>
+		<p class="p">
+			<strong>Use Cases:</strong> Auto mode is ideal when source and target column names are identical. 
+			Use strict mode when data quality is critical. Use manual mode for complex transformations.
+		</p>
+	</div>
+</body>

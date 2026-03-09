@@ -1,0 +1,21 @@
+<body>
+	<div class="body conbody">
+		<p class="shortdesc">Excel file caching mode for performance optimization</p>
+		<p class="p">
+			Controls how Excel files are cached during import. This affects memory usage and performance.
+		</p>
+		<p class="p">
+			<strong>Options:</strong>
+		</p>
+		<ul>
+			<li><strong>cache</strong> - Cache the entire file in memory (faster for small files)</li>
+			<li><strong>stream</strong> - Stream file contents without caching (better for large files)</li>
+		</ul>
+		<p class="p">
+			<strong>Default:</strong> cache
+		</p>
+		<p class="p">
+			<strong>Performance Guidance:</strong> Use streaming for files larger than 100MB to reduce memory footprint.
+		</p>
+	</div>
+</body>

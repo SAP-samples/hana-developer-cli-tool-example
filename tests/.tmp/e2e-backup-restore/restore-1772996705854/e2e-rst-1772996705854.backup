@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "schema": "14DA6AFA0FF948D7BC914D8DF43B1E67",
+    "table": "E2E_RST_SRC_1772996705854",
+    "columns": [
+      {
+        "COLUMN_NAME": "DUMMY",
+        "DATA_TYPE_NAME": "NCHAR",
+        "LENGTH": 1,
+        "SCALE": null,
+        "IS_NULLABLE": "TRUE",
+        "DEFAULT_VALUE": null
+      }
+    ],
+    "format": "binary"
+  },
+  "data": [
+    {
+      "DUMMY": "X"
+    }
+  ]
+}

@@ -3,4 +3,4 @@ export function traces(prompts: any): Promise<any>;
 export const command: "traces";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;

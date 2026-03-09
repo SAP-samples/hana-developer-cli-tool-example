@@ -1,11 +1,12 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'triggers [schema] [trigger] [target]'
 export const aliases = ['trig', 'listTriggers', 'ListTrigs', 'listtrigs', 'Listtrig', "listrig"]
 export const describe = baseLite.bundle.getText("triggers")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   trigger: {
     alias: ['t', 'Trigger'],
     type: 'string',
@@ -19,7 +20,7 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("target")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
@@ -29,8 +30,13 @@ export const builder = baseLite.getBuilder({
     type: 'number',
     default: 200,
     desc: baseLite.bundle.getText("limit")
+  },
+  profile: {
+    alias: ['p'],
+    type: 'string',
+    desc: baseLite.bundle.getText("profile")
   }
-})
+})).wrap(160).example('hana-cli triggers --schema MYSCHEMA --trigger %', baseLite.bundle.getText('triggersExample')).wrap(160).epilog(buildDocEpilogue('triggers', 'schema-tools', ['inspectTrigger', 'procedures', 'tables']))
 
 /**
  * Command handler function
@@ -98,6 +104,7 @@ export async function getTriggers(prompts) {
  */
 async function getTriggersInt(schema, trigger, target, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getTriggersInt ${schema} ${trigger} ${target} ${limit}`)
   trigger = base.dbClass.objectName(trigger)
   target = base.dbClass.objectName(target)

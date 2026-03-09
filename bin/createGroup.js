@@ -1,17 +1,18 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'createGroup [group]'
 export const aliases = ['cg', 'cGrp']
 export const describe = baseLite.bundle.getText("createGroup")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   group: {
-    alias: ['g', 'Group'],
+    alias: ['g'],
     type: 'string',
     desc: baseLite.bundle.getText("group")
   }
-})
+})).wrap(160).example('hana-cli createGroup --group myGroup', baseLite.bundle.getText("createGroupExample")).wrap(160).epilog(buildDocEpilogue('createGroup', 'security', ['createXSAAdmin', 'users', 'roles']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

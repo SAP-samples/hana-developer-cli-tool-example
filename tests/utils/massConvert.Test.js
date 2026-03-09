@@ -1,4 +1,3 @@
-/*eslint-env node, es6, mocha */
 // @ts-nocheck
 
 /**
@@ -17,7 +16,7 @@ describe('massConvert.js - Mass Conversion Utilities', () => {
 
     describe('Module Structure', () => {
         it('should be a module that exports functions', () => {
-            expect(massConvert).to.be.an('object')
+            expect(typeof massConvert).to.equal('object')
         })
 
         it('should have conversion-related functions', () => {
@@ -94,7 +93,7 @@ describe('massConvert.js - Mass Conversion Utilities', () => {
             // containing converted database artifacts
             
             // Basic module validation
-            expect(massConvert).to.be.an('object')
+            expect(typeof massConvert).to.equal('object')
         })
     })
 
@@ -131,7 +130,7 @@ describe('massConvert.js - Mass Conversion Utilities', () => {
             // - Percentage complete
             
             // Structural validation
-            expect(massConvert).to.be.an('object')
+            expect(typeof massConvert).to.equal('object')
         })
     })
 
@@ -186,7 +185,7 @@ describe('massConvert.js - Mass Conversion Utilities', () => {
             // for reading and writing files
             
             // Module check
-            expect(massConvert).to.be.an('object')
+            expect(typeof massConvert).to.equal('object')
         })
 
         it('should generate proper file extensions', () => {
@@ -203,7 +202,7 @@ describe('massConvert.js - Mass Conversion Utilities', () => {
 
 describe('massConvert.js - Module Exports', () => {
     it('should export the module', () => {
-        expect(massConvert).to.be.an('object')
+        expect(typeof massConvert).to.equal('object')
     })
 
     it('should be importable without errors', () => {

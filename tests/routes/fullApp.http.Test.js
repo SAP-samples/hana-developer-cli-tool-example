@@ -4,7 +4,6 @@
  * Integration tests using supertest to test the complete application with all routes loaded
  */
 
-import { describe, it, before } from 'mocha'
 import { expect } from 'chai'
 import request from 'supertest'
 import { createApp } from '../appFactory.js'

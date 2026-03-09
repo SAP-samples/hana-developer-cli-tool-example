@@ -2,11 +2,12 @@
 // Use lightweight base-lite for command metadata to avoid loading heavy deps during CLI init
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'tables [schema] [table]'
 export const aliases = ['t', 'listTables', 'listtables']
 export const describe = baseLite.bundle.getText("tables")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
     alias: ['t', 'Table'],
     type: 'string',
@@ -26,11 +27,14 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("limit")
   },
   profile: {
-    alias: ['p', 'Profile'],
+    alias: ['p'],
     type: 'string',
     desc: baseLite.bundle.getText("profile")
   }
-})
+})).wrap(160).example(
+  'hana-cli tables --table myTable --schema MYSCHEMA',
+  baseLite.bundle.getText("tablesExample")
+).epilog(buildDocEpilogue('tables', 'schema-tools', ['inspectTable', 'tableGroups', 'schemas']))
 
 export let inputPrompts = {
   table: {
@@ -109,21 +113,13 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
   const yargs = (await import('yargs')).default
   const { hideBin } = await import('yargs/helpers')
   
-  yargs(hideBin(process.argv))
-    .usage(`Usage: ${command}\n\n${describe}`)
-    .options(builder)
+  const argv = await builder(yargs(hideBin(process.argv))
+    .usage(baseLite.bundle.getText("cli.usage", [command, describe]))
     .help('help').alias('help', 'h')
-    .wrap(null)
-    .parse(process.argv.slice(2), {}, (err, argv, output) => {
-      if (output) {
-        console.log(output)
-      }
-      if (err) {
-        console.error(err.message)
-        process.exit(1)
-      }
-      if (!argv.help && !argv.h) {
-        handler(argv)
-      }
-    })
+    )
+    .argv
+  
+  if (!argv.help && !argv.h) {
+    handler(argv)
+  }
 }

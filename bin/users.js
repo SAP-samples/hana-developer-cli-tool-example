@@ -1,13 +1,14 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'users [user]'
 export const aliases = ['u', 'listUsers', 'listusers']
 export const describe = baseLite.bundle.getText("users")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   user: {
-    alias: ['u', 'User'],
+    alias: ['u'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("user")
@@ -18,7 +19,10 @@ export const builder = baseLite.getBuilder({
     default: 200,
     desc: baseLite.bundle.getText("limit")
   }
-})
+})).wrap(160).example(
+  'hana-cli users --user SYSTEM',
+  baseLite.bundle.getText("usersExample")
+).epilog(buildDocEpilogue('users', 'security', ['roles', 'inspectUser', 'massUsers']))
 
 /**
  * Command handler function
@@ -72,6 +76,7 @@ export async function getUsers(prompts) {
  */
 async function getUsersInt(user, client, limit) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getUsersInt ${user} ${limit}`)
   user = base.dbClass.objectName(user)
   let query =

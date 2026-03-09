@@ -3,23 +3,29 @@ import * as baseLite from '../utils/base-lite.js'
 import * as dbInspect from '../utils/dbInspect.js'
 import * as conn from '../utils/connections.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'callProcedure [schema] [procedure]'
 export const aliases = ['cp', 'callprocedure', 'callProc', 'callproc', 'callSP', 'callsp']
 export const describe = baseLite.bundle.getText("callProcedure")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   procedure: {
-    alias: ['p', 'Procedure', 'sp'],
+    alias: ['p', 'sp'],
     type: 'string',
     desc: baseLite.bundle.getText("procedure")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
+  },
+  profile: {
+    alias: ['p'],
+    type: 'string',
+    desc: baseLite.bundle.getText("profile")
   }
-})
+})).wrap(160).example('hana-cli callProcedure --procedure myProc --schema MYSCHEMA', baseLite.bundle.getText("callProcedureExample")).wrap(160).epilog(buildDocEpilogue('callProcedure', 'developer-tools', ['inspectProcedure', 'procedures']))
 
 
 export async function handler(argv) {

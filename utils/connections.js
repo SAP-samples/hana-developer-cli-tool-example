@@ -1,4 +1,3 @@
-/*eslint-env node, es6 */
 // @ts-check
 
 /**
@@ -13,6 +12,9 @@ import { homedir } from 'os'
 import * as xsenv from '@sap/xsenv'
 import cds from '@sap/cds'
 
+const fileCheckCache = new Map()
+const cdsrcPrivateCache = new Map()
+
 //import cds from '@sap/cds'
 // @ts-ignore
 //const LOG = cds.log('bind')
@@ -23,103 +25,247 @@ import cds from '@sap/cds'
 /**
  * Check parameter folders to see if the input file exists there
  * @param {string} filename 
- * @returns {string} - the file path if found 
+ * @param {number} maxDepth - Maximum directory depth to search (default: 5)
+ * @returns {string|undefined} - the file path if found 
  */
-export function getFileCheckParents(filename) {
-    base.debug(`getFileCheckParents ${filename}`)
+export function getFileCheckParents(filename, maxDepth = 5) {
+    base.debug(base.bundle.getText("debug.callWithParams", ["getFileCheckParents", filename]))
     try {
-
-        //check current dir for package.json
-        let root = filename
-        root = path.join('.', root)
-        if (fs.existsSync(root)) return root
-
-        root = path.join('..', root)
-        if (fs.existsSync(root)) return root
-
-        root = path.join('..', root)
-        if (fs.existsSync(root)) return root
-
-        root = path.join('..', root)
-        if (fs.existsSync(root)) return root
-
-        root = path.join('..', root)
-        if (fs.existsSync(root)) return root
-
-        return
+        const cacheKey = `${process.cwd()}|${filename}|${maxDepth}`
+        if (fileCheckCache.has(cacheKey)) {
+            const cachedPath = fileCheckCache.get(cacheKey)
+            return cachedPath || undefined
+        }
+        let currentPath = '.'
+        
+        for (let i = 0; i < maxDepth; i++) {
+            const fullPath = path.join(currentPath, filename)
+            if (fs.existsSync(fullPath)) {
+                fileCheckCache.set(cacheKey, fullPath)
+                return fullPath
+            }
+            currentPath = path.join(currentPath, '..')
+        }
+        
+        fileCheckCache.set(cacheKey, null)
+        return undefined
     }
     catch (error) {
         throw new Error(`${base.bundle.getText("error")} ${error}`)
     }
 }
 
+// Convenience wrapper functions that delegate to getFileCheckParents
 /**
  * Check current and parent directories for a package.json
- * @returns {string} - the file path if found 
+ * @returns {string|undefined} - the file path if found 
  */
-export function getPackageJSON() {
-    base.debug('getPackageJSON')
-    return getFileCheckParents(`package.json`)
-}
+export const getPackageJSON = () => getFileCheckParents('package.json')
 
 /**
  * Check current and parent directories for a mta.yaml
- * @returns {string} - the file path if found 
+ * @returns {string|undefined} - the file path if found 
  */
-export function getMTA() {
-    base.debug('getMTA')
-    return getFileCheckParents(`mta.yaml`)
-}
+export const getMTA = () => getFileCheckParents('mta.yaml')
 
 /**
  * Check current and parent directories for a default-env.json
- * @returns {string} - the file path if found 
+ * @returns {string|undefined} - the file path if found 
  */
-export function getDefaultEnv() {
-    base.debug('getDefaultEnv')
-    return getFileCheckParents(`default-env.json`)
-}
+export const getDefaultEnv = () => getFileCheckParents('default-env.json')
 
 /**
  * Check current and parent directories for a default-env-admin.json
- * @returns {string} - the file path if found 
+ * @returns {string|undefined} - the file path if found 
  */
-export function getDefaultEnvAdmin() {
-    base.debug('getDefaultEnvAdmin')
-    return getFileCheckParents(`default-env-admin.json`)
-}
+export const getDefaultEnvAdmin = () => getFileCheckParents('default-env-admin.json')
 
 /**
  * Check current and parent directories for a .env
- * @returns {string} - the file path if found 
+ * @returns {string|undefined} - the file path if found 
  */
-export function getEnv() {
-    base.debug('getEnv')
-    return getFileCheckParents(`.env`)
-}
+export const getEnv = () => getFileCheckParents('.env')
 
 /**
  * Check current and parent directories for a .cdsrc-private.json
- * @returns {string} - the file path if found 
+ * @returns {string|undefined} - the file path if found 
  */
-export function getCdsrcPrivate() {
-    base.debug('getCdsrcPrivate')
-    return getFileCheckParents(`.cdsrc-private.json`)
+export const getCdsrcPrivate = () => getFileCheckParents('.cdsrc-private.json')
+
+/**
+ * Extract the first available CDS binding or credentials from .cdsrc-private.json
+ * Supports multiple formats (profiled and unprofiled) for backwards compatibility.
+ * @param {object} config
+ * @returns {{ type: 'binding' | 'credentials', value: object } | undefined}
+ */
+function extractCdsBindingOrCredentials(config) {
+    const requires = config?.requires
+    if (!requires || typeof requires !== 'object') {
+        return undefined
+    }
+
+    /** @type {Array<any>} */
+    const candidates = []
+
+    if (requires['[hybrid]']) {
+        candidates.push(requires['[hybrid]'])
+    }
+    if (requires.db) {
+        candidates.push(requires.db)
+    }
+
+    for (const value of Object.values(requires)) {
+        if (value) {
+            candidates.push(value)
+        }
+    }
+
+    for (const candidate of candidates) {
+        const dbSection = candidate?.db || candidate
+        if (dbSection?.credentials) {
+            return { type: 'credentials', value: dbSection.credentials }
+        }
+        if (dbSection?.binding) {
+            return { type: 'binding', value: dbSection.binding }
+        }
+    }
+
+    return undefined
+}
+
+/**
+ * Resolve CDS binding using cds-dk (supports multiple module paths).
+ * @param {object} binding
+ * @returns {Promise<object>} resolved service with credentials
+ */
+async function resolveCdsBinding(binding) {
+    const bindingType = binding?.type || 'cf'
+    const candidates = [
+        `@sap/cds-dk/lib/bind/${bindingType}`,
+        '@sap/cds-dk/lib/bind/cf',
+        '@sap/cds-dk/lib/bind',
+        '@sap/cds-dk/lib/bindings/cf'
+    ]
+
+    let resolverModule
+    let loadError
+    for (const modulePath of candidates) {
+        try {
+            resolverModule = require(modulePath)
+            if (resolverModule) {
+                break
+            }
+        } catch (error) {
+            loadError = error
+        }
+    }
+    
+    // If not found locally, try to resolve from global installation
+    if (!resolverModule && loadError?.code === 'MODULE_NOT_FOUND') {
+        try {
+            const { execSync } = await import('child_process')
+            const globalPath = execSync('npm root -g', { encoding: 'utf8' }).trim()
+            const globalCandidates = candidates.map(p => path.join(globalPath, p))
+            
+            for (const modulePath of globalCandidates) {
+                try {
+                    resolverModule = require(modulePath)
+                    if (resolverModule) {
+                        break
+                    }
+                } catch (error) {
+                    // Continue trying
+                }
+            }
+        } catch (globalError) {
+            // Unable to resolve global path
+        }
+    }
+
+    const resolveFn = resolverModule?.resolve
+        || resolverModule?.default?.resolve
+
+    if (!resolveFn) {
+        if (loadError && loadError.code === 'MODULE_NOT_FOUND') {
+            throw new Error(base.bundle.getText("cds-dk2"))
+        }
+        throw loadError || new Error(base.bundle.getText("cds-dk2"))
+    }
+
+    try {
+        // The binding instance name (from binding.instance property)
+        const instanceName = binding.instance || 'db'
+        
+        // Call resolve with proper context - it's a method on the resolver instance
+        if (resolverModule.resolve) {
+            return await resolverModule.resolve(instanceName, binding)
+        } else if (resolverModule.default?.resolve) {
+            return await resolverModule.default.resolve(instanceName, binding)
+        }
+        
+        // Fallback to old behavior for other resolver types
+        if (resolveFn.length >= 2) {
+            return await resolveFn(null, binding)
+        }
+        return await resolveFn(binding)
+    } catch (error) {
+        throw error
+    }
+}
+
+/**
+ * Resolve CDS binding credentials from .cdsrc-private.json only
+ * @param {object} prompts
+ * @returns {Promise<object|undefined>}
+ */
+export async function getCdsrcBindingOptions(prompts) {
+    const cdsrcPrivate = prompts?.admin ? undefined : getCdsrcPrivate()
+    if (!cdsrcPrivate) {
+        return undefined
+    }
+
+    try {
+        let object = cdsrcPrivateCache.get(cdsrcPrivate)
+        if (!object) {
+            const data = fs.readFileSync(cdsrcPrivate, { encoding: 'utf8', flag: 'r' })
+            object = JSON.parse(data)
+            cdsrcPrivateCache.set(cdsrcPrivate, object)
+        }
+
+        const bindingEntry = extractCdsBindingOrCredentials(object)
+        if (!bindingEntry) {
+            return undefined
+        }
+
+        if (bindingEntry.type === 'credentials') {
+            const options = { hana: bindingEntry.value }
+            base.debug(options)
+            if (base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile2")} .cdsrc-private.json\n`) }
+            return options
+        }
+
+        const resolvedService = await resolveCdsBinding(bindingEntry.value)
+        const options = { hana: resolvedService.credentials }
+        base.debug(options)
+        if (base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile2")} .cdsrc-private.json\n`) }
+        return options
+    }
+    catch (e) {
+        if (e.code !== 'MODULE_NOT_FOUND') throw e
+    }
+
+    return undefined
 }
 
 /**
  * Resolve Environment by deciding which option between default-env and default-env-admin we should take
- * @param {*} options 
+ * @param {object} options 
  * @returns {string} - the file path if found 
  */
 export function resolveEnv(options) {
-    base.debug(`resolveEnv ${options}`)
-    let file = 'default-env.json'
-    if (options && Object.prototype.hasOwnProperty.call(options, 'admin') && options.admin) {
-        file = 'default-env-admin.json'
-    }
-    let envFile = path.resolve(process.cwd(), file)
-    return envFile
+    base.debug(base.bundle.getText("debug.callWithParams", ["resolveEnv", options]))
+    const file = options?.admin ? 'default-env-admin.json' : 'default-env.json'
+    return path.resolve(process.cwd(), file)
 }
 
 
@@ -129,104 +275,93 @@ export function resolveEnv(options) {
  * @returns {Promise<object>} connection options
  */
 export async function getConnOptions(prompts) {
-    base.debug('getConnOptions')
+    base.debug(base.bundle.getText("debug.call", ["getConnOptions"]))
+    
+    // NEW: Check for project-specific context from MCP server
+    // This allows AI agents to specify which project's database to use
+    const projectPath = process.env.HANA_CLI_PROJECT_PATH;
+    const connFile = process.env.HANA_CLI_CONN_FILE;
+    
+    // If project path provided, change to that directory so connection resolution starts there
+    if (projectPath && fs.existsSync(projectPath)) {
+        process.chdir(projectPath);
+        base.debug(`Using project directory for connection resolution: ${projectPath}`);
+    }
+    
+    // NEW: Check for direct database credentials from MCP (for explicit connection setup)
+    // This is used when connection file isn't available or for temporary connections
+    if (process.env.HANA_CLI_HOST) {
+        const directConnection = {
+            hana: {
+                host: process.env.HANA_CLI_HOST,
+                port: parseInt(process.env.HANA_CLI_PORT || '30013'),
+                user: process.env.HANA_CLI_USER,
+                password: process.env.HANA_CLI_PASSWORD,
+                database: process.env.HANA_CLI_DATABASE || 'SYSTEMDB',
+            }
+        };
+        base.debug('Using direct database connection from MCP context');
+        return directConnection;
+    }
+    
     delete process.env.VCAP_SERVICES
-    let envFile
 
-    //Look for Admin option - it overrides everything
-    if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'admin') && prompts.admin) {
-        envFile = getDefaultEnvAdmin()
+    // Try .cdsrc-private.json with CDS binding first
+    const cdsrcOptions = await getCdsrcBindingOptions(prompts)
+    if (cdsrcOptions) {
+        return cdsrcOptions
     }
 
-    //No Admin option or no default-env-admin.json file found - try for .cdsrc-private.json and cds bind
-    if (!envFile) {
-        let cdsrcPrivate = getCdsrcPrivate()
-
-        //No Admin option or no default-env-admin.json file found - try for .env 
-        if (!cdsrcPrivate) {
-            let dotEnvFile = getEnv()
-            dotenv.config({ path: dotEnvFile })
-        } else {
-            try {
-                const data = fs.readFileSync(cdsrcPrivate,
-                    { encoding: 'utf8', flag: 'r' })
-                const object = JSON.parse(data)
-                const resolveBinding = require('@sap/cds-dk/lib/bind/cf') //.BindingResolver(LOG)
-                let resolvedService = await resolveBinding.resolve(null, object.requires['[hybrid]'].db.binding)
-                let options = { hana: resolvedService.credentials }
-                base.debug(options)
-                base.debug(base.bundle.getText("connectionFile"))
-                base.debug(`.cdsrc-private.json`)
-                if (base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile2")} ${`.cdsrc-private.json`} \n`) }
-                return (options)
-            }
-            catch (e) {
-                if (e.code !== 'MODULE_NOT_FOUND') {
-                    // Re-throw not "Module not found" errors 
-                    throw e
-                }
-                throw base.bundle.getText("cds-dk2")
-            }
-        }
-    }
-
-
-
-    //No .env File found or it doesn't contain a VCAP_SERVICES - try other options
-    base.debug(process.env.VCAP_SERVICES)
-    base.debug(envFile)
-    if (!process.env.VCAP_SERVICES && !envFile) {
-        //Check for specific configuration file by special parameter 
-        if (prompts && Object.prototype.hasOwnProperty.call(prompts, 'conn') && prompts.conn) {
-            envFile = getFileCheckParents(prompts.conn)
-
-            //Conn parameters can also refer to a central configuration file in the user profile
-            if (!envFile) {
-                envFile = getFileCheckParents(`${homedir}/.hana-cli/${prompts.conn}`)
-            }
-        }
-
-        base.debug(`Before ${envFile}`)
-        //No specific configuration file requested go back to default-env.json
+    // Determine which env file to load
+    let envFile = prompts?.admin ? getDefaultEnvAdmin() : getDefaultEnv()
+    
+    if (!envFile && prompts?.conn) {
+        // Try custom configuration file
+        envFile = getFileCheckParents(prompts.conn)
         if (!envFile) {
-            envFile = getDefaultEnv()
-            base.debug(`Lookup Env ${envFile}`)
-            //Last resort - default.json in user profile location
-            if (!envFile) {
-                envFile = getFileCheckParents(`${homedir}/.hana-cli/default.json`)
-            }
+            envFile = getFileCheckParents(`${homedir()}/.hana-cli/${prompts.conn}`)
         }
-        if (envFile && base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile2")} ${envFile} \n`) }
+    }
+    
+    if (!envFile) {
+        // Last resort - configuration file in user profile
+        envFile = getFileCheckParents(`${homedir()}/.hana-cli/default.json`)
+    }
+    
+    if (!envFile && !process.env.VCAP_SERVICES) {
+        // Try .env file as fallback
+        const dotEnvFile = getEnv()
+        if (dotEnvFile) dotenv.config({ path: dotEnvFile, quiet: true })
+    }
 
-    } else {
-        if (!envFile && base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile2")} ${getEnv()} \n`) }
-        else if (base.verboseOutput(prompts)) { console.log(`${base.bundle.getText("connFile2")} ${envFile} \n`) }
+    if (envFile && base.verboseOutput(prompts)) {
+        console.log(`${base.bundle.getText("connFile2")} ${envFile}\n`)
     }
 
     xsenv.loadEnv(envFile)
-
     base.debug(base.bundle.getText("connectionFile"))
     base.debug(envFile)
 
-    /** @type object */
-    let options = ''
+    // Fetch HANA service configuration
+    let options
     try {
-        if (!process.env.TARGET_CONTAINER) {
-            options = xsenv.getServices({ hana: { tag: 'hana' } })
-        } else {
-            options = xsenv.getServices({ hana: { name: process.env.TARGET_CONTAINER } })
-        }
+        const serviceQuery = process.env.TARGET_CONTAINER 
+            ? { hana: { name: process.env.TARGET_CONTAINER } }
+            : { hana: { tag: 'hana' } }
+        options = xsenv.getServices(serviceQuery)
     } catch (error) {
         try {
-            options = xsenv.getServices({ hana: { tag: 'hana', plan: "hdi-shared" } })
-        } catch (error) {
-            if (envFile) { throw new Error(`${base.bundle.getText("badConfig")} ${envFile}.  ${base.bundle.getText("fullDetails")} ${error}`) }
-            else { throw new Error(`${base.bundle.getText("missingConfig")} ${error}`) }
-
+            options = xsenv.getServices({ hana: { tag: 'hana', plan: 'hdi-shared' } })
+        } catch (retryError) {
+            const errorMsg = envFile 
+                ? `${base.bundle.getText("badConfig")} ${envFile}. ${base.bundle.getText("fullDetails")} ${retryError}`
+                : `${base.bundle.getText("missingConfig")} ${retryError}`
+            throw new Error(errorMsg)
         }
     }
+    
     base.debug(options)
-    return (options)
+    return options
 }
 
 /**
@@ -236,16 +371,12 @@ export async function getConnOptions(prompts) {
  * @returns {Promise<object>} HANA DB connection of type hdb
  */
 export async function createConnection(prompts, directConnect = false) {
-    base.debug('createConnection')
+    base.debug(base.bundle.getText("debug.call", ["createConnection"]))
 
-    /** @type object */
-    let options = []
-    if (directConnect) {
-        options.hana = prompts
-    } else {
-        options = await getConnOptions(prompts)
-    }
+    const options = directConnect 
+        ? { hana: prompts }
+        : await getConnOptions(prompts)
 
-    base.debug(`In Create Connection`)
+    base.debug(base.bundle.getText("debug.connectionCreateStart"))
     return base.dbClass.createConnection(options)
 }

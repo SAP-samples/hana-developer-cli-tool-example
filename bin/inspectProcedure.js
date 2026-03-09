@@ -2,30 +2,31 @@
 import * as baseLite from '../utils/base-lite.js'
 import * as dbInspect from '../utils/dbInspect.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'inspectProcedure [schema] [procedure]'
 export const aliases = ['ip', 'procedure', 'insProc', 'inspectprocedure', 'inspectsp']
 export const describe = baseLite.bundle.getText("inspectProcedure")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   procedure: {
-    alias: ['p', 'Procedure', 'sp'],
+    alias: ['p', 'sp'],
     type: 'string',
     desc: baseLite.bundle.getText("procedure")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
   },
   output: {
-    alias: ['o', 'Output'],
+    alias: ['o'],
     choices: ["tbl", "sql"],
     default: "tbl",
     type: 'string',
     desc: baseLite.bundle.getText("outputType")
   }
-})
+})).wrap(160).example('hana-cli inspectProcedure --procedure myProcedure --schema MYSCHEMA', baseLite.bundle.getText("inspectProcedureExample")).wrap(160).epilog(buildDocEpilogue('inspectProcedure', 'object-inspection', ['procedures', 'inspectFunction', 'callProcedure']))
 
 /**
  * Command handler function

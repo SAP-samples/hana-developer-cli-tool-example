@@ -1,13 +1,14 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'serviceKey [instance] [key]'
 export const aliases = ['key', 'servicekey', 'service-key']
 export const describe = baseLite.bundle.getText("serviceKey")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   instance: {
-    alias: ['i', 'Instance'],
+    alias: ['i'],
     desc: baseLite.bundle.getText("instance")
   },
   key: {
@@ -15,13 +16,13 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("key")
   },
   encrypt: {
-    alias: ['e', 'Encrypt', 'ssl'],
+    alias: ['e', 'ssl'],
     desc: baseLite.bundle.getText("encrypt"),
     type: 'boolean',
     default: true
   },
   validate: {
-    alias: ['v', 'Validate', 'validateCertificate'],
+    alias: ['v', 'validatecertificate'],
     desc: baseLite.bundle.getText("validate"),
     type: 'boolean',
     default: false
@@ -33,12 +34,12 @@ export const builder = baseLite.getBuilder({
     default: true
   },
   save: {
-    alias: ['s', 'Save'],
+    alias: ['s'],
     desc: baseLite.bundle.getText("save2"),
     type: 'boolean',
     default: true
   }
-}, false)
+}, false)).wrap(160).example('hana-cli serviceKey --instance myInstance --key myKey', baseLite.bundle.getText('serviceKeyExample')).wrap(160).epilog(buildDocEpilogue('connectViaServiceKey', 'connection-auth', ['connect', 'connections', 'config']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')
@@ -97,7 +98,7 @@ export async function setKeyDetails(input) {
       if (err) {
         return base.error(err)
       } 
-      console.log(`Service Key ${input.key} created`)
+      console.log(baseLite.bundle.getText("serviceKey.created", [input.key]))
       let script = ''
       if (input.cf) {
         script = `cf service-key ${input.instance} ${input.key}`
@@ -167,7 +168,7 @@ export async function saveEnv(options, input) {
     let results = await db.execSQL(`SELECT CURRENT_USER AS "Current User", CURRENT_SCHEMA AS "Current Schema" FROM DUMMY`);
     base.outputTableFancy(results)
 
-    let resultsSession = await db.execSQL(`SELECT * FROM M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`);
+    let resultsSession = await db.execSQL(`SELECT * FROM SYS.M_SESSION_CONTEXT WHERE CONNECTION_ID = (SELECT SESSION_CONTEXT('CONN_ID') FROM "DUMMY")`);
     base.outputTableFancy(resultsSession)
 
   } catch (error) {

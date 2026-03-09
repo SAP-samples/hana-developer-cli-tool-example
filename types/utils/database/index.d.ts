@@ -54,17 +54,18 @@ export default class dbClientClass {
     * @returns {Promise<TableData>} table of database tables
     */
     listTables(): Promise<{
-        SCHEMA_NAME?: string;
+        SCHEMA_NAME?: string | undefined;
         TABLE_NAME: string;
-        TABLE_OID?: string;
-        COMMENTS?: string;
+        TABLE_OID?: string | undefined;
+        COMMENTS?: string | undefined;
     }[]>;
     /**
      * Execute single SQL Statement and directly return result set
-     * @param {string} sql - SQL Statement
+     * @param {string} query - SQL Statement
+     * @param {Array<any>} [params] - Optional parameter bindings
      * @returns {Promise<any>} - result set object
      */
-    execSQL(query: any): Promise<any>;
+    execSQL(query: string, params?: Array<any>): Promise<any>;
     /**
     * Getter for Prompts Private Attribute
     * @returns {typeof import("prompt")} prompts - input prompts current value
@@ -74,7 +75,7 @@ export default class dbClientClass {
     * Getter for CDS or HDB database object Private Attribute
     * @returns @type {Object}
     */
-    getDB(): any;
+    getDB(): Object;
     /**
     * Getter for database kind/flavor Private Attribute
     * @returns @type {String} Database Kind / Flavor

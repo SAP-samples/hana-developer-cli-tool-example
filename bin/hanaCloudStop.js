@@ -3,18 +3,22 @@ import * as baseLite from '../utils/base-lite.js'
 import * as cf from '../utils/cf.js'
 import * as btp from '../utils/btp.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'hcStop [name]'
 export const aliases = ['hcstop', 'hc_stop', 'stop']
 export const describe = baseLite.bundle.getText("hcStop")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     name: {
         alias: ['n'],
         type: 'string',
         default: `**default**`,
         desc: baseLite.bundle.getText("hc_instance_name")
     }
-}, false)
+}, false)).wrap(160).example(
+  'hana-cli hcStop --name myInstance',
+  baseLite.bundle.getText("hcStopExample")
+).epilog(buildDocEpilogue('hanaCloudStop', 'hana-cloud', ['hanaCloudStart', 'hanaCloudInstances']))
 
 export async function handler(argv) {
   const base = await import('../utils/base.js')

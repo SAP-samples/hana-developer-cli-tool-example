@@ -1,256 +1,130 @@
 #!/usr/bin/env node
 /*eslint no-console: 0, no-process-exit:0*/
-/*eslint-env node, es6, module */
 // @ts-check
 
+// Parse initial args before yargs
+const args = process.argv.slice(2)
+const requestedCommand = args[0]
+
+/**
+ * Determine if current execution is expected to run a persistent web server.
+ * @returns {boolean}
+ */
+function isServerModeCommand() {
+    if (!requestedCommand) {
+        return false
+    }
+    const normalized = String(requestedCommand).toLowerCase()
+    return ['ui', 'gui', 'server', 'launchpad', 'launchpad'].includes(normalized)
+}
+
+// Defer all imports until after --version fast path
 import * as base from '../utils/base-lite.js'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { commandMap } from './commandMap.js'
+import { getSuggestionMessage } from '../utils/commandSuggestions.js'
+import { loadConfig, applyConfigToEnv } from '../utils/config-loader.js'
 
-import yargs from 'yargs'
-import { hideBin } from 'yargs/helpers'
+// Load configuration early - before any command processing
+const config = await loadConfig()
+applyConfigToEnv(config)
+base.setConfig(config)
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+// Defer yargs import until after fast-path checks (saves ~77ms)
+let yargs, hideBin
 
 // Import package.json for version info
 const pkg = base.require('../package.json')
 
+// Error handler setup
 const errorHandler = err => {
     base.error(err)
-    process.exit(1)
+    if (!isServerModeCommand()) {
+        process.exit(1)
+    }
 }
 process.on('uncaughtException', errorHandler)
 
-// Command file mapping for lazy loading
-const commandMap = {
-    'activateHDI': './activateHDI.js',
-    'adminHDI': './adminHDI.js',
-    'adminHDIGroup': './adminHDIGroup.js',
-    'btp': './btp.js',
-    'btpSubs': './btpSubs.js',
-    'btpInfo': './btpInfo.js',
-    'callProcedure': './callProcedure.js',
-    'call': './callProcedure.js',
-    'certificates': './certificates.js',
-    'cds': './cds.js',
-    'openChangeLog': './openChangeLog.js',
-    'changeLog': './changeLog.js',
-    'changelog': './changeLog.js',
-    'changeLogUI': './changeLogUI.js',
-    'connect': './connect.js',
-    'c': './connect.js',
-    'containers': './containers.js',
-    'containersUI': './containersUI.js',
-    'copy2DefaultEnv': './copy2DefaultEnv.js',
-    'copy2Env': './copy2Env.js',
-    'copy2Secrets': './copy2Secrets.js',
-    'createGroup': './createGroup.js',
-    'createContainer': './createContainer.js',
-    'createContainerUsers': './createContainerUsers.js',
-    'createJWT': './createJWT.js',
-    'createModule': './createModule.js',
-    'createXSAAdmin': './createXSAAdmin.js',
-    'dataTypes': './dataTypes.js',
-    'dataTypesUI': './dataTypesUI.js',
-    'dataVolumes': './dataVolumes.js',
-    'disks': './disks.js',
-    'dropGroup': './dropGroup.js',
-    'dropContainer': './dropContainer.js',
-    'features': './features.js',
-    'featuresUI': './featuresUI.js',
-    'featureUsage': './featureUsage.js',
-    'featureUsageUI': './featureUsageUI.js',
-    'functions': './functions.js',
-    'f': './functions.js',
-    'functionsUI': './functionsUI.js',
-    'hanaCloudHDIInstances': './hanaCloudHDIInstances.js',
-    'hanaCloudHDIInstancesUI': './hanaCloudHDIInstancesUI.js',
-    'hanaCloudInstances': './hanaCloudInstances.js',
-    'hanaCloudStart': './hanaCloudStart.js',
-    'hanaCloudStop': './hanaCloudStop.js',
-    'hdbsql': './hdbsql.js',
-    'hostInformation': './hostInformation.js',
-    'indexes': './indexes.js',
-    'indexesUI': './indexesUI.js',
-    'iniContents': './iniContents.js',
-    'iniFiles': './iniFiles.js',
-    'ini': './iniFiles.js',
-    'inspectFunction': './inspectFunction.js',
-    'if': './inspectFunction.js',
-    'inspectIndex': './inspectIndex.js',
-    'inspectJWT': './inspectJWT.js',
-    'inspectLibMember': './inspectLibMember.js',
-    'inspectLibrary': './inspectLibrary.js',
-    'inspectProcedure': './inspectProcedure.js',
-    'ip': './inspectProcedure.js',
-    'inspectTable': './inspectTable.js',
-    'it': './inspectTable.js',
-    'inspectTableUI': './inspectTableUI.js',
-    'inspectTrigger': './inspectTrigger.js',
-    'inspectUser': './inspectUser.js',
-    'inspectView': './inspectView.js',
-    'iv': './inspectView.js',
-    'issue': './issue.js',
-    'libraries': './libraries.js',
-    'massConvert': './massConvert.js',
-    'massConvertUI': './massConvertUI.js',
-    'massRename': './massRename.js',
-    'massUsers': './massUsers.js',
-    'objects': './objects.js',
-    'openBAS': './openBAS.js',
-    'openDBExplorer': './openDBExplorer.js',
-    'opendbx': './openDBExplorer.js',
-    'ports': './ports.js',
-    'privilegeError': './privilegeError.js',
-    'procedures': './procedures.js',
-    'p': './procedures.js',
-    'querySimple': './querySimple.js',
-    'querySimpleUI': './querySimpleUI.js',
-    'readMe': './readMe.js',
-    'readme': './readMe.js',
-    'readMeUI': './readMeUI.js',
-    'openReadMe': './openReadMe.js',
-    'reclaim': './reclaim.js',
-    'rick': './rick.js',
-    'roles': './roles.js',
-    'hanaCloudSBSSInstances': './hanaCloudSBSSInstances.js',
-    'hanaCloudSBSSInstancesUI': './hanaCloudSBSSInstancesUI.js',
-    'schemas': './schemas.js',
-    's': './schemas.js',
-    'schemasUI': './schemasUI.js',
-    'hanaCloudSchemaInstances': './hanaCloudSchemaInstances.js',
-    'hanaCloudSchemaInstancesUI': './hanaCloudSchemaInstancesUI.js',
-    'hanaCloudSecureStoreInstances': './hanaCloudSecureStoreInstances.js',
-    'hanaCloudSecureStoreInstancesUI': './hanaCloudSecureStoreInstancesUI.js',
-    'connectViaServiceKey': './connectViaServiceKey.js',
-    'sequences': './sequences.js',
-    'status': './status.js',
-    'synonyms': './synonyms.js',
-    'systemInfo': './systemInfo.js',
-    'systemInfoUI': './systemInfoUI.js',
-    'tables': './tables.js',
-    't': './tables.js',
-    'listTables': './tables.js',
-    'listtables': './tables.js',
-    'tablesPG': './tablesPG.js',
-    'tablesSQLite': './tablesSQLite.js',
-    'tablesUI': './tablesUI.js',
-    'traces': './traces.js',
-    'traceContents': './traceContents.js',
-    'triggers': './triggers.js',
-    'UI': './UI.js',
-    'hanaCloudUPSInstances': './hanaCloudUPSInstances.js',
-    'hanaCloudUPSInstancesUI': './hanaCloudUPSInstancesUI.js',
-    'users': './users.js',
-    'version': './version.js',
-    'views': './views.js',
-    'v': './views.js'
+// Convert --version or -V flags to version command
+if (args.length > 0 && (args[0] === '--version' || args[0] === '-V')) {
+    args[0] = 'version'
 }
 
-// Find which command is being requested
-const args = hideBin(process.argv)
-const requestedCommand = args[0]
+// Load yargs only when needed
+if (!yargs) {
+    const yargsModule = await import('yargs')
+    yargs = yargsModule.default
+    const helpers = await import('yargs/helpers')
+    hideBin = helpers.hideBin
+}
+
+// Reconstruct argv with the potentially modified args
+const processArgv = [...process.argv.slice(0, 2), ...args]
+const yargsArgs = hideBin(processArgv)
+
+// Helper to create yargs instance with common configuration
+function createYargsInstance(yargsArgs) {
+    return yargs(yargsArgs)
+        .scriptName(base.colors.blue('hana-cli'))
+        .usage(base.colors.blue(base.bundle.getText("usage")))
+        .wrap(160)
+        .help('help').alias('help', 'h')
+        .version(false) // Disable default version handler, use version command instead
+        .alias('version', 'V')
+        .example([[base.colors.green("connect:"), base.bundle.getText("example")]])
+        .epilog(base.colors.blue(base.bundle.getText("epilog")))
+        .fail((msg, err) => {
+            if (err) {
+                console.error(base.colors.red(err.message))
+            } else if (msg) {
+                // Check if this is an unknown command error and translate it
+                const unknownCommandMatch = msg.match(/Unknown (?:command|argument): (\S+)/)
+                if (unknownCommandMatch) {
+                    const unknownCommand = unknownCommandMatch[1]
+                    // Replace yargs' English message with our translated version
+                    const translatedMsg = base.bundle.getText("unknownCommand", [unknownCommand])
+                    console.error(base.colors.red(translatedMsg))
+                    
+                    // Add suggestion if available
+                    const suggestionMsg = getSuggestionMessage(unknownCommand, base.bundle)
+                    if (suggestionMsg) {
+                        console.error(base.colors.yellow(suggestionMsg))
+                    }
+                } else {
+                    // For other errors, display as-is
+                    console.error(base.colors.red(msg))
+                }
+            }
+            process.exit(1)
+        })
+}
 
 // If a known command is requested, load only that command
 if (requestedCommand && commandMap[requestedCommand]) {
-    base.debug(`Lazy loading command: ${requestedCommand}`)
+    base.debug(base.bundle.getText("debug.cli.lazyLoad", [requestedCommand]))
     const commandModule = await import(commandMap[requestedCommand])
     
-    base.debug(`Before Yargs`)
+    base.debug(base.bundle.getText("debug.cli.beforeYargs"))
     // @ts-ignore
-    yargs(args)
-        .scriptName(base.colors.blue('hana-cli'))
-        .usage(base.colors.blue(base.bundle.getText("usage")))
+    const yargsInstance = createYargsInstance(yargsArgs)
         .demandCommand(1, "")
         .strictCommands()
         .command(commandModule)
-        .option('h', {
-            alias: 'help',
-            description: base.colors.green(base.bundle.getText("help"))
-        })
-        .help('help').alias('help', 'h')
-        .example([[base.colors.green("connect:"), base.bundle.getText("example")]])
-        .epilog(base.colors.blue(base.bundle.getText("epilog")))
-        .version(pkg.version).alias('version', 'V')
-        .completion()
-        .fail((msg, err) => {
-            if (err) {
-                console.error(base.colors.red(err.message))
-            } else if (msg) {
-                console.error(base.colors.red(msg))
-            }
-            process.exit(1)
-        })
-        .argv
-    base.debug(`After Yargs`)
+    
+    await yargsInstance.argv
+    base.debug(base.bundle.getText("debug.cli.afterYargs"))
 } else {
-    // For help, version, or unknown commands, load all commands
-    base.debug(`Loading all commands for help/discovery`)
+    // For help, unknown commands, or no arguments - load all commands to show full help
+    base.debug(base.bundle.getText("debug.cli.loadAll"))
     const index = await import('./index.js')
     
-    base.debug(`Before Yargs`)
+    base.debug(base.bundle.getText("debug.cli.beforeYargs"))
     // @ts-ignore
-    yargs(hideBin(process.argv))
-        .scriptName(base.colors.blue('hana-cli'))
-        .usage(base.colors.blue(base.bundle.getText("usage")))
+    const yargsInstance = createYargsInstance(yargsArgs)
         .demandCommand(1, "")
         .strictCommands()
         .command(await index.init())
-        .option('h', {
-            alias: 'help',
-            description: base.colors.green(base.bundle.getText("help"))
-        })
-        .help('help').alias('help', 'h')
-        .example([[base.colors.green("connect:"), base.bundle.getText("example")]])
-        .epilog(base.colors.blue(base.bundle.getText("epilog")))
-        .version(pkg.version).alias('version', 'V')
-        .completion()
-        .fail((msg, err) => {
-            if (err) {
-                console.error(base.colors.red(err.message))
-            } else if (msg) {
-                console.error(base.colors.red(msg))
-            }
-            process.exit(1)
-        })
-        .argv
-    base.debug(`After Yargs`)
+    
+    await yargsInstance.argv
+    base.debug(base.bundle.getText("debug.cli.afterYargs"))
 }
 
-//versionCheck.checkVersion().then(async () => {
-
-// @ts-ignore
-//   const pkg = base.require('../package.json')
-//  const notifier =  updateNotifier({ pkg }).notify({ isGlobal: true })
-//  base.debug(notifier.update)
-
-/*
-const errorHandler = err => {
-    base.error(err)
-    process.exit(1)
-}
-process.on('uncaughtException', errorHandler)
-process.on('unhandledRejection', errorHandler)
-
-//setDebug.enable('hana-cli, *')
-base.debug(`Before Yargs`)
-// @ts-ignore
-yargs(hideBin(process.argv))
-    .scriptName('hana-cli')
-    .usage(base.bundle.getText("usage"))
-    .demandCommand(1, "")
-    // @ts-ignore
-    .command(await index.init())
-    .option('h', {
-        alias: 'help',
-        description: base.bundle.getText("help")
-    })
-    .help('help').alias('help', 'h')
-    .example([[base.colors.green("connect:"), base.bundle.getText("example")]])
-    .epilog(base.bundle.getText("epilog"))
-    .version(false)
-    .completion()
-    .argv
-base.debug(`After Yargs`)
-}) */

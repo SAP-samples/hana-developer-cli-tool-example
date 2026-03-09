@@ -3,7 +3,7 @@
 	"sap.app": {
 		"id": "sap.hanacli.inspect",
 		"type": "application",
-		"i18n": "i18n/i18n.properties",
+		"i18n": "/i18n/inspect.properties",
 		"applicationVersion": {
 			"version": "1.0.0"
 		},
@@ -87,7 +87,7 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "sap.hanacli.inspect.i18n.i18n"
+					"bundleUrl": "/i18n/inspect.properties"
 				}
 			},
 			"i18nReuse": {

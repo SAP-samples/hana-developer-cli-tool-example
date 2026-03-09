@@ -1,0 +1,85 @@
+<mvc:View controllerName="sap.hanacli.inspect.controller.callProcedure-ui" height="100%" width="100%"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:table="sap.ui.table"
+	xmlns="sap.m">
+	<ScrollContainer id="scrollContainerCallProcedure" height="100%" width="100%" vertical="true" focusable="true">
+		<f:SimpleForm id="SimpleFormToolbarCallProcedure" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" ariaLabelledBy="Title1">
+			<f:toolbar>
+				<Toolbar id="TB1CallProcedure">
+					<Title id="Title1CallProcedure" text="{i18n>appTitle}: {config>/cmd}"/>
+					<ToolbarSpacer id="spacer1CallProcedure"/>
+					<Button id="refreshButtonCallProcedure" icon="sap-icon://refresh" tooltip="{i18nReuse>gui.execute}" press="executeCmd" />
+				</Toolbar>
+			</f:toolbar>
+			<f:content>
+
+				<Toolbar id="targetToolbarCallProcedure" ariaLabelledBy="Title2CallProcedure">
+					<Title id="Title2CallProcedure" text="{i18nReuse>gui.target}"/>
+					<ToolbarSpacer id="spacerCallProcedure" />
+					<Button id="settingsButtonCallProcedure" icon="sap-icon://settings" tooltip="{i18nReuse>gui.targetDetails}" press=".openUrl('/ui/#systeminfo-ui', true)" />
+				</Toolbar>
+
+				<core:Fragment fragmentName="sap.hanacli.tables.view.reuse.schema" type="XML"/>
+
+				<Label id="labelProcedureCallProcedure" text="{i18nReuse>procedure}" required="true"/>
+				<Input id="ProcedureCallProcedure" value="{/procedure}" showSuggestion="true" suggest="loadProcedureFilter" change="onProcedureChange">
+				</Input>
+
+				<Button id="loadParametersButton" text="{i18nReuse>gui.loadParameters}" press="onLoadParameters" type="Emphasized" icon="sap-icon://download" />
+
+			</f:content>
+		</f:SimpleForm>
+
+		<!-- Dynamic Parameters Form -->
+		<f:SimpleForm id="parametersForm" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" singleContainerFullSize="false" visible="{= ${resultsModel>/hasParameters} === true }">
+			<f:toolbar>
+				<Toolbar id="parametersToolbar" ariaLabelledBy="parametersTitle">
+					<Title id="parametersTitle" text="{i18nReuse>gui.inputParameters}" level="H2"/>
+				</Toolbar>
+			</f:toolbar>
+			<f:content>
+				<!-- Dynamic parameter fields will be added here -->
+			</f:content>
+		</f:SimpleForm>
+
+		<!-- Connection and Debug Settings -->
+		<f:SimpleForm id="connectionForm" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="true" singleContainerFullSize="false" visible="{= ${resultsModel>/hasParameters} === true }">
+			<f:content>
+				<core:Fragment fragmentName="sap.hanacli.common.view.Connection" type="XML"/>
+				<core:Fragment fragmentName="sap.hanacli.common.view.Debug" type="XML"/>
+			</f:content>
+		</f:SimpleForm>
+
+		<!-- Results Section with Tabs for Multiple Outputs -->
+		<Panel id="resultsPanel" headerText="{i18nReuse>gui.results}" expandable="true" expanded="true" visible="{= ${resultsModel>/hasResults} === true }">
+			<IconTabBar id="outputTabBar" expanded="true" class="sapUiResponsiveContentPadding">
+				<items>
+					<!-- Output Scalar Tab -->
+					<IconTabFilter id="iconTabFilterOutputScalar" text="{i18nReuse>gui.outputScalar}" key="outputScalar" visible="{= ${resultsModel>/hasOutputScalar} === true }">
+						<table:Table id="outputScalarTable" selectionMode="None" visibleRowCount="5" rows="{resultsModel>/outputScalar}" threshold="15" enableBusyIndicator="true">
+							<table:noData>
+								<BusyIndicator id="busyIndicatorOutputScalar" class="sapUiMediumMargin"/>
+							</table:noData>
+						</table:Table>
+					</IconTabFilter>
+
+					<!-- Results Tab (for single result set) -->
+					<IconTabFilter id="iconTabFilterResults" text="{i18nReuse>gui.results}" key="results" visible="{= ${resultsModel>/hasResults1} === true }">
+						<table:Table id="resultsTable" selectionMode="MultiToggle" visibleRowCount="10" enableSelectAll="false" rows="{resultsModel>/results}" threshold="15" enableBusyIndicator="true">
+							<table:noData>
+								<BusyIndicator id="busyIndicatorResults" class="sapUiMediumMargin"/>
+							</table:noData>
+						</table:Table>
+					</IconTabFilter>
+
+					<!-- Dynamic Result Tabs (for multiple result sets) -->
+					<!-- These will be created dynamically in the controller -->
+				</items>
+			</IconTabBar>
+		</Panel>
+
+	</ScrollContainer>
+</mvc:View>

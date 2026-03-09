@@ -333,6 +333,12 @@ Provides functionality for bulk conversion and export of database objects (table
 - Error logging and handling
 - Support for SQL-based and CDS-based outputs
 
+Notes:
+
+- `limit` values are validated as positive integers when provided.
+- View exports in `hdbtable` output are written as `.hdbview` artifacts in the ZIP.
+- Output folders are created automatically if they do not exist.
+
 **Key Functions**:
 
 - `hdbtableTablesSQL(prompts, results, wss, db, schema, replacer, zip, logOutput)` - Convert tables to .hdbtable SQL format

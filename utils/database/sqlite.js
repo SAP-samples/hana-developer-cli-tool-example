@@ -14,7 +14,7 @@ export default class extends DBClientClass {
      */
     constructor(prompts, optionsCDS) {
         super(prompts, optionsCDS)
-        base.debug(`Database client specific class for profile: ${prompts.profile}`)
+        base.debug(base.bundle.getText("debug.dbClientSpecificProfile", [prompts.profile]))
     }
 
     /**
@@ -22,14 +22,18 @@ export default class extends DBClientClass {
      * @returns {Promise<Array>} - array of table objects
      */
     async listTables() {
-        base.debug(`listTables for for ${this.#clientType}`)
-        const tableName = super.adjustWildcard(super.getPrompts().table)
+        base.debug(base.bundle.getText("debug.dbListTablesForClient", [this.#clientType]))
+        const prompts = super.getPrompts()
+        prompts.limit = base.validateLimit(prompts.limit)
+        const tableName = super.adjustWildcard(prompts.table)
         let dbQuery = SELECT
             .columns({ref:["name"],as:'TABLE_NAME'})
             .from("sqlite_schema")
             .where({ type: 'table', name: { like: tableName } })
-            .limit(super.getPrompts().limit)
-        base.debug(JSON.stringify(dbQuery))
+            .limit(prompts.limit)
+        if (prompts.debug) {
+            base.debug(JSON.stringify(dbQuery))
+        }
         let results = await this.getDB().run(dbQuery)
         return results
 

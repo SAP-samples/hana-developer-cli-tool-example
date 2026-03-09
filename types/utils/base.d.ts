@@ -12,6 +12,14 @@ export function stopSpinnerInt(): void;
  */
 export function blankLine(): void;
 /**
+ * Validate that a limit parameter is a valid positive number
+ * @param {any} limit - The limit value to validate
+ * @param {string} [paramName='limit'] - Parameter name for error messages
+ * @throws {Error} If limit is not a valid positive number
+ * @returns {number} The validated limit as a number
+ */
+export function validateLimit(limit: any, paramName?: string): number;
+/**
  *
  * @param {object} newPrompts - processed input prompts
  */
@@ -29,6 +37,7 @@ export function clearConnection(): Promise<void>;
 /**
  * @param {object} [options] - override the already set parameters with new connection options
  * @returns {Promise<hdbextPromiseInstance>} - hdbext instanced promisfied
+ * @throws {Error} If connection creation fails
  */
 export function createDBConnection(options?: object): Promise<hdbextPromiseInstance>;
 /**
@@ -71,8 +80,10 @@ export function askFalse(): boolean;
  * @param {object} inputSchema - prompts current value
  * @param {boolean} [iConn=true] - Add Connection Group
  * @param {boolean} [iDebug=true] - Add Debug Group
+ * @param {object} [builderOptions] - Command builder options for validation
+ * @throws {Error} If required parameters are missing or invalid
  */
-export function promptHandler(argv: import("yargs").CommandBuilder, processingFunction: Function, inputSchema: object, iConn?: boolean, iDebug?: boolean): Promise<void>;
+export function promptHandler(argv: import("yargs").CommandBuilder, processingFunction: Function, inputSchema: object, iConn?: boolean, iDebug?: boolean, builderOptions?: object): Promise<void>;
 /**
  * Handle Errors cleanup connections and decide how to alter the user
  * @param {*} error - Error Object
@@ -136,14 +147,14 @@ export function output(content: any): void;
  * @param {Object} res - Express response object
  * @param {Function} next - Express next middleware function
  */
-export function globalErrorHandler(err: Error, req: any, res: any, next: Function): void;
+export function globalErrorHandler(err: Error, req: Object, res: Object, next: Function): void;
 /**
  * 404 Not Found handler
  * Must be placed after all other route definitions
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  */
-export function notFoundHandler(req: any, res: any): void;
+export function notFoundHandler(req: Object, res: Object): void;
 /**
  * Setup Express and Launch Browser
  * @param {string} urlPath - URL Path to Launch
@@ -177,7 +188,7 @@ export const dbClass: typeof dbClassDef;
 export const sqlInjection: typeof sqlInjectionDef;
 export const sqlInjectionUtils: typeof sqlInjectionDef;
 export const colors: import("chalk").ChalkInstance;
-export const debug: any;
+export function debug(...args: any[]): any;
 /** @type string */
 export let hanaBin: string;
 /** @typeof TextBundle - instance of sap/textbundle */

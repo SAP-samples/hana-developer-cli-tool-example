@@ -1,27 +1,28 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'createJWT [name]'
 export const aliases = ['cJWT', 'cjwt', 'cJwt']
 export const describe = baseLite.bundle.getText("createJWT")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   name: {
-    alias: ['c', 'Name'],
+    alias: ['c'],
     type: 'string',
     desc: baseLite.bundle.getText("jwtName")
   },
   certificate: {
-    alias: ['c', 'Certificate'],
+    alias: ['cert'],
     type: 'string',
     desc: baseLite.bundle.getText("certificate")
   },
   issuer: {
-    alias: ['i', 'Issuer'],
+    alias: ['i'],
     desc: baseLite.bundle.getText("issuer"),
     type: 'string'
   }
-})
+})).wrap(160).example('hana-cli createJWT --name myJWT --issuer https://example.com', baseLite.bundle.getText("createJWTExample")).wrap(160).epilog(buildDocEpilogue('createJWT', 'connection-auth', ['inspectJWT', 'connectViaServiceKey']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

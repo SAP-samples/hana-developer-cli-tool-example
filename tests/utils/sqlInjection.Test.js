@@ -3,7 +3,6 @@
  * @module SQLInjection Tests - Unit tests for SQL injection protection utilities
  */
 
-import { describe, it } from 'mocha'
 import { assert } from '../base.js'
 import * as sqlInjection from '../../utils/sqlInjection.js'
 

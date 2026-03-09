@@ -19,7 +19,7 @@ export function dbQuery(prompts: object): Promise<any>;
 export const command: "querySimple";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace query {
         let description: string;

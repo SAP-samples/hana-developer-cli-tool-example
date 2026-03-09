@@ -3,7 +3,6 @@
  * @module Routes HanaList Tests - Integration tests for HANA list routes with mocked requests/responses
  */
 
-import { describe, it, beforeEach } from 'mocha'
 import { assert } from '../base.js'
 import express from 'express'
 import { route, listHandler } from '../../routes/hanaList.js'

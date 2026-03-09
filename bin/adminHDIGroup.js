@@ -1,22 +1,23 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'adminHDIGroup [user] [group]'
 export const aliases = ['adHDIG', 'adhdig']
 export const describe = baseLite.bundle.getText("adminHDIGroup")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   user: {
     alias: ['u', 'User'],
     desc: baseLite.bundle.getText("user")
   },
   group: {
-    alias: ['g', 'Group'],
+    alias: ['g'],
     type: 'string',
     default: 'SYS_XS_HANA_BROKER',
     desc: baseLite.bundle.getText("group")
   }
-})
+})).wrap(160).example('hana-cli adminHDIGroup --action create --group myGroup', baseLite.bundle.getText("adminHDIGroupExample")).wrap(160).epilog(buildDocEpilogue('adminHDIGroup', 'hdi-management', ['adminHDI', 'activateHDI']))
 
 /**
  * Command handler function
@@ -75,7 +76,7 @@ export async function activate(prompts) {
       console.table(resultsGrant)
     }
     else
-      base.debug('Do not grant privileges to ' + prompts.user)
+      base.debug(base.bundle.getText("debug.adminHDIGroup.skipGrant", [prompts.user]))
 
     return base.end()
   } catch (error) {

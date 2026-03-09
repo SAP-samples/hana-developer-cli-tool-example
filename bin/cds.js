@@ -5,25 +5,27 @@ import { createRequire } from 'module'
 // @ts-ignore
 import cds from '@sap/cds'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 global.__xRef = []
 
 export const command = 'cds [schema] [table]'
 export const aliases = ['cdsPreview']
 export const describe = baseLite.bundle.getText("cds")
-export const builder = baseLite.getBuilder({
+const t = (key, params = []) => baseLite.bundle.getText(key, params)
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   table: {
-    alias: ['t', 'Table'],
+    alias: ['t'],
     type: 'string',
     desc: baseLite.bundle.getText("table")
   },
   schema: {
-    alias: ['s', 'Schema'],
+    alias: ['s'],
     type: 'string',
     default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
   },
   view: {
-    alias: ['v', 'View'],
+    alias: ['v'],
     type: 'boolean',
     default: false,
     desc: baseLite.bundle.getText("viewOpt")
@@ -35,7 +37,7 @@ export const builder = baseLite.getBuilder({
     desc: baseLite.bundle.getText("useHanaTypes")
   },
   useQuoted: {
-    alias: ['q', 'quoted', 'quotedIdentifiers'],
+    alias: ['q', 'quoted'],
     desc: baseLite.bundle.getText("gui.useQuoted"),
     type: 'boolean',
     default: false
@@ -45,8 +47,13 @@ export const builder = baseLite.getBuilder({
     type: 'number',
     default: false,
     desc: baseLite.bundle.getText("port")
+  },
+  profile: {
+    alias: ['pr'],
+    type: 'string',
+    desc: baseLite.bundle.getText("profile")
   }
-})
+})).wrap(160).example('hana-cli cds --table myTable --schema MYSCHEMA', baseLite.bundle.getText("cdsExample")).wrap(160).epilog(buildDocEpilogue('cds', 'developer-tools', ['activateHDI', 'generateDocs', 'codeTemplate']))
 
 export async function handler(argv) {
   const base = await import('../utils/base.js')
@@ -191,7 +198,7 @@ export async function cdsBuild(prompts) {
 
 
     if (!prompts.view) {
-      console.log(`Schema: ${schema}, Table: ${prompts.table}`)
+      console.log(t("cds.log.schemaTable", [schema, prompts.table]))
       object = await dbInspect.getTable(db, schema, prompts.table)
       fields = await dbInspect.getTableFields(db, object[0].TABLE_OID)
       constraints = await dbInspect.getConstraints(db, object)
@@ -200,7 +207,7 @@ export async function cdsBuild(prompts) {
 
         `@cds.persistence.skip\n ${tableSource} \n }`
     } else {
-      console.log(`Schema: ${schema}, View: ${prompts.table}`)
+      console.log(t("cds.log.schemaView", [schema, prompts.table]))
       object = await dbInspect.getView(db, schema, prompts.table)
       fields = await dbInspect.getViewFields(db, object[0].VIEW_OID)
       let viewSource = await dbInspect.formatCDS(db, object, fields, null, "view", schema, "preview")
@@ -238,26 +245,26 @@ async function cdsServerSetup(prompts, cdsSource) {
   // This bridges the ES module / CommonJS gap
   try {
     const require = createRequire(import.meta.url)
-    console.log('✓ Loading @sap/cds-fiori plugin via CommonJS require...')
+    console.log(t("cds.plugin.loading"))
     
     // Get the plugin's preview functionality
     const preview = require('@sap/cds-fiori/app/preview')
-    console.log('✓ @sap/cds-fiori plugin loaded successfully')
-    console.log('✓ Preview module:', typeof preview)
+    console.log(t("cds.plugin.loaded"))
+    console.log(t("cds.plugin.previewModule"), typeof preview)
   } catch (pluginErr) {
-    console.warn(`Warning: Failed to load @sap/cds-fiori plugin: ${pluginErr.message}`)
+    console.warn(t("cds.plugin.loadFailed", [pluginErr.message]))
   }
 
   // Handle server-level errors gracefully
   server.on('error', (err) => {
-    base.debug(`Server Error: ${err.message}`)
-    console.error(`Server Error: ${err.message}`)
+    base.debug(baseLite.bundle.getText("debug.cds.serverError", [err.message]))
+    console.error(t("cds.server.error", [err.message]))
   })
 
   // Handle any unhandled promise rejections in the server context
   process.on('unhandledRejection', (reason, promise) => {
-    base.debug(`Unhandled Rejection: ${reason}`)
-    console.error(`Unhandled Rejection:`, reason)
+    base.debug(baseLite.bundle.getText("debug.cds.unhandledRejection", [reason]))
+    console.error(t("cds.unhandledRejection"), reason)
   })
 
   //CDS OData Service
@@ -279,24 +286,24 @@ async function cdsServerSetup(prompts, cdsSource) {
     cds.env.fiori = {}
   }
   cds.env.fiori.preview = true
-  console.log('✓ CDS Fiori preview enabled: cds.env.fiori.preview =', cds.env.fiori.preview)
+  console.log(t("cds.preview.enabled"), cds.env.fiori.preview)
 
   // Listen for the 'served' event to verify it fires
   cds.on('served', (services) => {
-    console.log('✓ CDS "served" event fired')
-    console.log('  Services:', Object.keys(services))
-    console.log('  cds.env.fiori:', JSON.stringify(cds.env.fiori, null, 2))
+    console.log(t("cds.served.fired"))
+    console.log(t("cds.served.services"), Object.keys(services))
+    console.log(t("cds.served.fiori"), JSON.stringify(cds.env.fiori, null, 2))
     
     // Check if Fiori preview routes were registered
     if (app._router && app._router.stack) {
       const fioriRoutes = app._router.stack.filter(layer => 
         layer.route && layer.route.path && layer.route.path.includes('$fiori-preview')
       )
-      console.log('  Fiori preview routes found:', fioriRoutes.length)
+      console.log(t("cds.preview.routesFound", [fioriRoutes.length]))
       if (fioriRoutes.length > 0) {
-        console.log('  Route paths:', fioriRoutes.map(r => r.route.path))
+        console.log(t("cds.preview.routePaths"), fioriRoutes.map(r => r.route.path))
       } else {
-        console.warn('  WARNING: No $fiori-preview routes found in Express app')
+        console.warn(t("cds.preview.routesMissing"))
       }
     }
   })
@@ -305,15 +312,15 @@ async function cdsServerSetup(prompts, cdsSource) {
   cds.connect()
 
   let entity = prompts.table
-  base.debug(`Entity Before ${entity}`)
+  base.debug(baseLite.bundle.getText("debug.cds.entityBefore", [entity]))
   entity = entity.replace(/\./g, "_")
   entity = entity.replace(/::/g, "_")
   let graphQLEntity = entity.replace(/_/g, ".")
-  base.debug(`GraphQL Entity After ${graphQLEntity}`)
-  base.debug('CDS Source:')
+  base.debug(baseLite.bundle.getText("debug.cds.graphqlEntityAfter", [graphQLEntity]))
+  base.debug(baseLite.bundle.getText("debug.cds.sourceLabel"))
   base.debug(cdsSource)
-  console.log(`✓ Entity name for routes: ${entity}`)
-  console.log('✓ CDS Source preview:')
+  console.log(t("cds.entity.routes", [entity]))
+  console.log(t("cds.source.preview"))
   console.log(cdsSource.substring(0, 500) + '...')
 
   // @ts-ignore
@@ -325,10 +332,110 @@ async function cdsServerSetup(prompts, cdsSource) {
     const parsedModel = await cds.parse(cdsSource)
     compiledModel = cds.compile(parsedModel)
     
+    // Setup Swagger/OpenAPI documentation
+    try {
+      console.log("✓ Setting up API documentation...")
+      
+      // Generate basic OpenAPI spec manually since cds-dk OpenAPI compiler may not be available
+      const openAPISpec = {
+        openapi: '3.0.0',
+        info: {
+          title: 'HANA CLI CDS Service',
+          version: '1.0.0',
+          description: `CDS OData v4 service for ${entity}`
+        },
+        servers: [
+          {
+            url: `http://localhost:${port}`,
+            description: 'Development server'
+          }
+        ],
+        paths: {
+          [odataURL]: {
+            get: {
+              summary: 'Service Document',
+              description: 'Returns the OData service document',
+              responses: {
+                '200': {
+                  description: 'Service document',
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'object'
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          [`${odataURL}/${entity}`]: {
+            get: {
+              summary: `Get ${entity} entities`,
+              description: `Retrieve entities from ${entity}`,
+              responses: {
+                '200': {
+                  description: 'List of entities',
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'object',
+                        properties: {
+                          value: {
+                            type: 'array',
+                            items: {
+                              type: 'object'
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          [`${odataURL}/$metadata`]: {
+            get: {
+              summary: 'Service Metadata',
+              description: 'Returns the OData service metadata (EDMX)',
+              responses: {
+                '200': {
+                  description: 'Service metadata',
+                  content: {
+                    'application/xml': {
+                      schema: {
+                        type: 'string'
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      const swaggerUi = await import('swagger-ui-express')
+      console.log("✓ Swagger UI module loaded")
+      
+      // Mount Swagger UI using correct pattern
+      app.use('/api-docs', swaggerUi.serve)
+      app.get('/api-docs', swaggerUi.setup(openAPISpec, { 
+        explorer: true,
+        customSiteTitle: 'HANA CLI CDS API Documentation'
+      }))
+      
+      console.log("✓ API documentation configured at /api-docs")
+    } catch (swaggerErr) {
+      base.debug(baseLite.bundle.getText("debug.cds.swaggerSkipped", [swaggerErr.message]))
+      console.warn(`Warning: API documentation setup failed: ${swaggerErr.message}`)
+    }
+    
     // Debug: show what's in the compiled model
-    console.log('✓ Compiled model definitions:')
+    console.log(t("cds.model.compiledDefinitions"))
     Object.keys(compiledModel.definitions || {}).forEach(key => {
-      console.log(`  - ${key}`)
+      console.log(t("cds.listItemPrefix") + key)
     })
 
     // Ensure model is properly registered in CDS
@@ -347,18 +454,18 @@ async function cdsServerSetup(prompts, cdsSource) {
       .with(srv => {
         // Log the actual entity names in the service for debugging
         const entityNames = Object.keys(srv.entities || {})
-        base.debug(`Service entities: ${entityNames.join(', ')}`)
-        console.log(`✓ Service entities: ${entityNames.join(', ')}`)
+        base.debug(baseLite.bundle.getText("debug.cds.serviceEntities", [entityNames.join(', ')]))
+        console.log(t("cds.service.entities", [entityNames.join(', ')]))
         
         // Use the actual entity name from the service (first entity)
         // This ensures we match what CDS actually registered
         actualEntityName = entityNames.length > 0 ? entityNames[0] : entity
-        console.log(`✓ Using entity name: ${actualEntityName}`)
+        console.log(t("cds.service.entityUsing", [actualEntityName]))
         
         // @ts-ignore
         srv.on(['READ'], [actualEntityName], async (req) => {
 
-          base.debug(`In Read Exit ${prompts.table}`)
+          base.debug(baseLite.bundle.getText("debug.cds.readExit", [prompts.table]))
 
           // Build a new query targeting the actual HANA table
           let query1 = await cds.parse.cql(`SELECT from ${prompts.table}`)
@@ -436,40 +543,19 @@ async function cdsServerSetup(prompts, cdsSource) {
 
     // Manually emit the 'served' event since it's not firing automatically
     // The @sap/cds-fiori plugin listens for this event to register its routes
-    console.log('✓ Manually emitting CDS "served" event...')
+    console.log(t("cds.served.emit"))
     cds.emit('served', services)
 
     // CDS OData - add homepage for preview
     // Serve homepage with links to available endpoints
     app.get('/', (_, res) => res.send(getIndex(odataURL, actualEntityName)))
 
-    // Setup Swagger UI for API documentation
-    try {
-      Object.defineProperty(cds.compile.to, 'openapi', { configurable: true, get: () => base.require('@sap/cds-dk/lib/compile/to_openapi') })
-      // @ts-ignore
-      let metadata = await cds.compile.to.openapi(compiledModel, {
-        service: 'HanaCli',
-        servicePath: odataURL,
-        'openapi:url': odataURL,
-        'openapi:diagram': true,
-        to: 'openapi'
-      })
-
-      let serveOptions = {
-        explorer: true
-      }
-      const swaggerUi = await import('swagger-ui-express')
-      app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(metadata, serveOptions))
-    } catch (swaggerErr) {
-      base.debug(`Swagger setup skipped: ${swaggerErr.message}`)
-    }
-
     // Add error handling middleware
     app.use((err, req, res, next) => {
-      base.debug(`Express Error Handler: ${err.message}`)
-      console.error(`Request Error: ${err.message}`)
+      base.debug(baseLite.bundle.getText("debug.cds.expressErrorHandler", [err.message]))
+      console.error(t("cds.request.error", [err.message]))
       if (!res.headersSent) {
-        res.status(500).json({ error: 'Internal Server Error', message: err.message })
+        res.status(500).json({ error: baseLite.bundle.getText("error.internalServerError"), message: err.message })
       }
     })
 
@@ -478,13 +564,13 @@ async function cdsServerSetup(prompts, cdsSource) {
     server.listen(port, async () => {
       // @ts-ignore
       let serverAddr = `http://localhost:${server.address().port}`
-      console.info(`HTTP Server: ${serverAddr}`)
+      console.info(t("server.httpServer", [serverAddr]))
       const { default: open } = await import('open')
       await open(serverAddr, {wait: true})
     })
   }
   catch (err) {
-    base.debug(`CDS Setup Error: ${err.code} - ${err.message}`)
+    base.debug(baseLite.bundle.getText("debug.cds.setupError", [err.code, err.message]))
     console.log(err)
     if (err.code === 'MODULE_NOT_FOUND') {
       throw baseLite.bundle.getText("cds-dk")
@@ -494,7 +580,7 @@ async function cdsServerSetup(prompts, cdsSource) {
 }
 
 export function getIndex(odataURL, entity) {
-  base.debug('getIndex')
+  // base.debug('getIndex') // Removed: base is not in scope here
   return `
   <html>
       <head>
@@ -554,13 +640,13 @@ export function getIndex(odataURL, entity) {
       </head>
       <body>
           <h1>${baseLite.bundle.getText("cdsIndex")}</h1>
-          <p class="subtitle"> These are the paths currently served ...
+          <p class="subtitle"> ${baseLite.bundle.getText("cds.index.subtitle")}
 
-          <h2> Web Applications: </h2>
-          <h3><a href="/api-docs/">Swagger UI</a></h3>
-          <h3><a href="/$fiori-preview/HanaCli/${entity}">Fiori Preview</a></h3>
+          <h2> ${baseLite.bundle.getText("cds.index.webApps")} </h2>
+          <h3><a href="/api-docs/">${baseLite.bundle.getText("cds.index.swaggerUi")}</a></h3>
+          <h3><a href="/$fiori-preview/HanaCli/${entity}">${baseLite.bundle.getText("cds.index.fioriPreview")}</a></h3>
 
-          <h2> Service Endpoints: </h2>
+          <h2> ${baseLite.bundle.getText("cds.index.serviceEndpoints")} </h2>
               <h3>
                   <a href="${odataURL}">${odataURL}</a> /
                   <a href="${odataURL}/$metadata">$metadata</a>

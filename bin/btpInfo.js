@@ -1,21 +1,22 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 import * as btp from '../utils/btp.js'
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 const colors = baseLite.colors
 
 export const command = 'btpInfo'
 export const aliases = ['btpinfo']
 export const describe = baseLite.bundle.getText("btpInfo")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     output: {
-        alias: ['o', 'Output'],
+        alias: ['o'],
         choices: ["tbl", "json"],
         default: "tbl",
         type: 'string',
         desc: baseLite.bundle.getText("outputType")
       }
-}, false)
+}, false)).wrap(160).example('hana-cli btpInfo --output json', baseLite.bundle.getText("btpInfoExample")).wrap(160).epilog(buildDocEpilogue('btpInfo', 'btp-integration', ['btp', 'btpTarget', 'btpSubs']))
 
 
 export async function handler(argv) {
@@ -59,6 +60,48 @@ export async function getBTPInfo(prompts) {
             }
         }
         return base.end()
+    } catch (error) {
+        base.error(error)
+    }
+}
+
+export async function getBTPInfoUI(prompts) {
+    const base = await import('../utils/base.js')
+    base.debug('getBTPInfoUI')
+    try {
+        base.setPrompts(prompts)
+        let data = await btp.getBTPConfig()
+        
+        // Transform data for UI
+        let result = {
+            UserName: data.UserName,
+            ServerURL: data.ServerURL,
+            Version: data.Version,
+            GlobalAccount: '',
+            GlobalAccountID: '',
+            Directory: '',
+            DirectoryID: '',
+            SubAccount: '',
+            SubAccountID: ''
+        }
+        
+        // Extract target hierarchy items
+        if (data.TargetHierarchy) {
+            for (let item of data.TargetHierarchy) {
+                if (item.Type === 'globalaccount') {
+                    result.GlobalAccount = item.DisplayName
+                    result.GlobalAccountID = item.ID
+                } else if (item.Type === 'directory') {
+                    result.Directory = item.DisplayName
+                    result.DirectoryID = item.ID
+                } else if (item.Type === 'subaccount') {
+                    result.SubAccount = item.DisplayName
+                    result.SubAccountID = item.ID
+                }
+            }
+        }
+        
+        return result
     } catch (error) {
         base.error(error)
     }

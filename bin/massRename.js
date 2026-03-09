@@ -2,32 +2,33 @@
 import * as baseLite from '../utils/base-lite.js'
 import cds from '@sap/cds'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'massRename'
 export const aliases = ['mr', 'massrename', 'massRN', 'massrn']
 export const describe = baseLite.bundle.getText("massRename")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   schema: {
-    alias: ['s', 'schema'],
+    alias: ['s'],
     type: 'string',
     desc: baseLite.bundle.getText("schemaCDS")
   },
   namespace: {
-    alias: ['n', 'namespace'],
+    alias: ['n'],
     type: 'string',
     desc: baseLite.bundle.getText("namespace")
   },
   prefix: {
-    alias: ['p', 'prefix'],
+    alias: ['p'],
     type: 'string',
     desc: baseLite.bundle.getText("prefix")
   },
   case: {
-    alias: ['c', 'case'],
+    alias: ['c'],
     type: 'string',
     desc: baseLite.bundle.getText("case")
   }
-})
+})).wrap(160).example('hana-cli massRename --schema db/schema.cds --prefix app_ --case camelCase', baseLite.bundle.getText('massRenameExample')).wrap(160).epilog(buildDocEpilogue('massRename', 'mass-operations', ['massConvert', 'massUpdate']))
 
 export async function handler (argv) {
   const base = await import('../utils/base.js')

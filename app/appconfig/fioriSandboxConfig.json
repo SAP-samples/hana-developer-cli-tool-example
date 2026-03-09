@@ -75,20 +75,129 @@
                 "config": {
                     "groups": [
                         {
+                            "id": "developer_tools_group",
+                            "title": "i18n.group.developer_tools_group.title",
+                            "isPreset": true,
+                            "isVisible": true,
+                            "isGroupLocked": false,
+                            "tiles": [
+                                {
+                                    "id": "swagger-api-docs",
+                                    "title": "i18n.tile.swagger_api_docs.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.swagger_api_docs.info",
+                                        "title": "i18n.tile.swagger_api_docs.title",
+                                        "targetURL": "/api-docs",
+                                        "icon": "sap-icon://document-text"
+                                    }
+                                },
+                                {
+                                    "id": "docs-readme-tile",
+                                    "title": "i18n.tile.docs_readme_tile.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.docs_readme_tile.info",
+                                        "title": "i18n.tile.docs_readme_tile.title",
+                                        "targetURL": "/docs/readme",
+                                        "icon": "sap-icon://syntax"
+                                    }
+                                },
+                                {
+                                    "id": "docs-changelog-tile",
+                                    "title": "i18n.tile.docs_changelog_tile.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.docs_changelog_tile.info",
+                                        "title": "i18n.tile.docs_changelog_tile.title",
+                                        "targetURL": "/docs/changelog",
+                                        "icon": "sap-icon://history"
+                                    }
+                                },
+                                {
+                                    "id": "massconvert-ui",
+                                    "title": "i18n.tile.massconvert_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.massconvert_ui.info",
+                                        "title": "i18n.tile.massconvert_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.massConvert",
+                                        "applicationType": "URL",
+                                        "targetURL": "#massconvert-ui",
+                                        "url": "./massConvert",
+                                        "icon": "sap-icon://process",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
+                                    "id": "import-ui",
+                                    "title": "i18n.tile.import_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.import_ui.info",
+                                        "title": "i18n.tile.import_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.import",
+                                        "applicationType": "URL",
+                                        "targetURL": "#import-ui",
+                                        "url": "./import",
+                                        "icon": "sap-icon://upload",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
+                                    "id": "querySimple-ui",
+                                    "title": "i18n.tile.querySimple_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.querySimple_ui.info",
+                                        "title": "i18n.tile.querySimple_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
+                                        "applicationType": "URL",
+                                        "targetURL": "#querySimple-ui",
+                                        "url": "./querySimple",
+                                        "icon": "sap-icon://search",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
+                                    "id": "version-ui",
+                                    "title": "i18n.tile.version_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.version_ui.info",
+                                        "title": "i18n.tile.version_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.version",
+                                        "applicationType": "URL",
+                                        "targetURL": "#version-ui",
+                                        "url": "./version",
+                                        "icon": "sap-icon://information",
+                                        "navigationMode": "embedded"
+                                    }
+                                }
+                            ]
+                        },
+                        {
                             "id": "list_group",
-                            "title": "List Objects",
+                            "title": "i18n.group.list_group.title",
                             "isPreset": true,
                             "isVisible": true,
                             "isGroupLocked": false,
                             "tiles": [
                                 {
                                     "id": "containers-ui",
-                                    "title": "List Containers",
+                                    "title": "i18n.tile.containers_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "Get a list of all HDI containers",
-                                        "title": "List Containers",
+                                        "info": "i18n.tile.containers_ui.info",
+                                        "title": "i18n.tile.containers_ui.title",
                                         "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
                                         "applicationType": "URL",
                                         "targetURL": "#containers-ui",
@@ -98,13 +207,29 @@
                                     }
                                 },
                                 {
-                                    "id": "dataTypes-ui",
-                                    "title": "List Data Types",
+                                    "id": "certificates-ui",
+                                    "title": "i18n.tile.certificates_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "Get a list of all HANA Data Types",
-                                        "title": "List Data Types",
+                                        "info": "i18n.tile.certificates_ui.info",
+                                        "title": "i18n.tile.certificates_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#certificates-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://official-service",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
+                                    "id": "dataTypes-ui",
+                                    "title": "i18n.tile.dataTypes_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.dataTypes_ui.info",
+                                        "title": "i18n.tile.dataTypes_ui.title",
                                         "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
                                         "applicationType": "URL",
                                         "targetURL": "#dataTypes-ui",
@@ -115,12 +240,12 @@
                                 },
                                 {
                                     "id": "functions-ui",
-                                    "title": "List Functions",
+                                    "title": "i18n.tile.functions_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "Get a list of all HANA Functions",
-                                        "title": "List Functions",
+                                        "info": "i18n.tile.functions_ui.info",
+                                        "title": "i18n.tile.functions_ui.title",
                                         "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
                                         "applicationType": "URL",
                                         "targetURL": "#functions-ui",
@@ -130,13 +255,29 @@
                                     }
                                 },
                                 {
-                                    "id": "indexes-ui",
-                                    "title": "List Indexes",
+                                    "id": "procedures-ui",
+                                    "title": "i18n.tile.procedures_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "Get a list of all HANA Indexes",
-                                        "title": "List Indexes",
+                                        "info": "i18n.tile.procedures_ui.info",
+                                        "title": "i18n.tile.procedures_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#procedures-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://table-view",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
+                                    "id": "indexes-ui",
+                                    "title": "i18n.tile.indexes_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.indexes_ui.info",
+                                        "title": "i18n.tile.indexes_ui.title",
                                         "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
                                         "applicationType": "URL",
                                         "targetURL": "#indexes-ui",
@@ -147,12 +288,12 @@
                                 },
                                 {
                                     "id": "schemas-ui",
-                                    "title": "List Schemas",
+                                    "title": "i18n.tile.schemas_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "Get a list of all Schemas",
-                                        "title": "List Schemas",
+                                        "info": "i18n.tile.schemas_ui.info",
+                                        "title": "i18n.tile.schemas_ui.title",
                                         "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
                                         "applicationType": "URL",
                                         "targetURL": "#schemas-ui",
@@ -163,12 +304,12 @@
                                 },
                                 {
                                     "id": "tables-ui",
-                                    "title": "List Tables",
+                                    "title": "i18n.tile.tables_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "Get a list of all tables",
-                                        "title": "List Tables",
+                                        "info": "i18n.tile.tables_ui.info",
+                                        "title": "i18n.tile.tables_ui.title",
                                         "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
                                         "applicationType": "URL",
                                         "targetURL": "#tables-ui",
@@ -178,13 +319,38 @@
                                     }
                                 },
                                 {
-                                    "id": "inspectTable-ui",
-                                    "title": "Inspect Table",
+                                    "id": "views-ui",
+                                    "title": "i18n.tile.views_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "Get details of a single Table",
-                                        "title": "Inspect Table",
+                                        "info": "i18n.tile.views_ui.info",
+                                        "title": "i18n.tile.views_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#views-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://table-view",
+                                        "navigationMode": "embedded"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "id": "object_details_group",
+                            "title": "i18n.group.object_details_group.title",
+                            "isPreset": true,
+                            "isVisible": true,
+                            "isGroupLocked": false,
+                            "tiles": [
+                                {
+                                    "id": "inspectTable-ui",
+                                    "title": "i18n.tile.inspectTable_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.inspectTable_ui.info",
+                                        "title": "i18n.tile.inspectTable_ui.title",
                                         "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
                                         "applicationType": "URL",
                                         "targetURL": "#inspectTable-ui",
@@ -194,29 +360,13 @@
                                     }
                                 },
                                 {
-                                    "id": "views-ui",
-                                    "title": "List Views",
-                                    "size": "1x1",
-                                    "tileType": "sap.ushell.ui.tile.StaticTile",
-                                    "properties": {
-                                        "info": "Get a list of all views",
-                                        "title": "List Views",
-                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
-                                        "applicationType": "URL",
-                                        "targetURL": "#views-ui",
-                                        "url": "./tables",
-                                        "icon": "sap-icon://table-view",
-                                        "navigationMode": "embedded"
-                                    }
-                                },
-                                {
                                     "id": "inspectView-ui",
-                                    "title": "Inspect Viw",
+                                    "title": "i18n.tile.inspectView_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "Get details of a single View",
-                                        "title": "Inspect View",
+                                        "info": "i18n.tile.inspectView_ui.info",
+                                        "title": "i18n.tile.inspectView_ui.title",
                                         "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
                                         "applicationType": "URL",
                                         "targetURL": "#inspectView-ui",
@@ -224,24 +374,40 @@
                                         "icon": "sap-icon://table-view",
                                         "navigationMode": "embedded"
                                     }
+                                },
+                                {
+                                    "id": "callProcedure-ui",
+                                    "title": "i18n.tile.callProcedure_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.callProcedure_ui.info",
+                                        "title": "i18n.tile.callProcedure_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
+                                        "applicationType": "URL",
+                                        "targetURL": "#callProcedure-ui",
+                                        "url": "./inspect",
+                                        "icon": "sap-icon://play",
+                                        "navigationMode": "embedded"
+                                    }
                                 }
                             ]
                         },
                         {
                             "id": "admin_group",
-                            "title": "Admin",
+                            "title": "i18n.group.admin_group.title",
                             "isPreset": true,
                             "isVisible": true,
                             "isGroupLocked": false,
                             "tiles": [
                                 {
                                     "id": "features-ui",
-                                    "title": "List Features",
+                                    "title": "i18n.tile.features_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "Get a list of all HANA Features",
-                                        "title": "List Features",
+                                        "info": "i18n.tile.features_ui.info",
+                                        "title": "i18n.tile.features_ui.title",
                                         "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
                                         "applicationType": "URL",
                                         "targetURL": "#features-ui",
@@ -252,12 +418,12 @@
                                 },
                                 {
                                     "id": "featureUsage-ui",
-                                    "title": "List Feature Usage",
+                                    "title": "i18n.tile.featureUsage_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "Get a list of all HANA Feature Usage",
-                                        "title": "List Feature Usage",
+                                        "info": "i18n.tile.featureUsage_ui.info",
+                                        "title": "i18n.tile.featureUsage_ui.title",
                                         "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
                                         "applicationType": "URL",
                                         "targetURL": "#featureUsage-ui",
@@ -267,18 +433,34 @@
                                     }
                                 },
                                 {
-                                    "id": "querySimple-ui",
-                                    "title": "Write DB Query using SQL",
+                                    "id": "systeminfo-ui",
+                                    "title": "i18n.tile.systeminfo_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "Execute single SQL Query",
-                                        "title": "Query Simple",
-                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
+                                        "info": "i18n.tile.systeminfo_ui.info",
+                                        "title": "i18n.tile.systeminfo_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.systemInfo",
                                         "applicationType": "URL",
-                                        "targetURL": "#querySimple-ui",
-                                        "url": "./querySimple",
-                                        "icon": "sap-icon://search",
+                                        "targetURL": "#systeminfo-ui",
+                                        "url": "./systemInfo",
+                                        "icon": "sap-icon://sys-monitor",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
+                                    "id": "users-ui",
+                                    "title": "i18n.tile.users_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.users_ui.info",
+                                        "title": "i18n.tile.users_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#users-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://employee",
                                         "navigationMode": "embedded"
                                     }
                                 }
@@ -286,19 +468,19 @@
                         },
                         {
                             "id": "cf_group",
-                            "title": "CF/XS",
+                            "title": "i18n.group.cf_group.title",
                             "isPreset": true,
                             "isVisible": true,
                             "isGroupLocked": false,
                             "tiles": [
                                 {
                                     "id": "hdi-ui",
-                                    "title": "List HDI service instances",
+                                    "title": "i18n.tile.hdi_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "List all SAP HANA Cloud HDI service instances in your target Space",
-                                        "title": "List HDI service instances",
+                                        "info": "i18n.tile.hdi_ui.info",
+                                        "title": "i18n.tile.hdi_ui.title",
                                         "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
                                         "applicationType": "URL",
                                         "targetURL": "#hdi-ui",
@@ -309,12 +491,12 @@
                                 },
                                 {
                                     "id": "sbss-ui",
-                                    "title": "List SBSS service instances",
+                                    "title": "i18n.tile.sbss_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "List all SAP HANA Cloud SBSS service instances in your target Space",
-                                        "title": "List SBSS service instances",
+                                        "info": "i18n.tile.sbss_ui.info",
+                                        "title": "i18n.tile.sbss_ui.title",
                                         "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
                                         "applicationType": "URL",
                                         "targetURL": "#sbss-ui",
@@ -325,12 +507,12 @@
                                 },
                                 {
                                     "id": "schemaInstances-ui",
-                                    "title": "List Schema service instances",
+                                    "title": "i18n.tile.schemaInstances_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "List all SAP HANA Cloud Schema service instances in your target Space",
-                                        "title": "List Schema service instances",
+                                        "info": "i18n.tile.schemaInstances_ui.info",
+                                        "title": "i18n.tile.schemaInstances_ui.title",
                                         "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
                                         "applicationType": "URL",
                                         "targetURL": "#schemaInstances-ui",
@@ -341,12 +523,12 @@
                                 },
                                 {
                                     "id": "securestore-ui",
-                                    "title": "List SecureStore service instances",
+                                    "title": "i18n.tile.securestore_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "List all SAP HANA Cloud SecureStore service instances in your target Space",
-                                        "title": "List SecureStore service instances",
+                                        "info": "i18n.tile.securestore_ui.info",
+                                        "title": "i18n.tile.securestore_ui.title",
                                         "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
                                         "applicationType": "URL",
                                         "targetURL": "#securestore-ui",
@@ -357,17 +539,74 @@
                                 },
                                 {
                                     "id": "ups-ui",
-                                    "title": "List UPS service instances",
+                                    "title": "i18n.tile.ups_ui.title",
                                     "size": "1x1",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "info": "List all Cloud Foundry user provided service instances in your target Space",
-                                        "title": "List UPS service instances",
+                                        "info": "i18n.tile.ups_ui.info",
+                                        "title": "i18n.tile.ups_ui.title",
                                         "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
                                         "applicationType": "URL",
                                         "targetURL": "#ups-ui",
                                         "url": "./tables",
                                         "icon": "sap-icon://cloud",
+                                        "navigationMode": "embedded"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "id": "btp_group",
+                            "title": "i18n.group.btp_group.title",
+                            "isPreset": true,
+                            "isVisible": true,
+                            "isGroupLocked": false,
+                            "tiles": [
+                                {
+                                    "id": "btpInfo-ui",
+                                    "title": "i18n.tile.btpInfo_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.btpInfo_ui.info",
+                                        "title": "i18n.tile.btpInfo_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#btpInfo-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://sys-monitor",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
+                                    "id": "btpSubs-ui",
+                                    "title": "i18n.tile.btpSubs_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.btpSubs_ui.info",
+                                        "title": "i18n.tile.btpSubs_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#btpSubs-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://cloud",
+                                        "navigationMode": "embedded"
+                                    }
+                                },
+                                {
+                                    "id": "btp-ui",
+                                    "title": "i18n.tile.btp_ui.title",
+                                    "size": "1x1",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "info": "i18n.tile.btp_ui.info",
+                                        "title": "i18n.tile.btp_ui.title",
+                                        "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+                                        "applicationType": "URL",
+                                        "targetURL": "#btp-ui",
+                                        "url": "./tables",
+                                        "icon": "sap-icon://target-group",
                                         "navigationMode": "embedded"
                                     }
                                 }
@@ -392,168 +631,240 @@
         }
     },
     "applications": {
-        "massconvert-ui": {
-            "title": "Mass Convert",
-            "description": "Convert a group of tables to CDS or HDBTable format",
-            "additionalInformation": "SAPUI5.Component=sap.hanacli.massConvert",
+        "btp-ui": {
+            "title": "i18n.app.btp_ui.title",
+            "description": "i18n.app.btp_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
-            "url": "./massConvert",
+            "url": "./tables",
             "navigationMode": "embedded"
         },
-        "systeminfo-ui": {
-            "title": "System Info",
-            "description": "Current HANA Connection System Details",
-            "additionalInformation": "SAPUI5.Component=sap.hanacli.systemInfo",
+        "btpInfo-ui": {
+            "title": "i18n.app.btpInfo_ui.title",
+            "description": "i18n.app.btpInfo_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
-            "url": "./systemInfo",
+            "url": "./tables",
             "navigationMode": "embedded"
         },
-        "docs-readme": {
-            "title": "ReadMe",
-            "description": "hana-cli Documentation",
+        "btpSubs-ui": {
+            "title": "i18n.app.btpSubs_ui.title",
+            "description": "i18n.app.btpSubs_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
-            "url": "/docs/readme"
+            "url": "./tables",
+            "navigationMode": "embedded"
         },
-        "docs-changelog": {
-            "title": "Change Log",
-            "description": "hana-cli Change Log",
+        "callProcedure-ui": {
+            "title": "i18n.app.callProcedure_ui.title",
+            "description": "i18n.app.callProcedure_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
             "applicationType": "URL",
-            "url": "/docs/changelog"
+            "url": "./inspect",
+            "navigationMode": "embedded"
+        },
+        "certificates-ui": {
+            "title": "i18n.app.certificates_ui.title",
+            "description": "i18n.app.certificates_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
+            "navigationMode": "embedded"
         },
         "containers-ui": {
-            "title": "List Containers",
-            "description": "Get a list of all HDI Containers",
+            "title": "i18n.app.containers_ui.title",
+            "description": "i18n.app.containers_ui.description",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
             "url": "./tables",
             "navigationMode": "embedded"
         },
         "dataTypes-ui": {
-            "title": "List Data Types",
-            "description": "Get a list of all HANA Data Types",
+            "title": "i18n.app.dataTypes_ui.title",
+            "description": "i18n.app.dataTypes_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "docs-changelog": {
+            "title": "i18n.app.docs_changelog.title",
+            "description": "i18n.app.docs_changelog.description",
+            "applicationType": "URL",
+            "url": "/docs/changelog"
+        },
+        "docs-readme": {
+            "title": "i18n.app.docs_readme.title",
+            "description": "i18n.app.docs_readme.description",
+            "applicationType": "URL",
+            "url": "/docs/readme"
+        },
+        "featureUsage-ui": {
+            "title": "i18n.app.featureUsage_ui.title",
+            "description": "i18n.app.featureUsage_ui.description",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
             "url": "./tables",
             "navigationMode": "embedded"
         },
         "features-ui": {
-            "title": "List Features",
-            "description": "Get a list of all HANA Features",
-            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
-            "applicationType": "URL",
-            "url": "./tables",
-            "navigationMode": "embedded"
-        },
-        "featureUsage-ui": {
-            "title": "List Feature Usage",
-            "description": "Get a list of all HANA Feature Usage",
+            "title": "i18n.app.features_ui.title",
+            "description": "i18n.app.features_ui.description",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
             "url": "./tables",
             "navigationMode": "embedded"
         },
         "functions-ui": {
-            "title": "List Functions",
-            "description": "Get a list of all HANA Functions",
+            "title": "i18n.app.functions_ui.title",
+            "description": "i18n.app.functions_ui.description",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
             "url": "./tables",
             "navigationMode": "embedded"
         },
         "hdi-ui": {
-            "title": "List HDI service instances",
-            "description": "List all SAP HANA Cloud HDI service instances in your target Space",
+            "title": "i18n.app.hdi_ui.title",
+            "description": "i18n.app.hdi_ui.description",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
             "url": "./tables",
             "navigationMode": "embedded"
         },
         "indexes-ui": {
-            "title": "List Indexes",
-            "description": "List all databasae indexes",
-            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
-            "applicationType": "URL",
-            "url": "./tables",
-            "navigationMode": "embedded"
-        },
-        "sbss-ui": {
-            "title": "List SBSS instances",
-            "description": "List all SAP HANA Cloud SBSS service instances in your target Space",
-            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
-            "applicationType": "URL",
-            "url": "./tables",
-            "navigationMode": "embedded"
-        },
-        "schemaInstances-ui": {
-            "title": "List Schema service instances",
-            "description": "List all SAP HANA Cloud Schema service instances in your target Space",
-            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
-            "applicationType": "URL",
-            "url": "./tables",
-            "navigationMode": "embedded"
-        },
-        "schemas-ui": {
-            "title": "List Schemas",
-            "description": "Get a list of all schemas",
-            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
-            "applicationType": "URL",
-            "url": "./tables",
-            "navigationMode": "embedded"
-        },
-        "securestore-ui": {
-            "title": "List SecureStore service instances",
-            "description": "List all SAP HANA Cloud SecureStore service instances in your target Space",
-            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
-            "applicationType": "URL",
-            "url": "./tables",
-            "navigationMode": "embedded"
-        },
-        "tables-ui": {
-            "title": "List Tables",
-            "description": "Get a list of all tables",
+            "title": "i18n.app.indexes_ui.title",
+            "description": "i18n.app.indexes_ui.description",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
             "url": "./tables",
             "navigationMode": "embedded"
         },
         "inspectTable-ui": {
-            "title": "Inspect Table",
-            "description": "Get details of a single Table",
+            "title": "i18n.app.inspectTable_ui.title",
+            "description": "i18n.app.inspectTable_ui.description",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
             "applicationType": "URL",
             "url": "./inspect",
-            "navigationMode": "embedded"
-        },
-        "views-ui": {
-            "title": "List Views",
-            "description": "Get a list of all views",
-            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
-            "applicationType": "URL",
-            "url": "./tables",
             "navigationMode": "embedded"
         },
         "inspectView-ui": {
-            "title": "Inspect View",
-            "description": "Get details of a single View",
+            "title": "i18n.app.inspectView_ui.title",
+            "description": "i18n.app.inspectView_ui.description",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
             "applicationType": "URL",
             "url": "./inspect",
             "navigationMode": "embedded"
         },
-        "ups-ui": {
-            "title": "List UPS service instances",
-            "description": "List all Cloud Foundry user provided service instances in your target Space",
+        "massconvert-ui": {
+            "title": "i18n.app.massconvert_ui.title",
+            "description": "i18n.app.massconvert_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.massConvert",
+            "applicationType": "URL",
+            "url": "./massConvert",
+            "navigationMode": "embedded"
+        },
+        "import-ui": {
+            "title": "i18n.app.import_ui.title",
+            "description": "i18n.app.import_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.import",
+            "applicationType": "URL",
+            "url": "./import",
+            "navigationMode": "embedded"
+        },
+        "procedures-ui": {
+            "title": "i18n.app.procedures_ui.title",
+            "description": "i18n.app.procedures_ui.description",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
             "applicationType": "URL",
             "url": "./tables",
             "navigationMode": "embedded"
         },
         "querySimple-ui": {
-            "title": "Query Simple",
-            "description": "Execute Single SQL Statement",
+            "title": "i18n.app.querySimple_ui.title",
+            "description": "i18n.app.querySimple_ui.description",
             "additionalInformation": "SAPUI5.Component=sap.hanacli.inspect",
             "applicationType": "URL",
             "url": "./inspect",
+            "navigationMode": "embedded"
+        },
+        "sbss-ui": {
+            "title": "i18n.app.sbss_ui.title",
+            "description": "i18n.app.sbss_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "schemaInstances-ui": {
+            "title": "i18n.app.schemaInstances_ui.title",
+            "description": "i18n.app.schemaInstances_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "schemas-ui": {
+            "title": "i18n.app.schemas_ui.title",
+            "description": "i18n.app.schemas_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "securestore-ui": {
+            "title": "i18n.app.securestore_ui.title",
+            "description": "i18n.app.securestore_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "systeminfo-ui": {
+            "title": "i18n.app.systeminfo_ui.title",
+            "description": "i18n.app.systeminfo_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.systemInfo",
+            "applicationType": "URL",
+            "url": "./systemInfo",
+            "navigationMode": "embedded"
+        },
+        "tables-ui": {
+            "title": "i18n.app.tables_ui.title",
+            "description": "i18n.app.tables_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "users-ui": {
+            "title": "i18n.app.users_ui.title",
+            "description": "i18n.app.users_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "ups-ui": {
+            "title": "i18n.app.ups_ui.title",
+            "description": "i18n.app.ups_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
+            "navigationMode": "embedded"
+        },
+        "version-ui": {
+            "title": "i18n.app.version_ui.title",
+            "description": "i18n.app.version_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.version",
+            "applicationType": "URL",
+            "url": "./version",
+            "navigationMode": "embedded"
+        },
+        "views-ui": {
+            "title": "i18n.app.views_ui.title",
+            "description": "i18n.app.views_ui.description",
+            "additionalInformation": "SAPUI5.Component=sap.hanacli.tables",
+            "applicationType": "URL",
+            "url": "./tables",
             "navigationMode": "embedded"
         }
     }

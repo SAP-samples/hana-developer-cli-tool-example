@@ -1,3 +1,4 @@
+import { COMMAND_METADATA_MAP } from './command-metadata.js';
 /**
  * Converts a yargs builder object to JSON Schema format for MCP tool parameters
  */
@@ -58,6 +59,34 @@ export function yargsBuilderToJsonSchema(builder) {
         required: required.length > 0 ? required : undefined
     };
 }
+/**
+ * Attempts to get the builder object from a command module
+ * Handles both direct object builders and function-based builders
+ */
+function getBuilderObject(commandModule) {
+    if (!commandModule.builder) {
+        return {};
+    }
+    // If builder is an object, return it directly
+    if (typeof commandModule.builder === 'object' && typeof commandModule.builder !== 'function') {
+        return commandModule.builder;
+    }
+    // If builder is a function, try to call it to get the builder object
+    if (typeof commandModule.builder === 'function') {
+        try {
+            // Try calling without arguments first (many builders don't need args)
+            const result = commandModule.builder({});
+            if (result && typeof result === 'object') {
+                return result;
+            }
+        }
+        catch (e) {
+            // If that fails, just return empty object
+            // Function-based builders will be handled at runtime
+        }
+    }
+    return {};
+}
 export function extractCommandInfo(commandModule) {
     const name = typeof commandModule.command === 'string'
         ? commandModule.command.split(' ')[0]
@@ -66,13 +95,19 @@ export function extractCommandInfo(commandModule) {
         ? commandModule.aliases
         : [];
     const description = commandModule.describe || commandModule.description || `Execute ${name} command`;
-    const schema = yargsBuilderToJsonSchema(typeof commandModule.builder === 'function'
-        ? {} // Can't introspect function builders easily
-        : commandModule.builder || {});
+    // Get builder object, handling both direct objects and functions
+    const builderObject = getBuilderObject(commandModule);
+    const schema = yargsBuilderToJsonSchema(builderObject);
+    // Get metadata if available
+    const metadata = COMMAND_METADATA_MAP[name];
     return {
         name,
         aliases,
         description,
+        category: metadata?.category,
+        tags: metadata?.tags,
+        useCases: metadata?.useCases,
+        relatedCommands: metadata?.relatedCommands,
         schema
     };
 }

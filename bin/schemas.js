@@ -1,13 +1,14 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'schemas [schema]'
-export const aliases = ['sch', 'getSchemas', 'listSchemas']
+export const aliases = ['sch', 'getSchemas', 'listSchemas', 's']
 export const describe = baseLite.bundle.getText("schemas")
 
-export const builder = baseLite.getBuilder({
+export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   schema: {
-    alias: ['s', 'schemas'],
+    alias: ['s'],
     type: 'string',
     default: "*",
     desc: baseLite.bundle.getText("schema")
@@ -24,7 +25,10 @@ export const builder = baseLite.getBuilder({
     default: false,
     desc: baseLite.bundle.getText("allSchemas")
   }
-})
+})).wrap(160).example(
+  'hana-cli schemas --schema MYSCHEMA',
+  baseLite.bundle.getText("schemasExample")
+).epilog(buildDocEpilogue('schemas', 'schema-tools', ['objects', 'schemaClone', 'tables']))
 
 export let inputPrompts = {
   schema: {
@@ -89,6 +93,7 @@ export async function getSchemas(prompts) {
  */
 async function getSchemasInt(schema, client, limit, all) {
   const base = await import('../utils/base.js')
+  limit = base.validateLimit(limit)
   base.debug(`getSchemasInt ${schema} ${limit} ${all}`)
   schema = base.dbClass.objectName(schema)
   let hasPrivileges = 'FALSE'

@@ -13,7 +13,7 @@ export function getSchemas(prompts: object): Promise<any[]>;
 export const command: "schemas [schema]";
 export const aliases: string[];
 export const describe: string;
-export const builder: any;
+export function builder(yargs: any): any;
 export namespace inputPrompts {
     namespace schema {
         let description: string;
