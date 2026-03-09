@@ -217,13 +217,14 @@ function formatText(value, args) {
 const normalizedLocale = locale.normalizeLocale(locale.getLocale())
 const baseBundle = new TextBundle(path.join(__dirname, '..', '/_i18n/messages'), normalizedLocale)
 const additionalBundles = [
-    'duplicateDetection',
     'compareData',
     'dataDiff',
     'dataLineage',
     'dataProfile',
     'dataValidator',
+    'duplicateDetection',
     'export',
+    'interactive',
     'referentialCheck'
 ]
 const additionalTexts = additionalBundles.reduce((acc, bundleName) => {
