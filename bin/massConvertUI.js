@@ -9,7 +9,13 @@ export const aliases = ['mcui', 'massconvertui', 'massConvUI', 'massconvui']
 export const describe = baseLite.bundle.getText("massConvertUI")
 
 
-export const builder = getMassConvertBuilder(true)
+export const builder = (yargs) => yargs.options(getMassConvertBuilder(true)).wrap(160).example(
+  'hana-cli massConvertUI',
+  baseLite.bundle.getText("massConvertUI")
+).example(
+  'hana-cli massConvertUI --schema MYSCHEMA',
+  'Launch mass convert UI for specific schema'
+).epilog(buildDocEpilogue('massConvertUI', 'developer-tools', ['massConvert', 'UI', 'inspectTable']))
 
 
 export async function handler (argv) {
