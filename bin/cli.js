@@ -4,6 +4,19 @@
 
 // Parse initial args before yargs
 const args = process.argv.slice(2)
+const requestedCommand = args[0]
+
+/**
+ * Determine if current execution is expected to run a persistent web server.
+ * @returns {boolean}
+ */
+function isServerModeCommand() {
+    if (!requestedCommand) {
+        return false
+    }
+    const normalized = String(requestedCommand).toLowerCase()
+    return ['ui', 'gui', 'server', 'launchpad', 'launchpad'].includes(normalized)
+}
 
 // Defer all imports until after --version fast path
 import * as base from '../utils/base-lite.js'
@@ -25,7 +38,9 @@ const pkg = base.require('../package.json')
 // Error handler setup
 const errorHandler = err => {
     base.error(err)
-    process.exit(1)
+    if (!isServerModeCommand()) {
+        process.exit(1)
+    }
 }
 process.on('uncaughtException', errorHandler)
 
@@ -33,9 +48,6 @@ process.on('uncaughtException', errorHandler)
 if (args.length > 0 && (args[0] === '--version' || args[0] === '-V')) {
     args[0] = 'version'
 }
-
-// Find which command is being requested
-const requestedCommand = args[0]
 
 // Load yargs only when needed
 if (!yargs) {

@@ -1102,6 +1102,14 @@ export async function promptHandler(argv, processingFunction, inputSchema, iConn
  */
 export async function error(error) {
     debug(bundle.getText("debug.errorHandler"))
+
+    const processCommand = (process.argv && process.argv[2]) ? String(process.argv[2]).toLowerCase() : ''
+    const isServerLikeCommand = processCommand === 'ui'
+        || processCommand === 'gui'
+        || processCommand === 'server'
+        || processCommand === 'launchpad'
+        || processCommand.endsWith('ui')
+
     try {
         // Attempt clean disconnect
         await disconnectOnly()
@@ -1112,8 +1120,8 @@ export async function error(error) {
         throw error
     } else {
         console.error(colors.red(`${error}`))
-        // Exit process after error in CLI mode
-        if (!inGui) {
+        // Exit process after error in CLI mode, but keep server/UI mode alive
+        if (!inGui && !isServerLikeCommand) {
             process.exit(1)
         }
     }
@@ -1402,6 +1410,14 @@ export async function webServerSetup(urlPath) {
     const http = await import('http')
     
     debug(bundle.getText("debug.serverSetup"))
+    // Ensure GUI mode to prevent process exit on errors in UI/server context
+    const currentPrompts = getPrompts()
+    if (!currentPrompts.isGui) {
+        setPrompts({
+            ...currentPrompts,
+            isGui: true
+        })
+    }
     // @ts-ignore
     const port = process.env.PORT || prompts.port || 3010
     const host = process.env.HOST || prompts.host || 'localhost'

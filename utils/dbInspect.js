@@ -532,8 +532,10 @@ function getTypeMapping(dataType, length, scale, useHanaTypes, geoSrsId) {
 		return `hana.${dataType}(${geoSrsId})`
 	}
 
-	// Select appropriate type map based on useHanaTypes option
-	const typeFunc = useHanaTypes ? hanaTypeMap[dataType] : typeMap[dataType]
+	// Prefer HANA-specific mappings when enabled, but always fall back to shared/common mappings
+	const typeFunc = useHanaTypes
+		? (hanaTypeMap[dataType] || typeMap[dataType])
+		: typeMap[dataType]
 	if (typeFunc) {
 		return typeFunc(length, scale)
 	}

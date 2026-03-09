@@ -586,3 +586,46 @@ describe('dbInspect.js - Module Exports', () => {
         expect(dbInspect.getViewParameters).to.be.a('function')
     })
 })
+
+describe('dbInspect.js - CDS Type Mapping Regression', () => {
+    beforeEach(() => {
+        dbInspect.options.useHanaTypes = true
+        dbInspect.options.useExists = false
+        dbInspect.options.useQuoted = false
+        dbInspect.options.noColons = false
+        dbInspect.options.keepPath = false
+    })
+
+    afterEach(() => {
+        dbInspect.options.useHanaTypes = false
+        dbInspect.options.useExists = true
+    })
+
+    it('should map common types when useHanaTypes is true', async () => {
+        global.__xRef = []
+        const object = [{
+            SCHEMA_NAME: 'MYSCHEMA',
+            TABLE_NAME: 'STAR_WARS_FILM',
+            HAS_PRIMARY_KEY: 'TRUE'
+        }]
+        const fields = [
+            { COLUMN_NAME: 'ID', DATA_TYPE_NAME: 'NVARCHAR', LENGTH: 36, SCALE: 0, IS_NULLABLE: 'FALSE', DEFAULT_VALUE: null, COMMENTS: null },
+            { COLUMN_NAME: 'CREATEDAT', DATA_TYPE_NAME: 'TIMESTAMP', LENGTH: 0, SCALE: 0, IS_NULLABLE: 'TRUE', DEFAULT_VALUE: null, COMMENTS: null },
+            { COLUMN_NAME: 'EPISODE_ID', DATA_TYPE_NAME: 'INTEGER', LENGTH: 10, SCALE: 0, IS_NULLABLE: 'TRUE', DEFAULT_VALUE: null, COMMENTS: null },
+            { COLUMN_NAME: 'RELEASE_DATE', DATA_TYPE_NAME: 'DATE', LENGTH: 0, SCALE: 0, IS_NULLABLE: 'TRUE', DEFAULT_VALUE: null, COMMENTS: null }
+        ]
+        const constraints = [{ COLUMN_NAME: 'ID' }]
+        const mockDb = {
+            preparePromisified: sinon.stub(),
+            statementExecPromisified: sinon.stub()
+        }
+
+        const cds = await dbInspect.formatCDS(mockDb, object, fields, constraints, 'hdbtable', 'MYSCHEMA', null)
+
+        expect(cds).to.include('ID: String(36)')
+        expect(cds).to.include('CREATEDAT: Timestamp')
+        expect(cds).to.include('EPISODE_ID: Integer')
+        expect(cds).to.include('RELEASE_DATE: Date')
+        expect(cds).to.not.include('**UNSUPPORTED TYPE')
+    })
+})
