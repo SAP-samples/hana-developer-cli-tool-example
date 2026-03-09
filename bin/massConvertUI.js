@@ -1,6 +1,7 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 import { getMassConvertBuilder } from '../utils/base.js'
+import { buildDocEpilogue } from '../utils/doc-linker.js'
 global.__xRef = []
 
 export const command = 'massConvertUI [schema] [table]'
@@ -8,7 +9,9 @@ export const aliases = ['mcui', 'massconvertui', 'massConvUI', 'massconvui']
 export const describe = baseLite.bundle.getText("massConvertUI")
 
 
-export const builder = getMassConvertBuilder(true)
+export const builder = (yargs) => yargs.options(getMassConvertBuilder(true)).wrap(160)
+  .example('hana-cli massConvertUI --schema MYSCHEMA', baseLite.bundle.getText("massConvertUI"))
+  .epilog(buildDocEpilogue('massConvertUI', 'mass-operations', ['massConvert']))
 
 
 export async function handler (argv) {

@@ -675,14 +675,14 @@ describe('Generic Command Flags', function () {
 
         // Connection and configuration commands
         const connectionCommands = [
-            { cmd: 'copy2DefaultEnv', args: '' },
-            { cmd: 'copy2Env', args: '' },
-            { cmd: 'copy2Secrets', args: '' }
+            { cmd: 'copy2DefaultEnv', args: '--help' },
+            { cmd: 'copy2Env', args: '--help' },
+            { cmd: 'copy2Secrets', args: '--help' }
         ]
 
         connectionCommands.forEach(({ cmd, args }) => {
             it(`${cmd}: should accept --debug flag`, function (done) {
-                child_process.exec(`hana-cli ${cmd} --debug ${args}`, 
+                child_process.exec(`hana-cli ${cmd} ${args} --debug`, 
                     { timeout: 15000 },
                     (error, stdout, stderr) => {
                         base.addContext(this, { title: 'Command', value: cmd })
@@ -701,7 +701,7 @@ describe('Generic Command Flags', function () {
 
         connectionCommands.forEach(({ cmd, args }) => {
             it(`${cmd}: should accept --quiet flag`, function (done) {
-                child_process.exec(`hana-cli ${cmd} --quiet ${args}`, 
+                child_process.exec(`hana-cli ${cmd} ${args} --quiet`, 
                     { timeout: 15000 },
                     (error, stdout, stderr) => {
                         base.addContext(this, { title: 'Command', value: cmd })

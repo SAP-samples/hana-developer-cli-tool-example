@@ -41,13 +41,11 @@ export async function copy() {
     }
     
     base.debug(defaultEnv)
-    fs.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'), async (err) => {
-        if (err) {
-            return base.error(err)
-        }
+    try {
+        await fs.promises.writeFile("default-env.json", JSON.stringify(defaultEnv, null, '\t'))
         console.log(baseLite.bundle.getText("saved"))
         return base.end()
-    })
-
-   return base.end()
+    } catch (err) {
+        return base.error(err)
+    }
 }

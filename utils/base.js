@@ -611,11 +611,18 @@ export function getMassConvertBuilder(ui = false) {
             type: 'boolean',
             default: false,
             desc: bundle.getText("noColons")
+        },
+        profile: {
+            alias: ['p'],
+            type: 'string',
+            default: '',
+            desc: bundle.getText("profile")
         }
     }
+    const hasProfile = parameters.profile !== undefined
     if (ui) {
         parameters.port = {
-            alias: ['p'],
+            alias: hasProfile ? [] : ['p'],
             type: 'integer',
             default: false,
             desc: bundle.getText("port")

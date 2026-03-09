@@ -58,7 +58,18 @@ export default class dbClientClass {
             process.env.CDS_ENV = prompts.profile
             process.env.NODE_ENV = prompts.profile
             let optionsCDS = cds.env.requires.db
-            if(!optionsCDS || !optionsCDS.kind){
+            if (!optionsCDS || !optionsCDS.kind) {
+                throw new Error(base.bundle.getText("error.cdsProjectMissing"))
+            }
+            const normalizedProfile = prompts.profile?.toLowerCase?.()
+            const profileKindMap = {
+                hana: 'hana',
+                postgres: 'postgres',
+                pg: 'postgres',
+                sqlite: 'sqlite'
+            }
+            const expectedKind = normalizedProfile ? profileKindMap[normalizedProfile] : undefined
+            if (expectedKind && optionsCDS.kind !== expectedKind) {
                 throw new Error(base.bundle.getText("error.cdsProjectMissing"))
             }
             if (optionsCDS.kind === 'sqlite') {  //SQLite CDS
