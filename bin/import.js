@@ -1080,6 +1080,14 @@ export async function importData(prompts) {
       throw new Error(baseLite.bundle.getText("errInvalidTableFormat", [prompts.table]))
     }
 
+    if (!schema && prompts.schema && prompts.schema !== '**CURRENT_SCHEMA**') {
+      const parsedSchema = parseIdentifier(prompts.schema, dbKind)
+      if (!parsedSchema.name) {
+        throw new Error(baseLite.bundle.getText("errInvalidSchema", [prompts.schema]))
+      }
+      schema = parsedSchema.name
+    }
+
     if (!schema && dbKind !== 'sqlite') {
       const currentSchema = await getCurrentSchema(dbClient, dbKind)
       if (!currentSchema) {

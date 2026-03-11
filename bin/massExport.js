@@ -10,11 +10,13 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
   schema: {
     alias: ['s', 'schema'],
     type: 'string',
+    default: '**CURRENT_SCHEMA**',
     desc: baseLite.bundle.getText("schema")
   },
   object: {
     alias: ['o', 'object'],
     type: 'string',
+    default: '*',
     desc: baseLite.bundle.getText("object")
   },
   objectType: {
@@ -35,7 +37,7 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({
     desc: baseLite.bundle.getText("exportFormat")
   },
   folder: {
-    alias: ['d', 'directory'],
+    alias: ['directory', 'dir'],
     type: 'string',
     desc: baseLite.bundle.getText("folder")
   },
@@ -53,12 +55,14 @@ export async function handler (argv) {
     schema: {
       type: 'string',
       description: base.bundle.getText("schema"),
-      required: true
+      required: false,
+      default: '**CURRENT_SCHEMA**'
     },
     object: {
       type: 'string',
       description: base.bundle.getText("object"),
-      required: true
+      required: false,
+      default: '*'
     },
     objectType: {
       type: 'string',
@@ -80,7 +84,7 @@ export async function handler (argv) {
     folder: {
       type: 'string',
       description: base.bundle.getText("folder"),
-      required: true
+      required: false
     },
     includeData: {
       type: 'boolean',

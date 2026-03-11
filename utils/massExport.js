@@ -58,7 +58,7 @@ async function getTableStructure(db, schema, table) {
     let query = `SELECT COLUMN_NAME, DATA_TYPE_NAME, IS_NULLABLE, COMMENTS, DEFAULT_VALUE
                  FROM TABLE_COLUMNS 
                  WHERE SCHEMA_NAME = ? AND TABLE_NAME = ?
-                 ORDER BY COLUMN_POSITION`
+                 ORDER BY POSITION`
     
     let results = await db.statementExecPromisified(
         await db.preparePromisified(query), 
@@ -81,10 +81,11 @@ async function getTableData(db, schema, table, limit) {
     if (limit) query += ` LIMIT ${limit}`
     
     let results = await db.statementExecPromisified(
-        await db.preparePromisified(query)
+        await db.preparePromisified(query),
+        []
     )
     
-    return results
+    return results ?? []
 }
 
 /**

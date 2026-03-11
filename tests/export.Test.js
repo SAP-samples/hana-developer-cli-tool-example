@@ -3,9 +3,11 @@ import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 import sinon from 'sinon'
 import * as fs from 'fs'
+import yargsModule from 'yargs'
 
 chai.use(chaiAsPromised.default)
 const expect = chai.expect
+const yargs = yargsModule
 
 /**
  * @test Export Command Tests
@@ -86,6 +88,26 @@ describe('@all @export', () => {
       expect(exportCmd.inputPrompts.limit).to.exist
       expect(exportCmd.inputPrompts.limit.type).to.equal('number')
       expect(exportCmd.inputPrompts.limit.required).to.equal(false)
+    })
+
+    it('should default schema to CURRENT_SCHEMA when omitted', async () => {
+      const parser = exportCmd.builder(yargs([])
+        .help(false)
+        .version(false)
+        .exitProcess(false))
+
+      const argv = await parser.parse(['--table', 'DUMMY', '--output', 'dummy.json', '--format', 'json'])
+      expect(argv.schema).to.equal('**CURRENT_SCHEMA**')
+    })
+
+    it('should parse explicit schema value', async () => {
+      const parser = exportCmd.builder(yargs([])
+        .help(false)
+        .version(false)
+        .exitProcess(false))
+
+      const argv = await parser.parse(['--table', 'DUMMY', '--output', 'dummy.json', '--format', 'json', '--schema', 'MYSCHEMA'])
+      expect(argv.schema).to.equal('MYSCHEMA')
     })
   })
 

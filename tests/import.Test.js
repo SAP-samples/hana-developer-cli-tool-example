@@ -110,6 +110,26 @@ Jane,25,jane@example.com`
     it('should provide truncate boolean option', () => {
       // Truncate should be a boolean flag
     })
+
+    it('should default schema to CURRENT_SCHEMA when omitted', async () => {
+      const parser = importCmd.builder(yargs([])
+        .help(false)
+        .version(false)
+        .exitProcess(false))
+
+      const argv = await parser.parse(['--filename', 'data.csv', '--table', 'DUMMY'])
+      expect(argv.schema).to.equal('**CURRENT_SCHEMA**')
+    })
+
+    it('should parse explicit schema value', async () => {
+      const parser = importCmd.builder(yargs([])
+        .help(false)
+        .version(false)
+        .exitProcess(false))
+
+      const argv = await parser.parse(['--filename', 'data.csv', '--table', 'DUMMY', '--schema', 'MYSCHEMA'])
+      expect(argv.schema).to.equal('MYSCHEMA')
+    })
   })
 
   describe('import functionality (mock)', () => {
