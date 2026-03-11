@@ -1,6 +1,6 @@
 {
   "name": "hana-cli",
-  "version": "4.202603.0",
+  "version": "4.202603.1",
   "description": "HANA Developer Command Line Interface",
   "main": "index.js",
   "bin": {
@@ -118,7 +118,7 @@
   "bugs": {
     "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example/issues"
   },
-  "homepage": "https://github.com/SAP-samples/hana-developer-cli-tool-example#readme",
+  "homepage": "https://sap-samples.github.io/hana-developer-cli-tool-example/",
   "devDependencies": {
     "@sap/eslint-plugin-cds": "^4.1.2",
     "@types/mocha": "^10.0.10",
@@ -133,7 +133,7 @@
     "chai-as-promised": "^8.0.2",
     "chromedriver": "^145.0.6",
     "cross-env": "^10.1.0",
-    "eslint": "^9.39.2",
+    "eslint": "^10.0.0",
     "esmock": "^2.7.3",
     "mermaid": "^11.12.3",
     "mocha": "^10.8.2",
