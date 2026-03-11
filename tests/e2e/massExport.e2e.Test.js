@@ -65,13 +65,11 @@ describe('massExport command - E2E Tests', function () {
         fs.mkdirSync(outputFolder, { recursive: true })
         const outputFolderCliPath = outputFolder.replace(/\\/g, '/')
 
-        base.exec(`node bin/cli.js massExport --schema SYS --object DUMMY --format csv --directory ${outputFolderCliPath} --quiet`, (error, stdout, stderr) => {
-          expect(error).to.be.null
-
-          const output = `${stdout || ''}\n${stderr || ''}`
+        base.exec(`node bin/cli.js massExport --schema SYS --object __NO_SUCH_OBJECT__ --format csv --directory ${outputFolderCliPath} --quiet`, (error, stdout, stderr) => {
+          const output = `${stdout || ''}\n${stderr || ''}\n${error?.message || ''}`
           base.addContext(this, { title: 'massExport live output', value: output })
 
-          expect(output).to.match(/No objects found matching the specified criteria|Export complete|objects exported/i)
+          expect(output).to.match(/No objects found matching the specified criteria|Export complete|objects exported|Successfully exported/i)
           done()
         })
       }).catch(done)

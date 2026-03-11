@@ -373,7 +373,7 @@ describe('UI Commands', function () {
         })
 
         it('should export builder', function () {
-            assert.ok(typeof massConvertUI.builder === 'object')
+            assert.ok(typeof massConvertUI.builder === 'function')
         })
     })
 
