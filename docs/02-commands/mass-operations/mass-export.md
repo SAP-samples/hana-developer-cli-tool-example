@@ -8,6 +8,8 @@
 
 Export multiple database objects at once in various formats. This command allows you to bulk export tables, views, and other database objects to CSV, JSON, or other supported formats, with optional data export capabilities.
 
+When exporting table structures, the command includes comprehensive schema metadata including column names, data types, nullability constraints, and **default values** for each column. This ensures complete table definitions are captured for documentation, migration, or backup purposes.
+
 ### Use Cases
 
 - **Backup & Archive**: Export schema objects for version control or archival
@@ -73,8 +75,8 @@ graph TD
 
 | Parameter | Alias | Type | Default | Required | Description |
 |-----------|-------|------|---------|----------|-------------|
-| `schema` | `s` | string | - | Yes | Database schema to export from |
-| `object` | `o` | string | - | Yes | Object name or pattern (use `%` for all) |
+| `schema` | `s` | string | `**CURRENT_SCHEMA**` | No | Database schema to export from; if omitted, uses current schema context |
+| `object` | `o` | string | `*` | No | Object name or pattern (use `*` or `%` for all objects); if omitted, exports all objects matching the pattern |
 | `objectType` | `t`, `type` | string | - | No | Filter by object type (TABLE, VIEW, PROCEDURE, etc.) |
 | `limit` | `l` | number | 1000 | No | Maximum number of objects to export |
 | `format` | `f` | string | `csv` | No | Output format (csv, json) |
@@ -112,6 +114,56 @@ hana-cli massExport --schema MYSCHEMA --object "SALES%" --objectType TABLE --for
 ```bash
 hana-cli massExport -s MYSCHEMA -o % -t VIEW -f json -d views/
 ```
+
+## Output Format
+
+### Structure Export
+
+When exporting table structures (the default behavior), the command generates files containing the following information for each column:
+
+- **COLUMN_NAME**: Name of the column
+- **DATA_TYPE_NAME**: Data type (VARCHAR, INTEGER, DECIMAL, etc.)
+- **IS_NULLABLE**: Whether the column allows NULL values (YES/NO)
+- **DEFAULT_VALUE**: Default value assigned to the column (if any)
+- **COMMENTS**: Column descriptions or documentation
+
+**CSV Structure Output Example:**
+
+```csv
+COLUMN_NAME,DATA_TYPE_NAME,IS_NULLABLE,DEFAULT_VALUE
+"ID","INTEGER","NO",""
+"NAME","VARCHAR(255)","NO",""
+"CREATED_AT","TIMESTAMP","YES","CURRENT_TIMESTAMP"
+"STATUS","VARCHAR(50)","YES","'ACTIVE'"
+```
+
+**JSON Structure Output Example:**
+
+```json
+{
+  "table": "CUSTOMERS",
+  "schema": "MYSCHEMA",
+  "columns": [
+    {
+      "COLUMN_NAME": "ID",
+      "DATA_TYPE_NAME": "INTEGER",
+      "IS_NULLABLE": "NO",
+      "DEFAULT_VALUE": null
+    },
+    {
+      "COLUMN_NAME": "CREATED_AT",
+      "DATA_TYPE_NAME": "TIMESTAMP",
+      "IS_NULLABLE": "YES",
+      "DEFAULT_VALUE": "'CURRENT_TIMESTAMP'"
+    }
+  ],
+  "createdAt": "2026-03-11T10:30:00.000Z"
+}
+```
+
+### Data Export
+
+When `--includeData` is specified, the command additionally exports actual table data in the selected format, preserving all column values and data types.
 
 ## Related Commands
 
