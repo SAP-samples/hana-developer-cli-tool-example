@@ -1,4 +1,18 @@
 [{
+        "date": "2026-03-11",
+        "version": "4.202603.1",
+        "Changed": [
+            "Patch release to align all package and release metadata to version 4.202603.1",
+            "Bump MCP server package version to 1.202603.1",
+            "Update changelog and lockfile metadata for March 2026 patch release",
+            "Add new documentation URL in package.json",
+            "Clean shrinkwrap file to remove old version references and ensure consistency with new version",
+            "Blog Posts added to Documentation site",
+            "Fixed issue with three commands not having the correct documentation link",
+            "Fix issue Mass Export is giving Invalid Column Name: COLUMN_POSITION for each table exported"
+        ]
+    },
+    {
         "date": "2026-03-07",
         "version": "4.202603.0",
         "Changed": [

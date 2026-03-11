@@ -1,6 +1,6 @@
 {
   "name": "hana-cli-mcp-server",
-  "version": "1.202603.0",
+  "version": "1.202603.1",
   "description": "MCP Server for HANA CLI Tool",
   "type": "module",
   "main": "build/index.js",

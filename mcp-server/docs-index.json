@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "buildDate": "2026-03-11T17:07:47.506Z",
-  "totalDocuments": 250,
+  "buildDate": "2026-03-11T17:53:38.005Z",
+  "totalDocuments": 253,
   "categories": [
     "api-reference",
     "commands",
@@ -11,6 +11,7 @@
     "general",
     "getting-started",
     "reference",
+    "resources",
     "troubleshooting"
   ],
   "index": {
@@ -245,6 +246,11 @@
         "05-development/mcp-server/setup-and-configuration.md",
         "05-development/mcp-server/troubleshooting.md",
         "05-development/testing.md"
+      ],
+      "resources": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md",
+        "06-resources/blog-posts/index.md",
+        "06-resources/index.md"
       ],
       "reference": [
         "99-reference/changelog.md",
@@ -680,7 +686,8 @@
         "02-commands/performance-monitoring/workload-management.md",
         "03-features/knowledge-base.md",
         "04-api-reference/index.md",
-        "05-development/copilot/skills.md"
+        "05-development/copilot/skills.md",
+        "06-resources/index.md"
       ],
       "commands": [
         "01-getting-started/index.md",
@@ -2230,7 +2237,8 @@
         "02-commands/system-tools/time-series-tools.md",
         "02-commands/system-tools/u-i.md",
         "02-commands/system-tools/version.md",
-        "02-commands/system-tools/xsa-services.md"
+        "02-commands/system-tools/xsa-services.md",
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
       ],
       "what": [
         "02-commands/analysis-tools/calc-view-analyzer.md",
@@ -3463,7 +3471,6 @@
         "02-commands/analysis-tools/data-lineage.md",
         "02-commands/analysis-tools/data-profile.md",
         "02-commands/index.md",
-        "02-commands/mass-operations/mass-export.md",
         "02-commands/system-admin/data-types.md",
         "05-development/architecture/codebase.md",
         "05-development/mcp-server/advanced-features.md",
@@ -3507,6 +3514,7 @@
         "03-features/mcp/knowledge-base.md",
         "03-features/mcp/server-usage.md",
         "05-development/mcp-server/index.md",
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md",
         "developer-notes/command-consistency-analysis.md",
         "developer-notes/command-documentation-updates.md",
         "developer-notes/testing-guide.md",
@@ -4801,7 +4809,8 @@
         "02-commands/connection-auth/connections.md",
         "02-commands/developer-tools/create-module.md",
         "02-commands/system-admin/ini-contents.md",
-        "02-commands/system-tools/import.md"
+        "02-commands/system-tools/import.md",
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
       ],
       "include": [
         "02-commands/connection-auth/connections.md",
@@ -6308,6 +6317,7 @@
         "05-development/mcp-server/docs-search.md",
         "05-development/mcp-server/features.md",
         "05-development/mcp-server/overview.md",
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md",
         "developer-notes/knowledge-base-integration.md",
         "developer-notes/knowledge-base-summary.md"
       ],
@@ -6525,14 +6535,8 @@
         "03-features/output-formats.md",
         "developer-notes/test-coverage-analysis.md"
       ],
-      "| string | - | yes | object name or pattern (use": [
-        "02-commands/mass-operations/mass-export.md",
-        "02-commands/mass-operations/mass-grant.md"
-      ],
-      "for all) |\n|": [
-        "02-commands/mass-operations/mass-export.md",
-        "02-commands/mass-operations/mass-grant.md",
-        "02-commands/mass-operations/mass-update.md"
+      "| no | object name or pattern (use": [
+        "02-commands/mass-operations/mass-export.md"
       ],
       "| no | output format (csv, json) |\n|": [
         "02-commands/mass-operations/mass-export.md"
@@ -6550,6 +6554,12 @@
         "02-commands/mass-operations/mass-export.md"
       ],
       "### export views only": [
+        "02-commands/mass-operations/mass-export.md"
+      ],
+      "**json structure output example:**": [
+        "02-commands/mass-operations/mass-export.md"
+      ],
+      "### data export\n\nwhen": [
         "02-commands/mass-operations/mass-export.md"
       ],
       "formats": [
@@ -6590,6 +6600,13 @@
       ],
       "execute": [
         "02-commands/mass-operations/mass-grant.md"
+      ],
+      "| string | - | yes | object name or pattern (use": [
+        "02-commands/mass-operations/mass-grant.md"
+      ],
+      "for all) |\n|": [
+        "02-commands/mass-operations/mass-grant.md",
+        "02-commands/mass-operations/mass-update.md"
       ],
       "bash\nhana-cli massgrant --help": [
         "02-commands/mass-operations/mass-grant.md"
@@ -8310,7 +8327,8 @@
       ],
       "bin/": [
         "02-commands/system-tools/command-map.md",
-        "05-development/copilot/agents.md"
+        "05-development/copilot/agents.md",
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
       ],
       "bash\nnot a standalone cli command": [
         "02-commands/system-tools/command-map.md"
@@ -8898,7 +8916,8 @@
       ],
       "version": [
         "02-commands/system-tools/version.md",
-        "05-development/implementation.md"
+        "05-development/implementation.md",
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
       ],
       "bash\nhana-cli version [options]": [
         "02-commands/system-tools/version.md"
@@ -9371,6 +9390,7 @@
       ],
       "help": [
         "03-features/knowledge-base.md",
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md",
         "index.md"
       ],
       "command-specific": [
@@ -9951,6 +9971,7 @@
         "04-api-reference/index.md",
         "05-development/mcp-server/overview.md",
         "05-development/mcp-server/prompts-and-resources.md",
+        "06-resources/index.md",
         "99-reference/index.md",
         "index.md"
       ],
@@ -10919,7 +10940,8 @@
       ],
       "utils/": [
         "05-development/architecture/utilities.md",
-        "05-development/copilot/agents.md"
+        "05-development/copilot/agents.md",
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
       ],
       "colors": [
         "05-development/architecture/utilities.md"
@@ -11015,7 +11037,8 @@
         "05-development/copilot/agents.md"
       ],
       "routes/": [
-        "05-development/copilot/agents.md"
+        "05-development/copilot/agents.md",
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
       ],
       ".github/agents/tooling.agent.md": [
         "05-development/copilot/agents.md"
@@ -11080,10 +11103,12 @@
         "05-development/copilot/hooks.md"
       ],
       "pretooluse": [
-        "05-development/copilot/hooks.md"
+        "05-development/copilot/hooks.md",
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
       ],
       "posttooluse": [
-        "05-development/copilot/hooks.md"
+        "05-development/copilot/hooks.md",
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
       ],
       "stop": [
         "05-development/copilot/hooks.md"
@@ -11098,7 +11123,8 @@
         "05-development/copilot/prompts.md"
       ],
       "docs/02-commands/": [
-        "05-development/copilot/prompts.md"
+        "05-development/copilot/prompts.md",
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
       ],
       "update-vitepress-config.prompt.md": [
         "05-development/copilot/prompts.md"
@@ -11125,7 +11151,8 @@
       ],
       "package.json": [
         "05-development/copilot/prompts.md",
-        "05-development/copilot.md"
+        "05-development/copilot.md",
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
       ],
       "update-tool-configs.prompt.md": [
         "05-development/copilot/prompts.md"
@@ -11193,7 +11220,8 @@
         "05-development/copilot/skills.md"
       ],
       "cli-command-development": [
-        "05-development/copilot/skills.md"
+        "05-development/copilot/skills.md",
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
       ],
       "mcp-server-workflows": [
         "05-development/copilot/skills.md"
@@ -12041,6 +12069,69 @@
       ],
       "### inspect specific test\n\nadd": [
         "05-development/testing.md"
+      ],
+      "major": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      "hana-cli:": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      "built": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      "(and": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      "human": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      "review)": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      ".github": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      "applyto": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      "bin/*.js": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      "tests/**/*.test.js": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      "docs/.vitepress/**/*.{ts,js,json}": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      "skill.md": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      "argument-hint": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      "quality-gates.json": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      "pre-tool-use.js": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      "post-tool-use.js": [
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md"
+      ],
+      "blog": [
+        "06-resources/blog-posts/index.md"
+      ],
+      "posts": [
+        "06-resources/blog-posts/index.md"
+      ],
+      "featured": [
+        "06-resources/blog-posts/index.md"
+      ],
+      "articles": [
+        "06-resources/blog-posts/index.md"
+      ],
+      "[blog posts](blog-posts/)": [
+        "06-resources/index.md"
       ],
       "change": [
         "99-reference/changelog.md"
@@ -13689,6 +13780,9 @@
         "05-development/mcp-server/prompts-and-resources.md",
         "05-development/mcp-server/setup-and-configuration.md",
         "05-development/testing.md",
+        "06-resources/blog-posts/2026-release-ai-assisted-development.md",
+        "06-resources/blog-posts/index.md",
+        "06-resources/index.md",
         "99-reference/changelog.md",
         "99-reference/command-reference.md",
         "99-reference/faq-extended.md",
@@ -26459,15 +26553,16 @@
         "json",
         "## aliases\n\n-",
         "## command diagram",
-        "| string | - | yes | object name or pattern (use",
-        "for all) |\n|",
         "| string |",
+        "| no | object name or pattern (use",
         "| no | output format (csv, json) |\n|",
         "bash\nhana-cli massexport --help",
         "## examples\n\n### export all tables as csv",
         "### export specific table with data",
         "### export tables matching pattern",
         "### export views only",
+        "**json structure output example:**",
+        "### data export\n\nwhen",
         "description",
         "cases",
         "supported",
@@ -26482,10 +26577,9 @@
         "tables",
         "specific",
         "table",
-        "with",
-        "data"
+        "with"
       ],
-      "excerpt": "massExport > Command: > Category: **Mass Operations** > Status: Production Ready Description Export multiple database objects at once in various formats. This command allows you to bulk export tables, views, and other database objects to CSV, JSON, or other supported formats, with optional data export capabilities. Use Cases - **Backup & Archive**: Export schema objects for version control or archival - **Data Migration**: Export tables with data for transfer to other systems - **Documentation**...",
+      "excerpt": "massExport > Command: > Category: **Mass Operations** > Status: Production Ready Description Export multiple database objects at once in various formats. This command allows you to bulk export tables, views, and other database objects to CSV, JSON, or other supported formats, with optional data export capabilities. When exporting table structures, the command includes comprehensive schema metadata including column names, data types, nullability constraints, and **default values** for each column...",
       "headings": [
         {
           "level": 1,
@@ -26554,6 +26648,21 @@
         },
         {
           "level": 2,
+          "text": "Output Format",
+          "anchor": "output-format"
+        },
+        {
+          "level": 3,
+          "text": "Structure Export",
+          "anchor": "structure-export"
+        },
+        {
+          "level": 3,
+          "text": "Data Export",
+          "anchor": "data-export"
+        },
+        {
+          "level": 2,
           "text": "Related Commands",
           "anchor": "related-commands"
         },
@@ -26577,8 +26686,8 @@
           "url": "../all-commands.md"
         }
       ],
-      "size": 3700,
-      "lastModified": "2026-03-09T21:07:57.983Z"
+      "size": 5455,
+      "lastModified": "2026-03-11T17:08:56.264Z"
     },
     {
       "path": "02-commands/mass-operations/mass-grant.md",
@@ -48445,6 +48554,201 @@
       ],
       "size": 22538,
       "lastModified": "2026-03-09T21:07:58.060Z"
+    },
+    {
+      "path": "06-resources/blog-posts/2026-release-ai-assisted-development.md",
+      "title": "Major New Version of the hana-cli: How It Was Built With the Help of AI (and a Lot of Human Review)",
+      "category": "resources",
+      "docType": "general",
+      "keywords": [
+        "major",
+        "version",
+        "hana-cli:",
+        "built",
+        "with",
+        "help",
+        "(and",
+        "human",
+        "review)",
+        ".github",
+        "applyto",
+        "bin/*.js",
+        "tests/**/*.test.js",
+        "docs/.vitepress/**/*.{ts,js,json}",
+        "bin/",
+        "name",
+        "description",
+        "tools",
+        "routes/",
+        "utils/",
+        "package.json",
+        "skill.md",
+        "cli-command-development",
+        "argument-hint",
+        "docs/02-commands/",
+        "quality-gates.json",
+        "pretooluse",
+        "pre-tool-use.js",
+        "posttooluse",
+        "post-tool-use.js"
+      ],
+      "excerpt": "Major New Version of the hana-cli: How It Was Built With the Help of AI (and a Lot of Human Review) This week I released the newest hana-cli version, and I wanted to share what actually happened behind the scenes. Not just the feature list, but the real process since this was the first version with significant AI assistance. The small steps, the rough edges, and the lessons learned. Short version: code generation helped the project add more features in two months than I'd been able to deliver in...",
+      "headings": [
+        {
+          "level": 1,
+          "text": "Major New Version of the hana-cli: How It Was Built With the Help of AI (and a Lot of Human Review)",
+          "anchor": "major-new-version-of-the-hana-cli-how-it-was-built-with-the-help-of-ai-and-a-lot-of-human-review"
+        },
+        {
+          "level": 2,
+          "text": "What Changed in the 4.0 Release",
+          "anchor": "what-changed-in-the-40-release"
+        },
+        {
+          "level": 2,
+          "text": "The Architecture Shift That Matters Most",
+          "anchor": "the-architecture-shift-that-matters-most"
+        },
+        {
+          "level": 2,
+          "text": "How I Used GitHub Copilot in Small, Incremental Steps",
+          "anchor": "how-i-used-github-copilot-in-small-incremental-steps"
+        },
+        {
+          "level": 2,
+          "text": "Why the `.github` Folder Was Critical",
+          "anchor": "why-the-github-folder-was-critical"
+        },
+        {
+          "level": 2,
+          "text": "Fast Code Generation Is Real, but So Is Review Work",
+          "anchor": "fast-code-generation-is-real-but-so-is-review-work"
+        },
+        {
+          "level": 2,
+          "text": "The Testing Story",
+          "anchor": "the-testing-story"
+        },
+        {
+          "level": 2,
+          "text": "What Took the Most Time",
+          "anchor": "what-took-the-most-time"
+        },
+        {
+          "level": 2,
+          "text": "My Honest Take After This Release",
+          "anchor": "my-honest-take-after-this-release"
+        }
+      ],
+      "links": [
+        {
+          "text": "copilot-instructions.md",
+          "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/.github/copilot-instructions.md"
+        },
+        {
+          "text": "project-overview.instructions.md",
+          "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/.github/instructions/project-overview.instructions.md"
+        },
+        {
+          "text": "cli-command-development.instructions.md",
+          "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/.github/instructions/cli-command-development.instructions.md"
+        },
+        {
+          "text": "testing.instructions.md",
+          "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/.github/instructions/testing.instructions.md"
+        },
+        {
+          "text": "route-development.instructions.md",
+          "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/.github/instructions/route-development.instructions.md"
+        },
+        {
+          "text": "i18n-translation-management.instructions.md",
+          "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/.github/instructions/i18n-translation-management.instructions.md"
+        },
+        {
+          "text": "mcp-server-development.instructions.md",
+          "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/.github/instructions/mcp-server-development.instructions.md"
+        },
+        {
+          "text": "vitepress-config-management.instructions.md",
+          "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/.github/instructions/vitepress-config-management.instructions.md"
+        },
+        {
+          "text": "cli.agent.md",
+          "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/.github/agents/cli.agent.md"
+        },
+        {
+          "text": "docops.agent.md",
+          "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/.github/agents/docops.agent.md"
+        }
+      ],
+      "size": 22633,
+      "lastModified": "2026-03-11T17:50:25.196Z"
+    },
+    {
+      "path": "06-resources/blog-posts/index.md",
+      "title": "Blog Posts",
+      "category": "resources",
+      "docType": "general",
+      "keywords": [
+        "blog",
+        "posts",
+        "featured",
+        "articles"
+      ],
+      "excerpt": "Blog Posts Read about the story behind hana-cli's development, technical deep dives, and community insights. Featured Articles - **How the 4.0 Release Was Built With the Help of AI** — A comprehensive look at how AI coding agents were used to accelerate the 4.0 release, including the role of test-driven development, repo customization, and code review discipline.",
+      "headings": [
+        {
+          "level": 1,
+          "text": "Blog Posts",
+          "anchor": "blog-posts"
+        },
+        {
+          "level": 2,
+          "text": "Featured Articles",
+          "anchor": "featured-articles"
+        }
+      ],
+      "links": [
+        {
+          "text": "How the 4.0 Release Was Built With the Help of AI",
+          "url": "2026-release-ai-assisted-development.md"
+        }
+      ],
+      "size": 424,
+      "lastModified": "2026-03-11T17:21:07.466Z"
+    },
+    {
+      "path": "06-resources/index.md",
+      "title": "Resources",
+      "category": "resources",
+      "docType": "general",
+      "keywords": [
+        "resources",
+        "available",
+        "[blog posts](blog-posts/)"
+      ],
+      "excerpt": "Resources Explore additional resources for learning, contributing, and staying updated with the SAP HANA Developer CLI project. Available Resources - **Blog Posts** — Articles, case studies, and technical discussions on hana-cli development and usage - **GitHub Repository** — Source code, issue tracking, and contribution guidelines - **NPM Package** — Download and version information - **Changelog** — Version history and release notes",
+      "headings": [
+        {
+          "level": 1,
+          "text": "Resources",
+          "anchor": "resources"
+        },
+        {
+          "level": 2,
+          "text": "Available Resources",
+          "anchor": "available-resources"
+        }
+      ],
+      "links": [
+        {
+          "text": "Changelog",
+          "url": "/99-reference/changelog"
+        }
+      ],
+      "size": 607,
+      "lastModified": "2026-03-11T17:19:19.224Z"
     },
     {
       "path": "99-reference/changelog.md",

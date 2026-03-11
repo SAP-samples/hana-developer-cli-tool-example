@@ -62,6 +62,7 @@ export default withMermaid(
       { text: 'Features', link: '/03-features/' },
       { text: 'API Reference', link: '/04-api-reference/' },
       { text: 'Development', link: '/05-development/' },
+      { text: 'Resources', link: '/06-resources/' },
       {
         text: 'References',
         items: [
@@ -70,7 +71,7 @@ export default withMermaid(
         ]
       },
       {
-        text: 'Resources',
+        text: 'External Links',
         items: [
           { text: 'GitHub', link: 'https://github.com/SAP-samples/hana-developer-cli-tool-example' },
           { text: 'NPM Package', link: 'https://www.npmjs.com/package/hana-cli' },
@@ -482,6 +483,22 @@ export default withMermaid(
             { text: 'Prompts & Resources', link: '/05-development/mcp-server/prompts-and-resources' },
             { text: 'Documentation Search', link: '/05-development/mcp-server/docs-search' },
             { text: 'Implementation Phases', link: '/05-development/mcp-server/implementation-phases' },
+          ]
+        }
+      ],
+
+      '/06-resources/': [
+        {
+          text: 'Resources',
+          items: [
+            { text: 'Overview', link: '/06-resources/' },
+            { text: 'Blog Posts', link: '/06-resources/blog-posts/' },
+          ]
+        },
+        {
+          text: 'Blog Posts',
+          items: [
+            { text: 'How the 4.0 Release Was Built With the Help of AI', link: '/06-resources/blog-posts/2026-release-ai-assisted-development' },
           ]
         }
       ],

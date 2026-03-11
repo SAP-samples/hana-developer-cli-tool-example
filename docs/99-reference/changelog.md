@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [4.202603.1] - 2026-03-11
+
+**Changed**
+
+- Patch release to align all package and release metadata to version 4.202603.1
+- Bump MCP server package version to 1.202603.1
+- Update changelog and lockfile metadata for March 2026 patch release
+- Add new documentation URL in package.json
+- Clean shrinkwrap file to remove old version references and ensure consistency with new version
+- Fix issue Mass Export is giving Invalid Column Name: COLUMN_POSITION for each table exported
+
 ## [4.202603.0] - 2026-03-07
 
 **Changed**
