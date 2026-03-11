@@ -7,7 +7,7 @@ export const command = 'featuresUI'
 export const aliases = ['feui', 'featuresui', 'FeaturesUI']
 export const describe = features.describe
 
-export const builder = (yargs) => yargs.options(baseLite.getUIBuilder({})).wrap(160).example('hana-cli featuresUI', baseLite.bundle.getText("dataTypesExample")).wrap(160).epilog(buildDocEpilogue('featuresUI', 'database-admin', ['dataTypes', 'dataTypesUI']))
+export const builder = (yargs) => yargs.options(baseLite.getUIBuilder({})).wrap(160).example('hana-cli featuresUI', baseLite.bundle.getText("dataTypesExample")).wrap(160).epilog(buildDocEpilogue('featuresUI', 'system-tools', ['features', 'systemInfo']))
 
 export const inputPrompts = {
   port: {

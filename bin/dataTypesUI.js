@@ -7,7 +7,7 @@ export const command = 'dataTypesUI'
 export const aliases = ['dtui', 'datatypesUI', 'dataTypeUI', 'datatypeui', 'datatypesui']
 export const describe = dataTypes.describe
 
-export const builder = (yargs) => yargs.options(baseLite.getUIBuilder({})).wrap(160).example('hana-cli dataTypesUI', baseLite.bundle.getText("dataTypesExample")).wrap(160).epilog(buildDocEpilogue('dataTypesUI', 'database-admin', ['dataTypes']))
+export const builder = (yargs) => yargs.options(baseLite.getUIBuilder({})).wrap(160).example('hana-cli dataTypesUI', baseLite.bundle.getText("dataTypesExample")).wrap(160).epilog(buildDocEpilogue('dataTypesUI', 'schema-tools', ['dataTypes']))
 
 export const inputPrompts = {
   port: {

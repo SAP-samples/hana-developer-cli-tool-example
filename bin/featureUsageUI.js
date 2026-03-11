@@ -6,7 +6,7 @@ import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'featureUsageUI'
 export const aliases = ['fuui', 'featureusageui', 'FeaturesUsageUI', 'featuresusageui']
 export const describe = featureUsage.describe
-export const builder = (yargs) => yargs.options(baseLite.getUIBuilder({})).wrap(160).example('hana-cli featureUsageUI', baseLite.bundle.getText("featureUsageExample")).wrap(160).epilog(buildDocEpilogue('featureUsageUI', 'database-admin', ['featureUsage']))
+export const builder = (yargs) => yargs.options(baseLite.getUIBuilder({})).wrap(160).example('hana-cli featureUsageUI', baseLite.bundle.getText("featureUsageExample")).wrap(160).epilog(buildDocEpilogue('featureUsageUI', 'system-tools', ['featureUsage', 'features']))
 
 export const inputPrompts = {
   port: {
