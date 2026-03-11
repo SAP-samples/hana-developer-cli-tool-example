@@ -84,6 +84,7 @@ yarn.lock
 
 #Test Results
 /mochawesome-report
+/tests/.tmp
 
 /.playwright-mcp
 
