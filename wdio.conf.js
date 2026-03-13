@@ -80,7 +80,7 @@ export const config = {
   // Services
   // ========
   services: [
-    'chromedriver',
+    'devtools',
     [
       'ui5',
       {
