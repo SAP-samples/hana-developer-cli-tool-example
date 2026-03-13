@@ -1,9 +1,23 @@
 /**
- * README Knowledge Base
+ * Documentation Knowledge Base
  *
- * Aggregates and indexes all documentation from the project's markdown files
+ * Aggregates and indexes documentation from the project's docs/ folder
  * to provide context-aware guidance and parameter information for the MCP server.
  */
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+function readDocsFile(relativePath, fallbackText) {
+    try {
+        const filePath = join(__dirname, '..', '..', relativePath);
+        return readFileSync(filePath, 'utf-8');
+    }
+    catch {
+        return fallbackText;
+    }
+}
 export class ReadmeKnowledgeBase {
     /**
      * Global Standard Parameters - Available in all commands
@@ -343,65 +357,60 @@ export class ReadmeKnowledgeBase {
      * Key markdown documentation files and their contents
      */
     static DOCUMENTATION_RESOURCES = {
-        'main-readme': {
-            path: 'README.md',
-            title: 'Main README',
-            description: 'Complete guide to hana-cli, including installation, security, parameters, and conventions',
-            contents: 'Covers: Description, Installation, Security (7-step connection resolution), Examples, Project Structure, Standard Parameters, Naming Conventions, Alias Conventions, Default Values, Current Schema Defaults, Multi-Profile Database Support'
+        'docs-home': {
+            path: 'docs/README.md',
+            title: 'Documentation Home',
+            description: 'Entry point for hana-cli documentation, guides, and references',
+            contents: 'Covers: Documentation overview, navigation, and key entry points'
         },
-        'app-guide': {
-            path: 'app/README.md',
-            title: 'Web Applications Guide',
-            description: 'Documentation for the Fiori Launchpad web UI and all UI5 applications',
-            contents: 'Covers: Architecture, Folder Structure, Core Files, Resource Organization, All UI5 Apps (inspect, list, convert, system-info, etc.)'
+        'getting-started': {
+            path: 'docs/01-getting-started/index.md',
+            title: 'Getting Started',
+            description: 'Installation, configuration, and quick start guidance',
+            contents: 'Covers: Requirements, setup, configuration, and first commands'
         },
-        'routes-guide': {
-            path: 'routes/README.md',
-            title: 'HTTP Routes Documentation',
-            description: 'Complete API documentation for all REST endpoints (27+ endpoints)',
-            contents: 'Covers: Base Configuration, HANA Database Endpoints, Inspection Operations, WebSocket Support, Excel Export, Error Handling'
+        'web-ui': {
+            path: 'docs/03-features/web-ui/index.md',
+            title: 'Web UI (Fiori) Guide',
+            description: 'Documentation for the Web UI and UI5 applications',
+            contents: 'Covers: Web UI architecture, feature overview, and usage'
         },
-        'utils-guide': {
-            path: 'utils/README.md',
-            title: 'Utils Directory Guide',
-            description: 'Documentation for internal utility modules used by all commands',
-            contents: 'Covers: Core Utilities (base, connections, dbInspect, locale, sqlInjection, versionCheck), CLI Integration (btp, cf, xs), Database Utilities, Database Abstraction Layer'
+        'api-reference': {
+            path: 'docs/04-api-reference/index.md',
+            title: 'API Reference',
+            description: 'HTTP API reference and integration guidance',
+            contents: 'Covers: API overview, endpoints, and integration patterns'
+        },
+        'http-routes': {
+            path: 'docs/04-api-reference/http-routes.md',
+            title: 'HTTP Routes',
+            description: 'Detailed documentation for REST endpoints',
+            contents: 'Covers: REST endpoints, request/response formats, and usage'
         },
         'mcp-server': {
-            path: 'mcp-server/README.md',
+            path: 'docs/05-development/mcp-server/index.md',
             title: 'MCP Server Documentation',
-            description: 'Setup and usage guide for the Model Context Protocol integration',
-            contents: 'Covers: Installation, Configuration, Available Commands, Discovery Features, Workflows, Examples, Parameter Presets, Intent-Based Discovery'
+            description: 'Development and configuration guide for MCP integration',
+            contents: 'Covers: MCP server architecture, setup, tools, prompts, and resources'
         },
         'swagger': {
-            path: 'SWAGGER_IMPLEMENTATION.md',
+            path: 'docs/04-api-reference/swagger-implementation.md',
             title: 'Swagger/OpenAPI Implementation',
-            description: 'Documentation for the interactive API specification and exploration interface',
-            contents: 'Covers: API Documentation, Interactive Testing, OpenAPI 3.0 Support, Organized Endpoints, Export Support'
+            description: 'Swagger/OpenAPI tooling and implementation details',
+            contents: 'Covers: Swagger setup, OpenAPI support, and interactive testing'
+        },
+        'command-reference': {
+            path: 'docs/99-reference/command-reference.md',
+            title: 'Command Reference',
+            description: 'Reference index for CLI commands and categories',
+            contents: 'Covers: Command taxonomy, category mapping, and references'
         },
     };
     /**
      * Get connection resolution guide with detailed explanations
      */
     static getConnectionGuide() {
-        const steps = this.CONNECTION_RESOLUTION
-            .map(step => `${step.order}. **${step.name}** (${step.file})
-   ${step.description}
-   Note: ${step.notes}`)
-            .join('\n\n');
-        return `# Connection Resolution Order
-
-The hana-cli tool uses a 7-step process to determine database connection parameters:
-
-${steps}
-
-**Selection Strategy**: The tool stops at the first match found and uses those credentials. This allows flexible configuration for different environments (local dev, cloud, CI/CD).
-
-**Recommended Approach**:
-- Local Development: Use \`default-env.json\`
-- Cloud/BTP: Use \`.cdsrc-private.json\` with \`cds bind\` (most secure)
-- CI/CD Pipelines: Use \`--conn\` parameter or environment variables
-- Admin Operations: Use \`default-env-admin.json\` with \`--admin\` flag`;
+        return readDocsFile('docs/01-getting-started/configuration.md', 'Connection guide documentation is not available. Check docs/01-getting-started/configuration.md.');
     }
     /**
      * Get standard parameters for a specific command category
@@ -418,157 +427,26 @@ ${steps}
      * Get security guidelines as formatted text
      */
     static getSecurityGuidelines() {
-        const sections = this.SECURITY_GUIDELINES
-            .map(guide => `## ${guide.topic}
-
-${guide.description}
-
-${guide.details.map(d => `- ${d}`).join('\n')}`)
-            .join('\n\n');
-        return `# Security and Best Practices
-
-${sections}
-
-## Quick Security Checklist
-
-- ✓ Use .cdsrc-private.json with cds bind for production
-- ✓ Never commit connection files to version control
-- ✓ Use --disableVerbose in scripts to prevent logging credentials
-- ✓ Test with --dryRun before executing sensitive operations
-- ✓ Review operation logs in regulated environments
-- ✓ Keep hana-cli updated to get latest security patches
-- ✓ Run commands from appropriate user accounts with minimal required permissions`;
+        return readDocsFile('docs/03-features/knowledge-base.md', 'Security guidance is not available. Check docs/03-features/knowledge-base.md.');
     }
     /**
      * Get parameter guidelines for a specific command category
      */
     static getParameterGuide(category) {
-        const categoryData = this.COMMAND_CATEGORIES[category];
-        if (!categoryData) {
-            return `Category "${category}" not found. Available categories: ${Object.keys(this.COMMAND_CATEGORIES).join(', ')}`;
-        }
-        const params = this.getStandardParameters(category);
-        const paramTable = params
-            .map(p => `| \`${p.name}\` | ${p.alias || '—'} | ${p.type} | \`${p.default}\` | ${p.description} |`)
-            .join('\n');
-        return `# ${categoryData.name} Parameters
-
-${categoryData.description}
-
-## Standard Parameters
-
-| Parameter | Alias | Type | Default | Description |
-|-----------|-------|------|---------|-------------|
-${paramTable}
-
-## Usage Notes
-
-- **CURRENT_SCHEMA**: This placeholder automatically uses your current database schema
-- **dryRun**: Use \`--dryRun\` or \`--preview\` to preview operations before execution
-- **format**: Output format varies by command (csv, json, excel, summary, cds, edmx)
-- **timeout**: Specified in seconds; default 1 hour for long-running operations
-- **profile**: Select alternative database configuration without changing connections`;
+        const docText = readDocsFile('docs/03-features/cli-features.md', 'CLI features documentation is not available. Check docs/03-features/cli-features.md.');
+        return `# Parameters Reference (${category})\n\n${docText}`;
     }
     /**
      * Get project structure overview
      */
     static getProjectStructure() {
-        const folders = Object.entries(this.PROJECT_STRUCTURE)
-            .map(([folder, purpose]) => `- **${folder}/**: ${purpose}`)
-            .join('\n');
-        return `# hana-cli Project Structure
-
-${folders}
-
-## Key Documentation Files
-
-${Object.entries(this.DOCUMENTATION_RESOURCES)
-            .map(([key, resource]) => `### ${resource.title}
-- **Path**: \`${resource.path}\`
-- **Purpose**: ${resource.description}
-- **Contains**: ${resource.contents}`)
-            .join('\n\n')}
-
-## Key Resources for MCP Integration
-
-- **Commands**: 150+ CLI commands available via hana-cli (see \`bin/\`)
-- **HTTP API**: 27+ REST endpoints for programmatic access (\`routes/\`)
-- **Web UI**: Complete Fiori Launchpad interface (\`app/\`)
-- **Utilities**: Shared modules for connections, database, security (\`utils/\`)
-- **Documentation**: In-depth command examples and guides (\`docs/\`)`;
+        return readDocsFile('docs/05-development/index.md', 'Project structure documentation is not available. Check docs/05-development/index.md.');
     }
     /**
      * Get best practices and naming conventions guide
      */
     static getBestPractices() {
-        const conventions = this.NAMING_CONVENTIONS;
-        const aliasRules = Object.entries(conventions.aliases)
-            .map(([rule, desc]) => `- **${rule}**: ${desc}`)
-            .join('\n');
-        return `# hana-cli Best Practices and Conventions
-
-## Parameter Naming Conventions
-
-- **Single Operations**: ${conventions.singleOperations}
-- **Source/Target Operations**: ${conventions.sourceTarget}
-- **Boolean Flags**: ${conventions.booleanFlags}
-- **Aggregation Parameters**: ${conventions.aggregation}
-
-## Alias Conventions
-
-${aliasRules}
-
-## Parameter Usage Examples
-
-\`\`\`bash
-# List commands
-hana-cli tables -s myschema -l 100                    # Limit to 100 results
-hana-cli procedures --schema production               # Explicit parameter
-
-# Data manipulation
-hana-cli export -t CUSTOMERS -s SALES -f csv -dr      # Dry-run preview
-hana-cli import -t ORDERS --dryRun --log              # With logging
-
-# Batch operations
-hana-cli massGrant -s SCHEMA -o TABLE -p SELECT -dr   # Preview grants
-hana-cli massUpdate -s SCHEMA -o TABLE -c "COL='VAL'" # Update with condition
-
-# Debug and connection
-hana-cli status --debug                                # Enable debug output
-hana-cli tables --conn /path/to/config.json           # Custom connection
-hana-cli tables --admin                                # Admin credentials
-\`\`\`
-
-## Common Patterns
-
-### Safe Operation Pattern
-\`\`\`bash
-# 1. Preview the operation
-hana-cli import -t TABLE -f input.csv --dryRun
-
-# 2. Check parameters one more time
-hana-cli import -t TABLE -f input.csv --dryRun --debug
-
-# 3. Execute for real
-hana-cli import -t TABLE -f input.csv
-\`\`\`
-
-### Cross-Database Pattern
-\`\`\`bash
-# Use --profile to work with different databases
-hana-cli tables --profile production
-hana-cli export -t CUSTOMERS -p staging
-hana-cli compareData --sourceSchema SRC -p source --targetSchema TGT -p target
-\`\`\`
-
-### Batch Processing Pattern
-\`\`\`bash
-# Preview batch operation
-hana-cli massExport -s SCHEMA -l 50 --dryRun
-
-# Execute with logging
-hana-cli massExport -s SCHEMA -l 50 --log
-\`\`\``;
+        return readDocsFile('docs/03-features/knowledge-base.md', 'Best practices guidance is not available. Check docs/03-features/knowledge-base.md.');
     }
     /**
      * Search documentation by keyword

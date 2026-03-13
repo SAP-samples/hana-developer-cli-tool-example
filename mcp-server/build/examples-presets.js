@@ -373,6 +373,19 @@ export const COMMAND_PRESETS = {
             whenToUse: 'Large tables where full profile is too slow',
         },
     ],
+    dataValidator: [
+        {
+            name: 'default-rules',
+            description: 'Generic starter rules based on common column patterns',
+            parameters: {
+                table: '<table-name>',
+                schema: '<schema-name>',
+                rules: '<id-column>:required;<email-column>:email;<date-column>:date;<amount-column>:numeric',
+            },
+            notes: 'Adjust column names to match your table. Use rulesFile for larger rule sets.',
+            whenToUse: 'Quick validation setup before refining rules',
+        },
+    ],
     duplicateDetection: [
         {
             name: 'all-columns',

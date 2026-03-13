@@ -14,59 +14,67 @@ export interface CommandMetadata {
  * Category definitions with descriptions
  */
 export declare const CATEGORIES: {
-    readonly 'database-info': {
-        readonly name: "Database Information";
-        readonly description: "View and analyze database structure, metadata, and current state";
+    readonly 'data-tools': {
+        readonly name: "Data Tools";
+        readonly description: "Import, export, compare, validate, and manage data across systems";
     };
-    readonly 'data-quality': {
-        readonly name: "Data Quality & Validation";
-        readonly description: "Check data integrity, find duplicates, validate against rules";
+    readonly 'schema-tools': {
+        readonly name: "Schema Tools";
+        readonly description: "Explore schemas, tables, views, and database object metadata";
     };
-    readonly 'data-operations': {
-        readonly name: "Data Operations";
-        readonly description: "Import, export, copy, sync data between systems";
+    readonly 'object-inspection': {
+        readonly name: "Object Inspection";
+        readonly description: "Inspect tables, views, procedures, indexes, and related objects";
     };
-    readonly 'performance-analysis': {
-        readonly name: "Performance Analysis";
-        readonly description: "Analyze memory usage, expensive operations, and bottlenecks";
+    readonly 'analysis-tools': {
+        readonly name: "Analysis Tools";
+        readonly description: "Analyze dependencies, privileges, calculations, and relationships";
     };
-    readonly 'schema-management': {
-        readonly name: "Schema Management";
-        readonly description: "Clone, compare, and analyze database schemas";
-    };
-    readonly security: {
-        readonly name: "Security & Access Control";
-        readonly description: "Manage users, roles, privileges, and audit trails";
+    readonly 'performance-monitoring': {
+        readonly name: "Performance Monitoring";
+        readonly description: "Monitor performance, expensive operations, and system bottlenecks";
     };
     readonly 'backup-recovery': {
         readonly name: "Backup & Recovery";
-        readonly description: "Create backups, manage restore points, check backup status";
+        readonly description: "Create backups, manage restores, and verify recovery readiness";
     };
     readonly 'system-admin': {
         readonly name: "System Administration";
-        readonly description: "General system health, configuration, and diagnostics";
+        readonly description: "System health, configuration, diagnostics, and maintenance";
     };
-    readonly 'cloud-management': {
-        readonly name: "SAP HANA Cloud Management";
-        readonly description: "Manage SAP HANA Cloud instances and subscriptions";
+    readonly 'system-tools': {
+        readonly name: "System Tools";
+        readonly description: "System diagnostics, logs, host info, and runtime utilities";
+    };
+    readonly security: {
+        readonly name: "Security";
+        readonly description: "User, role, privilege, and security audit management";
+    };
+    readonly 'mass-operations': {
+        readonly name: "Mass Operations";
+        readonly description: "Bulk operations for grants, updates, deletions, and conversions";
+    };
+    readonly 'connection-auth': {
+        readonly name: "Connection & Auth";
+        readonly description: "Connection setup, authentication helpers, and configuration tools";
+    };
+    readonly 'btp-integration': {
+        readonly name: "BTP Integration";
+        readonly description: "SAP BTP integration tools and account management utilities";
+    };
+    readonly 'hana-cloud': {
+        readonly name: "HANA Cloud";
+        readonly description: "Manage SAP HANA Cloud instances and related services";
     };
     readonly 'hdi-management': {
         readonly name: "HDI Management";
-        readonly description: "Manage HDI (HANA Deployment Infrastructure) containers and groups";
+        readonly description: "Manage HDI containers, groups, and deployment operations";
     };
-    readonly 'monitoring-diagnostics': {
-        readonly name: "Monitoring & Diagnostics";
-        readonly description: "Monitor system events, diagnose issues, analyze logs";
-    };
-    readonly utilities: {
-        readonly name: "Utilities & Tools";
-        readonly description: "Generate documentation, test data, and perform mass operations";
+    readonly 'developer-tools': {
+        readonly name: "Developer Tools";
+        readonly description: "Developer utilities, templates, docs, and interactive helpers";
     };
 };
-/**
- * Complete command metadata registry
- * Organized by command name for quick lookup
- */
 export declare const COMMAND_METADATA_MAP: Record<string, Omit<CommandMetadata, 'command'>>;
 /**
  * Workflow definition for multi-step tasks

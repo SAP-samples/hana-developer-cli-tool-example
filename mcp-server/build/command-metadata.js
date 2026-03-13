@@ -2,64 +2,79 @@
  * Command metadata mapping - categorizes commands and provides discovery information
  * Categories help agents understand available functionality at a glance
  */
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const { commandMetadata: CLI_COMMAND_METADATA } = require('../../bin/commandMetadata.js');
 /**
  * Category definitions with descriptions
  */
 export const CATEGORIES = {
-    'database-info': {
-        name: 'Database Information',
-        description: 'View and analyze database structure, metadata, and current state',
+    'data-tools': {
+        name: 'Data Tools',
+        description: 'Import, export, compare, validate, and manage data across systems',
     },
-    'data-quality': {
-        name: 'Data Quality & Validation',
-        description: 'Check data integrity, find duplicates, validate against rules',
+    'schema-tools': {
+        name: 'Schema Tools',
+        description: 'Explore schemas, tables, views, and database object metadata',
     },
-    'data-operations': {
-        name: 'Data Operations',
-        description: 'Import, export, copy, sync data between systems',
+    'object-inspection': {
+        name: 'Object Inspection',
+        description: 'Inspect tables, views, procedures, indexes, and related objects',
     },
-    'performance-analysis': {
-        name: 'Performance Analysis',
-        description: 'Analyze memory usage, expensive operations, and bottlenecks',
+    'analysis-tools': {
+        name: 'Analysis Tools',
+        description: 'Analyze dependencies, privileges, calculations, and relationships',
     },
-    'schema-management': {
-        name: 'Schema Management',
-        description: 'Clone, compare, and analyze database schemas',
-    },
-    'security': {
-        name: 'Security & Access Control',
-        description: 'Manage users, roles, privileges, and audit trails',
+    'performance-monitoring': {
+        name: 'Performance Monitoring',
+        description: 'Monitor performance, expensive operations, and system bottlenecks',
     },
     'backup-recovery': {
         name: 'Backup & Recovery',
-        description: 'Create backups, manage restore points, check backup status',
+        description: 'Create backups, manage restores, and verify recovery readiness',
     },
     'system-admin': {
         name: 'System Administration',
-        description: 'General system health, configuration, and diagnostics',
+        description: 'System health, configuration, diagnostics, and maintenance',
     },
-    'cloud-management': {
-        name: 'SAP HANA Cloud Management',
-        description: 'Manage SAP HANA Cloud instances and subscriptions',
+    'system-tools': {
+        name: 'System Tools',
+        description: 'System diagnostics, logs, host info, and runtime utilities',
+    },
+    'security': {
+        name: 'Security',
+        description: 'User, role, privilege, and security audit management',
+    },
+    'mass-operations': {
+        name: 'Mass Operations',
+        description: 'Bulk operations for grants, updates, deletions, and conversions',
+    },
+    'connection-auth': {
+        name: 'Connection & Auth',
+        description: 'Connection setup, authentication helpers, and configuration tools',
+    },
+    'btp-integration': {
+        name: 'BTP Integration',
+        description: 'SAP BTP integration tools and account management utilities',
+    },
+    'hana-cloud': {
+        name: 'HANA Cloud',
+        description: 'Manage SAP HANA Cloud instances and related services',
     },
     'hdi-management': {
         name: 'HDI Management',
-        description: 'Manage HDI (HANA Deployment Infrastructure) containers and groups',
+        description: 'Manage HDI containers, groups, and deployment operations',
     },
-    'monitoring-diagnostics': {
-        name: 'Monitoring & Diagnostics',
-        description: 'Monitor system events, diagnose issues, analyze logs',
-    },
-    'utilities': {
-        name: 'Utilities & Tools',
-        description: 'Generate documentation, test data, and perform mass operations',
+    'developer-tools': {
+        name: 'Developer Tools',
+        description: 'Developer utilities, templates, docs, and interactive helpers',
     },
 };
 /**
  * Complete command metadata registry
  * Organized by command name for quick lookup
  */
-export const COMMAND_METADATA_MAP = {
+const ENRICHED_COMMAND_METADATA = {
     // Database Information
     'status': {
         category: 'database-info',
@@ -811,6 +826,21 @@ export const COMMAND_METADATA_MAP = {
         useCases: ['Report issues or get help'],
     },
 };
+const CLI_COMMANDS = CLI_COMMAND_METADATA;
+export const COMMAND_METADATA_MAP = Object.fromEntries(Object.entries(CLI_COMMANDS).map(([command, metadata]) => {
+    const enriched = ENRICHED_COMMAND_METADATA[command];
+    const tags = (enriched?.tags ?? []).map(tag => tag.toLowerCase());
+    return [
+        command,
+        {
+            category: metadata.category,
+            tags,
+            useCases: enriched?.useCases,
+            prerequisites: enriched?.prerequisites,
+            relatedCommands: metadata.relatedCommands ?? enriched?.relatedCommands,
+        },
+    ];
+}));
 /**
  * Workflow registry - common multi-step tasks
  */

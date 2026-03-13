@@ -3,7 +3,14 @@
  * Categories help agents understand available functionality at a glance
  */
 
-import { commandMetadata as CLI_COMMAND_METADATA } from '../../bin/commandMetadata.js';
+import { createRequire } from 'node:module';
+
+type CliCommandMetadata = Record<string, { category: string; relatedCommands?: string[] }>;
+
+const require = createRequire(import.meta.url);
+const { commandMetadata: CLI_COMMAND_METADATA } = require('../../bin/commandMetadata.js') as {
+  commandMetadata: CliCommandMetadata;
+};
 
 export interface CommandMetadata {
   command: string;
@@ -13,8 +20,6 @@ export interface CommandMetadata {
   prerequisites?: string[];
   relatedCommands?: string[];
 }
-
-type CliCommandMetadata = Record<string, { category: string; relatedCommands?: string[] }>;
 
 /**
  * Category definitions with descriptions
