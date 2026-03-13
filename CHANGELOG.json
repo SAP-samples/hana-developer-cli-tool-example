@@ -1,4 +1,16 @@
 [{
+        "date": "2026-03-13",
+        "version": "4.202603.2",
+        "Fixed": [
+            "Fix for CDS 9.8x compatibility - corrected CDS binding and path resolution when hana-cli commands are invoked from a project sub-directory, ensuring proper project root detection and CDS model loading regardless of working directory"
+        ],
+        "Changed": [
+            "Update MCP SDK version in mcp-server package for improved compatibility and stability",
+            "MCP Server Infrastructure Cleanup - refactored command-metadata, resources, readme-knowledge-base, and examples-presets modules for cleaner architecture and better maintainability",
+            "Improve WDI5 end-to-end test infrastructure and update shrinkwrap dependencies for UI testing"
+        ]
+    },
+    {
         "date": "2026-03-11",
         "version": "4.202603.1",
         "Changed": [

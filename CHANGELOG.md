@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [4.202603.2] - 2026-03-13
+
+**Fixed**
+
+- Fix for CDS 9.8x compatibility - corrected CDS binding and path resolution when hana-cli commands are invoked from a project sub-directory, ensuring proper project root detection and CDS model loading regardless of working directory
+
+**Changed**
+
+- Update MCP SDK version in mcp-server package for improved compatibility and stability
+- MCP Server Infrastructure Cleanup - refactored command-metadata, resources, readme-knowledge-base, and examples-presets modules for cleaner architecture and better maintainability
+- Improve WDI5 end-to-end test infrastructure and update shrinkwrap dependencies for UI testing
+
 ## [4.202603.1] - 2026-03-11
 
 **Changed**
@@ -13,6 +25,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - Update changelog and lockfile metadata for March 2026 patch release
 - Add new documentation URL in package.json
 - Clean shrinkwrap file to remove old version references and ensure consistency with new version
+- Blog Posts added to Documentation site
+- Fixed issue with three commands not having the correct documentation link
 - Fix issue Mass Export is giving Invalid Column Name: COLUMN_POSITION for each table exported
 
 ## [4.202603.0] - 2026-03-07
