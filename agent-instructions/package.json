@@ -45,7 +45,7 @@
   "bugs": {
     "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example/issues"
   },
-  "homepage": "https://sap-samples.github.io/hana-developer-cli-tool-example/",
+  "homepage": "https://sap-samples.github.io/hana-developer-cli-tool-example/03-features/agent-instructions",
   "author": "SAP",
   "license": "Apache-2.0",
   "engines": {
