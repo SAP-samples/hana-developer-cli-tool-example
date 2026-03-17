@@ -13,6 +13,7 @@ Explore HANA CLI feature guides, integrations, and advanced workflows.
 
 ## 🔧 Integration & Extensions
 
+- **[Agent Instructions](./agent-instructions.md)** - Portable AI coding assistant knowledge for any agent (Copilot, Cursor, Claude, Windsurf, Cline)
 - **[Internationalization (i18n)](./internationalization.md)** - Multi-language support
 - **[Knowledge Base Integration](./knowledge-base.md)** - Built-in help and examples
 - **[SAP BTP Integration](./btp-integration.md)** - Manage SAP BTP resources and SAP HANA Cloud instances

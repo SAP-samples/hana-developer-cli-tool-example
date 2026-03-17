@@ -1,0 +1,189 @@
+# hana-cli
+
+> SAP HANA Developer CLI Tool — simplifies database development operations
+
+## Install: npm install -g hana-cli
+## Version: 4.202603.2
+## Docs: https://github.com/SAP-samples/hana-developer-cli-tool-example
+
+## Commands
+
+- activateHDI (ahdi, ah): Activate HDI deployment
+- adminHDI (adHDI, adhdi): Administer HDI
+- adminHDIGroup (adHDIG, adhdig): Manage HDI groups
+- alerts (a, alert): View system alerts
+- auditLog (audit, auditlog): View audit logs
+- backup (bkp, createBackup): Create backup
+- backupList (blist, listBackups, backups): List available backups
+- backupStatus (bstatus, backupstate, bkpstatus): Check backup status
+- blocking (b, locks): Find blocking locks
+- btpInfo (btpinfo): Get BTP information
+- btpInfoUI (btpinfoUI, btpui, btpInfoui): Btp Integration
+- cacheStats: System Tools
+- calcViewAnalyzer (cva, analyzeCalcView, calcview): Analyze calculation views
+- callProcedure (cp, callprocedure, callProc, callproc, callSP, callsp): Call stored procedure
+- cds (cdsPreview): Work with CDS models
+- certificates (cert, certs): Manage certificates
+- certificatesUI (certUI, certsUI, certificatesui, listCertificatesUI, listcertificatesui): Security
+- codeTemplate (template, codegen, scaffold, boilerplate): Generate code templates
+- columnStats: Analyze column statistics
+- commandMap: Other
+- compareData (cmpdata, compardata, dataCompare): Data Tools
+- compareSchema (cmpschema, schemaCompare, compareschema): Compare two schemas
+- config (cfg): Connection Auth
+- connect (c, login): Configure database connection
+- connections (conn, c): Manage saved connections
+- connectViaServiceKey (key, servicekey, service-key): Connect using service key
+- containers (cont, listContainers, listcontainers): List HDI containers
+- containersUI (containersui, contUI, listContainersUI, listcontainersui): Hdi Management
+- copy2DefaultEnv (copyDefaultEnv, copyDefault-Env, copy2defaultenv, copydefaultenv, copydefault-env): Copy settings to default environment
+- copy2Env (copyEnv, copyenv, copy2env): Copy settings to environment file
+- copy2Secrets (secrets, make:secrets): Copy settings to secrets file
+- crashDumps (crash, cd): Check crash dumps
+- createContainer (cc, cCont): Create new HDI container
+- createContainerUsers (ccu, cContU): Hdi Management
+- createGroup (cg, cGrp): Create HDI group
+- createJWT (cJWT, cjwt, cJwt): Create JWT token
+- createModule (createDB, createDBModule): Developer Tools
+- createXSAAdmin (cXSAAdmin, cXSAA, cxsaadmin, cxsaa): Create XSA admin user
+- dataDiff (ddiff, diffData, dataCompare): Data Tools
+- dataLineage (lineage, dataFlow, traceLineage): Data Tools
+- dataMask (mask, dataprivacy, anonymize, pii): Mask sensitive data
+- dataProfile (prof, profileData, dataStats): Profile table data
+- dataSync (datasync, syncData, sync): Synchronize data between tables
+- dataTypes (dt, datatypes, dataType, datatype): Schema Tools
+- dataTypesUI (dtui, datatypesUI, dataTypeUI, datatypeui, datatypesui): Schema Tools
+- dataValidator (dval, validateData, dataValidation): Validate data against rules
+- dataVolumes (dv, datavolumes): Check data volumes
+- deadlocks (deadlock, dl): Find deadlock information
+- dependencies (deps, depend, dependency-graph, relationships): Find object dependencies
+- diagnose (diag): Run diagnostics
+- disks (di, Disks): Check disk usage
+- dropContainer (dc, dropC): Drop HDI container
+- dropGroup (dg, dropG): Drop HDI group
+- duplicateDetection (dupdetect, findDuplicates, duplicates): Find duplicate records
+- encryptionStatus (encryption, encrypt): Check encryption status
+- erdDiagram (erd, er, schema-diagram, entityrelation): Generate ER diagram
+- examples (example): Developer Tools
+- expensiveStatements: Find expensive SQL statements
+- export (exp, downloadData, downloaddata): Extract table data to file
+- features (fe, Features): List available features
+- featuresUI (feui, featuresui, FeaturesUI): System Tools
+- featureUsage (fu, FeaturesUsage): Check feature usage
+- featureUsageUI (fuui, featureusageui, FeaturesUsageUI, featuresusageui): System Tools
+- fragmentationCheck (frag, fc): Check table fragmentation
+- ftIndexes (fti, ftIndex, fulltext, fulltextIndexes): Schema Tools
+- functions (f, listFuncs, ListFunc, listfuncs, Listfunc, listFunctions, listfunctions): List functions
+- functionsUI (fui, listFuncsUI, ListFuncUI, listfuncsui, Listfuncui, listFunctionsUI, listfunctionsui): Schema Tools
+- generateDocs (docs, gendocs, generateDocumentation): Generate documentation
+- generateTestData (testdata, gendata, generateData): Generate test data
+- grantChains (grants, grantchain): Analyze privilege grant chains
+- graphWorkspaces (gws, graphs, graphWorkspace, graphws): Explore graph workspaces
+- hanaCloudHDIInstances (hdiInstances, hdiinstances, hdiServices, listhdi, hdiservices, hdis): List HANA Cloud HDI instances
+- hanaCloudHDIInstancesUI (hdiInstancesUI, hdiinstancesui, hdiServicesUI, listhdiui, hdiservicesui, hdisui): Hana Cloud
+- hanaCloudInstances (hcInstances, instances, listHC, listhc, hcinstances): List HANA Cloud instances
+- hanaCloudSBSSInstances (sbssInstances, sbssinstances, sbssServices, listsbss, sbssservices, sbsss): List HANA Cloud SBSS instances
+- hanaCloudSBSSInstancesUI (sbssInstancesUI, sbssinstancesui, sbssServicesUI, listsbssui, sbssservicesui, sbsssui): Hana Cloud
+- hanaCloudSchemaInstances (schemainstances, schemaServices, listschemas, schemaservices): List HANA Cloud schema instances
+- hanaCloudSchemaInstancesUI (schemainstancesui, schemaServicesUI, listschemasui, schemaservicesui): Hana Cloud
+- hanaCloudSecureStoreInstances (secureStoreInstances, securestoreinstances, secureStoreServices, listSecureStore, securestoreservices, securestores): List HANA Cloud Secure Store instances
+- hanaCloudSecureStoreInstancesUI (secureStoreInstancesUI, secureStoreUI, securestoreinstancesui, secureStoreServicesUI, listSecureStoreUI, securestoreservicesui, securestoresui): Hana Cloud
+- hanaCloudStart (hcstart, hc_start, start): Start HANA Cloud instance
+- hanaCloudStop (hcstop, hc_stop, stop): Stop HANA Cloud instance
+- hanaCloudUPSInstances (upsInstances, upsinstances, upServices, listups, upsservices): List HANA Cloud UPS instances
+- hanaCloudUPSInstancesUI (upsInstancesUI, upsinstancesui, upServicesUI, listupsui, upsservicesui): Hana Cloud
+- hdbsql: Execute SQL directly
+- healthCheck (health, h): Perform system health check
+- helpDocu (openDocu, openDocumentation, documentation, docu): Developer Tools
+- hostInformation (hi, HostInformation, hostInfo, hostinfo): Get host information
+- import (imp, uploadData, uploaddata): Load data from CSV/Excel
+- importUI (impui, importui, uploadui, uploadUI): Data Tools
+- indexes (ind, listIndexes, ListInd, listind, Listind, listfindexes): List indexes on tables
+- indexesUI (indUI, listIndexesUI, ListIndUI, listindui, Listindui, listfindexesui, indexesui): Schema Tools
+- indexTest: Performance Monitoring
+- iniContents (if, inifiles, ini): View INI file contents
+- iniFiles (if, inifiles, ini): Manage INI files
+- inspectFunction (if, function, insFunc, inspectfunction): Inspect function details
+- inspectIndex (ii, index, insIndex, inspectindex): Inspect index details
+- inspectJWT (jwt, ijwt, iJWT, iJwt): Analyze JWT token
+- inspectLibMember (ilm, libraryMember, librarymember, insLibMem, inspectlibrarymember): Inspect library member details
+- inspectLibrary (il, library, insLib, inspectlibrary): Inspect library details
+- inspectProcedure (ip, procedure, insProc, inspectprocedure, inspectsp): Inspect procedure details
+- inspectTable (it, table, insTbl, inspecttable, inspectable): Inspect table structure and properties
+- inspectTableUI (itui, tableUI, tableui, insTblUI, inspecttableui, inspectableui): Object Inspection
+- inspectTrigger (itrig, trigger, insTrig, inspecttrigger, inspectrigger): Inspect trigger details
+- inspectUser (iu, user, insUser, inspectuser): Inspect user details and privileges
+- inspectView (iv, view, insVew, inspectview): Inspect view details
+- interactive (i, repl, shell): Developer Tools
+- issue (Issue, openIssue, openissue, reportIssue, reportissue): Report issues or get help
+- kafkaConnect (kafka, kafkaAdapter, kafkasub): Manage Kafka connections
+- kb: Developer Tools
+- libraries (l, listLibs, ListLibs, listlibs, ListLib, listLibraries, listlibraries): List managed libraries
+- longRunning (lr, longrunning): Find long-running operations
+- massConvert (mc, massconvert, massConv, massconv): Convert data types
+- massConvertUI (mcui, massconvertui, massConvUI, massconvui): Mass Operations
+- massDelete (md, massdelete, massDel, massdel): Delete records in bulk
+- massExport (me, mexport, massExp, massexp): Export multiple tables at once
+- massGrant (mg, massgrant, massGrn, massgrn): Grant permissions in bulk
+- massRename (mr, massrename, massRN, massrn): Rename objects in bulk
+- massUpdate (mu, massupdate, massUpd, massupd): Update many records at once
+- massUsers (massUser, mUsers, mUser, mu): Mass Operations
+- memoryAnalysis: Analyze memory consumption
+- memoryLeaks (memleak, ml): Find potential memory leaks
+- objects (o, listObjects, listobjects): List all database objects
+- partitions (parts, partition, partitioning, tablePartitions): Schema Tools
+- ports: Check open ports
+- privilegeAnalysis (privanalysis, privanalyze): Analyze privilege distribution
+- privilegeError (pe, privilegeerror, privilegerror, getInsuffficientPrivilegeErrorDetails): Analysis Tools
+- procedures (p, listProcs, ListProc, listprocs, Listproc, listProcedures, listprocedures, sp): Find stored procedures
+- pwdPolicy (pwdpolicy, passpolicies): Manage password policies
+- queryPlan: Analyze query execution plan
+- querySimple (qs, querysimple): Run simple queries
+- querySimpleUI (qsui, querysimpleui, queryUI, sqlUI): Performance Monitoring
+- readMe (readme): View help documentation
+- readMeUI (readmeui, readMeUi, readmeUI): Developer Tools
+- reclaim: Reclaim unused space
+- recommendations (rec, recommend): Get system recommendations
+- referentialCheck (refcheck, checkReferential, fkcheck): Check foreign key integrity
+- replicationStatus (replstatus, replication, replstat): Check replication status
+- restore (rst, restoreBackup): Restore from backup
+- rick: System Tools
+- roles (r, listRoles, listroles): List database roles
+- schemaClone (schemaclone, cloneSchema, copyschema): Clone entire schema
+- schemas (sch, getSchemas, listSchemas, s): List all schemas
+- schemasUI (schui, getSchemasUI, listSchemasUI, schemasui, getschemasui, listschemasui): Schema Tools
+- sdiTasks (sditasks, sdi, smartDataIntegration): Manage SDI tasks
+- securityScan (secscan, scan): Run security scan
+- sequences (seq, listSeqs, ListSeqs, listseqs, Listseq, listSequences): List sequences
+- spatialData (spatial, geoData, geographic, geo): Work with spatial data
+- status (s, whoami): Check current database user and connection
+- synonyms (syn, listSynonyms, listsynonyms): List synonyms
+- systemInfo (sys, sysinfo, sysInfo, systeminfo, system-information, dbInfo, dbinfo): View system information
+- systemInfoUI (sysUI, sysinfoui, sysInfoUI, systeminfoui): System Admin
+- tableCopy (tablecopy, copyTable, copytable): Copy table between schemas
+- tableGroups (tg, tablegroup, groups, groups-tables): View table groups
+- tableHotspots (th, hotspots): Identify heavily accessed tables
+- tables (t, listTables, listtables): Find tables in schema
+- tablesPG (tablespg, tablespostgres, tablesPostgres, tables-postgres, tables-postgressql, tablesPOSTGRES): Schema Tools
+- tablesSQLite (tablessqlite, tablesqlite, tablesSqlite, tables-sqlite, tables-sql, tablesSQL): Schema Tools
+- tablesUI (tui, listTablesUI, listtablesui, tablesui): Schema Tools
+- test: Developer Tools
+- timeSeriesTools (tsTools, timeseries, timeseriestools): Work with time series data
+- traces (tf, Traces): Manage system traces
+- triggers (trig, listTriggers, ListTrigs, listtrigs, Listtrig, listrig): List triggers on tables
+- UI (ui, gui, GUI, launchpad, LaunchPad, launchPad, server): Developer Tools
+- users (u, listUsers, listusers): List database users
+- version: Check HANA version
+- viewDocs (docs, doc, documentation): Developer Tools
+- views (v, listViews, listviews): List views
+- workloadManagement (wlm, workloads, workloadClass, workloadmgmt): Manage workload assignments
+- xsaServices (xsa, xsaSvc, xsaservices): Manage XSA services
+
+## Quick Start
+- hana-cli connect
+- hana-cli status
+- hana-cli tables --schema MYSCHEMA
+- hana-cli inspectTable --table MYTABLE --schema MYSCHEMA
+- hana-cli querySimple --query "SELECT TOP 10 * FROM MYSCHEMA.MYTABLE"
+- hana-cli import --filename data.csv --table MYTABLE --schema MYSCHEMA --dryRun
+- hana-cli healthCheck

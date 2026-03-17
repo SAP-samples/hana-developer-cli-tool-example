@@ -373,6 +373,7 @@ export default withMermaid(
         {
           text: 'MCP Server & AI',
           items: [
+            { text: 'Agent Instructions', link: '/03-features/agent-instructions' },
             { text: 'MCP Overview', link: '/03-features/mcp/' },
             { text: 'MCP Integration', link: '/03-features/mcp-integration' },
             { text: 'Architecture', link: '/03-features/mcp/architecture' },

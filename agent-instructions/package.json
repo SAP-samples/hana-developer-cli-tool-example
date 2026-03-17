@@ -1,0 +1,54 @@
+{
+  "name": "hana-cli-agent-instructions",
+  "version": "1.202603.0",
+  "description": "Portable AI coding agent instructions for hana-cli — teach any AI assistant to use SAP HANA CLI",
+  "type": "module",
+  "bin": {
+    "hana-cli-agent-instructions": "./install.js"
+  },
+  "files": [
+    "HANA_CLI_REFERENCE.md",
+    "HANA_CLI_QUICKSTART.md",
+    "HANA_CLI_EXAMPLES.md",
+    "HANA_CLI_WORKFLOWS.md",
+    "llms.txt",
+    "categories/",
+    "copilot/",
+    "cursor/",
+    "claude/",
+    "windsurf/",
+    "cline/",
+    "generic/",
+    "install.js",
+    "README.md"
+  ],
+  "keywords": [
+    "hana-cli",
+    "sap-hana",
+    "copilot",
+    "cursor",
+    "claude",
+    "windsurf",
+    "cline",
+    "ai-assistant",
+    "coding-agent",
+    "llm",
+    "mcp",
+    "instructions",
+    "agent-instructions"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example",
+    "directory": "agent-instructions"
+  },
+  "bugs": {
+    "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example/issues"
+  },
+  "homepage": "https://sap-samples.github.io/hana-developer-cli-tool-example/",
+  "author": "SAP",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

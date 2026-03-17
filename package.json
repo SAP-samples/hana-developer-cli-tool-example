@@ -44,6 +44,7 @@
     "lint:fix": "eslint . --fix",
     "postinstall": "node scripts/postinstall.js",
     "build:docs-index": "node scripts/build-docs-index.js",
+    "generate:agent-instructions": "node generate-agent-instructions.js --force",
     "validate:i18n": "node scripts/validate-i18n.js",
     "validate:i18n:quiet": "node scripts/validate-i18n.js --quiet"
   },
