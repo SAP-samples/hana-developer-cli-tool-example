@@ -7,13 +7,14 @@
   "scripts": {
     "docs:dev": "vitepress dev .",
     "docs:build": "vitepress build . && echo '' > .vitepress/dist/.nojekyll",
-    "docs:serve": "vitepress serve ./dist",
+    "docs:serve": "vitepress serve ",
     "docs:preview": "vue-tsc --noEmit && vitepress build . && vitepress serve ./dist"
   },
   "devDependencies": {
+    "@agentmarkup/vite": "^0.4.0",
+    "mermaid": "^11.12.3",
     "vitepress": "^1.0.0",
     "vitepress-plugin-mermaid": "2.0.17",
-    "mermaid": "^11.12.3",
     "vue": "^3.5.29"
   }
 }

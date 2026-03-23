@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
+import { agentmarkup } from '@agentmarkup/vite'
 
 export default withMermaid(
   defineConfig({
@@ -613,7 +614,78 @@ export default withMermaid(
   vite: {
     build: {
       chunkSizeWarningLimit: 2000, // Increased from default 500KB to 2MB for large documentation pages (changelog, command reference, etc.)
-    }
+    },
+    plugins: [
+      agentmarkup({
+        site: 'https://SAP-samples.github.io/hana-developer-cli-tool-example/',
+        name: 'SAP HANA Developer CLI',
+        globalSchemas: [
+          { preset: 'webSite', name: 'SAP HANA Developer CLI', url: 'https://SAP-samples.github.io/hana-developer-cli-tool-example/' },
+          { preset: 'organization', name: 'SAP', url: 'https://www.sap.com' },
+        ],
+        llmsTxt: {
+          title: 'SAP HANA Developer CLI',
+          description: 'Complete documentation for the SAP HANA Developer CLI tool — a developer-centric tool for working with SAP HANA databases from your terminal, IDE, or cloud shell environment.',
+          sections: [
+            {
+              title: 'Getting Started',
+              entries: [
+                { title: 'Introduction', url: '/01-getting-started/', description: 'Overview and introduction to hana-cli' },
+                { title: 'Installation', url: '/01-getting-started/installation', description: 'Installation instructions' },
+                { title: 'Quick Start', url: '/01-getting-started/quick-start', description: 'Quick start guide' },
+                { title: 'Configuration', url: '/01-getting-started/configuration', description: 'Configuration options' },
+                { title: 'Environments', url: '/01-getting-started/environments', description: 'Environment setup' },
+              ],
+            },
+            {
+              title: 'Commands',
+              entries: [
+                { title: 'All Commands A-Z', url: '/02-commands/all-commands', description: 'Complete alphabetical command reference' },
+                { title: 'Commands Overview', url: '/02-commands/', description: 'Commands organized by category' },
+              ],
+            },
+            {
+              title: 'Features',
+              entries: [
+                { title: 'CLI Features', url: '/03-features/cli-features', description: 'Command line interface features' },
+                { title: 'API Server', url: '/03-features/api-server', description: 'REST API server mode' },
+                { title: 'MCP Server', url: '/03-features/mcp/', description: 'Model Context Protocol server for AI integration' },
+                { title: 'Web UI', url: '/03-features/web-ui/', description: 'Web user interface' },
+                { title: 'Internationalization', url: '/03-features/internationalization', description: 'Multi-language support' },
+                { title: 'Output Formats', url: '/03-features/output-formats', description: 'Supported output formats (JSON, CSV, table, etc.)' },
+              ],
+            },
+            {
+              title: 'API Reference',
+              entries: [
+                { title: 'API Overview', url: '/04-api-reference/', description: 'API reference overview' },
+                { title: 'Swagger / OpenAPI', url: '/04-api-reference/swagger', description: 'Swagger documentation' },
+                { title: 'HTTP Routes', url: '/04-api-reference/http-routes', description: 'HTTP route reference' },
+              ],
+            },
+            {
+              title: 'Development',
+              entries: [
+                { title: 'Development Guide', url: '/05-development/', description: 'Development guide overview' },
+                { title: 'Testing & QA', url: '/05-development/testing', description: 'Testing strategy and QA' },
+                { title: 'Project Structure', url: '/05-development/architecture/project-structure', description: 'Project architecture and structure' },
+              ],
+            },
+            {
+              title: 'Reference',
+              entries: [
+                { title: 'Changelog', url: '/99-reference/changelog', description: 'Version history and release notes' },
+                { title: 'FAQ', url: '/99-reference/faq-extended', description: 'Frequently asked questions' },
+                { title: 'Troubleshooting', url: '/troubleshooting/', description: 'Troubleshooting guide' },
+              ],
+            },
+          ],
+        },
+        llmsFullTxt: {
+          enabled: true,
+        },
+      }),
+    ],
   }
   })
 )
