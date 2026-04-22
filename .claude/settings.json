@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls d:/projects/cloud-cap-hana-swapi/cap/default-env*.json)",
+      "Bash(ls d:/projects/cloud-cap-hana-swapi/default-env*.json)",
+      "Bash(npm test*)",
+      "Bash(npm run test:*)",
+      "Bash(npm run lint*)",
+      "Bash(npm run coverage*)",
+      "Bash(npm run validate:i18n*)",
+      "Bash(npm run types)",
+      "Bash(npm run changelog)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx eslint --fix --no-warn-ignored \"$CLAUDE_FILE_PATH\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"$CLAUDE_FILE_PATH\" | grep -q 'default-env.*\\.json' && echo 'BLOCK: default-env files contain credentials - use hana-cli connect instead' && exit 1 || exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -8,7 +8,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
+### Quick Start
+
+```bash
+npm ci                      # Install dependencies (use npm ci, not npm install, for reproducible builds)
+npm test                    # Verify everything works
+```
+
 ### Testing
+
 ```bash
 npm test                    # All tests (Mocha, 16 parallel jobs)
 npm run test:cli            # CLI command tests only
@@ -22,6 +30,7 @@ npm run coverage:check      # Check thresholds without re-running tests
 ```
 
 ### Linting & Types
+
 ```bash
 npm run lint                # ESLint
 npm run lint:fix            # Auto-fix
@@ -29,13 +38,16 @@ npm run types               # Generate TypeScript declarations (.d.ts)
 ```
 
 ### Documentation
+
 ```bash
-# From docs/ subdirectory:
+# From docs/ subdirectory (has its own package.json):
+cd docs && npm install      # First-time setup for docs
 npm run docs:dev            # VitePress dev server (localhost:5173)
 npm run docs:build          # Production build
 ```
 
 ### i18n Validation
+
 ```bash
 npm run validate:i18n       # Validate i18n bundle completeness
 ```
@@ -43,8 +55,9 @@ npm run validate:i18n       # Validate i18n bundle completeness
 ## Architecture
 
 ### Directory Layout
+
 - **`bin/`** — 183 CLI command files + `cli.js` (entry point with lazy loading), `commandMap.js`, `commandMetadata.js`
-- **`utils/`** — Core utilities: `base.js` (~2300 lines, core API), `connections.js` (connection resolution), `database/` (factory pattern), `dbInspect.js`, `sqlInjection.js`, and mass-operation helpers
+- **`utils/`** — Core utilities: `base.js` (~1500 lines, core API), `connections.js` (connection resolution), `database/` (factory pattern), `dbInspect.js`, `sqlInjection.js`, and mass-operation helpers
 - **`routes/`** — Express REST API endpoints (served when running `hana-cli ui`)
 - **`mcp-server/src/`** — TypeScript MCP server (JSON-RPC over STDIO for AI tool use)
 - **`app/`** — SAPUI5 web applications (Fiori Launchpad UI)
@@ -71,12 +84,15 @@ Each `bin/*.js` file is a yargs command module. `commandMap.js` registers all co
 All user-facing console output uses `base.bundle.getText(key, [params])` backed by `@sap/textbundle` property files in `_i18n/`. Feature-specific strings go in separate property files (e.g., `messages_dataProfile_en.properties`).
 
 ### Standard CLI Parameters
+
 Most commands share: `--schema`/`-s` (defaults to `**CURRENT_SCHEMA**`), `--table`/`-t`, `--limit`/`-l`, `--output`/`-o` (csv|json|table|excel), `--dryRun`/`-dr`, `--admin`/`-a`, `--profile`/`-p` (database profile), `--debug`/`-d`.
 
 ### MCP Server (TypeScript)
+
 `mcp-server/src/` exposes CLI commands as MCP tools for AI assistants. Build output goes to `mcp-server/build/`. It wraps the CLI's metadata from `commandMetadata.js` and executes commands via `executor.ts`.
 
 ### Testing Conventions
+
 - Test files: `tests/*.Test.js`, `tests/routes/*.Test.js`, `tests/utils/*.Test.js`
 - Config: `tests/.mocharc.json` (16 parallel jobs, 10s timeout)
 - Mocking: `sinon` + `esmock` for ESM mocking, `mock-fs` for filesystem, `supertest` for HTTP routes
@@ -86,8 +102,16 @@ Most commands share: `--schema`/`-s` (defaults to `**CURRENT_SCHEMA**`), `--tabl
 ## Development Guides
 
 Before adding a new command, route, or test, consult `.github/instructions/` — it contains authoritative, detailed guides for every major development task:
+
 - `cli-command-development.instructions.md` — adding CLI commands
 - `testing.instructions.md` — test patterns and mocking
 - `route-development.instructions.md` — REST API endpoints
 - `mcp-server-development.instructions.md` — MCP tool integration
 - `i18n-translation-management.instructions.md` — i18n patterns
+
+## Gotchas
+
+- **`default-env.json` contains credentials** — This file stores HANA connection credentials and is NOT gitignored. Never commit real credentials. Use `hana-cli connect` to regenerate it locally.
+- **ESM mocking** — Standard `sinon.stub()` cannot intercept ESM `import` bindings. Use `esmock` to mock module-level dependencies in tests. See `.github/instructions/testing.instructions.md`.
+- **Docs is a separate project** — The `docs/` directory has its own `package.json` and `node_modules`. Run `npm install` inside `docs/` before building documentation.
+- **ESLint flat config** — This project uses ESLint flat config (`eslint.config.js`), not legacy `.eslintrc`. The `@sap/eslint-plugin-cds` plugin is integrated.
