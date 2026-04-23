@@ -5,7 +5,11 @@ import { ConnectionContext } from '../connection-context.js';
 import { hasExamples, hasPresets } from '../examples-presets.js';
 
 function sanitizeToolName(name: string): string {
-  return name.replace(/[^a-z0-9_-]/g, '_');
+  return name
+    .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]/g, '_');
 }
 
 const PROJECT_CONTEXT_SCHEMA = {
@@ -73,6 +77,10 @@ export async function handleCliTool(toolName: string, args: Record<string, any>)
   let actualCommandName = commandName;
   if (!commandsMap.has(commandName)) {
     for (const [cmdName, cmdModule] of commandsMap) {
+      if (sanitizeToolName(cmdName) === commandName) {
+        actualCommandName = cmdName;
+        break;
+      }
       if (cmdModule.aliases) {
         for (const alias of cmdModule.aliases) {
           if (sanitizeToolName(alias) === commandName) {
