@@ -19,13 +19,6 @@ export declare function executeCommand(commandName: string, args?: Record<string
     commandName: string;
 }>;
 /**
- * Validates that required environment variables are set for database connection
- */
-export declare function validateEnvironment(): {
-    valid: boolean;
-    message?: string;
-};
-/**
  * Formats execution result for display using the output formatter
  */
 export declare function formatResult(result: ExecutionResult & {

@@ -9,6 +9,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { docsSearch } from './docs-search.js';
 import { getCommandExamples, getCommandPresets } from './examples-presets.js';
+import ReadmeKnowledgeBase from './readme-knowledge-base.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 /**
@@ -133,6 +134,62 @@ export function listResources() {
             name: 'Available Prompts',
             description: 'List of guided workflows and templates for common tasks',
             mimeType: 'text/plain',
+        },
+        // Knowledge Base (migrated from tools for reduced context usage)
+        {
+            uri: 'hana://knowledge/connection-guide',
+            name: 'Connection Resolution Guide (Knowledge Base)',
+            description: 'Detailed 7-step connection resolution order and best practices',
+            mimeType: 'text/markdown',
+        },
+        {
+            uri: 'hana://knowledge/security-guide',
+            name: 'Security Guidelines (Knowledge Base)',
+            description: 'Connection security, SQL injection protection, parameter security, environment security',
+            mimeType: 'text/markdown',
+        },
+        {
+            uri: 'hana://knowledge/best-practices',
+            name: 'Best Practices (Knowledge Base)',
+            description: 'Naming conventions, alias patterns, safe operation patterns',
+            mimeType: 'text/markdown',
+        },
+        {
+            uri: 'hana://knowledge/project-structure',
+            name: 'Project Structure (Knowledge Base)',
+            description: 'Overview of hana-cli project folders and documentation resources',
+            mimeType: 'text/markdown',
+        },
+        {
+            uri: 'hana://knowledge/parameters/data-manipulation',
+            name: 'Data Manipulation Parameters',
+            description: 'Standard parameters for data manipulation commands (schema, table, output, format, etc.)',
+            mimeType: 'text/markdown',
+        },
+        {
+            uri: 'hana://knowledge/parameters/batch-operations',
+            name: 'Batch Operation Parameters',
+            description: 'Standard parameters for batch/mass operation commands',
+            mimeType: 'text/markdown',
+        },
+        {
+            uri: 'hana://knowledge/parameters/list-inspect',
+            name: 'List & Inspect Parameters',
+            description: 'Standard parameters for listing and inspection commands',
+            mimeType: 'text/markdown',
+        },
+        // Documentation Index Metadata
+        {
+            uri: 'hana://docs/statistics',
+            name: 'Documentation Statistics',
+            description: 'Total documents, categories, and document types available in the documentation index',
+            mimeType: 'application/json',
+        },
+        {
+            uri: 'hana://docs/categories',
+            name: 'Documentation Categories',
+            description: 'All available documentation categories and document types with sample documents',
+            mimeType: 'application/json',
         },
     ];
 }
@@ -386,6 +443,46 @@ Example: To explore a database, invoke the "explore-database" prompt.
             mimeType: 'text/plain',
             text,
         };
+    }
+    // Knowledge Base resources
+    if (uri === 'hana://knowledge/connection-guide') {
+        return { uri, mimeType: 'text/markdown', text: ReadmeKnowledgeBase.getConnectionGuide() };
+    }
+    if (uri === 'hana://knowledge/security-guide') {
+        return { uri, mimeType: 'text/markdown', text: ReadmeKnowledgeBase.getSecurityGuidelines() };
+    }
+    if (uri === 'hana://knowledge/best-practices') {
+        return { uri, mimeType: 'text/markdown', text: ReadmeKnowledgeBase.getBestPractices() };
+    }
+    if (uri === 'hana://knowledge/project-structure') {
+        return { uri, mimeType: 'text/markdown', text: ReadmeKnowledgeBase.getProjectStructure() };
+    }
+    if (uri.startsWith('hana://knowledge/parameters/')) {
+        const category = uri.replace('hana://knowledge/parameters/', '');
+        return { uri, mimeType: 'text/markdown', text: ReadmeKnowledgeBase.getParameterGuide(category) };
+    }
+    // Documentation index metadata resources
+    if (uri === 'hana://docs/statistics') {
+        if (!docsSearch.isAvailable()) {
+            return { uri, mimeType: 'application/json', text: JSON.stringify({ error: 'Documentation index not available' }) };
+        }
+        return { uri, mimeType: 'application/json', text: JSON.stringify(docsSearch.getStats(), null, 2) };
+    }
+    if (uri === 'hana://docs/categories') {
+        if (!docsSearch.isAvailable()) {
+            return { uri, mimeType: 'application/json', text: JSON.stringify({ error: 'Documentation index not available' }) };
+        }
+        const categories = docsSearch.getCategories();
+        const docTypes = docsSearch.getDocTypes();
+        const categorySummary = {};
+        categories.forEach(cat => {
+            const docs = docsSearch.listByCategory(cat);
+            categorySummary[cat] = {
+                documentCount: docs.length,
+                sampleDocuments: docs.slice(0, 3).map(d => ({ title: d.title, path: d.path })),
+            };
+        });
+        return { uri, mimeType: 'application/json', text: JSON.stringify({ categories: categorySummary, documentTypes: docTypes }, null, 2) };
     }
     throw new Error(`Unknown resource: ${uri}`);
 }

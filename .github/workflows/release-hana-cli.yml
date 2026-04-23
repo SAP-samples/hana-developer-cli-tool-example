@@ -15,14 +15,15 @@ on:
         required: false
         type: string
         default: '[]'
-      publish_mcp_server:
-        description: 'Also publish hana-cli-mcp-server to npm?'
+      publish_mcp_registry:
+        description: 'Also publish to MCP Registry?'
         required: false
         type: boolean
         default: true
 
 permissions:
   contents: write
+  id-token: write
 
 concurrency:
   group: release-hana-cli
@@ -107,7 +108,7 @@ jobs:
 
       - name: Commit version bump and changelog
         run: |
-          git add package.json npm-shrinkwrap.json mcp-server/package.json mcp-server/npm-shrinkwrap.json CHANGELOG.json CHANGELOG.md
+          git add package.json npm-shrinkwrap.json server.json mcp-server/package.json mcp-server/npm-shrinkwrap.json CHANGELOG.json CHANGELOG.md
           git diff --cached --quiet && echo "No changes to commit" && exit 0
           git commit -m "chore: release v${{ steps.calc.outputs.version }} [skip ci]"
 
@@ -200,14 +201,17 @@ jobs:
           draft: false
           prerelease: ${{ contains(steps.ver.outputs.version, '-') }}
 
-  publish-mcp-server:
-    name: Publish MCP Server to npm
+  publish-mcp-registry:
+    name: Publish to MCP Registry
     needs: [publish, prepare, resolve-version]
     if: |
       always() &&
       needs.publish.result == 'success' &&
-      (github.event_name == 'push' || inputs.publish_mcp_server == true)
+      (github.event_name == 'push' || inputs.publish_mcp_registry == true)
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Determine version
         id: ver
@@ -223,21 +227,12 @@ jobs:
         with:
           ref: "v${{ steps.ver.outputs.version }}"
 
-      - name: Setup Node.js with npm registry
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
-
-      - name: Install and build MCP server
-        working-directory: mcp-server
+      - name: Install mcp-publisher
         run: |
-          npm ci
-          npm run build
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
 
-      - name: Publish mcp-server to npm
-        working-directory: mcp-server
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Authenticate to MCP Registry
+        run: ./mcp-publisher login github-oidc
+
+      - name: Publish server to MCP Registry
+        run: ./mcp-publisher publish

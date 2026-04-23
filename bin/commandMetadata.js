@@ -209,6 +209,8 @@ export const commandMetadata = {
     openDBExplorer: { category: 'schema-tools', relatedCommands: ['tables', 'schemas', 'objects'] },
     openBAS: { category: 'developer-tools', relatedCommands: ['cds', 'activateHDI'] },
     issue: { category: 'developer-tools', relatedCommands: ['diagnose', 'helpDocu'] },
+    mcpServerInstall: { category: 'developer-tools', relatedCommands: ['mcpServerStatus', 'helpDocu'] },
+    mcpServerStatus: { category: 'developer-tools', relatedCommands: ['mcpServerInstall', 'helpDocu'] },
 
     // UI Feature Flags
     features: { category: 'system-tools', relatedCommands: ['featuresUI', 'systemInfo'] },

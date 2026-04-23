@@ -2,8 +2,22 @@
     {
         "date": "2026-04-23",
         "version": "4.202604.0",
+        "Added": [
+            "New mcpServerInstall command (hana-cli mcp) for one-command MCP server configuration in Claude Desktop, Claude Code, Cursor, Windsurf, Cline, VS Code, Continue, and Zed",
+            "New mcpServerStatus command (hana-cli mcp-status) to check MCP server installation status across all 8 supported AI assistant clients",
+            "MCP resources for knowledge base content and documentation index metadata"
+        ],
         "Changed": [
-            "Release version 4.202604.0"
+            "Major MCP server refactor: modular architecture replacing monolithic 1,700-line index.ts",
+            "Reduced MCP tool count by removing alias registrations and consolidating search tools",
+            "Updated MCP SDK from 1.27.1 to 1.29.0",
+            "Fixed MCP server version to read dynamically from package.json",
+            "Fixed fragile command name matching in output formatter",
+            "Added isError signaling to all MCP error response paths"
+        ],
+        "Removed": [
+            "Removed simulated workflow execution tools (LLMs orchestrate multi-step tasks more effectively)",
+            "Removed no-op validateEnvironment function and low-value metadata tools"
         ]
     },
     {

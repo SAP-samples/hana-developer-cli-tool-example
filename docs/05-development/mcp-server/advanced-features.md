@@ -2,13 +2,11 @@
 
 Sophisticated capabilities for complex workflows and understanding results.
 
-## Workflow Execution System
+## Workflow Templates
 
-Automated execution of multi-step workflows with parameter substitution and result tracking.
+Pre-built sequences of commands that work together to accomplish a goal. The AI agent orchestrates execution — workflow templates provide the sequence and recommended parameters, while the LLM handles execution and decision-making between steps.
 
 ### What Are Workflows?
-
-Pre-built sequences of commands that work together to accomplish a goal.
 
 **Example Workflow - Data Quality Check:**
 
@@ -24,48 +22,36 @@ Pre-built sequences of commands that work together to accomplish a goal.
 5. Generate report
 ```
 
-### Executing a Workflow
+### Browsing Workflows
 
-**MCP Tool:** `hana_execute_workflow`
+**MCP Tool:** `hana_workflows`
 
-```json
-{
-  "workflowId": "data-quality-check",
-  "parameters": {
-    "schema": "SALES",
-    "table": "CUSTOMERS",
-    "stopOnError": false
-  }
-}
-```
+Returns a list of all available workflow templates with descriptions and step counts.
 
-**Output includes:**
-
-- Results from each step
-- Execution time per step
-- Any errors encountered
-- Summary and recommendations
-
-### Previewing Before Execution
-
-**MCP Tool:** `hana_preview_workflow`
+**MCP Tool:** `hana_workflow_by_id`
 
 ```json
 {
-  "workflowId": "data-quality-check",
-  "parameters": {
-    "schema": "SALES",
-    "table": "CUSTOMERS"
-  }
+  "id": "data-quality-check"
 }
 ```
 
-**Shows:**
+**Returns:**
 
-- All steps in order
-- Parameters for each step
-- Expected execution
-- No actual commands run
+- All steps in order with commands and parameters
+- Parameter templates using `<parameter-name>` substitution
+- Expected outcomes per step
+- Tips and best practices
+
+**MCP Tool:** `hana_search_workflows`
+
+```json
+{
+  "tag": "performance"
+}
+```
+
+Search workflows by tag (e.g., `data-quality`, `performance`, `security`, `backup`, `migration`).
 
 ### Built-In Workflows
 
@@ -139,7 +125,7 @@ The MCP Server includes 20+ professional workflows:
 
 ### Parameter Substitution
 
-Workflows support parameter templates using `<parameter-name>`:
+Workflow templates use parameter placeholders with `<parameter-name>` syntax. When the AI agent executes each step, it substitutes the actual values:
 
 ```json
 {
@@ -176,54 +162,11 @@ When executing, provide actual values:
 }
 ```
 
-Parameters are automatically substituted in each step.
+The AI agent substitutes actual values when calling each tool in sequence.
 
 ### Error Handling in Workflows
 
-Control how workflows handle errors:
-
-**Continue on errors:**
-
-```json
-{
-  "workflowId": "data-quality-check",
-  "parameters": { ... },
-  "stopOnError": false
-}
-```
-
-**Stop on first error:**
-
-```json
-{
-  "workflowId": "data-quality-check", 
-  "parameters": { ... },
-  "stopOnError": true
-}
-```
-
-**Output shows:**
-
-```json
-{
-  "steps": [
-    {
-      "step": 1,
-      "command": "dataProfile",
-      "status": "success",
-      "duration": 2.5
-    },
-    {
-      "step": 2,
-      "command": "duplicateDetection",
-      "status": "success",
-      "duration": 1.8
-    }
-  ],
-  "totalDuration": 4.3,
-  "errors": []
-}
-```
+The AI agent decides how to handle errors between steps — it can skip failed steps, retry with different parameters, or stop and report issues. Workflow templates include guidance on which steps are critical vs. optional.
 
 ## Result Interpretation (`hana_interpret_result`)
 
@@ -405,11 +348,12 @@ Access all 279 project documentation pages directly from MCP.
 
 ### Searching Documentation
 
-**MCP Tool:** `hana_search_docs`
+**MCP Tool:** `hana_search`
 
 ```json
 {
   "query": "import CSV data",
+  "scope": "docs",
   "category": "commands",
   "docType": "command",
   "limit": 5
@@ -454,13 +398,9 @@ Access all 279 project documentation pages directly from MCP.
 
 ### Finding Documentation by Category
 
-**MCP Tool:** `hana_list_doc_categories`
+**MCP Resource:** `hana://docs/categories`
 
-Returns:
-
-- All 9+ categories
-- Number of documents per category
-- Sample documents from each
+Documentation categories are available as an MCP resource (not a tool), keeping the tool list concise while still providing browsable metadata.
 
 **Categories:**
 
@@ -477,7 +417,7 @@ Returns:
 ```bash
 1. User: "How do I import a CSV file?"
    ↓
-2. System: Calls hana_search_docs
+2. System: Calls hana_search
    ↓
 3. Returns: Top 5 import-related docs
    ↓
@@ -495,10 +435,10 @@ Returns:
 ### Scenario 1: Complete Data Migration
 
 ```bash
-1. Preview: hana_preview_workflow("schema-migration")
+1. Browse: hana_workflow_by_id("schema-migration")
    ↓
-2. Execute: hana_execute_workflow("schema-migration")
-   - Validate source
+2. Execute steps guided by the workflow template:
+   - Validate source schema
    - Generate DDL
    - Test migration
    - Compare schemas
@@ -511,19 +451,19 @@ Returns:
 ### Scenario 2: Performance Optimization
 
 ```bash
-1. Get baseline: hana_execute_workflow("performance-baseline")
+1. Get workflow: hana_workflow_by_id("performance-baseline")
    ↓
-2. Analyze: hana_interpret_result("memoryAnalysis", baseline)
+2. Execute baseline steps: hana_healthCheck, hana_memoryAnalysis, etc.
    ↓
-3. Find issues: hana_execute_workflow("performance-diagnosis")
+3. Analyze: hana_interpret_result("memoryAnalysis", baseline)
    ↓
-4. Get recommendations: from diagnosed issues
+4. Get diagnosis workflow: hana_workflow_by_id("performance-diagnosis")
    ↓
-5. Implement optimizations
+5. Execute diagnosis steps and get recommendations
    ↓
-6. Re-run baseline: hana_execute_workflow("performance-baseline")
+6. Implement optimizations
    ↓
-7. Compare: baseline before vs. after
+7. Re-run baseline steps and compare before vs. after
 ```
 
 ### Scenario 3: Data Quality Assurance
@@ -535,40 +475,33 @@ Returns:
    ↓
 3. Find issues: recommendations and concerns
    ↓
-4. Execute: hana_execute_workflow("data-cleansing")
+4. Get workflow: hana_workflow_by_id("data-cleansing")
+   ↓
+5. Execute cleansing steps:
    - Identify issues
    - Clean data
    - Validate
    ↓
-5. Verify: hana_dataValidator(table)
+6. Verify: hana_dataValidator(table)
    ↓
-6. Report: Quality metrics and changes
+7. Report: Quality metrics and changes
 ```
 
 ## Best Practices
 
-### 1. Always Preview Before Executing
+### 1. Review Workflow Templates First
 
-```json
-// Step 1: Preview
-hana_preview_workflow("data-migration", parameters)
+```bash
+# Step 1: Browse the workflow
+hana_workflow_by_id("data-migration")
 
-// Step 2: Review and confirm
-// Step 3: Execute
-hana_execute_workflow("data-migration", parameters)
+# Step 2: Review the steps and parameters
+# Step 3: Execute each step, adapting as needed
 ```
 
-### 2. Use Error Handling Wisely
+### 2. Handle Errors Between Steps
 
-```json
-{
-  "stopOnError": true  // For critical workflows
-}
-
-{
-  "stopOnError": false  // For bulk operations with retry
-}
-```
+The AI agent should check results between workflow steps and decide whether to continue, retry, or stop based on the outcome.
 
 ### 3. Interpret All Results
 

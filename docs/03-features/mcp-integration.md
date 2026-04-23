@@ -18,29 +18,67 @@ The Model Context Protocol enables AI assistants to interact with external tools
 
 ## Quick Start
 
-### Installation
+### Option 1: Auto-Configure (Recommended)
+
+If you already have `hana-cli` installed, use the built-in install command:
 
 ```bash
-cd mcp-server
-npm install
-npm run build
+# Auto-detect installed clients and configure them
+hana-cli mcp
+
+# Preview what would be written without making changes
+hana-cli mcp --dry-run
+
+# Target a specific client
+hana-cli mcp --client claude-desktop
+hana-cli mcp --client claude-code --global
+hana-cli mcp --client cursor
+
+# Check configuration status across all clients
+hana-cli mcp-status
 ```
 
-### Configuration
+See [mcpServerInstall](../02-commands/developer-tools/mcp-server-install.md) for full documentation.
 
-Add to your IDE's MCP settings:
+### Option 2: npx (No Installation)
 
-**VS Code with Claude Dev or Cline:**
+Run the MCP server directly via npx without installing anything:
+
+```bash
+npx -y -p hana-cli hana-cli-mcp
+```
+
+Use this in your IDE's MCP configuration:
 
 ```json
 {
   "mcpServers": {
     "hana-cli": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "-p", "hana-cli", "hana-cli-mcp"]
+    }
+  }
+}
+```
+
+### Option 3: MCP Registry
+
+The MCP server is published to the [MCP Registry](https://registry.modelcontextprotocol.io) as `io.github.SAP-samples/hana-cli`. AI clients and aggregators that support the MCP Registry can discover and install it automatically.
+
+### Manual Configuration
+
+You can also point directly to a local build:
+
+```json
+{
+  "mcpServers": {
+    "hana-cli": {
+      "type": "stdio",
       "command": "node",
       "args": [
-        "D:/projects/hana-developer-cli-tool-example/mcp-server/build/index.js"
-      ],
-      "env": {}
+        "/absolute/path/to/mcp-server/build/index.js"
+      ]
     }
   }
 }
@@ -66,7 +104,7 @@ hana_compareSchema       Compare database schemas
 hana_inspectTable        View table structure and metadata
 ```
 
-Command aliases are also available (e.g., `hana_s` for status, `hana_imp` for import).
+Command aliases still work when called (e.g., `hana_s` for status, `hana_imp` for import), but they are not registered as separate tools to keep the tool list concise.
 
 ### 2. Discovery Tools
 
@@ -79,7 +117,7 @@ Input: "find duplicate rows in my customer table"
 Output: Top 5 matching commands with confidence scores and parameter templates
 ```
 
-**`hana_smart_search`** - Search across commands, workflows, examples, and presets:
+**`hana_search`** - Search across commands, workflows, examples, presets, and documentation:
 
 ```text
 Input: "csv import"
@@ -106,7 +144,7 @@ Output: Recommended parameters for comprehensive analysis
 
 ### 4. Workflows
 
-**`hana_execute_workflow`** - Run pre-built multi-step workflows:
+**`hana_workflows`** - List available multi-step workflow templates:
 
 ```text
 Available workflows:
@@ -118,9 +156,11 @@ Available workflows:
 ... and 15+ more
 ```
 
+**`hana_workflow_by_id`** - Get detailed steps for a specific workflow.
+
 ### 5. Documentation Access
 
-**`hana_search_docs`** - Full-text search across all documentation:
+**`hana_get_doc`** - Retrieve full content of a documentation page found via search:
 
 ```text
 Input: "import csv with errors"
@@ -128,8 +168,6 @@ Output: Top 10 relevant documentation pages with excerpts
 ```
 
 **`hana_get_doc`** - Retrieve complete documentation page content.
-
-**`hana_list_doc_categories`** - Browse documentation by category.
 
 ## Use Cases
 
@@ -181,14 +219,17 @@ The AI will:
 
 ## Advanced Features
 
-### Workflow Execution
+### Workflow Templates
 
-Run complex multi-step workflows:
+Browse and use pre-built multi-step workflows:
 
 ```text
-hana_preview_workflow - Preview workflow steps before execution
-hana_execute_workflow - Execute complete workflow with automated steps
+hana_workflows          - List available workflow templates
+hana_workflow_by_id     - Get detailed steps for a specific workflow
+hana_search_workflows   - Search workflows by tag or purpose
 ```
+
+The AI agent orchestrates the individual steps — workflow templates provide the sequence and recommended parameters, while the LLM handles execution and decision-making between steps.
 
 ### Result Interpretation
 
@@ -196,7 +237,7 @@ hana_execute_workflow - Execute complete workflow with automated steps
 
 ### Conversation Templates
 
-`hana_get_conversation_template` - Pre-built dialogue flows for guided troubleshooting and task completion.
+`hana_conversation_templates` / `hana_get_template` - Pre-built dialogue flows for guided troubleshooting and task completion.
 
 ## Connection Management
 

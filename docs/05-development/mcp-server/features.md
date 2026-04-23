@@ -32,7 +32,7 @@ hana_duplicateDetection  # Find duplicate rows
 hana_compareSchema       # Compare database schemas
 ```
 
-All command aliases are also available (e.g., `hana_s` for status, `hana_imp` for import).
+All command aliases still resolve at call time (e.g., `hana_s` for status, `hana_imp` for import), but they are not registered as separate tools to keep the tool list concise.
 
 ### 2. Discovery Tools
 
@@ -69,16 +69,18 @@ Recommendations:
    Reason: Can check for duplicate key violations
 ```
 
-#### Smart Search (`hana_smart_search`)
+#### Smart Search (`hana_search`)
 
-Comprehensive search across all resources:
+Consolidated search across all resources:
 
 **Searches:**
 
-- Command names and descriptions
-- Workflow templates by name/purpose
-- Usage examples by scenario
-- Parameter presets by use case
+- Documentation pages (scope: `docs`)
+- Command names and descriptions (scope: `commands`)
+- Workflow templates by name/purpose (scope: `workflows`)
+- Usage examples by scenario (scope: `examples`)
+- Parameter presets by use case (scope: `presets`)
+- All of the above (scope: `all`, the default)
 
 **Features:**
 
@@ -166,16 +168,16 @@ Pre-configured parameter combinations for common use cases.
 
 ### 4. Workflows and Tasks
 
-#### Workflow Execution (`hana_execute_workflow`, `hana_preview_workflow`)
+#### Workflow Templates (`hana_workflows`, `hana_workflow_by_id`, `hana_search_workflows`)
 
-Execute multi-step workflow sequences with automatic parameter substitution.
+Browse and use multi-step workflow templates. The AI agent orchestrates execution — workflow templates provide the sequence and recommended parameters.
 
 **Features:**
 
-- Parameter validation before execution
-- Step result tracking
-- Error handling with optional continuation
-- Preview mode to see what will execute
+- Browse all available workflows
+- Get detailed steps for a specific workflow
+- Search workflows by tag or purpose
+- Parameter templates with `<placeholder>` substitution
 
 **Example Workflow - Data Quality Check:**
 
@@ -293,9 +295,9 @@ AI-friendly analysis and insights from command results.
 }
 ```
 
-### 6. Documentation Search (`hana_search_docs`, `hana_get_doc`, `hana_list_doc_categories`)
+### 6. Documentation Search (`hana_search`, `hana_get_doc`)
 
-Access to all 279 project documentation pages with full-text search.
+Access to all 279 project documentation pages with full-text search via the consolidated `hana_search` tool (use `scope: "docs"`). Documentation categories and statistics are available as MCP resources.
 
 **Features:**
 
@@ -349,11 +351,12 @@ The MCP Server was built in three phases, each adding significant capabilities:
 
 ### Phase 3: Advanced Features
 
-- Workflow execution system
+- Workflow template system (browse, search, LLM-orchestrated execution)
 - Result interpretation engine
-- Smart search system
+- Consolidated search system (`hana_search`)
 - Conversation templates
 - Integrated documentation
+- Static knowledge moved to MCP resources
 
 ## Context-Aware Guidance
 
