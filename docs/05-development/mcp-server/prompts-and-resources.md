@@ -24,7 +24,7 @@ Instead of searching or guessing:
 Agent: "I want to import data but I'm not sure how"
 
 Traditional (without resources):
-- Agent calls hana_search_docs → finds import.md
+- Agent calls hana_search → finds import.md
 - Agent guesses at parameters
 - Agent tries import (may fail)
 

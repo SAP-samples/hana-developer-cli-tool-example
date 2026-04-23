@@ -283,21 +283,21 @@ Context-sensitive suggestions based on results.
 
 ### Phase 3 Features Implemented
 
-#### 1. Workflow Execution System (`hana_execute_workflow`, `hana_preview_workflow`)
+#### 1. Workflow Template System (`hana_workflows`, `hana_workflow_by_id`, `hana_search_workflows`)
 
-Automated multi-step command sequences.
+Multi-step workflow templates that the AI agent orchestrates.
 
 **Files Created:**
 
-- `src/workflow-execution.ts` (230 lines)
+- Workflow definitions in `src/tools/content-tools.ts`
 
 **Features:**
 
-- Parameter substitution
-- Step validation
-- Result tracking
-- Error handling with options
-- Preview mode
+- Browse all available workflows
+- Get detailed steps for a specific workflow
+- Search by tag or purpose
+- Parameter templates with `<placeholder>` substitution
+- LLM-orchestrated execution (no simulated executor)
 
 **Built-in Workflows (20+):**
 
@@ -308,7 +308,7 @@ Automated multi-step command sequences.
 - data-cleansing (7 steps)
 - And 15+ more...
 
-**Workflow Structure:**
+**Workflow Template Structure:**
 
 ```json
 {
@@ -324,23 +324,7 @@ Automated multi-step command sequences.
 }
 ```
 
-**Execution Output:**
-
-```json
-{
-  "steps": [
-    {
-      "step": 1,
-      "command": "dataProfile",
-      "status": "success",
-      "duration": 2.5,
-      "result": {...}
-    }
-  ],
-  "totalDuration": 4.3,
-  "status": "complete"
-}
-```
+The AI agent reads the workflow template and executes each step individually, making decisions between steps based on the results.
 
 #### 2. Result Interpretation Engine (`hana_interpret_result`)
 
@@ -385,17 +369,17 @@ AI-friendly analysis of command results.
 }
 ```
 
-#### 3. Smart Search System (`hana_smart_search`)
+#### 3. Consolidated Search System (`hana_search`)
 
-Comprehensive search across all resources.
+Unified search across all resources, replacing the previous separate `hana_smart_search` and `hana_search_docs` tools.
 
 **Files Created:**
 
-- `src/smart-search.ts` (320 lines)
+- `src/tools/search-tools.ts`
 
 **Features:**
 
-- Multi-scope searching (commands, workflows, examples, presets)
+- Multi-scope searching (docs, commands, workflows, examples, presets, or all)
 - Relevance ranking
 - Result type indicators
 - Context information
@@ -454,21 +438,24 @@ Guided workflows for common tasks.
 }
 ```
 
-#### 5. Documentation Search Integration (4 tools)
+#### 5. Documentation Search Integration
 
-Access to 279 documentation pages.
+Access to 279 documentation pages via consolidated search and MCP resources.
 
 **Files Created:**
 
-- `src/docs-search.ts` (400 lines)
+- `src/tools/search-tools.ts` (search handler)
 - `docs-index.json` (pre-built index)
 
 **Tools:**
 
-- `hana_search_docs` - Full-text search
+- `hana_search` (scope: `docs`) - Full-text search
 - `hana_get_doc` - Retrieve full content
-- `hana_list_doc_categories` - Browse categories
-- `hana_docs_stats` - Index statistics
+
+**Resources:**
+
+- `hana://docs/categories` - Browse categories
+- `hana://docs/statistics` - Index statistics
 
 **Features:**
 

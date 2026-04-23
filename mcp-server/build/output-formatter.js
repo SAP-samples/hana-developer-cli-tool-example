@@ -226,33 +226,24 @@ function formatContainersOutput(output) {
     result += formatAsMarkdown({ headers, rows });
     return result;
 }
+const COMMAND_FORMATTERS = {
+    tables: formatTablesOutput,
+    schemas: formatSchemasOutput,
+    views: formatViewsOutput,
+    procedures: formatProceduresOutput,
+    functions: formatFunctionsOutput,
+    systemInfo: formatSystemInfoOutput,
+    sysInfo: formatSystemInfoOutput,
+    containers: formatContainersOutput,
+};
 /**
  * Main formatter function
  */
 export function formatOutput(command, output) {
-    // Remove the connection config message for cleaner output
     const cleanOutput = output.replace(/Using Connection Configuration.*\n\n?/, '');
-    // Detect command type and apply appropriate formatting
-    if (command.includes('tables') || command.includes(' t ')) {
-        return formatTablesOutput(cleanOutput);
-    }
-    else if (command.includes('schemas') || command.includes(' sch ')) {
-        return formatSchemasOutput(cleanOutput);
-    }
-    else if (command.includes('views') || command.includes(' v ')) {
-        return formatViewsOutput(cleanOutput);
-    }
-    else if (command.includes('procedures') || command.includes(' p ')) {
-        return formatProceduresOutput(cleanOutput);
-    }
-    else if (command.includes('functions') || command.includes(' f ')) {
-        return formatFunctionsOutput(cleanOutput);
-    }
-    else if (command.includes('systemInfo') || command.includes('sysInfo')) {
-        return formatSystemInfoOutput(cleanOutput);
-    }
-    else if (command.includes('containers') || command.includes('cont')) {
-        return formatContainersOutput(cleanOutput);
+    const formatter = COMMAND_FORMATTERS[command];
+    if (formatter) {
+        return formatter(cleanOutput);
     }
     // For other commands, try generic table formatting
     const table = parseAsciiTable(cleanOutput);

@@ -141,6 +141,14 @@ function run() {
         cwd: PACKAGES['mcp-server'].dir,
         stdio: 'pipe',
       })
+
+      const serverJsonPath = join(ROOT, 'server.json')
+      const serverJson = JSON.parse(readFileSync(serverJsonPath, 'utf8'))
+      serverJson.version = newVersion
+      if (serverJson.packages?.[0]) {
+        serverJson.packages[0].version = newVersion
+      }
+      writeFileSync(serverJsonPath, JSON.stringify(serverJson, null, 2) + '\n')
     }
   }
 

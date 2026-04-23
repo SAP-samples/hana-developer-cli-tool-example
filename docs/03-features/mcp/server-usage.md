@@ -4,7 +4,27 @@ How to run and use the MCP (Model Context Protocol) server with HANA CLI.
 
 ## Quick Start
 
-### Installation
+### Easiest: Auto-Configure
+
+```bash
+# Auto-detect installed AI clients and configure them
+hana-cli mcp
+
+# Or target a specific client
+hana-cli mcp --client claude-desktop
+hana-cli mcp --client claude-code --global
+hana-cli mcp --client cursor
+```
+
+### Via npx (No Local Install)
+
+Run the MCP server via npx — no global install or build step needed:
+
+```bash
+npx -y -p hana-cli hana-cli-mcp
+```
+
+### From Source (Development)
 
 ```bash
 # Navigate to mcp-server directory
@@ -29,6 +49,10 @@ DEBUG=hana-cli:* node build/index.js
 # With larger heap for very large workloads
 NODE_OPTIONS="--max-old-space-size=4096" node build/index.js
 ```
+
+### MCP Registry
+
+The server is published to the [MCP Registry](https://registry.modelcontextprotocol.io) as `io.github.SAP-samples/hana-cli`. AI clients that support the MCP Registry can discover and install it automatically.
 
 ## How It Works
 
@@ -61,36 +85,19 @@ The MCP server exposes 150+ HANA CLI tools:
 {
   "mcpServers": {
     "hana-cli": {
-      "command": "node",
-      "args": ["/path/to/mcp-server/build/index.js"],
-      "env": {
-        "DEBUG": "hana-cli:*"
-      }
+      "command": "npx",
+      "args": ["-y", "-p", "hana-cli", "hana-cli-mcp"]
     }
   }
 }
 ```
 
+Or run `hana-cli mcp --client claude-desktop` to configure automatically.
+
 1. Restart Claude Desktop
 1. Ask Claude questions about your HANA database
 
 ### With VSCode (GitHub Copilot)
-
-1. **Build the MCP Server**
-
-   ```bash
-   cd mcp-server
-   npm install
-   npm run build
-   ```
-
-1. **Build the Documentation Index**
-
-   The MCP server includes documentation search tools. Build the index so they work:
-
-   ```bash
-   npm run build:docs-index
-   ```
 
 1. **Configure VSCode MCP Settings**
 
@@ -99,11 +106,25 @@ The MCP server exposes 150+ HANA CLI tools:
    ```json
    {
      "servers": {
-       "io.github.SAP-samples/hana-cli-mcp-server": {
+       "io.github.SAP-samples/hana-cli": {
+         "type": "stdio",
+         "command": "npx",
+         "args": ["-y", "-p", "hana-cli", "hana-cli-mcp"]
+       }
+     }
+   }
+   ```
+
+   Or if you have a local build, point directly to it:
+
+   ```json
+   {
+     "servers": {
+       "io.github.SAP-samples/hana-cli": {
          "type": "stdio",
          "command": "node",
          "args": [
-           "D:/projects/hana-developer-cli-tool-example/mcp-server/build/index.js"
+           "/absolute/path/to/mcp-server/build/index.js"
          ]
        }
      }
@@ -112,10 +133,8 @@ The MCP server exposes 150+ HANA CLI tools:
 
    **Important Notes:**
 
-   - Replace `D:/projects/hana-developer-cli-tool-example` with your actual project path
-   - Use absolute paths (not relative paths)
+   - Use absolute paths when pointing to a local build
    - Use forward slashes `/` even on Windows
-   - The server name `io.github.SAP-samples/hana-cli-mcp-server` is the standard naming convention and ensures proper tool discovery
 
 1. **Restart VSCode**
 
@@ -142,7 +161,7 @@ The MCP server exposes 150+ HANA CLI tools:
    - "Compare data between two tables"
    - Copilot will use the `hana_*` tools to answer
 
-**Tip:** Use `hana_search_docs` tool to search the full documentation for answers to complex questions.
+**Tip:** Use `hana_search` tool to search the full documentation for answers to complex questions.
 
 ### With Custom AI Agents
 

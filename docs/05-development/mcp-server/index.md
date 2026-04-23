@@ -145,7 +145,7 @@ All `hana-cli` commands are exposed as MCP tools with the `hana_` prefix:
 ### 2. Discovery System
 
 - **`hana_recommend`** - Get command suggestions from natural language intent
-- **`hana_smart_search`** - Search commands, examples, presets, and workflows
+- **`hana_search`** - Search commands, docs, examples, presets, and workflows
 - **`hana_quickstart`** - Get beginner-friendly first commands
 - **`hana_conversation_templates`** - Browse pre-built task workflows
 

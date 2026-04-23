@@ -182,6 +182,8 @@ export default withMermaid(
             { text: 'Help Documentation', link: '/02-commands/developer-tools/help-docu' },
             { text: 'HDBSQL', link: '/02-commands/developer-tools/hdbsql' },
             { text: 'Issue', link: '/02-commands/developer-tools/issue' },
+            { text: 'MCP Server Install', link: '/02-commands/developer-tools/mcp-server-install' },
+            { text: 'MCP Server Status', link: '/02-commands/developer-tools/mcp-server-status' },
             { text: 'Open Change Log', link: '/02-commands/developer-tools/open-change-log' },
             { text: 'Open README', link: '/02-commands/developer-tools/open-read-me' },
             { text: 'Query Simple', link: '/02-commands/developer-tools/query-simple' },

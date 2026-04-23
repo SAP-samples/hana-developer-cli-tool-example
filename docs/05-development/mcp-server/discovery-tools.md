@@ -68,7 +68,7 @@ The recommendation system matches your intent to commands using:
 | "Verify connection" | `hana_status`, `hana_healthCheck` |
 | "Find missing columns" | `hana_compareSchema`, `hana_inspectTable` |
 
-## Smart Search (`hana_smart_search`)
+## Consolidated Search (`hana_search`)
 
 Comprehensive search across all resources in the MCP Server.
 

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.SAP-samples/hana-cli",
+  "title": "SAP HANA CLI",
+  "description": "150+ SAP HANA database tools as MCP tools for AI assistants",
+  "repository": {
+    "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example",
+    "source": "github"
+  },
+  "version": "4.202604.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "hana-cli",
+      "version": "4.202604.0",
+      "runtimeHint": "npx",
+      "runtimeArguments": ["-y", "-p", "hana-cli", "hana-cli-mcp"],
+      "packageArguments": [],
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

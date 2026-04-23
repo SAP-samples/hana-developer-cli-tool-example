@@ -91,7 +91,7 @@ The MCP Server includes a comprehensive documentation index of all project docum
 
 ## MCP Tools for Documentation Access
 
-### 1. Search Documentation (`hana_search_docs`)
+### 1. Search Documentation (`hana_search`)
 
 Fast full-text search across all documentation.
 
@@ -209,44 +209,13 @@ Retrieve full content of a specific documentation page.
 }
 ```
 
-### 3. List Documentation Categories (`hana_list_doc_categories`)
+### 3. Browse Documentation Categories (MCP Resource)
 
-Browse available documentation categories with sample documents.
+Documentation categories are now available as an MCP resource at `hana://docs/categories` rather than as a tool, keeping the tool list concise.
 
-**Parameters:** None
+Similarly, documentation statistics are available as a resource at `hana://docs/statistics`.
 
-**Returns:**
-
-```json
-{
-  "categories": [
-    {
-      "name": "Getting Started",
-      "path": "01-getting-started",
-      "documentCount": 5,
-      "description": "Installation, setup, and quick start guides",
-      "samples": [
-        { "title": "Installation", "path": "01-getting-started/installation.md" },
-        { "title": "Configuration", "path": "01-getting-started/configuration.md" }
-      ]
-    },
-    {
-      "name": "Commands",
-      "path": "02-commands",
-      "documentCount": 82,
-      "description": "Complete command reference and guides",
-      "samples": [
-        { "title": "All Commands", "path": "02-commands/all-commands.md" },
-        { "title": "Import", "path": "02-commands/data-tools/import.md" }
-      ]
-    }
-  ],
-  "total": 9,
-  "documentCount": 279
-}
-```
-
-### 4. Get Documentation Statistics (`hana_docs_stats`)
+### 4. Consolidated Search (`hana_search`)
 
 Overview of documentation status and metrics.
 
@@ -324,7 +293,7 @@ Document 3: "CSV File Format"
 
 ```typescript
 // Step 1: Search
-const results = await mcpTool('hana_search_docs', {
+const results = await mcpTool('hana_search', {
   query: 'how to connect to HANA database',
   limit: 5
 });
@@ -343,13 +312,13 @@ const params = fullDoc.content.match(/## Parameters/i);
 
 ```typescript
 // Step 1: List categories
-const categories = await mcpTool('hana_list_doc_categories');
+const categories = await mcpResource('hana://docs/categories');
 
 // Step 2: Find category of interest
 const commands = categories.find(c => c.name === 'Commands');
 
 // Step 3: Search within category
-const results = await mcpTool('hana_search_docs', {
+const results = await mcpTool('hana_search', {
   query: 'data validation',
   category: 'commands'
 });
@@ -364,7 +333,7 @@ for (const result of results) {
 
 ```typescript
 // Step 1: Search troubleshooting docs
-const issues = await mcpTool('hana_search_docs', {
+const issues = await mcpTool('hana_search', {
   query: 'connection timeout',
   category: 'troubleshooting',
   limit: 5
@@ -383,7 +352,7 @@ const solutions = guide.content.match(/## Solution/gi);
 
 ```typescript
 // Step 1: Get command examples
-const examples = await mcpTool('hana_search_docs', {
+const examples = await mcpTool('hana_search', {
   query: 'import command',
   docType: 'command',
   limit: 1
@@ -431,7 +400,7 @@ cd mcp-server
 npm run build
 
 # Restart MCP in your client
-# Test with hana_search_docs
+# Test with hana_search
 ```
 
 ### Index Structure
@@ -465,7 +434,7 @@ npm run build
 ```bash
 User: "How do I import data?"
 
-Agent: Calls hana_search_docs("import data")
+Agent: Calls hana_search("import data")
 
 System: Returns top 5 results with excerpts
 

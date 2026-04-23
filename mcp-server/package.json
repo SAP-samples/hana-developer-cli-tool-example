@@ -19,7 +19,7 @@
   "author": "SAP",
   "license": "SEE LICENSE IN ../LICENSE",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.27.1"
+    "@modelcontextprotocol/sdk": "^1.29.0"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
