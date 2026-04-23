@@ -15,10 +15,9 @@
       "version": "4.202604.0",
       "runtimeHint": "npx",
       "runtimeArguments": [
-        "-y",
-        "-p",
-        "hana-cli",
-        "hana-cli-mcp"
+        { "type": "named", "name": "-y" },
+        { "type": "named", "name": "-p", "value": "hana-cli" },
+        { "type": "positional", "value": "hana-cli-mcp" }
       ],
       "packageArguments": [],
       "transport": {
