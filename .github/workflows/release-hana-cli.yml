@@ -56,13 +56,11 @@ jobs:
       - name: Validate i18n
         run: npm run validate:i18n
 
-      - name: Run tests
-        run: npm run test:ci
+      - name: Run tests with coverage
+        run: npm run coverage:ci
 
       - name: Check coverage thresholds
-        run: |
-          npm run coverage:ci
-          npm run coverage:check
+        run: npm run coverage:check
 
   prepare:
     name: Prepare Release
