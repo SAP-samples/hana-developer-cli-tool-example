@@ -46,7 +46,9 @@
     "build:docs-index": "node scripts/build-docs-index.js",
     "generate:agent-instructions": "node generate-agent-instructions.js --force",
     "validate:i18n": "node scripts/validate-i18n.js",
-    "validate:i18n:quiet": "node scripts/validate-i18n.js --quiet"
+    "validate:i18n:quiet": "node scripts/validate-i18n.js --quiet",
+    "release:prepare": "node scripts/prepare-release.js",
+    "release:notes": "node scripts/extract-release-notes.js"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,243 @@
+name: Release hana-cli
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 4.202604.0). Leave empty for auto-calculation from current date.'
+        required: false
+        type: string
+      changelog_entries:
+        description: 'Changelog entries as JSON array: [{"category":"Changed","text":"Description"}]'
+        required: false
+        type: string
+        default: '[]'
+      publish_mcp_server:
+        description: 'Also publish hana-cli-mcp-server to npm?'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-hana-cli
+  cancel-in-progress: false
+
+jobs:
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Validate i18n
+        run: npm run validate:i18n
+
+      - name: Run tests
+        run: npm run test:ci
+
+      - name: Check coverage thresholds
+        run: |
+          npm run coverage:ci
+          npm run coverage:check
+
+  prepare:
+    name: Prepare Release
+    needs: test
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.calc.outputs.version }}
+      tag: ${{ steps.calc.outputs.tag }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Calculate version and update files
+        id: calc
+        run: |
+          RESULT=$(node scripts/prepare-release.js \
+            --package hana-cli \
+            --version "${{ inputs.version }}" \
+            --changelog-entries '${{ inputs.changelog_entries }}')
+          VERSION=$(echo "$RESULT" | jq -r '.version')
+          TAG=$(echo "$RESULT" | jq -r '.tag')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "Prepared release: $TAG"
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit version bump and changelog
+        run: |
+          git add package.json npm-shrinkwrap.json mcp-server/package.json mcp-server/npm-shrinkwrap.json CHANGELOG.json CHANGELOG.md
+          git diff --cached --quiet && echo "No changes to commit" && exit 0
+          git commit -m "chore: release v${{ steps.calc.outputs.version }} [skip ci]"
+
+      - name: Create and push tag
+        run: |
+          git tag -a "v${{ steps.calc.outputs.version }}" -m "Release v${{ steps.calc.outputs.version }}"
+          git push origin HEAD:${{ github.ref_name }}
+          git push origin "v${{ steps.calc.outputs.version }}"
+
+  resolve-version:
+    name: Resolve Version from Tag
+    needs: test
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.extract.outputs.version }}
+      tag: ${{ github.ref_name }}
+    steps:
+      - name: Extract version from tag
+        id: extract
+        run: |
+          TAG="${{ github.ref_name }}"
+          VERSION="${TAG#v}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Resolved version: $VERSION from tag: $TAG"
+
+  publish:
+    name: Publish to npm
+    needs: [test, prepare, resolve-version]
+    if: |
+      always() &&
+      needs.test.result == 'success' &&
+      (needs.prepare.result == 'success' || needs.resolve-version.result == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine version
+        id: ver
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "version=${{ needs.prepare.outputs.version }}" >> $GITHUB_OUTPUT
+            echo "tag=${{ needs.prepare.outputs.tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ needs.resolve-version.outputs.version }}" >> $GITHUB_OUTPUT
+            echo "tag=${{ needs.resolve-version.outputs.tag }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Checkout code at tag
+        uses: actions/checkout@v4
+        with:
+          ref: "v${{ steps.ver.outputs.version }}"
+
+      - name: Setup Node.js with npm registry
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify package version matches tag
+        run: |
+          PKG_VERSION=$(node -e "import fs from 'fs'; console.log(JSON.parse(fs.readFileSync('package.json','utf8')).version)")
+          if [ "$PKG_VERSION" != "${{ steps.ver.outputs.version }}" ]; then
+            echo "::error::package.json version ($PKG_VERSION) does not match tag version (${{ steps.ver.outputs.version }})"
+            exit 1
+          fi
+
+      - name: Publish hana-cli to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Extract release notes
+        id: notes
+        run: |
+          NOTES=$(node scripts/extract-release-notes.js --version "${{ steps.ver.outputs.version }}")
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "body<<$EOF" >> $GITHUB_OUTPUT
+          echo "$NOTES" >> $GITHUB_OUTPUT
+          echo "$EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v${{ steps.ver.outputs.version }}"
+          name: "v${{ steps.ver.outputs.version }}"
+          body: ${{ steps.notes.outputs.body }}
+          draft: false
+          prerelease: ${{ contains(steps.ver.outputs.version, '-') }}
+
+  publish-mcp-server:
+    name: Publish MCP Server to npm
+    needs: [publish, prepare, resolve-version]
+    if: |
+      always() &&
+      needs.publish.result == 'success' &&
+      (github.event_name == 'push' || inputs.publish_mcp_server == true)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine version
+        id: ver
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "version=${{ needs.prepare.outputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ needs.resolve-version.outputs.version }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Checkout code at tag
+        uses: actions/checkout@v4
+        with:
+          ref: "v${{ steps.ver.outputs.version }}"
+
+      - name: Setup Node.js with npm registry
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install and build MCP server
+        working-directory: mcp-server
+        run: |
+          npm ci
+          npm run build
+
+      - name: Publish mcp-server to npm
+        working-directory: mcp-server
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

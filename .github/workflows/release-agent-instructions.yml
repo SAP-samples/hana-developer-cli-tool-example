@@ -1,0 +1,158 @@
+name: Release hana-cli-agent-instructions
+
+on:
+  push:
+    tags:
+      - 'agent-v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 1.202604.0). Leave empty for auto-calculation from current date.'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-agent-instructions
+  cancel-in-progress: false
+
+jobs:
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm run test:ci
+
+  prepare:
+    name: Prepare Release
+    needs: test
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.calc.outputs.version }}
+      tag: ${{ steps.calc.outputs.tag }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Calculate version and update files
+        id: calc
+        run: |
+          RESULT=$(node scripts/prepare-release.js \
+            --package agent-instructions \
+            --version "${{ inputs.version }}")
+          VERSION=$(echo "$RESULT" | jq -r '.version')
+          TAG=$(echo "$RESULT" | jq -r '.tag')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "Prepared release: $TAG"
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit version bump
+        run: |
+          git add agent-instructions/package.json
+          git diff --cached --quiet && echo "No changes to commit" && exit 0
+          git commit -m "chore: release agent-instructions v${{ steps.calc.outputs.version }} [skip ci]"
+
+      - name: Create and push tag
+        run: |
+          git tag -a "agent-v${{ steps.calc.outputs.version }}" -m "Release agent-instructions v${{ steps.calc.outputs.version }}"
+          git push origin HEAD:${{ github.ref_name }}
+          git push origin "agent-v${{ steps.calc.outputs.version }}"
+
+  resolve-version:
+    name: Resolve Version from Tag
+    needs: test
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.extract.outputs.version }}
+      tag: ${{ github.ref_name }}
+    steps:
+      - name: Extract version from tag
+        id: extract
+        run: |
+          TAG="${{ github.ref_name }}"
+          VERSION="${TAG#agent-v}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Resolved version: $VERSION from tag: $TAG"
+
+  publish:
+    name: Publish to npm
+    needs: [test, prepare, resolve-version]
+    if: |
+      always() &&
+      needs.test.result == 'success' &&
+      (needs.prepare.result == 'success' || needs.resolve-version.result == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine version
+        id: ver
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "version=${{ needs.prepare.outputs.version }}" >> $GITHUB_OUTPUT
+            echo "tag=${{ needs.prepare.outputs.tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ needs.resolve-version.outputs.version }}" >> $GITHUB_OUTPUT
+            echo "tag=${{ needs.resolve-version.outputs.tag }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Checkout code at tag
+        uses: actions/checkout@v4
+        with:
+          ref: "agent-v${{ steps.ver.outputs.version }}"
+
+      - name: Setup Node.js with npm registry
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Publish agent-instructions to npm
+        working-directory: agent-instructions
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "agent-v${{ steps.ver.outputs.version }}"
+          name: "agent-instructions v${{ steps.ver.outputs.version }}"
+          body: "Release of hana-cli-agent-instructions v${{ steps.ver.outputs.version }}"
+          draft: false
+          prerelease: ${{ contains(steps.ver.outputs.version, '-') }}
