@@ -2,6 +2,13 @@
     {
         "date": "2026-04-23",
         "version": "4.202604.0",
+        "Changed": [
+            "Release version 4.202604.0"
+        ]
+    },
+    {
+        "date": "2026-04-23",
+        "version": "4.202604.0",
         "Added": [
             "New mcpServerInstall command (hana-cli mcp) for one-command MCP server configuration in Claude Desktop, Claude Code, Cursor, Windsurf, Cline, VS Code, Continue, and Zed",
             "New mcpServerStatus command (hana-cli mcp-status) to check MCP server installation status across all 8 supported AI assistant clients",

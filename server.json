@@ -14,7 +14,12 @@
       "identifier": "hana-cli",
       "version": "4.202604.0",
       "runtimeHint": "npx",
-      "runtimeArguments": ["-y", "-p", "hana-cli", "hana-cli-mcp"],
+      "runtimeArguments": [
+        "-y",
+        "-p",
+        "hana-cli",
+        "hana-cli-mcp"
+      ],
       "packageArguments": [],
       "transport": {
         "type": "stdio"

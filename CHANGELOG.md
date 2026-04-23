@@ -6,29 +6,31 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## [4.202604.0] - 2026-04-23
 
+**Changed**
+
+- Release version 4.202604.0
+
+## [4.202604.0] - 2026-04-23
+
 **Added**
 
-- New `mcpServerInstall` command (`hana-cli mcp`) — one-command setup for MCP server configuration in Claude Desktop, Claude Code, Cursor, Windsurf, Cline, VS Code, Continue, and Zed
-- New `mcpServerStatus` command (`hana-cli mcp-status`) — check MCP server installation status across all 8 supported AI assistant clients
-- MCP resources for knowledge base content (connection guide, security guide, best practices, project structure, parameter guides)
-- MCP documentation index metadata resources (statistics, categories)
+- New mcpServerInstall command (hana-cli mcp) for one-command MCP server configuration in Claude Desktop, Claude Code, Cursor, Windsurf, Cline, VS Code, Continue, and Zed
+- New mcpServerStatus command (hana-cli mcp-status) to check MCP server installation status across all 8 supported AI assistant clients
+- MCP resources for knowledge base content and documentation index metadata
 
 **Changed**
 
-- Major MCP server refactor: rewrote monolithic index.ts (1,700 lines) into modular architecture (~200 line bootstrap + 5 handler modules)
-- Reduced MCP tool count by removing alias tool registrations (aliases still resolve at call time)
-- Consolidated 3 search tools (`hana_search_docs`, `hana_smart_search`, `hana_docs_search`) into single `hana_search` with scope parameter
-- Moved 6 static knowledge tools to MCP resources for reduced LLM context usage
+- Major MCP server refactor: modular architecture replacing monolithic 1,700-line index.ts
+- Reduced MCP tool count by removing alias registrations and consolidating search tools
 - Updated MCP SDK from 1.27.1 to 1.29.0
-- Fixed MCP server version to read dynamically from package.json instead of hardcoded value
-- Fixed fragile command name matching in output formatter (exact-match map instead of substring includes)
-- Added `isError: true` signaling to all MCP error response paths
+- Fixed MCP server version to read dynamically from package.json
+- Fixed fragile command name matching in output formatter
+- Added isError signaling to all MCP error response paths
 
 **Removed**
 
-- Removed simulated workflow execution tools (`hana_execute_workflow`, `hana_preview_workflow`) — LLMs orchestrate multi-step tasks more effectively
-- Removed no-op `validateEnvironment` function from MCP executor
-- Removed low-value `hana_commands_with_examples`, `hana_docs_stats`, `hana_list_doc_categories` tools
+- Removed simulated workflow execution tools (LLMs orchestrate multi-step tasks more effectively)
+- Removed no-op validateEnvironment function and low-value metadata tools
 
 ## [4.202603.2] - 2026-03-13
 
