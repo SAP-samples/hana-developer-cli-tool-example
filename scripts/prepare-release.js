@@ -126,10 +126,12 @@ function run() {
   // The version string is either auto-calculated from the current date or explicitly provided by
   // the developer — never from untrusted input.
   if (!args.dryRun) {
-    execSync(`npm version ${newVersion} --no-git-tag-version`, {
-      cwd: pkgConfig.dir,
-      stdio: 'pipe',
-    })
+    if (newVersion !== currentVersion) {
+      execSync(`npm version ${newVersion} --no-git-tag-version`, {
+        cwd: pkgConfig.dir,
+        stdio: 'pipe',
+      })
+    }
 
     if (args.package === 'hana-cli') {
       const mcpPkg = JSON.parse(readFileSync(join(PACKAGES['mcp-server'].dir, 'package.json'), 'utf8'))
@@ -137,10 +139,12 @@ function run() {
       const mainParts = newVersion.split('.')
       const alignedMcpVersion = `${mcpParts[0]}.${mainParts[1]}.${mainParts[2]}`
 
-      execSync(`npm version ${alignedMcpVersion} --no-git-tag-version`, {
-        cwd: PACKAGES['mcp-server'].dir,
-        stdio: 'pipe',
-      })
+      if (alignedMcpVersion !== mcpPkg.version) {
+        execSync(`npm version ${alignedMcpVersion} --no-git-tag-version`, {
+          cwd: PACKAGES['mcp-server'].dir,
+          stdio: 'pipe',
+        })
+      }
 
       const serverJsonPath = join(ROOT, 'server.json')
       const serverJson = JSON.parse(readFileSync(serverJsonPath, 'utf8'))
