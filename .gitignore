@@ -90,3 +90,7 @@ yarn.lock
 
 # Interactive mode state
 .interactive-state.json
+
+# Claude Code
+.claude/
+.mcp.json
