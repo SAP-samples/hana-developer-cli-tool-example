@@ -1,0 +1,6 @@
+{
+  "hana-cli": {
+    "command": "npx",
+    "args": ["-y", "-p", "hana-cli", "hana-cli-mcp"]
+  }
+}
