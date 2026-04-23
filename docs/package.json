@@ -1,6 +1,6 @@
 {
   "name": "hana-cli-docs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SAP HANA Developer CLI Documentation",
   "private": true,
   "type": "module",
@@ -11,10 +11,10 @@
     "docs:preview": "vue-tsc --noEmit && vitepress build . && vitepress serve ./dist"
   },
   "devDependencies": {
-    "@agentmarkup/vite": "^0.4.0",
-    "mermaid": "^11.12.3",
+    "@agentmarkup/vite": "^0.5.0",
+    "mermaid": "^11.14.0",
     "vitepress": "^1.0.0",
     "vitepress-plugin-mermaid": "2.0.17",
-    "vue": "^3.5.29"
+    "vue": "^3.5.33"
   }
 }

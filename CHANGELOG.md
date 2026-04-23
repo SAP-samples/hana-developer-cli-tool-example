@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [4.202604.0] - 2026-04-23
+
+**Changed**
+
+- Release version 4.202604.0
+
 ## [4.202603.2] - 2026-03-13
 
 **Fixed**
