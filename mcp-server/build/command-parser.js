@@ -60,6 +60,35 @@ export function yargsBuilderToJsonSchema(builder) {
     };
 }
 /**
+ * Creates a mock yargs instance that captures options passed via .options()
+ * while supporting the full chaining API that builder functions expect.
+ */
+function createYargsMock() {
+    const captured = {};
+    const mock = new Proxy({}, {
+        get(_target, prop) {
+            if (prop === 'options' || prop === 'option') {
+                return (opts) => {
+                    if (opts && typeof opts === 'object') {
+                        Object.assign(captured, opts);
+                    }
+                    return mock;
+                };
+            }
+            if (prop === 'positional') {
+                return (name, opts) => {
+                    if (name && opts && typeof opts === 'object') {
+                        captured[name] = opts;
+                    }
+                    return mock;
+                };
+            }
+            return (..._args) => mock;
+        }
+    });
+    return { mock, captured };
+}
+/**
  * Attempts to get the builder object from a command module
  * Handles both direct object builders and function-based builders
  */
@@ -67,22 +96,17 @@ function getBuilderObject(commandModule) {
     if (!commandModule.builder) {
         return {};
     }
-    // If builder is an object, return it directly
     if (typeof commandModule.builder === 'object' && typeof commandModule.builder !== 'function') {
         return commandModule.builder;
     }
-    // If builder is a function, try to call it to get the builder object
     if (typeof commandModule.builder === 'function') {
         try {
-            // Try calling without arguments first (many builders don't need args)
-            const result = commandModule.builder({});
-            if (result && typeof result === 'object') {
-                return result;
-            }
+            const { mock, captured } = createYargsMock();
+            commandModule.builder(mock);
+            return captured;
         }
         catch (e) {
-            // If that fails, just return empty object
-            // Function-based builders will be handled at runtime
+            // Builder failed even with mock — return empty
         }
     }
     return {};
