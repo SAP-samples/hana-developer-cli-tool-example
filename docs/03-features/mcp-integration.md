@@ -62,7 +62,29 @@ Use this in your IDE's MCP configuration:
 }
 ```
 
-### Option 3: MCP Registry
+### Option 3: VS Code Extension
+
+Install the **SAP HANA CLI MCP Server** extension from the VS Code Marketplace. Search for `@mcp` in the Extensions view, or install from the command line:
+
+```bash
+code --install-extension SAPOSS.hana-cli-mcp
+```
+
+This registers the MCP server with VS Code automatically — no manual configuration needed. Works with GitHub Copilot agent mode and other AI assistants.
+
+Source: [SAP-samples/hana-cli-vscode-mcp](https://github.com/SAP-samples/hana-cli-vscode-mcp)
+
+### Option 4: Claude Code Plugin
+
+Install the hana-cli plugin directly in Claude Code:
+
+```text
+/plugin install https://github.com/SAP-samples/hana-cli-claude-plugin
+```
+
+Source: [SAP-samples/hana-cli-claude-plugin](https://github.com/SAP-samples/hana-cli-claude-plugin)
+
+### Option 5: MCP Registry
 
 The MCP server is published to the [MCP Registry](https://registry.modelcontextprotocol.io) as `io.github.SAP-samples/hana-cli`. AI clients and aggregators that support the MCP Registry can discover and install it automatically.
 
@@ -278,6 +300,9 @@ For comprehensive guides, implementation details, and troubleshooting:
 
 ## See Also
 
+- [VS Code Extension](https://github.com/SAP-samples/hana-cli-vscode-mcp) - MCP server as a VS Code extension for GitHub Copilot
+- [Claude Code Plugin](https://github.com/SAP-samples/hana-cli-claude-plugin) - Plugin for the Claude Code marketplace
+- [MCP Registry](https://registry.modelcontextprotocol.io/?q=hana-cli) - MCP Registry listing
 - [API Server](./api-server.md) - REST API access to CLI commands
 - [CLI Features](./cli-features.md) - Command syntax and Options
 - [Knowledge Base](./knowledge-base.md) - Built-in help and documentation
