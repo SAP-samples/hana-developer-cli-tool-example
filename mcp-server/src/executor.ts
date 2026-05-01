@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+import { existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { formatOutput } from './output-formatter.js';
@@ -313,9 +314,17 @@ export async function executeCommand(
       }
 
       // Determine working directory based on context
-      let cwd = join(__dirname, '..', '..');
+      let cwd: string;
       if (context?.projectPath) {
         cwd = context.projectPath;
+      } else {
+        // Prefer the process working directory (where MCP server was launched)
+        // over the hana-cli install directory, since agents typically launch
+        // the MCP server from within the target project
+        const launchDir = process.cwd();
+        const hasProjectMarker = ['default-env.json', '.env', 'package.json', '.cdsrc-private.json']
+          .some(f => existsSync(join(launchDir, f)));
+        cwd = hasProjectMarker ? launchDir : join(__dirname, '..', '..');
       }
 
       // Spawn the CLI process

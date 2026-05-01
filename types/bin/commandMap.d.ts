@@ -194,6 +194,11 @@ export const commandMap: {
     import: string;
     imp: string;
     uploadData: string;
+    importUI: string;
+    impui: string;
+    importui: string;
+    uploadui: string;
+    uploadUI: string;
     inspectFunction: string;
     if: string;
     inspectIndex: string;
@@ -242,6 +247,13 @@ export const commandMap: {
     massUpd: string;
     massupd: string;
     massUsers: string;
+    mcpServerInstall: string;
+    mcp: string;
+    mcpInstall: string;
+    'mcp-install': string;
+    mcpServerStatus: string;
+    'mcp-status': string;
+    mcpStatus: string;
     memoryAnalysis: string;
     memoryLeaks: string;
     memleak: string;

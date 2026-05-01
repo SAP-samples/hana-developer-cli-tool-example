@@ -1,6 +1,6 @@
 {
   "name": "hana-cli-agent-instructions",
-  "version": "1.202603.0",
+  "version": "1.202605.0",
   "description": "Portable AI coding agent instructions for hana-cli — teach any AI assistant to use SAP HANA CLI",
   "type": "module",
   "bin": {

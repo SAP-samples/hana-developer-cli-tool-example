@@ -30,6 +30,14 @@ export function error(err: Error): Promise<void>;
  * @returns {object} Combined options object
  */
 export function getBuilder(input: object, iConn?: boolean, iDebug?: boolean): object;
+/**
+ * Extension of getBuilder for UI commands that require port and host options
+ * @param {Object} input - Command-specific parameters
+ * @param {boolean} [iConn=true] - Include connection parameters
+ * @param {boolean} [iDebug=true] - Include debug parameters
+ * @returns {Object} Builder configuration with UI-specific options (port, host)
+ */
+export function getUIBuilder(input?: Object, iConn?: boolean, iDebug?: boolean): Object;
 export const require: NodeJS.Require;
 export const colors: import("chalk").ChalkInstance;
 export function debug(...args: any[]): any;

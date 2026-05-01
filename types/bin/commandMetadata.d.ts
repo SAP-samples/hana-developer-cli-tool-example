@@ -995,131 +995,143 @@ export namespace commandMetadata {
         let relatedCommands_163: string[];
         export { relatedCommands_163 as relatedCommands };
     }
-    export namespace features {
+    export namespace mcpServerInstall {
         let category_164: string;
         export { category_164 as category };
         let relatedCommands_164: string[];
         export { relatedCommands_164 as relatedCommands };
     }
-    export namespace featuresUI {
+    export namespace mcpServerStatus {
         let category_165: string;
         export { category_165 as category };
         let relatedCommands_165: string[];
         export { relatedCommands_165 as relatedCommands };
     }
-    export namespace featureUsage {
+    export namespace features {
         let category_166: string;
         export { category_166 as category };
         let relatedCommands_166: string[];
         export { relatedCommands_166 as relatedCommands };
     }
-    export namespace featureUsageUI {
+    export namespace featuresUI {
         let category_167: string;
         export { category_167 as category };
         let relatedCommands_167: string[];
         export { relatedCommands_167 as relatedCommands };
     }
-    export namespace tableGroups {
+    export namespace featureUsage {
         let category_168: string;
         export { category_168 as category };
         let relatedCommands_168: string[];
         export { relatedCommands_168 as relatedCommands };
     }
-    export namespace tablesUI {
+    export namespace featureUsageUI {
         let category_169: string;
         export { category_169 as category };
         let relatedCommands_169: string[];
         export { relatedCommands_169 as relatedCommands };
     }
-    export namespace tablesPG {
+    export namespace tableGroups {
         let category_170: string;
         export { category_170 as category };
         let relatedCommands_170: string[];
         export { relatedCommands_170 as relatedCommands };
     }
-    export namespace tablesSQLite {
+    export namespace tablesUI {
         let category_171: string;
         export { category_171 as category };
         let relatedCommands_171: string[];
         export { relatedCommands_171 as relatedCommands };
     }
-    export namespace tableCopy {
+    export namespace tablesPG {
         let category_172: string;
         export { category_172 as category };
         let relatedCommands_172: string[];
         export { relatedCommands_172 as relatedCommands };
     }
-    export namespace partitions {
+    export namespace tablesSQLite {
         let category_173: string;
         export { category_173 as category };
         let relatedCommands_173: string[];
         export { relatedCommands_173 as relatedCommands };
     }
-    export namespace dataTypes {
+    export namespace tableCopy {
         let category_174: string;
         export { category_174 as category };
         let relatedCommands_174: string[];
         export { relatedCommands_174 as relatedCommands };
     }
-    export namespace dataTypesUI {
+    export namespace partitions {
         let category_175: string;
         export { category_175 as category };
         let relatedCommands_175: string[];
         export { relatedCommands_175 as relatedCommands };
     }
-    export namespace functionsUI {
+    export namespace dataTypes {
         let category_176: string;
         export { category_176 as category };
         let relatedCommands_176: string[];
         export { relatedCommands_176 as relatedCommands };
     }
-    export namespace importUI {
+    export namespace dataTypesUI {
         let category_177: string;
         export { category_177 as category };
         let relatedCommands_177: string[];
         export { relatedCommands_177 as relatedCommands };
     }
-    export namespace indexesUI {
+    export namespace functionsUI {
         let category_178: string;
         export { category_178 as category };
         let relatedCommands_178: string[];
         export { relatedCommands_178 as relatedCommands };
     }
-    export namespace schemasUI {
+    export namespace importUI {
         let category_179: string;
         export { category_179 as category };
         let relatedCommands_179: string[];
         export { relatedCommands_179 as relatedCommands };
     }
-    export namespace iniContents {
+    export namespace indexesUI {
         let category_180: string;
         export { category_180 as category };
         let relatedCommands_180: string[];
         export { relatedCommands_180 as relatedCommands };
     }
-    export namespace iniFiles {
+    export namespace schemasUI {
         let category_181: string;
         export { category_181 as category };
         let relatedCommands_181: string[];
         export { relatedCommands_181 as relatedCommands };
     }
-    export namespace rick {
+    export namespace iniContents {
         let category_182: string;
         export { category_182 as category };
         let relatedCommands_182: string[];
         export { relatedCommands_182 as relatedCommands };
     }
-    export namespace recommendations {
+    export namespace iniFiles {
         let category_183: string;
         export { category_183 as category };
         let relatedCommands_183: string[];
         export { relatedCommands_183 as relatedCommands };
     }
-    export namespace dependencies {
+    export namespace rick {
         let category_184: string;
         export { category_184 as category };
         let relatedCommands_184: string[];
         export { relatedCommands_184 as relatedCommands };
+    }
+    export namespace recommendations {
+        let category_185: string;
+        export { category_185 as category };
+        let relatedCommands_185: string[];
+        export { relatedCommands_185 as relatedCommands };
+    }
+    export namespace dependencies {
+        let category_186: string;
+        export { category_186 as category };
+        let relatedCommands_186: string[];
+        export { relatedCommands_186 as relatedCommands };
     }
 }
 declare namespace _default {

@@ -313,8 +313,20 @@ export async function getConnOptions(prompts) {
     }
 
     // Determine which env file to load
-    let envFile = prompts?.admin ? getDefaultEnvAdmin() : getDefaultEnv()
-    
+    let envFile = null;
+
+    // If MCP provided a specific connection file, use it (relative to projectPath or cwd)
+    if (connFile) {
+        envFile = getFileCheckParents(connFile);
+        if (envFile) {
+            base.debug(`Using MCP-specified connection file: ${envFile}`);
+        }
+    }
+
+    if (!envFile) {
+        envFile = prompts?.admin ? getDefaultEnvAdmin() : getDefaultEnv()
+    }
+
     if (!envFile && prompts?.conn) {
         // Try custom configuration file
         envFile = getFileCheckParents(prompts.conn)
