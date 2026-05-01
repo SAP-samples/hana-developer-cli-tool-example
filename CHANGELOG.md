@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [4.202605.0] - 2026-05-01
+
+**Fixed**
+
+- MCP server connection context: wired up dead connFile code so HANA_CLI_CONN_FILE env var is now honored when resolving connection files
+- MCP server default working directory: executor now prefers the launch directory over the hana-cli install directory when project markers (package.json, default-env.json, .env, .cdsrc-private.json) are detected
+
+**Changed**
+
+- Minimum Node.js version raised from 20.19.0 to 22.0.0 (preparing for CDS 10)
+- Added CDS 10 forward-compatibility flags: ieee754compatible, compat_srv_getters, compat_texts_entities, calc_elements
+- Added queue.legacyLocking: false for CDS 10 outbox locking behavior
+- Updated peerDependencies to accept @sap/cds-dk >=10.0.0
+- Updated CI matrix to Node.js 22.x and 24.x (dropped 20.x)
+- Updated @cap-js/hana from ^2.7.1 to ^2.8.0
+- Updated @cap-js/postgres from ^2.2.1 to ^2.3.0
+- Updated @cap-js/sqlite from ^2.2.1 to ^2.4.0
+- Updated @sap/cds-common-content from ^3.1.0 to ^3.2.0
+- Updated chromedriver from ^147.0.4 to ^148.0.1
+- Updated eslint from ^10.2.1 to ^10.3.0
+- Updated @wdio/* packages from ^9.27.0 to ^9.27.1
+- Updated webdriverio from ^9.27.0 to ^9.27.1
+- Upgraded TypeScript from 5.x to 6.x across project (MCP server ^6.0.2, root devDependencies)
+- Updated tsconfig.json files for TypeScript 6 compatibility: moduleResolution Node→Bundler (root), Node16→NodeNext (MCP server)
+- Updated @types/node from ^25.5.0 to ^25.6.0
+
 ## [4.202604.0] - 2026-04-23
 
 **Changed**

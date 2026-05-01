@@ -2,6 +2,10 @@
     {
         "date": "2026-05-01",
         "version": "4.202605.0",
+        "Fixed": [
+            "MCP server connection context: wired up dead connFile code so HANA_CLI_CONN_FILE env var is now honored when resolving connection files",
+            "MCP server default working directory: executor now prefers the launch directory over the hana-cli install directory when project markers (package.json, default-env.json, .env, .cdsrc-private.json) are detected"
+        ],
         "Changed": [
             "Minimum Node.js version raised from 20.19.0 to 22.0.0 (preparing for CDS 10)",
             "Added CDS 10 forward-compatibility flags: ieee754compatible, compat_srv_getters, compat_texts_entities, calc_elements",
