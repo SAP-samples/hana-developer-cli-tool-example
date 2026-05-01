@@ -1,6 +1,13 @@
 [
     {
         "date": "2026-05-01",
+        "version": "4.202605.1",
+        "Changed": [
+            "Release version 4.202605.1"
+        ]
+    },
+    {
+        "date": "2026-05-01",
         "version": "4.202605.0",
         "Fixed": [
             "MCP server connection context: wired up dead connFile code so HANA_CLI_CONN_FILE env var is now honored when resolving connection files",
