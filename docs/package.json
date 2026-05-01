@@ -1,6 +1,6 @@
 {
   "name": "hana-cli-docs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "SAP HANA Developer CLI Documentation",
   "private": true,
   "type": "module",

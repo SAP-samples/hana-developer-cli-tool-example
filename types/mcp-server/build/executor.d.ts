@@ -8,12 +8,6 @@
  */
 export function executeCommand(commandName: any, args: {} | undefined, context: any): Promise<any>;
 /**
- * Validates that required environment variables are set for database connection
- */
-export function validateEnvironment(): {
-    valid: boolean;
-};
-/**
  * Formats execution result for display using the output formatter
  */
 export function formatResult(result: any): string;

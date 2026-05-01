@@ -1,9 +1,3 @@
-/**
- * README Knowledge Base
- *
- * Aggregates and indexes all documentation from the project's markdown files
- * to provide context-aware guidance and parameter information for the MCP server.
- */
 export class ReadmeKnowledgeBase {
     /**
      * Global Standard Parameters - Available in all commands
@@ -116,25 +110,31 @@ export class ReadmeKnowledgeBase {
      * Key markdown documentation files and their contents
      */
     static DOCUMENTATION_RESOURCES: {
-        'main-readme': {
+        'docs-home': {
             path: string;
             title: string;
             description: string;
             contents: string;
         };
-        'app-guide': {
+        'getting-started': {
             path: string;
             title: string;
             description: string;
             contents: string;
         };
-        'routes-guide': {
+        'web-ui': {
             path: string;
             title: string;
             description: string;
             contents: string;
         };
-        'utils-guide': {
+        'api-reference': {
+            path: string;
+            title: string;
+            description: string;
+            contents: string;
+        };
+        'http-routes': {
             path: string;
             title: string;
             description: string;
@@ -152,11 +152,17 @@ export class ReadmeKnowledgeBase {
             description: string;
             contents: string;
         };
+        'command-reference': {
+            path: string;
+            title: string;
+            description: string;
+            contents: string;
+        };
     };
     /**
      * Get connection resolution guide with detailed explanations
      */
-    static getConnectionGuide(): string;
+    static getConnectionGuide(): any;
     /**
      * Get standard parameters for a specific command category
      */
@@ -164,7 +170,7 @@ export class ReadmeKnowledgeBase {
     /**
      * Get security guidelines as formatted text
      */
-    static getSecurityGuidelines(): string;
+    static getSecurityGuidelines(): any;
     /**
      * Get parameter guidelines for a specific command category
      */
@@ -172,11 +178,11 @@ export class ReadmeKnowledgeBase {
     /**
      * Get project structure overview
      */
-    static getProjectStructure(): string;
+    static getProjectStructure(): any;
     /**
      * Get best practices and naming conventions guide
      */
-    static getBestPractices(): string;
+    static getBestPractices(): any;
     /**
      * Search documentation by keyword
      */

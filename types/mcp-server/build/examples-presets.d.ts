@@ -390,6 +390,18 @@ export namespace COMMAND_PRESETS {
         whenToUse: string;
     })[];
     export { dataProfile_1 as dataProfile };
+    let dataValidator_1: {
+        name: string;
+        description: string;
+        parameters: {
+            table: string;
+            schema: string;
+            rules: string;
+        };
+        notes: string;
+        whenToUse: string;
+    }[];
+    export { dataValidator_1 as dataValidator };
     let duplicateDetection_1: ({
         name: string;
         description: string;

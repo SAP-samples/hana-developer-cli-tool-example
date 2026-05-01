@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: [20.x, 22.x, 24.x]
+        node-version: [22.x, 24.x]
         
     steps:
     - name: Checkout code
@@ -52,12 +52,12 @@ jobs:
         retention-days: 30
 
     - name: Generate coverage report
-      if: matrix.os == 'ubuntu-latest' && matrix.node-version == '20.x'
+      if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
       run: npm run coverage:ci
-        
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
-      if: matrix.os == 'ubuntu-latest' && matrix.node-version == '20.x'
+      if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
       continue-on-error: true
       with:
         file: ./coverage/coverage-final.json
@@ -79,7 +79,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20.x'
+        node-version: '22.x'
         cache: 'npm'
         
     - name: Install dependencies

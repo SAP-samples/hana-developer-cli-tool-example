@@ -1,3 +1,4 @@
+export function require(moduleId: any): any;
 /**
  * Start the Terminal Spinner
  */
@@ -178,13 +179,12 @@ export function getLastResults(): any;
  * @returns userName
  */
 export function getUserName(): Promise<string>;
-export const require: NodeJS.Require;
 /**
  * - instance of sap-hdb-promisified module
  */
 export type dbClass = dbClassDef;
 /** @typedef {dbClassDef} dbClass - instance of sap-hdb-promisified module */
-export const dbClass: typeof dbClassDef;
+export const dbClass: any;
 export const sqlInjection: typeof sqlInjectionDef;
 export const sqlInjectionUtils: typeof sqlInjectionDef;
 export const colors: import("chalk").ChalkInstance;
@@ -219,7 +219,6 @@ export const MAX_DISPLAY_ROWS: 100;
  */
 export type hdbextPromiseInstance = dbClass;
 export type Ora = typeof import("ora");
-import dbClassDef from "sap-hdb-promisfied";
 import * as sqlInjectionDef from "../utils/sqlInjection.js";
 import TextBundle_1 = require("@sap/textbundle");
 import TextBundle = TextBundle_1.TextBundle;
