@@ -40,8 +40,11 @@ npm run build
 ### Running the Server
 
 ```bash
-# Start MCP server (listens on stdio)
+# Start MCP server (listens on stdio) — default: ~22 tools
 node build/index.js
+
+# Full mode: all 186 tools exposed at startup
+node build/index.js --full
 
 # With debug logging
 DEBUG=hana-cli:* node build/index.js
@@ -65,15 +68,21 @@ The MCP server:
 
 ## Available Tools
 
-The MCP server exposes 150+ HANA CLI tools:
+By default, the MCP server exposes ~22 tools at startup using a progressive discovery model:
 
-**Data Tools:** import, export, compareData, dataProfile, dataDiff, dataValidator, dataMask, dataSync, duplicateDetection, dataLineage
+**Tier-1 (always available):** `hana_query_simple`, `hana_tables`, `hana_inspect_table`, `hana_views`, `hana_status`
 
-**Schema Tools:** compareSchema, schemaClone, tableCopy, erdDiagram, generateDocs, generateTestData
+**Router:** `hana_execute` — dispatches any of 183+ commands by name (e.g., `{ "command": "import", "args": { ... } }`)
 
-**Query Tools:** querySimple, callProcedure, tables, views, functions, procedures, roles, etc
+**Discovery:** `hana_discover_categories`, `hana_discover_by_category`, `hana_discover_by_tag`, `hana_recommend`, `hana_search`, `hana_quickstart`
 
-**System Tools:** backup, replicationStatus, partitions, spatialData, and more
+**Content:** `hana_examples`, `hana_parameter_presets`, `hana_get_doc`, `hana_interpret_result`, `hana_conversation_templates`, `hana_get_template`
+
+**Workflows:** `hana_workflows`, `hana_workflow_by_id`, `hana_search_workflows`
+
+When an AI agent explores a category via `hana_discover_by_category`, those tools are dynamically promoted to first-class tools (up to 50 additional tools, oldest category evicted first).
+
+Use `--full` mode to expose all 186 tools at startup for environments where tool count is not a concern.
 
 ## Usage with AI Assistants
 

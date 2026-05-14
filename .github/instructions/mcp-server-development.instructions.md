@@ -131,8 +131,85 @@ mcp-server/src/
 ├── readme-knowledge-base.ts      # README parsing and search
 ├── connection-context.ts         # Project connection management
 ├── resources.ts                  # MCP resource handlers
-└── prompts.ts                    # MCP prompt handlers
+├── prompts.ts                    # MCP prompt handlers
+└── tools/
+    ├── tier-config.ts            # Tier-1 command list, router name, caps
+    ├── cli-tools.ts              # Tool definitions (tier-1, per-category, all)
+    ├── router-tool.ts            # hana_execute router implementation
+    ├── discovery-tools.ts        # Category/tag/recommend tools
+    └── content-tools.ts          # Examples, presets, docs tools
 ```
+
+## Tiered Tool Architecture
+
+The MCP server uses progressive discovery to keep the initial tool surface small (~22 tools) while providing access to all 186 commands.
+
+### Configuration: `tools/tier-config.ts`
+
+```typescript
+// Tier-1 commands are always exposed as first-class tools
+export const TIER_1_COMMANDS: string[] = [
+  'querySimple', 'tables', 'inspectTable', 'views', 'status',
+];
+
+export const ROUTER_TOOL_NAME = 'hana_execute';
+export const MAX_DYNAMIC_TOOLS = 50;
+```
+
+### Tool Layers
+
+| Layer | Source | Registration |
+| ----- | ------ | ------------ |
+| Tier-1 | `tools/cli-tools.ts → getCliToolDefinitions()` | Always registered |
+| Router | `tools/router-tool.ts` | Always registered; dispatches 183+ commands |
+| Discovery/Content | `tools/discovery-tools.ts`, `tools/content-tools.ts` | Always registered |
+| Dynamic | `tools/cli-tools.ts → getCliToolDefinitionsForCategory()` | Promoted on demand via `activateCategory()` |
+
+### Router Tool: `tools/router-tool.ts`
+
+The `hana_execute` router accepts `{ command, args }` and resolves commands via:
+1. Direct name match (e.g., `"dataProfile"`)
+2. Sanitized name match (camelCase to snake_case)
+3. Alias lookup
+
+```typescript
+export async function handleRouterTool(params: { command: string; args?: Record<string, any> }): Promise<ExecutionResult> {
+  const resolved = resolveCommand(params.command);
+  return executeCommand(resolved, params.args || {});
+}
+```
+
+### Dynamic Tool Promotion
+
+When `hana_discover_by_category` is called, the server promotes those tools to first-class MCP tools:
+
+```typescript
+private activateCategory(category: string): void {
+  const tools = getCliToolDefinitionsForCategory(category);
+  // Filter out any tier-1 tools to avoid duplicates
+  const newTools = tools.filter(t => !isTier1Command(t.originalName));
+  
+  this.dynamicTools.set(category, newTools);
+  this.enforceCap(); // FIFO eviction if over MAX_DYNAMIC_TOOLS
+  this.server.sendToolListChanged(); // Notify client to refresh
+}
+```
+
+**Important implementation details:**
+- Tier-1 tools are filtered out before adding category tools (deduplication)
+- A FIFO cap of `MAX_DYNAMIC_TOOLS` (50) evicts the oldest category first
+- `sendToolListChanged()` triggers an MCP `notifications/tools/list_changed` notification
+
+### Full Mode (`--full` flag)
+
+Pass `--full` to bypass tiering and register all 186 tools at startup:
+
+```typescript
+const fullMode = process.argv.includes('--full');
+const cliTools = fullMode ? getAllCliToolDefinitions() : getCliToolDefinitions();
+```
+
+Use `--full` in environments where tool count is not a concern (e.g., dedicated HANA AI agents).
 
 ## Tool Registration Pattern
 

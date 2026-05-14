@@ -15,9 +15,11 @@ Complete documentation for the Model Context Protocol (MCP) server that enables 
 
 ## Key Capabilities
 
-**Context-Aware Commands**: Pass project directory and connection file to MCP server
+**Progressive Tool Discovery**: Starts with ~22 focused tools; expands on demand via router or dynamic promotion
 
-**150+ Tools Exposed**: All HANA CLI commands available to AI assistants
+**Router Tool (`hana_execute`)**: Execute any of 183+ commands by name without pre-registration
+
+**Context-Aware Commands**: Pass project directory and connection file to MCP server
 
 **Structured Output**: Markdown tables and formatted responses
 

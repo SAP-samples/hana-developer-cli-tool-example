@@ -2,6 +2,42 @@
 
 Advanced capabilities and workflows for the MCP server.
 
+## Progressive Tool Discovery
+
+The MCP server uses a tiered architecture to keep the initial tool surface small while providing access to all 183+ commands:
+
+### Using the Router Tool
+
+For any command not in the tier-1 set, use `hana_execute`:
+
+```json
+{
+  "tool": "hana_execute",
+  "arguments": {
+    "command": "dataProfile",
+    "args": {
+      "schema": "MY_SCHEMA",
+      "table": "ORDERS"
+    }
+  }
+}
+```
+
+### Dynamic Tool Promotion
+
+Calling `hana_discover_by_category` promotes all tools in that category:
+
+```json
+{
+  "tool": "hana_discover_by_category",
+  "arguments": { "category": "data-tools" }
+}
+```
+
+After this call, tools like `hana_import`, `hana_export`, `hana_data_profile` become directly callable. The server sends a `tools/list_changed` notification and the AI client refreshes its tool list.
+
+A cap of 50 dynamically-promoted tools is enforced (oldest category evicted first via FIFO).
+
 ## Advanced Topics
 
 ### Presets & Configurations
