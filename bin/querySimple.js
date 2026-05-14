@@ -122,8 +122,25 @@ export async function dbQuery(prompts) {
     await dbClient.connect()
     let results = await dbClient.execSQL(prompts.query)
 
-    if (!results[0]) {
-      return base.error(baseLite.bundle.getText("errNoResults"))
+    if (typeof results === 'number') {
+      const response = { rowsAffected: results }
+      if (prompts.output === 'json') {
+        console.log(JSON.stringify(response, null, 2))
+      } else {
+        console.log(baseLite.bundle.getText("rowsAffected", [results]))
+      }
+      await dbClient.disconnect()
+      return response
+    }
+    if (!Array.isArray(results) || results.length === 0) {
+      const response = { success: true, message: baseLite.bundle.getText("stmtExecutedNoResultSet") }
+      if (prompts.output === 'json') {
+        console.log(JSON.stringify(response, null, 2))
+      } else {
+        console.log(response.message)
+      }
+      await dbClient.disconnect()
+      return response
     }
 
     switch (prompts.output) {

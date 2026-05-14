@@ -6,7 +6,7 @@
 
 ## Description
 
-Execute a simple SQL query and display or export the results. This command provides a quick way to run SQL queries against the database with output options including table display, JSON, Excel, or CSV formats. Results can be saved to a file or displayed in the terminal.
+Execute any single SQL statement and display or export the results. This command supports SELECT queries (returning result sets), DML statements (INSERT, UPDATE, DELETE — returning rows-affected counts), and DDL statements (CREATE, DROP, ALTER — returning success confirmation). Results can be saved to a file or displayed in the terminal.
 
 ## Syntax
 
@@ -23,7 +23,7 @@ hana-cli querySimple [options]
 
 ```mermaid
 graph TD
-    Start([hana-cli querySimple]) --> QueryInput[Specify SQL Query]
+    Start([hana-cli querySimple]) --> QueryInput[Specify SQL Statement]
     QueryInput --> Profile{Profile Specified?}
     
     Profile -->|Yes| ProfileConn[Use CDS Profile Connection]
@@ -32,16 +32,21 @@ graph TD
     ProfileConn --> Connect[Connect to Database]
     DefaultConn --> Connect
     
-    Connect --> ExecuteQuery[Execute SQL Query]
-    ExecuteQuery --> GetResults[Retrieve Results]
-    GetResults --> Format{Output Format}
+    Connect --> ExecuteSQL[Execute SQL Statement]
+    ExecuteSQL --> ResultType{Result Type?}
+    
+    ResultType -->|SELECT result set| Format{Output Format}
+    ResultType -->|DML rows affected| DMLOutput[Display Rows Affected]
+    ResultType -->|DDL no result| DDLOutput[Display Success Message]
     
     Format -->|table| TableDisplay[Display as Table<br/>in Terminal]
     Format -->|json| JSONFormat[Convert to JSON]
     Format -->|excel| ExcelFormat[Convert to Excel]
     Format -->|csv| CSVFormat[Convert to CSV]
     
-    TableDisplay --> Complete([Complete])
+    DMLOutput --> Complete([Complete])
+    DDLOutput --> Complete
+    TableDisplay --> Complete
     
     JSONFormat --> Output{File Specified?}
     ExcelFormat --> Output
@@ -58,6 +63,7 @@ graph TD
     style Profile fill:#f39c12
     style Format fill:#f39c12
     style Output fill:#f39c12
+    style ResultType fill:#f39c12
 ```
 
 ## Parameters
@@ -66,7 +72,7 @@ graph TD
 
 | Option | Alias | Type | Default | Description |
 |--------|-------|------|---------|-------------|
-| `--query` | `-q` | string | - | SQL query to execute |
+| `--query` | `-q` | string | - | SQL statement to execute |
 | `--folder` | `-f` | string | `./` | Folder path for output file (when saving to file) |
 | `--filename` | `-n` | string | - | Output filename (when saving to file) |
 | `--output` | `-o` | string | `table` | Output format. Choices: `table`, `json`, `excel`, `csv` |
@@ -86,47 +92,61 @@ graph TD
 | `--disableVerbose` | `--quiet` | boolean | `false` | Disable verbose output - removes all extra output that is only helpful to human readable interface |
 | `--debug` | `-d` | boolean | `false` | Debug hana-cli itself by adding output of LOTS of intermediate details |
 
+## Output Behavior by Statement Type
+
+| Statement Type | Default Output | JSON Output (`--output json`) |
+|---------------|----------------|-------------------------------|
+| SELECT | Formatted table | `[{...}, {...}]` (array of row objects) |
+| INSERT/UPDATE/DELETE | `Rows affected: N` | `{"rowsAffected": N}` |
+| CREATE/DROP/ALTER | `Statement executed successfully` | `{"success": true, "message": "..."}` |
+
+All statement types exit with code 0 on success, making this command safe for scripting and automation.
+
 ## Examples
 
-### Basic Usage
+### SELECT Queries
 
 ```bash
-hana-cli querySimple --query "SELECT * FROM CUSTOMERS" --output csv
-```
-
-Executes the query and displays results in CSV format.
-
-### Display as Table
-
-```bash
+# Display results as a formatted table (default)
 hana-cli querySimple --query "SELECT TOP 10 * FROM ORDERS"
+
+# Output as JSON for programmatic use
+hana-cli querySimple --query "SELECT * FROM CUSTOMERS" --output json --quiet
+
+# Export to CSV file
+hana-cli querySimple --query "SELECT * FROM SALES" --output csv --folder ./exports --filename sales
+
+# Export to Excel file
+hana-cli querySimple --query "SELECT * FROM PRODUCTS" --output excel --folder ./exports --filename products
 ```
 
-Executes the query and displays the first 10 results as a formatted table in the terminal (default output).
-
-### Export to Excel
+### DML Statements (INSERT, UPDATE, DELETE)
 
 ```bash
-hana-cli querySimple --query "SELECT * FROM PRODUCTS" --output excel --filename products.xlsx
+# Insert a row
+hana-cli querySimple --query "INSERT INTO CONFIG (KEY, VALUE) VALUES ('timeout', '30')"
+# Output: Rows affected: 1
+
+# Update rows
+hana-cli querySimple --query "UPDATE CONFIG SET VALUE = '60' WHERE KEY = 'timeout'" --output json --quiet
+# Output: {"rowsAffected": 1}
+
+# Delete rows
+hana-cli querySimple --query "DELETE FROM LOGS WHERE CREATED_AT < ADD_DAYS(CURRENT_DATE, -90)"
+# Output: Rows affected: 1542
 ```
 
-Executes the query and exports results to an Excel file.
-
-### Export to CSV with Custom Folder
+### DDL Statements (CREATE, DROP, ALTER)
 
 ```bash
-hana-cli querySimple --query "SELECT * FROM SALES" --output csv --folder ./exports --filename sales.csv
+# Create a table
+hana-cli querySimple --query "CREATE TABLE T1 (ID INT PRIMARY KEY, NAME NVARCHAR(100))" --output json --quiet
+# Output: {"success": true, "message": "Statement executed successfully (no result set)."}
+
+# Drop a table
+hana-cli querySimple --query "DROP TABLE T1"
+# Output: Statement executed successfully (no result set).
 ```
-
-Exports query results to a CSV file in the specified folder.
-
-### Export to JSON
-
-```bash
-hana-cli querySimple --query "SELECT * FROM USERS" --output json --filename users.json
-```
-
-Exports query results to a JSON file.
 
 ### Use Alias
 
