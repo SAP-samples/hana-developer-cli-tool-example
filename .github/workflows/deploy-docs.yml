@@ -115,17 +115,17 @@ jobs:
         id: link-check
         continue-on-error: true
         run: |
-          cd docs/.vitepress/dist
-          # Install broken-link-checker
-          npm install -g broken-link-checker
-          # Start a simple HTTP server in the background
-          npx http-server -p 8080 -s &
+          # Serve dist under the same base path VitePress uses
+          mkdir -p docs/.vitepress/dist-serve/hana-developer-cli-tool-example
+          cp -r docs/.vitepress/dist/* docs/.vitepress/dist-serve/hana-developer-cli-tool-example/
+          npm install -g broken-link-checker http-server
+          npx http-server docs/.vitepress/dist-serve -p 8080 -s &
           SERVER_PID=$!
           sleep 5
-          # Check for broken links (excluding external links for speed)
-          blc http://localhost:8080 -ro --exclude external --filter-level 3 || true
-          # Clean up
+          # Crawl from the base path; exclude external links (npmjs.com blocks crawlers with 403)
+          blc http://localhost:8080/hana-developer-cli-tool-example/ -ro --exclude external --filter-level 3 || true
           kill $SERVER_PID || true
+          rm -rf docs/.vitepress/dist-serve
 
       - name: Report link check results
         if: steps.link-check.outcome == 'failure'
