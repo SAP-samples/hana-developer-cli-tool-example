@@ -8,7 +8,8 @@ The Model Context Protocol enables AI assistants to interact with external tools
 
 **Key Capabilities:**
 
-- **150+ Tools** - All CLI commands accessible via MCP interface
+- **Progressive Tool Discovery** - Starts with ~22 focused tools; promotes additional tools on demand (up to 186 total)
+- **Router Tool** - `hana_execute` dispatches any of 183+ commands by name without pre-registration
 - **Discovery** - AI-guided command recommendations and smart search
 - **Workflows** - Pre-built multi-step task templates
 - **Examples** - Real-world usage scenarios and parameter presets
@@ -110,20 +111,86 @@ You can also point directly to a local build:
 Replace the path with your actual project location. Connection credentials are read from `default-env.json` in the project root. Use `hana-cli connect` or `hana-cli serviceKey` to configure database connections.
 :::
 
+## Tool Architecture
+
+### Tiered Tool Exposure
+
+The MCP server uses a progressive discovery model to keep the initial tool surface small and focused:
+
+| Layer | Tools | Description |
+| ----- | ----- | ----------- |
+| **Tier 1** (always-on) | `hana_query_simple`, `hana_tables`, `hana_inspect_table`, `hana_views`, `hana_status` | Core database tools available immediately |
+| **Router** | `hana_execute` | Dispatches any of 183+ commands by name |
+| **Discovery** | `hana_discover_categories`, `hana_discover_by_category`, `hana_discover_by_tag`, `hana_recommend`, etc. | Help AI agents find the right tools |
+| **Content** | `hana_examples`, `hana_parameter_presets`, `hana_get_doc`, etc. | Usage examples and documentation |
+| **Dynamic** | Up to 50 additional tools | Promoted when a category is explored via `hana_discover_by_category` |
+
+**Default:** ~22 tools registered at startup.
+**Full mode:** All 186 tools registered (use `--full` flag).
+
+### The Router Tool (`hana_execute`)
+
+For commands not in the tier-1 set, the router tool provides direct access without requiring dynamic promotion:
+
+```json
+{
+  "tool": "hana_execute",
+  "arguments": {
+    "command": "dataProfile",
+    "args": { "schema": "MY_SCHEMA", "table": "ORDERS" }
+  }
+}
+```
+
+The router resolves commands by exact name, camelCase-to-snake_case conversion, or alias matching.
+
+### Dynamic Tool Promotion
+
+When an AI agent calls `hana_discover_by_category` (e.g., to browse "data-tools"), the server:
+
+1. Promotes all tools in that category to first-class MCP tools
+2. Sends a `tools/list_changed` notification so the client refreshes its tool list
+3. Enforces a cap of 50 dynamically-promoted tools (oldest category evicted first)
+
+This means frequently-used categories become directly callable without the router.
+
+### Full Mode
+
+For environments where tool count is not a concern, pass `--full` to expose all 186 tools at startup:
+
+```json
+{
+  "mcpServers": {
+    "hana-cli": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "-p", "hana-cli", "hana-cli-mcp", "--full"]
+    }
+  }
+}
+```
+
 ## Core Features
 
 ### 1. Command Tools
 
-All CLI commands are exposed with the `hana_` prefix:
+Tier-1 commands are always available with the `hana_` prefix:
 
 ```text
 hana_status              Check database connection
 hana_tables              List tables in a schema
-hana_import              Import data from CSV/Excel
-hana_dataProfile         Analyze data quality
-hana_duplicateDetection  Find duplicate rows
-hana_compareSchema       Compare database schemas
-hana_inspectTable        View table structure and metadata
+hana_inspect_table       View table structure and metadata
+hana_views               List views in a schema
+hana_query_simple        Execute SQL queries
+```
+
+All other commands (183+) are accessible via `hana_execute`:
+
+```text
+hana_execute { command: "import", args: { ... } }
+hana_execute { command: "dataProfile", args: { ... } }
+hana_execute { command: "duplicateDetection", args: { ... } }
+hana_execute { command: "compareSchema", args: { ... } }
 ```
 
 Command aliases still work when called (e.g., `hana_s` for status, `hana_imp` for import), but they are not registered as separate tools to keep the tool list concise.

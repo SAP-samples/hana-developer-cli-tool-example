@@ -455,29 +455,29 @@ hana-cli serve        # Start the web server standalone
 
 The web UI runs on `http://localhost:3010` by default and provides access to all CLI functionality through an easy-to-use graphical interface. For complete documentation of all web applications, UI5 components, configuration, and development guides, see the [app/README.md](app/README.md) file.
 
-### Experimental MCP (Model Context Protocol) Integration
+### MCP (Model Context Protocol) Integration
 
-The hana-cli tool now includes experimental support for the Model Context Protocol (MCP), enabling AI assistants like Claude to interact with SAP HANA databases through natural language. This integration exposes all 100+ hana-cli commands as tools that AI assistants can invoke directly.
+The hana-cli tool includes a Model Context Protocol (MCP) server, enabling AI assistants like Claude to interact with SAP HANA databases through natural language. The server uses a progressive discovery model — starting with ~22 focused tools and expanding on demand to all 186 commands.
 
 ```mermaid
 graph LR
     AI["🤖 AI Assistant<br/>Claude, etc."]
-    
-    AI -->|Natural Language<br/>Query| MCP["MCP Server<br/>hana-cli Integration"]
-    
-    MCP -->|Tool Invocation| Tools["100+ hana-cli<br/>Commands as Tools"]
-    
+
+    AI -->|Natural Language<br/>Query| MCP["MCP Server<br/>~22 Default Tools"]
+
+    MCP -->|Router or<br/>Direct Call| Tools["186 hana-cli<br/>Commands"]
+
     Tools --> DB["SAP HANA<br/>Database"]
     Tools --> Cloud["BTP/Cloud<br/>Services"]
     Tools --> HDI["HDI<br/>Containers"]
-    
+
     DB -->|Data & Results| Tools
     Cloud -->|Service Info| Tools
     HDI -->|Container Status| Tools
-    
+
     Tools -->|Formatted<br/>Response| MCP
     MCP -->|Natural Language<br/>Result| AI
-    
+
     style AI fill:#9D55F0,color:#fff
     style MCP fill:#0070C0,color:#fff
     style Tools fill:#FF6B6B,color:#fff
@@ -486,17 +486,16 @@ graph LR
 
 **Key Features:**
 
-- Natural language database queries and operations
-- Full access to all hana-cli commands through AI assistants
-- Seamless integration with AI development environments (Cline/Claude Dev, etc.)
-- Command execution with proper parameter handling and error responses
+- Progressive tool discovery — tier-1 tools always available, others via router or dynamic promotion
+- Router tool (`hana_execute`) dispatches any of 183+ commands by name
+- AI-guided command recommendations and smart search
+- Seamless integration with Claude Desktop, VS Code, Cursor, and other MCP clients
+- `--full` mode available for environments where tool count is not a concern
 
 For detailed setup instructions, configuration options, and usage examples, please refer to:
 
-- [mcp-server/README.md](mcp-server/README.md) - Complete installation and configuration guide
-- [mcp-server/TROUBLESHOOTING.md](mcp-server/TROUBLESHOOTING.md) - Common issues and solutions
-
-**Note:** This is an experimental feature and may be subject to changes as the MCP specification evolves.
+- [docs/03-features/mcp-integration.md](docs/03-features/mcp-integration.md) - Complete MCP overview and setup guide
+- [mcp-server/README.md](mcp-server/README.md) - Server installation and configuration
 
 ## Standard Parameters and Conventions
 

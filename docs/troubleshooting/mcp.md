@@ -58,6 +58,36 @@ Resolve common issues when using the Model Context Protocol (MCP) server integra
 
 ## Command Failures
 
+### Tool Not Found
+
+**Problem:** AI assistant reports a tool like `hana_dataProfile` is not available
+
+**Cause:** The MCP server uses progressive discovery — only ~22 tools are registered at startup. Other tools must be accessed via the router or promoted dynamically.
+
+**Solutions:**
+
+1. Use the router tool directly:
+
+   ```json
+   { "tool": "hana_execute", "arguments": { "command": "dataProfile", "args": { "schema": "MY_SCHEMA", "table": "ORDERS" } } }
+   ```
+
+2. Promote the category first by calling `hana_discover_by_category`:
+
+   ```json
+   { "tool": "hana_discover_by_category", "arguments": { "category": "data-tools" } }
+   ```
+
+   After this call, tools like `hana_data_profile` become directly callable.
+
+3. Use `--full` mode to expose all 186 tools at startup:
+
+   ```json
+   { "command": "npx", "args": ["-y", "-p", "hana-cli", "hana-cli-mcp", "--full"] }
+   ```
+
+4. Use `hana_recommend` with a natural language description to find the right tool name.
+
 ### Command Execution Errors
 
 **Problem:** Tool call returns error from HANA CLI
@@ -116,7 +146,7 @@ Resolve common issues when using the Model Context Protocol (MCP) server integra
 2. Verify MCP server is running: `npm run dev`
 3. Check your IDE's MCP configuration file (e.g., `claude_desktop_config.json`)
 4. Ensure the correct path to the MCP executable is configured
-5. Verify the MCP server is accessible on the expected port
+5. Note: by default only ~22 tools are registered. Use `hana_execute` router for other commands, or start with `--full` to expose all 186 tools
 
 ### AI Returns Incorrect Results
 

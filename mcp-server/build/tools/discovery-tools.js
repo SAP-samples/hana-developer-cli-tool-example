@@ -70,7 +70,7 @@ export function getDiscoveryToolDefinitions() {
         },
     ];
 }
-export function handleDiscoveryTool(commandName, args) {
+export function handleDiscoveryTool(commandName, args, options) {
     if (commandName === 'discover_categories') {
         const categoryList = Object.entries(CATEGORIES).map(([key, value]) => ({
             id: key,
@@ -94,6 +94,9 @@ export function handleDiscoveryTool(commandName, args) {
                 error: `No commands found in category: ${category}`,
                 tip: 'Use hana_discover_categories to see available categories',
             });
+        }
+        if (options?.onCategoryActivated) {
+            options.onCategoryActivated(category);
         }
         return jsonResponse({
             category,
