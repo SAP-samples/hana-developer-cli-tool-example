@@ -27,8 +27,13 @@ import { listPrompts, getPrompt } from './prompts.js';
 import { getDiscoveryToolDefinitions, handleDiscoveryTool } from './tools/discovery-tools.js';
 import { getContentToolDefinitions, handleContentTool } from './tools/content-tools.js';
 import { getSearchToolDefinitions, handleSearchTool } from './tools/search-tools.js';
-import { initCliTools, getCliToolDefinitions, handleCliTool } from './tools/cli-tools.js';
+import { initCliTools, getCliToolDefinitions, getAllCliToolDefinitions, getCliToolDefinitionsForCategory, handleCliTool } from './tools/cli-tools.js';
+import { initRouterTool, getRouterToolDefinition, handleRouterTool } from './tools/router-tool.js';
+import { isRouterTool, MAX_DYNAMIC_TOOLS } from './tools/tier-config.js';
 import { errorResponse } from './tools/types.js';
+import type { ToolDefinition } from './tools/types.js';
+
+const fullMode = process.argv.includes('--full');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -40,6 +45,8 @@ const pkg = JSON.parse(readFileSync(join(__dirname, '..', '..', 'mcp-server', 'p
 class HanaCliMcpServer {
   private server: Server;
   private commands: Map<string, any> = new Map();
+  private activatedCategories: string[] = [];
+  private dynamicToolDefinitions: ToolDefinition[] = [];
 
   constructor() {
     const iconPngDataUri =
@@ -59,7 +66,7 @@ class HanaCliMcpServer {
       },
       {
         capabilities: {
-          tools: {},
+          tools: { listChanged: true },
           resources: {},
           prompts: {},
         },
@@ -86,11 +93,23 @@ class HanaCliMcpServer {
     this.setupPromptHandlers();
 
     this.server.setRequestHandler(ListToolsRequestSchema, async () => {
+      if (fullMode) {
+        const tools = [
+          ...getDiscoveryToolDefinitions(),
+          ...getContentToolDefinitions(),
+          ...getSearchToolDefinitions(),
+          ...getAllCliToolDefinitions(),
+        ];
+        return { tools };
+      }
+
       const tools = [
         ...getDiscoveryToolDefinitions(),
         ...getContentToolDefinitions(),
         ...getSearchToolDefinitions(),
+        getRouterToolDefinition(),
         ...getCliToolDefinitions(),
+        ...this.dynamicToolDefinitions,
       ];
       return { tools };
     });
@@ -99,8 +118,17 @@ class HanaCliMcpServer {
       const { name, arguments: args } = request.params;
       const commandName = name.startsWith('hana_') ? name.slice(5) : name;
 
+      if (isRouterTool(name)) {
+        const result = await handleRouterTool(args as Record<string, any>);
+        if (result) return result;
+      }
+
+      const discoveryOptions = fullMode ? undefined : {
+        onCategoryActivated: (category: string) => this.activateCategory(category),
+      };
+
       const result =
-        handleDiscoveryTool(commandName, args as Record<string, any>) ??
+        handleDiscoveryTool(commandName, args as Record<string, any>, discoveryOptions) ??
         handleContentTool(commandName, args as Record<string, any>) ??
         handleSearchTool(commandName, args as Record<string, any>) ??
         await handleCliTool(name, args as Record<string, any>);
@@ -155,6 +183,26 @@ class HanaCliMcpServer {
     });
   }
 
+  private activateCategory(category: string): void {
+    if (this.activatedCategories.includes(category)) return;
+
+    const categoryTools = getCliToolDefinitionsForCategory(category);
+    if (categoryTools.length === 0) return;
+
+    this.activatedCategories.push(category);
+    this.dynamicToolDefinitions.push(...categoryTools);
+
+    // Enforce accumulation cap by removing oldest category's tools
+    while (this.dynamicToolDefinitions.length > MAX_DYNAMIC_TOOLS && this.activatedCategories.length > 1) {
+      const oldestCategory = this.activatedCategories.shift()!;
+      this.dynamicToolDefinitions = this.dynamicToolDefinitions.filter(
+        t => !getCliToolDefinitionsForCategory(oldestCategory).some(ct => ct.name === t.name)
+      );
+    }
+
+    this.server.sendToolListChanged().catch(() => {});
+  }
+
   async loadCommands(): Promise<void> {
     try {
       const indexPath = join(__dirname, '..', '..', 'bin', 'index.js');
@@ -187,6 +235,7 @@ class HanaCliMcpServer {
       }
 
       initCliTools(this.commands);
+      initRouterTool(this.commands);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : String(error);
       console.error(`[MCP] Failed to load commands: ${errorMsg}`);
