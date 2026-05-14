@@ -31,6 +31,7 @@
     "test:windows": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json --grep \"@windows|@all\" \"./tests/**/*.Test.js\"",
     "test:unix": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json --grep \"@unix|@all\" \"./tests/**/*.Test.js\"",
     "test:report": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json --no-parallel --reporter mochawesome --reporter-options reportDir=mochawesome-report,reportFilename=test-report,overwrite=true,html=true,json=true \"./tests/**/*.Test.js\"",
+    "test:json": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json-output.json \"./tests/**/*.Test.js\" > test-results.json 2>&1 || true",
     "test:output": "node scripts/run-test-output.js",
     "test:ci": "cross-env NODE_ENV=test mocha --config=tests/.mocharc.json \"./tests/platform*.Test.js\" \"./tests/routes/*.Test.js\" \"./tests/utils/*.Test.js\" --exclude \"./tests/utils/profileIntegration.Test.js\"",
     "coverage": "cross-env NODE_ENV=test nyc mocha --config=tests/.mocharc.json --no-parallel",

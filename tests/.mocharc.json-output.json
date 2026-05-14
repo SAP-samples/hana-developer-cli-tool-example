@@ -1,0 +1,10 @@
+{
+    "timeout": "10s",
+    "parallel": true,
+    "jobs": 16,
+    "reporter": "json",
+    "exit": true,
+    "require": [
+      "./tests/helper.js"
+    ]
+  }
