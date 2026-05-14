@@ -121,8 +121,8 @@ jobs:
           # Check internal links only (offline mode), remap base path to local files
           lychee \
             --offline \
-            --base 'docs/.vitepress/dist' \
-            --remap '/hana-developer-cli-tool-example/(.*) $1' \
+            --root-dir "$(pwd)/docs/.vitepress/dist" \
+            --remap '/hana-developer-cli-tool-example/(.*) /$1' \
             'docs/.vitepress/dist/**/*.html'
 
       - name: Report link check results
