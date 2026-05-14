@@ -1,26 +1,6 @@
 import { textResponse, errorResponse } from './types.js';
 import { executeCommand, formatResult } from '../executor.js';
-import { ROUTER_TOOL_NAME } from './tier-config.js';
-function sanitizeToolName(name) {
-    return name
-        .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
-        .replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
-        .toLowerCase()
-        .replace(/[^a-z0-9_-]/g, '_');
-}
-const PROJECT_CONTEXT_SCHEMA = {
-    type: 'object',
-    description: 'Project-specific connection context (optional). Use this to connect to a project-specific database instead of the default.',
-    properties: {
-        connectionFile: { type: 'string', description: 'Connection file name relative to projectPath (e.g., ".env", "default-env.json").' },
-        database: { type: 'string', description: 'Database name (default "SYSTEMDB").' },
-        host: { type: 'string', description: 'Database host (for direct connection).' },
-        password: { type: 'string', description: 'Database password. SECURITY WARNING: Prefer connection files instead.' },
-        port: { type: 'number', description: 'Database port (default 30013).' },
-        projectPath: { type: 'string', description: 'Absolute path to the project directory.' },
-        user: { type: 'string', description: 'Database user.' },
-    },
-};
+import { ROUTER_TOOL_NAME, sanitizeToolName, PROJECT_CONTEXT_SCHEMA } from './tier-config.js';
 let commandsMap = new Map();
 export function initRouterTool(commands) {
     commandsMap = commands;

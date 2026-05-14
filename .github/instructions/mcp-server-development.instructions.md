@@ -185,12 +185,24 @@ When `hana_discover_by_category` is called, the server promotes those tools to f
 
 ```typescript
 private activateCategory(category: string): void {
-  const tools = getCliToolDefinitionsForCategory(category);
-  // Filter out any tier-1 tools to avoid duplicates
-  const newTools = tools.filter(t => !isTier1Command(t.originalName));
-  
-  this.dynamicTools.set(category, newTools);
-  this.enforceCap(); // FIFO eviction if over MAX_DYNAMIC_TOOLS
+  if (this.activatedCategories.includes(category)) return;
+
+  const tier1Names = new Set(getCliToolDefinitions().map(t => t.name));
+  const categoryTools = getCliToolDefinitionsForCategory(category)
+    .filter(t => !tier1Names.has(t.name)); // Deduplicate against tier-1
+  if (categoryTools.length === 0) return;
+
+  this.activatedCategories.push(category);
+  this.dynamicToolDefinitions.push(...categoryTools);
+
+  // FIFO eviction: remove oldest category's tools if over cap
+  while (this.dynamicToolDefinitions.length > MAX_DYNAMIC_TOOLS && this.activatedCategories.length > 1) {
+    const oldest = this.activatedCategories.shift()!;
+    this.dynamicToolDefinitions = this.dynamicToolDefinitions.filter(
+      t => !getCliToolDefinitionsForCategory(oldest).some(ct => ct.name === t.name)
+    );
+  }
+
   this.server.sendToolListChanged(); // Notify client to refresh
 }
 ```
