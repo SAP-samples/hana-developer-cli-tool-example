@@ -12,20 +12,25 @@ function parseAsciiTable(output) {
     if (headerIndex === -1)
         return null;
     const headerLine = lines[headerIndex];
+    // Split by │ and drop the leading/trailing empty segments from outer borders
     const headers = headerLine
         .split('│')
-        .map(h => h.trim())
-        .filter(h => h.length > 0);
+        .slice(1, -1)
+        .map(h => h.trim());
+    if (headers.length === 0)
+        return null;
     // Parse data rows
     const rows = [];
     for (let i = headerIndex + 1; i < lines.length; i++) {
         const line = lines[i];
         if (line.startsWith('├') || line.startsWith('╰'))
             continue;
+        if (!line.includes('│'))
+            continue;
         const cells = line
             .split('│')
-            .map(c => c.trim())
-            .filter(c => c.length > 0);
+            .slice(1, -1)
+            .map(c => c.trim());
         if (cells.length === headers.length) {
             rows.push(cells);
         }
