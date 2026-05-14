@@ -116,7 +116,8 @@ jobs:
         continue-on-error: true
         run: |
           # Use lychee for fast parallel link checking of the built HTML
-          curl -sSfL https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-gnu.tar.gz | tar xz -C /usr/local/bin
+          curl -sSfL https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-gnu.tar.gz \
+            | tar xz --strip-components=1 -C /usr/local/bin lychee-x86_64-unknown-linux-gnu/lychee
           # Check internal links only (offline mode), remap base path to local files
           lychee \
             --offline \
