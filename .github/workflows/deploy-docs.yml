@@ -114,19 +114,15 @@ jobs:
       - name: Check for broken links
         id: link-check
         continue-on-error: true
-        timeout-minutes: 3
         run: |
-          # Serve dist under the same base path VitePress uses
-          mkdir -p docs/.vitepress/dist-serve/hana-developer-cli-tool-example
-          cp -r docs/.vitepress/dist/* docs/.vitepress/dist-serve/hana-developer-cli-tool-example/
-          npm install -g broken-link-checker http-server
-          npx http-server docs/.vitepress/dist-serve -p 8080 -s &
-          SERVER_PID=$!
-          sleep 3
-          # Crawl from the base path; exclude external links (npmjs.com blocks crawlers with 403)
-          blc http://localhost:8080/hana-developer-cli-tool-example/ -ro --exclude external --filter-level 3 || true
-          kill $SERVER_PID || true
-          rm -rf docs/.vitepress/dist-serve
+          # Use lychee for fast parallel link checking of the built HTML
+          curl -sSfL https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-gnu.tar.gz | tar xz -C /usr/local/bin
+          # Check internal links only (offline mode), remap base path to local files
+          lychee \
+            --offline \
+            --base 'docs/.vitepress/dist' \
+            --remap '/hana-developer-cli-tool-example/(.*) $1' \
+            'docs/.vitepress/dist/**/*.html'
 
       - name: Report link check results
         if: steps.link-check.outcome == 'failure'
