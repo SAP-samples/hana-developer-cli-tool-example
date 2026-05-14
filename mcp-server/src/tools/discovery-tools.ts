@@ -79,7 +79,11 @@ export function getDiscoveryToolDefinitions(): ToolDefinition[] {
   ];
 }
 
-export function handleDiscoveryTool(commandName: string, args: Record<string, any>): ToolResponse | null {
+export interface DiscoveryToolOptions {
+  onCategoryActivated?: (category: string) => void;
+}
+
+export function handleDiscoveryTool(commandName: string, args: Record<string, any>, options?: DiscoveryToolOptions): ToolResponse | null {
   if (commandName === 'discover_categories') {
     const categoryList = Object.entries(CATEGORIES).map(([key, value]) => ({
       id: key,
@@ -105,6 +109,10 @@ export function handleDiscoveryTool(commandName: string, args: Record<string, an
         tip: 'Use hana_discover_categories to see available categories',
       });
     }
+    if (options?.onCategoryActivated) {
+      options.onCategoryActivated(category);
+    }
+
     return jsonResponse({
       category,
       categoryInfo: CATEGORIES[category as keyof typeof CATEGORIES],
