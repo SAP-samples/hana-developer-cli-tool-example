@@ -186,7 +186,9 @@ class HanaCliMcpServer {
   private activateCategory(category: string): void {
     if (this.activatedCategories.includes(category)) return;
 
-    const categoryTools = getCliToolDefinitionsForCategory(category);
+    const tier1Names = new Set(getCliToolDefinitions().map(t => t.name));
+    const categoryTools = getCliToolDefinitionsForCategory(category)
+      .filter(t => !tier1Names.has(t.name));
     if (categoryTools.length === 0) return;
 
     this.activatedCategories.push(category);

@@ -83,7 +83,9 @@ export async function handleRouterTool(args) {
     }
     try {
         const context = __projectContext;
-        const result = await executeCommand(actualCommandName, commandArgs, context);
+        const cleanArgs = { ...commandArgs };
+        delete cleanArgs.__projectContext;
+        const result = await executeCommand(actualCommandName, cleanArgs, context);
         const formattedOutput = formatResult(result);
         return textResponse(formattedOutput);
     }

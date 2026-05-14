@@ -96,8 +96,10 @@ export async function handleRouterTool(args: Record<string, any>): Promise<ToolR
 
   try {
     const context = __projectContext as ConnectionContext | undefined;
+    const cleanArgs = { ...(commandArgs as Record<string, any>) };
+    delete cleanArgs.__projectContext;
 
-    const result = await executeCommand(actualCommandName, commandArgs as Record<string, any>, context);
+    const result = await executeCommand(actualCommandName, cleanArgs, context);
     const formattedOutput = formatResult(result);
     return textResponse(formattedOutput);
   } catch (error) {
