@@ -118,12 +118,16 @@ jobs:
           # Use lychee for fast parallel link checking of the built HTML
           curl -sSfL https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-gnu.tar.gz \
             | tar xz --strip-components=1 -C /usr/local/bin lychee-x86_64-unknown-linux-gnu/lychee
-          # Check internal links only (offline mode), remap base path to local files
+          # Mirror deployment structure (GitHub Pages serves under /repo-name/)
+          mkdir -p /tmp/site/hana-developer-cli-tool-example
+          cp -r docs/.vitepress/dist/* /tmp/site/hana-developer-cli-tool-example/
+          # Check internal links only; fallback-extensions handles VitePress clean URLs
           lychee \
             --offline \
-            --root-dir "$(pwd)/docs/.vitepress/dist" \
-            --remap '/hana-developer-cli-tool-example/(.*) /$1' \
-            'docs/.vitepress/dist/**/*.html'
+            --root-dir /tmp/site \
+            --fallback-extensions html \
+            /tmp/site
+          rm -rf /tmp/site
 
       - name: Report link check results
         if: steps.link-check.outcome == 'failure'

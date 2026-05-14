@@ -82,7 +82,7 @@ export async function getTables(prompts) {
 
 ## Complete Example: bin/tables.js
 
-See [bin/tables.js](bin/tables.js) for the complete optimized implementation.
+See [bin/tables.js](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/bin/tables.js) for the complete optimized implementation.
 
 ## When to Apply This Pattern
 

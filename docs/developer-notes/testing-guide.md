@@ -11,7 +11,7 @@ Overview of testing infrastructure, coverage metrics, and development practices.
 - Branch Coverage: 80%+
 - Function Coverage: 90%+
 
-See full analysis in: [TEST_COVERAGE_ANALYSIS.md](../../TEST_COVERAGE_ANALYSIS.md)
+See full analysis in: [TEST_COVERAGE_ANALYSIS.md](../05-development/testing.md)
 
 ## Test Categories
 
@@ -59,7 +59,7 @@ npm test -- tests/unit/utils/validation.js
 - Before: 2.2 seconds
 - After: 700ms (~7x improvement)
 
-See: [OPTIMIZATION_PATTERN.md](../../OPTIMIZATION_PATTERN.md)
+See: [OPTIMIZATION_PATTERN.md](../05-development/testing.md#performance-benchmarks)
 
 ## See Also
 

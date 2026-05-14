@@ -37,7 +37,7 @@ Major refactoring in v4.202602 focused on performance and reliability.
 
 Multi-language support for all output and help text.
 
-Details: [INTERNATIONALIZATION_UPDATES.md](../../03-features/internationalization.md)
+Details: [INTERNATIONALIZATION_UPDATES.md](../03-features/internationalization.md)
 
 **Supported Languages:**
 
@@ -62,7 +62,7 @@ Details: [INTERNATIONALIZATION_UPDATES.md](../../03-features/internationalizatio
 
 AI-first integration enabling natural language commands.
 
-Details: [MCP_SERVER_IMPLEMENTATION_COMPLETE.md](../../03-features/mcp/server-implementation-complete.md)
+Details: [MCP_SERVER_IMPLEMENTATION_COMPLETE.md](../03-features/mcp/server-implementation-complete.md)
 
 **Architecture:**
 
@@ -86,7 +86,7 @@ REST API server for programmatic access.
 
 API documentation and testing interface.
 
-Details: [SWAGGER_IMPLEMENTATION.md](../../04-api-reference/swagger.md)
+Details: [SWAGGER_IMPLEMENTATION.md](../04-api-reference/swagger.md)
 
 **Benefits:**
 
@@ -99,7 +99,7 @@ Details: [SWAGGER_IMPLEMENTATION.md](../../04-api-reference/swagger.md)
 
 Integration with SAP knowledge base and documentation.
 
-Details: [KNOWLEDGE_BASE_INTEGRATION_SUMMARY.md](../../03-features/knowledge-base.md)
+Details: [KNOWLEDGE_BASE_INTEGRATION_SUMMARY.md](../03-features/knowledge-base.md)
 
 **Features:**
 
@@ -112,7 +112,7 @@ Details: [KNOWLEDGE_BASE_INTEGRATION_SUMMARY.md](../../03-features/knowledge-bas
 
 Advanced import capabilities.
 
-Details: [Import Command Documentation](../../02-commands/data-tools/import.md)
+Details: [Import Command Documentation](../02-commands/data-tools/import.md)
 
 **Enhancements:**
 
@@ -127,7 +127,7 @@ Details: [Import Command Documentation](../../02-commands/data-tools/import.md)
 
 Comprehensive command documentation.
 
-See: [COMMAND_DOCUMENTATION_UPDATES.md](../../02-commands/index.md)
+See: [COMMAND_DOCUMENTATION_UPDATES.md](../02-commands/index.md)
 
 **Coverage:**
 
@@ -143,7 +143,7 @@ Testing infrastructure and metrics.
 
 Details:
 
-- [TEST_COVERAGE_ANALYSIS.md](../../05-development/testing.md)
+- [TEST_COVERAGE_ANALYSIS.md](../05-development/testing.md)
 
 **Focus Areas:**
 
@@ -176,8 +176,8 @@ Details:
 
 Version upgrade considerations documented in:
 
-- [CHANGELOG.md](../../CHANGELOG.md)
-- [README.md](../../README.md#upgrading)
+- [CHANGELOG.md](/99-reference/changelog.md)
+- [README.md](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/README.md#upgrading)
 
 **Backward Compatibility:**
 

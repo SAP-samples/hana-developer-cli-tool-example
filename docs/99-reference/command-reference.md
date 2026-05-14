@@ -1050,10 +1050,10 @@ hana-cli
 
 ## See Also
 
-- [Main README](../../README.md) - Overview and features
+- [Main README](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/README.md) - Overview and features
 - [Commands Index](/02-commands/) - Full command documentation
 - [All Commands A-Z](/02-commands/all-commands) - Complete command catalog
-- [Utils Documentation](../../utils/README.md) - Internal utilities
-- [Routes Documentation](../../routes/README.md) - HTTP API endpoints
+- [Utils Documentation](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/utils/README.md) - Internal utilities
+- [Routes Documentation](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/routes/README.md) - HTTP API endpoints
 - [Swagger/OpenAPI](http://localhost:3010/api-docs) - Interactive API docs
-- [Web Applications](../../app/README.md) - Web UI documentation
+- [Web Applications](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/app/README.md) - Web UI documentation

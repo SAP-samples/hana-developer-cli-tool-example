@@ -578,7 +578,7 @@ describe('NewCommandUI - SAPUI5 Tests', function() {
 - **WDI5 Documentation**: <https://ui5-community.github.io/wdi5/>
 - **WebdriverIO Docs**: <https://webdriver.io/>
 - **SAPUI5 Test Automation**: <https://ui5.sap.com/#/topic/ae448243822448d8ba04b4784f4b09a0>
-- **WDI5 Setup Guide**: See [WDI5-SETUP.md](../../WDI5-SETUP.md) in project root
+- **WDI5 Setup Guide**: See [WDI5-SETUP.md](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/WDI5-SETUP.md) in project root
 
 ## Test Framework
 
@@ -788,4 +788,4 @@ See Also:
 
 - [Development Guide](./index.md)
 - [Architecture](./architecture/)
-- [Troubleshooting](../../troubleshooting/)
+- [Troubleshooting](../troubleshooting/)

@@ -132,7 +132,7 @@ Each user created includes:
 
 - [massGrant](mass-grant.md) - Grant privileges to bulk users
 - [users](../connection-auth/users.md) - Manage individual users
-- [roles](../connection-auth/roles.md) - Assign users to roles
+- [roles](../security/roles.md) - Assign users to roles
 
 ## See Also
 

@@ -16,7 +16,7 @@ Additional reference materials and project history.
 
 Main project documentation:
 
-- [README.md](../../README.md) - Project overview and quick start
+- [README.md](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/README.md) - Project overview and quick start
 
 ## Developer Resources
 

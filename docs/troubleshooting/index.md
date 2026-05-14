@@ -1,6 +1,6 @@
 # Troubleshooting
 
-Use this guide to troubleshoot common hana-cli errors, verify fixes, and get back to work quickly. If you are just getting started, see the [Installation Guide](./installation.md) and [Configuration Guide](./configuration.md).
+Use this guide to troubleshoot common hana-cli errors, verify fixes, and get back to work quickly. If you are just getting started, see the [Installation Guide](../01-getting-started/installation.md) and [Configuration Guide](../01-getting-started/configuration.md).
 
 ## Quick Links
 
@@ -507,7 +507,7 @@ hana-cli <command> --debug --verbose | Tee-Object -FilePath hana-cli-debug.log
 
 2. **Upgrade to the required version**
    - hana-cli requires Node.js 20.19.0 or later
-   - See the [Installation Guide](./installation.md) for platform-specific steps
+   - See the [Installation Guide](../01-getting-started/installation.md) for platform-specific steps
 
 #### Insufficient Privileges
 
@@ -1367,7 +1367,7 @@ done
 ## See Also
 
 - [MCP Server Issues](./mcp.md)
-- [Configuration Guide](./configuration.md)
-- [Installation Guide](./installation.md)
+- [Configuration Guide](../01-getting-started/configuration.md)
+- [Installation Guide](../01-getting-started/installation.md)
 - [Commands documentation](/02-commands/)
 - [GitHub Repository](https://github.com/SAP-samples/hana-developer-cli-tool-example)

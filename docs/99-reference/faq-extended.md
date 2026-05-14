@@ -439,7 +439,7 @@ See [Changelog](./changelog.md) for details.
 
 ### Q: Can I modify and redistribute?
 
-**A:** Yes, following Apache License 2.0 terms. See [LICENSE](../../LICENSE)
+**A:** Yes, following Apache License 2.0 terms. See [LICENSE](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/LICENSE)
 
 ### Q: Where can I report bugs?
 

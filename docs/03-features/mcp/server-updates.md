@@ -180,9 +180,9 @@ hana_healthCheck     # System health
 
 ## Configuration
 
-See [README.md](./README.md) for MCP client configuration instructions.
+See [README.md](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/mcp-server/README.md) for MCP client configuration instructions.
 
-For troubleshooting, refer to [TROUBLESHOOTING.md](./TROUBLESHOOTING.md).
+For troubleshooting, refer to [TROUBLESHOOTING.md](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/mcp-server/TROUBLESHOOTING.md).
 
 ## Build Instructions
 
@@ -217,8 +217,8 @@ The compiled JavaScript will be output to `build/` directory.
 
 For issues or feature requests related to the MCP server:
 
-1. Check [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
-2. Review [README.md](./README.md)
+1. Check [TROUBLESHOOTING.md](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/mcp-server/TROUBLESHOOTING.md)
+2. Review [README.md](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/mcp-server/README.md)
 3. Consult main project documentation
 
 ## See Also

@@ -92,4 +92,4 @@ See the [Commands Reference](../all-commands.md) for other commands in this cate
 - [Category: Developer Tools](..)
 - [All Commands A-Z](../all-commands.md)
 - [helpDocu](./help-docu.md) - Open online documentation
-- [diagnose](../troubleshooting/diagnose.md) - Run diagnostic checks
+- [diagnose](../system-admin/diagnose.md) - Run diagnostic checks

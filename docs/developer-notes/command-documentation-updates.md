@@ -122,6 +122,6 @@ All command documentation updates in README.md have been verified to:
 
 For comprehensive details about these changes, see:
 
-- [CONSISTENCY_REVIEW_COMPLETE.md](CONSISTENCY_REVIEW_COMPLETE.md) - Full analysis and QA notes
-- [COMMAND_CONSISTENCY_ANALYSIS.md](COMMAND_CONSISTENCY_ANALYSIS.md) - Detailed audit findings
-- [COMMAND_CONSISTENCY_FIXES.md](COMMAND_CONSISTENCY_FIXES.md) - Implementation details
+- [CONSISTENCY_REVIEW_COMPLETE.md](./consistency-review-complete.md) - Full analysis and QA notes
+- [COMMAND_CONSISTENCY_ANALYSIS.md](./command-consistency-analysis.md) - Detailed audit findings
+- [COMMAND_CONSISTENCY_FIXES.md](./command-consistency-fixes.md) - Implementation details

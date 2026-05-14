@@ -284,8 +284,8 @@ The MCP server is production-ready with:
 
 ## Support & Documentation
 
-- **README:** [mcp-server/README.md](./mcp-server/README.md)
-- **Troubleshooting:** [mcp-server/TROUBLESHOOTING.md](./mcp-server/TROUBLESHOOTING.md)
+- **README:** [mcp-server/README.md](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/mcp-server/README.md)
+- **Troubleshooting:** [mcp-server/TROUBLESHOOTING.md](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/mcp-server/TROUBLESHOOTING.md)
 - **Update Details:** [server-updates.md](./server-updates.md)
 
 ---

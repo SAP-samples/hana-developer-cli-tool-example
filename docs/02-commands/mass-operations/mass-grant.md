@@ -125,7 +125,7 @@ hana-cli massGrant -s MYSCHEMA -o % -t VIEW -g ANALYST -pr SELECT --log
 
 - [massUsers](mass-users.md) - Create bulk users for development
 - [users](../connection-auth/users.md) - Manage individual users
-- [roles](../connection-auth/roles.md) - Manage database roles
+- [roles](../security/roles.md) - Manage database roles
 
 ## See Also
 

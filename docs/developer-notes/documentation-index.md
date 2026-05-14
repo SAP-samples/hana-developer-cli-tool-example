@@ -387,4 +387,4 @@ Possible additions:
 **Total Content**: 5,000+ Lines  
 **Status**: ✅ Complete and Ready  
 
-For setup instructions, see: [`docs/README.md`](docs/README.md)
+For setup instructions, see: [`docs/README.md`](https://github.com/SAP-samples/hana-developer-cli-tool-example/blob/main/docs/README.md)

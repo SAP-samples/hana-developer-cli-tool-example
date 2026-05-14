@@ -149,4 +149,4 @@ hana_tables {
 
 - [MCP Server Usage](./server-usage.md)
 - [Connection Guide](./connection-guide.md)
-- [Quick Setup](../../01-getting-started/mcp-quickstart.md)
+- [Quick Setup](../mcp-integration.md)
