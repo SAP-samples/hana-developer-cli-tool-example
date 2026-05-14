@@ -4,6 +4,76 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [4.202605.2] - 2026-05-14
+
+**Added**
+
+- MCP server tiered tool architecture: tier-1 essential tools are always available, category-specific tools activate on demand via hana_discover_by_category
+- New hana_execute router tool for generic command dispatch without per-command tool registration
+- JSON test reporter (npm run test:json) for structured result querying with jq
+
+**Fixed**
+
+- MCP server: preserve empty cell values in ASCII table parser
+- MCP server: deduplicate tier-1 tools on category activation
+- querySimple now exits 0 for DML/DDL statements
+- Security: update uuid to 11.1.1 in docs to resolve vulnerability alert
+
+**Changed**
+
+- MCP server: extract shared utilities into reusable modules and add mocked querySimple tests
+- MCP server: add dynamic registration callback to discovery-tools for on-demand tool loading
+- Dependency updates to latest patch/minor versions
+
+## [4.202605.1] - 2026-05-01
+
+**Changed**
+
+- Release version 4.202605.1
+
+## [4.202605.0] - 2026-05-01
+
+**Fixed**
+
+- MCP server connection context: wired up dead connFile code so HANA_CLI_CONN_FILE env var is now honored when resolving connection files
+- MCP server default working directory: executor now prefers the launch directory over the hana-cli install directory when project markers (package.json, default-env.json, .env, .cdsrc-private.json) are detected
+
+**Changed**
+
+- Minimum Node.js version raised from 20.19.0 to 22.0.0 (preparing for CDS 10)
+- Added CDS 10 forward-compatibility flags: ieee754compatible, compat_srv_getters, compat_texts_entities, calc_elements
+- Added queue.legacyLocking: false for CDS 10 outbox locking behavior
+- Updated peerDependencies to accept @sap/cds-dk >=10.0.0
+- Updated CI matrix to Node.js 22.x and 24.x (dropped 20.x)
+- Updated @cap-js/hana from ^2.7.1 to ^2.8.0
+- Updated @cap-js/postgres from ^2.2.1 to ^2.3.0
+- Updated @cap-js/sqlite from ^2.2.1 to ^2.4.0
+- Updated @sap/cds-common-content from ^3.1.0 to ^3.2.0
+- Upgraded TypeScript from 5.x to 6.x across project (MCP server ^6.0.2, root devDependencies)
+- Updated tsconfig.json files for TypeScript 6 compatibility: moduleResolution Node→Bundler (root), Node16→NodeNext (MCP server)
+
+## [4.202604.0] - 2026-04-23
+
+**Added**
+
+- New mcpServerInstall command (hana-cli mcp) for one-command MCP server configuration in Claude Desktop, Claude Code, Cursor, Windsurf, Cline, VS Code, Continue, and Zed
+- New mcpServerStatus command (hana-cli mcp-status) to check MCP server installation status across all 8 supported AI assistant clients
+- MCP resources for knowledge base content and documentation index metadata
+
+**Changed**
+
+- Major MCP server refactor: modular architecture replacing monolithic 1,700-line index.ts
+- Reduced MCP tool count by removing alias registrations and consolidating search tools
+- Updated MCP SDK from 1.27.1 to 1.29.0
+- Fixed MCP server version to read dynamically from package.json
+- Fixed fragile command name matching in output formatter
+- Added isError signaling to all MCP error response paths
+
+**Removed**
+
+- Removed simulated workflow execution tools (LLMs orchestrate multi-step tasks more effectively)
+- Removed no-op validateEnvironment function and low-value metadata tools
+
 ## [4.202603.2] - 2026-03-13
 
 **Fixed**

@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [4.202605.2] - 2026-05-14
+
+**Added**
+
+- MCP server tiered tool architecture: tier-1 essential tools are always available, category-specific tools activate on demand via hana_discover_by_category
+- New hana_execute router tool for generic command dispatch without per-command tool registration
+- JSON test reporter (npm run test:json) for structured result querying with jq
+
+**Fixed**
+
+- MCP server: preserve empty cell values in ASCII table parser
+- MCP server: deduplicate tier-1 tools on category activation
+- querySimple now exits 0 for DML/DDL statements
+- Security: update uuid to 11.1.1 in docs to resolve vulnerability alert
+
+**Changed**
+
+- MCP server: extract shared utilities into reusable modules and add mocked querySimple tests
+- MCP server: add dynamic registration callback to discovery-tools for on-demand tool loading
+- Dependency updates to latest patch/minor versions
+
 ## [4.202605.1] - 2026-05-01
 
 **Changed**
