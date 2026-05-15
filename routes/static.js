@@ -56,6 +56,7 @@ export function route (app) {
     app.use('/sap/dfa/', express.static(path.join(__dirname, '../app/dfa')))
     app.use('/resources/sap/dfa/', express.static(path.join(__dirname, '../app/dfa')))
     app.use('/i18n', express.static(path.join(__dirname, '../_i18n')))
+    app.use('/api/changelog', express.static(path.join(__dirname, '../changelog.json')))
     app.use('/favicon.ico', express.static(path.join(__dirname, '../app/resources/favicon.ico')))
    
     /**
