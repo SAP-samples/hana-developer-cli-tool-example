@@ -1,0 +1,201 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useSuggestions } from '../composables/useSuggestions'
+import { toast } from '../composables/useToast'
+
+import '@ui5/webcomponents/dist/Title.js'
+import '@ui5/webcomponents/dist/Input.js'
+import '@ui5/webcomponents/dist/SuggestionItem.js'
+import '@ui5/webcomponents/dist/Button.js'
+import '@ui5/webcomponents/dist/Bar.js'
+import '@ui5/webcomponents/dist/Label.js'
+import '@ui5/webcomponents/dist/MessageStrip.js'
+import '@ui5/webcomponents/dist/BusyIndicator.js'
+import '@ui5/webcomponents/dist/Dialog.js'
+
+const schema = ref('**CURRENT_SCHEMA**')
+const running = ref(false)
+const messages = ref<string[]>([])
+const error = ref('')
+
+const schemaSuggestions = useSuggestions('schemas-ui', 'SCHEMA_NAME')
+const confirmDialogOpen = ref(false)
+
+let ws: WebSocket | null = null
+
+function connectWebSocket() {
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+  const wsUrl = `${protocol}//${window.location.host}/websockets`
+
+  ws = new WebSocket(wsUrl)
+
+  ws.onmessage = (event) => {
+    try {
+      const data = JSON.parse(event.data)
+      if (data.text) {
+        messages.value.push(data.text)
+      }
+      if (data.progress === 100 || data.text?.includes('Complete') || data.text?.includes('complete')) {
+        running.value = false
+        toast.show('Mass convert completed successfully')
+      }
+    } catch {
+      messages.value.push(event.data)
+    }
+  }
+
+  ws.onerror = () => {
+    error.value = 'WebSocket connection error'
+    running.value = false
+  }
+
+  ws.onclose = () => {
+    running.value = false
+  }
+}
+
+async function startMassConvert() {
+  confirmDialogOpen.value = false
+  running.value = true
+  messages.value = []
+  error.value = ''
+
+  try {
+    await fetch('/', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ schema: schema.value })
+    })
+
+    connectWebSocket()
+
+    ws?.addEventListener('open', () => {
+      ws?.send(JSON.stringify({ action: 'massConvert' }))
+    })
+  } catch (e: any) {
+    error.value = e.message
+    running.value = false
+  }
+}
+</script>
+
+<template>
+  <div class="mass-convert-view">
+    <ui5-title level="H3">Mass Convert</ui5-title>
+
+    <ui5-message-strip design="Information" hide-close-button>
+      Converts all tables in the schema to CDS format (hdbtable/hdbmigrationtable).
+      This operation uses WebSocket for real-time progress reporting.
+    </ui5-message-strip>
+
+    <div class="form-section">
+      <div class="form-field">
+        <ui5-label>Schema</ui5-label>
+        <ui5-input
+          :value="schema"
+          show-suggestions
+          filter="Contains"
+          @change="(e: any) => schema = e.target.value"
+          @focus="schemaSuggestions.ensureLoaded({ limit: 1000 })"
+          placeholder="Schema"
+        >
+          <ui5-suggestion-item v-for="s in schemaSuggestions.items.value" :key="s" :text="s" />
+        </ui5-input>
+      </div>
+    </div>
+
+    <ui5-bar design="Subheader">
+      <ui5-button
+        slot="endContent"
+        design="Emphasized"
+        icon="batch-payments"
+        :disabled="running"
+        @click="confirmDialogOpen = true"
+      >Start Mass Convert</ui5-button>
+    </ui5-bar>
+
+    <ui5-busy-indicator v-if="running" active size="Medium" text="Converting..." class="loading" />
+
+    <div v-if="error" class="error">
+      <ui5-message-strip design="Negative" hide-close-button>{{ error }}</ui5-message-strip>
+    </div>
+
+    <div v-if="messages.length > 0" class="log-area">
+      <ui5-title level="H5">Progress Log</ui5-title>
+      <div class="log-messages">
+        <div v-for="(msg, i) in messages" :key="i" class="log-line">{{ msg }}</div>
+      </div>
+    </div>
+
+    <ui5-dialog
+      header-text="Confirm Mass Convert"
+      :open="confirmDialogOpen"
+      @close="confirmDialogOpen = false"
+    >
+      <p style="padding: 1rem;">
+        Convert all tables in schema <strong>{{ schema }}</strong> to CDS format?
+        This operation will generate hdbtable/hdbmigrationtable artifacts and may take several minutes.
+      </p>
+      <div slot="footer" style="display: flex; justify-content: flex-end; gap: 0.5rem; padding: 0.5rem;">
+        <ui5-button design="Emphasized" @click="startMassConvert">Convert</ui5-button>
+        <ui5-button design="Transparent" @click="confirmDialogOpen = false">Cancel</ui5-button>
+      </div>
+    </ui5-dialog>
+  </div>
+</template>
+
+<style scoped>
+.mass-convert-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--sapGroup_ContentBackground, #fff);
+  border-radius: 4px;
+  border: 1px solid var(--sapGroup_ContentBorderColor, #d9d9d9);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.error {
+  padding: 0.5rem 0;
+}
+
+.log-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.log-messages {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 0.75rem;
+  background: var(--sapShell_Background, #edeff0);
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.log-line {
+  padding: 0.125rem 0;
+  border-bottom: 1px solid var(--sapGroup_ContentBorderColor, #d9d9d9);
+}
+</style>
