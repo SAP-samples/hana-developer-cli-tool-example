@@ -226,6 +226,8 @@ watch(() => route.query, (q) => {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  position: relative;
+  padding-bottom: 1rem;
 }
 
 .filter-input {
@@ -237,10 +239,13 @@ watch(() => route.query, (q) => {
 }
 
 .execute-btn {
-  align-self: flex-end;
+  margin-bottom: 1rem;
 }
 
 .resolved-schema {
+  position: absolute;
+  bottom: 0;
+  left: 0;
   font-size: 0.75rem;
   color: var(--sapContent_LabelColor);
   font-style: italic;
