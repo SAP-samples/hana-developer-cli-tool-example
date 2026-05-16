@@ -82,6 +82,11 @@ export const router = createRouter({
       component: () => import('./views/InspectView.vue')
     },
     {
+      path: '/inspect-function',
+      name: 'inspectFunction',
+      component: () => import('./views/InspectFunction.vue')
+    },
+    {
       path: '/call-procedure',
       name: 'callProcedure',
       component: () => import('./views/CallProcedure.vue')
@@ -103,6 +108,11 @@ export const router = createRouter({
       component: () => import('./views/MassConvert.vue')
     },
     // Cloud
+    {
+      path: '/cf-login',
+      name: 'cfLogin',
+      component: () => import('./views/CFLogin.vue')
+    },
     {
       path: '/hdi',
       name: 'hdi',
@@ -132,6 +142,11 @@ export const router = createRouter({
       path: '/containers',
       name: 'containers',
       component: () => import('./views/Containers.vue')
+    },
+    {
+      path: '/btp-login',
+      name: 'btpLogin',
+      component: () => import('./views/BtpLogin.vue')
     },
     {
       path: '/btp-info',

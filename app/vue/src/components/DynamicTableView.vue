@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, watch } from 'vue'
+import { ref, reactive, onMounted, watch, computed } from 'vue'
 import { useHanaApi } from '../composables/useHanaApi'
 import { useSuggestions } from '../composables/useSuggestions'
 import { useCurrentSchema } from '../composables/useCurrentSchema'
 import { useDynamicTable } from '../composables/useDynamicTable'
 import SmartTable from './SmartTable.vue'
+import { useRouter } from 'vue-router'
 
 import '@ui5/webcomponents/dist/Title.js'
 import '@ui5/webcomponents/dist/Input.js'
@@ -13,6 +14,7 @@ import '@ui5/webcomponents/dist/Button.js'
 import '@ui5/webcomponents/dist/Select.js'
 import '@ui5/webcomponents/dist/Option.js'
 import '@ui5/webcomponents/dist/Label.js'
+import '@ui5/webcomponents/dist/Link.js'
 
 export interface FilterField {
   key: string
@@ -51,6 +53,25 @@ const {
 const filterValues = ref<Record<string, string>>({})
 const limit = ref(200)
 const error = ref('')
+const router = useRouter()
+
+const isCfError = computed(() => {
+  const msg = error.value.toLowerCase()
+  return msg.includes('not logged in') ||
+    msg.includes('cloud foundry') ||
+    msg.includes('cf login') ||
+    msg.includes('cf-notauthenticated') ||
+    msg.includes('unable to determine current space')
+})
+
+const isBtpError = computed(() => {
+  const msg = error.value.toLowerCase()
+  return msg.includes('unknown session') ||
+    msg.includes('authorization failed') ||
+    msg.includes('btp cli target') ||
+    msg.includes('no btp cli') ||
+    msg.includes('unexpected end of json')
+})
 
 const suggestions = reactive<Record<string, ReturnType<typeof useSuggestions>>>({})
 
@@ -150,6 +171,8 @@ onMounted(() => {
 
     <div v-if="error" class="error">
       <p>{{ error }}</p>
+      <ui5-link v-if="isCfError" @click="router.push({ name: 'cfLogin' })">Go to CF Login</ui5-link>
+      <ui5-link v-else-if="isBtpError" @click="router.push({ name: 'btpLogin' })">Go to BTP Login</ui5-link>
     </div>
 
     <SmartTable

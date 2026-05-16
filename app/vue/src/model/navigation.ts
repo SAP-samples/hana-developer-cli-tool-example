@@ -50,6 +50,7 @@ export const navigation: NavGroup[] = [
     items: [
       { key: 'inspectTable', title: 'Inspect Table', route: 'inspectTable' },
       { key: 'inspectView', title: 'Inspect View', route: 'inspectView' },
+      { key: 'inspectFunction', title: 'Inspect Function', route: 'inspectFunction' },
       { key: 'callProcedure', title: 'Call Procedure', route: 'callProcedure' },
       { key: 'querySimple', title: 'SQL Query', route: 'querySimple' }
     ]
@@ -68,6 +69,7 @@ export const navigation: NavGroup[] = [
     title: 'Cloud',
     icon: 'cloud',
     items: [
+      { key: 'cfLogin', title: 'CF Login', route: 'cfLogin' },
       { key: 'hdi', title: 'HDI Instances', route: 'hdi' },
       { key: 'sbss', title: 'SBSS', route: 'sbss' },
       { key: 'schemaInstances', title: 'Schema Instances', route: 'schemaInstances' },
@@ -81,6 +83,7 @@ export const navigation: NavGroup[] = [
     title: 'BTP',
     icon: 'it-host',
     items: [
+      { key: 'btpLogin', title: 'BTP Login', route: 'btpLogin' },
       { key: 'btpInfo', title: 'BTP Info', route: 'btpInfo' },
       { key: 'btpSubs', title: 'Subscriptions', route: 'btpSubs' },
       { key: 'btpTarget', title: 'Subaccount Target', route: 'btpTarget' }

@@ -84,6 +84,13 @@ function onTableKeydown(e: KeyboardEvent) {
 
 function onCellClick(rowIdx: number, colIdx: number) {
   gridNav.activate(rowIdx, colIdx)
+  const col = orderedColumns.value[colIdx]
+  if (col?.key === props.linkColumn) {
+    const value = String(props.data[rowIdx]?.[col.key] ?? '')
+    if (value.startsWith('http://') || value.startsWith('https://')) {
+      window.open(value, '_blank', 'noopener')
+    }
+  }
 }
 
 let dragSourceKey = ''
@@ -323,6 +330,8 @@ const countLabel = computed(() => {
   outline: none;
   flex: 1;
   min-height: 0;
+  background: var(--sapList_Background, #fff);
+  color: var(--sapTextColor, #32363a);
 }
 
 .grid-header {
@@ -389,6 +398,11 @@ const countLabel = computed(() => {
   border-bottom: 1px solid var(--sapList_BorderColor, #e5e5e5);
   cursor: pointer;
   transition: background-color 0.1s;
+  background: var(--sapList_Background, #fff);
+}
+
+.grid-row:nth-child(even) {
+  background: var(--sapList_AlternatingBackground, var(--sapList_Background, #fff));
 }
 
 .grid-row:hover {

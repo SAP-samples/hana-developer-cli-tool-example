@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useHanaApi } from '../composables/useHanaApi'
+import { useRouter } from 'vue-router'
 import { toast } from '../composables/useToast'
 
 import '@ui5/webcomponents/dist/Title.js'
@@ -10,15 +11,27 @@ import '@ui5/webcomponents/dist/MessageStrip.js'
 import '@ui5/webcomponents/dist/Tree.js'
 import '@ui5/webcomponents/dist/TreeItem.js'
 import '@ui5/webcomponents/dist/Panel.js'
+import '@ui5/webcomponents/dist/Link.js'
 
 const { fetchDirect } = useHanaApi()
+const router = useRouter()
 
 const loading = ref(false)
 const error = ref('')
 const success = ref('')
 const globalAccount = ref<any>(null)
 const hierarchy = ref<any>(null)
-const currentTarget = ref('')
+const currentTarget = ref<any>(null)
+
+const isBtpError = computed(() => {
+  const msg = error.value.toLowerCase()
+  return msg.includes('unknown session') ||
+    msg.includes('authorization failed') ||
+    msg.includes('btp cli target') ||
+    msg.includes('no btp cli') ||
+    msg.includes('not logged in') ||
+    msg.includes('unexpected end of json')
+})
 
 interface TreeNode {
   displayName: string
@@ -35,7 +48,7 @@ async function loadHierarchy() {
     const result = await fetchDirect<any>('/hana/btp-ui')
     globalAccount.value = result.globalAccount || null
     hierarchy.value = result.hierarchy || null
-    currentTarget.value = result.currentTarget || ''
+    currentTarget.value = result.currentTarget || null
   } catch (e: any) {
     error.value = e.message
   } finally {
@@ -56,7 +69,7 @@ async function setTarget(guid: string) {
     const result = await res.json()
     if (result.success) {
       success.value = `Target set to: ${guid}`
-      currentTarget.value = guid
+      currentTarget.value = { guid, displayName: guid }
       toast.show(`Target set to ${guid}`)
       await loadHierarchy()
     } else {
@@ -81,13 +94,21 @@ function flattenHierarchy(node: any): TreeNode[] {
     }
   }
 
-  if (node.directories) {
-    for (const dir of node.directories) {
-      items.push({
-        displayName: dir.displayName || dir.guid,
-        type: 'directory',
-        children: flattenHierarchy(dir)
-      })
+  if (node.children) {
+    for (const child of node.children) {
+      if (child.directoryType) {
+        items.push({
+          displayName: child.displayName || child.guid,
+          type: 'directory',
+          children: flattenHierarchy(child)
+        })
+      } else {
+        items.push({
+          displayName: child.displayName || child.guid,
+          guid: child.guid,
+          type: 'subaccount'
+        })
+      }
     }
   }
 
@@ -111,13 +132,14 @@ onMounted(loadHierarchy)
     <ui5-title level="H3">BTP Subaccount Target</ui5-title>
 
     <ui5-message-strip v-if="currentTarget" design="Information" hide-close-button>
-      Current target: {{ currentTarget }}
+      Current target: {{ currentTarget.displayName }} ({{ currentTarget.guid }})
     </ui5-message-strip>
 
     <ui5-busy-indicator v-if="loading" active size="Medium" class="loading" />
 
     <div v-else-if="error" class="error">
       <ui5-message-strip design="Negative" hide-close-button>{{ error }}</ui5-message-strip>
+      <ui5-link v-if="isBtpError" @click="router.push({ name: 'btpLogin' })">Go to BTP Login</ui5-link>
     </div>
 
     <div v-else-if="success" class="success">
@@ -136,7 +158,7 @@ onMounted(loadHierarchy)
               :text="node.displayName"
               icon="it-system"
               :data-guid="node.guid"
-              :additional-text="node.guid === currentTarget ? '(current)' : ''"
+              :additional-text="node.guid === currentTarget?.guid ? '(current)' : ''"
             />
             <ui5-tree-item
               v-else
@@ -150,7 +172,7 @@ onMounted(loadHierarchy)
                 :text="child.displayName"
                 :icon="child.type === 'subaccount' ? 'it-system' : 'open-folder'"
                 :data-guid="child.guid"
-                :additional-text="child.guid === currentTarget ? '(current)' : ''"
+                :additional-text="child.guid === currentTarget?.guid ? '(current)' : ''"
               />
             </ui5-tree-item>
           </template>

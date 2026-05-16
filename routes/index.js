@@ -1,8 +1,24 @@
 // @ts-check
 import * as base from '../utils/base.js'
 import express from 'express'
+import multer from 'multer'
+import * as path from 'path'
+import * as os from 'os'
+import * as fs from 'fs'
 
 const jsonParser = express.json()
+
+const uploadDir = path.join(os.tmpdir(), 'hana-cli-uploads')
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true })
+
+const storage = multer.diskStorage({
+    destination: uploadDir,
+    filename: (_req, file, cb) => {
+        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e6)}`
+        cb(null, `${uniqueSuffix}-${file.originalname}`)
+    }
+})
+const upload = multer({ storage, limits: { fileSize: 500 * 1024 * 1024 } })
 
 export function route (app) {
     base.debug('Index Route')
@@ -85,5 +101,16 @@ export function route (app) {
         } catch (error) {
             next(error) // Pass to error handler
         }
-    }) 
+    })
+
+    app.post('/hana/upload', upload.single('file'), (req, res, next) => {
+        try {
+            if (!req.file) {
+                return res.status(400).json({ message: 'No file uploaded' })
+            }
+            res.json({ path: req.file.path, filename: req.file.originalname, size: req.file.size })
+        } catch (error) {
+            next(error)
+        }
+    })
 }

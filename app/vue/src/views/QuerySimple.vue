@@ -132,9 +132,14 @@ function onTabClose(id: string) {
 }
 
 function onOutputModeChange(e: Event) {
-  const selected = (e as CustomEvent).detail?.selectedItem
+  const items = (e as CustomEvent).detail?.selectedItems
+  const selected = items?.[0]
   if (selected) {
-    updateTab(activeTab.value.id, { outputMode: selected.dataset.mode || 'table' })
+    const mode = selected.dataset.mode || 'table'
+    updateTab(activeTab.value.id, { outputMode: mode, error: '' })
+    if (mode === 'plan' && planResults.value.length === 0 && activeTab.value.sql.trim()) {
+      explainQuery()
+    }
   }
 }
 
@@ -219,10 +224,10 @@ function onExplorerInsert(text: string) {
                   @click="toggleExplorer"
                 />
                 <ui5-segmented-button slot="startContent" @selection-change="onOutputModeChange">
-                  <ui5-segmented-button-item data-mode="table" :pressed="activeTab.outputMode === 'table'" icon="table-view">Table</ui5-segmented-button-item>
-                  <ui5-segmented-button-item data-mode="json" :pressed="activeTab.outputMode === 'json'" icon="syntax">JSON</ui5-segmented-button-item>
-                  <ui5-segmented-button-item data-mode="plan" :pressed="activeTab.outputMode === 'plan'" icon="tree">Plan</ui5-segmented-button-item>
-                  <ui5-segmented-button-item data-mode="diff" :pressed="activeTab.outputMode === 'diff'" icon="compare">Diff</ui5-segmented-button-item>
+                  <ui5-segmented-button-item data-mode="table" :selected="activeTab.outputMode === 'table'" icon="table-view">Table</ui5-segmented-button-item>
+                  <ui5-segmented-button-item data-mode="json" :selected="activeTab.outputMode === 'json'" icon="syntax">JSON</ui5-segmented-button-item>
+                  <ui5-segmented-button-item data-mode="plan" :selected="activeTab.outputMode === 'plan'" icon="tree">Plan</ui5-segmented-button-item>
+                  <ui5-segmented-button-item data-mode="diff" :selected="activeTab.outputMode === 'diff'" icon="compare">Diff</ui5-segmented-button-item>
                 </ui5-segmented-button>
                 <ui5-button
                   slot="endContent"
@@ -296,7 +301,7 @@ function onExplorerInsert(text: string) {
                 <p>{{ activeTab.error }}</p>
               </div>
 
-              <template v-else-if="resultsTable.totalCount.value > 0 || (activeTab.outputMode === 'plan' && planResults.length > 0) || activeTab.outputMode === 'diff'">
+              <template v-else-if="resultsTable.totalCount.value > 0 || activeTab.outputMode === 'plan' || activeTab.outputMode === 'diff'">
                 <SmartTable
                   v-if="activeTab.outputMode === 'table'"
                   title="Results"

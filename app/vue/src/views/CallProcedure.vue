@@ -44,6 +44,7 @@ const paramValues = ref<Record<string, string>>({})
 const resultSets = ref<any[][]>([])
 const outputScalar = ref<Record<string, any>>({})
 const resultTables = shallowRef<ReturnType<typeof useDynamicTable>[]>([])
+const executed = ref(false)
 
 async function loadParameters() {
   if (!procedure.value) return
@@ -82,6 +83,7 @@ async function loadParameters() {
 async function callProcedure() {
   loading.value = true
   error.value = ''
+  executed.value = false
   resultSets.value = []
   resultTables.value = []
   outputScalar.value = {}
@@ -113,6 +115,8 @@ async function callProcedure() {
     sets.forEach((data, i) => {
       resultTables.value[i].setData(data)
     })
+
+    executed.value = true
   } catch (e: any) {
     error.value = e.message
   } finally {
@@ -212,10 +216,10 @@ watch(() => route.query, (q) => {
     <ui5-busy-indicator v-if="loading" active size="Medium" class="loading" />
 
     <div v-else-if="error" class="error">
-      <p>{{ error }}</p>
+      <ui5-message-strip design="Negative" hide-close-button>{{ error }}</ui5-message-strip>
     </div>
 
-    <template v-else-if="resultTables.length > 0">
+    <template v-else-if="executed">
       <div v-if="Object.keys(outputScalar).length > 0" class="scalar-output">
         <ui5-message-strip design="Information" hide-close-button>
           Output Scalars:
@@ -225,41 +229,49 @@ watch(() => route.query, (q) => {
         </ui5-message-strip>
       </div>
 
-      <ui5-tabcontainer v-if="resultTables.length > 1" class="tabs">
-        <ui5-tab
-          v-for="(table, i) in resultTables"
-          :key="i"
-          :text="`Result Set ${i + 1}`"
-          :selected="i === 0"
-        >
-          <SmartTable
-            :title="`Result Set ${i + 1} (${table.totalCount.value})`"
-            :columns="table.columns.value"
-            :data="table.displayData.value"
-            :sort-key="table.sortKey.value"
-            :sort-dir="table.sortDir.value"
-            :row-count="table.rowCount.value"
-            :total-count="table.totalCount.value"
-            @sort="table.toggleSort"
-            @search="(q: string) => table.searchQuery.value = q"
-            @export="(fmt: 'excel' | 'csv') => onExport(i, fmt)"
-          />
-        </ui5-tab>
-      </ui5-tabcontainer>
+      <template v-if="resultTables.length > 0">
+        <ui5-tabcontainer v-if="resultTables.length > 1" class="tabs">
+          <ui5-tab
+            v-for="(table, i) in resultTables"
+            :key="i"
+            :text="`Result Set ${i + 1}`"
+            :selected="i === 0"
+          >
+            <SmartTable
+              :title="`Result Set ${i + 1} (${table.totalCount.value})`"
+              :columns="table.columns.value"
+              :data="table.displayData.value"
+              :sort-key="table.sortKey.value"
+              :sort-dir="table.sortDir.value"
+              :row-count="table.rowCount.value"
+              :total-count="table.totalCount.value"
+              @sort="table.toggleSort"
+              @search="(q: string) => table.searchQuery.value = q"
+              @export="(fmt: 'excel' | 'csv') => onExport(i, fmt)"
+            />
+          </ui5-tab>
+        </ui5-tabcontainer>
 
-      <SmartTable
-        v-else
-        :title="`Results (${resultTables[0].totalCount.value})`"
-        :columns="resultTables[0].columns.value"
-        :data="resultTables[0].displayData.value"
-        :sort-key="resultTables[0].sortKey.value"
-        :sort-dir="resultTables[0].sortDir.value"
-        :row-count="resultTables[0].rowCount.value"
-        :total-count="resultTables[0].totalCount.value"
-        @sort="resultTables[0].toggleSort"
-        @search="(q: string) => resultTables[0].searchQuery.value = q"
-        @export="(fmt: 'excel' | 'csv') => onExport(0, fmt)"
-      />
+        <SmartTable
+          v-else
+          :title="`Results (${resultTables[0].totalCount.value})`"
+          :columns="resultTables[0].columns.value"
+          :data="resultTables[0].displayData.value"
+          :sort-key="resultTables[0].sortKey.value"
+          :sort-dir="resultTables[0].sortDir.value"
+          :row-count="resultTables[0].rowCount.value"
+          :total-count="resultTables[0].totalCount.value"
+          @sort="resultTables[0].toggleSort"
+          @search="(q: string) => resultTables[0].searchQuery.value = q"
+          @export="(fmt: 'excel' | 'csv') => onExport(0, fmt)"
+        />
+      </template>
+
+      <ui5-message-strip
+        v-else-if="Object.keys(outputScalar).length === 0"
+        design="Positive"
+        hide-close-button
+      >Procedure executed successfully (no result sets returned)</ui5-message-strip>
     </template>
   </div>
 </template>

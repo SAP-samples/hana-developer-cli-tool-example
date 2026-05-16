@@ -71,7 +71,7 @@ export async function getBTPInfoUI(prompts) {
     try {
         base.setPrompts(prompts)
         let data = await btp.getBTPConfig()
-        
+
         // Transform data for UI
         let result = {
             UserName: data.UserName,
@@ -84,7 +84,7 @@ export async function getBTPInfoUI(prompts) {
             SubAccount: '',
             SubAccountID: ''
         }
-        
+
         // Extract target hierarchy items
         if (data.TargetHierarchy) {
             for (let item of data.TargetHierarchy) {
@@ -100,9 +100,10 @@ export async function getBTPInfoUI(prompts) {
                 }
             }
         }
-        
+
         return result
     } catch (error) {
         base.error(error)
+        throw error
     }
 }

@@ -8,5 +8,6 @@ import DynamicTableView from '../components/DynamicTableView.vue'
     endpoint="btpSubs-ui"
     :filters="[]"
     :show-limit="false"
+    link-column="SubscriptionUrl"
   />
 </template>

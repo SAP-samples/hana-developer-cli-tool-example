@@ -125,6 +125,8 @@ const PlanNodeItem = defineComponent({
   padding: 0.5rem;
   overflow: auto;
   height: 100%;
+  background: var(--sapList_Background, #fff);
+  color: var(--sapTextColor, #32363a);
 }
 
 .plan-empty {

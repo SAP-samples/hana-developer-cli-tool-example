@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { navigation } from './model/navigation'
 import { toast } from './composables/useToast'
@@ -27,6 +27,14 @@ const route = useRoute()
 
 const sideCollapsed = ref(localStorage.getItem('hana-cli-side-collapsed') === 'true')
 const currentTheme = ref(localStorage.getItem('hana-cli-theme') || 'auto')
+
+const expandedState = ref<Record<string, boolean>>((() => {
+  try {
+    const saved = localStorage.getItem('hana-cli-nav-expanded')
+    if (saved) return JSON.parse(saved)
+  } catch { /* fall through */ }
+  return Object.fromEntries(navigation.map(g => [g.key, g.expanded ?? false]))
+})())
 const themePopoverOpen = ref(false)
 const themePopoverRef = ref<HTMLElement | null>(null)
 const toastRef = ref<HTMLElement | null>(null)
@@ -58,12 +66,37 @@ onMounted(() => {
   darkMatcher.addEventListener('change', onOsThemeChange)
   if (toastRef.value) toast.registerElement(toastRef.value)
   checkVersion()
+  nextTick(setupNavObserver)
 })
-onUnmounted(() => darkMatcher.removeEventListener('change', onOsThemeChange))
+onUnmounted(() => {
+  darkMatcher.removeEventListener('change', onOsThemeChange)
+  navObserver?.disconnect()
+})
 
 function onMenuClick() {
   sideCollapsed.value = !sideCollapsed.value
   localStorage.setItem('hana-cli-side-collapsed', String(sideCollapsed.value))
+}
+
+let navObserver: MutationObserver | null = null
+
+function setupNavObserver() {
+  const items = document.querySelectorAll('ui5-side-navigation-item')
+  if (!items.length) return
+  navObserver = new MutationObserver((mutations) => {
+    for (const m of mutations) {
+      if (m.attributeName === 'expanded') {
+        const el = m.target as HTMLElement
+        const text = el.getAttribute('text')
+        const group = navigation.find(g => g.title === text)
+        if (group) {
+          expandedState.value[group.key] = el.hasAttribute('expanded')
+          localStorage.setItem('hana-cli-nav-expanded', JSON.stringify(expandedState.value))
+        }
+      }
+    }
+  })
+  items.forEach(item => navObserver!.observe(item, { attributes: true, attributeFilter: ['expanded'] }))
 }
 
 function onNavSelect(e: Event) {
@@ -176,7 +209,7 @@ function isItemSelected(itemKey: string): boolean {
         :key="group.key"
         :text="group.title"
         :icon="group.icon"
-        :expanded="group.expanded ?? false"
+        :expanded="expandedState[group.key] ?? false"
       >
         <ui5-side-navigation-sub-item
           v-for="item in group.items"

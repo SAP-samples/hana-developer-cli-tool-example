@@ -34,8 +34,8 @@ describe('Full Application - HTTP Integration Tests', function () {
         })
 
         it('should have static routes registered', async function () {
-            const response = await request(app).get('/appconfig/fioriSandboxConfig.json')
-            expect(response.status).to.be.oneOf([200, 500])
+            const response = await request(app).get('/ui/')
+            expect(response.status).to.be.oneOf([200, 304, 500])
         })
     })
 
@@ -91,19 +91,19 @@ describe('Full Application - HTTP Integration Tests', function () {
         it('should handle sequential requests to different routes', async function () {
             const response1 = await request(app).get('/')
             const response2 = await request(app).get('/docs/readme')
-            const response3 = await request(app).get('/appconfig/fioriSandboxConfig.json')
-            
+            const response3 = await request(app).get('/ui/')
+
             // All should return some response
             expect([200, 404, 500]).to.include(response1.status)
             expect([200, 404, 500]).to.include(response2.status)
-            expect([200, 404, 500]).to.include(response3.status)
+            expect([200, 304, 404, 500]).to.include(response3.status)
         })
 
         it('should handle concurrent requests', async function () {
             const requests = await Promise.all([
                 request(app).get('/'),
                 request(app).get('/docs/readme'),
-                request(app).get('/appconfig/fioriSandboxConfig.json')
+                request(app).get('/ui/')
             ])
             
             // All requests should complete
@@ -215,7 +215,7 @@ describe('Full Application - HTTP Integration Tests', function () {
                 request(app).get('/'),
                 request(app).get('/docs/readme'),
                 request(app).get('/docs/changelog'),
-                request(app).get('/appconfig/fioriSandboxConfig.json'),
+                request(app).get('/ui/'),
                 request(app).put('/').send({ test: 'data1' }),
                 request(app).put('/').send({ test: 'data2' }),
                 request(app).get('/non-existent'),

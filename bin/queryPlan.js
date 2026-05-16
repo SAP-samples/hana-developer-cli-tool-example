@@ -1,5 +1,6 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
+import { promisify } from 'util'
 
 import { buildDocEpilogue } from '../utils/doc-linker.js'
 export const command = 'queryPlan'
@@ -48,16 +49,25 @@ export async function getQueryPlan(prompts) {
     }
 
     const db = await base.createDBConnection()
+    const rawExec = promisify(db.client.exec.bind(db.client))
+
     const statementName = buildStatementName()
-    const explainSql = `EXPLAIN PLAN SET STATEMENT_NAME '${statementName}' FOR ${prompts.sql}`
+    const explainSql = `EXPLAIN PLAN SET STATEMENT_NAME = '${statementName}' FOR ${prompts.sql}`
 
-    await db.execSQL(explainSql)
+    try {
+      await rawExec(explainSql)
+    } catch (explainErr) {
+      // hdb driver doesn't recognize EXPLAIN PLAN's FunctionCode in Result.handle,
+      // but the statement executes successfully on the server side
+      if (!explainErr.message?.includes('FunctionCode')) {
+        throw explainErr
+      }
+    }
 
-    const planQuery = `SELECT * FROM EXPLAIN_PLAN_TABLE WHERE STATEMENT_NAME = '${statementName}' ORDER BY ID`
-    const results = await db.execSQL(planQuery)
+    const planQuery = `SELECT * FROM EXPLAIN_PLAN_TABLE WHERE STATEMENT_NAME = '${statementName}' ORDER BY OPERATOR_ID`
+    const results = await rawExec(planQuery)
 
     base.outputTableFancy(results)
-    base.end()
     return results
   } catch (error) {
     await base.error(error)

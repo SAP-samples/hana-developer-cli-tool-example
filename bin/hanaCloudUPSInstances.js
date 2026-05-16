@@ -65,6 +65,6 @@ export async function listInstances(prompts) {
         base.end()
         return output
     } catch (error) {
-        base.error(error)
+        await base.error(error)
     }
 }

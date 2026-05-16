@@ -1,17 +1,30 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useHanaApi } from '../composables/useHanaApi'
+import { useRouter } from 'vue-router'
 
 import '@ui5/webcomponents/dist/Title.js'
 import '@ui5/webcomponents/dist/BusyIndicator.js'
 import '@ui5/webcomponents/dist/Card.js'
 import '@ui5/webcomponents/dist/CardHeader.js'
 import '@ui5/webcomponents/dist/Label.js'
+import '@ui5/webcomponents/dist/Link.js'
 
 const { fetchDirect } = useHanaApi()
+const router = useRouter()
 const loading = ref(false)
 const error = ref('')
 const btpData = ref<Record<string, any>>({})
+
+const isBtpError = computed(() => {
+  const msg = error.value.toLowerCase()
+  return msg.includes('unknown session') ||
+    msg.includes('authorization failed') ||
+    msg.includes('btp cli target') ||
+    msg.includes('no btp cli') ||
+    msg.includes('not logged in') ||
+    msg.includes('unexpected end of json')
+})
 
 async function loadBtpInfo() {
   loading.value = true
@@ -38,6 +51,7 @@ onMounted(loadBtpInfo)
 
     <div v-else-if="error" class="error">
       <p>{{ error }}</p>
+      <ui5-link v-if="isBtpError" @click="router.push({ name: 'btpLogin' })">Go to BTP Login</ui5-link>
     </div>
 
     <template v-else>

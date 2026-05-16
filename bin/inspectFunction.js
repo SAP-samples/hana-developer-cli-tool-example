@@ -57,7 +57,7 @@ export async function functionInspect(prompts) {
   try {
     base.setPrompts(prompts)
     const db = await base.createDBConnection()
-  
+
 
     let schema = await base.dbClass.schemaCalc(prompts, db)
     base.debug(`${baseLite.bundle.getText("schema")}: ${schema}, ${baseLite.bundle.getText("function")}: ${prompts.functionName}`);
@@ -66,17 +66,23 @@ export async function functionInspect(prompts) {
     let parameters = await dbInspect.getFunctionPrams(db, proc[0].FUNCTION_OID)
     let columns = await dbInspect.getFunctionPramCols(db, proc[0].FUNCTION_OID)
 
+    var results = {}
 
     if (prompts.output === 'tbl') {
       console.log(proc[0])
       console.log("\n")
       base.outputTableFancy(parameters)
       base.outputTableFancy(columns)
+      results.basic = proc[0]
+      results.parameters = parameters
+      results.columns = columns
     } else if (prompts.output === 'sql') {
       let definition = await dbInspect.getDef(db, schema, prompts.functionName);
+      results.sql = definition
       console.log(highlight(definition))
     }
-    return base.end()
+    await base.end()
+    return results
   } catch (error) {
     await base.error(error)
   }

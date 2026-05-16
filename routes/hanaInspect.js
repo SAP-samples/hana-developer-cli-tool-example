@@ -76,6 +76,42 @@ export function route(app) {
 
     /**
      * @swagger
+     * /hana/inspectFunction:
+     *   get:
+     *     tags: [HANA Inspect]
+     *     summary: Inspect database function structure
+     *     description: Returns detailed information about a database function including parameters, columns, and SQL definition
+     *     responses:
+     *       200:
+     *         description: Function inspection results
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 basic:
+     *                   type: object
+     *                 parameters:
+     *                   type: array
+     *                   items:
+     *                     type: object
+     *                 columns:
+     *                   type: array
+     *                   items:
+     *                     type: object
+     *                 sql:
+     *                   type: string
+     */
+    app.get(['/hana/inspectFunction', '/hana/inspectFunction-ui'], async (req, res, next) => {
+        try {
+            await inspectFunctionHandler(res)
+        } catch (error) {
+            next(error)
+        }
+    })
+
+    /**
+     * @swagger
      * /hana/querySimple:
      *   get:
      *     tags: [HANA Inspect]
@@ -250,6 +286,30 @@ export async function inspectViewHandler(res, lib, func) {
 
 
 
+}
+
+export async function inspectFunctionHandler(res) {
+    try {
+        await base.clearConnection()
+        const targetLibrary = await import('../bin/inspectFunction.js')
+        let prompts = base.getPrompts()
+        prompts.output = 'tbl'
+        let promptsSQL = Object.assign({}, prompts)
+        promptsSQL.output = 'sql'
+
+        let [results, sql] = await Promise.all([
+            targetLibrary.functionInspect(prompts),
+            targetLibrary.functionInspect(promptsSQL)
+        ])
+        if (sql.sql) {
+            results.sql = sql.sql
+        }
+
+        base.sendResults(res, results)
+    } catch (error) {
+        console.error(base.colors.red(`${error}`))
+        throw error
+    }
 }
 
 export async function inspectHandler(res, lib, func) {

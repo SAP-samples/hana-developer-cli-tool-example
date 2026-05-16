@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [
     vue({
       template: {
@@ -11,9 +11,14 @@ export default defineConfig({
       }
     })
   ],
+  base: command === 'build' ? '/ui/' : '/',
   server: {
     port: 5173,
     proxy: {
+      '/websockets': {
+        target: 'http://localhost:3010',
+        ws: true
+      },
       '/hana': 'http://localhost:3010',
       '/api': 'http://localhost:3010',
       '/api-docs': 'http://localhost:3010',
@@ -31,4 +36,4 @@ export default defineConfig({
   build: {
     outDir: 'dist'
   }
-})
+}))
