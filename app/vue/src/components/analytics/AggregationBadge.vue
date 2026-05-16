@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import '@ui5/webcomponents/dist/Badge.js'
+import '@ui5/webcomponents/dist/Tag.js'
 import { computed } from 'vue'
 
 // ── Props ─────────────────────────────────────────────────────────────────────
@@ -35,7 +35,7 @@ const label = computed<string>(() => {
 </script>
 
 <template>
-  <ui5-badge :color-scheme="colorScheme">
+  <ui5-tag :color-scheme="colorScheme">
     {{ label }}
-  </ui5-badge>
+  </ui5-tag>
 </template>
