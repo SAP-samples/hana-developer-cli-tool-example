@@ -6,10 +6,12 @@ import DashboardGrid from './DashboardGrid.vue'
 import AddChartModal from './AddChartModal.vue'
 import { useDashboardStore, type DashboardTile } from '../../composables/useDashboardStore'
 import { useDashboardGrid } from '../../composables/useDashboardGrid'
+import { useCrossFilter } from '../../composables/useCrossFilter'
 import type { ChartConfig } from '../../composables/useChartConfig'
 
 const store = useDashboardStore()
 const grid = useDashboardGrid()
+const crossFilter = useCrossFilter()
 const addChartRef = ref<InstanceType<typeof AddChartModal> | null>(null)
 
 watchEffect(() => {
@@ -53,6 +55,12 @@ function onExport() {
 function onImport(json: string) {
   store.importDashboard(json)
 }
+
+function onChartClick(tileId: string, params: any) {
+  if (params.name) {
+    crossFilter.addCrossFilter(tileId, params.seriesName || 'value', params.name)
+  }
+}
 </script>
 
 <template>
@@ -68,10 +76,14 @@ function onImport(json: string) {
       @import-dash="onImport"
       @add-chart="onAddChart"
     />
+    <ui5-button v-if="crossFilter.hasCrossFilters.value" design="Transparent" icon="clear-filter" @click="crossFilter.clearCrossFilters()">
+      Clear cross-filters
+    </ui5-button>
     <DashboardGrid
       v-if="store.activeDashboard.value"
       :tiles="store.activeDashboard.value.tiles"
       @remove-tile="onRemoveTile"
+      @chart-click="onChartClick"
     />
     <div v-else class="no-dashboard">
       <p>Select or create a dashboard to get started.</p>
