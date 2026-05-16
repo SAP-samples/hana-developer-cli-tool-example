@@ -168,6 +168,11 @@ export const router = createRouter({
       path: '/version',
       name: 'version',
       component: () => import('./views/Version.vue')
+    },
+    {
+      path: '/analytics',
+      name: 'analytics',
+      component: () => import('./views/Analytics.vue')
     }
   ]
 })
