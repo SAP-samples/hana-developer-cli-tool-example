@@ -43,7 +43,7 @@ export async function UI(prompts){
   base.debug('UI')
   try {
     base.setPrompts(prompts)
-    await base.webServerSetup('/ui/#Shell-home')
+    await base.webServerSetup('/ui/')
     // Don't call base.end() - let the web server keep running
   } catch (error) {
     await base.error(error)

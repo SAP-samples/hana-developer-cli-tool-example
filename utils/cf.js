@@ -22,23 +22,76 @@ let cfConfigCache = null
 async function executeCFCurl(endpoint) {
     const exec = promisify(child_process.exec)
     const script = `cf curl "${endpoint}"`
-    
+
     try {
         const { stdout, stderr } = await exec(script)
-        
+
         if (stderr) {
             base.debug(bundle.getText("debug.cf.curlError", [endpoint, stderr]))
-            throw new Error(`${bundle.getText("error")} ${stderr.toString()}`)
+            const stderrStr = stderr.toString()
+            if (isAuthError(stderrStr)) {
+                throw new Error(bundle.getText("error.cfNotLoggedIn"))
+            }
+            throw new Error(`${bundle.getText("error")} ${stderrStr}`)
         }
-        
-        return stdout ? JSON.parse(stdout) : null
+
+        if (!stdout || !stdout.trim()) {
+            throw new Error(bundle.getText("error.cfNotLoggedIn"))
+        }
+
+        const trimmed = stdout.trim()
+        if (isAuthError(trimmed)) {
+            throw new Error(bundle.getText("error.cfNotLoggedIn"))
+        }
+
+        try {
+            const parsed = JSON.parse(trimmed)
+            if (parsed && parsed.errors && Array.isArray(parsed.errors)) {
+                const authErr = parsed.errors.find(e =>
+                    e.title === 'CF-NotAuthenticated' || e.code === 10002
+                )
+                if (authErr) {
+                    throw new Error(bundle.getText("error.cfNotLoggedIn"))
+                }
+            }
+            return parsed
+        } catch (parseError) {
+            if (parseError.message === bundle.getText("error.cfNotLoggedIn")) {
+                throw parseError
+            }
+            base.debug(bundle.getText("debug.jsonParseFailed", [trimmed.substring(0, 200)]))
+            throw new Error(bundle.getText("error.cfNotLoggedIn"))
+        }
     } catch (error) {
-        if (!(error instanceof SyntaxError)) {
-            base.debug(error)
+        if (error.message === bundle.getText("error.cfNotLoggedIn")) {
             throw error
         }
-        throw new Error(`${bundle.getText("error")} ${bundle.getText("error.jsonParseError")}`)
+        if (error.stderr && isAuthError(error.stderr.toString())) {
+            throw new Error(bundle.getText("error.cfNotLoggedIn"))
+        }
+        if (error.stdout && isAuthError(error.stdout.toString())) {
+            throw new Error(bundle.getText("error.cfNotLoggedIn"))
+        }
+        base.debug(error)
+        throw error
     }
+}
+
+/**
+ * Check if output text indicates a CF authentication/login issue
+ * @param {string} text
+ * @returns {boolean}
+ * @private
+ */
+function isAuthError(text) {
+    const lower = text.toLowerCase()
+    return lower.includes('not logged in') ||
+        lower.includes('authentication') ||
+        lower.includes('unauthorized') ||
+        lower.includes('invalid_token') ||
+        lower.includes('token expired') ||
+        lower.includes('cf login') ||
+        lower.includes('cf-notauthenticated')
 }
 
 /**
@@ -397,7 +450,139 @@ export async function getCFServiceInstanceParameters(serviceInstanceGUID) {
     if (!serviceInstanceGUID || typeof serviceInstanceGUID !== 'string') {
         throw new Error(bundle.getText("error.cfServiceInstanceGuidRequired"))
     }
-    
+
     base.debug(bundle.getText("debug.callWithParams", ["getCFServiceInstanceParameters", serviceInstanceGUID]))
     return executeCFCurl(`/v3/service_instances/${serviceInstanceGUID}/parameters`)
+}
+
+/**
+ * Get current CF login status without throwing on auth errors
+ * @returns {Promise<object>}
+ */
+export async function getCFStatus() {
+    try {
+        clearCFConfigCache()
+        const config = await getCFConfig()
+        if (!config.AccessToken || config.AccessToken === 'bearer ') {
+            return { loggedIn: false }
+        }
+        return {
+            loggedIn: true,
+            apiEndpoint: config.Target || '',
+            org: config.OrganizationFields?.Name || '',
+            space: config.SpaceFields?.Name || ''
+        }
+    } catch {
+        return { loggedIn: false }
+    }
+}
+
+/**
+ * Get SSO passcode URL from CF config or derive from API endpoint
+ * @param {string} [apiEndpoint] - CF API endpoint (optional, read from config if not provided)
+ * @returns {Promise<string|null>}
+ */
+export async function getSSOPasscodeURL(apiEndpoint) {
+    try {
+        const config = await getCFConfig()
+        if (config.AuthorizationEndpoint) {
+            return config.AuthorizationEndpoint + '/passcode'
+        }
+    } catch { /* fall through */ }
+    if (!apiEndpoint) return null
+    try {
+        const url = new URL(apiEndpoint)
+        return `${url.protocol}//${url.hostname.replace(/^api\./, 'login.')}/passcode`
+    } catch { return null }
+}
+
+/**
+ * Execute cf login with provided credentials
+ * @param {object} options - Login options
+ * @param {string} options.mode - 'sso' or 'password'
+ * @param {string} options.apiEndpoint - CF API endpoint URL
+ * @param {string} [options.passcode] - SSO one-time passcode (required for sso mode)
+ * @param {string} [options.username] - Username (required for password mode)
+ * @param {string} [options.password] - Password (required for password mode)
+ * @param {string} [options.org] - Organization (optional)
+ * @param {string} [options.space] - Space (optional)
+ * @returns {Promise<string>}
+ */
+export async function cfLogin(options) {
+    const execFileAsync = promisify(child_process.execFile)
+    const { mode, apiEndpoint, passcode, username, password, org, space } = options
+
+    let args = ['login']
+    if (mode === 'sso') {
+        args.push('--sso-passcode', passcode, '-a', apiEndpoint)
+    } else {
+        args.push('-a', apiEndpoint, '-u', username, '-p', password)
+        if (org) args.push('-o', org)
+        if (space) args.push('-s', space)
+    }
+
+    try {
+        const { stdout } = await execFileAsync('cf', args, { timeout: 30000 })
+        clearCFConfigCache()
+        return stdout
+    } catch (error) {
+        throw new Error(error.stderr || error.message || 'CF login failed')
+    }
+}
+
+/**
+ * Set CF target org and/or space
+ * @param {string} [org] - Organization name
+ * @param {string} [space] - Space name
+ * @returns {Promise<string>}
+ */
+export async function cfTarget(org, space) {
+    const execFileAsync = promisify(child_process.execFile)
+    let args = ['target']
+    if (org) args.push('-o', org)
+    if (space) args.push('-s', space)
+
+    try {
+        const { stdout } = await execFileAsync('cf', args, { timeout: 15000 })
+        clearCFConfigCache()
+        return stdout
+    } catch (error) {
+        throw new Error(error.stderr || error.message || 'CF target failed')
+    }
+}
+
+/**
+ * Get available CF organizations
+ * @returns {Promise<object>}
+ */
+export async function getCFOrgs() {
+    base.debug(bundle.getText("debug.call", ["getCFOrgs"]))
+    return executeCFCurl('/v3/organizations?per_page=200')
+}
+
+/**
+ * Get available CF spaces, optionally filtered by organization
+ * @param {string} [orgGuid] - Organization GUID filter
+ * @returns {Promise<object>}
+ */
+export async function getCFSpaces(orgGuid) {
+    base.debug(bundle.getText("debug.call", ["getCFSpaces"]))
+    let endpoint = '/v3/spaces?per_page=200'
+    if (orgGuid) endpoint += `&organization_guids=${orgGuid}`
+    return executeCFCurl(endpoint)
+}
+
+/**
+ * Log out from Cloud Foundry
+ * @returns {Promise<string>}
+ */
+export async function cfLogout() {
+    const execFileAsync = promisify(child_process.execFile)
+    try {
+        const { stdout } = await execFileAsync('cf', ['logout'], { timeout: 15000 })
+        clearCFConfigCache()
+        return stdout
+    } catch (error) {
+        throw new Error(error.stderr || error.message || 'CF logout failed')
+    }
 }

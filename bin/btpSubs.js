@@ -62,5 +62,6 @@ export async function getSubsUI(prompts) {
         return getSubscribedApps(subs)
     } catch (error) {
         base.error(error)
+        throw error
     }
 }

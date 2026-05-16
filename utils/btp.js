@@ -646,16 +646,16 @@ export async function startHana(name) {
  */
 export async function stopHana(name) {
     base.debug(bundle.getText("debug.callWithParams", ["stopHana", name]))
-    
+
     if (!name || typeof name !== 'string') {
         throw new Error(bundle.getText("error.btpInstanceNameRequired"))
     }
-    
+
     let fileName = null
     try {
         const data = { "data": { "serviceStopped": true } }
         fileName = writeTempParameterFile(data)
-        
+
         const result = await executeBTPCommand(`update services/instance --name ${name} --parameters ${fileName}`)
         return result
     } catch (error) {
@@ -670,4 +670,99 @@ export async function stopHana(name) {
             }
         }
     }
+}
+
+/**
+ * Get current BTP login status without throwing on auth errors
+ * @returns {Promise<object>}
+ */
+export async function getBTPStatus() {
+    try {
+        const infoOutput = await executeBTPCommand('--info')
+        if (infoOutput && infoOutput.includes('not logged in')) {
+            return { loggedIn: false }
+        }
+        const config = await getBTPConfig()
+        const target = config.TargetHierarchy || []
+        const ga = findInArray(target, item => item.Type === 'globalaccount')
+        const sa = findInArray(target, item => item.Type === 'subaccount')
+        return {
+            loggedIn: true,
+            user: config.UserName || '',
+            serverUrl: config.ServerURL || '',
+            globalAccount: ga?.DisplayName || '',
+            globalAccountId: ga?.ID || '',
+            subAccount: sa?.DisplayName || '',
+            subAccountId: sa?.ID || ''
+        }
+    } catch {
+        return { loggedIn: false }
+    }
+}
+
+/**
+ * Execute btp login with provided credentials
+ * Uses execFile (not exec) to prevent shell injection
+ * @param {object} options - Login options
+ * @param {string} options.mode - 'sso' or 'password'
+ * @param {string} [options.url] - BTP CLI server URL
+ * @param {string} [options.subdomain] - Global account subdomain
+ * @param {string} [options.user] - Username/email (required for password mode)
+ * @param {string} [options.password] - Password (required for password mode)
+ * @param {string} [options.idp] - Custom identity provider origin key
+ * @returns {Promise<string>}
+ */
+export async function btpLogin(options) {
+    const execFileAsync = promisify(child_process.execFile)
+    const { mode, url, subdomain, user, password, idp } = options
+
+    let args = ['login']
+    if (url) args.push('--url', url)
+    if (subdomain) args.push('--subdomain', subdomain)
+    if (idp) args.push('--idp', idp)
+
+    if (mode === 'sso') {
+        args.push('--sso')
+    } else {
+        if (user) args.push('--user', user)
+        if (password) args.push('--password', password)
+    }
+
+    try {
+        const { stdout, stderr } = await execFileAsync('btp', args, { timeout: 90000 })
+        return stdout || stderr || 'Login successful'
+    } catch (error) {
+        const msg = error.stderr || error.stdout || error.message || 'BTP login failed'
+        throw new Error(msg.includes('FAILED') ? msg.split('FAILED')[0].trim() : msg)
+    }
+}
+
+/**
+ * Log out from BTP
+ * Uses execFile (not exec) to prevent shell injection
+ * @returns {Promise<string>}
+ */
+export async function btpLogout() {
+    const execFileAsync = promisify(child_process.execFile)
+    try {
+        const { stdout } = await execFileAsync('btp', ['logout'], { timeout: 15000 })
+        return stdout
+    } catch (error) {
+        throw new Error(error.stderr || error.message || 'BTP logout failed')
+    }
+}
+
+/**
+ * List available subaccounts for targeting dropdown
+ * @returns {Promise<Array<{displayName: string, guid: string, region: string, state: string}>>}
+ */
+export async function getBTPSubAccountsList() {
+    const result = await executeBTPCommand('list accounts/subaccount', { json: true })
+    if (!result || !result.value) return []
+    return result.value.map(sa => ({
+        displayName: sa.displayName,
+        guid: sa.guid,
+        region: sa.region || '',
+        state: sa.state || ''
+    }))
 }
