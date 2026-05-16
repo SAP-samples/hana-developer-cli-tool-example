@@ -2,6 +2,7 @@
 import { ref, reactive, onMounted, watch } from 'vue'
 import { useHanaApi } from '../composables/useHanaApi'
 import { useSuggestions } from '../composables/useSuggestions'
+import { useCurrentSchema } from '../composables/useCurrentSchema'
 import { useDynamicTable } from '../composables/useDynamicTable'
 import SmartTable from './SmartTable.vue'
 
@@ -39,6 +40,7 @@ const emit = defineEmits<{
 }>()
 
 const { execute } = useHanaApi()
+const { resolvedSchema } = useCurrentSchema()
 
 const {
   columns, displayData, loading, searchQuery, sortKey, sortDir,
@@ -122,6 +124,7 @@ onMounted(() => {
             :text="s"
           />
         </ui5-input>
+        <span v-if="filterValues[filter.key] === '**CURRENT_SCHEMA**' && resolvedSchema" class="resolved-schema">{{ resolvedSchema }}</span>
       </div>
       <div v-if="showLimit" class="filter-field">
         <ui5-label for="limit">Limit:</ui5-label>
@@ -206,6 +209,12 @@ onMounted(() => {
 
 .execute-btn {
   align-self: flex-end;
+}
+
+.resolved-schema {
+  font-size: 0.75rem;
+  color: var(--sapContent_LabelColor);
+  font-style: italic;
 }
 
 .error {

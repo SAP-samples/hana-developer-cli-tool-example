@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useHanaApi } from '../composables/useHanaApi'
 import { useSuggestions } from '../composables/useSuggestions'
+import { useCurrentSchema } from '../composables/useCurrentSchema'
 import { toast } from '../composables/useToast'
 
 import '@ui5/webcomponents/dist/Title.js'
@@ -25,6 +26,7 @@ const error = ref('')
 
 const schemaSuggestions = useSuggestions('schemas-ui', 'SCHEMA_NAME')
 const tableSuggestions = useSuggestions('tables-ui', 'TABLE_NAME')
+const { resolvedSchema } = useCurrentSchema()
 const confirmDialogOpen = ref(false)
 
 let ws: WebSocket | null = null
@@ -108,6 +110,7 @@ async function startImport() {
         >
           <ui5-suggestion-item v-for="s in schemaSuggestions.items.value" :key="s" :text="s" />
         </ui5-input>
+        <span v-if="schema === '**CURRENT_SCHEMA**' && resolvedSchema" class="resolved-schema">{{ resolvedSchema }}</span>
       </div>
       <div class="form-field" data-help-id="table">
         <ui5-label required>Table</ui5-label>
@@ -195,6 +198,12 @@ async function startImport() {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+}
+
+.resolved-schema {
+  font-size: 0.75rem;
+  color: var(--sapContent_LabelColor);
+  font-style: italic;
 }
 
 .wide-input {

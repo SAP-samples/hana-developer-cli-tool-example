@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useSuggestions } from '../composables/useSuggestions'
+import { useCurrentSchema } from '../composables/useCurrentSchema'
 import { toast } from '../composables/useToast'
 
 import '@ui5/webcomponents/dist/Title.js'
@@ -19,6 +20,7 @@ const messages = ref<string[]>([])
 const error = ref('')
 
 const schemaSuggestions = useSuggestions('schemas-ui', 'SCHEMA_NAME')
+const { resolvedSchema } = useCurrentSchema()
 const confirmDialogOpen = ref(false)
 
 let ws: WebSocket | null = null
@@ -101,6 +103,7 @@ async function startMassConvert() {
         >
           <ui5-suggestion-item v-for="s in schemaSuggestions.items.value" :key="s" :text="s" />
         </ui5-input>
+        <span v-if="schema === '**CURRENT_SCHEMA**' && resolvedSchema" class="resolved-schema">{{ resolvedSchema }}</span>
       </div>
     </div>
 
@@ -165,6 +168,12 @@ async function startMassConvert() {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+}
+
+.resolved-schema {
+  font-size: 0.75rem;
+  color: var(--sapContent_LabelColor);
+  font-style: italic;
 }
 
 .loading {

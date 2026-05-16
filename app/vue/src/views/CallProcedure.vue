@@ -3,6 +3,7 @@ import { ref, shallowRef, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useHanaApi } from '../composables/useHanaApi'
 import { useSuggestions } from '../composables/useSuggestions'
+import { useCurrentSchema } from '../composables/useCurrentSchema'
 import { useDynamicTable } from '../composables/useDynamicTable'
 import SmartTable from '../components/SmartTable.vue'
 
@@ -11,7 +12,6 @@ import '@ui5/webcomponents/dist/Input.js'
 import '@ui5/webcomponents/dist/SuggestionItem.js'
 import '@ui5/webcomponents/dist/Button.js'
 import '@ui5/webcomponents/dist/BusyIndicator.js'
-import '@ui5/webcomponents/dist/Bar.js'
 import '@ui5/webcomponents/dist/TabContainer.js'
 import '@ui5/webcomponents/dist/Tab.js'
 import '@ui5/webcomponents/dist/Label.js'
@@ -37,6 +37,7 @@ const error = ref('')
 
 const schemaSuggestions = useSuggestions('schemas-ui', 'SCHEMA_NAME')
 const procSuggestions = useSuggestions('procedures-ui', 'PROCEDURE_NAME')
+const { resolvedSchema } = useCurrentSchema()
 
 const parameters = ref<ProcParam[]>([])
 const paramValues = ref<Record<string, string>>({})
@@ -144,46 +145,53 @@ watch(() => route.query, (q) => {
   <div class="call-proc-view">
     <ui5-title level="H3">Call Procedure</ui5-title>
 
-    <ui5-bar design="Subheader" class="filter-bar">
-      <ui5-input
-        slot="startContent"
-        placeholder="Schema"
-        :value="schema"
-        show-suggestions
-        filter="Contains"
-        @change="(e: any) => schema = e.target.value"
-        @focus="schemaSuggestions.ensureLoaded({ limit: 1000, schema: '*' })"
-        class="filter-input"
-      >
-        <ui5-suggestion-item v-for="s in schemaSuggestions.items.value" :key="s" :text="s" />
-      </ui5-input>
-      <ui5-input
-        slot="startContent"
-        placeholder="Procedure name"
-        :value="procedure"
-        show-suggestions
-        filter="Contains"
-        @change="(e: any) => procedure = e.target.value"
-        @focus="procSuggestions.ensureLoaded({ schema: schema, procedure: '*', limit: 1000 })"
-        class="filter-input-wide"
-      >
-        <ui5-suggestion-item v-for="s in procSuggestions.items.value" :key="s" :text="s" />
-      </ui5-input>
+    <div class="filter-bar">
+      <div class="filter-field">
+        <ui5-label for="schema">Schema:</ui5-label>
+        <ui5-input
+          id="schema"
+          placeholder="Schema"
+          :value="schema"
+          show-suggestions
+          filter="Contains"
+          @change="(e: any) => schema = e.target.value"
+          @focus="schemaSuggestions.ensureLoaded({ limit: 1000, schema: '*' })"
+          class="filter-input"
+        >
+          <ui5-suggestion-item v-for="s in schemaSuggestions.items.value" :key="s" :text="s" />
+        </ui5-input>
+        <span v-if="schema === '**CURRENT_SCHEMA**' && resolvedSchema" class="resolved-schema">{{ resolvedSchema }}</span>
+      </div>
+      <div class="filter-field">
+        <ui5-label for="procedure">Procedure:</ui5-label>
+        <ui5-input
+          id="procedure"
+          placeholder="Procedure name"
+          :value="procedure"
+          show-suggestions
+          filter="Contains"
+          @change="(e: any) => procedure = e.target.value"
+          @focus="procSuggestions.ensureLoaded({ schema: schema, procedure: '*', limit: 1000 })"
+          class="filter-input-wide"
+        >
+          <ui5-suggestion-item v-for="s in procSuggestions.items.value" :key="s" :text="s" />
+        </ui5-input>
+      </div>
       <ui5-button
-        slot="endContent"
         design="Default"
         icon="detail-view"
         :disabled="!procedure"
         @click="loadParameters"
+        class="execute-btn"
       >Load Parameters</ui5-button>
       <ui5-button
-        slot="endContent"
         design="Emphasized"
         icon="play"
         :disabled="!procedure"
         @click="callProcedure"
+        class="execute-btn"
       >Execute</ui5-button>
-    </ui5-bar>
+    </div>
 
     <ui5-busy-indicator v-if="loadingParams" active size="Medium" class="loading" />
 
@@ -264,15 +272,35 @@ watch(() => route.query, (q) => {
 }
 
 .filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
   padding: 0.5rem 0;
 }
 
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
 .filter-input {
-  width: 180px;
+  width: 200px;
 }
 
 .filter-input-wide {
   width: 280px;
+}
+
+.execute-btn {
+  align-self: flex-end;
+}
+
+.resolved-schema {
+  font-size: 0.75rem;
+  color: var(--sapContent_LabelColor);
+  font-style: italic;
 }
 
 .params-section {
