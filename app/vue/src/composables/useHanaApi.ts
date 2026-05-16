@@ -1,10 +1,15 @@
+import { useGlobalSettings } from './useGlobalSettings'
+
 export function useHanaApi() {
+  const { getApiParams } = useGlobalSettings()
+
   async function execute<T = any>(command: string, params: Record<string, any> = {}): Promise<T> {
-    if (Object.keys(params).length > 0) {
+    const merged = { ...getApiParams(), ...params }
+    if (Object.keys(merged).length > 0) {
       await fetch('/', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(params)
+        body: JSON.stringify(merged)
       })
     }
     const res = await fetch(`/hana/${command}`)

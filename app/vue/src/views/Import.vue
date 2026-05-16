@@ -103,7 +103,7 @@ async function startImport() {
           show-suggestions
           filter="Contains"
           @change="(e: any) => schema = e.target.value"
-          @focus="schemaSuggestions.ensureLoaded({ limit: 1000 })"
+          @focus="schemaSuggestions.ensureLoaded({ limit: 1000, schema: '*' })"
           placeholder="Schema"
         >
           <ui5-suggestion-item v-for="s in schemaSuggestions.items.value" :key="s" :text="s" />
@@ -116,7 +116,7 @@ async function startImport() {
           show-suggestions
           filter="Contains"
           @change="(e: any) => table = e.target.value"
-          @focus="tableSuggestions.ensureLoaded({ schema: schema, limit: 1000 })"
+          @focus="tableSuggestions.ensureLoaded({ schema: schema, table: '*', limit: 1000 })"
           placeholder="Target table name"
         >
           <ui5-suggestion-item v-for="s in tableSuggestions.items.value" :key="s" :text="s" />

@@ -15,6 +15,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/hana': 'http://localhost:3010',
+      '/api': 'http://localhost:3010',
       '/api-docs': 'http://localhost:3010',
       '/i18n': 'http://localhost:3010',
       '/': {

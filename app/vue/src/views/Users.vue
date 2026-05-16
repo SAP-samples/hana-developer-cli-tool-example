@@ -2,8 +2,7 @@
 import DynamicTableView from '../components/DynamicTableView.vue'
 
 const filters = [
-  { key: 'schema', label: 'Schema', default: '**CURRENT_SCHEMA**', suggestEndpoint: 'schemas-ui', suggestField: 'SCHEMA_NAME' },
-  { key: 'user', label: 'User filter', default: '*' }
+  { key: 'user', label: 'User', default: '*', wide: true, suggestEndpoint: 'users-ui', suggestField: 'USER_NAME' }
 ]
 </script>
 

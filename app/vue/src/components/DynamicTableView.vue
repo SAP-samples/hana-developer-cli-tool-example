@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, reactive, onMounted, watch } from 'vue'
 import { useHanaApi } from '../composables/useHanaApi'
 import { useSuggestions } from '../composables/useSuggestions'
 import { useDynamicTable } from '../composables/useDynamicTable'
@@ -11,7 +11,7 @@ import '@ui5/webcomponents/dist/SuggestionItem.js'
 import '@ui5/webcomponents/dist/Button.js'
 import '@ui5/webcomponents/dist/Select.js'
 import '@ui5/webcomponents/dist/Option.js'
-import '@ui5/webcomponents/dist/Bar.js'
+import '@ui5/webcomponents/dist/Label.js'
 
 export interface FilterField {
   key: string
@@ -49,19 +49,17 @@ const filterValues = ref<Record<string, string>>({})
 const limit = ref(200)
 const error = ref('')
 
-const suggestions = ref<Record<string, ReturnType<typeof useSuggestions>>>({})
+const suggestions = reactive<Record<string, ReturnType<typeof useSuggestions>>>({})
 
 function initFilters() {
   const vals: Record<string, string> = {}
-  const suggs: Record<string, ReturnType<typeof useSuggestions>> = {}
   props.filters.forEach(f => {
     vals[f.key] = f.default
     if (f.suggestEndpoint && f.suggestField) {
-      suggs[f.key] = useSuggestions(f.suggestEndpoint, f.suggestField)
+      suggestions[f.key] = useSuggestions(f.suggestEndpoint, f.suggestField)
     }
   })
   filterValues.value = vals
-  suggestions.value = suggs
 }
 
 async function loadData() {
@@ -105,43 +103,46 @@ onMounted(() => {
   <div class="dynamic-table-view">
     <ui5-title level="H3">{{ title }}</ui5-title>
 
-    <ui5-bar design="Subheader" class="filter-bar">
-      <ui5-input
-        v-for="filter in filters"
-        :key="filter.key"
-        slot="startContent"
-        :placeholder="filter.label"
-        :value="filterValues[filter.key]"
-        :show-suggestions="!!filter.suggestEndpoint"
-        filter="Contains"
-        @change="(e: any) => filterValues[filter.key] = e.target.value"
-        @focus="suggestions[filter.key]?.ensureLoaded({ schema: filterValues['schema'] || '**CURRENT_SCHEMA**', limit: 1000 })"
-        :class="filter.wide ? 'filter-input-wide' : 'filter-input'"
-      >
-        <ui5-suggestion-item
-          v-for="s in (suggestions[filter.key]?.items.value || [])"
-          :key="s"
-          :text="s"
-        />
-      </ui5-input>
-      <ui5-select
-        v-if="showLimit"
-        slot="startContent"
-        @change="(e: any) => limit = Number(e.detail.selectedOption.value)"
-      >
-        <ui5-option value="50">50</ui5-option>
-        <ui5-option value="100">100</ui5-option>
-        <ui5-option value="200" selected>200</ui5-option>
-        <ui5-option value="500">500</ui5-option>
-        <ui5-option value="1000">1000</ui5-option>
-      </ui5-select>
+    <div class="filter-bar">
+      <div v-for="filter in filters" :key="filter.key" class="filter-field" :class="{ wide: filter.wide }">
+        <ui5-label :for="filter.key">{{ filter.label }}:</ui5-label>
+        <ui5-input
+          :id="filter.key"
+          :placeholder="filter.label"
+          :value="filterValues[filter.key]"
+          :show-suggestions="!!filter.suggestEndpoint"
+          filter="Contains"
+          :data-help-id="filter.key"
+          @change="(e: any) => filterValues[filter.key] = e.target.value"
+          @focus="suggestions[filter.key]?.ensureLoaded({ ...filterValues, [filter.key]: '*', limit: 1000 })"
+        >
+          <ui5-suggestion-item
+            v-for="s in (suggestions[filter.key]?.items || [])"
+            :key="s"
+            :text="s"
+          />
+        </ui5-input>
+      </div>
+      <div v-if="showLimit" class="filter-field">
+        <ui5-label for="limit">Limit:</ui5-label>
+        <ui5-select
+          id="limit"
+          @change="(e: any) => limit = Number(e.detail.selectedOption.value)"
+        >
+          <ui5-option value="50">50</ui5-option>
+          <ui5-option value="100">100</ui5-option>
+          <ui5-option value="200" selected>200</ui5-option>
+          <ui5-option value="500">500</ui5-option>
+          <ui5-option value="1000">1000</ui5-option>
+        </ui5-select>
+      </div>
       <ui5-button
-        slot="endContent"
         design="Emphasized"
         icon="refresh"
         @click="loadData"
+        class="execute-btn"
       >Execute</ui5-button>
-    </ui5-bar>
+    </div>
 
     <div v-if="error" class="error">
       <p>{{ error }}</p>
@@ -157,6 +158,7 @@ onMounted(() => {
       :sort-dir="sortDir"
       :row-count="rowCount"
       :total-count="totalCount"
+      :context-id="endpoint"
       @sort="toggleSort"
       @search="(q: string) => searchQuery = q"
       @export="onExport"
@@ -170,18 +172,40 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  min-width: 0;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
   padding: 0.5rem 0;
 }
 
-.filter-input {
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.filter-field ui5-input {
   width: 200px;
 }
 
-.filter-input-wide {
+.filter-field.wide ui5-input {
   width: 280px;
+}
+
+.filter-field ui5-select {
+  width: 100px;
+}
+
+.execute-btn {
+  align-self: flex-end;
 }
 
 .error {

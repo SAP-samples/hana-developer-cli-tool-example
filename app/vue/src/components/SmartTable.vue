@@ -55,10 +55,13 @@ const columnLayout = computed(() => {
 })
 
 const orderedColumns = computed(() => {
+  if (props.columns.length === 0) return []
   const layout = columnLayout.value
   const ordered = layout.getOrderedKeys()
   const colMap = new Map(props.columns.map(c => [c.key, c]))
-  return ordered.filter(k => colMap.has(k)).map(k => colMap.get(k)!)
+  const result = ordered.filter(k => colMap.has(k)).map(k => colMap.get(k)!)
+  if (result.length === 0) return props.columns
+  return result
 })
 
 const gridRowCount = computed(() => props.data.length)
@@ -125,9 +128,11 @@ function onResizePointerDown(e: PointerEvent, colKey: string, headerEl: HTMLElem
   document.body.style.userSelect = 'none'
 }
 
-function getColWidth(col: SmartColumn): string {
+function getColStyle(col: SmartColumn): Record<string, string> {
   const w = columnLayout.value.getColumnWidth(col.key)
-  return w ? `${w}px` : (col.width || 'auto')
+  if (w) return { width: `${w}px`, minWidth: '80px', flexShrink: '0' }
+  if (col.width) return { width: col.width, minWidth: '80px', flexShrink: '0' }
+  return { flex: '1 1 0', minWidth: '80px', overflow: 'hidden' }
 }
 
 function getSortIndicator(col: SmartColumn): string {
@@ -238,7 +243,7 @@ const countLabel = computed(() => {
           :key="col.key"
           class="grid-header-cell"
           :class="{ sortable: col.sortable }"
-          :style="{ width: getColWidth(col), minWidth: '80px' }"
+          :style="getColStyle(col)"
           draggable="true"
           @dragstart="onHeaderDragStart($event, col.key)"
           @dragover="onHeaderDragOver"
@@ -268,9 +273,9 @@ const countLabel = computed(() => {
               'cell-copied': copiedKey === `${rowIdx}-${col.key}`,
               'grid-cell-focused': gridNav.isFocused(rowIdx, colIdx)
             }"
-            :style="{ width: getColWidth(col), minWidth: '80px' }"
+            :style="getColStyle(col)"
             :title="String(row[col.key] ?? '')"
-            @click.stop="() => { onCellClick(rowIdx, colIdx); copy(row[col.key], `${rowIdx}-${col.key}`) }"
+            @click="onCellClick(rowIdx, colIdx)"
             @contextmenu="onCellContext($event, row, col, rowIdx)"
           >{{ row[col.key] ?? '' }}</span>
         </div>
@@ -294,6 +299,9 @@ const countLabel = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 0;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .search-input {
@@ -310,7 +318,8 @@ const countLabel = computed(() => {
   border-radius: 4px;
   overflow: auto;
   outline: none;
-  max-height: 600px;
+  flex: 1;
+  min-height: 0;
 }
 
 .grid-header {
@@ -332,7 +341,6 @@ const countLabel = computed(() => {
   color: var(--sapList_HeaderTextColor, #32363a);
   white-space: nowrap;
   user-select: none;
-  flex-shrink: 0;
 }
 
 .grid-header-cell.sortable {
@@ -390,10 +398,8 @@ const countLabel = computed(() => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  cursor: copy;
   border-radius: 2px;
   transition: background-color 0.2s;
-  flex-shrink: 0;
 }
 
 .cell-copied {

@@ -30,6 +30,16 @@ const data = ref<SystemData | null>(null)
 const loading = ref(true)
 const error = ref('')
 
+function formatDateTime(raw: string): string {
+  if (!raw) return ''
+  const d = new Date(raw)
+  if (isNaN(d.getTime())) return raw
+  return d.toLocaleString(undefined, {
+    year: 'numeric', month: 'short', day: 'numeric',
+    hour: '2-digit', minute: '2-digit', second: '2-digit'
+  })
+}
+
 onMounted(async () => {
   try {
     data.value = await fetchDirect<SystemData>('/hana')
@@ -73,7 +83,7 @@ onMounted(async () => {
           <ui5-label>Host:</ui5-label>
           <ui5-input :value="data.version.HOST" readonly />
           <ui5-label>Start Time:</ui5-label>
-          <ui5-input :value="data.version.START_TIME" readonly />
+          <ui5-input :value="formatDateTime(data.version.START_TIME)" readonly />
           <ui5-label>Version:</ui5-label>
           <ui5-input :value="data.version.VERSION" readonly />
         </div>
@@ -119,7 +129,11 @@ onMounted(async () => {
   grid-template-columns: 120px 1fr;
   gap: 0.5rem 1rem;
   align-items: center;
-  max-width: 500px;
+}
+
+.form-grid ui5-input {
+  width: 100%;
+  min-width: 0;
 }
 
 .loading {

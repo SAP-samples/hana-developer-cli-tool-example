@@ -152,7 +152,7 @@ watch(() => route.query, (q) => {
         show-suggestions
         filter="Contains"
         @change="(e: any) => schema = e.target.value"
-        @focus="schemaSuggestions.ensureLoaded({ limit: 1000 })"
+        @focus="schemaSuggestions.ensureLoaded({ limit: 1000, schema: '*' })"
         class="filter-input"
       >
         <ui5-suggestion-item v-for="s in schemaSuggestions.items.value" :key="s" :text="s" />
@@ -164,7 +164,7 @@ watch(() => route.query, (q) => {
         show-suggestions
         filter="Contains"
         @change="(e: any) => procedure = e.target.value"
-        @focus="procSuggestions.ensureLoaded({ schema: schema, limit: 1000 })"
+        @focus="procSuggestions.ensureLoaded({ schema: schema, procedure: '*', limit: 1000 })"
         class="filter-input-wide"
       >
         <ui5-suggestion-item v-for="s in procSuggestions.items.value" :key="s" :text="s" />

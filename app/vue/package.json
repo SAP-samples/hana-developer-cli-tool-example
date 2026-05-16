@@ -15,6 +15,7 @@
     "@ui5/webcomponents-fiori": "^2.7.0",
     "@ui5/webcomponents-icons": "^2.7.0",
     "highlight.js": "^11.11.0",
+    "marked": "^18.0.3",
     "splitpanes": "^4.0.4",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",

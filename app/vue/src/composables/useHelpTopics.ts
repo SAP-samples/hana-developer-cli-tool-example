@@ -6,8 +6,10 @@ export interface HelpTopic {
   helpText: string
 }
 
-const cache = new Map<string, HelpTopic[]>()
+const topicCache = new Map<string, HelpTopic[]>()
+const docsCache = new Map<string, string>()
 const loading = ref(false)
+const docsLoading = ref(false)
 
 function parseProperties(text: string): Map<string, string> {
   const map = new Map<string, string>()
@@ -41,36 +43,57 @@ function buildTopics(props: Map<string, string>): HelpTopic[] {
 
 export function useHelpTopics() {
   const topics = ref<HelpTopic[]>([])
+  const documentation = ref('')
 
   async function loadTopics(commandName: string) {
     if (!commandName) {
       topics.value = []
+      documentation.value = ''
       return
     }
 
-    if (cache.has(commandName)) {
-      topics.value = cache.get(commandName)!
-      return
-    }
-
-    loading.value = true
-    try {
-      const res = await fetch(`/i18n/${commandName}.properties`)
-      if (!res.ok) {
+    if (topicCache.has(commandName)) {
+      topics.value = topicCache.get(commandName)!
+    } else {
+      loading.value = true
+      try {
+        const res = await fetch(`/i18n/${commandName}.properties`)
+        if (res.ok) {
+          const text = await res.text()
+          const props = parseProperties(text)
+          const built = buildTopics(props)
+          topicCache.set(commandName, built)
+          topics.value = built
+        } else {
+          topics.value = []
+        }
+      } catch {
         topics.value = []
-        return
+      } finally {
+        loading.value = false
       }
-      const text = await res.text()
-      const props = parseProperties(text)
-      const built = buildTopics(props)
-      cache.set(commandName, built)
-      topics.value = built
-    } catch {
-      topics.value = []
-    } finally {
-      loading.value = false
+    }
+
+    if (docsCache.has(commandName)) {
+      documentation.value = docsCache.get(commandName)!
+    } else {
+      docsLoading.value = true
+      try {
+        const res = await fetch(`/api/docs/${commandName}`)
+        if (res.ok) {
+          const md = await res.text()
+          docsCache.set(commandName, md)
+          documentation.value = md
+        } else {
+          documentation.value = ''
+        }
+      } catch {
+        documentation.value = ''
+      } finally {
+        docsLoading.value = false
+      }
     }
   }
 
-  return { topics, loading, loadTopics }
+  return { topics, documentation, loading, docsLoading, loadTopics }
 }

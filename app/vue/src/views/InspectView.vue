@@ -99,7 +99,7 @@ watch(() => route.query, (q) => {
         show-suggestions
         filter="Contains"
         @change="(e: any) => schema = e.target.value"
-        @focus="schemaSuggestions.ensureLoaded({ limit: 1000 })"
+        @focus="schemaSuggestions.ensureLoaded({ limit: 1000, schema: '*' })"
         class="filter-input"
       >
         <ui5-suggestion-item v-for="s in schemaSuggestions.items.value" :key="s" :text="s" />
@@ -111,7 +111,7 @@ watch(() => route.query, (q) => {
         show-suggestions
         filter="Contains"
         @change="(e: any) => viewName = e.target.value"
-        @focus="viewSuggestions.ensureLoaded({ schema: schema, limit: 1000 })"
+        @focus="viewSuggestions.ensureLoaded({ schema: schema, view: '*', limit: 1000 })"
         class="filter-input-wide"
       >
         <ui5-suggestion-item v-for="s in viewSuggestions.items.value" :key="s" :text="s" />

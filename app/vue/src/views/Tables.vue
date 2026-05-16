@@ -33,6 +33,7 @@ const tableFilter = ref('*')
 const limit = ref(200)
 
 const schemaSuggestions = useSuggestions('schemas-ui', 'SCHEMA_NAME')
+const tableSuggestions = useSuggestions('tables-ui', 'TABLE_NAME')
 
 async function loadTables() {
   loading.value = true
@@ -77,7 +78,7 @@ onMounted(loadTables)
         show-suggestions
         filter="Contains"
         @change="(e: any) => schema = e.target.value"
-        @focus="schemaSuggestions.ensureLoaded({ limit: 1000 })"
+        @focus="schemaSuggestions.ensureLoaded({ limit: 1000, schema: '*' })"
         class="filter-input"
       >
         <ui5-suggestion-item v-for="s in schemaSuggestions.items.value" :key="s" :text="s" />
@@ -86,9 +87,14 @@ onMounted(loadTables)
         slot="startContent"
         placeholder="Table filter (e.g. MY_*)"
         :value="tableFilter"
+        show-suggestions
+        filter="Contains"
         @change="(e: any) => tableFilter = e.target.value"
+        @focus="tableSuggestions.ensureLoaded({ schema: schema, table: '*', limit: 1000 })"
         class="filter-input"
-      />
+      >
+        <ui5-suggestion-item v-for="s in tableSuggestions.items.value" :key="s" :text="s" />
+      </ui5-input>
       <ui5-select
         slot="startContent"
         @change="(e: any) => limit = Number(e.detail.selectedOption.value)"

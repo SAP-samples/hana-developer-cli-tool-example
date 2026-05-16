@@ -30,8 +30,12 @@ export function useColumnLayout(contextId: string, defaultColumns: string[]) {
 
   const layout = layouts.get(contextId)!
 
-  if (layout.order.length === 0) {
+  if (layout.order.length === 0 || !defaultColumns.some(k => layout.order.includes(k))) {
     layout.order = [...defaultColumns]
+    layout.widths = {}
+  } else {
+    const missing = defaultColumns.filter(k => !layout.order.includes(k))
+    if (missing.length > 0) layout.order.push(...missing)
   }
 
   const resizing = ref(false)

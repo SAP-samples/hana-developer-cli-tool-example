@@ -5,10 +5,12 @@ import { navigation } from './model/navigation'
 import { toast } from './composables/useToast'
 import { useKeyboardShortcuts } from './composables/useKeyboardShortcuts'
 import { setTheme } from '@ui5/webcomponents-base/dist/config/Theme.js'
+import { checkVersion } from './composables/useVersionCheck'
 import CommandPalette from './components/CommandPalette.vue'
 import NotificationCenter from './components/NotificationCenter.vue'
 import WhatsNew from './components/WhatsNew.vue'
 import HelpPanel from './components/HelpPanel.vue'
+import SettingsDialog from './components/SettingsDialog.vue'
 
 import '@ui5/webcomponents/dist/Button.js'
 import '@ui5/webcomponents/dist/Popover.js'
@@ -30,6 +32,7 @@ const themePopoverRef = ref<HTMLElement | null>(null)
 const toastRef = ref<HTMLElement | null>(null)
 const commandPaletteOpen = ref(false)
 const helpOpen = ref(false)
+const settingsOpen = ref(false)
 
 useKeyboardShortcuts([
   { key: 'k', ctrl: true, handler: () => { commandPaletteOpen.value = true }, description: 'Command Palette', category: 'global' },
@@ -54,6 +57,7 @@ function onOsThemeChange() {
 onMounted(() => {
   darkMatcher.addEventListener('change', onOsThemeChange)
   if (toastRef.value) toast.registerElement(toastRef.value)
+  checkVersion()
 })
 onUnmounted(() => darkMatcher.removeEventListener('change', onOsThemeChange))
 
@@ -126,8 +130,8 @@ function isItemSelected(itemKey: string): boolean {
     <ui5-button
       slot="startButton"
       icon="action-settings"
-      tooltip="System Info"
-      @click="router.push({ name: 'systemInfo' })"
+      tooltip="Settings"
+      @click="settingsOpen = true"
     />
   </ui5-shellbar>
 
@@ -194,6 +198,7 @@ function isItemSelected(itemKey: string): boolean {
   </div>
 
   <CommandPalette :open="commandPaletteOpen" @close="commandPaletteOpen = false" />
+  <SettingsDialog :open="settingsOpen" @close="settingsOpen = false" />
   <ui5-toast ref="toastRef" />
 </template>
 
@@ -210,8 +215,17 @@ ui5-side-navigation {
 
 .content-area {
   flex: 1;
-  overflow: auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   padding: 1rem 1.5rem;
   background: var(--sapBackgroundColor);
+}
+
+.content-area > * {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
 }
 </style>
