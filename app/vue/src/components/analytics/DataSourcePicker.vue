@@ -38,7 +38,7 @@ watch([schema, objectType], () => {
 })
 
 function onObjectSelect(e: any) {
-  const selected = e.detail?.item?.textContent || objectName.value
+  const selected = e.detail?.item?.text || e.detail?.item?.textContent || objectName.value
   objectName.value = selected
   if (selected) {
     emit('select', schema.value, selected, objectType.value)
@@ -55,7 +55,7 @@ function onObjectSelect(e: any) {
         :value="schema"
         show-suggestions
         @input="(e: any) => schema = e.target.value"
-        @suggestion-item-select="(e: any) => schema = e.detail?.item?.textContent || schema"
+        @selection-change="(e: any) => schema = e.detail?.item?.text || e.detail?.item?.textContent || schema"
       >
         <ui5-suggestion-item
           v-for="s in schemaSuggestions.items.value"
@@ -74,7 +74,7 @@ function onObjectSelect(e: any) {
       :value="objectName"
       show-suggestions
       @input="(e: any) => objectName = e.target.value"
-      @suggestion-item-select="onObjectSelect"
+      @selection-change="onObjectSelect"
     >
       <ui5-suggestion-item
         v-for="s in (objectType === 'table' ? tableSuggestions.items.value : viewSuggestions.items.value)"
