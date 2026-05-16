@@ -94,6 +94,7 @@ export function useChartConfig() {
   const measures = ref<MeasureConfig[]>([])
   const filters = ref<FilterConfig[]>([])
   const chartType = ref<string>('bar')
+  const chartTypeUserOverride = ref(false)
   const orderBy = ref<{ column: string; direction: 'ASC' | 'DESC' } | undefined>(undefined)
   const limit = ref<number>(100)
 
@@ -115,11 +116,13 @@ export function useChartConfig() {
     limit: limit.value,
   }))
 
-  // Auto-update chartType whenever dims/measures change
+  // Auto-update chartType whenever dims/measures change (unless user overrode)
   watch(
     [dimensions, measures],
     () => {
-      chartType.value = suggestedChartType.value
+      if (!chartTypeUserOverride.value) {
+        chartType.value = suggestedChartType.value
+      }
     },
     { deep: true },
   )
@@ -154,13 +157,27 @@ export function useChartConfig() {
     filters.value = filters.value.filter(f => f.column !== column)
   }
 
+  function removeFilterAtIndex(index: number): void {
+    filters.value = filters.value.filter((_, i) => i !== index)
+  }
+
+  function clearFilters(): void {
+    filters.value = []
+  }
+
   function clearAll(): void {
     dimensions.value = []
     measures.value = []
     filters.value = []
     chartType.value = 'bar'
+    chartTypeUserOverride.value = false
     orderBy.value = undefined
     limit.value = 100
+  }
+
+  function setChartType(type: string): void {
+    chartType.value = type
+    chartTypeUserOverride.value = true
   }
 
   function setDataSource(params: {
@@ -195,6 +212,9 @@ export function useChartConfig() {
     removeMeasure,
     addFilter,
     removeFilter,
+    removeFilterAtIndex,
+    clearFilters,
+    setChartType,
     clearAll,
     setDataSource,
   }

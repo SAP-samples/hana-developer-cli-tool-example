@@ -45,8 +45,7 @@ function onUpdateAggregation(col: string, agg: string) {
 }
 function onAddFilter(filter: FilterConfig) { chartConfig.addFilter(filter) }
 function onRemoveFilter(index: number) {
-  const filter = chartConfig.filters.value[index]
-  if (filter) chartConfig.removeFilter(filter.column)
+  chartConfig.removeFilterAtIndex(index)
 }
 </script>
 
@@ -57,7 +56,7 @@ function onRemoveFilter(index: number) {
       :columns="dataSource.columns.value"
       @add-filter="onAddFilter"
       @remove-filter="onRemoveFilter"
-      @clear-all="() => chartConfig.filters.value = []"
+      @clear-all="chartConfig.clearFilters"
     />
     <div class="explore-content">
       <div class="config-panel">
@@ -75,7 +74,7 @@ function onRemoveFilter(index: number) {
       </div>
       <div class="chart-panel">
         <div class="chart-toolbar">
-          <ChartTypeSwitcher v-model="chartConfig.chartType.value" :suggested="chartConfig.suggestedChartType.value" />
+          <ChartTypeSwitcher :model-value="chartConfig.chartType.value" :suggested="chartConfig.suggestedChartType.value" @update:model-value="chartConfig.setChartType" />
           <AggregationBadge
             :aggregated="dataSource.useServerAggregation.value"
             :total-rows="dataSource.rowCount.value"

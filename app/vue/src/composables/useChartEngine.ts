@@ -285,10 +285,14 @@ function buildOptions(
 export function useChartEngine(containerRef: Ref<HTMLElement | null>) {
   const chart = ref<EChartsInstance | null>(null)
   const loading = ref(false)
+  const pendingClickHandlers: ((params: unknown) => void)[] = []
 
   function initChart(): void {
     if (!containerRef.value || chart.value) return
     chart.value = echarts.init(containerRef.value)
+    for (const handler of pendingClickHandlers) {
+      chart.value.on('click', handler)
+    }
   }
 
   function render(
@@ -309,7 +313,11 @@ export function useChartEngine(containerRef: Ref<HTMLElement | null>) {
   }
 
   function onChartClick(handler: (params: unknown) => void): void {
-    chart.value?.on('click', handler)
+    if (chart.value) {
+      chart.value.on('click', handler)
+    } else {
+      pendingClickHandlers.push(handler)
+    }
   }
 
   function onBrushSelected(handler: (params: unknown) => void): void {

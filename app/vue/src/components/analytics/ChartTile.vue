@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import '@ui5/webcomponents/dist/Button.js'
 import ChartRenderer from './ChartRenderer.vue'
 import { useDataSource } from '../../composables/useDataSource'
-import type { ChartConfig } from '../../composables/useChartConfig'
+import type { ChartConfig, FilterConfig } from '../../composables/useChartConfig'
 import type { ChartData } from '../../composables/useChartEngine'
 
 const props = defineProps<{
   config: ChartConfig
+  crossFilters?: FilterConfig[]
 }>()
 
 const emit = defineEmits<{
@@ -20,7 +21,11 @@ const chartData = ref<ChartData | null>(null)
 
 async function loadData() {
   try {
-    const result = await dataSource.fetchAggregated(props.config)
+    const merged = {
+      ...props.config,
+      filters: [...props.config.filters, ...(props.crossFilters || [])]
+    }
+    const result = await dataSource.fetchAggregated(merged)
     chartData.value = { columns: result.columns, data: result.data }
   } catch {
     chartData.value = null
@@ -28,6 +33,7 @@ async function loadData() {
 }
 
 onMounted(loadData)
+watch(() => props.crossFilters, loadData, { deep: true })
 </script>
 
 <template>

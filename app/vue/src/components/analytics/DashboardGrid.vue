@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import ChartTile from './ChartTile.vue'
 import type { DashboardTile } from '../../composables/useDashboardStore'
+import type { FilterConfig } from '../../composables/useChartConfig'
 
 defineProps<{
   tiles: DashboardTile[]
+  crossFiltersFn?: (tileId: string) => FilterConfig[]
 }>()
 
 const emit = defineEmits<{
@@ -25,6 +27,7 @@ const emit = defineEmits<{
     >
       <ChartTile
         :config="tile.config"
+        :cross-filters="crossFiltersFn?.(tile.id)"
         @remove="emit('removeTile', tile.id)"
         @chart-click="(p) => emit('chartClick', tile.id, p)"
       />

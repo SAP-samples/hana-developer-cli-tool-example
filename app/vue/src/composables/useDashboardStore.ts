@@ -72,7 +72,12 @@ export function useDashboardStore() {
 
   function importDashboard(json: string): DashboardDefinition | null {
     try {
-      const dashboard = JSON.parse(json) as DashboardDefinition
+      const parsed = JSON.parse(json)
+      if (!parsed || typeof parsed.name !== 'string' || !Array.isArray(parsed.tiles)) return null
+      for (const tile of parsed.tiles) {
+        if (!tile.config || !tile.position) return null
+      }
+      const dashboard = parsed as DashboardDefinition
       dashboard.id = crypto.randomUUID()
       dashboard.updatedAt = new Date().toISOString()
       dashboards.value.push(dashboard)

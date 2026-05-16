@@ -82,6 +82,7 @@ function onChartClick(tileId: string, params: any) {
     <DashboardGrid
       v-if="store.activeDashboard.value"
       :tiles="store.activeDashboard.value.tiles"
+      :cross-filters-fn="crossFilter.getFiltersForTile"
       @remove-tile="onRemoveTile"
       @chart-click="onChartClick"
     />
