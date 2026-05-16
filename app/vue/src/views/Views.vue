@@ -22,6 +22,7 @@ function onRowClick(row: any) {
     title="Database Views"
     endpoint="views-ui"
     :filters="filters"
+    link-column="VIEW_NAME"
     @row-click="onRowClick"
   />
 </template>

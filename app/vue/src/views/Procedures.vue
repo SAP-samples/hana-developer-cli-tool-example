@@ -22,6 +22,7 @@ function onRowClick(row: any) {
     title="Database Procedures"
     endpoint="procedures-ui"
     :filters="filters"
+    link-column="PROCEDURE_NAME"
     @row-click="onRowClick"
   />
 </template>

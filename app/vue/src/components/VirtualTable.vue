@@ -13,6 +13,7 @@ const props = withDefaults(defineProps<{
   data: any[]
   rowHeight?: number
   contextId?: string
+  linkColumn?: string
 }>(), {
   rowHeight: 40,
   contextId: 'virtual-default'
@@ -171,7 +172,8 @@ function onResizePointerDown(e: PointerEvent, colKey: string, headerEl: HTMLElem
           class="virtual-cell"
           :class="{
             'cell-copied': copiedKey === `${vRow.index}-${col.key}`,
-            'grid-cell-focused': gridNav.isFocused(vRow.index, colIdx)
+            'grid-cell-focused': gridNav.isFocused(vRow.index, colIdx),
+            'cell-link': col.key === linkColumn
           }"
           :style="{ width: getColWidth(col) }"
           :title="String(data[vRow.index]?.[col.key] ?? '')"
@@ -266,6 +268,15 @@ function onResizePointerDown(e: PointerEvent, colKey: string, headerEl: HTMLElem
   border-radius: 2px;
   transition: background-color 0.3s;
   flex-shrink: 0;
+}
+
+.cell-link {
+  color: var(--sapLinkColor, #0064d9);
+  cursor: pointer;
+}
+
+.virtual-row:hover .cell-link {
+  text-decoration: underline;
 }
 
 .cell-copied {

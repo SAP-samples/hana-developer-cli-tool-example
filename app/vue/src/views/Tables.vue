@@ -134,6 +134,7 @@ onMounted(loadTables)
       :sort-dir="sortDir"
       :row-count="rowCount"
       :total-count="totalCount"
+      link-column="TABLE_NAME"
       @sort="toggleSort"
       @search="(q: string) => searchQuery = q"
       @export="onExport"

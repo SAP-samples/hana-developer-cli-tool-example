@@ -30,6 +30,7 @@ const props = withDefaults(defineProps<{
   showLimit?: boolean
   rowClickRoute?: string
   rowClickParams?: (row: any) => Record<string, string>
+  linkColumn?: string
 }>(), {
   filters: () => [],
   showLimit: true
@@ -162,6 +163,7 @@ onMounted(() => {
       :row-count="rowCount"
       :total-count="totalCount"
       :context-id="endpoint"
+      :link-column="linkColumn"
       @sort="toggleSort"
       @search="(q: string) => searchQuery = q"
       @export="onExport"

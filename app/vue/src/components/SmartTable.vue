@@ -34,6 +34,7 @@ const props = withDefaults(defineProps<{
   overflowMode?: 'Popin' | 'Scroll'
   virtualThreshold?: number
   contextId?: string
+  linkColumn?: string
 }>(), {
   virtualThreshold: 500,
   contextId: 'default'
@@ -225,6 +226,7 @@ const countLabel = computed(() => {
         :columns="orderedColumns"
         :data="data"
         :context-id="contextId"
+        :link-column="linkColumn"
         @row-click="onRowClick"
       />
     </template>
@@ -271,7 +273,8 @@ const countLabel = computed(() => {
             class="grid-cell"
             :class="{
               'cell-copied': copiedKey === `${rowIdx}-${col.key}`,
-              'grid-cell-focused': gridNav.isFocused(rowIdx, colIdx)
+              'grid-cell-focused': gridNav.isFocused(rowIdx, colIdx),
+              'cell-link': col.key === linkColumn
             }"
             :style="getColStyle(col)"
             :title="String(row[col.key] ?? '')"
@@ -400,6 +403,15 @@ const countLabel = computed(() => {
   text-overflow: ellipsis;
   border-radius: 2px;
   transition: background-color 0.2s;
+}
+
+.cell-link {
+  color: var(--sapLinkColor, #0064d9);
+  cursor: pointer;
+}
+
+.grid-row:hover .cell-link {
+  text-decoration: underline;
 }
 
 .cell-copied {
