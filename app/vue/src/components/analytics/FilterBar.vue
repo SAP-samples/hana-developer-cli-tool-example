@@ -47,14 +47,14 @@ function addFilter() {
 
 <template>
   <div class="filter-bar">
-    <div v-for="(filter, i) in filters" :key="i" class="filter-chip">
+    <div v-for="(filter, i) in filters" :key="`${filter.column}_${filter.operator}_${filter.value}`" class="filter-chip">
       <span>{{ filter.column }} {{ filter.operator }} {{ filter.value }}</span>
       <ui5-button icon="decline" design="Transparent" @click="emit('removeFilter', i)"></ui5-button>
     </div>
     <ui5-button icon="add" design="Transparent" tooltip="Add filter" @click="openPopover"></ui5-button>
     <ui5-button v-if="filters.length > 0" design="Transparent" @click="emit('clearAll')">Clear all</ui5-button>
 
-    <ui5-popover ref="popoverRef" header-text="Add Filter" placement-type="Bottom">
+    <ui5-popover ref="popoverRef" header-text="Add Filter" placement="Bottom">
       <div class="filter-form">
         <ui5-select class="filter-col" @change="(e: any) => newColumn = e.detail.selectedOption?.dataset?.value || ''">
           <ui5-option data-value="">Column...</ui5-option>

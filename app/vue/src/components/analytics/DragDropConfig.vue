@@ -42,7 +42,7 @@ function onDropMeasures(event: DragEvent) {
   event.preventDefault()
   const result = drop('measures')
   if (result) {
-    emit('addMeasure', { column: result.column.column, aggregation: result.defaultAggregation as any })
+    emit('addMeasure', { column: result.column.column, aggregation: result.defaultAggregation as MeasureConfig['aggregation'] })
   }
 }
 </script>
