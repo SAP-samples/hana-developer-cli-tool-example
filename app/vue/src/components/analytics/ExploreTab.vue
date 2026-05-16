@@ -16,7 +16,7 @@ const dataSource = useDataSource()
 const chartData = ref<ChartData | null>(null)
 
 async function onDataSourceSelect(schema: string, object: string, objectType: 'table' | 'view') {
-  chartConfig.setDataSource(schema, object, objectType)
+  chartConfig.setDataSource({ schema, object, objectType })
   await dataSource.loadMetadata(schema, object)
 }
 
@@ -44,7 +44,10 @@ function onUpdateAggregation(col: string, agg: string) {
   if (m) m.aggregation = agg as MeasureConfig['aggregation']
 }
 function onAddFilter(filter: FilterConfig) { chartConfig.addFilter(filter) }
-function onRemoveFilter(index: number) { chartConfig.removeFilter(index) }
+function onRemoveFilter(index: number) {
+  const filter = chartConfig.filters.value[index]
+  if (filter) chartConfig.removeFilter(filter.column)
+}
 </script>
 
 <template>
