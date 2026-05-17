@@ -1,4 +1,13 @@
+import { getAdapter } from '../adapters/environment'
 import { useGlobalSettings } from './useGlobalSettings'
+
+function baseUrl(): string {
+  try {
+    return getAdapter().getApiBaseUrl()
+  } catch {
+    return ''
+  }
+}
 
 async function extractErrorMessage(res: Response): Promise<string> {
   try {
@@ -18,12 +27,12 @@ export function useHanaApi() {
 
   async function execute<T = any>(command: string, params: Record<string, any> = {}): Promise<T> {
     const merged = { ...getApiParams(), ...params }
-    await fetch('/', {
+    await fetch(`${baseUrl()}/`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(merged)
     })
-    const res = await fetch(`/hana/${command}`)
+    const res = await fetch(`${baseUrl()}/hana/${command}`)
     if (!res.ok) {
       const detail = await extractErrorMessage(res)
       throw new Error(detail)
@@ -32,7 +41,7 @@ export function useHanaApi() {
   }
 
   async function fetchDirect<T = any>(path: string): Promise<T> {
-    const res = await fetch(path)
+    const res = await fetch(`${baseUrl()}${path}`)
     if (!res.ok) {
       const detail = await extractErrorMessage(res)
       throw new Error(detail)

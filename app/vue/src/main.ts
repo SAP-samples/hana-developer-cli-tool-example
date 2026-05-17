@@ -24,6 +24,16 @@ function getInitialTheme(): string {
 
 setTheme(getInitialTheme())
 
+import { setAdapter } from './adapters/environment'
+import { BrowserAdapter } from './adapters/browserAdapter'
+import { VSCodeAdapter } from './adapters/vscodeAdapter'
+
+if ((window as any).__VSCODE__) {
+  setAdapter(new VSCodeAdapter())
+} else {
+  setAdapter(new BrowserAdapter())
+}
+
 const app = createApp(App)
 app.use(router)
 app.mount('#app')
