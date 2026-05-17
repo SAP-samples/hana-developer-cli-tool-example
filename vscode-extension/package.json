@@ -164,18 +164,22 @@
     "bundle": "npm run compile && node esbuild.config.mjs --production",
     "bundle:dev": "npm run compile && node esbuild.config.mjs",
     "package": "npm run bundle && vsce package",
-    "test": "node ./test/runTests.ts"
+    "pretest": "tsc -p tsconfig.test.json",
+    "test": "node ./out/test/runTests.js"
   },
   "dependencies": {
     "express": "^5.2.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/mocha": "^10.0.0",
     "@types/node": "^25.8.0",
     "@types/vscode": "^1.85.0",
     "@vscode/test-electron": "^2.3.0",
     "@vscode/vsce": "^2.22.0",
     "esbuild": "^0.20.0",
+    "glob": "^11.0.0",
+    "mocha": "^11.0.0",
     "typescript": "^5.7.0"
   }
 }

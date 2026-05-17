@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./out",
+    "types": ["node", "mocha"]
+  },
+  "include": ["src/**/*", "test/**/*"],
+  "exclude": ["node_modules", "out", "dist"]
+}
