@@ -1,15 +1,19 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, onUnmounted } from 'vue'
 import { useCalcViewModel } from '../composables/calcview/useCalcViewModel'
 import { parseCalcView } from '../services/calcview/xmlParser'
 import CalcViewCanvas from '../components/calcview/canvas/CalcViewCanvas.vue'
 import NodePalette from '../components/calcview/canvas/NodePalette.vue'
 import PropertiesPanel from '../components/calcview/properties/PropertiesPanel.vue'
 import type { NodeType } from '../services/calcview/types'
-import type { Node } from '@vue-flow/core'
+import type { Node, Edge, Connection } from '@vue-flow/core'
 import '@ui5/webcomponents/dist/Title.js'
 
-const { model, vueFlowNodes, vueFlowEdges, loadModel } = useCalcViewModel()
+const {
+  model, undoRedo, vueFlowNodes, vueFlowEdges,
+  loadModel, addNode, connectNodes, disconnectNodes,
+  mapColumn, unmapColumn, addJoinCondition, removeJoinCondition
+} = useCalcViewModel()
 
 const selectedNodeId = ref<string | null>(null)
 
@@ -17,8 +21,37 @@ function handleNodeClick(node: Node) {
   selectedNodeId.value = node.id
 }
 
+function handleConnect(connection: Connection) {
+  if (connection.source && connection.target) {
+    connectNodes(connection.source, connection.target)
+  }
+}
+
+function handleEdgeRemove(edge: Edge) {
+  if (edge.target === '__semantics__') return
+  disconnectNodes(edge.source, edge.target)
+}
+
+function handleAddNode(type: NodeType) {
+  addNode(type, { x: 200, y: 400 })
+}
+
+function handleKeydown(e: KeyboardEvent) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+    e.preventDefault()
+    undoRedo.undo()
+  } else if ((e.ctrlKey || e.metaKey) && e.key === 'z' && e.shiftKey) {
+    e.preventDefault()
+    undoRedo.redo()
+  } else if ((e.ctrlKey || e.metaKey) && e.key === 'y') {
+    e.preventDefault()
+    undoRedo.redo()
+  }
+}
+
 onMounted(() => {
-  // Load a demo model for development
+  document.addEventListener('keydown', handleKeydown)
+
   const demoXml = `<?xml version="1.0" encoding="UTF-8"?>
 <Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="DEMO" applyPrivilegeType="NONE" dataCategory="CUBE">
   <descriptions defaultDescription="Demo View"/>
@@ -62,10 +95,9 @@ onMounted(() => {
   loadModel(parseCalcView(demoXml))
 })
 
-function handleAddNode(type: NodeType) {
-  // Phase 2: will add node to model
-  console.log('Add node:', type)
-}
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeydown)
+})
 </script>
 
 <template>
@@ -76,6 +108,8 @@ function handleAddNode(type: NodeType) {
         :nodes="vueFlowNodes"
         :edges="vueFlowEdges"
         @node-click="handleNodeClick"
+        @connect="handleConnect"
+        @edge-remove="handleEdgeRemove"
       />
       <PropertiesPanel
         :model="model"

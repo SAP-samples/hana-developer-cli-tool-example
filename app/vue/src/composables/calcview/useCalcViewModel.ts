@@ -1,17 +1,28 @@
-import { ref, computed } from 'vue'
+import { ref, computed, type Ref } from 'vue'
 import type { Node, Edge } from '@vue-flow/core'
-import type { CalcViewModel } from '../../services/calcview/types'
+import type { CalcViewModel, CalcViewNode, NodeType, Column, JoinCondition } from '../../services/calcview/types'
 import { NODE_TYPE_DEFINITIONS } from '../../services/calcview/nodeTypes'
+import { createUndoRedoStack } from './useCalcViewUndoRedo'
+import {
+  AddNodeCommand,
+  RemoveNodeCommand,
+  ConnectNodesCommand,
+  DisconnectNodesCommand,
+  MapColumnCommand,
+  UnmapColumnCommand,
+  AddJoinConditionCommand,
+  RemoveJoinConditionCommand
+} from './commands'
 
 export function useCalcViewModel() {
   const model = ref<CalcViewModel | null>(null)
+  const undoRedo = createUndoRedoStack()
 
   const vueFlowNodes = computed<Node[]>(() => {
     if (!model.value) return []
 
     const nodes: Node[] = []
 
-    // Semantics node (always present at top)
     const semanticsShape = model.value.layout.shapes.find(
       s => s.modelObjectName === 'Output'
     )
@@ -30,7 +41,6 @@ export function useCalcViewModel() {
       }
     })
 
-    // Calculation view nodes
     for (const cvNode of model.value.calculationViews) {
       const shape = model.value.layout.shapes.find(
         s => s.modelObjectName === cvNode.id
@@ -63,15 +73,12 @@ export function useCalcViewModel() {
     const edges: Edge[] = []
     const nodeIds = model.value.calculationViews.map(n => n.id)
 
-    // Connect calc view nodes to their parents
-    // The top-most node connects to semantics
     for (const cvNode of model.value.calculationViews) {
       const hasParent = model.value.calculationViews.some(
         other => other.inputs.some(i => i.node === cvNode.id)
       )
 
       if (!hasParent) {
-        // This is a top-level node — connect to semantics
         edges.push({
           id: `e-${cvNode.id}-semantics`,
           source: cvNode.id,
@@ -80,7 +87,6 @@ export function useCalcViewModel() {
         })
       }
 
-      // Connect inputs
       for (const input of cvNode.inputs) {
         if (nodeIds.includes(input.node)) {
           edges.push({
@@ -100,5 +106,82 @@ export function useCalcViewModel() {
     model.value = newModel
   }
 
-  return { model, vueFlowNodes, vueFlowEdges, loadModel }
+  function generateNodeId(type: NodeType): string {
+    if (!model.value) return `${type}_1`
+    const typeDef = NODE_TYPE_DEFINITIONS[type]
+    const prefix = typeDef.label.replace(/\s/g, '_')
+    const existing = model.value.calculationViews.filter(n => n.id.startsWith(prefix))
+    return `${prefix}_${existing.length + 1}`
+  }
+
+  function addNode(type: NodeType, position: { x: number; y: number }) {
+    if (!model.value) return
+    const m = model as Ref<CalcViewModel>
+    const id = generateNodeId(type)
+    const node: CalcViewNode = {
+      id,
+      type,
+      inputs: [],
+      outputColumns: [],
+      calculatedColumns: [],
+      ...(type === 'join' || type === 'nonEquiJoin'
+        ? { joinConfig: { joinType: 'inner' as const, cardinality: '1..1' as const, conditions: [] } }
+        : {}),
+      ...(type === 'rank'
+        ? { rankConfig: { orderBy: [], thresholdType: 'top' as const, count: 10 } }
+        : {})
+    }
+    undoRedo.push(new AddNodeCommand(m, node, position))
+  }
+
+  function removeNode(nodeId: string) {
+    if (!model.value) return
+    undoRedo.push(new RemoveNodeCommand(model as Ref<CalcViewModel>, nodeId))
+  }
+
+  function connectNodes(sourceId: string, targetId: string) {
+    if (!model.value) return
+    undoRedo.push(new ConnectNodesCommand(model as Ref<CalcViewModel>, sourceId, targetId))
+  }
+
+  function disconnectNodes(sourceId: string, targetId: string) {
+    if (!model.value) return
+    undoRedo.push(new DisconnectNodesCommand(model as Ref<CalcViewModel>, sourceId, targetId))
+  }
+
+  function mapColumn(nodeId: string, column: Column) {
+    if (!model.value) return
+    undoRedo.push(new MapColumnCommand(model as Ref<CalcViewModel>, nodeId, column))
+  }
+
+  function unmapColumn(nodeId: string, columnId: string) {
+    if (!model.value) return
+    undoRedo.push(new UnmapColumnCommand(model as Ref<CalcViewModel>, nodeId, columnId))
+  }
+
+  function addJoinCondition(nodeId: string, condition: JoinCondition) {
+    if (!model.value) return
+    undoRedo.push(new AddJoinConditionCommand(model as Ref<CalcViewModel>, nodeId, condition))
+  }
+
+  function removeJoinCondition(nodeId: string, index: number) {
+    if (!model.value) return
+    undoRedo.push(new RemoveJoinConditionCommand(model as Ref<CalcViewModel>, nodeId, index))
+  }
+
+  return {
+    model,
+    undoRedo,
+    vueFlowNodes,
+    vueFlowEdges,
+    loadModel,
+    addNode,
+    removeNode,
+    connectNodes,
+    disconnectNodes,
+    mapColumn,
+    unmapColumn,
+    addJoinCondition,
+    removeJoinCondition
+  }
 }
