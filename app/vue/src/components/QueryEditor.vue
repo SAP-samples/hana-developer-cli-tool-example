@@ -14,7 +14,7 @@ import QueryHistoryPanel from './QueryHistoryPanel.vue'
 import ObjectExplorer from './ObjectExplorer.vue'
 import { Splitpanes, Pane } from 'splitpanes'
 import 'splitpanes/dist/splitpanes.css'
-import { ref } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 
 import '@ui5/webcomponents/dist/Title.js'
 import '@ui5/webcomponents/dist/Button.js'
@@ -51,6 +51,7 @@ const historyOpen = ref(false)
 const explorerCollapsed = ref(localStorage.getItem('hana-cli-explorer-collapsed') === 'true')
 const explorerSize = ref(Number(localStorage.getItem('hana-cli-explorer-width') || 20))
 const sqlEditorRef = ref<any>(null)
+const outputModeRef = ref<any>(null)
 const editorPaneSize = ref(Number(localStorage.getItem('hana-cli-split-pos') || 40))
 
 const currentTheme = localStorage.getItem('hana-cli-theme') || 'auto'
@@ -78,6 +79,20 @@ function syncResultsTable() {
 }
 
 syncResultsTable()
+
+let suppressSelectionEvent = false
+
+watch(() => activeTab.value.id, () => {
+  nextTick(() => {
+    const el = outputModeRef.value
+    if (!el) return
+    suppressSelectionEvent = true
+    const mode = activeTab.value.outputMode
+    const items = el.querySelectorAll('ui5-segmented-button-item')
+    items.forEach((item: any) => { item.selected = item.dataset.mode === mode })
+    requestAnimationFrame(() => { suppressSelectionEvent = false })
+  })
+}, { immediate: true })
 
 async function executeQuery() {
   const tab = activeTab.value
@@ -137,6 +152,7 @@ function onTabClose(id: string) {
 }
 
 function onOutputModeChange(e: Event) {
+  if (suppressSelectionEvent) return
   const items = (e as CustomEvent).detail?.selectedItems
   const selected = items?.[0]
   if (selected) {
@@ -229,11 +245,11 @@ function onExplorerInsert(text: string) {
                   :tooltip="explorerCollapsed ? 'Show Object Explorer' : 'Hide Object Explorer'"
                   @click="toggleExplorer"
                 />
-                <ui5-segmented-button slot="startContent" @selection-change="onOutputModeChange">
-                  <ui5-segmented-button-item data-mode="table" :selected="activeTab.outputMode === 'table'" icon="table-view">Table</ui5-segmented-button-item>
-                  <ui5-segmented-button-item data-mode="json" :selected="activeTab.outputMode === 'json'" icon="syntax">JSON</ui5-segmented-button-item>
-                  <ui5-segmented-button-item data-mode="plan" :selected="activeTab.outputMode === 'plan'" icon="tree">Plan</ui5-segmented-button-item>
-                  <ui5-segmented-button-item data-mode="diff" :selected="activeTab.outputMode === 'diff'" icon="compare">Diff</ui5-segmented-button-item>
+                <ui5-segmented-button ref="outputModeRef" slot="startContent" @selection-change="onOutputModeChange">
+                  <ui5-segmented-button-item data-mode="table" icon="table-view">Table</ui5-segmented-button-item>
+                  <ui5-segmented-button-item data-mode="json" icon="syntax">JSON</ui5-segmented-button-item>
+                  <ui5-segmented-button-item data-mode="plan" icon="tree">Plan</ui5-segmented-button-item>
+                  <ui5-segmented-button-item data-mode="diff" icon="compare">Diff</ui5-segmented-button-item>
                 </ui5-segmented-button>
                 <ui5-button
                   slot="endContent"
@@ -307,7 +323,7 @@ function onExplorerInsert(text: string) {
                 <p>{{ activeTab.error }}</p>
               </div>
 
-              <template v-else-if="resultsTable.totalCount.value > 0 || activeTab.outputMode === 'plan' || activeTab.outputMode === 'diff'">
+              <template v-else-if="resultsTable.totalCount.value > 0 || activeTab.outputMode !== 'table'">
                 <SmartTable
                   v-if="activeTab.outputMode === 'table'"
                   title="Results"

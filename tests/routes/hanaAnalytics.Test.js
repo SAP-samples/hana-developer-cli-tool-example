@@ -254,10 +254,10 @@ describe('POST /hana/analytics-ui', function () {
             expect(result.error).to.match(/invalid identifier/i)
         })
 
-        it('should return an error for an identifier starting with a digit', function () {
+        it('should return an error for an identifier with special characters', function () {
             const result = buildAnalyticsSQL({
                 schema: 'S', object: 'T',
-                dimensions: ['1invalid']
+                dimensions: ['col; DROP TABLE']
             })
             expect(result).to.have.property('status', 400)
             expect(result.error).to.match(/invalid identifier/i)
