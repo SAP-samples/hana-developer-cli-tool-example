@@ -161,8 +161,9 @@
   },
   "scripts": {
     "compile": "tsc -p ./",
-    "bundle": "node esbuild.config.mjs",
-    "package": "vsce package",
+    "bundle": "npm run compile && node esbuild.config.mjs --production",
+    "bundle:dev": "npm run compile && node esbuild.config.mjs",
+    "package": "npm run bundle && vsce package",
     "test": "node ./test/runTests.ts"
   },
   "dependencies": {
