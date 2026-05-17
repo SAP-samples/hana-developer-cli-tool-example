@@ -3,6 +3,8 @@ import { onMounted } from 'vue'
 import { useCalcViewModel } from '../composables/calcview/useCalcViewModel'
 import { parseCalcView } from '../services/calcview/xmlParser'
 import CalcViewCanvas from '../components/calcview/canvas/CalcViewCanvas.vue'
+import NodePalette from '../components/calcview/canvas/NodePalette.vue'
+import type { NodeType } from '../services/calcview/types'
 import '@ui5/webcomponents/dist/Title.js'
 
 const { model, vueFlowNodes, vueFlowEdges, loadModel } = useCalcViewModel()
@@ -51,15 +53,22 @@ onMounted(() => {
 
   loadModel(parseCalcView(demoXml))
 })
+
+function handleAddNode(type: NodeType) {
+  // Phase 2: will add node to model
+  console.log('Add node:', type)
+}
 </script>
 
 <template>
   <div class="calc-view-editor">
-    <CalcViewCanvas
-      v-if="vueFlowNodes.length > 0"
-      :nodes="vueFlowNodes"
-      :edges="vueFlowEdges"
-    />
+    <div class="editor-content" v-if="vueFlowNodes.length > 0">
+      <NodePalette @add-node="handleAddNode" />
+      <CalcViewCanvas
+        :nodes="vueFlowNodes"
+        :edges="vueFlowEdges"
+      />
+    </div>
     <div v-else class="empty-state">
       <ui5-title level="H3">No Calculation View loaded</ui5-title>
     </div>
@@ -71,6 +80,11 @@ onMounted(() => {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.editor-content {
+  display: flex;
+  height: 100%;
 }
 
 .empty-state {
