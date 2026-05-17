@@ -90,25 +90,47 @@ onMounted(() => {
   document.addEventListener('keydown', handleKeydown)
 
   const demoXml = `<?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="DEMO" applyPrivilegeType="NONE" dataCategory="CUBE">
-  <descriptions defaultDescription="Demo View"/>
+<Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="SALES_ANALYSIS" applyPrivilegeType="NONE" dataCategory="CUBE">
+  <descriptions defaultDescription="Sales Analysis with Products"/>
   <localVariables/>
   <variableMappings/>
   <dataSources>
     <DataSource id="SALES"><resourceUri>SALES</resourceUri></DataSource>
+    <DataSource id="PRODUCTS"><resourceUri>PRODUCTS</resourceUri></DataSource>
   </dataSources>
   <calculationViews>
     <calculationView xsi:type="Calculation:ProjectionView" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Projection_1">
       <viewAttributes>
         <viewAttribute id="AMOUNT"/>
         <viewAttribute id="PRODUCT_ID"/>
+        <viewAttribute id="SALES_DATE"/>
       </viewAttributes>
       <input node="SALES"/>
     </calculationView>
+    <calculationView xsi:type="Calculation:ProjectionView" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Projection_2">
+      <viewAttributes>
+        <viewAttribute id="PRODUCT_NAME"/>
+        <viewAttribute id="CATEGORY"/>
+        <viewAttribute id="PRODUCT_ID"/>
+      </viewAttributes>
+      <input node="PRODUCTS"/>
+    </calculationView>
+    <calculationView xsi:type="Calculation:JoinView" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Join_1" cardinality="C1_N" joinType="inner">
+      <viewAttributes>
+        <viewAttribute id="PRODUCT_ID"/>
+        <viewAttribute id="AMOUNT"/>
+        <viewAttribute id="PRODUCT_NAME"/>
+      </viewAttributes>
+      <calculatedViewAttributes/>
+      <input node="Projection_1"/>
+      <input node="Projection_2"/>
+      <joinAttribute name="PRODUCT_ID"/>
+    </calculationView>
   </calculationViews>
-  <logicalModel id="Projection_1">
+  <logicalModel id="Join_1">
     <attributes>
-      <attribute id="PRODUCT_ID"><descriptions defaultDescription="Product"/></attribute>
+      <attribute id="PRODUCT_ID"><descriptions defaultDescription="Product ID"/></attribute>
+      <attribute id="PRODUCT_NAME"><descriptions defaultDescription="Product Name"/></attribute>
     </attributes>
     <calculatedAttributes/>
     <baseMeasures>
@@ -120,10 +142,16 @@ onMounted(() => {
   <layout>
     <shapes>
       <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
-        <upperLeftCorner x="200" y="50"/>
+        <upperLeftCorner x="250" y="50"/>
+      </shape>
+      <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="250" y="200"/>
       </shape>
       <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
-        <upperLeftCorner x="200" y="250"/>
+        <upperLeftCorner x="100" y="400"/>
+      </shape>
+      <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="400" y="400"/>
       </shape>
     </shapes>
   </layout>
