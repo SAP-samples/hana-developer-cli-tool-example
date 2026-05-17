@@ -4,9 +4,11 @@ import type { Ref } from 'vue'
 import { useCalcViewModel } from '../composables/calcview/useCalcViewModel'
 import { BatchCommand, MapColumnCommand } from '../composables/calcview/commands'
 import { parseCalcView } from '../services/calcview/xmlParser'
+import { autoLayout } from '../composables/calcview/useCalcViewLayout'
 import CalcViewCanvas from '../components/calcview/canvas/CalcViewCanvas.vue'
 import NodePalette from '../components/calcview/canvas/NodePalette.vue'
 import PropertiesPanel from '../components/calcview/properties/PropertiesPanel.vue'
+import EditorToolbar from '../components/calcview/toolbar/EditorToolbar.vue'
 import type { NodeType, Column, JoinCondition, CalcViewModel, CalculatedColumn } from '../services/calcview/types'
 import type { Node, Edge, Connection } from '@vue-flow/core'
 import '@ui5/webcomponents/dist/Title.js'
@@ -72,6 +74,11 @@ function handleMapAll(nodeId: string) {
     )
     undoRedo.push(new BatchCommand(commands, `Map all columns to ${nodeId}`))
   }
+}
+
+async function handleAutoLayout() {
+  if (!model.value) return
+  await autoLayout(model as Ref<CalcViewModel>, undoRedo)
 }
 
 function handleKeydown(e: KeyboardEvent) {
@@ -168,29 +175,38 @@ onUnmounted(() => {
 
 <template>
   <div class="calc-view-editor">
-    <div class="editor-content" v-if="model && vueFlowNodes.length > 0">
-      <NodePalette @add-node="handleAddNode" />
-      <CalcViewCanvas
-        :nodes="vueFlowNodes"
-        :edges="vueFlowEdges"
-        @node-click="handleNodeClick"
-        @connect="handleConnect"
-        @edge-remove="handleEdgeRemove"
+    <template v-if="model && vueFlowNodes.length > 0">
+      <EditorToolbar
+        :can-undo="undoRedo.canUndo.value"
+        :can-redo="undoRedo.canRedo.value"
+        @undo="undoRedo.undo()"
+        @redo="undoRedo.redo()"
+        @auto-layout="handleAutoLayout"
       />
-      <PropertiesPanel
-        :model="model"
-        :selected-node-id="selectedNodeId"
-        @map-column="(nodeId, col) => mapColumn(nodeId, col)"
-        @unmap-column="(nodeId, colId) => unmapColumn(nodeId, colId)"
-        @map-all="handleMapAll"
-        @add-join-condition="(nodeId, cond) => addJoinCondition(nodeId, cond)"
-        @remove-join-condition="(nodeId, idx) => removeJoinCondition(nodeId, idx)"
-        @add-calculated-column="(nodeId, col) => addCalculatedColumn(nodeId, col)"
-        @remove-calculated-column="(nodeId, colId) => removeCalculatedColumn(nodeId, colId)"
-        @update-calculated-column="(nodeId, colId, updates) => updateCalculatedColumn(nodeId, colId, updates)"
-        @set-filter="(nodeId, expr) => setFilterExpression(nodeId, expr)"
-      />
-    </div>
+      <div class="editor-content">
+        <NodePalette @add-node="handleAddNode" />
+        <CalcViewCanvas
+          :nodes="vueFlowNodes"
+          :edges="vueFlowEdges"
+          @node-click="handleNodeClick"
+          @connect="handleConnect"
+          @edge-remove="handleEdgeRemove"
+        />
+        <PropertiesPanel
+          :model="model"
+          :selected-node-id="selectedNodeId"
+          @map-column="(nodeId, col) => mapColumn(nodeId, col)"
+          @unmap-column="(nodeId, colId) => unmapColumn(nodeId, colId)"
+          @map-all="handleMapAll"
+          @add-join-condition="(nodeId, cond) => addJoinCondition(nodeId, cond)"
+          @remove-join-condition="(nodeId, idx) => removeJoinCondition(nodeId, idx)"
+          @add-calculated-column="(nodeId, col) => addCalculatedColumn(nodeId, col)"
+          @remove-calculated-column="(nodeId, colId) => removeCalculatedColumn(nodeId, colId)"
+          @update-calculated-column="(nodeId, colId, updates) => updateCalculatedColumn(nodeId, colId, updates)"
+          @set-filter="(nodeId, expr) => setFilterExpression(nodeId, expr)"
+        />
+      </div>
+    </template>
     <div v-else class="empty-state">
       <ui5-title level="H3">No Calculation View loaded</ui5-title>
     </div>
@@ -206,7 +222,8 @@ onUnmounted(() => {
 
 .editor-content {
   display: flex;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
 }
 
 .empty-state {

@@ -1,5 +1,5 @@
 import type { Ref } from 'vue'
-import type { CalcViewModel, CalcViewNode, Column, JoinCondition, CalculatedColumn } from '../../services/calcview/types'
+import type { CalcViewModel, CalcViewNode, Column, JoinCondition, CalculatedColumn, Variable } from '../../services/calcview/types'
 import type { Command } from './useCalcViewUndoRedo'
 
 export class AddNodeCommand implements Command {
@@ -438,5 +438,118 @@ export class SetFilterExpressionCommand implements Command {
   undo() {
     const node = this.model.value.calculationViews.find(n => n.id === this.nodeId)
     if (node) node.filterExpression = this.previousExpression
+  }
+}
+
+export class AddVariableCommand implements Command {
+  type = 'addVariable'
+  description: string
+
+  constructor(
+    private model: Ref<CalcViewModel>,
+    private variable: Variable
+  ) {
+    this.description = `Add variable ${variable.id}`
+  }
+
+  execute() { this.model.value.localVariables.push(this.variable) }
+
+  undo() {
+    const idx = this.model.value.localVariables.findIndex(v => v.id === this.variable.id)
+    if (idx >= 0) this.model.value.localVariables.splice(idx, 1)
+  }
+}
+
+export class RemoveVariableCommand implements Command {
+  type = 'removeVariable'
+  description: string
+  private variable: Variable
+  private removedIndex: number = -1
+
+  constructor(
+    private model: Ref<CalcViewModel>,
+    variableId: string
+  ) {
+    this.variable = { id: '', name: '', dataType: '' }
+    this.description = `Remove variable ${variableId}`
+    const idx = model.value.localVariables.findIndex(v => v.id === variableId)
+    if (idx >= 0) {
+      this.variable = { ...model.value.localVariables[idx] }
+      this.removedIndex = idx
+    }
+  }
+
+  execute() {
+    const idx = this.model.value.localVariables.findIndex(v => v.id === this.variable.id)
+    if (idx >= 0) this.model.value.localVariables.splice(idx, 1)
+  }
+
+  undo() {
+    this.model.value.localVariables.splice(this.removedIndex, 0, this.variable)
+  }
+}
+
+export class UpdateVariableCommand implements Command {
+  type = 'updateVariable'
+  description: string
+  private previous: Partial<Variable> = {}
+
+  constructor(
+    private model: Ref<CalcViewModel>,
+    private variableId: string,
+    private updates: Partial<Variable>
+  ) {
+    this.description = `Update variable ${variableId}`
+    const v = model.value.localVariables.find(x => x.id === variableId)
+    if (v) {
+      for (const key of Object.keys(updates) as (keyof Variable)[]) {
+        (this.previous as any)[key] = v[key]
+      }
+    }
+  }
+
+  execute() {
+    const v = this.model.value.localVariables.find(x => x.id === this.variableId)
+    if (v) Object.assign(v, this.updates)
+  }
+
+  undo() {
+    const v = this.model.value.localVariables.find(x => x.id === this.variableId)
+    if (v) Object.assign(v, this.previous)
+  }
+}
+
+export class MoveNodeCommand implements Command {
+  type = 'moveNode'
+  description: string
+  private previousPosition: { x: number; y: number }
+
+  constructor(
+    private model: Ref<CalcViewModel>,
+    private nodeId: string,
+    private newPosition: { x: number; y: number }
+  ) {
+    this.description = `Move ${nodeId}`
+    const shapeName = nodeId === '__semantics__' ? 'Output' : nodeId
+    const shape = model.value.layout.shapes.find(s => s.modelObjectName === shapeName)
+    this.previousPosition = shape ? { ...shape.upperLeftCorner } : { x: 0, y: 0 }
+  }
+
+  execute() {
+    const shapeName = this.nodeId === '__semantics__' ? 'Output' : this.nodeId
+    const shape = this.model.value.layout.shapes.find(s => s.modelObjectName === shapeName)
+    if (shape) {
+      shape.upperLeftCorner.x = this.newPosition.x
+      shape.upperLeftCorner.y = this.newPosition.y
+    }
+  }
+
+  undo() {
+    const shapeName = this.nodeId === '__semantics__' ? 'Output' : this.nodeId
+    const shape = this.model.value.layout.shapes.find(s => s.modelObjectName === shapeName)
+    if (shape) {
+      shape.upperLeftCorner.x = this.previousPosition.x
+      shape.upperLeftCorner.y = this.previousPosition.y
+    }
   }
 }
