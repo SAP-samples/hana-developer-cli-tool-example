@@ -97,5 +97,13 @@ export const navigation: NavGroup[] = [
       { key: 'swagger', title: 'Swagger API', external: '/api-docs' },
       { key: 'version', title: 'Version', route: 'version' }
     ]
+  },
+  {
+    key: 'analytics',
+    title: 'Analytics',
+    icon: 'business-objects-experience',
+    items: [
+      { key: 'analytics', title: 'Reports', icon: 'chart-table-view' }
+    ]
   }
 ]
