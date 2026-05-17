@@ -6,8 +6,10 @@ import '@ui5/webcomponents/dist/Tab.js'
 
 import ViewPropertiesTab from './ViewPropertiesTab.vue'
 import MappingTab from './MappingTab.vue'
+import CalculatedColumnsTab from './CalculatedColumnsTab.vue'
+import FilterTab from './FilterTab.vue'
 import JoinConditionSection from './JoinConditionSection.vue'
-import type { CalcViewModel, CalcViewNode, Column, JoinCondition } from '../../../services/calcview/types'
+import type { CalcViewModel, CalcViewNode, Column, JoinCondition, CalculatedColumn } from '../../../services/calcview/types'
 import { NODE_TYPE_DEFINITIONS } from '../../../services/calcview/nodeTypes'
 
 const props = defineProps<{
@@ -21,6 +23,10 @@ const emit = defineEmits<{
   'map-all': [nodeId: string]
   'add-join-condition': [nodeId: string, condition: JoinCondition]
   'remove-join-condition': [nodeId: string, index: number]
+  'add-calculated-column': [nodeId: string, column: CalculatedColumn]
+  'remove-calculated-column': [nodeId: string, columnId: string]
+  'update-calculated-column': [nodeId: string, columnId: string, updates: Partial<CalculatedColumn>]
+  'set-filter': [nodeId: string, expression: string | undefined]
 }>()
 
 const selectedNode = computed<CalcViewNode | null>(() => {
@@ -68,6 +74,20 @@ const isJoinNode = computed(() => {
               @map-column="(col) => emit('map-column', selectedNode!.id, col)"
               @unmap-column="(colId) => emit('unmap-column', selectedNode!.id, colId)"
               @map-all="() => emit('map-all', selectedNode!.id)"
+            />
+          </ui5-tab>
+          <ui5-tab text="Calculated">
+            <CalculatedColumnsTab
+              :node="selectedNode"
+              @add-column="(col) => emit('add-calculated-column', selectedNode!.id, col)"
+              @remove-column="(colId) => emit('remove-calculated-column', selectedNode!.id, colId)"
+              @update-column="(colId, updates) => emit('update-calculated-column', selectedNode!.id, colId, updates)"
+            />
+          </ui5-tab>
+          <ui5-tab text="Filter">
+            <FilterTab
+              :node="selectedNode"
+              @set-filter="(expr) => emit('set-filter', selectedNode!.id, expr)"
             />
           </ui5-tab>
         </ui5-tabcontainer>

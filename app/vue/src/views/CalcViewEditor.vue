@@ -7,14 +7,15 @@ import { parseCalcView } from '../services/calcview/xmlParser'
 import CalcViewCanvas from '../components/calcview/canvas/CalcViewCanvas.vue'
 import NodePalette from '../components/calcview/canvas/NodePalette.vue'
 import PropertiesPanel from '../components/calcview/properties/PropertiesPanel.vue'
-import type { NodeType, Column, JoinCondition, CalcViewModel } from '../services/calcview/types'
+import type { NodeType, Column, JoinCondition, CalcViewModel, CalculatedColumn } from '../services/calcview/types'
 import type { Node, Edge, Connection } from '@vue-flow/core'
 import '@ui5/webcomponents/dist/Title.js'
 
 const {
   model, undoRedo, vueFlowNodes, vueFlowEdges,
   loadModel, addNode, connectNodes, disconnectNodes,
-  mapColumn, unmapColumn, addJoinCondition, removeJoinCondition
+  mapColumn, unmapColumn, addJoinCondition, removeJoinCondition,
+  addCalculatedColumn, removeCalculatedColumn, updateCalculatedColumn, setFilterExpression
 } = useCalcViewModel()
 
 const selectedNodeId = ref<string | null>(null)
@@ -184,6 +185,10 @@ onUnmounted(() => {
         @map-all="handleMapAll"
         @add-join-condition="(nodeId, cond) => addJoinCondition(nodeId, cond)"
         @remove-join-condition="(nodeId, idx) => removeJoinCondition(nodeId, idx)"
+        @add-calculated-column="(nodeId, col) => addCalculatedColumn(nodeId, col)"
+        @remove-calculated-column="(nodeId, colId) => removeCalculatedColumn(nodeId, colId)"
+        @update-calculated-column="(nodeId, colId, updates) => updateCalculatedColumn(nodeId, colId, updates)"
+        @set-filter="(nodeId, expr) => setFilterExpression(nodeId, expr)"
       />
     </div>
     <div v-else class="empty-state">

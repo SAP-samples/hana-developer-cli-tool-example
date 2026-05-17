@@ -1,6 +1,6 @@
 import { ref, computed, type Ref } from 'vue'
 import type { Node, Edge } from '@vue-flow/core'
-import type { CalcViewModel, CalcViewNode, NodeType, Column, JoinCondition } from '../../services/calcview/types'
+import type { CalcViewModel, CalcViewNode, NodeType, Column, JoinCondition, CalculatedColumn } from '../../services/calcview/types'
 import { NODE_TYPE_DEFINITIONS } from '../../services/calcview/nodeTypes'
 import { createUndoRedoStack } from './useCalcViewUndoRedo'
 import {
@@ -11,7 +11,11 @@ import {
   MapColumnCommand,
   UnmapColumnCommand,
   AddJoinConditionCommand,
-  RemoveJoinConditionCommand
+  RemoveJoinConditionCommand,
+  AddCalculatedColumnCommand,
+  RemoveCalculatedColumnCommand,
+  UpdateCalculatedColumnCommand,
+  SetFilterExpressionCommand
 } from './commands'
 
 export function useCalcViewModel() {
@@ -169,6 +173,26 @@ export function useCalcViewModel() {
     undoRedo.push(new RemoveJoinConditionCommand(model as Ref<CalcViewModel>, nodeId, index))
   }
 
+  function addCalculatedColumn(nodeId: string, column: CalculatedColumn) {
+    if (!model.value) return
+    undoRedo.push(new AddCalculatedColumnCommand(model as Ref<CalcViewModel>, nodeId, column))
+  }
+
+  function removeCalculatedColumn(nodeId: string, columnId: string) {
+    if (!model.value) return
+    undoRedo.push(new RemoveCalculatedColumnCommand(model as Ref<CalcViewModel>, nodeId, columnId))
+  }
+
+  function updateCalculatedColumn(nodeId: string, columnId: string, updates: Partial<CalculatedColumn>) {
+    if (!model.value) return
+    undoRedo.push(new UpdateCalculatedColumnCommand(model as Ref<CalcViewModel>, nodeId, columnId, updates))
+  }
+
+  function setFilterExpression(nodeId: string, expression: string | undefined) {
+    if (!model.value) return
+    undoRedo.push(new SetFilterExpressionCommand(model as Ref<CalcViewModel>, nodeId, expression))
+  }
+
   return {
     model,
     undoRedo,
@@ -182,6 +206,10 @@ export function useCalcViewModel() {
     mapColumn,
     unmapColumn,
     addJoinCondition,
-    removeJoinCondition
+    removeJoinCondition,
+    addCalculatedColumn,
+    removeCalculatedColumn,
+    updateCalculatedColumn,
+    setFilterExpression
   }
 }

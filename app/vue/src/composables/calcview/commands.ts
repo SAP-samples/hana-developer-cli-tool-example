@@ -1,5 +1,5 @@
 import type { Ref } from 'vue'
-import type { CalcViewModel, CalcViewNode, Column, JoinCondition } from '../../services/calcview/types'
+import type { CalcViewModel, CalcViewNode, Column, JoinCondition, CalculatedColumn } from '../../services/calcview/types'
 import type { Command } from './useCalcViewUndoRedo'
 
 export class AddNodeCommand implements Command {
@@ -309,5 +309,134 @@ export class BatchCommand implements Command {
     for (let i = this.commands.length - 1; i >= 0; i--) {
       this.commands[i].undo()
     }
+  }
+}
+
+export class AddCalculatedColumnCommand implements Command {
+  type = 'addCalculatedColumn'
+  description: string
+
+  constructor(
+    private model: Ref<CalcViewModel>,
+    private nodeId: string,
+    private column: CalculatedColumn
+  ) {
+    this.description = `Add calculated column ${column.id} to ${nodeId}`
+  }
+
+  execute() {
+    const node = this.model.value.calculationViews.find(n => n.id === this.nodeId)
+    if (node) node.calculatedColumns.push(this.column)
+  }
+
+  undo() {
+    const node = this.model.value.calculationViews.find(n => n.id === this.nodeId)
+    if (node) {
+      const idx = node.calculatedColumns.findIndex(c => c.id === this.column.id)
+      if (idx >= 0) node.calculatedColumns.splice(idx, 1)
+    }
+  }
+}
+
+export class RemoveCalculatedColumnCommand implements Command {
+  type = 'removeCalculatedColumn'
+  description: string
+  private column: CalculatedColumn
+  private removedIndex: number = -1
+
+  constructor(
+    private model: Ref<CalcViewModel>,
+    private nodeId: string,
+    columnId: string
+  ) {
+    this.column = { id: '', name: '', dataType: '', expression: '' }
+    this.description = `Remove calculated column ${columnId} from ${nodeId}`
+    const node = model.value.calculationViews.find(n => n.id === nodeId)
+    if (node) {
+      const idx = node.calculatedColumns.findIndex(c => c.id === columnId)
+      if (idx >= 0) {
+        this.column = { ...node.calculatedColumns[idx] }
+        this.removedIndex = idx
+      }
+    }
+  }
+
+  execute() {
+    const node = this.model.value.calculationViews.find(n => n.id === this.nodeId)
+    if (node) {
+      const idx = node.calculatedColumns.findIndex(c => c.id === this.column.id)
+      if (idx >= 0) node.calculatedColumns.splice(idx, 1)
+    }
+  }
+
+  undo() {
+    const node = this.model.value.calculationViews.find(n => n.id === this.nodeId)
+    if (node) node.calculatedColumns.splice(this.removedIndex, 0, this.column)
+  }
+}
+
+export class UpdateCalculatedColumnCommand implements Command {
+  type = 'updateCalculatedColumn'
+  description: string
+  private previous: Partial<CalculatedColumn> = {}
+
+  constructor(
+    private model: Ref<CalcViewModel>,
+    private nodeId: string,
+    private columnId: string,
+    private updates: Partial<CalculatedColumn>
+  ) {
+    this.description = `Update calculated column ${columnId}`
+    const node = model.value.calculationViews.find(n => n.id === nodeId)
+    if (node) {
+      const col = node.calculatedColumns.find(c => c.id === columnId)
+      if (col) {
+        for (const key of Object.keys(updates) as (keyof CalculatedColumn)[]) {
+          (this.previous as any)[key] = col[key]
+        }
+      }
+    }
+  }
+
+  execute() {
+    const node = this.model.value.calculationViews.find(n => n.id === this.nodeId)
+    if (node) {
+      const col = node.calculatedColumns.find(c => c.id === this.columnId)
+      if (col) Object.assign(col, this.updates)
+    }
+  }
+
+  undo() {
+    const node = this.model.value.calculationViews.find(n => n.id === this.nodeId)
+    if (node) {
+      const col = node.calculatedColumns.find(c => c.id === this.columnId)
+      if (col) Object.assign(col, this.previous)
+    }
+  }
+}
+
+export class SetFilterExpressionCommand implements Command {
+  type = 'setFilterExpression'
+  description: string
+  private previousExpression: string | undefined
+
+  constructor(
+    private model: Ref<CalcViewModel>,
+    private nodeId: string,
+    private newExpression: string | undefined
+  ) {
+    this.description = `Set filter on ${nodeId}`
+    const node = model.value.calculationViews.find(n => n.id === nodeId)
+    this.previousExpression = node?.filterExpression
+  }
+
+  execute() {
+    const node = this.model.value.calculationViews.find(n => n.id === this.nodeId)
+    if (node) node.filterExpression = this.newExpression
+  }
+
+  undo() {
+    const node = this.model.value.calculationViews.find(n => n.id === this.nodeId)
+    if (node) node.filterExpression = this.previousExpression
   }
 }
