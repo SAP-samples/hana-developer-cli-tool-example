@@ -3,6 +3,7 @@ import * as http from 'http'
 import express from 'express'
 import { findAvailablePort } from './port.js'
 import { registerAllRoutes } from './routes.js'
+import type { HanaConnection } from '../connection/resolver.js'
 
 let server: http.Server | null = null
 let currentPort: number | null = null
@@ -17,16 +18,20 @@ export function isRunning(): boolean {
   return server !== null && server.listening
 }
 
-export async function startServer(_context: vscode.ExtensionContext): Promise<number> {
+export async function startServer(_context: vscode.ExtensionContext, conn?: HanaConnection): Promise<number> {
   if (isRunning()) return currentPort!
   if (startPromise) return startPromise
 
-  startPromise = doStart().finally(() => { startPromise = null })
+  startPromise = doStart(conn).finally(() => { startPromise = null })
   return startPromise
 }
 
-async function doStart(): Promise<number> {
+async function doStart(conn?: HanaConnection): Promise<number> {
   cancelShutdownTimer()
+
+  if (conn) {
+    injectConnection(conn)
+  }
 
   const port = await findAvailablePort()
 
@@ -74,4 +79,19 @@ function cancelShutdownTimer(): void {
     clearTimeout(shutdownTimer)
     shutdownTimer = null
   }
+}
+
+export function injectConnection(conn: HanaConnection): void {
+  process.env.VCAP_SERVICES = JSON.stringify({
+    hana: [{
+      credentials: {
+        host: conn.host,
+        port: String(conn.port),
+        user: conn.user,
+        password: conn.password,
+        encrypt: conn.useTLS !== false,
+        schema: conn.schema || ''
+      }
+    }]
+  })
 }
