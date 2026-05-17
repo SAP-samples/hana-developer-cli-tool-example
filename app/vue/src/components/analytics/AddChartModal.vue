@@ -25,11 +25,11 @@ async function onDataSourceSelect(schema: string, object: string, objectType: 't
 
 function confirm() {
   emit('confirm', chartConfig.config.value)
-  dialogRef.value?.close()
+  if (dialogRef.value) dialogRef.value.open = false
 }
 
 function show() {
-  dialogRef.value?.show()
+  if (dialogRef.value) dialogRef.value.open = true
 }
 
 defineExpose({ show })
@@ -55,7 +55,7 @@ defineExpose({ show })
     <div slot="footer">
       <ui5-bar design="Footer">
         <ui5-button slot="endContent" design="Emphasized" @click="confirm" :disabled="chartConfig.measures.value.length === 0">Add</ui5-button>
-        <ui5-button slot="endContent" @click="emit('cancel'); dialogRef?.close()">Cancel</ui5-button>
+        <ui5-button slot="endContent" @click="emit('cancel'); if (dialogRef) dialogRef.open = false">Cancel</ui5-button>
       </ui5-bar>
     </div>
   </ui5-dialog>

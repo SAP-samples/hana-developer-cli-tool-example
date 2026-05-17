@@ -1,5 +1,8 @@
 // @ts-check
 import * as base from '../utils/base.js'
+import express from 'express'
+
+const jsonParser = express.json()
 
 /**
  * Allowed aggregation functions for measures
@@ -17,7 +20,7 @@ const ALLOWED_OPERATORS = new Set(['=', '!=', '>', '<', '>=', '<=', 'IN', 'LIKE'
  * Regex for valid SQL identifier names (no quoting or special characters)
  * @type {RegExp}
  */
-const IDENTIFIER_REGEX = /^[a-zA-Z_][a-zA-Z0-9_]*$/
+const IDENTIFIER_REGEX = /^[a-zA-Z0-9_][a-zA-Z0-9_]*$/
 
 /**
  * Validate a SQL identifier against the allowed pattern.
@@ -52,7 +55,10 @@ function quoteIdentifier(identifier) {
  * @returns {{ sql: string, params: any[] } | { error: string, status: number }}
  */
 export function buildAnalyticsSQL(body) {
-    const { schema, object, dimensions = [], measures = [], filters = [], limit = 1000 } = body || {}
+    const { schema, object, dimensions: rawDimensions = [], measures = [], filters = [], limit = 1000 } = body || {}
+
+    // Normalize dimensions: accept string[] or {column: string}[]
+    const dimensions = rawDimensions.map(d => typeof d === 'string' ? d : d.column)
 
     // --- Required field validation ---
     if (!schema || typeof schema !== 'string' || schema.trim() === '') {
@@ -262,7 +268,7 @@ export function route(app) {
      *       500:
      *         description: Database or internal server error
      */
-    app.post('/hana/analytics-ui', async (req, res, next) => {
+    app.post('/hana/analytics-ui', jsonParser, async (req, res, next) => {
         try {
             const body = req.body || {}
             base.debug('analytics-ui request body:', JSON.stringify(body))

@@ -1,1 +1,0 @@
-import{b8 as o,cg as s,bl as c,bi as t}from"./index-cuvFa1Yu.js";const a={},r={class:"home"};function l(n,e){return s(),c("div",r,[...e[0]||(e[0]=[t("ui5-title",{level:"H2"},"Welcome to HANA CLI",-1),t("p",null,"Select a tool from the sidebar to get started.",-1)])])}const _=o(a,[["render",l],["__scopeId","data-v-c160e559"]]);export{_ as default};

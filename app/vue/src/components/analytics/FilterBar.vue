@@ -27,7 +27,11 @@ const newValue = ref('')
 const operators = ['=', '!=', '>', '<', '>=', '<=', 'IN', 'LIKE', 'BETWEEN']
 
 function openPopover(event: Event) {
-  popoverRef.value?.showAt(event.target)
+  const popover = popoverRef.value
+  if (popover) {
+    popover.opener = event.target
+    popover.open = true
+  }
 }
 
 function addFilter() {
@@ -40,7 +44,7 @@ function addFilter() {
     newColumn.value = ''
     newOperator.value = '='
     newValue.value = ''
-    popoverRef.value?.close()
+    if (popoverRef.value) popoverRef.value.open = false
   }
 }
 </script>
