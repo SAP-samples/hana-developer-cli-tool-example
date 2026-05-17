@@ -14,6 +14,8 @@ import PropertiesPanel from '../components/calcview/properties/PropertiesPanel.v
 import EditorToolbar from '../components/calcview/toolbar/EditorToolbar.vue'
 import EditorTabBar from '../components/calcview/tabs/EditorTabBar.vue'
 import CreateCalcViewDialog from '../components/calcview/dialogs/CreateCalcViewDialog.vue'
+import DataSourcePicker from '../components/calcview/dialogs/DataSourcePicker.vue'
+import type { DataSourceSelection } from '../components/calcview/dialogs/DataSourcePicker.vue'
 import type { NodeType, Column, CalcViewModel } from '../services/calcview/types'
 import type { Node, Edge, Connection } from '@vue-flow/core'
 import '@ui5/webcomponents/dist/Title.js'
@@ -31,6 +33,8 @@ const vueFlowEdges = computed(() => activeTab.value?.editor.vueFlowEdges.value ?
 const selectedNodeId = ref<string | null>(null)
 const showCreateDialog = ref(false)
 const createDir = ref('')
+const showDataSourcePicker = ref(false)
+const dataSourceTargetNodeId = ref<string | null>(null)
 
 function handleNodeClick(node: Node) { selectedNodeId.value = node.id }
 
@@ -77,6 +81,35 @@ function handleMapAll(nodeId: string) {
     const commands = columnsToMap.map(col => new MapColumnCommand(modelRef, nodeId, col))
     activeTab.value.editor.undoRedo.push(new BatchCommand(commands, `Map all columns to ${nodeId}`))
   }
+}
+
+function handleAddDataSource(nodeId: string) {
+  dataSourceTargetNodeId.value = nodeId
+  showDataSourcePicker.value = true
+}
+
+function handleDataSourceSelected(source: DataSourceSelection) {
+  showDataSourcePicker.value = false
+  if (!activeTab.value || !model.value || !dataSourceTargetNodeId.value) return
+
+  // Add to dataSources if not already present
+  if (!model.value.dataSources.find(d => d.id === source.id)) {
+    model.value.dataSources.push({
+      id: source.id,
+      type: source.type,
+      schemaName: source.schemaName,
+      objectName: source.objectName,
+      columns: []
+    })
+  }
+
+  // Add input reference to the target node
+  const targetNode = model.value.calculationViews.find(n => n.id === dataSourceTargetNodeId.value)
+  if (targetNode && !targetNode.inputs.find(i => i.node === source.id)) {
+    targetNode.inputs.push({ name: source.id, node: source.id })
+  }
+
+  dataSourceTargetNodeId.value = null
 }
 
 async function handleAutoLayout() {
@@ -284,6 +317,7 @@ onUnmounted(() => { document.removeEventListener('keydown', handleKeydown) })
             @map-column="(nodeId, col) => activeTab?.editor.mapColumn(nodeId, col)"
             @unmap-column="(nodeId, colId) => activeTab?.editor.unmapColumn(nodeId, colId)"
             @map-all="handleMapAll"
+            @add-data-source="handleAddDataSource"
             @add-join-condition="(nodeId, cond) => activeTab?.editor.addJoinCondition(nodeId, cond)"
             @remove-join-condition="(nodeId, idx) => activeTab?.editor.removeJoinCondition(nodeId, idx)"
             @add-calculated-column="(nodeId, col) => activeTab?.editor.addCalculatedColumn(nodeId, col)"
@@ -306,6 +340,12 @@ onUnmounted(() => { document.removeEventListener('keydown', handleKeydown) })
       :directory="createDir"
       @confirm="handleCreateConfirm"
       @cancel="handleCreateCancel"
+    />
+
+    <DataSourcePicker
+      :open="showDataSourcePicker"
+      @select="handleDataSourceSelected"
+      @cancel="showDataSourcePicker = false"
     />
   </div>
 </template>

@@ -12,6 +12,7 @@ const emit = defineEmits<{
   'map-column': [column: Column]
   'unmap-column': [columnId: string]
   'map-all': []
+  'add-data-source': []
 }>()
 
 interface InputColumn {
@@ -90,7 +91,10 @@ function handleMapAll() {
       <div class="column-list input-columns">
         <div class="column-header">
           <span>Input Columns</span>
-          <ui5-button design="Transparent" @click="handleMapAll">Map All</ui5-button>
+          <div class="header-actions">
+            <ui5-button design="Transparent" @click="emit('add-data-source')">+ Data Source</ui5-button>
+            <ui5-button design="Transparent" @click="handleMapAll">Map All</ui5-button>
+          </div>
         </div>
         <div
           v-for="col in inputColumns"
@@ -166,6 +170,12 @@ function handleMapAll() {
   color: var(--sapTextColor, #333);
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.header-actions {
+  display: flex;
+  gap: 2px;
   align-items: center;
 }
 

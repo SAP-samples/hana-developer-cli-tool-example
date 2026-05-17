@@ -31,6 +31,7 @@ const emit = defineEmits<{
   'add-variable': [variable: Variable]
   'remove-variable': [variableId: string]
   'update-variable': [variableId: string, updates: Partial<Variable>]
+  'add-data-source': [nodeId: string]
 }>()
 
 const selectedNode = computed<CalcViewNode | null>(() => {
@@ -83,6 +84,7 @@ const isJoinNode = computed(() => {
               @map-column="(col) => emit('map-column', selectedNode!.id, col)"
               @unmap-column="(colId) => emit('unmap-column', selectedNode!.id, colId)"
               @map-all="() => emit('map-all', selectedNode!.id)"
+              @add-data-source="() => emit('add-data-source', selectedNode!.id)"
             />
           </ui5-tab>
           <ui5-tab text="Calculated">
