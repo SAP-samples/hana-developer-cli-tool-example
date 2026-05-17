@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import { startServer, stopServer, scheduleShutdown } from './server/lifecycle.js'
+import { registerToolsPanel } from './editors/toolsPanel.js'
 
 let activeWebviewCount = 0
 
@@ -7,6 +8,8 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push({
     dispose: () => stopServer()
   })
+
+  registerToolsPanel(context)
 }
 
 export async function ensureServer(context: vscode.ExtensionContext): Promise<number> {
