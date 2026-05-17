@@ -4,12 +4,15 @@ import '@ui5/webcomponents/dist/Button.js'
 defineProps<{
   canUndo: boolean
   canRedo: boolean
+  filePath?: string
 }>()
 
 const emit = defineEmits<{
   'undo': []
   'redo': []
   'auto-layout': []
+  'save': []
+  'save-as': []
 }>()
 </script>
 
@@ -17,6 +20,9 @@ const emit = defineEmits<{
   <div class="editor-toolbar">
     <ui5-button design="Transparent" icon="undo" :disabled="!canUndo" @click="emit('undo')" tooltip="Undo (Ctrl+Z)" />
     <ui5-button design="Transparent" icon="redo" :disabled="!canRedo" @click="emit('redo')" tooltip="Redo (Ctrl+Y)" />
+    <div class="separator" />
+    <ui5-button design="Transparent" icon="save" @click="emit('save')" tooltip="Save (Ctrl+S)" />
+    <ui5-button design="Transparent" icon="request" @click="emit('save-as')" tooltip="Save As..." />
     <div class="separator" />
     <ui5-button design="Transparent" icon="resize" @click="emit('auto-layout')" tooltip="Auto Layout" />
   </div>

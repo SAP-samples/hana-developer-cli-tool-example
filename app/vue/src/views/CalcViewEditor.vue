@@ -1,20 +1,27 @@
 <script setup lang="ts">
 import { onMounted, ref, computed, onUnmounted } from 'vue'
 import type { Ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useCalcViewTabs } from '../composables/calcview/useCalcViewTabs'
 import { BatchCommand, MapColumnCommand } from '../composables/calcview/commands'
 import { parseCalcView } from '../services/calcview/xmlParser'
+import { serializeCalcView } from '../services/calcview/xmlSerializer'
 import { autoLayout } from '../composables/calcview/useCalcViewLayout'
+import { useCalcViewFileApi, generateSkeletonXml } from '../composables/calcview/useCalcViewFileApi'
 import CalcViewCanvas from '../components/calcview/canvas/CalcViewCanvas.vue'
 import NodePalette from '../components/calcview/canvas/NodePalette.vue'
 import PropertiesPanel from '../components/calcview/properties/PropertiesPanel.vue'
 import EditorToolbar from '../components/calcview/toolbar/EditorToolbar.vue'
 import EditorTabBar from '../components/calcview/tabs/EditorTabBar.vue'
-import type { NodeType, Column, JoinCondition, CalcViewModel, CalculatedColumn, Variable } from '../services/calcview/types'
+import CreateCalcViewDialog from '../components/calcview/dialogs/CreateCalcViewDialog.vue'
+import type { NodeType, Column, CalcViewModel } from '../services/calcview/types'
 import type { Node, Edge, Connection } from '@vue-flow/core'
 import '@ui5/webcomponents/dist/Title.js'
 
-const { tabs, activeTabId, activeTab, openTab, closeTab, forceCloseTab } = useCalcViewTabs()
+const route = useRoute()
+const router = useRouter()
+const { readProjectFile, writeProjectFile } = useCalcViewFileApi()
+const { tabs, activeTabId, activeTab, openTab, closeTab, forceCloseTab, updateTabFilePath } = useCalcViewTabs()
 
 const model = computed(() => activeTab.value?.editor.model.value ?? null)
 const undoRedo = computed(() => activeTab.value?.editor.undoRedo ?? null)
@@ -22,10 +29,10 @@ const vueFlowNodes = computed(() => activeTab.value?.editor.vueFlowNodes.value ?
 const vueFlowEdges = computed(() => activeTab.value?.editor.vueFlowEdges.value ?? [])
 
 const selectedNodeId = ref<string | null>(null)
+const showCreateDialog = ref(false)
+const createDir = ref('')
 
-function handleNodeClick(node: Node) {
-  selectedNodeId.value = node.id
-}
+function handleNodeClick(node: Node) { selectedNodeId.value = node.id }
 
 function handleConnect(connection: Connection) {
   if (connection.source && connection.target && activeTab.value) {
@@ -35,15 +42,11 @@ function handleConnect(connection: Connection) {
 
 function handleEdgeRemove(edge: Edge) {
   if (edge.target === '__semantics__') return
-  if (activeTab.value) {
-    activeTab.value.editor.disconnectNodes(edge.source, edge.target)
-  }
+  if (activeTab.value) activeTab.value.editor.disconnectNodes(edge.source, edge.target)
 }
 
 function handleAddNode(type: NodeType) {
-  if (activeTab.value) {
-    activeTab.value.editor.addNode(type, { x: 200, y: 400 })
-  }
+  if (activeTab.value) activeTab.value.editor.addNode(type, { x: 200, y: 400 })
 }
 
 function handleMapAll(nodeId: string) {
@@ -58,62 +61,120 @@ function handleMapAll(nodeId: string) {
     const ds = model.value.dataSources.find(d => d.id === input.node)
     if (ds) {
       for (const col of ds.columns) {
-        if (!mappedIds.has(col.name)) {
-          columnsToMap.push({ id: col.name, name: col.name, dataType: col.dataType })
-        }
+        if (!mappedIds.has(col.name)) columnsToMap.push({ id: col.name, name: col.name, dataType: col.dataType })
       }
     }
     const cvNode = model.value.calculationViews.find(n => n.id === input.node)
     if (cvNode) {
       for (const col of cvNode.outputColumns) {
-        if (!mappedIds.has(col.id)) {
-          columnsToMap.push({ id: col.id, name: col.name, dataType: col.dataType })
-        }
+        if (!mappedIds.has(col.id)) columnsToMap.push({ id: col.id, name: col.name, dataType: col.dataType })
       }
     }
   }
 
   if (columnsToMap.length > 0) {
     const modelRef = activeTab.value.editor.model as Ref<CalcViewModel>
-    const commands = columnsToMap.map(col =>
-      new MapColumnCommand(modelRef, nodeId, col)
-    )
+    const commands = columnsToMap.map(col => new MapColumnCommand(modelRef, nodeId, col))
     activeTab.value.editor.undoRedo.push(new BatchCommand(commands, `Map all columns to ${nodeId}`))
   }
 }
 
 async function handleAutoLayout() {
   if (!model.value || !activeTab.value) return
-  const modelRef = activeTab.value.editor.model as Ref<CalcViewModel>
-  await autoLayout(modelRef, activeTab.value.editor.undoRedo)
+  await autoLayout(activeTab.value.editor.model as Ref<CalcViewModel>, activeTab.value.editor.undoRedo)
 }
 
 function handleCloseTab(tabId: string) {
   const closed = closeTab(tabId)
-  if (!closed) {
-    // Tab is dirty - force close (in a real app, show confirmation dialog)
-    forceCloseTab(tabId)
-  }
+  if (!closed) forceCloseTab(tabId)
 }
+
+// --- Save ---
+
+async function handleSave() {
+  if (!activeTab.value || !model.value) return
+  const filePath = activeTab.value.filePath
+  if (!filePath) { handleSaveAs(); return }
+  const xml = serializeCalcView(model.value)
+  await writeProjectFile(filePath, xml)
+  activeTab.value.editor.undoRedo.markSaved()
+}
+
+async function handleSaveAs() {
+  if (!activeTab.value || !model.value) return
+  const newPath = prompt('Save as (full path):', activeTab.value.filePath || '')
+  if (!newPath) return
+  const xml = serializeCalcView(model.value)
+  await writeProjectFile(newPath, xml)
+  updateTabFilePath(activeTab.value.id, newPath)
+  activeTab.value.editor.undoRedo.markSaved()
+}
+
+// --- Create New ---
+
+function handleCreateConfirm(config: { name: string; dataCategory: string; description: string; initialNode: string; directory: string }) {
+  showCreateDialog.value = false
+  const xml = generateSkeletonXml(config)
+  const filePath = config.directory
+    ? `${config.directory.replace(/\\/g, '/')}/${config.name}.hdbcalculationview`
+    : undefined
+  const tab = openTab(config.name, filePath)
+  tab.editor.loadModel(parseCalcView(xml))
+  router.replace({ name: 'calcViewEditor' })
+}
+
+function handleCreateCancel() {
+  showCreateDialog.value = false
+  router.replace({ name: 'calcViewEditor' })
+}
+
+// --- Keyboard ---
 
 function handleKeydown(e: KeyboardEvent) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault()
+    handleSave()
+    return
+  }
   if (!undoRedo.value) return
   if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
-    e.preventDefault()
-    undoRedo.value.undo()
+    e.preventDefault(); undoRedo.value.undo()
   } else if ((e.ctrlKey || e.metaKey) && e.key === 'z' && e.shiftKey) {
-    e.preventDefault()
-    undoRedo.value.redo()
+    e.preventDefault(); undoRedo.value.redo()
   } else if ((e.ctrlKey || e.metaKey) && e.key === 'y') {
-    e.preventDefault()
-    undoRedo.value.redo()
+    e.preventDefault(); undoRedo.value.redo()
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   document.addEventListener('keydown', handleKeydown)
 
-  const demoXml = `<?xml version="1.0" encoding="UTF-8"?>
+  // Handle ?file= query param — open an existing file
+  if (route.query.file) {
+    const filePath = String(route.query.file)
+    try {
+      const { xml } = await readProjectFile(filePath)
+      const name = filePath.split(/[\\/]/).pop()?.replace('.hdbcalculationview', '') || 'Untitled'
+      const tab = openTab(name, filePath)
+      tab.editor.loadModel(parseCalcView(xml))
+      tab.editor.undoRedo.markSaved()
+    } catch (e: any) {
+      console.error('Failed to open file:', e)
+    }
+    router.replace({ name: 'calcViewEditor' })
+    return
+  }
+
+  // Handle ?new=true — show create dialog
+  if (route.query.new === 'true') {
+    createDir.value = String(route.query.dir || '')
+    showCreateDialog.value = true
+    return
+  }
+
+  // Default: open demo if no tabs
+  if (tabs.value.length === 0) {
+    const demoXml = `<?xml version="1.0" encoding="UTF-8"?>
 <Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="SALES_ANALYSIS" applyPrivilegeType="NONE" dataCategory="CUBE">
   <descriptions defaultDescription="Sales Analysis with Products"/>
   <localVariables/>
@@ -180,19 +241,17 @@ onMounted(() => {
     </shapes>
   </layout>
 </Calculation:scenario>`
-
-  const tab = openTab('SALES_ANALYSIS')
-  tab.editor.loadModel(parseCalcView(demoXml))
+    const tab = openTab('SALES_ANALYSIS')
+    tab.editor.loadModel(parseCalcView(demoXml))
+  }
 })
 
-onUnmounted(() => {
-  document.removeEventListener('keydown', handleKeydown)
-})
+onUnmounted(() => { document.removeEventListener('keydown', handleKeydown) })
 </script>
 
 <template>
   <div class="calc-view-editor">
-    <template v-if="tabs.length > 0">
+    <template v-if="tabs.length > 0 || showCreateDialog">
       <EditorTabBar
         :tabs="tabs"
         :active-tab-id="activeTabId"
@@ -203,9 +262,12 @@ onUnmounted(() => {
         <EditorToolbar
           :can-undo="undoRedo?.canUndo.value ?? false"
           :can-redo="undoRedo?.canRedo.value ?? false"
+          :file-path="activeTab?.filePath"
           @undo="undoRedo?.undo()"
           @redo="undoRedo?.redo()"
           @auto-layout="handleAutoLayout"
+          @save="handleSave"
+          @save-as="handleSaveAs"
         />
         <div class="editor-content">
           <NodePalette @add-node="handleAddNode" />
@@ -238,6 +300,13 @@ onUnmounted(() => {
     <div v-else class="empty-state">
       <ui5-title level="H3">No Calculation View loaded</ui5-title>
     </div>
+
+    <CreateCalcViewDialog
+      :open="showCreateDialog"
+      :directory="createDir"
+      @confirm="handleCreateConfirm"
+      @cancel="handleCreateCancel"
+    />
   </div>
 </template>
 

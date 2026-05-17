@@ -58,5 +58,10 @@ export function useCalcViewTabs() {
     }
   }
 
-  return { tabs, activeTabId, activeTab, openTab, closeTab, forceCloseTab }
+  function updateTabFilePath(tabId: string, filePath: string) {
+    const tab = tabs.value.find(t => t.id === tabId)
+    if (tab) tab.filePath = filePath
+  }
+
+  return { tabs, activeTabId, activeTab, openTab, closeTab, forceCloseTab, updateTabFilePath }
 }
