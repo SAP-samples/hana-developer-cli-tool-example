@@ -141,6 +141,7 @@ function onOutputModeChange(e: Event) {
   const selected = items?.[0]
   if (selected) {
     const mode = selected.dataset.mode || 'table'
+    if (mode === activeTab.value.outputMode) return
     updateTab(activeTab.value.id, { outputMode: mode, error: '' })
     if (mode === 'plan' && planResults.value.length === 0 && activeTab.value.sql.trim()) {
       explainQuery()
