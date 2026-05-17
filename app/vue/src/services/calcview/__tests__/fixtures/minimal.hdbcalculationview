@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="MINIMAL_TEST" applyPrivilegeType="NONE" dataCategory="CUBE">
+  <descriptions defaultDescription="Minimal Test View"/>
+  <localVariables/>
+  <variableMappings/>
+  <dataSources/>
+  <calculationViews/>
+  <logicalModel>
+    <attributes/>
+    <calculatedAttributes/>
+    <baseMeasures/>
+    <calculatedMeasures/>
+    <restrictedMeasures/>
+  </logicalModel>
+  <layout>
+    <shapes>
+      <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+        <upperLeftCorner x="40" y="85"/>
+      </shape>
+    </shapes>
+  </layout>
+</Calculation:scenario>

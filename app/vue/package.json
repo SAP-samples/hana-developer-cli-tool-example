@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@guolao/vue-monaco-editor": "^1.6.0",
@@ -14,7 +16,12 @@
     "@ui5/webcomponents": "^2.7.0",
     "@ui5/webcomponents-fiori": "^2.7.0",
     "@ui5/webcomponents-icons": "^2.7.0",
+    "@vue-flow/controls": "^1.1.3",
+    "@vue-flow/core": "^1.48.2",
+    "@vue-flow/minimap": "^1.5.4",
     "echarts": "^6.0.0",
+    "elkjs": "^0.11.1",
+    "fast-xml-parser": "^5.8.0",
     "highlight.js": "^11.11.0",
     "marked": "^18.0.3",
     "splitpanes": "^4.0.4",
@@ -27,6 +34,7 @@
     "@vitejs/plugin-vue": "^5.2.0",
     "typescript": "^5.7.0",
     "vite": "^6.3.0",
+    "vitest": "^4.1.6",
     "vue-tsc": "^2.2.0"
   }
 }

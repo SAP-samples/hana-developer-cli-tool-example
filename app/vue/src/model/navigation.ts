@@ -99,6 +99,15 @@ export const navigation: NavGroup[] = [
     ]
   },
   {
+    key: 'modeling',
+    title: 'Modeling',
+    icon: 'simulate',
+    expanded: false,
+    items: [
+      { key: 'calcViewBrowser', title: 'Calculation Views', route: 'calcViewBrowser' }
+    ]
+  },
+  {
     key: 'analytics',
     title: 'Analytics',
     icon: 'business-objects-experience',

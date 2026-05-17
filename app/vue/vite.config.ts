@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
@@ -35,5 +36,9 @@ export default defineConfig(({ command }) => ({
   },
   build: {
     outDir: 'dist'
+  },
+  test: {
+    globals: true,
+    environment: 'node'
   }
 }))

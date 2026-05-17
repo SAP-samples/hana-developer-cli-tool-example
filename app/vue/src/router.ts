@@ -169,6 +169,17 @@ export const router = createRouter({
       name: 'version',
       component: () => import('./views/Version.vue')
     },
+    // Modeling
+    {
+      path: '/calc-view-browser',
+      name: 'calcViewBrowser',
+      component: () => import('./views/CalcViewBrowser.vue')
+    },
+    {
+      path: '/calc-view-editor',
+      name: 'calcViewEditor',
+      component: () => import('./views/CalcViewEditor.vue')
+    },
     {
       path: '/analytics',
       name: 'analytics',
