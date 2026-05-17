@@ -266,7 +266,8 @@ Creates a valid minimal `.hdbcalculationview` XML skeleton and opens it in the e
 - **Project files:** Save in-place (Ctrl+S), or "Save As" to new path
 - **Runtime views:** "Export As" only — saves XML to local file
 - **Auto-save:** Optional, configurable interval (disabled by default)
-- **Dirty state:** Tracked via command stack (dirty = commands since last save > 0)
+- **Dirty state:** Tracked via command stack (dirty = pointer !== savedPointer)
+- **"Save As" behavior:** Updates the current tab's file path and calls `markSaved()` on its undo stack. Does NOT open a new tab — the current tab becomes associated with the new path.
 
 ---
 
@@ -358,6 +359,8 @@ interface CalcViewNode {
   joinConfig?: JoinConfig
   rankConfig?: RankConfig
   unionConfig?: UnionConfig
+  tableFunctionConfig?: TableFunctionConfig
+  hierarchyFunctionConfig?: HierarchyFunctionConfig
 }
 
 type NodeType = 'join' | 'nonEquiJoin' | 'projection' | 'aggregation'
@@ -375,6 +378,22 @@ interface JoinCondition {
   leftColumn: string
   rightColumn: string
   operator: '=' | '<' | '>' | '<=' | '>=' | '!='
+}
+
+// Table Function configuration
+interface TableFunctionConfig {
+  schemaName: string
+  functionName: string
+  parameterMappings: { paramName: string; value: string }[]
+}
+
+// Hierarchy Function configuration
+interface HierarchyFunctionConfig {
+  hierarchyType: 'leveled' | 'parentChild'
+  sourceNode: string            // reference to input node providing hierarchy data
+  parentColumn?: string
+  childColumn?: string
+  levels?: { name: string; column: string }[]
 }
 
 // Data source reference
@@ -489,6 +508,8 @@ interface HierarchyLevel {
 
 ## Component Structure
 
+All `calcview/` components are **locally imported** where used (not globally registered). This avoids namespace collisions with existing components (e.g., the analytics `DataSourcePicker`) and enables tree-shaking.
+
 ```
 src/
 ├── views/
@@ -500,7 +521,7 @@ src/
 │       │   ├── CalcViewCanvas.vue   # Vue Flow wrapper
 │       │   ├── nodes/
 │       │   │   ├── SemanticsNode.vue
-│       │   │   ├── JoinNode.vue
+│       │   │   ├── JoinNode.vue          # Shared by 'join' and 'nonEquiJoin' types (same visual, different config)
 │       │   │   ├── ProjectionNode.vue
 │       │   │   ├── AggregationNode.vue
 │       │   │   ├── UnionNode.vue
@@ -525,7 +546,7 @@ src/
 │       │   ├── ViewPropertiesTab.vue     # View-level properties
 │       │   └── HierarchiesTab.vue        # Hierarchy definitions
 │       ├── dialogs/
-│       │   ├── CalcViewDataSourcePicker.vue  # Add data source dialog (prefixed to avoid collision with analytics DataSourcePicker)
+│       │   ├── CalcViewDataSourcePicker.vue  # Add data source dialog (locally imported, not globally registered)
 │       │   ├── CreateViewDialog.vue      # New view creation
 │       │   └── ExportDialog.vue          # Export/Save As
 │       ├── toolbar/
