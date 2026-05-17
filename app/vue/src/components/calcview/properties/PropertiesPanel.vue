@@ -5,11 +5,12 @@ import '@ui5/webcomponents/dist/TabContainer.js'
 import '@ui5/webcomponents/dist/Tab.js'
 
 import ViewPropertiesTab from './ViewPropertiesTab.vue'
+import ParametersTab from './ParametersTab.vue'
 import MappingTab from './MappingTab.vue'
 import CalculatedColumnsTab from './CalculatedColumnsTab.vue'
 import FilterTab from './FilterTab.vue'
 import JoinConditionSection from './JoinConditionSection.vue'
-import type { CalcViewModel, CalcViewNode, Column, JoinCondition, CalculatedColumn } from '../../../services/calcview/types'
+import type { CalcViewModel, CalcViewNode, Column, JoinCondition, CalculatedColumn, Variable } from '../../../services/calcview/types'
 import { NODE_TYPE_DEFINITIONS } from '../../../services/calcview/nodeTypes'
 
 const props = defineProps<{
@@ -27,6 +28,9 @@ const emit = defineEmits<{
   'remove-calculated-column': [nodeId: string, columnId: string]
   'update-calculated-column': [nodeId: string, columnId: string, updates: Partial<CalculatedColumn>]
   'set-filter': [nodeId: string, expression: string | undefined]
+  'add-variable': [variable: Variable]
+  'remove-variable': [variableId: string]
+  'update-variable': [variableId: string, updates: Partial<Variable>]
 }>()
 
 const selectedNode = computed<CalcViewNode | null>(() => {
@@ -54,10 +58,15 @@ const isJoinNode = computed(() => {
       <ui5-title level="H5">{{ panelTitle }}</ui5-title>
     </div>
     <div class="panel-content">
-      <ViewPropertiesTab
-        v-if="!selectedNodeId || selectedNodeId === '__semantics__'"
-        :model="model"
-      />
+      <template v-if="!selectedNodeId || selectedNodeId === '__semantics__'">
+        <ViewPropertiesTab :model="model" />
+        <ParametersTab
+          :model="model"
+          @add-variable="(v) => emit('add-variable', v)"
+          @remove-variable="(id) => emit('remove-variable', id)"
+          @update-variable="(id, updates) => emit('update-variable', id, updates)"
+        />
+      </template>
       <template v-else-if="selectedNode">
         <JoinConditionSection
           v-if="isJoinNode"

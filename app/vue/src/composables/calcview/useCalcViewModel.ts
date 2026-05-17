@@ -1,6 +1,6 @@
 import { ref, computed, type Ref } from 'vue'
 import type { Node, Edge } from '@vue-flow/core'
-import type { CalcViewModel, CalcViewNode, NodeType, Column, JoinCondition, CalculatedColumn } from '../../services/calcview/types'
+import type { CalcViewModel, CalcViewNode, NodeType, Column, JoinCondition, CalculatedColumn, Variable } from '../../services/calcview/types'
 import { NODE_TYPE_DEFINITIONS } from '../../services/calcview/nodeTypes'
 import { createUndoRedoStack } from './useCalcViewUndoRedo'
 import {
@@ -15,7 +15,10 @@ import {
   AddCalculatedColumnCommand,
   RemoveCalculatedColumnCommand,
   UpdateCalculatedColumnCommand,
-  SetFilterExpressionCommand
+  SetFilterExpressionCommand,
+  AddVariableCommand,
+  RemoveVariableCommand,
+  UpdateVariableCommand
 } from './commands'
 
 export function useCalcViewModel() {
@@ -193,6 +196,21 @@ export function useCalcViewModel() {
     undoRedo.push(new SetFilterExpressionCommand(model as Ref<CalcViewModel>, nodeId, expression))
   }
 
+  function addVariable(variable: Variable) {
+    if (!model.value) return
+    undoRedo.push(new AddVariableCommand(model as Ref<CalcViewModel>, variable))
+  }
+
+  function removeVariable(variableId: string) {
+    if (!model.value) return
+    undoRedo.push(new RemoveVariableCommand(model as Ref<CalcViewModel>, variableId))
+  }
+
+  function updateVariable(variableId: string, updates: Partial<Variable>) {
+    if (!model.value) return
+    undoRedo.push(new UpdateVariableCommand(model as Ref<CalcViewModel>, variableId, updates))
+  }
+
   return {
     model,
     undoRedo,
@@ -210,6 +228,9 @@ export function useCalcViewModel() {
     addCalculatedColumn,
     removeCalculatedColumn,
     updateCalculatedColumn,
-    setFilterExpression
+    setFilterExpression,
+    addVariable,
+    removeVariable,
+    updateVariable
   }
 }
