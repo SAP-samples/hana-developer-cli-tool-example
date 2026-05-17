@@ -85,6 +85,16 @@ function serializeNode(node: CalcViewNode): Record<string, unknown> {
     viewAttributes: {
       viewAttribute: node.outputColumns.map(c => ({ '@_id': c.id }))
     },
+    ...(node.calculatedColumns.length > 0 ? {
+      calculatedViewAttributes: {
+        calculatedViewAttribute: node.calculatedColumns.map(c => ({
+          '@_id': c.id,
+          '@_datatype': c.dataType,
+          '@_expressionLanguage': 'SQL',
+          formula: c.expression
+        }))
+      }
+    } : { calculatedViewAttributes: '' }),
     input: node.inputs.map(i => ({
       '@_node': i.node,
       mapping: node.outputColumns.map(c => ({
@@ -93,6 +103,9 @@ function serializeNode(node: CalcViewNode): Record<string, unknown> {
         '@_source': c.id
       }))
     })),
+    ...(node.filterExpression ? {
+      filter: { formula: node.filterExpression }
+    } : {}),
     ...(node.joinConfig && node.joinConfig.conditions.length > 0 ? {
       joinAttribute: node.joinConfig.conditions.map(c => ({
         '@_name': c.leftColumn

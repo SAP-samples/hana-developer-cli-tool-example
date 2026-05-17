@@ -58,5 +58,17 @@ describe('xmlSerializer', () => {
       expect(reparsed.calculationViews[0].joinConfig!.cardinality).toBe('1..1')
       expect(reparsed.calculationViews[0].joinConfig!.conditions).toHaveLength(1)
     })
+
+    it('round-trips calculated columns and filter expression', () => {
+      const xml = loadFixture('calculated.hdbcalculationview')
+      const model = parseCalcView(xml)
+      const output = serializeCalcView(model)
+      const reparsed = parseCalcView(output)
+
+      expect(reparsed.calculationViews[0].calculatedColumns).toHaveLength(1)
+      expect(reparsed.calculationViews[0].calculatedColumns[0].id).toBe('DOUBLE_AMOUNT')
+      expect(reparsed.calculationViews[0].calculatedColumns[0].expression).toBe('"AMOUNT" * 2')
+      expect(reparsed.calculationViews[0].filterExpression).toBe('"AMOUNT" > 100')
+    })
   })
 })

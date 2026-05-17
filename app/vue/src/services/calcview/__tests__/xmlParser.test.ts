@@ -92,5 +92,17 @@ describe('xmlParser', () => {
       expect(node.joinConfig!.conditions[0].leftColumn).toBe('PRODUCT_ID')
       expect(node.joinConfig!.conditions[0].operator).toBe('=')
     })
+
+    it('parses calculated columns and filter expression', () => {
+      const xml = loadFixture('calculated.hdbcalculationview')
+      const model = parseCalcView(xml)
+
+      const node = model.calculationViews[0]
+      expect(node.calculatedColumns).toHaveLength(1)
+      expect(node.calculatedColumns[0].id).toBe('DOUBLE_AMOUNT')
+      expect(node.calculatedColumns[0].dataType).toBe('DECIMAL')
+      expect(node.calculatedColumns[0].expression).toBe('"AMOUNT" * 2')
+      expect(node.filterExpression).toBe('"AMOUNT" > 100')
+    })
   })
 })

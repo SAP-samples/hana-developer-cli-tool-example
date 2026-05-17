@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CALC_TEST" applyPrivilegeType="NONE" dataCategory="CUBE">
+  <descriptions defaultDescription="Calculated Column Test"/>
+  <localVariables/>
+  <variableMappings/>
+  <dataSources>
+    <DataSource id="SALES"><resourceUri>SALES</resourceUri></DataSource>
+  </dataSources>
+  <calculationViews>
+    <calculationView xsi:type="Calculation:ProjectionView" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Projection_1">
+      <viewAttributes>
+        <viewAttribute id="AMOUNT"/>
+        <viewAttribute id="PRODUCT_ID"/>
+      </viewAttributes>
+      <calculatedViewAttributes>
+        <calculatedViewAttribute id="DOUBLE_AMOUNT" datatype="DECIMAL" expressionLanguage="SQL">
+          <formula>"AMOUNT" * 2</formula>
+        </calculatedViewAttribute>
+      </calculatedViewAttributes>
+      <input node="SALES"/>
+      <filter>
+        <formula>"AMOUNT" &gt; 100</formula>
+      </filter>
+    </calculationView>
+  </calculationViews>
+  <logicalModel id="Projection_1">
+    <attributes>
+      <attribute id="PRODUCT_ID"><descriptions defaultDescription="Product"/></attribute>
+    </attributes>
+    <calculatedAttributes/>
+    <baseMeasures>
+      <measure id="AMOUNT" aggregationType="sum"><descriptions defaultDescription="Amount"/></measure>
+    </baseMeasures>
+    <calculatedMeasures/>
+    <restrictedMeasures/>
+  </logicalModel>
+  <layout>
+    <shapes>
+      <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+        <upperLeftCorner x="200" y="50"/>
+      </shape>
+      <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="200" y="250"/>
+      </shape>
+    </shapes>
+  </layout>
+</Calculation:scenario>

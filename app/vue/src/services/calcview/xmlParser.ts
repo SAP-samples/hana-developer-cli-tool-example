@@ -3,7 +3,7 @@ import type {
   CalcViewModel, CalcViewNode, DataSource, Column,
   LogicalModel, NodeShape, LayoutInfo,
   NodeType, NodeInput, Variable, VariableMapping,
-  JoinConfig, JoinCondition
+  JoinConfig, JoinCondition, CalculatedColumn
 } from './types'
 
 const parser = new XMLParser({
@@ -14,7 +14,7 @@ const parser = new XMLParser({
       'DataSource', 'calculationView', 'viewAttribute', 'input',
       'mapping', 'attribute', 'measure', 'shape', 'localVariable',
       'variableMapping', 'calculatedAttribute', 'calculatedMeasure',
-      'restrictedMeasure', 'joinAttribute'
+      'restrictedMeasure', 'joinAttribute', 'calculatedViewAttribute'
     ]
     return arrayElements.includes(name)
   }
@@ -76,8 +76,8 @@ function parseCalcViewNode(node: any): CalcViewNode {
     type: nodeType,
     inputs: parseInputs(node.input),
     outputColumns: parseViewAttributes(node.viewAttributes),
-    calculatedColumns: [],
-    filterExpression: node.filter?.expression || undefined
+    calculatedColumns: parseCalculatedViewAttributes(node.calculatedViewAttributes),
+    filterExpression: node.filter?.formula || undefined
   }
   if (nodeType === 'join' || nodeType === 'nonEquiJoin') {
     result.joinConfig = parseJoinConfig(node)
@@ -117,6 +117,18 @@ function parseViewAttributes(va: any): Column[] {
     name: a['@_id'],
     dataType: a['@_datatype'] || '',
     semanticType: a['@_semanticType'] as any,
+    aggregationType: a['@_aggregationType']
+  }))
+}
+
+function parseCalculatedViewAttributes(cva: any): CalculatedColumn[] {
+  if (!cva || !cva.calculatedViewAttribute) return []
+  const list = Array.isArray(cva.calculatedViewAttribute) ? cva.calculatedViewAttribute : [cva.calculatedViewAttribute]
+  return list.map((a: any) => ({
+    id: a['@_id'],
+    name: a['@_id'],
+    dataType: a['@_datatype'] || 'NVARCHAR',
+    expression: a.formula || '',
     aggregationType: a['@_aggregationType']
   }))
 }
