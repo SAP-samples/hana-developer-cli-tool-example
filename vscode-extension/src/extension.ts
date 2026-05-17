@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import { startServer, stopServer, scheduleShutdown } from './server/lifecycle.js'
 import { registerToolsPanel } from './editors/toolsPanel.js'
 import { CalcViewEditorProvider } from './editors/calcViewEditor.js'
+import { ArtifactInspectorProvider } from './editors/artifactInspector.js'
 
 let activeWebviewCount = 0
 
@@ -12,6 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   registerToolsPanel(context)
   CalcViewEditorProvider.register(context)
+  ArtifactInspectorProvider.registerAll(context)
 }
 
 export async function ensureServer(context: vscode.ExtensionContext): Promise<number> {
