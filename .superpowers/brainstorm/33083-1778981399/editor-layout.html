@@ -1,0 +1,193 @@
+<h2>Calculation View Editor — Overall Layout</h2>
+<p class="subtitle">Three-panel layout with tab bar, inspired by BAS</p>
+
+<div class="mockup">
+  <div class="mockup-header">Editor Layout — Full Screen Mode</div>
+  <div class="mockup-body" style="padding: 0; height: 500px; display: flex; flex-direction: column; font-family: var(--font-mono, monospace); font-size: 12px;">
+
+    <!-- Tab Bar -->
+    <div style="display: flex; align-items: center; background: #1a1a2e; border-bottom: 1px solid #333; padding: 0 8px; height: 36px; flex-shrink: 0;">
+      <div style="display: flex; gap: 2px;">
+        <div style="background: #2d2d44; color: #7dd3fc; padding: 6px 14px; border-radius: 4px 4px 0 0; border: 1px solid #444; border-bottom: 2px solid #7dd3fc; font-size: 11px;">SALES_CUBE.hdbcalculationview</div>
+        <div style="background: #1a1a2e; color: #888; padding: 6px 14px; border-radius: 4px 4px 0 0; border: 1px solid #333; font-size: 11px;">PRODUCT_DIM.hdbcalculationview</div>
+        <div style="background: #1a1a2e; color: #888; padding: 6px 14px; border-radius: 4px 4px 0 0; border: 1px solid #333; font-size: 11px;">+ New</div>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div style="display: flex; align-items: center; background: #1e1e2f; border-bottom: 1px solid #333; padding: 4px 12px; height: 40px; flex-shrink: 0; gap: 8px;">
+      <div style="display: flex; gap: 4px;">
+        <div style="background: #2a2a3e; color: #aaa; padding: 4px 8px; border-radius: 4px; font-size: 10px; border: 1px solid #444;">⟲ Undo</div>
+        <div style="background: #2a2a3e; color: #aaa; padding: 4px 8px; border-radius: 4px; font-size: 10px; border: 1px solid #444;">⟳ Redo</div>
+      </div>
+      <div style="width: 1px; height: 20px; background: #444;"></div>
+      <div style="display: flex; gap: 4px;">
+        <div style="background: #2a2a3e; color: #aaa; padding: 4px 8px; border-radius: 4px; font-size: 10px; border: 1px solid #444;">Auto Layout</div>
+        <div style="background: #2a2a3e; color: #aaa; padding: 4px 8px; border-radius: 4px; font-size: 10px; border: 1px solid #444;">Expand All</div>
+        <div style="background: #2a2a3e; color: #aaa; padding: 4px 8px; border-radius: 4px; font-size: 10px; border: 1px solid #444;">Collapse All</div>
+      </div>
+      <div style="width: 1px; height: 20px; background: #444;"></div>
+      <div style="display: flex; gap: 4px;">
+        <div style="background: #2a2a3e; color: #aaa; padding: 4px 8px; border-radius: 4px; font-size: 10px; border: 1px solid #444;">🗑 Remove</div>
+        <div style="background: #2a2a3e; color: #aaa; padding: 4px 8px; border-radius: 4px; font-size: 10px; border: 1px solid #444;">⧉ Duplicate</div>
+      </div>
+      <div style="flex: 1;"></div>
+      <div style="display: flex; gap: 4px;">
+        <div style="background: #2a2a3e; color: #aaa; padding: 4px 8px; border-radius: 4px; font-size: 10px; border: 1px solid #444;">💾 Save</div>
+        <div style="background: #2a2a3e; color: #7dd3fc; padding: 4px 8px; border-radius: 4px; font-size: 10px; border: 1px solid #7dd3fc;">XML Source</div>
+      </div>
+    </div>
+
+    <!-- Main Area: 3 panels -->
+    <div style="display: flex; flex: 1; overflow: hidden;">
+
+      <!-- Left: Node Palette -->
+      <div style="width: 180px; background: #1a1a2e; border-right: 1px solid #333; padding: 12px 8px; overflow-y: auto; flex-shrink: 0;">
+        <div style="color: #888; font-size: 10px; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px;">Nodes</div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: #2a2a3e; border-radius: 4px; color: #ccc; cursor: grab; border: 1px solid transparent;">
+            <span style="color: #7dd3fc;">⊕</span> Join
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: #2a2a3e; border-radius: 4px; color: #ccc; cursor: grab; border: 1px solid transparent;">
+            <span style="color: #a78bfa;">⊗</span> Non Equi Join
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: #2a2a3e; border-radius: 4px; color: #ccc; cursor: grab; border: 1px solid transparent;">
+            <span style="color: #34d399;">⊎</span> Union
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: #2a2a3e; border-radius: 4px; color: #ccc; cursor: grab; border: 1px solid transparent;">
+            <span style="color: #f87171;">⊖</span> Minus
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: #2a2a3e; border-radius: 4px; color: #ccc; cursor: grab; border: 1px solid transparent;">
+            <span style="color: #fbbf24;">⊓</span> Intersect
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: #2a2a3e; border-radius: 4px; color: #ccc; cursor: grab; border: 1px solid transparent;">
+            <span style="color: #60a5fa;">▦</span> Projection
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: #2a2a3e; border-radius: 4px; color: #ccc; cursor: grab; border: 1px solid transparent;">
+            <span style="color: #fb923c;">Σ</span> Aggregation
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: #2a2a3e; border-radius: 4px; color: #ccc; cursor: grab; border: 1px solid transparent;">
+            <span style="color: #e879f9;">⧗</span> Rank
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: #2a2a3e; border-radius: 4px; color: #ccc; cursor: grab; border: 1px solid transparent;">
+            <span style="color: #2dd4bf;">ƒ</span> Table Function
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: #2a2a3e; border-radius: 4px; color: #ccc; cursor: grab; border: 1px solid transparent;">
+            <span style="color: #c084fc;">⊹</span> Hierarchy Fn
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: Canvas -->
+      <div style="flex: 1; background: #12121f; position: relative; overflow: hidden;">
+        <!-- Grid dots pattern -->
+        <div style="position: absolute; inset: 0; background-image: radial-gradient(circle, #333 1px, transparent 1px); background-size: 20px 20px; opacity: 0.3;"></div>
+
+        <!-- Nodes on canvas -->
+        <div style="position: absolute; top: 40px; left: 50%; transform: translateX(-50%);">
+          <!-- Semantics node -->
+          <div style="background: #2d2d44; border: 2px dashed #7dd3fc; border-radius: 8px; padding: 10px 24px; text-align: center; color: #7dd3fc; font-weight: bold; width: 160px;">
+            ◈ Semantics
+          </div>
+          <!-- Edge -->
+          <div style="width: 2px; height: 40px; background: #555; margin: 0 auto;"></div>
+          <!-- Aggregation node -->
+          <div style="background: #2a2a3e; border: 2px solid #fb923c; border-radius: 8px; padding: 10px 24px; text-align: center; color: #ccc; width: 160px; position: relative;">
+            <span style="color: #fb923c;">Σ</span> Aggregation
+            <div style="position: absolute; right: -24px; top: 50%; transform: translateY(-50%); color: #888; cursor: pointer;">⊕</div>
+          </div>
+          <!-- Edge -->
+          <div style="width: 2px; height: 40px; background: #555; margin: 0 auto;"></div>
+          <!-- Join node -->
+          <div style="background: #2a2a3e; border: 2px solid #7dd3fc; border-radius: 8px; padding: 10px 24px; text-align: center; color: #ccc; width: 160px; box-shadow: 0 0 0 2px rgba(125,211,252,0.3);">
+            <span style="color: #7dd3fc;">⊕</span> Join_1 <span style="color: #888; font-size: 10px;">(selected)</span>
+          </div>
+          <!-- Two edges splitting -->
+          <div style="display: flex; justify-content: center; gap: 80px; margin-top: 0;">
+            <div style="width: 2px; height: 40px; background: #555;"></div>
+            <div style="width: 2px; height: 40px; background: #555;"></div>
+          </div>
+          <!-- Two projection nodes -->
+          <div style="display: flex; gap: 40px;">
+            <div style="background: #2a2a3e; border: 2px solid #60a5fa; border-radius: 8px; padding: 8px 16px; text-align: center; color: #ccc; width: 120px; font-size: 11px;">
+              <span style="color: #60a5fa;">▦</span> Proj_Sales
+            </div>
+            <div style="background: #2a2a3e; border: 2px solid #60a5fa; border-radius: 8px; padding: 8px 16px; text-align: center; color: #ccc; width: 120px; font-size: 11px;">
+              <span style="color: #60a5fa;">▦</span> Proj_Products
+            </div>
+          </div>
+        </div>
+
+        <!-- Minimap -->
+        <div style="position: absolute; bottom: 12px; right: 12px; width: 120px; height: 80px; background: #1a1a2e; border: 1px solid #444; border-radius: 4px; opacity: 0.8;"></div>
+
+        <!-- Zoom controls -->
+        <div style="position: absolute; bottom: 12px; left: 12px; display: flex; gap: 4px;">
+          <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 4px 8px; color: #aaa; font-size: 10px;">−</div>
+          <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 4px 8px; color: #aaa; font-size: 10px;">100%</div>
+          <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 4px 8px; color: #aaa; font-size: 10px;">+</div>
+        </div>
+      </div>
+
+      <!-- Right: Properties Panel -->
+      <div style="width: 320px; background: #1a1a2e; border-left: 1px solid #333; display: flex; flex-direction: column; flex-shrink: 0;">
+        <!-- Panel header -->
+        <div style="padding: 12px; border-bottom: 1px solid #333;">
+          <div style="color: #fff; font-weight: bold; font-size: 14px;">Join_1</div>
+          <div style="color: #888; font-size: 11px; margin-top: 2px;">Inner Join</div>
+        </div>
+        <!-- Tabs -->
+        <div style="display: flex; border-bottom: 1px solid #333;">
+          <div style="padding: 8px 12px; color: #7dd3fc; border-bottom: 2px solid #7dd3fc; font-size: 11px;">Mapping</div>
+          <div style="padding: 8px 12px; color: #888; font-size: 11px;">Calc Cols</div>
+          <div style="padding: 8px 12px; color: #888; font-size: 11px;">Filter</div>
+          <div style="padding: 8px 12px; color: #888; font-size: 11px;">Parameters</div>
+        </div>
+        <!-- Content -->
+        <div style="flex: 1; padding: 12px; overflow-y: auto;">
+          <div style="color: #888; font-size: 10px; text-transform: uppercase; margin-bottom: 6px;">Join Condition</div>
+          <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 8px; margin-bottom: 12px;">
+            <div style="color: #ccc; font-size: 11px; font-family: monospace;">SALES.PRODUCT_ID = PRODUCTS.ID</div>
+          </div>
+
+          <div style="color: #888; font-size: 10px; text-transform: uppercase; margin-bottom: 6px;">Data Sources</div>
+          <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px;">
+            <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 8px; color: #ccc; font-size: 11px;">📋 Proj_Sales (left)</div>
+            <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 8px; color: #ccc; font-size: 11px;">📋 Proj_Products (right)</div>
+          </div>
+
+          <div style="color: #888; font-size: 10px; text-transform: uppercase; margin-bottom: 6px;">Output Columns</div>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <div style="display: flex; align-items: center; gap: 6px; padding: 4px 8px; background: #2a2a3e; border-radius: 3px;">
+              <span style="color: #60a5fa; font-size: 10px;">◆</span>
+              <span style="color: #ccc; font-size: 11px;">PRODUCT_ID</span>
+              <span style="color: #666; font-size: 10px; margin-left: auto;">INTEGER</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; padding: 4px 8px; background: #2a2a3e; border-radius: 3px;">
+              <span style="color: #34d399; font-size: 10px;">◇</span>
+              <span style="color: #ccc; font-size: 11px;">AMOUNT</span>
+              <span style="color: #666; font-size: 10px; margin-left: auto;">DECIMAL</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; padding: 4px 8px; background: #2a2a3e; border-radius: 3px;">
+              <span style="color: #60a5fa; font-size: 10px;">◆</span>
+              <span style="color: #ccc; font-size: 11px;">PRODUCT_NAME</span>
+              <span style="color: #666; font-size: 10px; margin-left: auto;">NVARCHAR</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 24px;">
+  <h3>Key Layout Decisions</h3>
+  <ul style="color: #ccc; line-height: 1.8;">
+    <li><strong>Left panel (180px):</strong> Draggable node palette — drag onto canvas to add nodes</li>
+    <li><strong>Center:</strong> Vue Flow canvas — DAG with bottom-to-top flow, dot-grid background, minimap, zoom controls</li>
+    <li><strong>Right panel (320px):</strong> Context-sensitive properties — tabs change based on selected node type</li>
+    <li><strong>Tab bar (top):</strong> Multiple open Calculation Views, like browser tabs</li>
+    <li><strong>Toolbar:</strong> Undo/Redo, layout controls, save, toggle XML source view</li>
+    <li><strong>Resizable panels:</strong> Using splitpanes (already in project) for left/right panel resize</li>
+  </ul>
+</div>

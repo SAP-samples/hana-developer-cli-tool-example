@@ -1,0 +1,224 @@
+<h2>File Management & Data Source Picker</h2>
+<p class="subtitle">Browse, open, create Calculation Views + add data sources to nodes</p>
+
+<!-- Calculation View Browser -->
+<div class="mockup">
+  <div class="mockup-header">Modeling Home — Browse & Open Calculation Views</div>
+  <div class="mockup-body" style="padding: 0; height: 420px; display: flex; flex-direction: column; font-family: var(--font-mono, monospace); font-size: 12px; background: #1a1a2e;">
+
+    <!-- Mode Toggle + Actions -->
+    <div style="padding: 12px 16px; border-bottom: 1px solid #333; display: flex; align-items: center; gap: 12px;">
+      <!-- Source toggle -->
+      <div style="display: flex; border: 1px solid #444; border-radius: 6px; overflow: hidden;">
+        <div style="padding: 6px 14px; background: #7dd3fc; color: #1a1a2e; font-size: 11px; font-weight: bold;">Project Files</div>
+        <div style="padding: 6px 14px; background: #2a2a3e; color: #888; font-size: 11px;">HANA Runtime</div>
+      </div>
+      <!-- Search -->
+      <div style="flex: 1; background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 12px; color: #888; font-size: 11px;">
+        🔍 Search calculation views...
+      </div>
+      <!-- Actions -->
+      <div style="display: flex; gap: 6px;">
+        <div style="background: #7dd3fc; color: #1a1a2e; padding: 6px 14px; border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer;">+ New View</div>
+      </div>
+    </div>
+
+    <!-- Project Path Breadcrumb -->
+    <div style="padding: 8px 16px; border-bottom: 1px solid #333; display: flex; align-items: center; gap: 4px; color: #888; font-size: 11px;">
+      <span style="color: #7dd3fc; cursor: pointer;">workspace</span>
+      <span>/</span>
+      <span style="color: #7dd3fc; cursor: pointer;">db</span>
+      <span>/</span>
+      <span style="color: #ccc;">src</span>
+      <span style="margin-left: auto; color: #666;">4 views found</span>
+    </div>
+
+    <!-- File List -->
+    <div style="flex: 1; overflow-y: auto; padding: 8px;">
+      <!-- Calc view items -->
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+
+        <div style="display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #2a2a3e; border-radius: 6px; border: 1px solid #444; cursor: pointer;">
+          <div style="width: 36px; height: 36px; background: #1a1a2e; border-radius: 6px; display: flex; align-items: center; justify-content: center; border: 1px solid #555;">
+            <span style="color: #7dd3fc; font-size: 16px;">◈</span>
+          </div>
+          <div style="flex: 1;">
+            <div style="color: #fff; font-size: 12px; font-weight: bold;">SALES_CUBE</div>
+            <div style="color: #888; font-size: 10px; margin-top: 2px;">CUBE · 3 nodes · Last modified: 2h ago</div>
+          </div>
+          <div style="color: #888; font-size: 10px; text-align: right;">
+            <div>db/src/SALES_CUBE.hdbcalculationview</div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #2a2a3e; border-radius: 6px; border: 1px solid #444; cursor: pointer;">
+          <div style="width: 36px; height: 36px; background: #1a1a2e; border-radius: 6px; display: flex; align-items: center; justify-content: center; border: 1px solid #555;">
+            <span style="color: #34d399; font-size: 16px;">◈</span>
+          </div>
+          <div style="flex: 1;">
+            <div style="color: #fff; font-size: 12px; font-weight: bold;">PRODUCT_DIM</div>
+            <div style="color: #888; font-size: 10px; margin-top: 2px;">DIMENSION · 2 nodes · Last modified: 1d ago</div>
+          </div>
+          <div style="color: #888; font-size: 10px; text-align: right;">
+            <div>db/src/PRODUCT_DIM.hdbcalculationview</div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #2a2a3e; border-radius: 6px; border: 1px solid #444; cursor: pointer;">
+          <div style="width: 36px; height: 36px; background: #1a1a2e; border-radius: 6px; display: flex; align-items: center; justify-content: center; border: 1px solid #555;">
+            <span style="color: #7dd3fc; font-size: 16px;">◈</span>
+          </div>
+          <div style="flex: 1;">
+            <div style="color: #fff; font-size: 12px; font-weight: bold;">REVENUE_ANALYSIS</div>
+            <div style="color: #888; font-size: 10px; margin-top: 2px;">CUBE · 5 nodes · Last modified: 3d ago</div>
+          </div>
+          <div style="color: #888; font-size: 10px; text-align: right;">
+            <div>db/src/models/REVENUE_ANALYSIS.hdbcalculationview</div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #2a2a3e; border-radius: 6px; border: 1px solid transparent; cursor: pointer; opacity: 0.7;">
+          <div style="width: 36px; height: 36px; background: #1a1a2e; border-radius: 6px; display: flex; align-items: center; justify-content: center; border: 1px solid #555;">
+            <span style="color: #fbbf24; font-size: 16px;">◈</span>
+          </div>
+          <div style="flex: 1;">
+            <div style="color: #fff; font-size: 12px; font-weight: bold;">CUSTOMER_HIERARCHY</div>
+            <div style="color: #888; font-size: 10px; margin-top: 2px;">DIMENSION · 1 node · Last modified: 1w ago</div>
+          </div>
+          <div style="color: #888; font-size: 10px; text-align: right;">
+            <div>db/src/CUSTOMER_HIERARCHY.hdbcalculationview</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Data Source Picker Dialog -->
+<div class="mockup" style="margin-top: 24px;">
+  <div class="mockup-header">Add Data Source — Dialog (when clicking + on a node)</div>
+  <div class="mockup-body" style="padding: 0; height: 380px; display: flex; flex-direction: column; font-family: var(--font-mono, monospace); font-size: 12px; background: #1e1e2f; border-radius: 8px;">
+
+    <!-- Dialog Header -->
+    <div style="padding: 14px 16px; border-bottom: 1px solid #333; display: flex; align-items: center; justify-content: space-between;">
+      <span style="color: #fff; font-weight: bold; font-size: 14px;">Add Data Source</span>
+      <span style="color: #888; cursor: pointer; font-size: 18px;">×</span>
+    </div>
+
+    <!-- Tabs: Project / Database -->
+    <div style="display: flex; border-bottom: 1px solid #333;">
+      <div style="padding: 10px 20px; color: #888; font-size: 11px; cursor: pointer;">Project</div>
+      <div style="padding: 10px 20px; color: #7dd3fc; border-bottom: 2px solid #7dd3fc; font-size: 11px; font-weight: bold;">Database</div>
+    </div>
+
+    <!-- Search + Filter -->
+    <div style="padding: 10px 16px; border-bottom: 1px solid #333; display: flex; gap: 8px;">
+      <div style="flex: 1; background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 10px; color: #ccc; font-size: 11px;">
+        🔍 PRODUCT
+      </div>
+      <select style="background: #2a2a3e; color: #ccc; border: 1px solid #444; border-radius: 4px; padding: 4px 8px; font-size: 10px;">
+        <option>All Types</option>
+        <option>Tables</option>
+        <option>Views</option>
+        <option>Calc Views</option>
+      </select>
+      <select style="background: #2a2a3e; color: #ccc; border: 1px solid #444; border-radius: 4px; padding: 4px 8px; font-size: 10px;">
+        <option>CURRENT_SCHEMA</option>
+        <option>SYS</option>
+        <option>_SYS_BIC</option>
+      </select>
+    </div>
+
+    <!-- Results -->
+    <div style="flex: 1; overflow-y: auto; padding: 8px;">
+      <div style="display: flex; flex-direction: column; gap: 3px;">
+
+        <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #2a2a3e; border-radius: 4px; border: 1px solid #7dd3fc; cursor: pointer;">
+          <span style="color: #60a5fa; font-size: 10px; background: #1a1a2e; padding: 2px 6px; border-radius: 3px;">TABLE</span>
+          <span style="color: #fff; font-size: 11px;">PRODUCTS</span>
+          <span style="color: #666; font-size: 10px; margin-left: auto;">MY_SCHEMA · 6 columns</span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #2a2a3e; border-radius: 4px; border: 1px solid transparent; cursor: pointer;">
+          <span style="color: #34d399; font-size: 10px; background: #1a1a2e; padding: 2px 6px; border-radius: 3px;">VIEW</span>
+          <span style="color: #ccc; font-size: 11px;">PRODUCT_CATEGORIES_V</span>
+          <span style="color: #666; font-size: 10px; margin-left: auto;">MY_SCHEMA · 3 columns</span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #2a2a3e; border-radius: 4px; border: 1px solid transparent; cursor: pointer;">
+          <span style="color: #c084fc; font-size: 10px; background: #1a1a2e; padding: 2px 6px; border-radius: 3px;">CALC</span>
+          <span style="color: #ccc; font-size: 11px;">PRODUCT_DIM</span>
+          <span style="color: #666; font-size: 10px; margin-left: auto;">_SYS_BIC · 8 columns</span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #2a2a3e; border-radius: 4px; border: 1px solid transparent; cursor: pointer;">
+          <span style="color: #60a5fa; font-size: 10px; background: #1a1a2e; padding: 2px 6px; border-radius: 3px;">TABLE</span>
+          <span style="color: #ccc; font-size: 11px;">PRODUCT_SALES_HISTORY</span>
+          <span style="color: #666; font-size: 10px; margin-left: auto;">MY_SCHEMA · 12 columns</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="padding: 12px 16px; border-top: 1px solid #333; display: flex; align-items: center; justify-content: space-between;">
+      <span style="color: #888; font-size: 10px;">Selected: PRODUCTS (TABLE)</span>
+      <div style="display: flex; gap: 8px;">
+        <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 16px; color: #888; font-size: 11px; cursor: pointer;">Cancel</div>
+        <div style="background: #7dd3fc; border-radius: 4px; padding: 6px 16px; color: #1a1a2e; font-size: 11px; font-weight: bold; cursor: pointer;">Add</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create New Dialog -->
+<div class="mockup" style="margin-top: 24px;">
+  <div class="mockup-header">Create New Calculation View — Dialog</div>
+  <div class="mockup-body" style="padding: 20px; background: #1e1e2f; font-family: var(--font-mono, monospace); font-size: 12px;">
+
+    <div style="display: grid; grid-template-columns: 120px 1fr; gap: 12px; align-items: center;">
+      <div style="color: #888; font-size: 11px; text-align: right;">Name:</div>
+      <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 8px 12px; color: #fff; font-size: 12px;">NEW_SALES_REPORT</div>
+
+      <div style="color: #888; font-size: 11px; text-align: right;">Data Category:</div>
+      <div style="display: flex; gap: 8px;">
+        <div style="background: #2a2a3e; border: 1px solid #7dd3fc; border-radius: 4px; padding: 6px 14px; color: #7dd3fc; font-size: 11px;">CUBE</div>
+        <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 14px; color: #888; font-size: 11px;">DIMENSION</div>
+      </div>
+
+      <div style="color: #888; font-size: 11px; text-align: right;">Description:</div>
+      <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 8px 12px; color: #ccc; font-size: 11px;">Sales analysis with product dimension</div>
+
+      <div style="color: #888; font-size: 11px; text-align: right;">Initial Node:</div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <div style="background: #2a2a3e; border: 1px solid #7dd3fc; border-radius: 4px; padding: 6px 12px; color: #7dd3fc; font-size: 11px;">Projection</div>
+        <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 12px; color: #888; font-size: 11px;">Aggregation</div>
+        <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 12px; color: #888; font-size: 11px;">Join</div>
+        <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 12px; color: #888; font-size: 11px;">None</div>
+      </div>
+
+      <div style="color: #888; font-size: 11px; text-align: right;">Save Location:</div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 8px 12px; color: #ccc; font-size: 11px; flex: 1;">db/src/</div>
+        <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 10px; color: #888; font-size: 11px; cursor: pointer;">Browse</div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; padding-top: 12px; border-top: 1px solid #333;">
+      <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 8px 20px; color: #888; font-size: 11px;">Cancel</div>
+      <div style="background: #7dd3fc; border-radius: 4px; padding: 8px 20px; color: #1a1a2e; font-size: 11px; font-weight: bold;">Create</div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 24px;">
+  <h3>File Management Architecture</h3>
+  <ul style="color: #ccc; line-height: 1.9;">
+    <li><strong>Project mode:</strong> Scans configured project directory recursively for <code>.hdbcalculationview</code> files. Shows file path, parsed metadata (CUBE/DIMENSION, node count), last modified time.</li>
+    <li><strong>HANA Runtime mode:</strong> Queries <code>SYS.OBJECTS</code> + <code>_SYS_BI.BIMC_ALL_CUBES</code> to list deployed Calculation Views. Opens by reading the XML definition from <code>_SYS_REPO.ACTIVE_OBJECT</code> (classic) or HDI container metadata.</li>
+    <li><strong>Data source picker (Database tab):</strong> Uses hana-cli's existing <code>tables</code> / <code>views</code> commands via REST API. Filters by schema, type, name pattern. Shows column count.</li>
+    <li><strong>Data source picker (Project tab):</strong> Lists local <code>.hdbtable</code>, <code>.hdbview</code>, <code>.hdbcalculationview</code> files. Parsed to show column info.</li>
+    <li><strong>Save behavior:</strong> Project files save in-place (or "Save As" to new path). Runtime views always "Export As" to local file.</li>
+    <li><strong>Dirty state:</strong> Unsaved changes shown with dot indicator on tab. Ctrl+S saves. Close with unsaved prompts confirmation.</li>
+  </ul>
+</div>

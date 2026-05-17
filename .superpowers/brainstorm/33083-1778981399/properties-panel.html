@@ -1,0 +1,217 @@
+<h2>Properties Panel — Column Mapping UX</h2>
+<p class="subtitle">The most complex interaction: drag & drop columns between data sources and output</p>
+
+<div class="mockup">
+  <div class="mockup-header">Mapping Tab — Join Node Selected</div>
+  <div class="mockup-body" style="padding: 0; height: 600px; display: flex; flex-direction: column; font-family: var(--font-mono, monospace); font-size: 12px; background: #1a1a2e;">
+
+    <!-- Panel Header -->
+    <div style="padding: 12px 16px; border-bottom: 1px solid #333;">
+      <div style="color: #fff; font-weight: bold; font-size: 15px;">Join_1</div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+        <select style="background: #2a2a3e; color: #ccc; border: 1px solid #444; border-radius: 4px; padding: 4px 8px; font-size: 11px;">
+          <option>Inner Join</option>
+          <option>Left Outer</option>
+          <option>Right Outer</option>
+          <option>Full Outer</option>
+          <option>Text Join</option>
+          <option>Referential</option>
+        </select>
+        <select style="background: #2a2a3e; color: #ccc; border: 1px solid #444; border-radius: 4px; padding: 4px 8px; font-size: 11px;">
+          <option>1..1</option>
+          <option>1..N</option>
+          <option>N..1</option>
+          <option>N..M</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div style="display: flex; border-bottom: 1px solid #333; flex-shrink: 0;">
+      <div style="padding: 10px 16px; color: #7dd3fc; border-bottom: 2px solid #7dd3fc; font-size: 11px; font-weight: bold;">Mapping</div>
+      <div style="padding: 10px 16px; color: #888; font-size: 11px;">Calculated Columns (2)</div>
+      <div style="padding: 10px 16px; color: #888; font-size: 11px;">Filter</div>
+      <div style="padding: 10px 16px; color: #888; font-size: 11px;">Parameters</div>
+    </div>
+
+    <!-- Join Condition Section -->
+    <div style="padding: 12px 16px; border-bottom: 1px solid #333; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+        <div style="color: #888; font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">Join Condition</div>
+        <div style="color: #7dd3fc; font-size: 10px; cursor: pointer;">+ Add Condition</div>
+      </div>
+      <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 6px; padding: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="background: #1a1a2e; border: 1px solid #555; border-radius: 4px; padding: 4px 10px; color: #60a5fa; font-size: 11px;">SALES.PRODUCT_ID</div>
+          <div style="color: #888; font-size: 11px;">=</div>
+          <div style="background: #1a1a2e; border: 1px solid #555; border-radius: 4px; padding: 4px 10px; color: #fb923c; font-size: 11px;">PRODUCTS.ID</div>
+          <div style="color: #f87171; cursor: pointer; margin-left: auto; font-size: 14px;">×</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Three-Column Mapping Area -->
+    <div style="flex: 1; display: flex; overflow: hidden;">
+
+      <!-- Left Data Source -->
+      <div style="flex: 1; border-right: 1px solid #333; display: flex; flex-direction: column; overflow: hidden;">
+        <div style="padding: 8px 12px; background: #2a2a3e; border-bottom: 1px solid #333; display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+          <span style="color: #60a5fa; font-size: 10px;">●</span>
+          <span style="color: #ccc; font-size: 11px; font-weight: bold;">Proj_Sales</span>
+        </div>
+        <div style="padding: 4px; overflow-y: auto; flex: 1;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <div style="display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: #2a2a3e; border-radius: 3px; cursor: grab; border: 1px solid transparent; opacity: 0.5;">
+              <span style="color: #60a5fa; font-size: 9px;">◆</span>
+              <span style="color: #999; font-size: 11px; text-decoration: line-through;">PRODUCT_ID</span>
+              <span style="color: #555; font-size: 9px; margin-left: auto;">→ mapped</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: #2a2a3e; border-radius: 3px; cursor: grab; border: 1px dashed #7dd3fc;">
+              <span style="color: #60a5fa; font-size: 9px;">◆</span>
+              <span style="color: #ccc; font-size: 11px;">SALES_DATE</span>
+              <span style="color: #555; font-size: 9px; margin-left: auto;">DATE</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: #2a2a3e; border-radius: 3px; cursor: grab; border: 1px solid transparent;">
+              <span style="color: #34d399; font-size: 9px;">◇</span>
+              <span style="color: #ccc; font-size: 11px;">AMOUNT</span>
+              <span style="color: #555; font-size: 9px; margin-left: auto;">DECIMAL</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: #2a2a3e; border-radius: 3px; cursor: grab; border: 1px solid transparent;">
+              <span style="color: #34d399; font-size: 9px;">◇</span>
+              <span style="color: #ccc; font-size: 11px;">QUANTITY</span>
+              <span style="color: #555; font-size: 9px; margin-left: auto;">INTEGER</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: #2a2a3e; border-radius: 3px; cursor: grab; border: 1px solid transparent;">
+              <span style="color: #60a5fa; font-size: 9px;">◆</span>
+              <span style="color: #ccc; font-size: 11px;">CUSTOMER_ID</span>
+              <span style="color: #555; font-size: 9px; margin-left: auto;">NVARCHAR</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Data Source -->
+      <div style="flex: 1; border-right: 1px solid #333; display: flex; flex-direction: column; overflow: hidden;">
+        <div style="padding: 8px 12px; background: #2a2a3e; border-bottom: 1px solid #333; display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+          <span style="color: #fb923c; font-size: 10px;">●</span>
+          <span style="color: #ccc; font-size: 11px; font-weight: bold;">Proj_Products</span>
+        </div>
+        <div style="padding: 4px; overflow-y: auto; flex: 1;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <div style="display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: #2a2a3e; border-radius: 3px; cursor: grab; border: 1px solid transparent; opacity: 0.5;">
+              <span style="color: #60a5fa; font-size: 9px;">◆</span>
+              <span style="color: #999; font-size: 11px; text-decoration: line-through;">ID</span>
+              <span style="color: #555; font-size: 9px; margin-left: auto;">→ mapped</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: #2a2a3e; border-radius: 3px; cursor: grab; border: 1px solid transparent;">
+              <span style="color: #60a5fa; font-size: 9px;">◆</span>
+              <span style="color: #ccc; font-size: 11px;">PRODUCT_NAME</span>
+              <span style="color: #555; font-size: 9px; margin-left: auto;">NVARCHAR</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: #2a2a3e; border-radius: 3px; cursor: grab; border: 1px solid transparent;">
+              <span style="color: #60a5fa; font-size: 9px;">◆</span>
+              <span style="color: #ccc; font-size: 11px;">CATEGORY</span>
+              <span style="color: #555; font-size: 9px; margin-left: auto;">NVARCHAR</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: #2a2a3e; border-radius: 3px; cursor: grab; border: 1px solid transparent;">
+              <span style="color: #34d399; font-size: 9px;">◇</span>
+              <span style="color: #ccc; font-size: 11px;">PRICE</span>
+              <span style="color: #555; font-size: 9px; margin-left: auto;">DECIMAL</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Output Columns -->
+      <div style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+        <div style="padding: 8px 12px; background: #2a2a3e; border-bottom: 1px solid #333; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;">
+          <span style="color: #ccc; font-size: 11px; font-weight: bold;">Output Columns</span>
+          <span style="color: #888; font-size: 10px;">3 mapped</span>
+        </div>
+        <div style="padding: 4px; overflow-y: auto; flex: 1;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <div style="display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: #2a2a3e; border-radius: 3px; border-left: 3px solid #60a5fa;">
+              <span style="color: #60a5fa; font-size: 9px;">◆</span>
+              <span style="color: #ccc; font-size: 11px;">PRODUCT_ID</span>
+              <span style="color: #60a5fa; font-size: 9px; margin-left: auto;">Sales</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: #2a2a3e; border-radius: 3px; border-left: 3px solid #34d399;">
+              <span style="color: #34d399; font-size: 9px;">◇</span>
+              <span style="color: #ccc; font-size: 11px;">AMOUNT</span>
+              <span style="color: #60a5fa; font-size: 9px; margin-left: auto;">Sales</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: #2a2a3e; border-radius: 3px; border-left: 3px solid #60a5fa;">
+              <span style="color: #60a5fa; font-size: 9px;">◆</span>
+              <span style="color: #ccc; font-size: 11px;">PRODUCT_NAME</span>
+              <span style="color: #fb923c; font-size: 9px; margin-left: auto;">Products</span>
+            </div>
+          </div>
+
+          <!-- Drop zone -->
+          <div style="margin-top: 8px; border: 2px dashed #444; border-radius: 6px; padding: 16px; text-align: center; color: #666; font-size: 11px;">
+            Drag columns here to map
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Calculated Column Editor -->
+<div class="mockup" style="margin-top: 24px;">
+  <div class="mockup-header">Calculated Columns Tab — Expression Editor</div>
+  <div class="mockup-body" style="padding: 16px; background: #1a1a2e; font-family: var(--font-mono, monospace); font-size: 12px;">
+
+    <!-- Column list -->
+    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+      <div style="background: #2a2a3e; border: 1px solid #7dd3fc; border-radius: 4px; padding: 6px 12px; color: #7dd3fc; font-size: 11px;">MARGIN (selected)</div>
+      <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 12px; color: #ccc; font-size: 11px;">FULL_NAME</div>
+      <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 12px; color: #7dd3fc; font-size: 11px; border-style: dashed;">+ New</div>
+    </div>
+
+    <!-- Expression editor (Monaco) -->
+    <div style="border: 1px solid #444; border-radius: 6px; overflow: hidden;">
+      <div style="background: #2a2a3e; padding: 6px 12px; border-bottom: 1px solid #444; display: flex; align-items: center; justify-content: space-between;">
+        <span style="color: #888; font-size: 10px;">Expression (SQL)</span>
+        <div style="display: flex; gap: 4px;">
+          <span style="color: #888; font-size: 10px; background: #1a1a2e; padding: 2px 6px; border-radius: 3px;">Column Type: DECIMAL(15,2)</span>
+        </div>
+      </div>
+      <div style="background: #1e1e2f; padding: 12px 16px; min-height: 60px; font-family: 'Cascadia Code', monospace;">
+        <span style="color: #c084fc;">"PRICE"</span> <span style="color: #888;">-</span> <span style="color: #c084fc;">"COST"</span> <span style="color: #888;">/</span> <span style="color: #c084fc;">"PRICE"</span> <span style="color: #888;">*</span> <span style="color: #fb923c;">100</span>
+      </div>
+    </div>
+
+    <!-- Column properties -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;">
+      <div>
+        <div style="color: #888; font-size: 10px; margin-bottom: 4px;">Data Type</div>
+        <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 10px; color: #ccc; font-size: 11px;">DECIMAL(15,2)</div>
+      </div>
+      <div>
+        <div style="color: #888; font-size: 10px; margin-bottom: 4px;">Aggregation</div>
+        <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 10px; color: #ccc; font-size: 11px;">SUM</div>
+      </div>
+      <div>
+        <div style="color: #888; font-size: 10px; margin-bottom: 4px;">Label</div>
+        <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 10px; color: #ccc; font-size: 11px;">Profit Margin %</div>
+      </div>
+      <div>
+        <div style="color: #888; font-size: 10px; margin-bottom: 4px;">Hidden</div>
+        <div style="background: #2a2a3e; border: 1px solid #444; border-radius: 4px; padding: 6px 10px; color: #ccc; font-size: 11px;">No</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 24px;">
+  <h3>Interaction Model</h3>
+  <ul style="color: #ccc; line-height: 1.9;">
+    <li><strong>Drag & Drop mapping:</strong> Drag from data source columns (left/middle) → drop onto Output Columns area (right). Mapped columns show strikethrough + "→ mapped" in source.</li>
+    <li><strong>Join condition:</strong> Drag column from left source onto column from right source to create a join condition. Or click "+ Add Condition" and pick from dropdowns.</li>
+    <li><strong>Column indicators:</strong> ◆ = attribute (dimension), ◇ = measure. Color-coded left border shows source origin.</li>
+    <li><strong>Expression editor:</strong> Embedded Monaco editor with SQL syntax highlighting and column name autocomplete from available inputs.</li>
+    <li><strong>Multi-select:</strong> Shift+click or Ctrl+click multiple columns to drag-map in bulk.</li>
+    <li><strong>"Map All" shortcut:</strong> Double-click a data source header to map all its unmapped columns at once.</li>
+  </ul>
+</div>
