@@ -102,7 +102,7 @@ export const navigation: NavGroup[] = [
     key: 'modeling',
     title: 'Modeling',
     icon: 'simulate',
-    expanded: false,
+    expanded: true,
     items: [
       { key: 'calcViewBrowser', title: 'Calculation Views', route: 'calcViewBrowser' }
     ]

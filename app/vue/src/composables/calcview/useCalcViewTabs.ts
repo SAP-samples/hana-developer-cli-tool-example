@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { shallowRef, computed, triggerRef } from 'vue'
 import { useCalcViewModel } from './useCalcViewModel'
 
 export interface CalcViewTab {
@@ -9,8 +9,8 @@ export interface CalcViewTab {
 }
 
 export function useCalcViewTabs() {
-  const tabs = ref<CalcViewTab[]>([])
-  const activeTabId = ref<string | null>(null)
+  const tabs = shallowRef<CalcViewTab[]>([])
+  const activeTabId = shallowRef<string | null>(null)
 
   const activeTab = computed(() => {
     return tabs.value.find(t => t.id === activeTabId.value) ?? null
@@ -27,6 +27,7 @@ export function useCalcViewTabs() {
     const editor = useCalcViewModel()
     const tab: CalcViewTab = { id, title, filePath, editor }
     tabs.value.push(tab)
+    triggerRef(tabs)
     activeTabId.value = id
     return tab
   }
@@ -38,6 +39,7 @@ export function useCalcViewTabs() {
 
     const idx = tabs.value.findIndex(t => t.id === tabId)
     tabs.value.splice(idx, 1)
+    triggerRef(tabs)
 
     if (activeTabId.value === tabId) {
       activeTabId.value = tabs.value.length > 0
@@ -51,6 +53,7 @@ export function useCalcViewTabs() {
     const idx = tabs.value.findIndex(t => t.id === tabId)
     if (idx < 0) return
     tabs.value.splice(idx, 1)
+    triggerRef(tabs)
     if (activeTabId.value === tabId) {
       activeTabId.value = tabs.value.length > 0
         ? tabs.value[Math.min(idx, tabs.value.length - 1)].id
