@@ -1,13 +1,21 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useCalcViewModel } from '../composables/calcview/useCalcViewModel'
 import { parseCalcView } from '../services/calcview/xmlParser'
 import CalcViewCanvas from '../components/calcview/canvas/CalcViewCanvas.vue'
 import NodePalette from '../components/calcview/canvas/NodePalette.vue'
+import PropertiesPanel from '../components/calcview/properties/PropertiesPanel.vue'
 import type { NodeType } from '../services/calcview/types'
+import type { Node } from '@vue-flow/core'
 import '@ui5/webcomponents/dist/Title.js'
 
 const { model, vueFlowNodes, vueFlowEdges, loadModel } = useCalcViewModel()
+
+const selectedNodeId = ref<string | null>(null)
+
+function handleNodeClick(node: Node) {
+  selectedNodeId.value = node.id
+}
 
 onMounted(() => {
   // Load a demo model for development
@@ -62,11 +70,16 @@ function handleAddNode(type: NodeType) {
 
 <template>
   <div class="calc-view-editor">
-    <div class="editor-content" v-if="vueFlowNodes.length > 0">
+    <div class="editor-content" v-if="model && vueFlowNodes.length > 0">
       <NodePalette @add-node="handleAddNode" />
       <CalcViewCanvas
         :nodes="vueFlowNodes"
         :edges="vueFlowEdges"
+        @node-click="handleNodeClick"
+      />
+      <PropertiesPanel
+        :model="model"
+        :selected-node-id="selectedNodeId"
       />
     </div>
     <div v-else class="empty-state">
