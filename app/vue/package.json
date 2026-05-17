@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@guolao/vue-monaco-editor": "^1.6.0",
@@ -32,6 +34,7 @@
     "@vitejs/plugin-vue": "^5.2.0",
     "typescript": "^5.7.0",
     "vite": "^6.3.0",
+    "vitest": "^4.1.6",
     "vue-tsc": "^2.2.0"
   }
 }

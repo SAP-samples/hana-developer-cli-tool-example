@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="PROJECTION_TEST" applyPrivilegeType="NONE" dataCategory="DIMENSION">
+  <descriptions defaultDescription="Projection Test View"/>
+  <localVariables/>
+  <variableMappings/>
+  <dataSources>
+    <DataSource id="PRODUCTS">
+      <resourceUri>PRODUCTS</resourceUri>
+    </DataSource>
+  </dataSources>
+  <calculationViews>
+    <calculationView xsi:type="Calculation:ProjectionView" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Projection_1">
+      <descriptions defaultDescription="Product Projection"/>
+      <viewAttributes>
+        <viewAttribute id="PRODUCT_ID"/>
+        <viewAttribute id="PRODUCT_NAME"/>
+        <viewAttribute id="PRICE"/>
+      </viewAttributes>
+      <input node="PRODUCTS">
+        <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_ID" source="PRODUCT_ID"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="PRODUCT_NAME" source="PRODUCT_NAME"/>
+        <mapping xsi:type="Calculation:AttributeMapping" target="PRICE" source="PRICE"/>
+      </input>
+    </calculationView>
+  </calculationViews>
+  <logicalModel id="Projection_1">
+    <attributes>
+      <attribute id="PRODUCT_ID" order="1" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Product ID"/>
+        <keyMapping columnObjectName="Projection_1" columnName="PRODUCT_ID"/>
+      </attribute>
+      <attribute id="PRODUCT_NAME" order="2" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Product Name"/>
+        <keyMapping columnObjectName="Projection_1" columnName="PRODUCT_NAME"/>
+      </attribute>
+    </attributes>
+    <calculatedAttributes/>
+    <baseMeasures>
+      <measure id="PRICE" order="3" aggregationType="sum">
+        <descriptions defaultDescription="Price"/>
+        <measureMapping columnObjectName="Projection_1" columnName="PRICE"/>
+      </measure>
+    </baseMeasures>
+    <calculatedMeasures/>
+    <restrictedMeasures/>
+  </logicalModel>
+  <layout>
+    <shapes>
+      <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+        <upperLeftCorner x="40" y="85"/>
+      </shape>
+      <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="100" y="200"/>
+      </shape>
+    </shapes>
+  </layout>
+</Calculation:scenario>
