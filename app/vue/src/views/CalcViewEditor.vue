@@ -327,6 +327,7 @@ onUnmounted(() => { document.removeEventListener('keydown', handleKeydown) })
             @add-variable="(v) => activeTab?.editor.addVariable(v)"
             @remove-variable="(id) => activeTab?.editor.removeVariable(id)"
             @update-variable="(id, updates) => activeTab?.editor.updateVariable(id, updates)"
+            @update-column="(collection, colId, updates) => activeTab?.editor.updateColumnProperties(collection, colId, updates)"
           />
         </div>
       </template>

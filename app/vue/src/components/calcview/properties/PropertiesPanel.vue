@@ -6,6 +6,7 @@ import '@ui5/webcomponents/dist/Tab.js'
 
 import ViewPropertiesTab from './ViewPropertiesTab.vue'
 import ParametersTab from './ParametersTab.vue'
+import SemanticsColumnsTab from './SemanticsColumnsTab.vue'
 import MappingTab from './MappingTab.vue'
 import CalculatedColumnsTab from './CalculatedColumnsTab.vue'
 import FilterTab from './FilterTab.vue'
@@ -31,6 +32,7 @@ const emit = defineEmits<{
   'add-variable': [variable: Variable]
   'remove-variable': [variableId: string]
   'update-variable': [variableId: string, updates: Partial<Variable>]
+  'update-column': [collection: 'attributes' | 'baseMeasures', columnId: string, updates: Partial<Column>]
   'add-data-source': [nodeId: string]
 }>()
 
@@ -60,13 +62,25 @@ const isJoinNode = computed(() => {
     </div>
     <div class="panel-content">
       <template v-if="!selectedNodeId || selectedNodeId === '__semantics__'">
-        <ViewPropertiesTab :model="model" />
-        <ParametersTab
-          :model="model"
-          @add-variable="(v) => emit('add-variable', v)"
-          @remove-variable="(id) => emit('remove-variable', id)"
-          @update-variable="(id, updates) => emit('update-variable', id, updates)"
-        />
+        <ui5-tabcontainer>
+          <ui5-tab text="Properties">
+            <ViewPropertiesTab :model="model" />
+          </ui5-tab>
+          <ui5-tab text="Columns">
+            <SemanticsColumnsTab
+              :logical-model="model.logicalModel"
+              @update-column="(collection, colId, updates) => emit('update-column', collection, colId, updates)"
+            />
+          </ui5-tab>
+          <ui5-tab text="Variables">
+            <ParametersTab
+              :model="model"
+              @add-variable="(v) => emit('add-variable', v)"
+              @remove-variable="(id) => emit('remove-variable', id)"
+              @update-variable="(id, updates) => emit('update-variable', id, updates)"
+            />
+          </ui5-tab>
+        </ui5-tabcontainer>
       </template>
       <template v-else-if="selectedNode">
         <JoinConditionSection
