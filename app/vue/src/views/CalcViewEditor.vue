@@ -1,17 +1,82 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
+import { useCalcViewModel } from '../composables/calcview/useCalcViewModel'
+import { parseCalcView } from '../services/calcview/xmlParser'
+import CalcViewCanvas from '../components/calcview/canvas/CalcViewCanvas.vue'
 import '@ui5/webcomponents/dist/Title.js'
+
+const { model, vueFlowNodes, vueFlowEdges, loadModel } = useCalcViewModel()
+
+onMounted(() => {
+  // Load a demo model for development
+  const demoXml = `<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="DEMO" applyPrivilegeType="NONE" dataCategory="CUBE">
+  <descriptions defaultDescription="Demo View"/>
+  <localVariables/>
+  <variableMappings/>
+  <dataSources>
+    <DataSource id="SALES"><resourceUri>SALES</resourceUri></DataSource>
+  </dataSources>
+  <calculationViews>
+    <calculationView xsi:type="Calculation:ProjectionView" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Projection_1">
+      <viewAttributes>
+        <viewAttribute id="AMOUNT"/>
+        <viewAttribute id="PRODUCT_ID"/>
+      </viewAttributes>
+      <input node="SALES"/>
+    </calculationView>
+  </calculationViews>
+  <logicalModel id="Projection_1">
+    <attributes>
+      <attribute id="PRODUCT_ID"><descriptions defaultDescription="Product"/></attribute>
+    </attributes>
+    <calculatedAttributes/>
+    <baseMeasures>
+      <measure id="AMOUNT" aggregationType="sum"><descriptions defaultDescription="Amount"/></measure>
+    </baseMeasures>
+    <calculatedMeasures/>
+    <restrictedMeasures/>
+  </logicalModel>
+  <layout>
+    <shapes>
+      <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+        <upperLeftCorner x="200" y="50"/>
+      </shape>
+      <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="200" y="250"/>
+      </shape>
+    </shapes>
+  </layout>
+</Calculation:scenario>`
+
+  loadModel(parseCalcView(demoXml))
+})
 </script>
 
 <template>
   <div class="calc-view-editor">
-    <ui5-title level="H2">Calculation View Editor</ui5-title>
-    <p>Editor shell — to be implemented.</p>
+    <CalcViewCanvas
+      v-if="vueFlowNodes.length > 0"
+      :nodes="vueFlowNodes"
+      :edges="vueFlowEdges"
+    />
+    <div v-else class="empty-state">
+      <ui5-title level="H3">No Calculation View loaded</ui5-title>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .calc-view-editor {
-  padding: 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
 }
 </style>
