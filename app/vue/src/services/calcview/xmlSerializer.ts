@@ -1,5 +1,5 @@
 import { XMLBuilder } from 'fast-xml-parser'
-import type { CalcViewModel, CalcViewNode, DataSource, LogicalModel } from './types'
+import type { CalcViewModel, CalcViewNode, DataSource, LogicalModel, Hierarchy } from './types'
 
 const builder = new XMLBuilder({
   ignoreAttributes: false,
@@ -20,7 +20,10 @@ export function serializeCalcView(model: CalcViewModel): string {
     variableMappings: serializeVariableMappings(model),
     dataSources: serializeDataSources(model.dataSources),
     calculationViews: serializeCalculationViews(model.calculationViews),
-    logicalModel: serializeLogicalModel(model.logicalModel),
+    logicalModel: {
+      '@_id': model.outputNodeId || '',
+      ...serializeLogicalModel(model.logicalModel)
+    },
     layout: serializeLayout(model)
   }
 
@@ -145,21 +148,80 @@ function serializeLogicalModel(lm: LogicalModel): Record<string, unknown> {
         '@_id': a.id,
         '@_attributeHierarchyActive': 'false',
         '@_displayAttribute': 'false',
+        ...(a.hidden ? { '@_hidden': 'true' } : {}),
         descriptions: a.label ? { '@_defaultDescription': a.label } : undefined,
         keyMapping: { '@_columnObjectName': '', '@_columnName': a.id }
       }))
     } : '',
-    calculatedAttributes: '',
+    calculatedAttributes: lm.calculatedAttributes.length > 0 ? {
+      calculatedAttribute: lm.calculatedAttributes.map(ca => ({
+        '@_id': ca.id,
+        '@_datatype': ca.dataType,
+        '@_expressionLanguage': 'SQL',
+        formula: ca.expression,
+        descriptions: ca.label ? { '@_defaultDescription': ca.label } : undefined
+      }))
+    } : '',
     baseMeasures: lm.baseMeasures.length > 0 ? {
       measure: lm.baseMeasures.map(m => ({
         '@_id': m.id,
         '@_aggregationType': m.aggregationType || 'sum',
+        ...(m.hidden ? { '@_hidden': 'true' } : {}),
         descriptions: m.label ? { '@_defaultDescription': m.label } : undefined,
         measureMapping: { '@_columnObjectName': '', '@_columnName': m.id }
       }))
     } : '',
-    calculatedMeasures: '',
-    restrictedMeasures: ''
+    calculatedMeasures: lm.calculatedMeasures.length > 0 ? {
+      calculatedMeasure: lm.calculatedMeasures.map(cm => ({
+        '@_id': cm.id,
+        '@_datatype': cm.dataType,
+        '@_aggregationType': cm.aggregationType || 'sum',
+        '@_expressionLanguage': 'SQL',
+        formula: cm.expression,
+        descriptions: cm.label ? { '@_defaultDescription': cm.label } : undefined
+      }))
+    } : '',
+    restrictedMeasures: lm.restrictedMeasures.length > 0 ? {
+      restrictedMeasure: lm.restrictedMeasures.map(rm => ({
+        '@_id': rm.id,
+        '@_baseMeasure': rm.baseMeasure,
+        descriptions: rm.label ? { '@_defaultDescription': rm.label } : undefined,
+        restriction: {
+          filter: rm.restriction.map(r => ({
+            '@_attributeName': r.attributeName,
+            valueFilter: r.values.map(v => ({
+              '@_operator': r.operator,
+              '@_value': v
+            }))
+          }))
+        }
+      }))
+    } : '',
+    hierarchies: serializeHierarchies(lm.hierarchies)
+  }
+}
+
+function serializeHierarchies(hierarchies: Hierarchy[]): unknown {
+  if (hierarchies.length === 0) return ''
+  return {
+    hierarchy: hierarchies.map(h => ({
+      '@_id': h.id,
+      '@_type': h.type,
+      descriptions: { '@_defaultDescription': h.name },
+      ...(h.type === 'leveled' && h.levels ? {
+        levels: {
+          level: h.levels.map(l => ({
+            '@_name': l.name,
+            '@_column': l.column,
+            '@_ordinal': String(l.ordinal)
+          }))
+        }
+      } : {}),
+      ...(h.type === 'parentChild' ? {
+        parentColumn: h.parentColumn,
+        childColumn: h.childColumn
+      } : {})
+    }))
   }
 }
 
