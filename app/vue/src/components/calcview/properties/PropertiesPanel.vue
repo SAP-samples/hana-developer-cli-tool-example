@@ -7,11 +7,13 @@ import '@ui5/webcomponents/dist/Tab.js'
 import ViewPropertiesTab from './ViewPropertiesTab.vue'
 import ParametersTab from './ParametersTab.vue'
 import SemanticsColumnsTab from './SemanticsColumnsTab.vue'
+import HierarchiesTab from './HierarchiesTab.vue'
+import RestrictedMeasuresTab from './RestrictedMeasuresTab.vue'
 import MappingTab from './MappingTab.vue'
 import CalculatedColumnsTab from './CalculatedColumnsTab.vue'
 import FilterTab from './FilterTab.vue'
 import JoinConditionSection from './JoinConditionSection.vue'
-import type { CalcViewModel, CalcViewNode, Column, JoinCondition, CalculatedColumn, Variable } from '../../../services/calcview/types'
+import type { CalcViewModel, CalcViewNode, Column, JoinCondition, CalculatedColumn, Variable, Hierarchy, RestrictedMeasure } from '../../../services/calcview/types'
 import { NODE_TYPE_DEFINITIONS } from '../../../services/calcview/nodeTypes'
 
 const props = defineProps<{
@@ -34,6 +36,10 @@ const emit = defineEmits<{
   'update-variable': [variableId: string, updates: Partial<Variable>]
   'update-column': [collection: 'attributes' | 'baseMeasures', columnId: string, updates: Partial<Column>]
   'add-data-source': [nodeId: string]
+  'add-hierarchy': [hierarchy: Hierarchy]
+  'remove-hierarchy': [hierarchyId: string]
+  'add-restricted-measure': [measure: RestrictedMeasure]
+  'remove-restricted-measure': [measureId: string]
 }>()
 
 const selectedNode = computed<CalcViewNode | null>(() => {
@@ -78,6 +84,20 @@ const isJoinNode = computed(() => {
               @add-variable="(v) => emit('add-variable', v)"
               @remove-variable="(id) => emit('remove-variable', id)"
               @update-variable="(id, updates) => emit('update-variable', id, updates)"
+            />
+          </ui5-tab>
+          <ui5-tab text="Hierarchies">
+            <HierarchiesTab
+              :logical-model="model.logicalModel"
+              @add-hierarchy="(h) => emit('add-hierarchy', h)"
+              @remove-hierarchy="(id) => emit('remove-hierarchy', id)"
+            />
+          </ui5-tab>
+          <ui5-tab text="Restricted">
+            <RestrictedMeasuresTab
+              :logical-model="model.logicalModel"
+              @add-restricted-measure="(rm) => emit('add-restricted-measure', rm)"
+              @remove-restricted-measure="(id) => emit('remove-restricted-measure', id)"
             />
           </ui5-tab>
         </ui5-tabcontainer>

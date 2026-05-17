@@ -16,7 +16,7 @@ import EditorTabBar from '../components/calcview/tabs/EditorTabBar.vue'
 import CreateCalcViewDialog from '../components/calcview/dialogs/CreateCalcViewDialog.vue'
 import DataSourcePicker from '../components/calcview/dialogs/DataSourcePicker.vue'
 import type { DataSourceSelection } from '../components/calcview/dialogs/DataSourcePicker.vue'
-import type { NodeType, Column, CalcViewModel } from '../services/calcview/types'
+import type { NodeType, Column, CalcViewModel, Hierarchy } from '../services/calcview/types'
 import type { Node, Edge, Connection } from '@vue-flow/core'
 import '@ui5/webcomponents/dist/Title.js'
 
@@ -328,6 +328,8 @@ onUnmounted(() => { document.removeEventListener('keydown', handleKeydown) })
             @remove-variable="(id) => activeTab?.editor.removeVariable(id)"
             @update-variable="(id, updates) => activeTab?.editor.updateVariable(id, updates)"
             @update-column="(collection, colId, updates) => activeTab?.editor.updateColumnProperties(collection, colId, updates)"
+            @add-hierarchy="(h) => activeTab?.editor.addHierarchy(h)"
+            @remove-hierarchy="(id) => activeTab?.editor.removeHierarchy(id)"
           />
         </div>
       </template>
