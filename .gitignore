@@ -93,6 +93,10 @@ test-output.txt
 # Interactive mode state
 .interactive-state.json
 
+# Vue build outputs
+app/vue/dist/
+app/vue/dist-vscode/
+
 # Claude Code
 .claude/
 .mcp.json

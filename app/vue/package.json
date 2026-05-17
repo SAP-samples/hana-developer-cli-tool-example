@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
+    "build:vscode": "vue-tsc --noEmit && vite build --config vite.config.vscode.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },
