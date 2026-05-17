@@ -3,7 +3,8 @@ import type {
   CalcViewModel, CalcViewNode, DataSource, Column,
   LogicalModel, NodeShape, LayoutInfo,
   NodeType, NodeInput, Variable, VariableMapping,
-  JoinConfig, JoinCondition, CalculatedColumn
+  JoinConfig, JoinCondition, CalculatedColumn,
+  Hierarchy, HierarchyLevel, RestrictedMeasure, RestrictionFilter
 } from './types'
 
 const parser = new XMLParser({
@@ -14,7 +15,8 @@ const parser = new XMLParser({
       'DataSource', 'calculationView', 'viewAttribute', 'input',
       'mapping', 'attribute', 'measure', 'shape', 'localVariable',
       'variableMapping', 'calculatedAttribute', 'calculatedMeasure',
-      'restrictedMeasure', 'joinAttribute', 'calculatedViewAttribute'
+      'restrictedMeasure', 'joinAttribute', 'calculatedViewAttribute',
+      'level', 'hierarchy', 'valueFilter'
     ]
     return arrayElements.includes(name)
   }
@@ -35,7 +37,8 @@ export function parseCalcView(xml: string): CalcViewModel {
     localVariables: parseVariables(scenario.localVariables),
     variableMappings: parseVariableMappings(scenario.variableMappings),
     layout: parseLayout(scenario.layout),
-    _unknownElements: []
+    _unknownElements: [],
+    outputNodeId: scenario.logicalModel?.['@_id'] || undefined,
   }
 }
 
@@ -142,11 +145,11 @@ function parseLogicalModel(lm: any): LogicalModel {
   }
   return {
     attributes: parseAttributes(lm.attributes),
-    calculatedAttributes: [],
+    calculatedAttributes: parseCalculatedLogicalAttributes(lm.calculatedAttributes),
     baseMeasures: parseMeasures(lm.baseMeasures),
-    calculatedMeasures: [],
-    restrictedMeasures: [],
-    hierarchies: []
+    calculatedMeasures: parseCalculatedMeasures(lm.calculatedMeasures),
+    restrictedMeasures: parseRestrictedMeasures(lm.restrictedMeasures),
+    hierarchies: parseHierarchies(lm.hierarchies)
   }
 }
 
@@ -174,6 +177,80 @@ function parseMeasures(measures: any): Column[] {
     semanticType: 'measure' as const,
     aggregationType: m['@_aggregationType'] || 'sum',
     hidden: m['@_hidden'] === 'true'
+  }))
+}
+
+function parseCalculatedLogicalAttributes(ca: any): CalculatedColumn[] {
+  if (!ca || !ca.calculatedAttribute) return []
+  const list = ensureArray(ca.calculatedAttribute)
+  return list.map((a: any) => ({
+    id: a['@_id'],
+    name: a['@_id'],
+    dataType: a['@_datatype'] || 'NVARCHAR',
+    expression: a.formula || '',
+    aggregationType: a['@_aggregationType'],
+    label: a.descriptions?.['@_defaultDescription'] || ''
+  }))
+}
+
+function parseCalculatedMeasures(cm: any): CalculatedColumn[] {
+  if (!cm || !cm.calculatedMeasure) return []
+  const list = ensureArray(cm.calculatedMeasure)
+  return list.map((m: any) => ({
+    id: m['@_id'],
+    name: m['@_id'],
+    dataType: m['@_datatype'] || 'DECIMAL',
+    expression: m.formula || '',
+    aggregationType: m['@_aggregationType'] || 'sum',
+    label: m.descriptions?.['@_defaultDescription'] || ''
+  }))
+}
+
+function parseRestrictedMeasures(rm: any): RestrictedMeasure[] {
+  if (!rm || !rm.restrictedMeasure) return []
+  const list = ensureArray(rm.restrictedMeasure)
+  return list.map((m: any) => ({
+    id: m['@_id'],
+    name: m['@_id'],
+    baseMeasure: m['@_baseMeasure'] || '',
+    label: m.descriptions?.['@_defaultDescription'] || '',
+    restriction: parseRestrictionFilters(m.restriction)
+  }))
+}
+
+function parseRestrictionFilters(restriction: any): RestrictionFilter[] {
+  if (!restriction) return []
+  const filters = ensureArray(restriction.filter)
+  return filters.map((f: any) => {
+    const valueFilters = ensureArray(f.valueFilter)
+    return {
+      attributeName: f['@_attributeName'] || '',
+      operator: valueFilters[0]?.['@_operator'] || '=',
+      values: valueFilters.map((vf: any) => vf['@_value'] || '')
+    }
+  })
+}
+
+function parseHierarchies(h: any): Hierarchy[] {
+  if (!h || !h.hierarchy) return []
+  const list = ensureArray(h.hierarchy)
+  return list.map((hier: any) => ({
+    id: hier['@_id'],
+    name: hier.descriptions?.['@_defaultDescription'] || hier['@_id'],
+    type: hier['@_type'] || 'leveled',
+    levels: parseLevels(hier.levels),
+    parentColumn: hier.parentColumn || undefined,
+    childColumn: hier.childColumn || undefined
+  }))
+}
+
+function parseLevels(levels: any): HierarchyLevel[] | undefined {
+  if (!levels || !levels.level) return undefined
+  const list = ensureArray(levels.level)
+  return list.map((l: any) => ({
+    name: l['@_name'] || '',
+    column: l['@_column'] || '',
+    ordinal: parseInt(l['@_ordinal'] || '0', 10)
   }))
 }
 

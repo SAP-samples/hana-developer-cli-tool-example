@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="SEMANTICS_TEST" applyPrivilegeType="NONE" dataCategory="CUBE">
+  <descriptions defaultDescription="Semantics Features Test"/>
+  <localVariables/>
+  <variableMappings/>
+  <dataSources>
+    <DataSource id="SALES"><resourceUri>SALES</resourceUri></DataSource>
+  </dataSources>
+  <calculationViews>
+    <calculationView xsi:type="Calculation:ProjectionView" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Projection_1">
+      <viewAttributes>
+        <viewAttribute id="AMOUNT"/>
+        <viewAttribute id="PRODUCT_ID"/>
+        <viewAttribute id="CURRENCY"/>
+        <viewAttribute id="REGION"/>
+        <viewAttribute id="YEAR"/>
+      </viewAttributes>
+      <input node="SALES"/>
+    </calculationView>
+  </calculationViews>
+  <logicalModel id="Projection_1">
+    <attributes>
+      <attribute id="PRODUCT_ID" attributeHierarchyActive="false">
+        <descriptions defaultDescription="Product ID"/>
+      </attribute>
+      <attribute id="REGION" attributeHierarchyActive="false">
+        <descriptions defaultDescription="Region"/>
+      </attribute>
+      <attribute id="YEAR" attributeHierarchyActive="false">
+        <descriptions defaultDescription="Year"/>
+      </attribute>
+    </attributes>
+    <calculatedAttributes>
+      <calculatedAttribute id="FULL_NAME" datatype="NVARCHAR" length="100" expressionLanguage="SQL">
+        <formula>"PRODUCT_ID" || ' - ' || "REGION"</formula>
+        <descriptions defaultDescription="Full Name"/>
+      </calculatedAttribute>
+    </calculatedAttributes>
+    <baseMeasures>
+      <measure id="AMOUNT" aggregationType="sum">
+        <descriptions defaultDescription="Amount"/>
+      </measure>
+    </baseMeasures>
+    <calculatedMeasures>
+      <calculatedMeasure id="DOUBLE_AMOUNT" datatype="DECIMAL" precision="17" scale="2" aggregationType="sum" expressionLanguage="SQL">
+        <formula>"AMOUNT" * 2</formula>
+        <descriptions defaultDescription="Double Amount"/>
+      </calculatedMeasure>
+    </calculatedMeasures>
+    <restrictedMeasures>
+      <restrictedMeasure id="AMOUNT_US" baseMeasure="AMOUNT">
+        <descriptions defaultDescription="Amount US Only"/>
+        <restriction>
+          <filter attributeName="REGION">
+            <valueFilter operator="=" value="US"/>
+          </filter>
+        </restriction>
+      </restrictedMeasure>
+    </restrictedMeasures>
+    <hierarchies>
+      <hierarchy id="REGION_HIERARCHY" type="leveled">
+        <descriptions defaultDescription="Region Hierarchy"/>
+        <levels>
+          <level name="Region" column="REGION" ordinal="1"/>
+          <level name="Year" column="YEAR" ordinal="2"/>
+        </levels>
+      </hierarchy>
+      <hierarchy id="PRODUCT_HIERARCHY" type="parentChild">
+        <descriptions defaultDescription="Product Hierarchy"/>
+        <parentColumn>PARENT_ID</parentColumn>
+        <childColumn>PRODUCT_ID</childColumn>
+      </hierarchy>
+    </hierarchies>
+  </logicalModel>
+  <layout>
+    <shapes>
+      <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+        <upperLeftCorner x="250" y="50"/>
+      </shape>
+      <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+        <upperLeftCorner x="250" y="200"/>
+      </shape>
+    </shapes>
+  </layout>
+</Calculation:scenario>

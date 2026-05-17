@@ -17,6 +17,7 @@ export interface CalcViewModel {
   variableMappings: VariableMapping[]
   layout: LayoutInfo
   _unknownElements: unknown[]
+  outputNodeId?: string
 }
 
 export interface CalcViewNode {

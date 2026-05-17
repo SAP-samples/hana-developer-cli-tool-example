@@ -104,5 +104,62 @@ describe('xmlParser', () => {
       expect(node.calculatedColumns[0].expression).toBe('"AMOUNT" * 2')
       expect(node.filterExpression).toBe('"AMOUNT" > 100')
     })
+
+    it('parses outputNodeId from logicalModel', () => {
+      const xml = loadFixture('semantics.hdbcalculationview')
+      const model = parseCalcView(xml)
+      expect(model.outputNodeId).toBe('Projection_1')
+    })
+
+    it('parses calculated attributes', () => {
+      const xml = loadFixture('semantics.hdbcalculationview')
+      const model = parseCalcView(xml)
+      expect(model.logicalModel.calculatedAttributes).toHaveLength(1)
+      expect(model.logicalModel.calculatedAttributes[0].id).toBe('FULL_NAME')
+      expect(model.logicalModel.calculatedAttributes[0].expression).toBe('"PRODUCT_ID" || \' - \' || "REGION"')
+      expect(model.logicalModel.calculatedAttributes[0].dataType).toBe('NVARCHAR')
+    })
+
+    it('parses calculated measures', () => {
+      const xml = loadFixture('semantics.hdbcalculationview')
+      const model = parseCalcView(xml)
+      expect(model.logicalModel.calculatedMeasures).toHaveLength(1)
+      expect(model.logicalModel.calculatedMeasures[0].id).toBe('DOUBLE_AMOUNT')
+      expect(model.logicalModel.calculatedMeasures[0].expression).toBe('"AMOUNT" * 2')
+    })
+
+    it('parses restricted measures', () => {
+      const xml = loadFixture('semantics.hdbcalculationview')
+      const model = parseCalcView(xml)
+      expect(model.logicalModel.restrictedMeasures).toHaveLength(1)
+      const rm = model.logicalModel.restrictedMeasures[0]
+      expect(rm.id).toBe('AMOUNT_US')
+      expect(rm.baseMeasure).toBe('AMOUNT')
+      expect(rm.restriction).toHaveLength(1)
+      expect(rm.restriction[0].attributeName).toBe('REGION')
+      expect(rm.restriction[0].operator).toBe('=')
+      expect(rm.restriction[0].values).toEqual(['US'])
+    })
+
+    it('parses leveled hierarchy', () => {
+      const xml = loadFixture('semantics.hdbcalculationview')
+      const model = parseCalcView(xml)
+      expect(model.logicalModel.hierarchies).toHaveLength(2)
+      const h = model.logicalModel.hierarchies[0]
+      expect(h.id).toBe('REGION_HIERARCHY')
+      expect(h.type).toBe('leveled')
+      expect(h.levels).toHaveLength(2)
+      expect(h.levels![0]).toEqual({ name: 'Region', column: 'REGION', ordinal: 1 })
+    })
+
+    it('parses parent-child hierarchy', () => {
+      const xml = loadFixture('semantics.hdbcalculationview')
+      const model = parseCalcView(xml)
+      const h = model.logicalModel.hierarchies[1]
+      expect(h.id).toBe('PRODUCT_HIERARCHY')
+      expect(h.type).toBe('parentChild')
+      expect(h.parentColumn).toBe('PARENT_ID')
+      expect(h.childColumn).toBe('PRODUCT_ID')
+    })
   })
 })
