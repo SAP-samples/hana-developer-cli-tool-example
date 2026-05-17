@@ -165,6 +165,9 @@
     "package": "vsce package",
     "test": "node ./test/runTests.ts"
   },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^25.8.0",
@@ -172,7 +175,6 @@
     "@vscode/test-electron": "^2.3.0",
     "@vscode/vsce": "^2.22.0",
     "esbuild": "^0.20.0",
-    "express": "^5.2.1",
     "typescript": "^5.7.0"
   }
 }

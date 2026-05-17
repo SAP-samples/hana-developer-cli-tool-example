@@ -7,6 +7,7 @@ import { registerAllRoutes } from './routes.js'
 let server: http.Server | null = null
 let currentPort: number | null = null
 let shutdownTimer: ReturnType<typeof setTimeout> | null = null
+let startPromise: Promise<number> | null = null
 
 export function getPort(): number | null {
   return currentPort
@@ -18,7 +19,13 @@ export function isRunning(): boolean {
 
 export async function startServer(_context: vscode.ExtensionContext): Promise<number> {
   if (isRunning()) return currentPort!
+  if (startPromise) return startPromise
 
+  startPromise = doStart().finally(() => { startPromise = null })
+  return startPromise
+}
+
+async function doStart(): Promise<number> {
   cancelShutdownTimer()
 
   const port = await findAvailablePort()
@@ -59,6 +66,7 @@ export async function stopServer(): Promise<void> {
 export function scheduleShutdown(delayMs = 30000): void {
   cancelShutdownTimer()
   shutdownTimer = setTimeout(() => stopServer(), delayMs)
+  shutdownTimer.unref()
 }
 
 function cancelShutdownTimer(): void {
