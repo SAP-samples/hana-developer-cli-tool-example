@@ -9,7 +9,8 @@ import DashboardTab from '../components/analytics/DashboardTab.vue'
 const activeTab = ref('explore')
 
 function onTabSelect(e: any) {
-  activeTab.value = e.detail.tab.dataset.key
+  const key = e.detail?.tab?.dataset?.key
+  if (key) activeTab.value = key
 }
 </script>
 
@@ -18,12 +19,12 @@ function onTabSelect(e: any) {
     <ui5-tabcontainer @tab-select="onTabSelect">
       <ui5-tab data-key="explore" text="Explore" icon="chart-table-view" selected></ui5-tab>
       <ui5-tab data-key="sql" text="SQL" icon="syntax"></ui5-tab>
-      <ui5-tab data-key="dashboard" text="Dashboard" icon="dashboard"></ui5-tab>
+      <ui5-tab data-key="dashboard" text="Dashboard" icon="business-objects-experience"></ui5-tab>
     </ui5-tabcontainer>
     <div class="tab-content">
-      <ExploreTab v-if="activeTab === 'explore'" />
-      <SqlTab v-else-if="activeTab === 'sql'" />
-      <DashboardTab v-else-if="activeTab === 'dashboard'" />
+      <ExploreTab v-show="activeTab === 'explore'" />
+      <SqlTab v-show="activeTab === 'sql'" />
+      <DashboardTab v-show="activeTab === 'dashboard'" />
     </div>
   </div>
 </template>

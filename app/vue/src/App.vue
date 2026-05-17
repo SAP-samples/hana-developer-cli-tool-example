@@ -142,9 +142,13 @@ function isItemSelected(itemKey: string): boolean {
   <ui5-shellbar
     primary-title="HANA CLI"
     secondary-title="Database Developer Tools"
-    show-menu-button
-    @menu-button-click="onMenuClick"
   >
+    <ui5-button
+      slot="startButton"
+      icon="menu2"
+      tooltip="Toggle Navigation"
+      @click="onMenuClick"
+    />
     <NotificationCenter slot="startButton" />
     <WhatsNew slot="startButton" />
     <ui5-button
@@ -243,7 +247,12 @@ function isItemSelected(itemKey: string): boolean {
 }
 
 ui5-side-navigation {
-  min-width: 240px;
+  width: 240px;
+  transition: width 0.2s ease;
+}
+
+ui5-side-navigation[collapsed] {
+  width: auto;
 }
 
 .content-area {

@@ -325,7 +325,7 @@ function onExplorerInsert(text: string) {
 
               <template v-else-if="resultsTable.totalCount.value > 0 || activeTab.outputMode !== 'table'">
                 <SmartTable
-                  v-if="activeTab.outputMode === 'table'"
+                  v-show="activeTab.outputMode === 'table'"
                   title="Results"
                   :columns="resultsTable.columns.value"
                   :data="resultsTable.displayData.value"
@@ -337,9 +337,9 @@ function onExplorerInsert(text: string) {
                   @search="(q: string) => resultsTable.searchQuery.value = q"
                   @export="onExport"
                 />
-                <PlanTree v-else-if="activeTab.outputMode === 'plan'" :data="planResults" />
-                <ResultDiffView v-else-if="activeTab.outputMode === 'diff'" :current-data="activeTab.results" />
-                <div v-else class="json-output">
+                <PlanTree v-if="activeTab.outputMode === 'plan'" :data="planResults" />
+                <ResultDiffView v-if="activeTab.outputMode === 'diff'" :current-data="activeTab.results" />
+                <div v-show="activeTab.outputMode === 'json'" class="json-output">
                   <pre>{{ JSON.stringify(activeTab.results, null, 2) }}</pre>
                 </div>
               </template>

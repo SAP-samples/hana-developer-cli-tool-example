@@ -67,6 +67,8 @@ function visualize() {
 .editor-section {
   flex: 1;
   position: relative;
+  min-height: 0;
+  overflow: hidden;
 }
 .editor-section.with-chart {
   flex: 0.6;
