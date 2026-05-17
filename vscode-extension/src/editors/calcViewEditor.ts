@@ -111,8 +111,9 @@ export class CalcViewEditorProvider implements vscode.CustomEditorProvider<CalcV
     const port = await ensureServer(this._context)
 
     webviewPanel.webview.html = getWebviewContent(webviewPanel.webview, this._context.extensionUri, {
-      route: '/calcView',
+      route: '/calc-view-editor',
       port,
+      chromeless: true,
     })
 
     // Listen for messages from the webview

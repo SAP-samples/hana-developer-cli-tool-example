@@ -1,3 +1,4 @@
 out/
 dist/
+_i18n/
 *.vsix

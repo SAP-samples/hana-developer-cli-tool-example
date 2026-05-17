@@ -62,6 +62,10 @@
       {
         "command": "hana-cli.importData",
         "title": "HANA: Import Data"
+      },
+      {
+        "command": "hana-cli.openCfLogin",
+        "title": "HANA: CF Login"
       }
     ],
     "customEditors": [
@@ -161,8 +165,9 @@
   },
   "scripts": {
     "compile": "tsc -p ./",
-    "bundle": "npm run compile && node esbuild.config.mjs --production",
-    "bundle:dev": "npm run compile && node esbuild.config.mjs",
+    "copy:i18n": "node -e \"const fs=require('fs');fs.cpSync('../_i18n','_i18n',{recursive:true})\"",
+    "bundle": "npm run compile && npm run copy:i18n && node esbuild.config.mjs --production",
+    "bundle:dev": "npm run compile && npm run copy:i18n && node esbuild.config.mjs",
     "package": "npm run bundle && vsce package",
     "pretest": "tsc -p tsconfig.test.json",
     "test": "node ./out/test/runTests.js"

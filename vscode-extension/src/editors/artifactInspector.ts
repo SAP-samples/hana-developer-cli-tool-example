@@ -10,13 +10,13 @@ interface ArtifactConfig {
 }
 
 const ARTIFACT_CONFIGS: ArtifactConfig[] = [
-  { viewType: 'hana-cli.tableInspector', route: '/inspectTable', kind: 'table' },
-  { viewType: 'hana-cli.viewInspector', route: '/inspectView', kind: 'view' },
-  { viewType: 'hana-cli.procedureInspector', route: '/inspectProcedure', kind: 'procedure' },
-  { viewType: 'hana-cli.functionInspector', route: '/inspectFunction', kind: 'function' },
-  { viewType: 'hana-cli.synonymInspector', route: '/inspectSynonym', kind: 'synonym' },
-  { viewType: 'hana-cli.roleInspector', route: '/inspectRole', kind: 'role' },
-  { viewType: 'hana-cli.sequenceInspector', route: '/inspectSequence', kind: 'sequence' },
+  { viewType: 'hana-cli.tableInspector', route: '/inspect-table', kind: 'table' },
+  { viewType: 'hana-cli.viewInspector', route: '/inspect-view', kind: 'view' },
+  { viewType: 'hana-cli.procedureInspector', route: '/call-procedure', kind: 'procedure' },
+  { viewType: 'hana-cli.functionInspector', route: '/inspect-function', kind: 'function' },
+  { viewType: 'hana-cli.synonymInspector', route: '/inspect-table', kind: 'synonym' },
+  { viewType: 'hana-cli.roleInspector', route: '/inspect-table', kind: 'role' },
+  { viewType: 'hana-cli.sequenceInspector', route: '/inspect-table', kind: 'sequence' },
 ]
 
 /**
@@ -72,33 +72,31 @@ class ArtifactInspectorProvider implements vscode.CustomReadonlyEditorProvider {
       enableScripts: true,
     }
 
-    const port = await ensureServer(this._context)
-
-    webviewPanel.webview.html = getWebviewContent(webviewPanel.webview, this._context.extensionUri, {
-      route: this._config.route,
-      port,
-    })
-
     // Parse artifact name from the filename (strip extension)
     const filename = path.basename(document.uri.fsPath)
     const dotIndex = filename.lastIndexOf('.')
     const name = dotIndex > 0 ? filename.substring(0, dotIndex) : filename
 
+    const port = await ensureServer(this._context)
+
+    webviewPanel.webview.html = getWebviewContent(webviewPanel.webview, this._context.extensionUri, {
+      route: this._config.route,
+      port,
+      chromeless: true,
+    })
+
     webviewPanel.webview.onDidReceiveMessage(
-      (message: { type: string; level?: string; text?: string; path?: string }) => {
+      async (message: { type: string; level?: string; text?: string; path?: string }) => {
         switch (message.type) {
-          case 'ready':
+          case 'ready': {
             webviewPanel.webview.postMessage({
               type: 'openArtifact',
               kind: this._config.kind,
               name,
               schema: '',
             })
-            webviewPanel.webview.postMessage({
-              type: 'serverReady',
-              port,
-            })
             break
+          }
 
           case 'showMessage': {
             const text = message.text || ''
