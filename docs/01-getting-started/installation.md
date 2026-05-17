@@ -165,6 +165,61 @@ cf --version
 
 For detailed installation instructions and troubleshooting, refer to the [official Cloud Foundry CLI documentation](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html).
 
+### VSCode Extension - Optional
+
+The hana-cli VSCode extension provides visual editors for HANA artifacts, database inspectors, and a full tools panel — all embedded directly in your IDE. It works with VS Code, VS Code Insiders, Codium, SAP Business Application Studio, and GitHub Codespaces.
+
+#### Installing the Extension
+
+**From the CLI (recommended):**
+
+```bash
+# Check current status
+hana-cli vscode status
+
+# Install the extension
+hana-cli vscode install
+
+# For VS Code Insiders
+hana-cli vscode install --insiders
+```
+
+**From VS Code:**
+
+1. Open the Extensions panel (Ctrl+Shift+X / Cmd+Shift+X)
+2. Search for `SAP-samples.hana-cli`
+3. Click **Install**
+
+**From source:**
+
+```bash
+cd vscode-extension
+npm install
+npm run bundle
+npx vsce package
+code --install-extension hana-cli-0.1.0.vsix
+```
+
+#### What the Extension Provides
+
+Once installed, the extension activates automatically in workspaces containing HANA artifacts (`.hdbcalculationview`, `.hdbtable`, `default-env.json`, etc.) and provides:
+
+- **Custom editors** — Double-click `.hdbcalculationview` files to open the graphical editor; `.hdbtable`, `.hdbview`, `.hdbprocedure`, etc. open in visual inspectors
+- **Database tools** — Access query editors, table browsers, and system info from the Command Palette (Ctrl+Shift+P → type "HANA")
+- **Automatic connection** — Reuses your existing CAP bindings or `default-env.json` credentials with no extra configuration
+
+#### Connection Setup in VSCode
+
+The extension resolves connections automatically in this order:
+
+1. **CAP project** — If `.cdsrc-private.json` exists (from `cds bind`), credentials are resolved securely via CF/K8s bindings
+2. **default-env.json** — Standard local development credentials
+3. **Manual entry** — Use **HANA: Add Connection** from the Command Palette to enter host, port, user, and password (stored in VSCode SecretStorage)
+
+For most CAP developers, no configuration is needed — the extension picks up your existing `cds bind` setup automatically.
+
+For detailed documentation, see the [VSCode Extension Feature Guide](/03-features/vscode-extension).
+
 ### HANA Database Client (hdbsql) - Optional
 
 The hana-cli `hdbsql` command provides a convenient way to launch the SAP HANA interactive SQL tool directly from the command line while reusing your hana-cli connectivity configuration. This is optional and only needed if you want to use this specific feature.

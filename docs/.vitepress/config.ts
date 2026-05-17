@@ -408,6 +408,14 @@ export default withMermaid(
           text: 'Web User Interface',
           items: [
             { text: 'Web UI Overview', link: '/03-features/web-ui/' },
+            { text: 'Analytics & Reporting', link: '/03-features/analytics' },
+            { text: 'Calculation View Editor', link: '/03-features/calc-view-editor' },
+          ]
+        },
+        {
+          text: 'IDE Integration',
+          items: [
+            { text: 'VSCode Extension', link: '/03-features/vscode-extension' },
           ]
         },
         {
@@ -653,6 +661,9 @@ export default withMermaid(
                 { title: 'API Server', url: '/03-features/api-server', description: 'REST API server mode' },
                 { title: 'MCP Server', url: '/03-features/mcp/', description: 'Model Context Protocol server for AI integration' },
                 { title: 'Web UI', url: '/03-features/web-ui/', description: 'Web user interface' },
+                { title: 'Analytics & Reporting', url: '/03-features/analytics', description: 'Interactive data visualization with server-side aggregation' },
+                { title: 'Calculation View Editor', url: '/03-features/calc-view-editor', description: 'Graphical editor for .hdbcalculationview files' },
+                { title: 'VSCode Extension', url: '/03-features/vscode-extension', description: 'Native VS Code integration with custom editors and database tools' },
                 { title: 'Internationalization', url: '/03-features/internationalization', description: 'Multi-language support' },
                 { title: 'Output Formats', url: '/03-features/output-formats', description: 'Supported output formats (JSON, CSV, table, etc.)' },
               ],
