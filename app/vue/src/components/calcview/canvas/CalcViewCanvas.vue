@@ -24,6 +24,7 @@ const emit = defineEmits<{
   'node-click': [node: Node]
   'connect': [connection: Connection]
   'edge-remove': [edge: Edge]
+  'node-drag-stop': [nodeId: string, position: { x: number; y: number }]
 }>()
 
 function onNodeClick(event: NodeMouseEvent) {
@@ -37,6 +38,15 @@ function onConnect(connection: Connection) {
 function onEdgeDoubleClick(event: any) {
   emit('edge-remove', event.edge)
 }
+
+function handleNodeDragStop(event: any) {
+  if (event.node) {
+    emit('node-drag-stop', event.node.id, {
+      x: Math.round(event.node.position.x),
+      y: Math.round(event.node.position.y)
+    })
+  }
+}
 </script>
 
 <template>
@@ -49,6 +59,7 @@ function onEdgeDoubleClick(event: any) {
       @node-click="onNodeClick"
       @connect="onConnect"
       @edge-double-click="onEdgeDoubleClick"
+      @node-drag-stop="handleNodeDragStop"
     >
       <template #node-semantics="nodeProps">
         <SemanticsNode v-bind="nodeProps" />

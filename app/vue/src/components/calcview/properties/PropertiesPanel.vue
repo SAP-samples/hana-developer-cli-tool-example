@@ -3,6 +3,8 @@ import { computed } from 'vue'
 import '@ui5/webcomponents/dist/Title.js'
 import '@ui5/webcomponents/dist/TabContainer.js'
 import '@ui5/webcomponents/dist/Tab.js'
+import '@ui5/webcomponents/dist/Input.js'
+import '@ui5/webcomponents/dist/Button.js'
 
 import ViewPropertiesTab from './ViewPropertiesTab.vue'
 import ParametersTab from './ParametersTab.vue'
@@ -40,6 +42,8 @@ const emit = defineEmits<{
   'remove-hierarchy': [hierarchyId: string]
   'add-restricted-measure': [measure: RestrictedMeasure]
   'remove-restricted-measure': [measureId: string]
+  'rename-node': [oldId: string, newId: string]
+  'delete-node': [nodeId: string]
 }>()
 
 const selectedNode = computed<CalcViewNode | null>(() => {
@@ -103,6 +107,14 @@ const isJoinNode = computed(() => {
         </ui5-tabcontainer>
       </template>
       <template v-else-if="selectedNode">
+        <div class="node-actions">
+          <ui5-input
+            :value="selectedNode.id"
+            @change="(e: any) => { const v = e.target.value?.trim(); if (v && v !== selectedNode!.id) emit('rename-node', selectedNode!.id, v) }"
+            class="node-name-input"
+          />
+          <ui5-button design="Negative" icon="delete" @click="emit('delete-node', selectedNode!.id)">Delete</ui5-button>
+        </div>
         <JoinConditionSection
           v-if="isJoinNode"
           :node="selectedNode"
@@ -160,5 +172,17 @@ const isJoinNode = computed(() => {
 .panel-content {
   flex: 1;
   overflow-y: auto;
+}
+
+.node-actions {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  align-items: center;
+  border-bottom: 1px solid var(--sapGroup_ContentBorderColor, #d9d9d9);
+}
+
+.node-name-input {
+  flex: 1;
 }
 </style>

@@ -88,6 +88,20 @@ function handleAddDataSource(nodeId: string) {
   showDataSourcePicker.value = true
 }
 
+function handleRenameNode(oldId: string, newId: string) {
+  if (activeTab.value) activeTab.value.editor.renameNode(oldId, newId)
+}
+
+function handleDeleteNode(nodeId: string) {
+  if (activeTab.value) activeTab.value.editor.removeNode(nodeId)
+  if (selectedNodeId.value === nodeId) selectedNodeId.value = null
+}
+
+function handleNodeDragStop(nodeId: string, position: { x: number; y: number }) {
+  if (nodeId === '__semantics__') return
+  if (activeTab.value) activeTab.value.editor.moveNode(nodeId, position)
+}
+
 function handleDataSourceSelected(source: DataSourceSelection) {
   showDataSourcePicker.value = false
   if (!activeTab.value || !model.value || !dataSourceTargetNodeId.value) return
@@ -310,6 +324,7 @@ onUnmounted(() => { document.removeEventListener('keydown', handleKeydown) })
             @node-click="handleNodeClick"
             @connect="handleConnect"
             @edge-remove="handleEdgeRemove"
+            @node-drag-stop="handleNodeDragStop"
           />
           <PropertiesPanel
             :model="model"
@@ -332,6 +347,8 @@ onUnmounted(() => { document.removeEventListener('keydown', handleKeydown) })
             @remove-hierarchy="(id) => activeTab?.editor.removeHierarchy(id)"
             @add-restricted-measure="(rm) => activeTab?.editor.addRestrictedMeasure(rm)"
             @remove-restricted-measure="(id) => activeTab?.editor.removeRestrictedMeasure(id)"
+            @rename-node="handleRenameNode"
+            @delete-node="handleDeleteNode"
           />
         </div>
       </template>
