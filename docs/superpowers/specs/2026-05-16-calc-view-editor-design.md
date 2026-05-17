@@ -21,6 +21,8 @@ A graphical editor for SAP HANA Calculation Views integrated into the hana-cli V
 - Direct write-back to HANA runtime (export-only for runtime views)
 - Real-time collaboration / multi-user editing
 - HDI deployment triggering (save produces XML; deploy is separate)
+- Lineage tracing (requires separate design with runtime integration)
+- Performance analysis integration (requires separate design with runtime integration)
 
 ---
 
@@ -236,8 +238,9 @@ Matches BAS layout:
 
 **HANA Runtime mode:**
 - Queries connected HANA instance for deployed Calculation Views
-- Uses `_SYS_BI.BIMC_ALL_CUBES` for listing
-- Reads XML definition from `_SYS_REPO.ACTIVE_OBJECT` (classic repository) or HDI container metadata
+- **Primary (HANA Cloud / HDI):** Uses `SYS.CALCULATION_SCENARIOS` system view for listing; reads XML via HDI container design-time artifact tables (`_SYS_DI` APIs or container schema metadata)
+- **Legacy (on-prem / XS Classic):** Falls back to `_SYS_BI.BIMC_ALL_CUBES` for listing and `_SYS_REPO.ACTIVE_OBJECT` for XML extraction
+- Detection: Attempts `SYS.CALCULATION_SCENARIOS` first; if unavailable, falls back to legacy path
 - Opens as read-only; "Export As" to save locally
 
 ### Create New Calculation View
@@ -331,7 +334,7 @@ Modal dialog triggered by clicking "+" on a node or "Add Data Source" in propert
 interface CalcViewModel {
   id: string
   description: string
-  dataCategory: 'CUBE' | 'DIMENSION'
+  dataCategory: 'CUBE' | 'DIMENSION' | 'DEFAULT'
   applyPrivilegeType: string
   dataSources: DataSource[]
   calculationViews: CalcViewNode[]
@@ -344,12 +347,14 @@ interface CalcViewModel {
 
 // Node in the graph
 interface CalcViewNode {
-  id: string
+  id: string                    // matches NodeShape.modelObjectName for position lookup
   type: NodeType
   inputs: NodeInput[]
   outputColumns: Column[]
   calculatedColumns: CalculatedColumn[]
   filterExpression?: string
+  // Join and Non Equi Join both use joinConfig. Non Equi Join enables all operators;
+  // regular Join restricts to '=' only (enforced by UI, not type system).
   joinConfig?: JoinConfig
   rankConfig?: RankConfig
   unionConfig?: UnionConfig
@@ -421,11 +426,62 @@ interface LayoutInfo {
   shapes: NodeShape[]
 }
 
+// Position key: modelObjectName === CalcViewNode.id (canonical relationship)
+// MoveNodeCommand mutates LayoutInfo.shapes[n].upperLeftCorner
 interface NodeShape {
-  modelObjectName: string
+  modelObjectName: string       // matches CalcViewNode.id
   modelObjectNameSpace: string
   expanded: boolean
   upperLeftCorner: { x: number; y: number }
+}
+
+// Input parameter / variable
+interface Variable {
+  id: string
+  name: string
+  dataType: string
+  defaultValue?: string
+  selectionType?: 'single' | 'interval' | 'range'
+  mandatory?: boolean
+  description?: string
+}
+
+// Parameter mapping between nodes
+interface VariableMapping {
+  sourceVariable: string        // variable ID in child node
+  targetVariable: string        // variable ID in parent node / view
+  nodeId: string                // which node owns this mapping
+}
+
+// Restricted measure
+interface RestrictedMeasure {
+  id: string
+  name: string
+  baseMeasure: string           // reference to a baseMeasure column ID
+  restriction: RestrictionFilter[]
+  label?: string
+}
+
+interface RestrictionFilter {
+  attributeName: string
+  operator: '=' | 'IN' | 'BETWEEN'
+  values: string[]
+}
+
+// Hierarchy definition
+interface Hierarchy {
+  id: string
+  name: string
+  type: 'leveled' | 'parentChild'
+  levels?: HierarchyLevel[]     // for leveled
+  parentColumn?: string         // for parent-child
+  childColumn?: string          // for parent-child
+}
+
+interface HierarchyLevel {
+  name: string
+  column: string
+  ordinal: number
 }
 ```
 
@@ -462,14 +518,14 @@ src/
 │       │   ├── CalculatedColumnsTab.vue  # Expression editor
 │       │   ├── FilterTab.vue             # Filter expression
 │       │   ├── ParametersTab.vue         # Input parameters
-│       │   ├── JoinConditionSection.vue  # Join condition builder
+│       │   ├── JoinConditionSection.vue  # Join condition builder (used by both Join and Non Equi Join)
 │       │   ├── RankConfigTab.vue         # Rank settings
 │       │   ├── UnionMappingTab.vue       # Union column matching
 │       │   ├── SemanticsColumnsTab.vue   # Semantics output columns
 │       │   ├── ViewPropertiesTab.vue     # View-level properties
 │       │   └── HierarchiesTab.vue        # Hierarchy definitions
 │       ├── dialogs/
-│       │   ├── DataSourcePicker.vue      # Add data source dialog
+│       │   ├── CalcViewDataSourcePicker.vue  # Add data source dialog (prefixed to avoid collision with analytics DataSourcePicker)
 │       │   ├── CreateViewDialog.vue      # New view creation
 │       │   └── ExportDialog.vue          # Export/Save As
 │       ├── toolbar/
@@ -482,9 +538,8 @@ src/
 │       ├── useCalcViewParser.ts          # XML → model
 │       ├── useCalcViewSerializer.ts      # Model → XML
 │       ├── useCalcViewLayout.ts          # elkjs auto-layout
-│       ├── useCalcViewUndoRedo.ts        # Command stack
-│       ├── useCalcViewTabs.ts            # Multi-tab state
-│       ├── useCalcViewDirtyState.ts      # Unsaved changes tracking
+│       ├── useCalcViewUndoRedo.ts        # Command stack + per-tab dirty state (dirty = pointer !== saved pointer)
+│       ├── useCalcViewTabs.ts            # Multi-tab state (each tab has its own undo stack)
 │       ├── useNodeRegistry.ts            # Node type registry
 │       └── useDataSourcePicker.ts        # Data source search/selection
 └── services/
@@ -499,23 +554,33 @@ src/
 
 ## Backend API Endpoints (New Routes)
 
-Added to hana-cli's Express REST API:
+Added to hana-cli's Express REST API under the existing `/hana/` prefix convention (new route module: `routes/calcView.js`):
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/api/calcview/project/list?path=` | List .hdbcalculationview files in project directory |
-| GET | `/api/calcview/project/read?file=` | Read file content (XML string) |
-| POST | `/api/calcview/project/write` | Write XML content to file |
-| GET | `/api/calcview/runtime/list` | List deployed calc views from HANA |
-| GET | `/api/calcview/runtime/read?name=&schema=` | Read deployed view XML definition |
-| GET | `/api/calcview/datasources/search?type=&schema=&name=` | Search tables/views for data source picker |
-| GET | `/api/calcview/datasources/columns?type=&schema=&name=` | Get column metadata for a data source |
+| GET | `/hana/calcview/project/list?path=` | List .hdbcalculationview files in project directory |
+| GET | `/hana/calcview/project/read?file=` | Read file content (XML string) |
+| POST | `/hana/calcview/project/write` | Write XML content to file |
+| GET | `/hana/calcview/runtime/list` | List deployed calc views from HANA |
+| GET | `/hana/calcview/runtime/read?name=&schema=` | Read deployed view XML definition |
+| GET | `/hana/calcview/datasources/columns?type=&schema=&name=` | Get column metadata for a data source |
+
+**Note:** The Data Source Picker's "Database" tab reuses existing `/hana/tables` and `/hana/views` endpoints for searching objects. Only the column-detail endpoint is new.
+
+### Security: Path Validation
+
+All project file endpoints (`/hana/calcview/project/*`) MUST validate that the resolved file path is within the configured project root directory. Path traversal attacks (e.g., `?file=../../etc/passwd`) are rejected with 403. Implementation:
+- Resolve the `file` parameter to an absolute path
+- Verify it starts with the configured project root
+- Reject symlinks that escape the project root
 
 ---
 
 ## Undo/Redo System
 
 ### Command Pattern
+
+Each tab maintains its own `UndoRedoStack` instance. Dirty state is derived directly from the undo stack: a tab is dirty when `pointer !== savedPointer` (where `savedPointer` is updated on each save). Undoing back to the saved state clears the dirty indicator.
 
 ```typescript
 interface Command {
@@ -528,11 +593,14 @@ interface Command {
 interface UndoRedoStack {
   commands: Command[]
   pointer: number      // current position in stack
+  savedPointer: number // position at last save (for dirty detection)
   push(cmd: Command): void
   undo(): void
   redo(): void
-  canUndo: boolean
-  canRedo: boolean
+  markSaved(): void    // updates savedPointer to current pointer
+  canUndo: ComputedRef<boolean>
+  canRedo: ComputedRef<boolean>
+  isDirty: ComputedRef<boolean>  // pointer !== savedPointer
 }
 ```
 
@@ -540,7 +608,7 @@ interface UndoRedoStack {
 
 - `AddNodeCommand` — adds a node to the graph
 - `RemoveNodeCommand` — removes a node and its connections
-- `MoveNodeCommand` — changes node position
+- `MoveNodeCommand` — changes node position (mutates `LayoutInfo.shapes[n].upperLeftCorner`)
 - `ConnectNodesCommand` — creates an edge between nodes
 - `DisconnectNodesCommand` — removes an edge
 - `MapColumnCommand` — maps a column to output
@@ -556,7 +624,7 @@ interface UndoRedoStack {
 - **Virtual rendering:** Vue Flow only renders visible nodes (important for complex views with 50+ nodes)
 - **Lazy column loading:** Column metadata for data sources loaded on demand, not upfront
 - **Debounced auto-layout:** elkjs layout runs debounced (300ms) after structural changes
-- **XML parsing:** Done in a web worker to avoid blocking the UI for large files
+- **XML parsing:** For large files (>500KB), parsing runs asynchronously using chunked microtasks (`requestIdleCallback` / `setTimeout(0)` batching) to avoid blocking the UI. A full web worker can be introduced as a future optimization if profiling shows the need.
 - **Minimap:** Rendered separately, updated on requestAnimationFrame
 
 ---
@@ -607,8 +675,15 @@ interface UndoRedoStack {
 - Currency/unit conversion
 - Data masking
 - Restricted measures
-- Lineage tracing
-- Performance analysis integration
+
+---
+
+## Future Considerations (Separate Design Required)
+
+These features require runtime HANA integration beyond static view modeling and will need their own design specs:
+
+- **Lineage tracing** — Visualizing data lineage across multiple calculation views and base tables
+- **Performance analysis integration** — Connecting to HANA's Plan Visualizer / statement hints
 
 ---
 
