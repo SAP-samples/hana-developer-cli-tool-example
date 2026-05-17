@@ -2,7 +2,8 @@ import { XMLParser } from 'fast-xml-parser'
 import type {
   CalcViewModel, CalcViewNode, DataSource, Column,
   LogicalModel, NodeShape, LayoutInfo,
-  NodeType, NodeInput, Variable, VariableMapping
+  NodeType, NodeInput, Variable, VariableMapping,
+  JoinConfig, JoinCondition
 } from './types'
 
 const parser = new XMLParser({
@@ -13,7 +14,7 @@ const parser = new XMLParser({
       'DataSource', 'calculationView', 'viewAttribute', 'input',
       'mapping', 'attribute', 'measure', 'shape', 'localVariable',
       'variableMapping', 'calculatedAttribute', 'calculatedMeasure',
-      'restrictedMeasure'
+      'restrictedMeasure', 'joinAttribute'
     ]
     return arrayElements.includes(name)
   }
@@ -69,14 +70,19 @@ function parseCalculationViews(cv: any): CalcViewNode[] {
 }
 
 function parseCalcViewNode(node: any): CalcViewNode {
-  return {
+  const nodeType = inferNodeType(node)
+  const result: CalcViewNode = {
     id: node['@_id'],
-    type: inferNodeType(node),
+    type: nodeType,
     inputs: parseInputs(node.input),
     outputColumns: parseViewAttributes(node.viewAttributes),
     calculatedColumns: [],
     filterExpression: node.filter?.expression || undefined
   }
+  if (nodeType === 'join' || nodeType === 'nonEquiJoin') {
+    result.joinConfig = parseJoinConfig(node)
+  }
+  return result
 }
 
 function inferNodeType(node: any): NodeType {
@@ -197,4 +203,29 @@ function parseLayout(layout: any): LayoutInfo {
       }
     }))
   }
+}
+
+function parseJoinConfig(cv: any): JoinConfig {
+  const joinType = cv['@_joinType'] || 'inner'
+  const rawCardinality = cv['@_cardinality'] || 'C1_1'
+  const cardinality = parseCardinality(rawCardinality)
+  const joinAttributes = ensureArray(cv['joinAttribute'])
+  const conditions: JoinCondition[] = joinAttributes.map((ja: any) => ({
+    leftColumn: typeof ja === 'string' ? ja : (ja['@_name'] || ''),
+    rightColumn: typeof ja === 'string' ? ja : (ja['@_name'] || ''),
+    operator: '=' as const
+  }))
+  return { joinType, cardinality, conditions }
+}
+
+function parseCardinality(raw: string): '1..1' | '1..N' | 'N..1' | 'N..M' {
+  const map: Record<string, '1..1' | '1..N' | 'N..1' | 'N..M'> = {
+    'C1_1': '1..1', 'C1_N': '1..N', 'CN_1': 'N..1', 'CN_M': 'N..M'
+  }
+  return map[raw] || '1..1'
+}
+
+function ensureArray(val: any): any[] {
+  if (!val) return []
+  return Array.isArray(val) ? val : [val]
 }

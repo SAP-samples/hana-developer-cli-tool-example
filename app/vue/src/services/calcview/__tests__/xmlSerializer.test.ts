@@ -46,5 +46,17 @@ describe('xmlSerializer', () => {
       expect(output).toContain('Calculation:scenario')
       expect(output).toContain('xmlns:Calculation')
     })
+
+    it('round-trips join calculation view with config', () => {
+      const xml = loadFixture('join.hdbcalculationview')
+      const model = parseCalcView(xml)
+      const output = serializeCalcView(model)
+      const reparsed = parseCalcView(output)
+
+      expect(reparsed.calculationViews[0].type).toBe('join')
+      expect(reparsed.calculationViews[0].joinConfig!.joinType).toBe('inner')
+      expect(reparsed.calculationViews[0].joinConfig!.cardinality).toBe('1..1')
+      expect(reparsed.calculationViews[0].joinConfig!.conditions).toHaveLength(1)
+    })
   })
 })

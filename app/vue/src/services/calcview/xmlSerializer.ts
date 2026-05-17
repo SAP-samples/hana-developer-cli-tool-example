@@ -74,10 +74,14 @@ function serializeCalculationViews(nodes: CalcViewNode[]): unknown {
 
 function serializeNode(node: CalcViewNode): Record<string, unknown> {
   const xsiType = getXsiType(node.type)
-  return {
+  const obj: Record<string, unknown> = {
     '@_xsi:type': xsiType,
     '@_xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
     '@_id': node.id,
+    ...(node.joinConfig ? {
+      '@_joinType': node.joinConfig.joinType,
+      '@_cardinality': serializeCardinality(node.joinConfig.cardinality)
+    } : {}),
     viewAttributes: {
       viewAttribute: node.outputColumns.map(c => ({ '@_id': c.id }))
     },
@@ -88,8 +92,21 @@ function serializeNode(node: CalcViewNode): Record<string, unknown> {
         '@_target': c.id,
         '@_source': c.id
       }))
-    }))
+    })),
+    ...(node.joinConfig && node.joinConfig.conditions.length > 0 ? {
+      joinAttribute: node.joinConfig.conditions.map(c => ({
+        '@_name': c.leftColumn
+      }))
+    } : {})
   }
+  return obj
+}
+
+function serializeCardinality(card: string): string {
+  const map: Record<string, string> = {
+    '1..1': 'C1_1', '1..N': 'C1_N', 'N..1': 'CN_1', 'N..M': 'CN_M'
+  }
+  return map[card] || 'C1_1'
 }
 
 function getXsiType(type: string): string {

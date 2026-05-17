@@ -73,5 +73,24 @@ describe('xmlParser', () => {
       expect(projShape).toBeDefined()
       expect(projShape!.upperLeftCorner).toEqual({ x: 100, y: 200 })
     })
+
+    it('parses join node with config and conditions', () => {
+      const xml = loadFixture('join.hdbcalculationview')
+      const model = parseCalcView(xml)
+
+      expect(model.calculationViews).toHaveLength(1)
+      const node = model.calculationViews[0]
+      expect(node.id).toBe('Join_1')
+      expect(node.type).toBe('join')
+      expect(node.inputs).toHaveLength(2)
+      expect(node.inputs[0].node).toBe('SALES')
+      expect(node.inputs[1].node).toBe('PRODUCTS')
+      expect(node.joinConfig).toBeDefined()
+      expect(node.joinConfig!.joinType).toBe('inner')
+      expect(node.joinConfig!.cardinality).toBe('1..1')
+      expect(node.joinConfig!.conditions).toHaveLength(1)
+      expect(node.joinConfig!.conditions[0].leftColumn).toBe('PRODUCT_ID')
+      expect(node.joinConfig!.conditions[0].operator).toBe('=')
+    })
   })
 })
