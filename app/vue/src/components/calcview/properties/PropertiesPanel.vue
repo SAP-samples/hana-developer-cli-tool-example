@@ -1,14 +1,26 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import '@ui5/webcomponents/dist/Title.js'
+import '@ui5/webcomponents/dist/TabContainer.js'
+import '@ui5/webcomponents/dist/Tab.js'
 
 import ViewPropertiesTab from './ViewPropertiesTab.vue'
-import type { CalcViewModel, CalcViewNode } from '../../../services/calcview/types'
+import MappingTab from './MappingTab.vue'
+import JoinConditionSection from './JoinConditionSection.vue'
+import type { CalcViewModel, CalcViewNode, Column, JoinCondition } from '../../../services/calcview/types'
 import { NODE_TYPE_DEFINITIONS } from '../../../services/calcview/nodeTypes'
 
 const props = defineProps<{
   model: CalcViewModel
   selectedNodeId: string | null
+}>()
+
+const emit = defineEmits<{
+  'map-column': [nodeId: string, column: Column]
+  'unmap-column': [nodeId: string, columnId: string]
+  'map-all': [nodeId: string]
+  'add-join-condition': [nodeId: string, condition: JoinCondition]
+  'remove-join-condition': [nodeId: string, index: number]
 }>()
 
 const selectedNode = computed<CalcViewNode | null>(() => {
@@ -24,6 +36,10 @@ const panelTitle = computed(() => {
   }
   return 'Properties'
 })
+
+const isJoinNode = computed(() => {
+  return selectedNode.value?.type === 'join' || selectedNode.value?.type === 'nonEquiJoin'
+})
 </script>
 
 <template>
@@ -36,12 +52,26 @@ const panelTitle = computed(() => {
         v-if="!selectedNodeId || selectedNodeId === '__semantics__'"
         :model="model"
       />
-      <div v-else class="node-properties-placeholder">
-        <p>Node properties for <strong>{{ selectedNode?.id }}</strong></p>
-        <p>Type: {{ selectedNode?.type }}</p>
-        <p>Columns: {{ selectedNode?.outputColumns.length }}</p>
-        <p class="note">Full property editing in Phase 2.</p>
-      </div>
+      <template v-else-if="selectedNode">
+        <JoinConditionSection
+          v-if="isJoinNode"
+          :node="selectedNode"
+          :model="model"
+          @add-condition="(cond) => emit('add-join-condition', selectedNode!.id, cond)"
+          @remove-condition="(idx) => emit('remove-join-condition', selectedNode!.id, idx)"
+        />
+        <ui5-tabcontainer>
+          <ui5-tab text="Mapping">
+            <MappingTab
+              :node="selectedNode"
+              :model="model"
+              @map-column="(col) => emit('map-column', selectedNode!.id, col)"
+              @unmap-column="(colId) => emit('unmap-column', selectedNode!.id, colId)"
+              @map-all="() => emit('map-all', selectedNode!.id)"
+            />
+          </ui5-tab>
+        </ui5-tabcontainer>
+      </template>
     </div>
   </div>
 </template>
@@ -65,17 +95,5 @@ const panelTitle = computed(() => {
 .panel-content {
   flex: 1;
   overflow-y: auto;
-}
-
-.node-properties-placeholder {
-  padding: 12px;
-  color: var(--sapTextColor, #333);
-  font-size: 12px;
-}
-
-.note {
-  color: var(--sapContent_LabelColor, #666);
-  font-style: italic;
-  margin-top: 8px;
 }
 </style>

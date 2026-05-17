@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { onMounted, ref, onUnmounted } from 'vue'
+import type { Ref } from 'vue'
 import { useCalcViewModel } from '../composables/calcview/useCalcViewModel'
+import { BatchCommand, MapColumnCommand } from '../composables/calcview/commands'
 import { parseCalcView } from '../services/calcview/xmlParser'
 import CalcViewCanvas from '../components/calcview/canvas/CalcViewCanvas.vue'
 import NodePalette from '../components/calcview/canvas/NodePalette.vue'
 import PropertiesPanel from '../components/calcview/properties/PropertiesPanel.vue'
-import type { NodeType } from '../services/calcview/types'
+import type { NodeType, Column, JoinCondition, CalcViewModel } from '../services/calcview/types'
 import type { Node, Edge, Connection } from '@vue-flow/core'
 import '@ui5/webcomponents/dist/Title.js'
 
@@ -34,6 +36,41 @@ function handleEdgeRemove(edge: Edge) {
 
 function handleAddNode(type: NodeType) {
   addNode(type, { x: 200, y: 400 })
+}
+
+function handleMapAll(nodeId: string) {
+  if (!model.value) return
+  const node = model.value.calculationViews.find(n => n.id === nodeId)
+  if (!node) return
+
+  const mappedIds = new Set(node.outputColumns.map(c => c.id))
+  const columnsToMap: Column[] = []
+
+  for (const input of node.inputs) {
+    const ds = model.value.dataSources.find(d => d.id === input.node)
+    if (ds) {
+      for (const col of ds.columns) {
+        if (!mappedIds.has(col.name)) {
+          columnsToMap.push({ id: col.name, name: col.name, dataType: col.dataType })
+        }
+      }
+    }
+    const cvNode = model.value.calculationViews.find(n => n.id === input.node)
+    if (cvNode) {
+      for (const col of cvNode.outputColumns) {
+        if (!mappedIds.has(col.id)) {
+          columnsToMap.push({ id: col.id, name: col.name, dataType: col.dataType })
+        }
+      }
+    }
+  }
+
+  if (columnsToMap.length > 0) {
+    const commands = columnsToMap.map(col =>
+      new MapColumnCommand(model as Ref<CalcViewModel>, nodeId, col)
+    )
+    undoRedo.push(new BatchCommand(commands, `Map all columns to ${nodeId}`))
+  }
 }
 
 function handleKeydown(e: KeyboardEvent) {
@@ -114,6 +151,11 @@ onUnmounted(() => {
       <PropertiesPanel
         :model="model"
         :selected-node-id="selectedNodeId"
+        @map-column="(nodeId, col) => mapColumn(nodeId, col)"
+        @unmap-column="(nodeId, colId) => unmapColumn(nodeId, colId)"
+        @map-all="handleMapAll"
+        @add-join-condition="(nodeId, cond) => addJoinCondition(nodeId, cond)"
+        @remove-join-condition="(nodeId, idx) => removeJoinCondition(nodeId, idx)"
       />
     </div>
     <div v-else class="empty-state">
