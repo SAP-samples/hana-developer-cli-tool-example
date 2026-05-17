@@ -1,6 +1,6 @@
 import { ref, computed, type Ref } from 'vue'
 import type { Node, Edge } from '@vue-flow/core'
-import type { CalcViewModel, CalcViewNode, NodeType, Column, JoinCondition, CalculatedColumn, Variable } from '../../services/calcview/types'
+import type { CalcViewModel, CalcViewNode, NodeType, Column, JoinCondition, CalculatedColumn, Variable, Hierarchy, RestrictedMeasure } from '../../services/calcview/types'
 import { NODE_TYPE_DEFINITIONS } from '../../services/calcview/nodeTypes'
 import { createUndoRedoStack } from './useCalcViewUndoRedo'
 import {
@@ -18,7 +18,14 @@ import {
   SetFilterExpressionCommand,
   AddVariableCommand,
   RemoveVariableCommand,
-  UpdateVariableCommand
+  UpdateVariableCommand,
+  MoveNodeCommand,
+  AddHierarchyCommand,
+  RemoveHierarchyCommand,
+  AddRestrictedMeasureCommand,
+  RemoveRestrictedMeasureCommand,
+  UpdateColumnPropertiesCommand,
+  RenameNodeCommand
 } from './commands'
 
 export function useCalcViewModel() {
@@ -211,6 +218,41 @@ export function useCalcViewModel() {
     undoRedo.push(new UpdateVariableCommand(model as Ref<CalcViewModel>, variableId, updates))
   }
 
+  function addHierarchy(hierarchy: Hierarchy) {
+    if (!model.value) return
+    undoRedo.push(new AddHierarchyCommand(model as Ref<CalcViewModel>, hierarchy))
+  }
+
+  function removeHierarchy(hierarchyId: string) {
+    if (!model.value) return
+    undoRedo.push(new RemoveHierarchyCommand(model as Ref<CalcViewModel>, hierarchyId))
+  }
+
+  function addRestrictedMeasure(measure: RestrictedMeasure) {
+    if (!model.value) return
+    undoRedo.push(new AddRestrictedMeasureCommand(model as Ref<CalcViewModel>, measure))
+  }
+
+  function removeRestrictedMeasure(measureId: string) {
+    if (!model.value) return
+    undoRedo.push(new RemoveRestrictedMeasureCommand(model as Ref<CalcViewModel>, measureId))
+  }
+
+  function updateColumnProperties(collectionKey: 'attributes' | 'baseMeasures', columnId: string, updates: Partial<Column>) {
+    if (!model.value) return
+    undoRedo.push(new UpdateColumnPropertiesCommand(model as Ref<CalcViewModel>, collectionKey, columnId, updates))
+  }
+
+  function renameNode(oldId: string, newId: string) {
+    if (!model.value) return
+    undoRedo.push(new RenameNodeCommand(model as Ref<CalcViewModel>, oldId, newId))
+  }
+
+  function moveNode(nodeId: string, position: { x: number; y: number }) {
+    if (!model.value) return
+    undoRedo.push(new MoveNodeCommand(model as Ref<CalcViewModel>, nodeId, position))
+  }
+
   return {
     model,
     undoRedo,
@@ -231,6 +273,13 @@ export function useCalcViewModel() {
     setFilterExpression,
     addVariable,
     removeVariable,
-    updateVariable
+    updateVariable,
+    addHierarchy,
+    removeHierarchy,
+    addRestrictedMeasure,
+    removeRestrictedMeasure,
+    updateColumnProperties,
+    renameNode,
+    moveNode
   }
 }

@@ -1,5 +1,5 @@
 import type { Ref } from 'vue'
-import type { CalcViewModel, CalcViewNode, Column, JoinCondition, CalculatedColumn, Variable } from '../../services/calcview/types'
+import type { CalcViewModel, CalcViewNode, Column, JoinCondition, CalculatedColumn, Variable, Hierarchy, RestrictedMeasure } from '../../services/calcview/types'
 import type { Command } from './useCalcViewUndoRedo'
 
 export class AddNodeCommand implements Command {
@@ -516,6 +516,182 @@ export class UpdateVariableCommand implements Command {
   undo() {
     const v = this.model.value.localVariables.find(x => x.id === this.variableId)
     if (v) Object.assign(v, this.previous)
+  }
+}
+
+export class AddHierarchyCommand implements Command {
+  type = 'addHierarchy'
+  description: string
+
+  constructor(
+    private model: Ref<CalcViewModel>,
+    private hierarchy: Hierarchy
+  ) {
+    this.description = `Add hierarchy ${hierarchy.id}`
+  }
+
+  execute() {
+    this.model.value.logicalModel.hierarchies.push(this.hierarchy)
+  }
+
+  undo() {
+    this.model.value.logicalModel.hierarchies = this.model.value.logicalModel.hierarchies.filter(
+      h => h.id !== this.hierarchy.id
+    )
+  }
+}
+
+export class RemoveHierarchyCommand implements Command {
+  type = 'removeHierarchy'
+  description: string
+  private removed: Hierarchy | null = null
+  private removedIndex = -1
+
+  constructor(
+    private model: Ref<CalcViewModel>,
+    private hierarchyId: string
+  ) {
+    this.description = `Remove hierarchy ${hierarchyId}`
+  }
+
+  execute() {
+    this.removedIndex = this.model.value.logicalModel.hierarchies.findIndex(h => h.id === this.hierarchyId)
+    if (this.removedIndex >= 0) {
+      this.removed = this.model.value.logicalModel.hierarchies[this.removedIndex]
+      this.model.value.logicalModel.hierarchies.splice(this.removedIndex, 1)
+    }
+  }
+
+  undo() {
+    if (this.removed && this.removedIndex >= 0) {
+      this.model.value.logicalModel.hierarchies.splice(this.removedIndex, 0, this.removed)
+    }
+  }
+}
+
+export class AddRestrictedMeasureCommand implements Command {
+  type = 'addRestrictedMeasure'
+  description: string
+
+  constructor(
+    private model: Ref<CalcViewModel>,
+    private measure: RestrictedMeasure
+  ) {
+    this.description = `Add restricted measure ${measure.id}`
+  }
+
+  execute() {
+    this.model.value.logicalModel.restrictedMeasures.push(this.measure)
+  }
+
+  undo() {
+    this.model.value.logicalModel.restrictedMeasures = this.model.value.logicalModel.restrictedMeasures.filter(
+      rm => rm.id !== this.measure.id
+    )
+  }
+}
+
+export class RemoveRestrictedMeasureCommand implements Command {
+  type = 'removeRestrictedMeasure'
+  description: string
+  private removed: RestrictedMeasure | null = null
+  private removedIndex = -1
+
+  constructor(
+    private model: Ref<CalcViewModel>,
+    private measureId: string
+  ) {
+    this.description = `Remove restricted measure ${measureId}`
+  }
+
+  execute() {
+    this.removedIndex = this.model.value.logicalModel.restrictedMeasures.findIndex(rm => rm.id === this.measureId)
+    if (this.removedIndex >= 0) {
+      this.removed = this.model.value.logicalModel.restrictedMeasures[this.removedIndex]
+      this.model.value.logicalModel.restrictedMeasures.splice(this.removedIndex, 1)
+    }
+  }
+
+  undo() {
+    if (this.removed && this.removedIndex >= 0) {
+      this.model.value.logicalModel.restrictedMeasures.splice(this.removedIndex, 0, this.removed)
+    }
+  }
+}
+
+export class UpdateColumnPropertiesCommand implements Command {
+  type = 'updateColumnProperties'
+  description: string
+  private oldProps: Partial<Column> = {}
+
+  constructor(
+    private model: Ref<CalcViewModel>,
+    private collectionKey: 'attributes' | 'baseMeasures',
+    private columnId: string,
+    private updates: Partial<Column>
+  ) {
+    this.description = `Update ${columnId} properties`
+  }
+
+  execute() {
+    const col = this.model.value.logicalModel[this.collectionKey].find(c => c.id === this.columnId)
+    if (!col) return
+    this.oldProps = {}
+    for (const key of Object.keys(this.updates) as (keyof Column)[]) {
+      (this.oldProps as any)[key] = (col as any)[key]
+      ;(col as any)[key] = (this.updates as any)[key]
+    }
+  }
+
+  undo() {
+    const col = this.model.value.logicalModel[this.collectionKey].find(c => c.id === this.columnId)
+    if (!col) return
+    for (const key of Object.keys(this.oldProps) as (keyof Column)[]) {
+      (col as any)[key] = (this.oldProps as any)[key]
+    }
+  }
+}
+
+export class RenameNodeCommand implements Command {
+  type = 'renameNode'
+  description: string
+
+  constructor(
+    private model: Ref<CalcViewModel>,
+    private oldId: string,
+    private newId: string
+  ) {
+    this.description = `Rename ${oldId} to ${newId}`
+  }
+
+  execute() {
+    const node = this.model.value.calculationViews.find(n => n.id === this.oldId)
+    if (node) node.id = this.newId
+    const shape = this.model.value.layout.shapes.find(s => s.modelObjectName === this.oldId)
+    if (shape) shape.modelObjectName = this.newId
+    for (const n of this.model.value.calculationViews) {
+      for (const input of n.inputs) {
+        if (input.node === this.oldId) input.node = this.newId
+      }
+    }
+    if (this.model.value.outputNodeId === this.oldId) {
+      this.model.value.outputNodeId = this.newId
+    }
+  }
+
+  undo() {
+    const node = this.model.value.calculationViews.find(n => n.id === this.newId)
+    if (node) node.id = this.oldId
+    const shape = this.model.value.layout.shapes.find(s => s.modelObjectName === this.newId)
+    if (shape) shape.modelObjectName = this.oldId
+    for (const n of this.model.value.calculationViews) {
+      for (const input of n.inputs) {
+        if (input.node === this.newId) input.node = this.oldId
+      }
+    }
+    if (this.model.value.outputNodeId === this.newId) {
+      this.model.value.outputNodeId = this.oldId
+    }
   }
 }
 

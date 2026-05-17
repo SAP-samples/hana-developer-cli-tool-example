@@ -10,9 +10,15 @@ import {
   ChangePropertyCommand,
   AddJoinConditionCommand,
   RemoveJoinConditionCommand,
-  BatchCommand
+  BatchCommand,
+  AddHierarchyCommand,
+  RemoveHierarchyCommand,
+  AddRestrictedMeasureCommand,
+  RemoveRestrictedMeasureCommand,
+  UpdateColumnPropertiesCommand,
+  RenameNodeCommand
 } from '../../../composables/calcview/commands'
-import type { CalcViewModel, CalcViewNode, Column, JoinCondition } from '../types'
+import type { CalcViewModel, CalcViewNode, Column, JoinCondition, Hierarchy, RestrictedMeasure } from '../types'
 
 function createMinimalModel(): CalcViewModel {
   return {
@@ -197,6 +203,101 @@ describe('commands', () => {
       expect(model.value.calculationViews[0].outputColumns).toHaveLength(2)
       batch.undo()
       expect(model.value.calculationViews[0].outputColumns).toHaveLength(0)
+    })
+  })
+
+  describe('AddHierarchyCommand', () => {
+    it('adds and undoes a hierarchy', () => {
+      const model = ref(createMinimalModel())
+      const hierarchy: Hierarchy = { id: 'H1', name: 'Test', type: 'leveled', levels: [{ name: 'L1', column: 'COL1', ordinal: 1 }] }
+      const cmd = new AddHierarchyCommand(model, hierarchy)
+      cmd.execute()
+      expect(model.value.logicalModel.hierarchies).toHaveLength(1)
+      expect(model.value.logicalModel.hierarchies[0].id).toBe('H1')
+      cmd.undo()
+      expect(model.value.logicalModel.hierarchies).toHaveLength(0)
+    })
+  })
+
+  describe('RemoveHierarchyCommand', () => {
+    it('removes and undoes a hierarchy', () => {
+      const model = ref(createMinimalModel())
+      model.value.logicalModel.hierarchies.push({ id: 'H1', name: 'Test', type: 'leveled', levels: [] })
+      const cmd = new RemoveHierarchyCommand(model, 'H1')
+      cmd.execute()
+      expect(model.value.logicalModel.hierarchies).toHaveLength(0)
+      cmd.undo()
+      expect(model.value.logicalModel.hierarchies).toHaveLength(1)
+      expect(model.value.logicalModel.hierarchies[0].id).toBe('H1')
+    })
+  })
+
+  describe('AddRestrictedMeasureCommand', () => {
+    it('adds and undoes a restricted measure', () => {
+      const model = ref(createMinimalModel())
+      const rm: RestrictedMeasure = { id: 'RM1', name: 'Test RM', baseMeasure: 'AMOUNT', restriction: [{ attributeName: 'REGION', operator: '=', values: ['US'] }] }
+      const cmd = new AddRestrictedMeasureCommand(model, rm)
+      cmd.execute()
+      expect(model.value.logicalModel.restrictedMeasures).toHaveLength(1)
+      cmd.undo()
+      expect(model.value.logicalModel.restrictedMeasures).toHaveLength(0)
+    })
+  })
+
+  describe('RemoveRestrictedMeasureCommand', () => {
+    it('removes and undoes a restricted measure', () => {
+      const model = ref(createMinimalModel())
+      model.value.logicalModel.restrictedMeasures.push({ id: 'RM1', name: 'Test', baseMeasure: 'AMOUNT', restriction: [] })
+      const cmd = new RemoveRestrictedMeasureCommand(model, 'RM1')
+      cmd.execute()
+      expect(model.value.logicalModel.restrictedMeasures).toHaveLength(0)
+      cmd.undo()
+      expect(model.value.logicalModel.restrictedMeasures).toHaveLength(1)
+    })
+  })
+
+  describe('UpdateColumnPropertiesCommand', () => {
+    it('updates and undoes column properties', () => {
+      const model = ref(createMinimalModel())
+      model.value.logicalModel.attributes.push({ id: 'COL1', name: 'COL1', dataType: 'NVARCHAR', label: 'Old', hidden: false })
+      const cmd = new UpdateColumnPropertiesCommand(model, 'attributes', 'COL1', { label: 'New Label', hidden: true })
+      cmd.execute()
+      expect(model.value.logicalModel.attributes[0].label).toBe('New Label')
+      expect(model.value.logicalModel.attributes[0].hidden).toBe(true)
+      cmd.undo()
+      expect(model.value.logicalModel.attributes[0].label).toBe('Old')
+      expect(model.value.logicalModel.attributes[0].hidden).toBe(false)
+    })
+  })
+
+  describe('RenameNodeCommand', () => {
+    it('renames a node, updates layout shape and outputNodeId', () => {
+      const model = ref(createMinimalModel())
+      model.value.calculationViews.push({ id: 'Projection_1', type: 'projection', inputs: [], outputColumns: [], calculatedColumns: [] })
+      model.value.layout.shapes.push({ modelObjectName: 'Projection_1', modelObjectNameSpace: 'CalculationView', expanded: true, upperLeftCorner: { x: 100, y: 200 } })
+      model.value.outputNodeId = 'Projection_1'
+      const cmd = new RenameNodeCommand(model, 'Projection_1', 'Sales_Projection')
+      cmd.execute()
+      expect(model.value.calculationViews[0].id).toBe('Sales_Projection')
+      expect(model.value.layout.shapes[0].modelObjectName).toBe('Sales_Projection')
+      expect(model.value.outputNodeId).toBe('Sales_Projection')
+      cmd.undo()
+      expect(model.value.calculationViews[0].id).toBe('Projection_1')
+      expect(model.value.outputNodeId).toBe('Projection_1')
+    })
+
+    it('updates input references in other nodes', () => {
+      const model = ref(createMinimalModel())
+      model.value.calculationViews.push(
+        { id: 'Proj_1', type: 'projection', inputs: [], outputColumns: [], calculatedColumns: [] },
+        { id: 'Join_1', type: 'join', inputs: [{ name: 'Proj_1', node: 'Proj_1' }], outputColumns: [], calculatedColumns: [] }
+      )
+      model.value.layout.shapes.push({ modelObjectName: 'Proj_1', modelObjectNameSpace: 'CalculationView', expanded: true, upperLeftCorner: { x: 0, y: 0 } })
+      const cmd = new RenameNodeCommand(model, 'Proj_1', 'Renamed')
+      cmd.execute()
+      expect(model.value.calculationViews[1].inputs[0].node).toBe('Renamed')
+      cmd.undo()
+      expect(model.value.calculationViews[1].inputs[0].node).toBe('Proj_1')
     })
   })
 })
