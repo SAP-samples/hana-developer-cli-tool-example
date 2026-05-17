@@ -53,6 +53,7 @@
     "release:prepare": "node scripts/prepare-release.js",
     "release:notes": "node scripts/extract-release-notes.js",
     "build:vue": "cd app/vue && npm run build",
+    "build:vscode": "cd app/vue && npm run build:vscode && cd ../../vscode-extension && npm run bundle",
     "prepack": "npm run build:vue"
   },
   "repository": {

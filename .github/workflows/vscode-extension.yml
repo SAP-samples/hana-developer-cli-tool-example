@@ -1,0 +1,56 @@
+name: VSCode Extension
+
+on:
+  push:
+    branches: [main, 'feature/vscode-extension']
+    paths:
+      - 'vscode-extension/**'
+      - 'app/vue/**'
+      - 'routes/**'
+      - 'utils/**'
+      - '.github/workflows/vscode-extension.yml'
+    tags:
+      - 'vscode-v*'
+  pull_request:
+    paths:
+      - 'vscode-extension/**'
+      - 'app/vue/**'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [20, 22]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci
+      - run: cd app/vue && npm ci
+      - run: cd vscode-extension && npm ci
+      - run: cd app/vue && npm run build:vscode
+      - run: cd vscode-extension && npm run compile
+      - run: cd vscode-extension && npm run bundle
+      - run: cd vscode-extension && npx vsce package --no-dependencies
+      - uses: actions/upload-artifact@v4
+        if: matrix.os == 'ubuntu-latest' && matrix.node == 22
+        with:
+          name: vsix
+          path: vscode-extension/*.vsix
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/vscode-v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: vsix
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: '*.vsix'

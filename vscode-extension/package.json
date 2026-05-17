@@ -1,0 +1,190 @@
+{
+  "name": "hana-cli",
+  "displayName": "hana-cli Tools for SAP HANA",
+  "description": "Visual editors and database tools for SAP HANA powered by hana-cli",
+  "version": "0.1.0",
+  "publisher": "SAP-samples",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "extensionKind": [
+    "workspace"
+  ],
+  "categories": [
+    "Other",
+    "Visualization"
+  ],
+  "keywords": [
+    "SAP",
+    "HANA",
+    "database",
+    "calculation view",
+    "CAP"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/*.hdbcalculationview",
+    "workspaceContains:**/*.hdbtable",
+    "workspaceContains:**/default-env.json",
+    "workspaceContains:**/.cdsrc-private.json"
+  ],
+  "main": "./dist/extension.js",
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false
+    }
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "hana-cli.openTools",
+        "title": "HANA: Open hana-cli Tools"
+      },
+      {
+        "command": "hana-cli.openQuery",
+        "title": "HANA: New Query Editor"
+      },
+      {
+        "command": "hana-cli.showTables",
+        "title": "HANA: Show Tables"
+      },
+      {
+        "command": "hana-cli.showViews",
+        "title": "HANA: Show Views"
+      },
+      {
+        "command": "hana-cli.systemInfo",
+        "title": "HANA: System Info"
+      },
+      {
+        "command": "hana-cli.addConnection",
+        "title": "HANA: Add Connection"
+      },
+      {
+        "command": "hana-cli.importData",
+        "title": "HANA: Import Data"
+      },
+      {
+        "command": "hana-cli.openCfLogin",
+        "title": "HANA: CF Login"
+      }
+    ],
+    "customEditors": [
+      {
+        "viewType": "hana-cli.calcViewEditor",
+        "displayName": "Calculation View Editor",
+        "selector": [
+          {
+            "filenamePattern": "*.hdbcalculationview"
+          }
+        ],
+        "priority": "default"
+      },
+      {
+        "viewType": "hana-cli.tableInspector",
+        "displayName": "HANA Table Inspector",
+        "selector": [
+          {
+            "filenamePattern": "*.hdbtable"
+          },
+          {
+            "filenamePattern": "*.hdbmigrationtable"
+          }
+        ],
+        "priority": "default"
+      },
+      {
+        "viewType": "hana-cli.viewInspector",
+        "displayName": "HANA View Inspector",
+        "selector": [
+          {
+            "filenamePattern": "*.hdbview"
+          }
+        ],
+        "priority": "default"
+      },
+      {
+        "viewType": "hana-cli.procedureInspector",
+        "displayName": "HANA Procedure Inspector",
+        "selector": [
+          {
+            "filenamePattern": "*.hdbprocedure"
+          }
+        ],
+        "priority": "default"
+      },
+      {
+        "viewType": "hana-cli.functionInspector",
+        "displayName": "HANA Function Inspector",
+        "selector": [
+          {
+            "filenamePattern": "*.hdbfunction"
+          }
+        ],
+        "priority": "default"
+      },
+      {
+        "viewType": "hana-cli.synonymInspector",
+        "displayName": "HANA Synonym Inspector",
+        "selector": [
+          {
+            "filenamePattern": "*.hdbsynonym"
+          }
+        ],
+        "priority": "default"
+      },
+      {
+        "viewType": "hana-cli.roleInspector",
+        "displayName": "HANA Role Inspector",
+        "selector": [
+          {
+            "filenamePattern": "*.hdbrole"
+          }
+        ],
+        "priority": "default"
+      },
+      {
+        "viewType": "hana-cli.sequenceInspector",
+        "displayName": "HANA Sequence Inspector",
+        "selector": [
+          {
+            "filenamePattern": "*.hdbsequence"
+          }
+        ],
+        "priority": "default"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "hana-cli.openTools",
+          "when": "resourceExtname == .hdbtable || resourceExtname == .hdbview",
+          "group": "hana-cli"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "copy:i18n": "node -e \"const fs=require('fs');fs.cpSync('../_i18n','_i18n',{recursive:true})\"",
+    "bundle": "npm run compile && npm run copy:i18n && node esbuild.config.mjs --production",
+    "bundle:dev": "npm run compile && npm run copy:i18n && node esbuild.config.mjs",
+    "package": "npm run bundle && vsce package",
+    "pretest": "tsc -p tsconfig.test.json",
+    "test": "node ./out/test/runTests.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^25.8.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-electron": "^2.3.0",
+    "@vscode/vsce": "^2.22.0",
+    "esbuild": "^0.20.0",
+    "glob": "^11.0.0",
+    "mocha": "^11.0.0",
+    "typescript": "^5.7.0"
+  }
+}
