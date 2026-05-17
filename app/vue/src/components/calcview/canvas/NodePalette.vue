@@ -39,12 +39,11 @@ function onDragStart(event: DragEvent, type: NodeType) {
 
 <style scoped>
 .node-palette {
-  width: 180px;
+  height: 100%;
   background: var(--sapGroup_ContentBackground, #fff);
   border-right: 1px solid var(--sapGroup_ContentBorderColor, #d9d9d9);
   padding: 12px 8px;
   overflow-y: auto;
-  flex-shrink: 0;
 }
 
 .palette-header {

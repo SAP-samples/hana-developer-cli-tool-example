@@ -5,6 +5,7 @@ defineProps<{
   canUndo: boolean
   canRedo: boolean
   filePath?: string
+  paletteVisible: boolean
 }>()
 
 const emit = defineEmits<{
@@ -13,11 +14,14 @@ const emit = defineEmits<{
   'auto-layout': []
   'save': []
   'save-as': []
+  'toggle-palette': []
 }>()
 </script>
 
 <template>
   <div class="editor-toolbar">
+    <ui5-button design="Transparent" :icon="paletteVisible ? 'close-command-field' : 'open-command-field'" @click="emit('toggle-palette')" :tooltip="paletteVisible ? 'Hide Node Palette' : 'Show Node Palette'" />
+    <div class="separator" />
     <ui5-button design="Transparent" icon="undo" :disabled="!canUndo" @click="emit('undo')" tooltip="Undo (Ctrl+Z)" />
     <ui5-button design="Transparent" icon="redo" :disabled="!canRedo" @click="emit('redo')" tooltip="Redo (Ctrl+Y)" />
     <div class="separator" />

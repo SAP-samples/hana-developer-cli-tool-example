@@ -2,6 +2,8 @@
 import { onMounted, ref, computed, onUnmounted } from 'vue'
 import type { Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { Splitpanes, Pane } from 'splitpanes'
+import 'splitpanes/dist/splitpanes.css'
 import { useCalcViewTabs } from '../composables/calcview/useCalcViewTabs'
 import { BatchCommand, MapColumnCommand } from '../composables/calcview/commands'
 import { parseCalcView } from '../services/calcview/xmlParser'
@@ -35,6 +37,31 @@ const showCreateDialog = ref(false)
 const createDir = ref('')
 const showDataSourcePicker = ref(false)
 const dataSourceTargetNodeId = ref<string | null>(null)
+
+const paletteCollapsed = ref(localStorage.getItem('calcview-palette-collapsed') === 'true')
+const propertiesSize = ref(Number(localStorage.getItem('calcview-properties-size') || 25))
+const paletteSize = ref(Number(localStorage.getItem('calcview-palette-size') || 12))
+
+function togglePalette() {
+  paletteCollapsed.value = !paletteCollapsed.value
+  localStorage.setItem('calcview-palette-collapsed', String(paletteCollapsed.value))
+}
+
+function onPanesResized(panes: { size: number }[]) {
+  if (paletteCollapsed.value) {
+    if (panes.length >= 2) {
+      propertiesSize.value = panes[panes.length - 1].size
+      localStorage.setItem('calcview-properties-size', String(propertiesSize.value))
+    }
+  } else {
+    if (panes.length >= 3) {
+      paletteSize.value = panes[0].size
+      propertiesSize.value = panes[2].size
+      localStorage.setItem('calcview-palette-size', String(paletteSize.value))
+      localStorage.setItem('calcview-properties-size', String(propertiesSize.value))
+    }
+  }
+}
 
 function handleNodeClick(node: Node) { selectedNodeId.value = node.id }
 
@@ -310,47 +337,55 @@ onUnmounted(() => { document.removeEventListener('keydown', handleKeydown) })
           :can-undo="undoRedo?.canUndo.value ?? false"
           :can-redo="undoRedo?.canRedo.value ?? false"
           :file-path="activeTab?.filePath"
+          :palette-visible="!paletteCollapsed"
           @undo="undoRedo?.undo()"
           @redo="undoRedo?.redo()"
           @auto-layout="handleAutoLayout"
           @save="handleSave"
           @save-as="handleSaveAs"
+          @toggle-palette="togglePalette"
         />
-        <div class="editor-content">
-          <NodePalette @add-node="handleAddNode" />
-          <CalcViewCanvas
-            :nodes="vueFlowNodes"
-            :edges="vueFlowEdges"
-            @node-click="handleNodeClick"
-            @connect="handleConnect"
-            @edge-remove="handleEdgeRemove"
-            @node-drag-stop="handleNodeDragStop"
-          />
-          <PropertiesPanel
-            :model="model"
-            :selected-node-id="selectedNodeId"
-            @map-column="(nodeId, col) => activeTab?.editor.mapColumn(nodeId, col)"
-            @unmap-column="(nodeId, colId) => activeTab?.editor.unmapColumn(nodeId, colId)"
-            @map-all="handleMapAll"
-            @add-data-source="handleAddDataSource"
-            @add-join-condition="(nodeId, cond) => activeTab?.editor.addJoinCondition(nodeId, cond)"
-            @remove-join-condition="(nodeId, idx) => activeTab?.editor.removeJoinCondition(nodeId, idx)"
-            @add-calculated-column="(nodeId, col) => activeTab?.editor.addCalculatedColumn(nodeId, col)"
-            @remove-calculated-column="(nodeId, colId) => activeTab?.editor.removeCalculatedColumn(nodeId, colId)"
-            @update-calculated-column="(nodeId, colId, updates) => activeTab?.editor.updateCalculatedColumn(nodeId, colId, updates)"
-            @set-filter="(nodeId, expr) => activeTab?.editor.setFilterExpression(nodeId, expr)"
-            @add-variable="(v) => activeTab?.editor.addVariable(v)"
-            @remove-variable="(id) => activeTab?.editor.removeVariable(id)"
-            @update-variable="(id, updates) => activeTab?.editor.updateVariable(id, updates)"
-            @update-column="(collection, colId, updates) => activeTab?.editor.updateColumnProperties(collection, colId, updates)"
-            @add-hierarchy="(h) => activeTab?.editor.addHierarchy(h)"
-            @remove-hierarchy="(id) => activeTab?.editor.removeHierarchy(id)"
-            @add-restricted-measure="(rm) => activeTab?.editor.addRestrictedMeasure(rm)"
-            @remove-restricted-measure="(id) => activeTab?.editor.removeRestrictedMeasure(id)"
-            @rename-node="handleRenameNode"
-            @delete-node="handleDeleteNode"
-          />
-        </div>
+        <Splitpanes class="editor-splitpanes" @resized="onPanesResized">
+          <Pane v-if="!paletteCollapsed" :size="paletteSize" :min-size="8" :max-size="20">
+            <NodePalette @add-node="handleAddNode" />
+          </Pane>
+          <Pane :size="paletteCollapsed ? (100 - propertiesSize) : (100 - paletteSize - propertiesSize)">
+            <CalcViewCanvas
+              :nodes="vueFlowNodes"
+              :edges="vueFlowEdges"
+              @node-click="handleNodeClick"
+              @connect="handleConnect"
+              @edge-remove="handleEdgeRemove"
+              @node-drag-stop="handleNodeDragStop"
+            />
+          </Pane>
+          <Pane :size="propertiesSize" :min-size="15" :max-size="50">
+            <PropertiesPanel
+              :model="model"
+              :selected-node-id="selectedNodeId"
+              @map-column="(nodeId, col) => activeTab?.editor.mapColumn(nodeId, col)"
+              @unmap-column="(nodeId, colId) => activeTab?.editor.unmapColumn(nodeId, colId)"
+              @map-all="handleMapAll"
+              @add-data-source="handleAddDataSource"
+              @add-join-condition="(nodeId, cond) => activeTab?.editor.addJoinCondition(nodeId, cond)"
+              @remove-join-condition="(nodeId, idx) => activeTab?.editor.removeJoinCondition(nodeId, idx)"
+              @add-calculated-column="(nodeId, col) => activeTab?.editor.addCalculatedColumn(nodeId, col)"
+              @remove-calculated-column="(nodeId, colId) => activeTab?.editor.removeCalculatedColumn(nodeId, colId)"
+              @update-calculated-column="(nodeId, colId, updates) => activeTab?.editor.updateCalculatedColumn(nodeId, colId, updates)"
+              @set-filter="(nodeId, expr) => activeTab?.editor.setFilterExpression(nodeId, expr)"
+              @add-variable="(v) => activeTab?.editor.addVariable(v)"
+              @remove-variable="(id) => activeTab?.editor.removeVariable(id)"
+              @update-variable="(id, updates) => activeTab?.editor.updateVariable(id, updates)"
+              @update-column="(collection, colId, updates) => activeTab?.editor.updateColumnProperties(collection, colId, updates)"
+              @add-hierarchy="(h) => activeTab?.editor.addHierarchy(h)"
+              @remove-hierarchy="(id) => activeTab?.editor.removeHierarchy(id)"
+              @add-restricted-measure="(rm) => activeTab?.editor.addRestrictedMeasure(rm)"
+              @remove-restricted-measure="(id) => activeTab?.editor.removeRestrictedMeasure(id)"
+              @rename-node="handleRenameNode"
+              @delete-node="handleDeleteNode"
+            />
+          </Pane>
+        </Splitpanes>
       </template>
     </template>
     <div v-else class="empty-state">
@@ -379,8 +414,7 @@ onUnmounted(() => { document.removeEventListener('keydown', handleKeydown) })
   flex-direction: column;
 }
 
-.editor-content {
-  display: flex;
+.editor-splitpanes {
   flex: 1;
   min-height: 0;
 }
@@ -390,5 +424,16 @@ onUnmounted(() => { document.removeEventListener('keydown', handleKeydown) })
   align-items: center;
   justify-content: center;
   height: 100%;
+}
+</style>
+
+<style>
+.editor-splitpanes .splitpanes__splitter {
+  background: var(--sapGroup_ContentBorderColor, #d9d9d9) !important;
+  min-width: 4px !important;
+  width: 4px !important;
+}
+.editor-splitpanes .splitpanes__splitter:hover {
+  background: var(--sapBrandColor, #0854a0) !important;
 }
 </style>

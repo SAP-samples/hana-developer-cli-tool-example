@@ -155,12 +155,11 @@ const isJoinNode = computed(() => {
 
 <style scoped>
 .properties-panel {
-  width: 300px;
+  height: 100%;
   background: var(--sapGroup_ContentBackground, #fff);
   border-left: 1px solid var(--sapGroup_ContentBorderColor, #d9d9d9);
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
   overflow-y: auto;
 }
 
