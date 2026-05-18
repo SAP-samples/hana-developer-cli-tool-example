@@ -10,7 +10,7 @@ Use this checklist when regenerating or enhancing documentation.
 
 ## Enhancement
 
-- [ ] Run `enhance-command-docs.js` after generation
+- [ ] Run `scripts/enhance-command-docs.js` after generation
 - [ ] Validate headings, tables, and code blocks
 - [ ] Ensure category names match the folder taxonomy
 

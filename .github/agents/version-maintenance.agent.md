@@ -12,7 +12,7 @@ This agent handles:
 - Version number updates in all package.json files (root, mcp-server, docs)
 - SAPUI5 version updates in HTML files
 - CHANGELOG.json entry creation and maintenance
-- CHANGELOG.md regeneration via CHANGELOG.js
+- CHANGELOG.md regeneration via scripts/CHANGELOG.js
 - Documentation version references
 - Dependency version updates
 - Comprehensive version change reporting
@@ -52,7 +52,7 @@ This agent handles:
 3. **docs/package.json** - Documentation version (rarely changed)
 4. **app/resources/**/index.html** - SAPUI5 CDN URLs (multiple files)
 5. **CHANGELOG.json** - Structured changelog entry
-6. **CHANGELOG.md** - Generated from JSON (via CHANGELOG.js)
+6. **CHANGELOG.md** - Generated from JSON (via scripts/CHANGELOG.js)
 7. **docs/99-reference/changelog.md** - Documentation copy of changelog
 
 ### Version References in Documentation
@@ -97,7 +97,7 @@ This agent handles:
    - Categorized changes (Changed, Added, Fixed, etc.)
 2. Ensure entry is added at the top of the array
 3. Validate JSON syntax
-4. Run `node CHANGELOG.js` to regenerate CHANGELOG.md
+4. Run `node scripts/CHANGELOG.js` to regenerate CHANGELOG.md
 5. Verify docs/99-reference/changelog.md is in sync
 
 ### Phase 5: Documentation Updates

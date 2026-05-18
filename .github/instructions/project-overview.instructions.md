@@ -914,26 +914,26 @@ graph TD
 
 ### Documentation Automation Scripts
 
-**Root-Level Scripts:**
+**Scripts in `scripts/`:**
 
-1. **generate-command-docs.js**
+1. **scripts/generate-command-docs.js**
    - Scans `bin/` directory for all commands
    - Extracts command metadata (name, aliases, options)
    - Creates skeleton markdown files in `docs/02-commands/{category}/`
    - Uses `bin/commandMetadata.js` for categorization
 
-2. **enhance-command-docs.js**
+2. **scripts/enhance-command-docs.js**
    - Enriches existing command documentation
    - Adds detailed parameter descriptions
    - Includes examples and usage patterns
    - Integrates Mermaid diagrams
 
-3. **populate-command-docs.js**
+3. **scripts/populate-command-docs.js**
    - Populates documentation with captured command output
    - Takes screenshots of UI commands
    - Updates examples with real execution results
 
-4. **generate-sidebar-config.js**
+4. **scripts/generate-sidebar-config.js**
    - Auto-generates VitePress sidebar configuration
    - Scans `docs/` directory structure
    - Creates hierarchical navigation
@@ -1155,8 +1155,8 @@ npm run changelog          # Generate CHANGELOG.md from CHANGELOG.json
 
 4. **Generate documentation**
    ```bash
-   node generate-command-docs.js
-   node enhance-command-docs.js
+   node scripts/generate-command-docs.js
+   node scripts/enhance-command-docs.js
    ```
 
 5. **Run validation**
@@ -1208,7 +1208,7 @@ npm run changelog          # Generate CHANGELOG.md from CHANGELOG.json
 
 2. **Regenerate sidebar** if structure changed
    ```bash
-   node generate-sidebar-config.js
+   node scripts/generate-sidebar-config.js
    ```
 
 3. **Rebuild docs index**

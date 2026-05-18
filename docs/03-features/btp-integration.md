@@ -18,7 +18,7 @@ The `btp`, `btpInfo`, and `sub` commands require the [SAP BTP Command Line Inter
 
 ```bash
 # Use provided script
-./install-btp.sh
+./scripts/install-btp.sh
 
 # Or manual
 # Download the btp CLI from https://tools.hana.ondemand.com/#cloud-btpcli

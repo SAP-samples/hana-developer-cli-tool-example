@@ -1,6 +1,6 @@
 ---
 description: "Use when preparing releases, updating CHANGELOG.json, bumping versions, or publishing to npm. Enforces consistent release process, version numbering conventions, changelog maintenance, and publishing workflow."
-applyTo: "CHANGELOG.json,package.json,CHANGELOG.js"
+applyTo: "CHANGELOG.json,package.json,scripts/CHANGELOG.js"
 ---
 
 # Release Management Guidelines
@@ -12,7 +12,7 @@ Use this guide when preparing releases, updating the changelog, or publishing ne
 This guide applies to:
 - **CHANGELOG.json** - Structured changelog entries
 - **package.json** - Version number updates
-- **CHANGELOG.js** - Changelog generation script
+- **scripts/CHANGELOG.js** - Changelog generation script
 - Release preparation and npm publishing process
 
 ## Version Numbering Convention
@@ -156,7 +156,7 @@ Based on [Keep a Changelog](http://keepachangelog.com/) convention:
 
 ### Changelog Generation
 
-**Script**: `CHANGELOG.js` (root directory)
+**Script**: `scripts/CHANGELOG.js`
 
 **Purpose**: Converts `CHANGELOG.json` to `CHANGELOG.md` with header
 
@@ -164,7 +164,7 @@ Based on [Keep a Changelog](http://keepachangelog.com/) convention:
 ```bash
 npm run changelog
 # or
-node CHANGELOG.js
+node scripts/CHANGELOG.js
 ```
 
 **Output**: `CHANGELOG.md` with standard header:
@@ -549,7 +549,7 @@ git tag -a v4.202602.0 -m "Release v4.202602.0"
 node -e "console.log(JSON.parse(require('fs').readFileSync('CHANGELOG.json')))"
 
 # Regenerate
-node CHANGELOG.js
+node scripts/CHANGELOG.js
 ```
 
 ### Issue: Package includes unwanted files

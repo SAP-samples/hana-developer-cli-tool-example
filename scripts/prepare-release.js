@@ -166,7 +166,7 @@ function run() {
     } else {
       changelog.unshift(newEntry)
       writeFileSync(pkgConfig.changelogPath, JSON.stringify(changelog, null, 4) + '\n')
-      execSync('node CHANGELOG.js', { cwd: ROOT, stdio: 'pipe' })
+      execSync('node scripts/CHANGELOG.js', { cwd: ROOT, stdio: 'pipe' })
     }
   }
 

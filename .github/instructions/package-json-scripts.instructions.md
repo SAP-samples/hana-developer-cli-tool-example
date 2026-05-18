@@ -104,12 +104,12 @@ This guide applies to npm script management in:
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "docs:generate": "node generate-command-docs.js",
+    "docs:generate": "node scripts/generate-command-docs.js",
     
     // gen:* or generate:* for generation
     "gen:types": "tsc --project tsconfig.json",
-    "gen:docs": "node generate-command-docs.js",
-    "gen:sidebar": "node generate-sidebar-config.js",
+    "gen:docs": "node scripts/generate-command-docs.js",
+    "gen:sidebar": "node scripts/generate-sidebar-config.js",
     "gen:all": "npm run gen:types && npm run gen:docs && npm run gen:sidebar",
     
     // validate:* for validation tasks
@@ -383,9 +383,9 @@ This guide applies to npm script management in:
     "docs:preview": "vitepress preview docs",
     
     // Documentation generation
-    "docs:generate": "node generate-command-docs.js",
-    "docs:enhance": "node enhance-command-docs.js",
-    "docs:sidebar": "node generate-sidebar-config.js",
+    "docs:generate": "node scripts/generate-command-docs.js",
+    "docs:enhance": "node scripts/enhance-command-docs.js",
+    "docs:sidebar": "node scripts/generate-sidebar-config.js",
     
     // Full documentation workflow
     "docs:full": "npm run docs:generate && npm run docs:enhance && npm run docs:build",
@@ -486,7 +486,7 @@ This guide applies to npm script management in:
     // Code generation
     "generate": "npm run gen:types && npm run gen:docs",
     "gen:types": "tsc --project tsconfig.json",
-    "gen:docs": "node generate-command-docs.js"
+    "gen:docs": "node scripts/generate-command-docs.js"
   }
 }
 ```

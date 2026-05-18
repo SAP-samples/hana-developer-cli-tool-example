@@ -150,7 +150,7 @@ The btp CLI is SAP's official command-line tool for managing resources and servi
 
 ### Installing the BTP CLI with install-btp.sh
 
-For Linux and macOS users, this repository includes a convenient installation script [`install-btp.sh`](install-btp.sh) that automates the installation of the BTP CLI.
+For Linux and macOS users, this repository includes a convenient installation script [`install-btp.sh`](scripts/install-btp.sh) that automates the installation of the BTP CLI.
 
 The script performs the following actions:
 
@@ -162,8 +162,8 @@ The script performs the following actions:
 **To use the installation script:**
 
 ```shell
-chmod +x install-btp.sh
-./install-btp.sh
+chmod +x scripts/install-btp.sh
+./scripts/install-btp.sh
 ```
 
 After running the script, you may need to restart your terminal or run `source ~/.bashrc` to apply the PATH changes.

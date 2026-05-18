@@ -11,7 +11,7 @@ Use this guide when creating or modifying configuration files for development to
 
 This guide applies to configuration files for:
 
-- ESLint (`.eslintrc.json`, `.eslintrc.js`)
+- ESLint (`eslint.config.js` flat config)
 - Prettier (`.prettierrc.json`, `.prettierrc.js`)
 - NYC/Istanbul coverage (`.nycrc`, `.nycrc.json`)
 - Mocha testing (`.mocharc.json`, `.mocharc.js`)
@@ -630,7 +630,7 @@ Git Hooks → Lint-Staged: Husky triggers lint-staged on commit
 
 ```
 /
-├── .eslintrc.json          # ESLint config
+├── eslint.config.js        # ESLint flat config
 ├── .eslintignore           # ESLint ignore
 ├── .prettierrc.json        # Prettier config
 ├── .prettierignore         # Prettier ignore
@@ -735,7 +735,7 @@ Ensure these patterns are aligned across all config files:
 ### Pattern: Commit Config Files
 
 ```
-✓ Commit: .eslintrc.json, .prettierrc.json, .nycrc.json
+✓ Commit: eslint.config.js, .prettierrc.json, .nycrc.json
 ✓ Commit: .editorconfig, .gitignore, .npmignore
 ✓ Commit: .mocharc.json, .markdownlintrc.json
 ✗ Don't commit: .eslintcache, .DS_Store, *.log

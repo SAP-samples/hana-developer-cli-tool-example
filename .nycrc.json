@@ -15,8 +15,7 @@
     "types/**",
     "app/**",
     "**/*.Test.js",
-    "CHANGELOG.js",
-    "update-notifier.js"
+    "scripts/**"
   ],
   "reporter": [
     "text",

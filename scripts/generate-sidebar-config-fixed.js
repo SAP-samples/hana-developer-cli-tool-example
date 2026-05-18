@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
- * Generate VitePress sidebar configuration for all command categories
+ * Generate proper sidebar configuration for 02-commands
+ * Accounts for base path in VitePress config
  */
 
 import fs from 'fs'
@@ -8,14 +9,14 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const DOCS_DIR = path.join(__dirname, 'docs', '02-commands')
+const DOCS_DIR = path.join(__dirname, '..', 'docs', '02-commands')
+const BASE_PATH = '/hana-developer-cli-tool-example'
 
 function toTitleCase(str) {
   return str.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
 }
 
 function getFileLabel(filename) {
-  // Remove .md and convert from kebab-case to Title Case
   return filename.replace('.md', '').split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
 
@@ -26,14 +27,17 @@ function generateSidebarConfig() {
   config.push(`        {
           text: 'Commands Reference',
           items: [
-            { text: '📋 All Commands A-Z', link: '/02-commands/all-commands' },
-            { text: 'Commands Overview', link: '/02-commands/' },
+            { text: '📋 All Commands A-Z', link: '${BASE_PATH}/02-commands/all-commands' },
+            { text: 'Commands Overview', link: '${BASE_PATH}/02-commands/' },
           ]
         },`)
 
   // Get all categories and sort them
   const categories = fs.readdirSync(DOCS_DIR)
-    .filter(name => fs.statSync(path.join(DOCS_DIR, name)).isDirectory())
+    .filter(name => {
+      const fullPath = path.join(DOCS_DIR, name)
+      return fs.statSync(fullPath).isDirectory()
+    })
     .sort()
 
   // Generate config for each category
@@ -48,7 +52,7 @@ function generateSidebarConfig() {
     const categoryTitle = toTitleCase(category)
     const items = docFiles
       .map(file => {
-        const link = `/02-commands/${category}/${file.replace('.md', '')}`
+        const link = `${BASE_PATH}/02-commands/${category}/${file.replace('.md', '')}`
         const label = getFileLabel(file)
         return `            { text: '${label}', link: '${link}' }`
       })
@@ -69,13 +73,13 @@ try {
   const config = generateSidebarConfig()
   const output = `'/02-commands/': [\n${config}\n      ],`
   
-  console.log('Generated VitePress sidebar configuration:')
+  console.log('Generated VitePress sidebar configuration with base path:')
   console.log('=========================================\n')
   console.log(output)
   
   // Write to temp file for easy copying
-  fs.writeFileSync('vitepress-commands-config.txt', output)
-  console.log('\n\n✅ Configuration written to vitepress-commands-config.txt')
+  fs.writeFileSync('vitepress-commands-config-fixed.txt', output)
+  console.log('\n\n✅ Configuration written to vitepress-commands-config-fixed.txt')
 
 } catch (error) {
   console.error('Error generating config:', error)

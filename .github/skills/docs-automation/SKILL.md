@@ -17,11 +17,11 @@ Use this skill for documentation generation and maintenance tasks.
 
 ## Procedure
 1. Identify the docs scope (all commands vs specific folders).
-2. Run the relevant automation scripts in the repo root:
-   - `generate-command-docs.js`
-   - `enhance-command-docs.js`
-   - `populate-command-docs.js`
-   - `generate-sidebar-config.js` or `generate-sidebar-config-fixed.js`
+2. Run the relevant automation scripts:
+   - `scripts/generate-command-docs.js`
+   - `scripts/enhance-command-docs.js`
+   - `scripts/populate-command-docs.js`
+   - `scripts/generate-sidebar-config.js` or `scripts/generate-sidebar-config-fixed.js`
 3. Spot-check updated markdown for formatting and taxonomy alignment.
 4. If needed, run `vitepress build docs` to validate the output.
 

@@ -9,8 +9,8 @@ import { fileURLToPath } from 'url'
 import vm from 'vm'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const BIN_DIR = path.join(__dirname, 'bin')
-const DOCS_DIR = path.join(__dirname, 'docs', '02-commands')
+const BIN_DIR = path.join(__dirname, '..', 'bin')
+const DOCS_DIR = path.join(__dirname, '..', 'docs', '02-commands')
 
 // Common parameter descriptions
 const COMMON_PARAMS = {

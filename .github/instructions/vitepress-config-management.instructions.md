@@ -639,5 +639,5 @@ VitePress configuration should be documented with:
 ## Reference Examples in This Repository
 
 - `docs/.vitepress/config.ts` - Complete VitePress configuration
-- `generate-sidebar-config.js` - Automated sidebar generation
+- `scripts/generate-sidebar-config.js` - Automated sidebar generation
 - `.github/workflows/deploy-docs.yml` - Documentation deployment

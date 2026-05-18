@@ -93,6 +93,12 @@ test-output.txt
 # Interactive mode state
 .interactive-state.json
 
+# hana-cli runtime cache
+hana-cli_cache.json
+
+# Runtime scratch directory
+/tmp/
+
 # Vue build outputs
 app/vue/dist/
 app/vue/dist-vscode/

@@ -11,7 +11,7 @@ Use this guide whenever editing `CHANGELOG.json`.
 
 - This file applies only to `CHANGELOG.json`.
 - The canonical history source is `CHANGELOG.json`.
-- `CHANGELOG.md` is generated from `CHANGELOG.json` by `CHANGELOG.js`.
+- `CHANGELOG.md` is generated from `CHANGELOG.json` by `scripts/CHANGELOG.js`.
 
 ## Required JSON Structure
 

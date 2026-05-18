@@ -1,31 +1,31 @@
 ---
-description: "Use when creating or updating automation scripts in the project root (generate-*, enhance-*, update-*, populate-* files). Enforces consistent patterns for file I/O, metadata extraction, documentation generation, template processing, error handling, and integration with npm scripts."
-applyTo: "generate-*.js,enhance-*.js,update-*.js,populate-*.js,CHANGELOG.js"
+description: "Use when creating or updating automation scripts in the scripts/ folder (generate-*, enhance-*, update-*, populate-* files). Enforces consistent patterns for file I/O, metadata extraction, documentation generation, template processing, error handling, and integration with npm scripts."
+applyTo: "scripts/generate-*.js,scripts/enhance-*.js,scripts/update-*.js,scripts/populate-*.js,scripts/CHANGELOG.js"
 ---
 
 # Automation Script Development Guidelines
 
-Use this guide when creating or modifying automation scripts in the project root directory.
+Use this guide when creating or modifying automation scripts in the `scripts/` folder.
 
 ## Scope and Purpose
 
-This guide applies to automation and code generation scripts in the project root:
+This guide applies to automation and code generation scripts in the `scripts/` folder:
 
 **Script Categories:**
-- `generate-*.js` - Generate new files (docs, config, examples)
-- `enhance-*.js` - Enhance existing files with extracted metadata
-- `update-*.js` - Update existing files with new content
-- `populate-*.js` - Populate templates with data
-- `CHANGELOG.js` - Generate changelog from JSON
+- `scripts/generate-*.js` - Generate new files (docs, config, examples)
+- `scripts/enhance-*.js` - Enhance existing files with extracted metadata
+- `scripts/update-*.js` - Update existing files with new content
+- `scripts/populate-*.js` - Populate templates with data
+- `scripts/CHANGELOG.js` - Generate changelog from JSON
 
 **Common Scripts:**
-- `generate-command-docs.js` - Generate command documentation
-- `generate-sidebar-config.js` - Generate VitePress sidebar config
-- `generate-examples.js` - Generate example files
-- `enhance-command-docs.js` - Enhance docs with metadata from source
-- `update-epilogues.js` - Update command epilogues
-- `populate-command-docs.js` - Populate doc templates
-- `CHANGELOG.js` - Convert CHANGELOG.json to markdown
+- `scripts/generate-command-docs.js` - Generate command documentation
+- `scripts/generate-sidebar-config.js` - Generate VitePress sidebar config
+- `scripts/generate-examples.js` - Generate example files
+- `scripts/enhance-command-docs.js` - Enhance docs with metadata from source
+- `scripts/update-epilogues.js` - Update command epilogues
+- `scripts/populate-command-docs.js` - Populate doc templates
+- `scripts/CHANGELOG.js` - Convert CHANGELOG.json to markdown
 
 ## Critical Principles
 
@@ -756,10 +756,10 @@ Scripts should integrate with package.json:
 ```json
 {
   "scripts": {
-    "generate:docs": "node generate-command-docs.js",
-    "generate:sidebar": "node generate-sidebar-config.js",
-    "update:changelog": "node CHANGELOG.js",
-    "enhance:docs": "node enhance-command-docs.js"
+    "generate:docs": "node scripts/generate-command-docs.js",
+    "generate:sidebar": "node scripts/generate-sidebar-config.js",
+    "update:changelog": "node scripts/CHANGELOG.js",
+    "enhance:docs": "node scripts/enhance-command-docs.js"
   }
 }
 ```
@@ -775,8 +775,8 @@ Every automation script should have:
 
 ## Reference Examples in This Repository
 
-- `CHANGELOG.js` - Simple changelog generation
-- `generate-command-docs.js` - Complex metadata extraction and doc generation
-- `generate-sidebar-config.js` - VitePress configuration generation
-- `enhance-command-docs.js` - File enhancement with metadata
-- `update-epilogues.js` - Batch file updates
+- `scripts/CHANGELOG.js` - Simple changelog generation
+- `scripts/generate-command-docs.js` - Complex metadata extraction and doc generation
+- `scripts/generate-sidebar-config.js` - VitePress configuration generation
+- `scripts/enhance-command-docs.js` - File enhancement with metadata
+- `scripts/update-epilogues.js` - Batch file updates

@@ -129,7 +129,7 @@ These files are auto-generated from hana-cli's metadata. To regenerate:
 ```bash
 cd hana-developer-cli-tool-example
 npm run build --prefix mcp-server    # Build MCP server first
-node generate-agent-instructions.js --force
+node scripts/generate-agent-instructions.js --force
 ```
 
 ## Version

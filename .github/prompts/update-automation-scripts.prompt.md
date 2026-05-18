@@ -1,10 +1,10 @@
 ---
-description: "Create or update root automation scripts (generate/enhance/update/populate) with repo conventions"
+description: "Create or update automation scripts (generate/enhance/update/populate) with repo conventions"
 name: "Update Automation Scripts"
-argument-hint: "Script path + intent (e.g., generate-command-docs.js: add new section output)"
+argument-hint: "Script path + intent (e.g., scripts/generate-command-docs.js: add new section output)"
 agent: "agent"
 ---
-You are updating root-level automation scripts in this repository. Use the user-provided arguments to identify the target script(s) and desired change.
+You are updating automation scripts in this repository's `scripts/` folder. Use the user-provided arguments to identify the target script(s) and desired change.
 
 Requirements:
 - Follow the automation script rules in [automation script instructions](../instructions/automation-script-development.instructions.md).

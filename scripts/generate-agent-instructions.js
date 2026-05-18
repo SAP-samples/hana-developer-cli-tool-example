@@ -9,7 +9,7 @@
  * - Per-category reference files
  * - llms.txt compact reference
  * 
- * Usage: node generate-agent-instructions.js [--force]
+ * Usage: node scripts/generate-agent-instructions.js [--force]
  * 
  * Data sources:
  *   bin/commandMetadata.js       → Category mapping for all commands
@@ -28,8 +28,8 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 // Directories
-const BIN_DIR = path.join(__dirname, 'bin')
-const OUTPUT_DIR = path.join(__dirname, 'agent-instructions')
+const BIN_DIR = path.join(__dirname, '..', 'bin')
+const OUTPUT_DIR = path.join(__dirname, '..', 'agent-instructions')
 const CATEGORIES_DIR = path.join(OUTPUT_DIR, 'categories')
 
 // Force flag
