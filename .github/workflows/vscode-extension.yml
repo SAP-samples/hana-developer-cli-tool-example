@@ -16,6 +16,9 @@ on:
       - 'vscode-extension/**'
       - 'app/vue/**'
 
+permissions:
+  contents: read
+
 jobs:
   build:
     strategy:
