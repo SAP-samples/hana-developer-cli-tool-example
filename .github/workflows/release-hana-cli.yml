@@ -138,6 +138,9 @@ jobs:
       needs.test.result == 'success' &&
       (needs.prepare.result == 'success' || needs.resolve-version.result == 'success')
     runs-on: ubuntu-latest
+    environment:
+      name: npm-publish
+      url: https://www.npmjs.com/package/hana-cli/v/${{ steps.ver.outputs.version }}
     steps:
       - name: Determine version
         id: ver
