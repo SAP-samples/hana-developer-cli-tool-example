@@ -69,12 +69,12 @@ export declare class DocsSearch {
         buildDate?: undefined;
         version?: undefined;
     } | {
+        error?: undefined;
         totalDocuments: number;
         categories: string[];
         docTypes: string[];
         buildDate: string;
         version: string;
-        error?: undefined;
     };
     /**
      * Calculate relevance score for a search query against a document

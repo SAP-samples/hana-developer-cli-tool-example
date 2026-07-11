@@ -185,6 +185,6 @@
     "esbuild": "^0.28.1",
     "glob": "^11.0.0",
     "mocha": "^11.0.0",
-    "typescript": "^5.7.0"
+    "typescript": "^7.0.2"
   }
 }
