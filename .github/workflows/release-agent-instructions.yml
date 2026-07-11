@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - 'agent-v*'
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       version:
@@ -13,6 +15,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: release-agent-instructions
@@ -21,6 +24,9 @@ concurrency:
 jobs:
   test:
     name: Test Suite
+    # Release paths only: an agent-v* tag push or a manual dispatch.
+    # A plain push to main (merged release PR) is handled by auto-tag.
+    if: startsWith(github.ref, 'refs/tags/agent-v') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -42,13 +48,10 @@ jobs:
         run: npm run test:ci
 
   prepare:
-    name: Prepare Release
+    name: Prepare Release PR
     needs: test
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.calc.outputs.version }}
-      tag: ${{ steps.calc.outputs.tag }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -82,22 +85,62 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Commit version bump
+      - name: Create release branch, commit, and open PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          VERSION="${{ steps.calc.outputs.version }}"
+          BRANCH="release/agent-v${VERSION}"
           git add agent-instructions/package.json
-          git diff --cached --quiet && echo "No changes to commit" && exit 0
-          git commit -m "chore: release agent-instructions v${{ steps.calc.outputs.version }} [skip ci]"
+          if git diff --cached --quiet; then
+            echo "::error::No version bump changes to commit (version may already be $VERSION)"
+            exit 1
+          fi
+          git checkout -b "$BRANCH"
+          git commit -m "chore: release agent-instructions v${VERSION}"
+          git push origin "$BRANCH"
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "chore: release agent-instructions v${VERSION}" \
+            --body "Automated release version bump for **agent-instructions v${VERSION}**, opened by the Release workflow (workflow_dispatch).
 
-      - name: Create and push tag
+          Merging this PR pushes to \`main\`, which triggers the \`auto-tag\` job to create tag \`agent-v${VERSION}\`, which runs the tag-triggered publish path (npm + GitHub release, gated by the \`npm-publish\` environment approval).
+
+          Review the version bump, then merge to release."
+
+  auto-tag:
+    name: Auto-tag merged release
+    # When a release PR is merged (push to main), tag the new agent-instructions
+    # version. Pushing the tag triggers this workflow via the 'agent-v*' path.
+    # Idempotent: only tags when the version has no tag yet, so ordinary pushes
+    # to main (and hana-cli release merges) are a no-op here.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag new version if not already tagged
         run: |
-          git tag -a "agent-v${{ steps.calc.outputs.version }}" -m "Release agent-instructions v${{ steps.calc.outputs.version }}"
-          git push origin HEAD:${{ github.ref_name }}
-          git push origin "agent-v${{ steps.calc.outputs.version }}"
+          VERSION=$(jq -r '.version' agent-instructions/package.json)
+          if git rev-parse "agent-v${VERSION}" >/dev/null 2>&1; then
+            echo "Tag agent-v${VERSION} already exists — nothing to release."
+            exit 0
+          fi
+          echo "Tagging new release agent-v${VERSION}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "agent-v${VERSION}" -m "Release agent-instructions v${VERSION}"
+          git push origin "agent-v${VERSION}"
 
   resolve-version:
     name: Resolve Version from Tag
     needs: test
-    if: github.event_name == 'push'
+    if: startsWith(github.ref, 'refs/tags/agent-v')
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.extract.outputs.version }}
@@ -113,11 +156,8 @@ jobs:
 
   publish:
     name: Publish to npm
-    needs: [test, prepare, resolve-version]
-    if: |
-      always() &&
-      needs.test.result == 'success' &&
-      (needs.prepare.result == 'success' || needs.resolve-version.result == 'success')
+    needs: [test, resolve-version]
+    if: needs.test.result == 'success' && needs.resolve-version.result == 'success'
     runs-on: ubuntu-latest
     environment:
       name: npm-publish
@@ -126,13 +166,8 @@ jobs:
       - name: Determine version
         id: ver
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            echo "version=${{ needs.prepare.outputs.version }}" >> $GITHUB_OUTPUT
-            echo "tag=${{ needs.prepare.outputs.tag }}" >> $GITHUB_OUTPUT
-          else
-            echo "version=${{ needs.resolve-version.outputs.version }}" >> $GITHUB_OUTPUT
-            echo "tag=${{ needs.resolve-version.outputs.tag }}" >> $GITHUB_OUTPUT
-          fi
+          echo "version=${{ needs.resolve-version.outputs.version }}" >> $GITHUB_OUTPUT
+          echo "tag=${{ needs.resolve-version.outputs.tag }}" >> $GITHUB_OUTPUT
 
       - name: Checkout code at tag
         uses: actions/checkout@v4
