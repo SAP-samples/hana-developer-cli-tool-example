@@ -177,6 +177,12 @@ await esbuild.build({
     // .vsix OS-portable (no per-OS rebuild). node:sqlite is a Node builtin and
     // is external automatically.
     'better-sqlite3',
+    // generic-pool is an OPTIONAL peer of @cap-js/db-service (CAP 10). Its
+    // require() is guarded behind the legacy `use_new_pool === false` path;
+    // CAP 10 defaults to the built-in pool, so it is never loaded. Not
+    // installed in the tree — keep external so esbuild leaves the guarded
+    // require in place instead of failing the build.
+    'generic-pool',
     '@cap-js/cds-test',
     '@sap-cloud-sdk/connectivity',
     '@sap-cloud-sdk/http-client',

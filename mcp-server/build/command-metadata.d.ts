@@ -15,64 +15,64 @@ export interface CommandMetadata {
  */
 export declare const CATEGORIES: {
     readonly 'data-tools': {
-        readonly name: "Data Tools";
-        readonly description: "Import, export, compare, validate, and manage data across systems";
+        readonly name: 'Data Tools';
+        readonly description: 'Import, export, compare, validate, and manage data across systems';
     };
     readonly 'schema-tools': {
-        readonly name: "Schema Tools";
-        readonly description: "Explore schemas, tables, views, and database object metadata";
+        readonly name: 'Schema Tools';
+        readonly description: 'Explore schemas, tables, views, and database object metadata';
     };
     readonly 'object-inspection': {
-        readonly name: "Object Inspection";
-        readonly description: "Inspect tables, views, procedures, indexes, and related objects";
+        readonly name: 'Object Inspection';
+        readonly description: 'Inspect tables, views, procedures, indexes, and related objects';
     };
     readonly 'analysis-tools': {
-        readonly name: "Analysis Tools";
-        readonly description: "Analyze dependencies, privileges, calculations, and relationships";
+        readonly name: 'Analysis Tools';
+        readonly description: 'Analyze dependencies, privileges, calculations, and relationships';
     };
     readonly 'performance-monitoring': {
-        readonly name: "Performance Monitoring";
-        readonly description: "Monitor performance, expensive operations, and system bottlenecks";
+        readonly name: 'Performance Monitoring';
+        readonly description: 'Monitor performance, expensive operations, and system bottlenecks';
     };
     readonly 'backup-recovery': {
-        readonly name: "Backup & Recovery";
-        readonly description: "Create backups, manage restores, and verify recovery readiness";
+        readonly name: 'Backup & Recovery';
+        readonly description: 'Create backups, manage restores, and verify recovery readiness';
     };
     readonly 'system-admin': {
-        readonly name: "System Administration";
-        readonly description: "System health, configuration, diagnostics, and maintenance";
+        readonly name: 'System Administration';
+        readonly description: 'System health, configuration, diagnostics, and maintenance';
     };
     readonly 'system-tools': {
-        readonly name: "System Tools";
-        readonly description: "System diagnostics, logs, host info, and runtime utilities";
+        readonly name: 'System Tools';
+        readonly description: 'System diagnostics, logs, host info, and runtime utilities';
     };
     readonly security: {
-        readonly name: "Security";
-        readonly description: "User, role, privilege, and security audit management";
+        readonly name: 'Security';
+        readonly description: 'User, role, privilege, and security audit management';
     };
     readonly 'mass-operations': {
-        readonly name: "Mass Operations";
-        readonly description: "Bulk operations for grants, updates, deletions, and conversions";
+        readonly name: 'Mass Operations';
+        readonly description: 'Bulk operations for grants, updates, deletions, and conversions';
     };
     readonly 'connection-auth': {
-        readonly name: "Connection & Auth";
-        readonly description: "Connection setup, authentication helpers, and configuration tools";
+        readonly name: 'Connection & Auth';
+        readonly description: 'Connection setup, authentication helpers, and configuration tools';
     };
     readonly 'btp-integration': {
-        readonly name: "BTP Integration";
-        readonly description: "SAP BTP integration tools and account management utilities";
+        readonly name: 'BTP Integration';
+        readonly description: 'SAP BTP integration tools and account management utilities';
     };
     readonly 'hana-cloud': {
-        readonly name: "HANA Cloud";
-        readonly description: "Manage SAP HANA Cloud instances and related services";
+        readonly name: 'HANA Cloud';
+        readonly description: 'Manage SAP HANA Cloud instances and related services';
     };
     readonly 'hdi-management': {
-        readonly name: "HDI Management";
-        readonly description: "Manage HDI containers, groups, and deployment operations";
+        readonly name: 'HDI Management';
+        readonly description: 'Manage HDI containers, groups, and deployment operations';
     };
     readonly 'developer-tools': {
-        readonly name: "Developer Tools";
-        readonly description: "Developer utilities, templates, docs, and interactive helpers";
+        readonly name: 'Developer Tools';
+        readonly description: 'Developer utilities, templates, docs, and interactive helpers';
     };
 };
 export declare const COMMAND_METADATA_MAP: Record<string, Omit<CommandMetadata, 'command'>>;
