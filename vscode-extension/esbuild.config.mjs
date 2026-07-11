@@ -7,6 +7,29 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const production = process.argv.includes('--production')
 const projectRoot = path.resolve(__dirname, '..')
 
+// Copy the built Vue webview assets into the extension so a packaged .vsix is
+// self-contained. At runtime htmlProvider prefers vscode-extension/webview-dist
+// and only falls back to ../app/vue/dist-vscode when running from source (F5).
+// Without this copy, an installed .vsix would resolve to VS Code's extensions
+// dir where the sibling app/ tree does not exist → blank webviews.
+function copyWebviewAssets() {
+  const src = path.resolve(projectRoot, 'app', 'vue', 'dist-vscode')
+  const dest = path.resolve(__dirname, 'webview-dist')
+  if (!fs.existsSync(path.join(src, 'assets', 'index.js'))) {
+    console.warn(
+      `[esbuild] Vue webview assets not found at ${src}.\n` +
+      `          Run "npm run build:vscode" from the project root first, ` +
+      `or the packaged .vsix will have no UI.`
+    )
+    return
+  }
+  fs.rmSync(dest, { recursive: true, force: true })
+  fs.cpSync(src, dest, { recursive: true })
+  console.log(`[esbuild] Copied Vue webview assets → ${dest}`)
+}
+
+copyWebviewAssets()
+
 // The route modules in src/server/routes.ts import from '../../routes/*.js'
 // which TypeScript preserves as-is (@ts-ignore). From the compiled location
 // (out/server/), these paths don't resolve correctly. This plugin redirects
@@ -142,7 +165,18 @@ await esbuild.build({
     'vscode',
     // Optional/dynamic dependencies from the parent project's node_modules
     // that are not needed at runtime in the VS Code extension context
+    //
+    // sqlite3 is optionally require()d by @sap/cds (lib/srv/middlewares/trace.js)
+    // but never installed here; keep it external so esbuild leaves the guarded
+    // require in place instead of failing the build.
     'sqlite3',
+    // better-sqlite3 is a native (.node) module. We force @cap-js/sqlite to use
+    // Node's built-in node:sqlite driver (see utils/database/index.js), so the
+    // better-sqlite3 require path is never executed at runtime. Marking it
+    // external keeps its platform-specific binary out of the bundle, making the
+    // .vsix OS-portable (no per-OS rebuild). node:sqlite is a Node builtin and
+    // is external automatically.
+    'better-sqlite3',
     '@cap-js/cds-test',
     '@sap-cloud-sdk/connectivity',
     '@sap-cloud-sdk/http-client',

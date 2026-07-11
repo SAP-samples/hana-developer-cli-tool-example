@@ -73,6 +73,15 @@ export default class dbClientClass {
                 throw new Error(base.bundle.getText("error.cdsProjectMissing"))
             }
             if (optionsCDS.kind === 'sqlite') {  //SQLite CDS
+                // Prefer Node's built-in node:sqlite driver over the native
+                // better-sqlite3 binding. This avoids a platform-specific
+                // native .node binary (portable VS Code .vsix, no per-OS
+                // rebuild) and matches the CAP 10 default. Node >=22 (our
+                // engines baseline) always ships node:sqlite. An explicit
+                // driver in the project/credentials config still wins.
+                if (!optionsCDS.driver && !optionsCDS.credentials?.driver) {
+                    optionsCDS.driver = 'node'
+                }
                 // Load actual SQLite credentials and merge them into optionsCDS if needed
                 const conn = await import("../connections.js")
                 const credentials = await conn.getConnOptions(prompts)

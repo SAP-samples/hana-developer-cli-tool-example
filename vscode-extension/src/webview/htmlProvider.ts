@@ -1,10 +1,30 @@
 import * as vscode from 'vscode'
 import * as crypto from 'crypto'
+import * as fs from 'fs'
 
 interface WebviewContentOptions {
   route?: string
   port?: number
   chromeless?: boolean
+}
+
+/**
+ * Resolve the directory containing the built Vue webview assets.
+ *
+ * A packaged .vsix ships the assets inside the extension itself at
+ * `webview-dist/` (copied there by the bundle step). When running from source
+ * via F5 (--extensionDevelopmentPath), that folder may not exist yet, so we
+ * fall back to the sibling `../app/vue/dist-vscode` build output in the repo.
+ *
+ * @param extensionUri - The extension's root URI
+ * @returns URI of the directory holding `assets/index.js` and `assets/index.css`
+ */
+function resolveWebviewDist(extensionUri: vscode.Uri): vscode.Uri {
+  const bundled = vscode.Uri.joinPath(extensionUri, 'webview-dist')
+  if (fs.existsSync(vscode.Uri.joinPath(bundled, 'assets', 'index.js').fsPath)) {
+    return bundled
+  }
+  return vscode.Uri.joinPath(extensionUri, '..', 'app', 'vue', 'dist-vscode')
 }
 
 export function getWebviewContent(
@@ -14,7 +34,7 @@ export function getWebviewContent(
 ): string {
   const nonce = crypto.randomBytes(16).toString('hex')
 
-  const distPath = vscode.Uri.joinPath(extensionUri, '..', 'app', 'vue', 'dist-vscode')
+  const distPath = resolveWebviewDist(extensionUri)
   const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(distPath, 'assets', 'index.js'))
   const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(distPath, 'assets', 'index.css'))
 
@@ -72,7 +92,7 @@ export function getWebviewContent(
 }
 
 export function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
-  const distPath = vscode.Uri.joinPath(extensionUri, '..', 'app', 'vue', 'dist-vscode')
+  const distPath = resolveWebviewDist(extensionUri)
   return {
     enableScripts: true,
     localResourceRoots: [distPath]
