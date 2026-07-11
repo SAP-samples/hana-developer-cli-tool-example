@@ -168,6 +168,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build VS Code extension .vsix
+        run: |
+          # Install sub-project deps (root npm ci does not cover these) and
+          # build a fresh, self-contained .vsix that ships inside the npm
+          # package for `hana-cli vscode install`. Installing app/vue deps here
+          # also satisfies the root prepack step (build:vue) run by npm publish.
+          rm -f vscode-extension/*.vsix
+          npm ci --prefix app/vue
+          npm ci --prefix vscode-extension
+          npm run build:vscode
+          cd vscode-extension && npx vsce package --no-dependencies
+
       - name: Verify package version matches tag
         run: |
           PKG_VERSION=$(node -e "import fs from 'fs'; console.log(JSON.parse(fs.readFileSync('package.json','utf8')).version)")

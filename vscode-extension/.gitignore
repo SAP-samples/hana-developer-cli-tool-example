@@ -1,4 +1,5 @@
 out/
 dist/
+webview-dist/
 _i18n/
 *.vsix

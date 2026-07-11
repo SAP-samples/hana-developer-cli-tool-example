@@ -107,11 +107,13 @@ The extension uses a **Hybrid Direct Webview + Embedded Server** architecture:
 
 ### From the CLI
 
+Once `hana-cli` is installed (globally via `npm install -g hana-cli`, or in a project), a prebuilt `.vsix` ships inside the npm package, so `install` works offline with no build step:
+
 ```bash
 # Check if the extension is installed
 hana-cli vscode status
 
-# Install from a local .vsix package
+# Install from the bundled .vsix package
 hana-cli vscode install
 
 # Install for VS Code Insiders
@@ -121,6 +123,8 @@ hana-cli vscode install --insiders
 hana-cli vscode uninstall
 ```
 
+The bundled `.vsix` is self-contained and OS-portable — it includes the web UI assets and uses Node's built-in `node:sqlite` driver, so there is no platform-specific native binary and no per-OS rebuild.
+
 ### From VS Code
 
 1. Open the Extensions panel (Ctrl+Shift+X)
@@ -129,16 +133,24 @@ hana-cli vscode uninstall
 
 ### From Source (Development)
 
+::: warning Install the parent project first
+The extension's bundle step reaches into the **root** hana-cli project's `node_modules`, `routes/`, and `utils/` (they are inlined into the extension). You must install the root project's dependencies **before** building the extension, or esbuild fails with dozens of `Could not resolve "express" / "exceljs" / "@sap/cds" …` errors.
+:::
+
 ```bash
-# Build the extension
+# 1. From the repo ROOT — install parent deps the bundle inlines
+npm ci
+
+# 2. Build the Vue web UI for the webview + bundle the extension.
+#    This copies the UI assets into vscode-extension/webview-dist so the
+#    packaged .vsix is self-contained.
+npm run build:vscode
+
+# 3. Package as .vsix
 cd vscode-extension
-npm install
-npm run bundle
+npx vsce package --no-dependencies
 
-# Package as .vsix
-npx vsce package
-
-# Install the generated .vsix
+# 4. Install the generated .vsix
 code --install-extension hana-cli-0.1.0.vsix
 ```
 

@@ -1,0 +1,22 @@
+# npm packaging rules for the vscode-extension folder.
+#
+# npm uses this file INSTEAD of .gitignore for this directory when deciding
+# what to include in the published hana-cli npm tarball. The prebuilt *.vsix
+# is git-ignored (build artifact) but MUST ship in the npm package so
+# `hana-cli vscode install` can find and install it offline.
+#
+# Ship: *.vsix and package.json. Exclude everything else in this folder —
+# consumers of the npm package never build the extension from source.
+src/
+out/
+test/
+dist/
+webview-dist/
+node_modules/
+_i18n/
+.vscode/
+esbuild.config.mjs
+tsconfig.json
+tsconfig.test.json
+package-lock.json
+.gitignore
