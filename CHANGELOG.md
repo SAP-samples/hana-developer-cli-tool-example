@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [4.202607.0] - 2026-07-11
+
+**Added**
+
+- VS Code extension now ships a self-contained, OS-portable .vsix via the npm package (installable through hana-cli vscode install) — bundles the web UI and uses Node built-in node:sqlite, no native binaries (#159)
+
+**Changed**
+
+- Upgrade to CAP 10 (@sap/cds 10) with cds-10-native drivers @cap-js/hana 3, @cap-js/sqlite 3, @cap-js/postgres 3, @cap-js/telemetry 2; remove incompatible @sap/cds-hana (#160)
+- TypeScript 7 for the VS Code extension and MCP server; consolidated dependency updates across all subprojects (#160, #162)
+- Group B major dependency upgrades: glob 13, @vscode/test-electron 3, vue-tsc 3, vue-router 5, csv-parse 7, js-yaml 5, inquirer 14 (#162)
+
+**Fixed**
+
+- Add missing vscode + error.cfNotLoggedIn i18n keys across all 9 locales (#163)
+
 ## [4.202605.2] - 2026-05-14
 
 **Added**

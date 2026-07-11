@@ -7,12 +7,12 @@
     "url": "https://github.com/SAP-samples/hana-developer-cli-tool-example",
     "source": "github"
   },
-  "version": "4.202605.2",
+  "version": "4.202607.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "hana-cli",
-      "version": "4.202605.2",
+      "version": "4.202607.0",
       "runtimeHint": "npx",
       "runtimeArguments": [
         {
