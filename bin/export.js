@@ -342,13 +342,13 @@ export function serializeCSV(rows, { delimiter = ',', includeHeaders = true, nul
   const headers = Object.keys(rows[0])
   let csv = ''
   if (includeHeaders) {
-    csv += headers.map(h => escapeCSVField(String(h))).join(delimiter) + '\n'
+    csv += headers.map(h => escapeCSVField(String(h), delimiter)).join(delimiter) + '\n'
   }
   for (const row of rows) {
     const values = headers.map(header => {
       const value = row[header]
       const s = value === null || value === undefined ? nullValue : String(value)
-      return escapeCSVField(s)
+      return escapeCSVField(s, delimiter)
     })
     csv += values.join(delimiter) + '\n'
   }
@@ -375,17 +375,18 @@ export async function serializeExcel(rows, { sheetName = 'Sheet1', nullValue = '
         return value === null || value === undefined ? nullValue : value
       }))
     }
+    const sheetValues = worksheet.getSheetValues().slice(1)
     headers.forEach((header, index) => {
       const column = worksheet.getColumn(index + 1)
       let maxLength = header.length
-      for (const r of worksheet.getSheetValues().slice(1)) {
-        if (r && r[index + 1]) maxLength = Math.max(maxLength, String(r[index + 1]).length)
+      for (const r of sheetValues) {
+        if (r != null && r[index + 1] != null) maxLength = Math.max(maxLength, String(r[index + 1]).length)
       }
       column.width = Math.min(maxLength + 2, 50)
     })
   }
   const buf = await workbook.xlsx.writeBuffer()
-  return Buffer.from(buf)
+  return Buffer.isBuffer(buf) ? buf : Buffer.from(buf)
 }
 
 /**
@@ -407,11 +408,12 @@ export function serializeJSON(rows /* , opts */) {
 /**
  * Escape CSV field value
  * @param {string} field - Field value
+ * @param {string} [delimiter=','] - Active delimiter character
  * @returns {string}
  */
-function escapeCSVField(field) {
+function escapeCSVField(field, delimiter = ',') {
   if (!field) return ''
-  if (field.includes(',') || field.includes('"') || field.includes('\n')) {
+  if (field.includes(delimiter) || field.includes('"') || field.includes('\n')) {
     return `"${field.replace(/"/g, '""')}"` // Escape quotes by doubling them
   }
   return field

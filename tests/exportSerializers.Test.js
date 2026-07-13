@@ -31,6 +31,22 @@ describe('Export Serializers', function () {
     it('returns empty string for no rows', function () {
       assert.strictEqual(serializeCSV([], {}), '')
     })
+
+    it('null field renders as empty string with default options', function () {
+      const csv = serializeCSV(rows, {})
+      const lines = csv.trim().split('\n')
+      // Bob row: ID=2, NAME=Bob, NOTE=null → trailing empty cell
+      assert.strictEqual(lines[2], '2,Bob,')
+    })
+
+    it('custom delimiter field is quoted when it contains the delimiter', function () {
+      const csv = serializeCSV([{ A: 'a;b' }], { delimiter: ';' })
+      // The value 'a;b' must be quoted because it contains the active delimiter ';'
+      assert.ok(csv.includes('"a;b"'), `Expected quoted field in: ${csv}`)
+      // Must NOT appear as an unquoted split: two separate cells 'a' and 'b'
+      const dataLine = csv.trim().split('\n')[1]
+      assert.ok(!dataLine.includes(';a;') && dataLine !== 'a;b', `Field must be quoted, got: ${dataLine}`)
+    })
   })
 
   describe('serializeJSON', function () {
