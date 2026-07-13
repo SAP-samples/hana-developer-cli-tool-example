@@ -122,7 +122,8 @@ let lastResults
 
 import * as locale from "../utils/locale.js"
 import * as commandSuggestions from "./commandSuggestions.js"
-const TextBundle = require('@sap/textbundle').TextBundle
+import TextBundleModule from '@sap/textbundle'
+const { TextBundle } = TextBundleModule
 
 /**
  * Parse .properties file content into a key-value map.
