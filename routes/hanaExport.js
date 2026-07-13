@@ -87,8 +87,6 @@ export function route (app) {
       }
 
       let query = `SELECT ${columnList} FROM ${qualifiedName(schema, table)}`
-      if (q.where && String(q.where).trim()) query += ` WHERE ${String(q.where)}`
-      if (q.orderby && String(q.orderby).trim()) query += ` ORDER BY ${String(q.orderby)}`
       if (limit > 0) query += ` LIMIT ${limit}`
 
       base.debug(`Export query: ${query}`)
@@ -114,7 +112,8 @@ export function route (app) {
       const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5)
       const filename = `${table}_${ts}.${EXT[format]}`
       res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
-      return res.type(CONTENT_TYPES[format]).status(200).send(body)
+      res.setHeader('Content-Type', CONTENT_TYPES[format])
+      return res.status(200).send(body)
     } catch (error) {
       next(error)
     }

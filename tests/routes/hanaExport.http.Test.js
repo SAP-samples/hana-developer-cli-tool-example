@@ -27,5 +27,12 @@ describe('Export Route - HTTP Integration Tests', function () {
         .query({ table: 'VALIDTABLE', columns: 'OK, BAD;--', format: 'csv' })
       expect(res.status).to.equal(400)
     })
+
+    it('returns 400 for a non-integer limit', async function () {
+      const res = await request(app)
+        .get('/hana/export')
+        .query({ table: 'VALIDTABLE', limit: 'abc', format: 'csv' })
+      expect(res.status).to.equal(400)
+    })
   })
 })
