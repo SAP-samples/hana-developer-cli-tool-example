@@ -9,15 +9,13 @@ export const builder = (yargs) => yargs.options(baseLite.getBuilder({}, false)).
 
 export const handler = async function () {
 
-  const [{ marked }, { default: fs }, { default: path }, { fileURLToPath }, { URL }, { markedTerminal }] = await Promise.all([
+  const [{ marked }, { default: fs }, { default: path }, { markedTerminal }] = await Promise.all([
     import('marked'),
     import('fs'),
     import('path'),
-    import('url'),
-    import('url'),
     import('marked-terminal')
   ])
-  const __dirname = fileURLToPath(new URL('.', import.meta.url))
+  const __dirname = import.meta.dirname
 
   marked.use(markedTerminal({
     showSectionPrefix: false,

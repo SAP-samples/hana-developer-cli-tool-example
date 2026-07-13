@@ -3,11 +3,10 @@ import * as baseLite from '../utils/base-lite.js'
 import { buildDocEpilogue } from '../utils/doc-linker.js'
 import { commandMap } from './commandMap.js'
 import { commandMetadata } from './commandMetadata.js'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { join } from 'path'
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+const __dirname = import.meta.dirname
 
 export const command = 'interactive'
 export const aliases = ['i', 'repl', 'shell']

@@ -3,14 +3,14 @@
  * Categories help agents understand available functionality at a glance
  */
 
-import { createRequire } from 'node:module';
+// Static import of the CLI command metadata registry.
+// The JS source has no adjacent .d.ts; the assert silences TS7016 while preserving type safety.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { commandMetadata as CLI_COMMAND_METADATA_RAW } from '../../bin/commandMetadata.js';
 
 type CliCommandMetadata = Record<string, { category: string; relatedCommands?: string[] }>;
-
-const require = createRequire(import.meta.url);
-const { commandMetadata: CLI_COMMAND_METADATA } = require('../../bin/commandMetadata.js') as {
-  commandMetadata: CliCommandMetadata;
-};
+const CLI_COMMAND_METADATA = CLI_COMMAND_METADATA_RAW as unknown as CliCommandMetadata;
 
 export interface CommandMetadata {
   command: string;
@@ -856,7 +856,7 @@ const ENRICHED_COMMAND_METADATA: Record<string, Omit<CommandMetadata, 'command'>
   },
 };
 
-const CLI_COMMANDS = CLI_COMMAND_METADATA as CliCommandMetadata;
+const CLI_COMMANDS = CLI_COMMAND_METADATA;
 
 export const COMMAND_METADATA_MAP: Record<string, Omit<CommandMetadata, 'command'>> = Object.fromEntries(
   Object.entries(CLI_COMMANDS).map(([command, metadata]) => {

@@ -5,10 +5,8 @@
  * to provide context-aware guidance and parameter information for the MCP server.
  */
 import { readFileSync } from 'fs';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { join } from 'path';
+const __dirname = import.meta.dirname;
 function readDocsFile(relativePath, fallbackText) {
     try {
         const filePath = join(__dirname, '..', '..', relativePath);

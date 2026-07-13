@@ -48,11 +48,9 @@ This guide applies to maintenance and utility scripts in the `scripts/` director
 
 import fs from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
 
-// ESM __dirname equivalent
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+// ESM __dirname equivalent (Node 20.11+: import.meta.dirname / import.meta.filename)
+const __dirname = import.meta.dirname
 
 // Configuration
 const CONFIG = {
@@ -304,11 +302,10 @@ function parseArguments() {
 
 ```javascript
 import { TextBundle } from '@sap/textbundle'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { join } from 'path'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+// Node 20.11+: import.meta.dirname / import.meta.filename
+const __dirname = import.meta.dirname
 
 // Load text bundle
 const bundle = new TextBundle(join(__dirname, '..', '_i18n', 'messages.properties'))
@@ -354,9 +351,9 @@ function getText(key, params = []) {
 
 import fs from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+// Node 20.11+: import.meta.dirname / import.meta.filename
+const __dirname = import.meta.dirname
 const I18N_DIR = path.join(__dirname, '../_i18n')
 const LANGUAGES = ['', '_de', '_es', '_fr', '_pt']
 const LANGUAGE_NAMES = { 
@@ -579,11 +576,10 @@ main()
 
 import pkg from '@sap/textbundle'
 const { TextBundle } = pkg
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { join } from 'path'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+// Node 20.11+: import.meta.dirname / import.meta.filename
+const __dirname = import.meta.dirname
 
 // Load text bundle for messages
 const bundle = new TextBundle(join(__dirname, '..', '_i18n', 'messages.properties'))
@@ -626,9 +622,9 @@ exec('npm link @sap/cds-dk --local', (error, stdout, stderr) => {
 
 import fs from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+// Node 20.11+: import.meta.dirname / import.meta.filename
+const __dirname = import.meta.dirname
 const DOCS_DIR = path.join(__dirname, '..', 'docs')
 const OUTPUT_FILE = path.join(__dirname, '..', 'docs-index.json')
 

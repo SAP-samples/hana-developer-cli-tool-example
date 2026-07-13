@@ -2,9 +2,12 @@
  * Command metadata mapping - categorizes commands and provides discovery information
  * Categories help agents understand available functionality at a glance
  */
-import { createRequire } from 'node:module';
-const require = createRequire(import.meta.url);
-const { commandMetadata: CLI_COMMAND_METADATA } = require('../../bin/commandMetadata.js');
+// Static import of the CLI command metadata registry.
+// The JS source has no adjacent .d.ts; the assert silences TS7016 while preserving type safety.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { commandMetadata as CLI_COMMAND_METADATA_RAW } from '../../bin/commandMetadata.js';
+const CLI_COMMAND_METADATA = CLI_COMMAND_METADATA_RAW;
 /**
  * Category definitions with descriptions
  */

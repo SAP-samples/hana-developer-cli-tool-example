@@ -3,9 +3,7 @@
  * @module base - Central functionality shared by all the various commands
  */
 
-import { fileURLToPath } from 'url'
-import { URL } from 'url'
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
+const __dirname = import.meta.dirname
 import { createRequire } from 'module'
 import { execSync } from 'child_process'
 
@@ -122,7 +120,8 @@ let lastResults
 
 import * as locale from "../utils/locale.js"
 import * as commandSuggestions from "./commandSuggestions.js"
-const TextBundle = require('@sap/textbundle').TextBundle
+import TextBundleModule from '@sap/textbundle'
+const { TextBundle } = TextBundleModule
 
 /**
  * Parse .properties file content into a key-value map.
@@ -295,49 +294,94 @@ export const getTerminal = async () => {
     return tk.terminal
 }
 
-// Import terminal-kit synchronously for backward compatibility with existing code
-// @ts-ignore
-import terminalKit from 'terminal-kit'
-
-// Wrap terminal access to handle test environments where terminal may not be available
-let _terminal = null
-try {
-	if (process.env.NODE_ENV !== 'test') {
-		_terminal = terminalKit.terminal
-	} else {
-		// Provide stub terminal for test environment that outputs to console
-		_terminal = {
-			table: (data) => {
-				// In test mode, use console.table to ensure output is captured
-				if (data && Array.isArray(data) && data.length > 0) {
-					console.table(data)
-				}
-			},
-			progressBar: () => ({
-				startItem: () => {},
-				itemDone: () => {},
-				stop: () => {}
-			})
-		}
-	}
-} catch (error) {
-    console.warn(bundle.getText("warning.terminalKitInitFail", [error.message]))
-	// Provide stub terminal that outputs to console
-	_terminal = {
-		table: (data) => {
-			// Fallback: use console.table to ensure output
-			if (data && Array.isArray(data) && data.length > 0) {
-				console.table(data)
-			}
-		},
-		progressBar: () => ({
-			startItem: () => {},
-			itemDone: () => {},
-			stop: () => {}
-		})
-	}
+// Console-based fallback used in test mode and before/if terminal-kit loads.
+const consoleTerminalStub = {
+    table: (data) => {
+        if (data && Array.isArray(data) && data.length > 0) {
+            console.table(data)
+        }
+    },
+    progressBar: () => ({
+        startItem: () => {},
+        itemDone: () => {},
+        stop: () => {}
+    })
 }
-export const terminal = _terminal
+
+// Cached real terminal-kit terminal (loaded lazily on first use).
+let _realTerminal = null
+let _terminalKitLoadFailed = false
+
+function loadRealTerminalSync() {
+    if (_realTerminal || _terminalKitLoadFailed) return _realTerminal
+    if (process.env.NODE_ENV === 'test') return null
+    try {
+        // standardRequire is CJS-synchronous and works in the CLI (has
+        // node_modules). In the bundled extension terminal-kit is never
+        // reached because the extension does not render terminal output;
+        // the Proxy falls back to the console stub.
+        _realTerminal = standardRequire('terminal-kit').terminal
+    } catch (error) {
+        _terminalKitLoadFailed = true
+        console.warn(bundle.getText("warning.terminalKitInitFail", [error.message]))
+    }
+    return _realTerminal
+}
+
+// Mutable overlay for sinon stubs/overrides. When sinon stubs terminal.table,
+// it uses defineProperty/set to install the stub and deleteProperty to restore.
+const terminalOverlay = {}
+
+// Known synchronous methods exposed by this facade.
+const KNOWN_METHODS = ['table', 'progressBar']
+
+// Synchronous facade: forwards to real terminal-kit when available,
+// otherwise to the console stub. No eager terminal-kit load at module init.
+// The Proxy is stub-compatible: sinon can read getOwnPropertyDescriptor,
+// defineProperty to install a stub, and deleteProperty to restore it.
+export const terminal = new Proxy({}, {
+    get(_target, prop) {
+        if (Object.prototype.hasOwnProperty.call(terminalOverlay, prop)) {
+            return terminalOverlay[prop]
+        }
+        const real = loadRealTerminalSync()
+        const impl = real || consoleTerminalStub
+        const value = impl[prop]
+        return typeof value === 'function' ? value.bind(impl) : value
+    },
+    set(_target, prop, value) {
+        terminalOverlay[prop] = value
+        return true
+    },
+    has(_target, prop) {
+        return Object.prototype.hasOwnProperty.call(terminalOverlay, prop) ||
+            KNOWN_METHODS.includes(prop)
+    },
+    getOwnPropertyDescriptor(_target, prop) {
+        if (Object.prototype.hasOwnProperty.call(terminalOverlay, prop)) {
+            return Object.getOwnPropertyDescriptor(terminalOverlay, prop)
+        }
+        if (KNOWN_METHODS.includes(prop)) {
+            const real = loadRealTerminalSync()
+            const impl = real || consoleTerminalStub
+            const value = impl[prop]
+            return {
+                value: typeof value === 'function' ? value.bind(impl) : value,
+                writable: true,
+                enumerable: true,
+                configurable: true
+            }
+        }
+        return undefined
+    },
+    defineProperty(_target, prop, desc) {
+        return Reflect.defineProperty(terminalOverlay, prop, desc)
+    },
+    deleteProperty(_target, prop) {
+        delete terminalOverlay[prop]
+        return true
+    }
+})
 
 export let tableOptions = {
     hasBorder: true,

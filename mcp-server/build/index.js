@@ -10,8 +10,7 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { CallToolRequestSchema, ListToolsRequestSchema, ListResourcesRequestSchema, ReadResourceRequestSchema, ListPromptsRequestSchema, GetPromptRequestSchema, } from '@modelcontextprotocol/sdk/types.js';
 import { pathToFileURL } from 'url';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { join } from 'path';
 import { readFileSync } from 'fs';
 import { listResources, readResource } from './resources.js';
 import { listPrompts, getPrompt } from './prompts.js';
@@ -23,8 +22,7 @@ import { initRouterTool, getRouterToolDefinition, handleRouterTool } from './too
 import { isRouterTool, MAX_DYNAMIC_TOOLS } from './tools/tier-config.js';
 import { errorResponse } from './tools/types.js';
 const fullMode = process.argv.includes('--full');
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = import.meta.dirname;
 const pkg = JSON.parse(readFileSync(join(__dirname, '..', '..', 'mcp-server', 'package.json'), 'utf-8'));
 class HanaCliMcpServer {
     server;

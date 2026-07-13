@@ -5,13 +5,11 @@
  * They provide documentation, guides, and reference material.
  */
 import { readFile } from 'fs/promises';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { join } from 'path';
 import { docsSearch } from './docs-search.js';
 import { getCommandExamples, getCommandPresets } from './examples-presets.js';
 import ReadmeKnowledgeBase from './readme-knowledge-base.js';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = import.meta.dirname;
 /**
  * List all available resources
  */

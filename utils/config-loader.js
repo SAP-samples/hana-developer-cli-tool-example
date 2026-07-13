@@ -6,9 +6,8 @@
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
-import { fileURLToPath } from 'url'
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
+const __dirname = import.meta.dirname
 
 /**
  * Load configuration from .hana-cli-config or hana-cli.config.js

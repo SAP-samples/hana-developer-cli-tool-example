@@ -1,11 +1,10 @@
 // @ts-check
 import { buildDocEpilogue } from '../utils/doc-linker.js'
 import * as baseLite from '../utils/base-lite.js'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { join } from 'path'
 import { readFileSync } from 'fs'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+const __dirname = import.meta.dirname
 
 export const command = 'examples [command] [query...]'
 export const aliases = ['example']

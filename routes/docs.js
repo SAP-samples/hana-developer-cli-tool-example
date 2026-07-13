@@ -4,9 +4,8 @@ import path from 'path'
 import { promises as fs } from 'fs'
 import { marked } from 'marked'
 
-import { fileURLToPath } from 'url'
 // @ts-ignore
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
+const __dirname = import.meta.dirname
 
 export function route(app) {
     /**

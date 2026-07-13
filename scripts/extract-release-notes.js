@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 // @ts-check
 import { readFileSync } from 'fs'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { join } from 'path'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const __dirname = import.meta.dirname
 const ROOT = join(__dirname, '..')
 
 const args = process.argv.slice(2)

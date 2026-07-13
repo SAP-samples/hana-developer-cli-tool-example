@@ -3,9 +3,7 @@
  * @module base-lite - Lightweight utilities for CLI initialization (no heavy dependencies)
  */
 
-import { fileURLToPath } from 'url'
-import { URL } from 'url'
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
+const __dirname = import.meta.dirname
 import { createRequire } from 'module'
 export const require = createRequire(import.meta.url)
 
@@ -83,7 +81,8 @@ export const debug = (...args) => {
 }
 
 import * as locale from "./locale.js"
-const TextBundle = require('@sap/textbundle').TextBundle
+import TextBundleModule from '@sap/textbundle'
+const { TextBundle } = TextBundleModule
 
 /**
  * Parse .properties file content into a key-value map.

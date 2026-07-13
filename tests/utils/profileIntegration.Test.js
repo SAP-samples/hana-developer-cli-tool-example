@@ -9,11 +9,8 @@ import dbClientClass from '../../utils/database/index.js'
 import PostgresClient from '../../utils/database/postgres.js'
 import SqliteClient from '../../utils/database/sqlite.js'
 import * as fs from 'fs'
-import * as path from 'path'
-import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const __dirname = import.meta.dirname
 
 describe('Profile Integration Tests', function () {
     this.timeout(30000) // Some operations may take longer with actual databases

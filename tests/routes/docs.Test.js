@@ -8,9 +8,8 @@ import express from 'express'
 import { route } from '../../routes/docs.js'
 import { promises as fs } from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
+const __dirname = import.meta.dirname
 
 describe('Docs Route Integration Tests', function () {
     let app

@@ -65,12 +65,8 @@ export function version4(pkgPath = '..', info = {}, parentPath) {
 export async function getVersion() {
   const base = await import('../utils/base.js')
   base.debug('version')
-  const [{ URL }, { fileURLToPath }] = await Promise.all([
-    import('url'),
-    import('url')
-  ])
 
-  const __dirname = fileURLToPath(new URL('.', import.meta.url))
+  const __dirname = import.meta.dirname
   const info = version4()
   try {
     let cfVer = await cf.getVersion()

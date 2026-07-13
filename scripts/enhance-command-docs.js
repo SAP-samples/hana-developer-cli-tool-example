@@ -5,10 +5,9 @@
 
 import fs from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
 import vm from 'vm'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const __dirname = import.meta.dirname
 const BIN_DIR = path.join(__dirname, '..', 'bin')
 const DOCS_DIR = path.join(__dirname, '..', 'docs', '02-commands')
 

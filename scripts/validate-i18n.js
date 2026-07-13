@@ -19,9 +19,8 @@
 
 import fs from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const __dirname = import.meta.dirname
 const I18N_DIR = path.join(__dirname, '../_i18n')
 const LANGUAGES = ['', '_de', '_es', '_fr', '_pt', '_ja', '_ko', '_zh', '_hi', '_pl']
 const LANGUAGE_NAMES = { '': 'English', '_de': 'German', '_es': 'Spanish', '_fr': 'French', '_pt': 'Portuguese', '_ja': 'Japanese', '_ko': 'Korean', '_zh': 'Simplified Chinese', '_hi': 'Hindi', '_pl': 'Polish' }

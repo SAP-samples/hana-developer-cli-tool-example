@@ -1,13 +1,11 @@
 // @ts-check
 import * as baseLite from '../utils/base-lite.js'
 import { buildDocEpilogue } from '../utils/doc-linker.js'
-import { fileURLToPath } from 'url'
 import { dirname, join, resolve } from 'path'
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
 import { homedir, platform } from 'os'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const __dirname = import.meta.dirname
 
 const ALL_CLIENT_IDS = ['claude-desktop', 'claude-code', 'cursor', 'windsurf', 'cline', 'vscode', 'continue', 'zed']
 

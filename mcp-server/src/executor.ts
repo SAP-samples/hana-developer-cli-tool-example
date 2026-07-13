@@ -1,13 +1,11 @@
 import { spawn } from 'child_process';
 import { existsSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { join } from 'path';
 import { formatOutput } from './output-formatter.js';
 import { getNextSteps, analyzeOutputForTips } from './next-steps.js';
 import { ConnectionContext } from './connection-context.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = import.meta.dirname;
 
 /**
  * Result of command execution
