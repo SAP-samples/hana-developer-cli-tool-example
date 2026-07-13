@@ -4,9 +4,8 @@ import * as path from 'path'
 import * as fs from 'fs'
 import express from 'express'
 import * as base from '../utils/base.js'
-import { fileURLToPath } from 'url'
 // @ts-ignore
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
+const __dirname = import.meta.dirname
 
 let commandDocsIndex = null
 

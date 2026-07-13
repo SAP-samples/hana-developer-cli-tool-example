@@ -2,12 +2,10 @@
 import * as base from '../utils/base.js'
 import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { join } from 'path'
 import { readFileSync } from 'fs'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const __dirname = import.meta.dirname
 
 // Load version from package.json
 const pkg = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf8'))
