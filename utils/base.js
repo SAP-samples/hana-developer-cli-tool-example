@@ -315,6 +315,11 @@ let _terminalKitLoadFailed = false
 function loadRealTerminalSync() {
     if (_realTerminal || _terminalKitLoadFailed) return _realTerminal
     if (process.env.NODE_ENV === 'test') return null
+    // terminal-kit issues cursor-location escape queries that return Infinity
+    // when stdout is not an interactive TTY (piped output, CI, redirected to a
+    // file). That makes calls like progressBar() throw "RangeError: Invalid
+    // count value: Infinity". Fall back to the console stub in non-TTY contexts.
+    if (!process.stdout.isTTY) return null
     try {
         // standardRequire is CJS-synchronous and works in the CLI (has
         // node_modules). In the bundled extension terminal-kit is never
