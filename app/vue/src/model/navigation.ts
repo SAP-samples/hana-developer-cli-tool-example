@@ -57,10 +57,11 @@ export const navigation: NavGroup[] = [
   },
   {
     key: 'tools',
-    title: 'Import / Convert',
+    title: 'Import / Export / Convert',
     icon: 'upload',
     items: [
       { key: 'import', title: 'Import', route: 'import' },
+      { key: 'export', title: 'Export', route: 'export' },
       { key: 'massConvert', title: 'Mass Convert', route: 'massConvert' }
     ]
   },

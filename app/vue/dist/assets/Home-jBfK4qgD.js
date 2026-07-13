@@ -1,0 +1,1 @@
+import{A as e,c as t,d as n,t as r}from"./_plugin-vue_export-helper-p2JYVKvd.js";var i={},a={class:`home`};function o(r,i){return e(),n(`div`,a,[...i[0]||=[t(`ui5-title`,{level:`H2`},`Welcome to HANA CLI`,-1),t(`p`,null,`Select a tool from the sidebar to get started.`,-1)]])}var s=r(i,[[`render`,o],[`__scopeId`,`data-v-c160e559`]]);export{s as default};

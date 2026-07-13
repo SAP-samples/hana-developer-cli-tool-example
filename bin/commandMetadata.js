@@ -232,6 +232,7 @@ export const commandMetadata = {
     
     // UI Variants
     functionsUI: { category: 'schema-tools', relatedCommands: ['functions'] },
+    exportUI: { category: 'data-tools', relatedCommands: ['export', 'import'] },
     importUI: { category: 'data-tools', relatedCommands: ['import'] },
     indexesUI: { category: 'schema-tools', relatedCommands: ['indexes'] },
     schemasUI: { category: 'schema-tools', relatedCommands: ['schemas'] },

@@ -1,0 +1,1 @@
+import{A as e,l as t,v as n}from"./_plugin-vue_export-helper-p2JYVKvd.js";import{t as r}from"./DynamicTableView-DkVyolQ9.js";var i=n({__name:`Users`,setup(n){let i=[{key:`user`,label:`User`,default:`*`,wide:!0,suggestEndpoint:`users-ui`,suggestField:`USER_NAME`}];return(n,a)=>(e(),t(r,{title:`Database Users`,endpoint:`users-ui`,filters:i}))}});export{i as default};

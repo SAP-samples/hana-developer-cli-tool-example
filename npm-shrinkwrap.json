@@ -52,7 +52,7 @@
         "ora": "^9.4.0",
         "properties": "^1.2.1",
         "rxjs": "^7.8.1",
-        "sap-hdb-promisfied": "2.202606.2",
+        "sap-hdb-promisfied": "2.202607.1",
         "swagger-jsdoc": "^6.2.8",
         "swagger-ui-express": "^5.0.0",
         "terminal-kit": "^3.1.1",
@@ -16034,6 +16034,7 @@
       "version": "2.4.0",
       "resolved": "https://registry.npmjs.org/ipaddr.js/-/ipaddr.js-2.4.0.tgz",
       "integrity": "sha512-9VGk3HGanVE6JoZXHiCpnGy5X0jYDnN4EA4lntFPj+1vIWlFhIylq2CrrCOJH9EAhc5CYhq18F2Av2tgoAPsYQ==",
+      "dev": true,
       "license": "MIT",
       "engines": {
         "node": ">= 10"
@@ -17768,7 +17769,8 @@
       "version": "0.9.2",
       "resolved": "https://registry.npmjs.org/lz4-wasm-nodejs/-/lz4-wasm-nodejs-0.9.2.tgz",
       "integrity": "sha512-hSwgJPS98q/Oe/89Y1OxzeA/UdnASG8GvldRyKa7aZyoAFCC8VPRtViBSava7wWC66WocjUwBpWau2rEmyFPsw==",
-      "license": "MIT"
+      "license": "MIT",
+      "optional": true
     },
     "node_modules/magic-string": {
       "version": "0.30.21",
@@ -21723,9 +21725,9 @@
       "license": "MIT"
     },
     "node_modules/sap-hdb-promisfied": {
-      "version": "2.202606.2",
-      "resolved": "https://registry.npmjs.org/sap-hdb-promisfied/-/sap-hdb-promisfied-2.202606.2.tgz",
-      "integrity": "sha512-uTtUhh0frYAYGvPUG/AdLNVJE5X0Sz/1n/5KCtxF3LRq86sUqc9/ENgNu3a3l/w3nOwwinUBAO1rF14di0jKyA==",
+      "version": "2.202607.1",
+      "resolved": "https://registry.npmjs.org/sap-hdb-promisfied/-/sap-hdb-promisfied-2.202607.1.tgz",
+      "integrity": "sha512-YmF1nHsxm3EabcU/Vzq312oQGZkXAlCQFFVKu7T7ziawpea4IvTJ0Bt/LrqwN1z05msFewA2ZJYsjDOoPMaxaQ==",
       "hasShrinkwrap": true,
       "license": "Apache-2.0",
       "dependencies": {
@@ -21735,7 +21737,7 @@
         "hdb": "2.27.1"
       },
       "engines": {
-        "node": "^20.0.0  || ^22.0.0 || ^24.0.0"
+        "node": "^20.0.0  || ^22.0.0 || ^24.0.0 || ^26.0.0"
       }
     },
     "node_modules/sap-hdb-promisfied/node_modules/@isaacs/cliui": {
@@ -21805,9 +21807,9 @@
       "license": "MIT"
     },
     "node_modules/sap-hdb-promisfied/node_modules/@types/node": {
-      "version": "25.9.3",
-      "resolved": "https://registry.npmjs.org/@types/node/-/node-25.9.3.tgz",
-      "integrity": "sha512-603BddQMv3pUcr4U2dhujk83N2tTDVr/34wII2B6bJy6g+8WD6yUb11jszNs0gdi4PesVWl7ABt8nYMVpnLUcg==",
+      "version": "25.9.5",
+      "resolved": "https://registry.npmjs.org/@types/node/-/node-25.9.5.tgz",
+      "integrity": "sha512-OScDchr2fwuUmWdf4kZ9h7PcJiYDVInhJizG/biAq3cAvqwYktuy/TYGGdZNMtNTFUP7rnb0NU4TUdm82kt4Rg==",
       "extraneous": true,
       "license": "MIT",
       "dependencies": {
@@ -21874,9 +21876,9 @@
       "license": "MIT"
     },
     "node_modules/sap-hdb-promisfied/node_modules/brace-expansion": {
-      "version": "2.1.1",
-      "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-2.1.1.tgz",
-      "integrity": "sha512-WR1cURNjuvBLMZBMbqM0UoE+WAfdUcEV1ccD8PVBVOI+Z3ND4+SZbN8RsfT2bMuG1qwz5RFvPukSZm5fF2D5eA==",
+      "version": "2.1.2",
+      "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-2.1.2.tgz",
+      "integrity": "sha512-w5JZcKgdhDOgOwm8H+KgbosopHMuGcl6qbulwjtz3SM7I7P3yW1eAjzMPLrIE+NQ9vjgANKHWeMHnrT0OXW1oA==",
       "extraneous": true,
       "license": "MIT",
       "dependencies": {
@@ -22108,9 +22110,9 @@
       }
     },
     "node_modules/sap-hdb-promisfied/node_modules/diff": {
-      "version": "7.0.0",
-      "resolved": "https://registry.npmjs.org/diff/-/diff-7.0.0.tgz",
-      "integrity": "sha512-PJWHUb1RFevKCwaFA9RlG5tCd+FO5iRh9A8HEtkmBH2Li03iJriB6m6JIN4rGz3K3JLawI7/veA1xzRKP6ISBw==",
+      "version": "8.0.4",
+      "resolved": "https://registry.npmjs.org/diff/-/diff-8.0.4.tgz",
+      "integrity": "sha512-DPi0FmjiSU5EvQV0++GFDOJ9ASQUVFh5kD+OzOnYdi7n3Wpm9hWWGfB/O2blfHcMVTL5WkQXSnRiK9makhrcnw==",
       "extraneous": true,
       "license": "BSD-3-Clause",
       "engines": {
@@ -22369,9 +22371,9 @@
       }
     },
     "node_modules/sap-hdb-promisfied/node_modules/js-yaml": {
-      "version": "4.2.0",
-      "resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-4.2.0.tgz",
-      "integrity": "sha512-ePWsvanv0DWuDRsW8dnt+R4jQ31SCRCQ7hhNcPXZPsoBZiemuZNYGf7adZdqX2D86j6rvKp3RpCxVTSb8WQlOw==",
+      "version": "4.3.0",
+      "resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-4.3.0.tgz",
+      "integrity": "sha512-1td788aAnnZ5qs7V2QIRl1owjtYpbKt749Y3xauqQgwIIGF/xXWz1wMTEBx5O3LK3lXLVuqXPdPxj2BoFHaW9Q==",
       "extraneous": true,
       "funding": [
         {
@@ -22602,16 +22604,6 @@
       "extraneous": true,
       "license": "ISC"
     },
-    "node_modules/sap-hdb-promisfied/node_modules/randombytes": {
-      "version": "2.1.0",
-      "resolved": "https://registry.npmjs.org/randombytes/-/randombytes-2.1.0.tgz",
-      "integrity": "sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==",
-      "extraneous": true,
-      "license": "MIT",
-      "dependencies": {
-        "safe-buffer": "^5.1.0"
-      }
-    },
     "node_modules/sap-hdb-promisfied/node_modules/readdirp": {
       "version": "4.1.2",
       "resolved": "https://registry.npmjs.org/readdirp/-/readdirp-4.1.2.tgz",
@@ -22636,27 +22628,6 @@
         "node": ">=0.10.0"
       }
     },
-    "node_modules/sap-hdb-promisfied/node_modules/safe-buffer": {
-      "version": "5.2.1",
-      "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.1.tgz",
-      "integrity": "sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==",
-      "extraneous": true,
-      "funding": [
-        {
-          "type": "github",
-          "url": "https://github.com/sponsors/feross"
-        },
-        {
-          "type": "patreon",
-          "url": "https://www.patreon.com/feross"
-        },
-        {
-          "type": "consulting",
-          "url": "https://feross.org/support"
-        }
-      ],
-      "license": "MIT"
-    },
     "node_modules/sap-hdb-promisfied/node_modules/safer-buffer": {
       "version": "2.1.2",
       "resolved": "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz",
@@ -22664,13 +22635,13 @@
       "license": "MIT"
     },
     "node_modules/sap-hdb-promisfied/node_modules/serialize-javascript": {
-      "version": "6.0.2",
-      "resolved": "https://registry.npmjs.org/serialize-javascript/-/serialize-javascript-6.0.2.tgz",
-      "integrity": "sha512-Saa1xPByTTq2gdeFZYLLo+RFE35NHZkAbqZeWNd3BpzppeVisAqpDjcp8dyf6uIvEqJRd46jemmyA4iFIeVk8g==",
+      "version": "7.0.7",
+      "resolved": "https://registry.npmjs.org/serialize-javascript/-/serialize-javascript-7.0.7.tgz",
+      "integrity": "sha512-YAy8Od6KV+uuwUuU50np8fGB/Aues6Y0nAhA9y/hId74PlKUcme4pXcBD46NWKr1Q4osN/iseZ17YqO1XfmI8g==",
       "extraneous": true,
       "license": "BSD-3-Clause",
-      "dependencies": {
-        "randombytes": "^2.1.0"
+      "engines": {
+        "node": ">=20.0.0"
       }
     },
     "node_modules/sap-hdb-promisfied/node_modules/shebang-command": {
@@ -23006,9 +22977,9 @@
       }
     },
     "node_modules/sap-hdb-promisfied/node_modules/yargs": {
-      "version": "17.7.2",
-      "resolved": "https://registry.npmjs.org/yargs/-/yargs-17.7.2.tgz",
-      "integrity": "sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w==",
+      "version": "17.7.3",
+      "resolved": "https://registry.npmjs.org/yargs/-/yargs-17.7.3.tgz",
+      "integrity": "sha512-GZtjxm/J/4TSxuL3FNYjCmLktBTnIw/rVmKSIyKeYAZpmJB2ig9VauCC5xsa82GNKVKDAqpOn3KVzNt0zmrU0g==",
       "extraneous": true,
       "license": "MIT",
       "dependencies": {
@@ -23515,6 +23486,7 @@
       "version": "0.6.1",
       "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz",
       "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==",
+      "dev": true,
       "license": "BSD-3-Clause",
       "engines": {
         "node": ">=0.10.0"

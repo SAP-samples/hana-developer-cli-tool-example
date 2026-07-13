@@ -54,7 +54,8 @@
     "release:notes": "node scripts/extract-release-notes.js",
     "build:vue": "cd app/vue && npm run build",
     "build:vscode": "cd app/vue && npm run build:vscode && cd ../../vscode-extension && npm run bundle",
-    "prepack": "npm run build:vue"
+    "package:vscode": "npm run build:vscode && cd vscode-extension && node -e \"const fs=require('fs');for(const f of fs.readdirSync('.'))if(f.endsWith('.vsix'))fs.rmSync(f)\" && npx vsce package --no-dependencies",
+    "prepack": "npm run build:vue && npm run package:vscode"
   },
   "repository": {
     "type": "git",
@@ -110,7 +111,7 @@
     "ora": "^9.4.0",
     "properties": "^1.2.1",
     "rxjs": "^7.8.1",
-    "sap-hdb-promisfied": "2.202606.2",
+    "sap-hdb-promisfied": "2.202607.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "terminal-kit": "^3.1.1",

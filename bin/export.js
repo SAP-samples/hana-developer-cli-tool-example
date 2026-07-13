@@ -294,12 +294,17 @@ export async function exportData(prompts) {
     }
 
     // Export based on format
+    const fsp = (await import('fs')).promises
     if (prompts.format === 'json') {
-      await exportJSON(outputFile, rows, prompts.nullValue)
+      await fsp.writeFile(outputFile, serializeJSON(rows), 'utf8')
     } else if (prompts.format === 'excel') {
-      await exportExcel(outputFile, table, rows, prompts.nullValue)
+      await fsp.writeFile(outputFile, await serializeExcel(rows, { sheetName: table, nullValue: prompts.nullValue }))
     } else {
-      await exportCSV(outputFile, rows, prompts.delimiter, prompts.includeHeaders, prompts.nullValue)
+      await fsp.writeFile(outputFile, serializeCSV(rows, {
+        delimiter: prompts.delimiter,
+        includeHeaders: prompts.includeHeaders,
+        nullValue: prompts.nullValue
+      }), 'utf8')
     }
 
     const elapsed = Date.now() - startTime
@@ -327,152 +332,91 @@ export async function exportData(prompts) {
 }
 
 /**
- * Export rows to CSV file
- * @param {string} filePath - Output file path
- * @param {Array<object>} rows - Data rows to export
- * @param {string} delimiter - CSV delimiter
- * @param {boolean} includeHeaders - Whether to include header row
- * @param {string} nullValue - Value to use for NULL cells
- * @returns {Promise<void>}
+ * Serialize rows to CSV string
+ * @param {Array<object>} rows
+ * @param {{delimiter?:string, includeHeaders?:boolean, nullValue?:string}} opts
+ * @returns {string}
  */
-async function exportCSV(filePath, rows, delimiter = ',', includeHeaders = true, nullValue = '') {
-  const fs = await import('fs')
-  const base = await import('../utils/base.js')
-
-  if (!rows || rows.length === 0) {
-    base.debug('No rows to export')
-    return
+export function serializeCSV(rows, { delimiter = ',', includeHeaders = true, nullValue = '' } = {}) {
+  if (!rows || rows.length === 0) return ''
+  const headers = Object.keys(rows[0])
+  let csv = ''
+  if (includeHeaders) {
+    csv += headers.map(h => escapeCSVField(String(h), delimiter)).join(delimiter) + '\n'
   }
+  for (const row of rows) {
+    const values = headers.map(header => {
+      const value = row[header]
+      const s = value === null || value === undefined ? nullValue : String(value)
+      return escapeCSVField(s, delimiter)
+    })
+    csv += values.join(delimiter) + '\n'
+  }
+  return csv
+}
 
-  try {
+/**
+ * Serialize rows to an Excel workbook Buffer
+ * @param {Array<object>} rows
+ * @param {{sheetName?:string, nullValue?:string}} opts
+ * @returns {Promise<Buffer>}
+ */
+export async function serializeExcel(rows, { sheetName = 'Sheet1', nullValue = '' } = {}) {
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet(String(sheetName).substring(0, 31))
+  if (rows && rows.length > 0) {
     const headers = Object.keys(rows[0])
-    let csvContent = ''
-
-    // Add headers
-    if (includeHeaders) {
-      csvContent += headers.map(h => escapeCSVField(String(h))).join(delimiter) + '\n'
-    }
-
-    // Add rows
+    const headerRow = worksheet.addRow(headers)
+    headerRow.font = { bold: true }
+    headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD3D3D3' } }
     for (const row of rows) {
-      const values = headers.map(header => {
-        const value = row[header]
-        const stringValue = value === null || value === undefined ? nullValue : String(value)
-        return escapeCSVField(stringValue)
-      })
-      csvContent += values.join(delimiter) + '\n'
+      worksheet.addRow(headers.map(h => {
+        const value = row[h]
+        return value === null || value === undefined ? nullValue : value
+      }))
     }
-
-    await fs.promises.writeFile(filePath, csvContent, 'utf8')
-    base.debug(`CSV file written: ${filePath}`)
-
-  } catch (error) {
-    throw new Error(`File write error for ${filePath}: ${error.message}`)
+    const sheetValues = worksheet.getSheetValues().slice(1)
+    headers.forEach((header, index) => {
+      const column = worksheet.getColumn(index + 1)
+      let maxLength = header.length
+      for (const r of sheetValues) {
+        if (r != null && r[index + 1] != null) maxLength = Math.max(maxLength, String(r[index + 1]).length)
+      }
+      column.width = Math.min(maxLength + 2, 50)
+    })
   }
+  const buf = await workbook.xlsx.writeBuffer()
+  return Buffer.isBuffer(buf) ? buf : Buffer.from(buf)
+}
+
+/**
+ * Serialize rows to a JSON string
+ * @param {Array<object>} rows
+ * @param {{nullValue?:string}} opts
+ * @returns {string}
+ */
+export function serializeJSON(rows /* , opts */) {
+  if (!rows || rows.length === 0) return '[]'
+  const processed = rows.map(row => {
+    const out = {}
+    for (const [k, v] of Object.entries(row)) out[k] = v === null || v === undefined ? null : v
+    return out
+  })
+  return JSON.stringify(processed, null, 2)
 }
 
 /**
  * Escape CSV field value
  * @param {string} field - Field value
+ * @param {string} [delimiter=','] - Active delimiter character
  * @returns {string}
  */
-function escapeCSVField(field) {
+function escapeCSVField(field, delimiter = ',') {
   if (!field) return ''
-  if (field.includes(',') || field.includes('"') || field.includes('\n')) {
+  if (field.includes(delimiter) || field.includes('"') || field.includes('\n')) {
     return `"${field.replace(/"/g, '""')}"` // Escape quotes by doubling them
   }
   return field
-}
-
-/**
- * Export rows to Excel file
- * @param {string} filePath - Output file path
- * @param {string} sheetName - Worksheet name
- * @param {Array<object>} rows - Data rows to export
- * @param {string} nullValue - Value to use for NULL cells
- * @returns {Promise<void>}
- */
-async function exportExcel(filePath, sheetName, rows, nullValue = '') {
-  const base = await import('../utils/base.js')
-
-  if (!rows || rows.length === 0) {
-    base.debug('No rows to export')
-    return
-  }
-
-  try {
-    const workbook = new ExcelJS.Workbook()
-    const worksheet = workbook.addWorksheet(sheetName.substring(0, 31)) // Excel sheet name limit
-
-    const headers = Object.keys(rows[0])
-    
-    // Add headers
-    const headerRow = worksheet.addRow(headers)
-    headerRow.font = { bold: true }
-    headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD3D3D3' } }
-
-    // Add rows
-    for (const row of rows) {
-      const values = headers.map(header => {
-        const value = row[header]
-        return value === null || value === undefined ? nullValue : value
-      })
-      worksheet.addRow(values)
-    }
-
-    // Auto-fit columns
-    headers.forEach((header, index) => {
-      const column = worksheet.getColumn(index + 1)
-      let maxLength = header.length
-      for (const row of worksheet.getSheetValues().slice(1)) {
-        if (row[index + 1]) {
-          maxLength = Math.max(maxLength, String(row[index + 1]).length)
-        }
-      }
-      column.width = Math.min(maxLength + 2, 50)
-    })
-
-    await workbook.xlsx.writeFile(filePath)
-    base.debug(`Excel file written: ${filePath}`)
-
-  } catch (error) {
-    throw new Error(`File write error for ${filePath}: ${error.message}`)
-  }
-}
-
-/**
- * Export rows to JSON file
- * @param {string} filePath - Output file path
- * @param {Array<object>} rows - Data rows to export
- * @param {string} nullValue - Value to use for NULL cells (not used for JSON)
- * @returns {Promise<void>}
- */
-async function exportJSON(filePath, rows, nullValue = '') {
-  const fs = await import('fs')
-  const base = await import('../utils/base.js')
-
-  if (!rows || rows.length === 0) {
-    base.debug('No rows to export')
-    return
-  }
-
-  try {
-    // Convert null values
-    const processedRows = rows.map(row => {
-      const processed = {}
-      for (const [key, value] of Object.entries(row)) {
-        processed[key] = value === null || value === undefined ? null : value
-      }
-      return processed
-    })
-
-    const jsonContent = JSON.stringify(processedRows, null, 2)
-    await fs.promises.writeFile(filePath, jsonContent, 'utf8')
-    base.debug(`JSON file written: ${filePath}`)
-
-  } catch (error) {
-    throw new Error(`File write error for ${filePath}: ${error.message}`)
-  }
 }
 
 /**

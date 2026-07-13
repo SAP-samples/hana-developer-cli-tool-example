@@ -47,9 +47,27 @@ function getCommandDocsIndex() {
 export function route (app) {
     base.debug('Static Route')
 
-    app.use('/ui', express.static(path.join(__dirname, '../app/vue/dist')))
+    app.use('/ui', express.static(path.join(__dirname, '../app/vue/dist'), {
+        // Hashed assets (index-<hash>.js/.css) are immutable and safe to cache
+        // forever, but index.html holds the pointers to those hashes and MUST
+        // be revalidated so a rebuild's new hashes are always picked up.
+        setHeaders: (res, filePath) => {
+            if (filePath.endsWith('index.html')) {
+                res.setHeader('Cache-Control', 'no-cache')
+            }
+        }
+    }))
 
-    app.get('/ui/{*splat}', (req, res) => {
+    app.get('/ui/{*splat}', (req, res, next) => {
+        // SPA fallback for client-side navigation routes only. A request that
+        // reaches here with a file extension (e.g. a missing /ui/assets/*.js)
+        // is a genuinely absent file — fall through to the 404 handler rather
+        // than returning index.html, which would be served as text/html and
+        // trigger a "MIME type text/html" module-script error in the browser.
+        if (path.extname(req.path)) {
+            return next()
+        }
+        res.setHeader('Cache-Control', 'no-cache')
         res.sendFile(path.join(__dirname, '../app/vue/dist/index.html'))
     })
 

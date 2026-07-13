@@ -30,6 +30,26 @@ describe('Static Route - HTTP Integration Tests', function () {
                     expect(response.text).to.include('<!DOCTYPE html>')
                 }
             })
+
+            it('should NOT serve the SPA shell for a missing hashed asset (avoids MIME error)', async function () {
+                // A stale/cached index.html can request an old asset hash that no
+                // longer exists after a rebuild. The SPA fallback must NOT return
+                // index.html for such requests — that would be served as
+                // text/html and break module script loading in the browser.
+                const response = await request(app).get('/ui/assets/index-DOESNOTEXIST.js')
+                expect(response.status).to.not.equal(200)
+                // Must not be the Vue SPA shell (which mounts on #app)
+                expect(response.text).to.not.include('id="app"')
+            })
+
+            it('should serve index.html with no-cache so new asset hashes are picked up', async function () {
+                const response = await request(app).get('/ui/')
+                expect(response.status).to.not.equal(404)
+                expect(response.status).to.be.oneOf([200, 304])
+                if (response.status === 200) {
+                    expect(response.headers['cache-control']).to.equal('no-cache')
+                }
+            })
         })
 
         describe('/i18n static files', function () {

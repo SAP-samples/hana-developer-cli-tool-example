@@ -103,6 +103,11 @@ export const router = createRouter({
       component: () => import('./views/Import.vue')
     },
     {
+      path: '/export',
+      name: 'export',
+      component: () => import('./views/Export.vue')
+    },
+    {
       path: '/mass-convert',
       name: 'massConvert',
       component: () => import('./views/MassConvert.vue')
