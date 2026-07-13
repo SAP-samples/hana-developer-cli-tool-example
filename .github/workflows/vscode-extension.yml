@@ -38,7 +38,7 @@ jobs:
       - run: cd vscode-extension && npm run compile
       - run: cd vscode-extension && npm run bundle
       - run: cd vscode-extension && npx vsce package --no-dependencies
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: matrix.os == 'ubuntu-latest' && matrix.node == 22
         with:
           name: vsix
