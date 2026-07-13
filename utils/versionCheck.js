@@ -1,9 +1,8 @@
 // @ts-check
 import * as base from './base.js'
-import { createRequire } from 'module'
-const require = createRequire(import.meta.url)
-const check = require('check-node-version')
+import check from 'check-node-version'
 import chalk from 'chalk'
+import pkg from '../package.json' with { type: 'json' }
 
 /**
  * Check if the current Node.js version meets the required version specified in package.json
@@ -12,7 +11,7 @@ import chalk from 'chalk'
 export function checkVersion() {
     return new Promise(resolve => {
 
-        const version = require("../package.json").engines.node
+        const version = pkg.engines.node
         base.debug(base.bundle.getText('requestedVersion', [version]))
         check({ node: version },
             (error, results) => {

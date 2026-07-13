@@ -16,7 +16,7 @@ export default [
   cdsPlugin.configs.recommended,
   {
     languageOptions: {
-      ecmaVersion: 2022,
+      ecmaVersion: 2025,
       sourceType: 'module',
       globals: {
         Atomics: 'readonly',
