@@ -15,7 +15,7 @@ Answers for common questions from users and contributors.
 
 ### Q: What's the minimum Node.js version required?
 
-**A:** Node.js 20.19.0 or higher.
+**A:** Node.js 22.0.0 or higher. **Node.js 24 (LTS) is highly recommended**, in line with the SAP CAP 10 recommendation.
 
 ```bash
 node --version

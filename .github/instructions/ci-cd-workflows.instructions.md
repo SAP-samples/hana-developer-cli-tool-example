@@ -68,8 +68,8 @@ npm run docs:build
 
 **Matrix Strategy:**
 - **Operating Systems**: Ubuntu, Windows, macOS
-- **Node.js Versions**: 20.x, 22.x, 24.x
-- **Total Combinations**: 9 test runs per trigger
+- **Node.js Versions**: 22.x, 24.x
+- **Total Combinations**: 6 test runs per trigger
 
 **Jobs:**
 
@@ -78,7 +78,7 @@ npm run docs:build
 - Run linter (continue-on-error: true)
 - Execute `npm run test:platform`
 - Upload test results and coverage artifacts
-- Upload coverage to Codecov (Ubuntu + Node 20.x only)
+- Upload coverage to Codecov (Ubuntu + Node 22.x only)
 
 **2. platform-verification** - Verify CLI installation
 - Test `npm link` and `hana-cli --version`

@@ -157,7 +157,7 @@ code --install-extension hana-cli-0.1.0.vsix
 ## Requirements
 
 - **VS Code** 1.85.0 or later
-- **Node.js** 20.19.0+ (for the embedded server)
+- **Node.js** 22.0.0+ (Node.js 24 LTS recommended, for the embedded server)
 - **hana-cli** installed globally or the extension includes its dependencies
 
 ### Compatibility

@@ -13,7 +13,7 @@ See the [Changelog](/99-reference/changelog) for complete details on all changes
 
 ## Prerequisites
 
-- **Node.js**: Version 20.19.0 or later
+- **Node.js**: Version 22.0.0 or later required; **Node.js 24 (LTS) is highly recommended** (aligns with the SAP CAP 10 recommendation)
   - Download from [nodejs.org](https://nodejs.org/)
   - Verify: `node --version`
 

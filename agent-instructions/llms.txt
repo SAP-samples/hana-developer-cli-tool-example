@@ -3,7 +3,7 @@
 > SAP HANA Developer CLI Tool — simplifies database development operations
 
 ## Install: npm install -g hana-cli
-## Version: 4.202603.2
+## Version: 4.202607.0
 ## Docs: https://github.com/SAP-samples/hana-developer-cli-tool-example
 
 ## Commands
@@ -128,6 +128,8 @@
 - massRename (mr, massrename, massRN, massrn): Rename objects in bulk
 - massUpdate (mu, massupdate, massUpd, massupd): Update many records at once
 - massUsers (massUser, mUsers, mUser, mu): Mass Operations
+- mcpServerInstall (mcp, mcpInstall, mcp-install): Developer Tools
+- mcpServerStatus (mcp-status, mcpStatus): Developer Tools
 - memoryAnalysis: Analyze memory consumption
 - memoryLeaks (memleak, ml): Find potential memory leaks
 - objects (o, listObjects, listobjects): List all database objects
@@ -176,6 +178,7 @@
 - version: Check HANA version
 - viewDocs (docs, doc, documentation): Developer Tools
 - views (v, listViews, listviews): List views
+- vscode (code, extension): Other
 - workloadManagement (wlm, workloads, workloadClass, workloadmgmt): Manage workload assignments
 - xsaServices (xsa, xsaSvc, xsaservices): Manage XSA services
 

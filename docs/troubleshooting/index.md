@@ -506,7 +506,7 @@ hana-cli <command> --debug --verbose | Tee-Object -FilePath hana-cli-debug.log
    ```
 
 2. **Upgrade to the required version**
-   - hana-cli requires Node.js 20.19.0 or later
+   - hana-cli requires Node.js 22.0.0 or later (Node.js 24 LTS recommended)
    - See the [Installation Guide](../01-getting-started/installation.md) for platform-specific steps
 
 #### Insufficient Privileges

@@ -159,7 +159,7 @@ The MCP server now properly exposes and documents all new commands added in rece
 ## Version Compatibility
 
 - **MCP SDK:** ^1.26.0
-- **Node.js:** ≥20.19.0 (matching parent project)
+- **Node.js:** ≥22.0.0, Node.js 24 LTS recommended (matching parent project)
 - **TypeScript:** ^5.7.3
 - **CLI Version:** 4.202602.0 and later
 

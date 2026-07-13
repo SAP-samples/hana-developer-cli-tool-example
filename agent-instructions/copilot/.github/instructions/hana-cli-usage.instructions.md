@@ -9,8 +9,8 @@ applyTo: "*.hdbcds,*.hdbtable,*.hdbview,*.hdbprocedure,*.hdbfunction,*.cds,mta.y
 
 hana-cli (npm: hana-cli, install: `npm install -g hana-cli`) is a command-line tool for SAP HANA database development. It simplifies complex multi-step database operations into single commands. It is a development tool, not a replacement for hdbsql or production admin tools.
 
-**Version:** 4.202603.2  
-**Requirements:** Node.js ≥ 20.19.0  
+**Version:** 4.202607.0  
+**Requirements:** Node.js ≥ 22.0.0 (Node.js 24 LTS recommended)
 **Module:** ESM (`"type": "module"`)
 
 ## When to Use hana-cli

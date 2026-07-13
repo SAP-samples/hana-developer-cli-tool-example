@@ -183,7 +183,7 @@ npm run build
 - **MCP Server Version:** 1.202602.0
 - **Main CLI Version:** 4.202602.0
 - **MCP SDK:** ^1.26.0
-- **Node.js:** ≥20.19.0
+- **Node.js:** ≥22.0.0 (Node.js 24 LTS recommended)
 - **TypeScript:** ^5.7.3
 
 ## Configuration

@@ -1,6 +1,6 @@
 # hana-cli Quick Start Guide
 
-> Generated from hana-cli v4.202603.2 on 2026-03-17
+> Generated from hana-cli v4.202607.0 on 2026-07-13
 
 ## Install
 

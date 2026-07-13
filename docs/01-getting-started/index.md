@@ -34,7 +34,7 @@ npm link
 
 **Requirements:**
 
-- [Node.js 20.19.0 or later](https://nodejs.org/)
+- [Node.js 22 or later](https://nodejs.org/) — **Node.js 24 (LTS) highly recommended** (follows SAP CAP 10 guidance)
 - Access to a SAP HANA database instance
 
 [Full Installation Guide →](./installation.md)
