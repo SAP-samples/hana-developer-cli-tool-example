@@ -3,11 +3,9 @@ import * as baseLite from '../utils/base-lite.js'
 import { buildDocEpilogue } from '../utils/doc-linker.js'
 import { execFileSync } from 'child_process'
 import { existsSync, readdirSync } from 'fs'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { join } from 'path'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const __dirname = import.meta.dirname
 
 const EXTENSION_ID = 'SAP-samples.hana-cli'
 const VSIX_DIR = join(__dirname, '..', 'vscode-extension')
