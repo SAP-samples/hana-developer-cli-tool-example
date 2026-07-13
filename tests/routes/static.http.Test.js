@@ -44,6 +44,8 @@ describe('Static Route - HTTP Integration Tests', function () {
 
             it('should serve index.html with no-cache so new asset hashes are picked up', async function () {
                 const response = await request(app).get('/ui/')
+                expect(response.status).to.not.equal(404)
+                expect(response.status).to.be.oneOf([200, 304])
                 if (response.status === 200) {
                     expect(response.headers['cache-control']).to.equal('no-cache')
                 }

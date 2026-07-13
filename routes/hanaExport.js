@@ -70,7 +70,7 @@ export function route (app) {
       let limit = 1000000
       if (q.limit !== undefined && q.limit !== '') {
         const n = Number(q.limit)
-        if (!Number.isInteger(n) || n < 0) {
+        if (!Number.isInteger(n) || n < 1) {
           return res.status(400).json({ error: 'Invalid limit' })
         }
         limit = n
