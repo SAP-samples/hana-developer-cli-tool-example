@@ -670,7 +670,7 @@ testTables().catch(console.error);
 
 ❌ **Missing error analysis** → Users get raw errors without actionable guidance
 
-❌ **Hardcoding file paths** → Use `fileURLToPath()` and `dirname()` for portability
+❌ **Hardcoding file paths** → Use `import.meta.dirname` (Node 20.11+) or `fileURLToPath()` for portability
 
 ❌ **Not handling SIGINT** → Server doesn't cleanup properly on interrupt
 

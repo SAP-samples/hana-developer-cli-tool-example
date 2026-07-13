@@ -54,11 +54,9 @@ This guide applies to automation and code generation scripts in the `scripts/` f
 
 import fs from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
 
-// Get __dirname equivalent in ESM
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+// Node 20.11+: import.meta.dirname / import.meta.filename
+const __dirname = import.meta.dirname
 
 // Constants
 const SOURCE_DIR = path.join(__dirname, 'source')
@@ -90,11 +88,10 @@ main()
 ### Pattern: Get __dirname in ESM
 
 ```javascript
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { join } from 'path'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+// Node 20.11+: import.meta.dirname / import.meta.filename
+const __dirname = import.meta.dirname
 
 // Use with path operations
 const BIN_DIR = join(__dirname, 'bin')
