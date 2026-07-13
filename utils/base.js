@@ -3,9 +3,7 @@
  * @module base - Central functionality shared by all the various commands
  */
 
-import { fileURLToPath } from 'url'
-import { URL } from 'url'
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
+const __dirname = import.meta.dirname
 import { createRequire } from 'module'
 import { execSync } from 'child_process'
 
