@@ -109,7 +109,14 @@ export function injectConnection(conn: HanaConnection): void {
   process.env.HANA_CLI_USER = conn.user
   process.env.HANA_CLI_PASSWORD = conn.password
   process.env.HANA_CLI_DATABASE = 'SYSTEMDB'
+  // Propagate the container schema so hana-cli issues SET SCHEMA on connect.
+  // Without it, CURRENT_SCHEMA stays the empty HDI runtime user schema and
+  // schema-filtered commands (tables, views, ...) return no rows. Clear any
+  // stale value when the new connection has no schema, to avoid leaking it
+  // across connection switches.
   if (conn.schema) {
     process.env.HANA_CLI_SCHEMA = conn.schema
+  } else {
+    delete process.env.HANA_CLI_SCHEMA
   }
 }

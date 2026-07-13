@@ -422,6 +422,56 @@ describe('connections.js - Connection Options (Isolated Tests)', () => {
     })
 })
 
+describe('connections.js - Direct (env var) Connection', () => {
+    const saved = {}
+    const ENV_KEYS = [
+        'HANA_CLI_HOST', 'HANA_CLI_PORT', 'HANA_CLI_USER',
+        'HANA_CLI_PASSWORD', 'HANA_CLI_DATABASE', 'HANA_CLI_SCHEMA'
+    ]
+
+    beforeEach(() => {
+        for (const k of ENV_KEYS) { saved[k] = process.env[k]; delete process.env[k] }
+        process.env.HANA_CLI_HOST = 'db.example.com'
+        process.env.HANA_CLI_PORT = '443'
+        process.env.HANA_CLI_USER = 'CONTAINER_RT'
+        process.env.HANA_CLI_PASSWORD = 'secret'
+        process.env.HANA_CLI_DATABASE = 'SYSTEMDB'
+    })
+
+    afterEach(() => {
+        for (const k of ENV_KEYS) {
+            if (saved[k] === undefined) { delete process.env[k] }
+            else { process.env[k] = saved[k] }
+        }
+    })
+
+    it('should build a direct connection from HANA_CLI_* env vars', async () => {
+        const connections = await import('../../utils/connections.js')
+        const options = await connections.getConnOptions({})
+        expect(options.hana.host).to.equal('db.example.com')
+        expect(options.hana.port).to.equal(443)
+        expect(options.hana.user).to.equal('CONTAINER_RT')
+        expect(options.hana.database).to.equal('SYSTEMDB')
+    })
+
+    it('should NOT set schema when HANA_CLI_SCHEMA is unset', async () => {
+        // Regression guard: without a schema, setSchema() skips SET SCHEMA and
+        // CURRENT_SCHEMA stays the empty HDI runtime user schema.
+        const connections = await import('../../utils/connections.js')
+        const options = await connections.getConnOptions({})
+        expect(options.hana).to.not.have.property('schema')
+    })
+
+    it('should propagate HANA_CLI_SCHEMA into the connection options', async () => {
+        // The fix: propagating the container schema makes createConnection issue
+        // SET SCHEMA on connect, so schema-filtered commands (tables, views) work.
+        process.env.HANA_CLI_SCHEMA = 'MY_CONTAINER'
+        const connections = await import('../../utils/connections.js')
+        const options = await connections.getConnOptions({})
+        expect(options.hana.schema).to.equal('MY_CONTAINER')
+    })
+})
+
 describe('connections.js - Module Exports', () => {
     let connections
     

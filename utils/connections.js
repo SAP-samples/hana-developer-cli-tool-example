@@ -298,6 +298,12 @@ export async function getConnOptions(prompts) {
                 database: process.env.HANA_CLI_DATABASE || 'SYSTEMDB',
             }
         };
+        // Propagate the container/default schema so setSchema() issues SET SCHEMA on
+        // connect. Without this, CURRENT_SCHEMA stays the (empty) HDI runtime user
+        // schema and schema-filtered commands (tables, views, ...) return no rows.
+        if (process.env.HANA_CLI_SCHEMA) {
+            directConnection.hana.schema = process.env.HANA_CLI_SCHEMA;
+        }
         base.debug('Using direct database connection from MCP context');
         return directConnection;
     }
