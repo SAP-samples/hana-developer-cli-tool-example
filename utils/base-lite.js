@@ -83,7 +83,8 @@ export const debug = (...args) => {
 }
 
 import * as locale from "./locale.js"
-const TextBundle = require('@sap/textbundle').TextBundle
+import TextBundleModule from '@sap/textbundle'
+const { TextBundle } = TextBundleModule
 
 /**
  * Parse .properties file content into a key-value map.
