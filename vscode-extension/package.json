@@ -186,5 +186,9 @@
     "glob": "^13.0.6",
     "mocha": "^11.0.0",
     "typescript": "^7.0.2"
+  },
+  "overrides": {
+    "serialize-javascript": "^7.0.5",
+    "diff": "^8.0.3"
   }
 }
