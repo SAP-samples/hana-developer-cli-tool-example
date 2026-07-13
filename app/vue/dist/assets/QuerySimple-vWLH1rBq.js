@@ -1,0 +1,1 @@
+import{A as e,l as t,v as n}from"./_plugin-vue_export-helper-p2JYVKvd.js";import{t as r}from"./QueryEditor-CiDHRmdS.js";var i=n({__name:`QuerySimple`,setup(n){return(n,i)=>(e(),t(r))}});export{i as default};

@@ -1,0 +1,1 @@
+import{A as e,l as t,v as n}from"./_plugin-vue_export-helper-p2JYVKvd.js";import{t as r}from"./DynamicTableView-DkVyolQ9.js";var i=n({__name:`HDI`,setup(n){return(n,i)=>(e(),t(r,{title:`HDI Containers`,endpoint:`hdi-ui`,filters:[]}))}});export{i as default};
