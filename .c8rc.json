@@ -21,7 +21,8 @@
     "text",
     "text-summary",
     "html",
-    "lcov"
+    "lcov",
+    "json"
   ],
   "report-dir": "./coverage",
   "temp-dir": "./.nyc_output",
@@ -29,8 +30,5 @@
   "lines": 80,
   "statements": 80,
   "functions": 80,
-  "branches": 80,
-  "cache": true,
-  "sourceMap": false,
-  "instrument": true
+  "branches": 80
 }
