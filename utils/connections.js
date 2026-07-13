@@ -18,8 +18,6 @@ const cdsrcPrivateCache = new Map()
 //import cds from '@sap/cds'
 // @ts-ignore
 //const LOG = cds.log('bind')
-//import { createRequire } from 'module'
-//const require = createRequire(import.meta.url)
 
 
 /**

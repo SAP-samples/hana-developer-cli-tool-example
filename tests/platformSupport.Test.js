@@ -122,7 +122,7 @@ describe('Cross-Platform Support Tests @all', function () {
         })
         
         it('should work with __dirname equivalent in ES modules', function () {
-            // __dirname is defined at the top using fileURLToPath
+            // __dirname is defined at the top using import.meta.dirname
             expect(__dirname).to.be.a('string')
             expect(path.isAbsolute(__dirname)).to.be.true
         })
