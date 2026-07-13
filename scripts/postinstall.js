@@ -2,11 +2,9 @@
 
 import pkg from '@sap/textbundle';
 const { TextBundle } = pkg;
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { join } from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = import.meta.dirname;
 
 const bundle = new TextBundle(join(__dirname, '..', '_i18n', 'messages.properties'));
 

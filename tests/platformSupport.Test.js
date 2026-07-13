@@ -2,10 +2,9 @@ import { expect } from 'chai'
 import path from 'path'
 import os from 'os'
 import fs from 'fs'
-import { fileURLToPath } from 'url'
 import mock from 'mock-fs'
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
+const __dirname = import.meta.dirname
 
 /**
  * Cross-Platform Support Tests
@@ -235,7 +234,7 @@ describe('Cross-Platform Support Tests @all', function () {
         
         it('should resolve ES module imports correctly', async function () {
             // Test that import.meta.url works
-            const currentFile = fileURLToPath(import.meta.url)
+            const currentFile = import.meta.filename
             expect(currentFile).to.be.a('string')
             expect(path.isAbsolute(currentFile)).to.be.true
         })

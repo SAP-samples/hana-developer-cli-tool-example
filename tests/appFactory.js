@@ -8,9 +8,8 @@
 import express from 'express'
 import path from 'path'
 import { glob } from 'glob'
-import { fileURLToPath } from 'url'
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url))
+const __dirname = import.meta.dirname
 
 /**
  * Creates an Express app with all routes loaded for testing

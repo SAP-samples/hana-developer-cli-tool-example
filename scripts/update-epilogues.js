@@ -6,10 +6,9 @@
 
 import fs from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
 import { commandMetadata } from '../bin/commandMetadata.js'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const __dirname = import.meta.dirname
 const binDir = path.join(__dirname, '..', 'bin')
 
 /**
