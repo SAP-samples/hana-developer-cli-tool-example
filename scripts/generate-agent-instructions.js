@@ -42,7 +42,7 @@ const FORCE = process.argv.includes('--force')
  * @returns {Promise<Record<string, {category: string, relatedCommands?: string[]}>>}
  */
 async function loadCommandMetadata() {
-    const mod = await import('./bin/commandMetadata.js')
+    const mod = await import('../bin/commandMetadata.js')
     return mod.commandMetadata
 }
 
@@ -51,7 +51,7 @@ async function loadCommandMetadata() {
  */
 async function loadEnrichedMetadata() {
     try {
-        const mod = await import('./mcp-server/build/command-metadata.js')
+        const mod = await import('../mcp-server/build/command-metadata.js')
         return {
             enriched: mod.COMMAND_METADATA_MAP || {},
             categories: mod.CATEGORIES || {},
@@ -68,7 +68,7 @@ async function loadEnrichedMetadata() {
  */
 async function loadExamplesPresets() {
     try {
-        const mod = await import('./mcp-server/build/examples-presets.js')
+        const mod = await import('../mcp-server/build/examples-presets.js')
         return {
             examples: mod.COMMAND_EXAMPLES || {},
             presets: mod.COMMAND_PRESETS || {},
@@ -220,7 +220,7 @@ function buildCanonicalCommands(commandMeta, commandFiles, enriched, examples, p
  * Get the package version
  */
 function getVersion() {
-    const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8'))
+    const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8'))
     return pkg.version
 }
 
@@ -271,7 +271,7 @@ function generateReference(canonical, categories, workflows, version) {
     lines.push(`npm install -g hana-cli`)
     lines.push('```')
     lines.push(``)
-    lines.push(`**Requirements:** Node.js ≥ 20.19.0`)
+    lines.push(`**Requirements:** Node.js ≥ 22.0.0 (Node.js 24 LTS recommended)`)
     lines.push(``)
     lines.push(`### Connection Setup`)
     lines.push(``)
@@ -767,7 +767,7 @@ function agentPreamble(version) {
 hana-cli (npm: hana-cli, install: \`npm install -g hana-cli\`) is a command-line tool for SAP HANA database development. It simplifies complex multi-step database operations into single commands. It is a development tool, not a replacement for hdbsql or production admin tools.
 
 **Version:** ${version}  
-**Requirements:** Node.js ≥ 20.19.0  
+**Requirements:** Node.js ≥ 22.0.0 (Node.js 24 LTS recommended)
 **Module:** ESM (\`"type": "module"\`)
 
 ## When to Use hana-cli

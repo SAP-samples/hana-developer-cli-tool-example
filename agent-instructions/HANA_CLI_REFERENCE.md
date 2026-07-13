@@ -1,6 +1,6 @@
 # SAP HANA CLI (hana-cli) — Complete Command Reference
 
-> Generated from hana-cli v4.202603.2 on 2026-03-17
+> Generated from hana-cli v4.202607.0 on 2026-07-13
 > This file is auto-generated. Do not edit manually.
 
 ## What is hana-cli?
@@ -13,7 +13,7 @@
 npm install -g hana-cli
 ```
 
-**Requirements:** Node.js ≥ 20.19.0
+**Requirements:** Node.js ≥ 22.0.0 (Node.js 24 LTS recommended)
 
 ### Connection Setup
 
@@ -1020,6 +1020,33 @@ Developer utilities, templates, docs, and interactive helpers
 
 ---
 
+#### `mcpServerInstall`
+
+**Aliases:** `mcp`, `mcpInstall`, `mcp-install`
+**Syntax:** `hana-cli mcpServerInstall`
+
+**Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `--client` (`-c`) | string | `'auto'` | client |
+| `--name` (`-n`) | string | `'hana-cli'` | name |
+| `--dryRun` (`--dr`) | boolean | `false` | dryRun |
+| `--global` (`-g`) | boolean | `false` | global |
+
+**Related:** `mcpServerStatus`, `helpDocu`
+
+---
+
+#### `mcpServerStatus`
+
+**Aliases:** `mcp-status`, `mcpStatus`
+**Syntax:** `hana-cli mcpServerStatus`
+
+**Related:** `mcpServerInstall`, `helpDocu`
+
+---
+
 #### `readMe`
 
 **Aliases:** `readme`
@@ -1838,6 +1865,20 @@ Inspect tables, views, procedures, indexes, and related objects
 #### `commandMap`
 
 **Syntax:** `hana-cli commandMap`
+
+
+---
+
+#### `vscode`
+
+**Aliases:** `code`, `extension`
+**Syntax:** `hana-cli vscode [action]`
+
+**Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `--insiders` | boolean | `false` | Use code-insiders instead of code |
 
 
 ---
@@ -3417,6 +3458,8 @@ Diagnose and investigate system problems
 | `massRename` (mr, massrename, massRN, massrn) | Mass Operations | Rename objects in bulk |
 | `massUpdate` (mu, massupdate, massUpd, massupd) | Mass Operations | Update many records at once |
 | `massUsers` (massUser, mUsers, mUser, mu) | Mass Operations | Mass Operations |
+| `mcpServerInstall` (mcp, mcpInstall, mcp-install) | Developer Tools | Developer Tools |
+| `mcpServerStatus` (mcp-status, mcpStatus) | Developer Tools | Developer Tools |
 | `memoryAnalysis` | Performance Monitoring | Analyze memory consumption |
 | `memoryLeaks` (memleak, ml) | Performance Monitoring | Find potential memory leaks |
 | `objects` (o, listObjects, listobjects) | Schema Tools | List all database objects |
@@ -3465,5 +3508,6 @@ Diagnose and investigate system problems
 | `version` | System Tools | Check HANA version |
 | `viewDocs` (docs, doc, documentation) | Developer Tools | Developer Tools |
 | `views` (v, listViews, listviews) | Schema Tools | List views |
+| `vscode` (code, extension) | Other | Other |
 | `workloadManagement` (wlm, workloads, workloadClass, workloadmgmt) | System Admin | Manage workload assignments |
 | `xsaServices` (xsa, xsaSvc, xsaservices) | System Admin | Manage XSA services |

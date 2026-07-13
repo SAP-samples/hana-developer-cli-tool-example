@@ -16,6 +16,8 @@ Developer utilities, templates, docs, and interactive helpers
 | `interactive` | `i`, `repl`, `shell` | - |
 | `issue` | `Issue`, `openIssue`, `openissue`, `reportIssue`, `reportissue` | Report issues or get help |
 | `kb` | - | - |
+| `mcpServerInstall` | `mcp`, `mcpInstall`, `mcp-install` | - |
+| `mcpServerStatus` | `mcp-status`, `mcpStatus` | - |
 | `readMe` | `readme` | View help documentation |
 | `readMeUI` | `readmeui`, `readMeUi`, `readmeUI` | - |
 | `sdiTasks` | `sditasks`, `sdi`, `smartDataIntegration` | Manage SDI tasks |
@@ -175,6 +177,31 @@ hana-cli kb [query...]
 
 
 **Related:** `viewDocs`, `helpDocu`, `examples`
+
+---
+
+## `mcpServerInstall`
+
+**Aliases:** `mcp`, `mcpInstall`, `mcp-install`
+
+### Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `--client` (`-c`) | string | `'auto'` | client |
+| `--name` (`-n`) | string | `'hana-cli'` | name |
+| `--dryRun` (`--dr`) | boolean | `false` | dryRun |
+| `--global` (`-g`) | boolean | `false` | global |
+
+**Related:** `mcpServerStatus`, `helpDocu`
+
+---
+
+## `mcpServerStatus`
+
+**Aliases:** `mcp-status`, `mcpStatus`
+
+**Related:** `mcpServerInstall`, `helpDocu`
 
 ---
 

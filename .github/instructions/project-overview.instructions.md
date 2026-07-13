@@ -139,7 +139,7 @@ hana-developer-cli-tool-example/
 ## Technology Stack
 
 ### Runtime and Module System
-- **Node.js**: ≥20.19.0 required
+- **Node.js**: ≥22.0.0 required (Node.js 24 LTS highly recommended, following the SAP CAP 10 recommendation)
 - **Module System**: Pure ESM (`"type": "module"` in package.json)
 - **Import Pattern**: Always use `import`/`export`, never `require()`
 
@@ -155,7 +155,7 @@ hana-developer-cli-tool-example/
 - `@cap-js/sqlite` (2.1.3) via CAP/CDS for testing and local development
 
 ### SAP Cloud Application Programming Model (CAP)
-- **Core Framework**: `@sap/cds` (9.7.1)
+- **Core Framework**: `@sap/cds` (10.x)
 - **Extensions**:
   - GraphQL: `@cap-js/graphql` (0.14.0)
   - OData V2: `@cap-js-community/odata-v2-adapter` (1.15.9)
@@ -1130,7 +1130,7 @@ npm run changelog          # Generate CHANGELOG.md from CHANGELOG.json
 **File**: `scripts/postinstall.js`
 
 **Purpose:**
-- Validates Node.js version (≥20.19.0)
+- Validates Node.js version (≥22.0.0)
 - Checks for required dependencies
 - Displays installation success message
 - Shows quick start instructions

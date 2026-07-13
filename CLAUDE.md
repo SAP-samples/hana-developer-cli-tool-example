@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**hana-cli** is a developer-centric CLI tool for SAP HANA database development with 183+ commands. It supports four operating modes: CLI, interactive menu, REST API server, and MCP server (for AI assistants). It runs on Node.js ≥20.19.0 and is a pure ESM project (`"type": "module"`).
+**hana-cli** is a developer-centric CLI tool for SAP HANA database development with 183+ commands. It supports four operating modes: CLI, interactive menu, REST API server, and MCP server (for AI assistants). It targets SAP CAP 10 and runs on Node.js ≥22.0.0 (Node.js 24 LTS highly recommended, following the CAP 10 recommendation). It is a pure ESM project (`"type": "module"`).
 
 ## Commands
 
@@ -97,7 +97,7 @@ Most commands share: `--schema`/`-s` (defaults to `**CURRENT_SCHEMA**`), `--tabl
 - Config: `tests/.mocharc.json` (16 parallel jobs, 10s timeout)
 - Mocking: `sinon` + `esmock` for ESM mocking, `mock-fs` for filesystem, `supertest` for HTTP routes
 - Coverage threshold: 80% lines/functions/branches (enforced in CI via `npm run coverage:check`)
-- Cross-platform CI: Windows/macOS/Ubuntu × Node 20/22/24 in `.github/workflows/cross-platform-tests.yml`
+- Cross-platform CI: Windows/macOS/Ubuntu × Node 22/24 in `.github/workflows/cross-platform-tests.yml`
 
 ## Development Guides
 

@@ -118,7 +118,7 @@ graph LR
 
 Otherwise you can also run it from the sources as described here:
 
-- Install Node.js version 20.19.0 or later on your development machine [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
+- Install Node.js on your development machine [https://nodejs.org/en/download/](https://nodejs.org/en/download/). Version 22 or later is required; **Node.js 24 (LTS) is highly recommended**, following the SAP CAP 10 recommendation.
 
 - Clone the repository from [https://github.com/SAP-samples/hana-developer-cli-tool-example](https://github.com/SAP-samples/hana-developer-cli-tool-example)
 
