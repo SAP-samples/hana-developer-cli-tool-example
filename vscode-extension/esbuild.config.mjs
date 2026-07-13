@@ -199,12 +199,21 @@ await esbuild.build({
   minify: production,
   treeShaking: true,
   plugins: [resolveRoutesPlugin, stripCLIBootstrapPlugin, dynamicImportPlugin],
-  // Shim import.meta.url for CJS output — route/util modules use it for __dirname
+  // Shim import.meta.url/dirname/filename for CJS output — route/util modules use it for __dirname
   banner: {
-    js: 'var importMetaUrl = require("url").pathToFileURL(__filename).href;',
+    js: 'var importMetaUrl = require("url").pathToFileURL(__filename).href;var importMetaDirname = __dirname;var importMetaFilename = __filename;',
   },
   define: {
     'import.meta.url': 'importMetaUrl',
+    // CJS output: bundled source uses import.meta.dirname/filename (Node 20.11+).
+    // esbuild does not auto-shim these for CJS, so map them to banner variables.
+    // We cannot use '__dirname'/'__filename' directly here because esbuild renames
+    // local `const __dirname = import.meta.dirname` declarations — the define
+    // replacement would produce `const __dirname = __dirname` (self-reference,
+    // evals to undefined). Instead we use stable banner variable names that are
+    // never renamed by esbuild's minifier.
+    'import.meta.dirname': 'importMetaDirname',
+    'import.meta.filename': 'importMetaFilename',
   },
   // Treat non-JS files (like README) that get pulled in as empty
   loader: { '.README': 'empty' },
