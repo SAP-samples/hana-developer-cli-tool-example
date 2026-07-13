@@ -296,49 +296,50 @@ export const getTerminal = async () => {
     return tk.terminal
 }
 
-// Import terminal-kit synchronously for backward compatibility with existing code
-// @ts-ignore
-import terminalKit from 'terminal-kit'
-
-// Wrap terminal access to handle test environments where terminal may not be available
-let _terminal = null
-try {
-	if (process.env.NODE_ENV !== 'test') {
-		_terminal = terminalKit.terminal
-	} else {
-		// Provide stub terminal for test environment that outputs to console
-		_terminal = {
-			table: (data) => {
-				// In test mode, use console.table to ensure output is captured
-				if (data && Array.isArray(data) && data.length > 0) {
-					console.table(data)
-				}
-			},
-			progressBar: () => ({
-				startItem: () => {},
-				itemDone: () => {},
-				stop: () => {}
-			})
-		}
-	}
-} catch (error) {
-    console.warn(bundle.getText("warning.terminalKitInitFail", [error.message]))
-	// Provide stub terminal that outputs to console
-	_terminal = {
-		table: (data) => {
-			// Fallback: use console.table to ensure output
-			if (data && Array.isArray(data) && data.length > 0) {
-				console.table(data)
-			}
-		},
-		progressBar: () => ({
-			startItem: () => {},
-			itemDone: () => {},
-			stop: () => {}
-		})
-	}
+// Console-based fallback used in test mode and before/if terminal-kit loads.
+const consoleTerminalStub = {
+    table: (data) => {
+        if (data && Array.isArray(data) && data.length > 0) {
+            console.table(data)
+        }
+    },
+    progressBar: () => ({
+        startItem: () => {},
+        itemDone: () => {},
+        stop: () => {}
+    })
 }
-export const terminal = _terminal
+
+// Cached real terminal-kit terminal (loaded lazily on first use).
+let _realTerminal = null
+let _terminalKitLoadFailed = false
+
+function loadRealTerminalSync() {
+    if (_realTerminal || _terminalKitLoadFailed) return _realTerminal
+    if (process.env.NODE_ENV === 'test') return null
+    try {
+        // standardRequire is CJS-synchronous and works in the CLI (has
+        // node_modules). In the bundled extension terminal-kit is never
+        // reached because the extension does not render terminal output;
+        // the Proxy falls back to the console stub.
+        _realTerminal = standardRequire('terminal-kit').terminal
+    } catch (error) {
+        _terminalKitLoadFailed = true
+        console.warn(bundle.getText("warning.terminalKitInitFail", [error.message]))
+    }
+    return _realTerminal
+}
+
+// Synchronous facade: forwards to real terminal-kit when available,
+// otherwise to the console stub. No eager terminal-kit load at module init.
+export const terminal = new Proxy({}, {
+    get(_target, prop) {
+        const real = loadRealTerminalSync()
+        const impl = real || consoleTerminalStub
+        const value = impl[prop]
+        return typeof value === 'function' ? value.bind(impl) : value
+    }
+})
 
 export let tableOptions = {
     hasBorder: true,
