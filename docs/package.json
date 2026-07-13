@@ -16,5 +16,9 @@
     "vitepress": "^1.0.0",
     "vitepress-plugin-mermaid": "2.0.17",
     "vue": "^3.5.33"
+  },
+  "overrides": {
+    "vite": "^6.4.3",
+    "esbuild": "^0.25.0"
   }
 }

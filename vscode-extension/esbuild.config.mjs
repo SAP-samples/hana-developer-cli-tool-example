@@ -77,6 +77,68 @@ const stripCLIBootstrapPlugin = {
   },
 }
 
+// utils/base.js and utils/base-lite.js load @sap/textbundle via a
+// createRequire(import.meta.url) require:
+//   const require = createRequire(import.meta.url)
+//   const TextBundle = require('@sap/textbundle').TextBundle
+// esbuild does NOT trace createRequire()-based requires into the bundle — it
+// emits them as runtime require("@sap/textbundle") calls resolved against the
+// bundle's own location. The installed .vsix ships no node_modules, so that
+// runtime require throws MODULE_NOT_FOUND at module-load time, before
+// activate() runs → extension stuck "Activating…", every command "not found".
+// (This masked itself in local testing because loading from vscode-extension/
+// resolves up into the parent project's node_modules.)
+// Fix: rewrite that specific require into a static ESM import so esbuild pulls
+// @sap/textbundle into the bundle. Source files are untouched — createRequire
+// is correct when the same modules run from the CLI.
+const bundleTextBundlePlugin = {
+  name: 'bundle-textbundle',
+  setup(build) {
+    build.onLoad({ filter: /[\\/]utils[\\/]base(-lite)?\.js$/ }, async (args) => {
+      let contents = fs.readFileSync(args.path, 'utf8')
+      if (contents.includes("require('@sap/textbundle')")) {
+        contents =
+          "import { TextBundle as __ESBUILD_TextBundle } from '@sap/textbundle'\n" +
+          contents.replace(
+            /const\s+TextBundle\s*=\s*require\('@sap\/textbundle'\)\.TextBundle/g,
+            'const TextBundle = __ESBUILD_TextBundle'
+          )
+      }
+      return { contents, loader: 'js', resolveDir: path.dirname(args.path) }
+    })
+  },
+}
+
+// terminal-kit is a CLI-only dependency used for fancy table/progress-bar
+// output in the terminal. utils/base.js has a STATIC top-level
+// `import terminalKit from 'terminal-kit'` which fires at module load. The
+// extension bundle pulls base.js in via the routes chain, so that require
+// runs during activate(). Marking terminal-kit `external` (it can't be
+// bundled — its package ships a README without extension that esbuild can't
+// parse) means the .vsix, which ships no node_modules, hits an unresolvable
+// require('terminal-kit') at load time → activate() never completes →
+// "command not found" for every hana-cli.* command. The extension never
+// needs terminal output (routes return JSON to the webview), so we resolve
+// terminal-kit to a safe stub. base.js reads `terminalKit.terminal`; the stub
+// provides a no-op terminal so the happy path works without throwing.
+const stubTerminalKitPlugin = {
+  name: 'stub-terminal-kit',
+  setup(build) {
+    build.onResolve({ filter: /^terminal-kit$/ }, () => ({
+      path: 'terminal-kit',
+      namespace: 'stub-terminal-kit',
+    }))
+    build.onLoad({ filter: /.*/, namespace: 'stub-terminal-kit' }, () => ({
+      contents: `
+        const noopProgressBar = () => ({ startItem() {}, itemDone() {}, stop() {} })
+        const terminal = { table() {}, progressBar: noopProgressBar }
+        export default { terminal }
+      `,
+      loader: 'js',
+    }))
+  },
+}
+
 // Route handlers use dynamic import() with template literals like:
 //   await import(`${lib}.js`)  where lib = "../bin/version"
 // esbuild can't resolve template-literal imports at build time.
@@ -188,9 +250,6 @@ await esbuild.build({
     '@sap-cloud-sdk/http-client',
     '@sap-cloud-sdk/http-client/package.json',
     'tar',
-    // terminal-kit has a README file without extension that esbuild
-    // cannot parse; it's only used for CLI interactive mode
-    'terminal-kit',
   ],
   format: 'cjs',
   platform: 'node',
@@ -198,7 +257,7 @@ await esbuild.build({
   sourcemap: !production,
   minify: production,
   treeShaking: true,
-  plugins: [resolveRoutesPlugin, stripCLIBootstrapPlugin, dynamicImportPlugin],
+  plugins: [resolveRoutesPlugin, stripCLIBootstrapPlugin, dynamicImportPlugin, bundleTextBundlePlugin, stubTerminalKitPlugin],
   // Shim import.meta.url for CJS output — route/util modules use it for __dirname
   banner: {
     js: 'var importMetaUrl = require("url").pathToFileURL(__filename).href;',

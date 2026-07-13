@@ -1,0 +1,79 @@
+# Dependabot configuration
+#
+# Enables automated dependency-update pull requests (security AND version) for
+# every npm project in this repo. Prior to this file, only passive security
+# ALERTS existed — no fix PRs were ever opened, so nested sub-projects
+# (app/vue, docs, vscode-extension) silently accumulated vulnerabilities that
+# root-level dependency updates never touched.
+#
+# Each `directory` is an independent npm project with its own lockfile.
+# GitHub Actions workflow deps are updated too, so pinned action SHAs stay current.
+version: 2
+updates:
+  # Root CLI project (npm-shrinkwrap.json)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      # Batch low-risk updates to reduce PR noise; majors still come individually.
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+
+  # Vue web UI (app/vue/package-lock.json) — runtime deps, highest alert count
+  - package-ecosystem: "npm"
+    directory: "/app/vue"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+
+  # VitePress documentation site (docs/package-lock.json)
+  - package-ecosystem: "npm"
+    directory: "/docs"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+
+  # MCP server (mcp-server/npm-shrinkwrap.json)
+  - package-ecosystem: "npm"
+    directory: "/mcp-server"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+
+  # VS Code extension (vscode-extension/package-lock.json)
+  - package-ecosystem: "npm"
+    directory: "/vscode-extension"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+
+  # GitHub Actions workflows
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5

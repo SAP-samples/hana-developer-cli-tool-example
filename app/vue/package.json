@@ -29,7 +29,7 @@
     "vue": "^3.5.13",
     "vue-echarts": "^8.0.1",
     "vue-router": "^5.1.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.7",
@@ -37,5 +37,8 @@
     "vite": "^8.1.4",
     "vitest": "^4.1.6",
     "vue-tsc": "^3.3.7"
+  },
+  "overrides": {
+    "dompurify": "^3.4.11"
   }
 }
