@@ -328,14 +328,58 @@ function loadRealTerminalSync() {
     return _realTerminal
 }
 
+// Mutable overlay for sinon stubs/overrides. When sinon stubs terminal.table,
+// it uses defineProperty/set to install the stub and deleteProperty to restore.
+const terminalOverlay = {}
+
+// Known synchronous methods exposed by this facade.
+const KNOWN_METHODS = ['table', 'progressBar']
+
 // Synchronous facade: forwards to real terminal-kit when available,
 // otherwise to the console stub. No eager terminal-kit load at module init.
+// The Proxy is stub-compatible: sinon can read getOwnPropertyDescriptor,
+// defineProperty to install a stub, and deleteProperty to restore it.
 export const terminal = new Proxy({}, {
     get(_target, prop) {
+        if (Object.prototype.hasOwnProperty.call(terminalOverlay, prop)) {
+            return terminalOverlay[prop]
+        }
         const real = loadRealTerminalSync()
         const impl = real || consoleTerminalStub
         const value = impl[prop]
         return typeof value === 'function' ? value.bind(impl) : value
+    },
+    set(_target, prop, value) {
+        terminalOverlay[prop] = value
+        return true
+    },
+    has(_target, prop) {
+        return Object.prototype.hasOwnProperty.call(terminalOverlay, prop) ||
+            KNOWN_METHODS.includes(prop)
+    },
+    getOwnPropertyDescriptor(_target, prop) {
+        if (Object.prototype.hasOwnProperty.call(terminalOverlay, prop)) {
+            return Object.getOwnPropertyDescriptor(terminalOverlay, prop)
+        }
+        if (KNOWN_METHODS.includes(prop)) {
+            const real = loadRealTerminalSync()
+            const impl = real || consoleTerminalStub
+            const value = impl[prop]
+            return {
+                value: typeof value === 'function' ? value.bind(impl) : value,
+                writable: true,
+                enumerable: true,
+                configurable: true
+            }
+        }
+        return undefined
+    },
+    defineProperty(_target, prop, desc) {
+        return Reflect.defineProperty(terminalOverlay, prop, desc)
+    },
+    deleteProperty(_target, prop) {
+        delete terminalOverlay[prop]
+        return true
     }
 })
 
