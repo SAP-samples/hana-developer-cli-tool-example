@@ -37,7 +37,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -136,7 +136,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -187,7 +187,7 @@ jobs:
           echo "tag=${{ needs.resolve-version.outputs.tag }}" >> $GITHUB_OUTPUT
 
       - name: Checkout code at tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: "v${{ steps.ver.outputs.version }}"
 
@@ -259,7 +259,7 @@ jobs:
           echo "version=${{ needs.resolve-version.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Checkout code at tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: "v${{ steps.ver.outputs.version }}"
 
