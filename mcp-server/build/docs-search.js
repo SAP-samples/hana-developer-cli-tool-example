@@ -5,10 +5,8 @@
  * Supports full-text search, category filtering, and document retrieval.
  */
 import { readFileSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { join } from 'path';
+const __dirname = import.meta.dirname;
 /**
  * Documentation search class
  *
