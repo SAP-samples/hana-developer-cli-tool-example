@@ -188,8 +188,8 @@ await esbuild.build({
     '@sap-cloud-sdk/http-client',
     '@sap-cloud-sdk/http-client/package.json',
     'tar',
-    // terminal-kit has a README file without extension that esbuild
-    // cannot parse; it's only used for CLI interactive mode
+    // terminal-kit stays external: its package ships a README without extension esbuild cannot parse.
+    // Lazy Proxy in base.js means it never loads at extension activation, so the console fallback keeps the extension working.
     'terminal-kit',
   ],
   format: 'cjs',
