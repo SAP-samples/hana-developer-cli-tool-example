@@ -1,4 +1,6 @@
 import * as vscode from 'vscode'
+import * as fs from 'fs'
+import * as path from 'path'
 import { execFile } from 'child_process'
 
 const log = vscode.window.createOutputChannel('hana-cli resolver', { log: true })
@@ -20,17 +22,31 @@ export type ResolveResult =
   | { status: 'no-config' }
 
 /**
- * Resolves a HANA connection from workspace files using a 3-step strategy:
- * 1. CAP: .cdsrc-private.json credentials or CF binding (if @sap/cds is a project dependency)
- * 2. Workspace: default-env.json VCAP_SERVICES
- * 3. Returns no-config (caller should fall back to SecretStorage)
+ * Resolves a HANA connection from a workspace folder, using its root as the
+ * config directory. Retained for backwards compatibility; prefer
+ * {@link resolveConnectionInDir} when the config lives in a subfolder.
  */
 export async function resolveConnection(
   workspaceFolder: vscode.WorkspaceFolder
 ): Promise<ResolveResult> {
-  log.info(`Resolving connection for workspace: ${workspaceFolder.uri.fsPath}`)
+  return resolveConnectionInDir(workspaceFolder.uri.fsPath)
+}
 
-  const capResult = await resolveFromCAP(workspaceFolder)
+/**
+ * Resolves a HANA connection from files in a specific directory using a
+ * 3-step strategy:
+ * 1. CAP: .cdsrc-private.json credentials or CF binding (if @sap/cds is a project dependency)
+ * 2. default-env.json VCAP_SERVICES
+ * 3. Returns no-config (caller should fall back to SecretStorage)
+ *
+ * @param dir absolute path of the directory holding the connection config.
+ *   This is used as the cwd for `cds env` / `cf service-key`, so it must be
+ *   the CAP project directory (e.g. a `cap/` subfolder), not the workspace root.
+ */
+export async function resolveConnectionInDir(dir: string): Promise<ResolveResult> {
+  log.info(`Resolving connection in directory: ${dir}`)
+
+  const capResult = await resolveFromCAP(dir)
   if (capResult.status !== 'no-config') {
     if (capResult.status === 'connected') {
       log.info(`Resolved via ${capResult.connection.source}: ${capResult.connection.user}@${capResult.connection.host}:${capResult.connection.port}`)
@@ -38,13 +54,13 @@ export async function resolveConnection(
     return capResult
   }
 
-  const envConn = await resolveFromDefaultEnv(workspaceFolder)
+  const envConn = await resolveFromDefaultEnv(dir)
   if (envConn) {
     log.info(`Resolved via default-env: ${envConn.user}@${envConn.host}:${envConn.port}`)
     return { status: 'connected', connection: envConn }
   }
 
-  log.info('No connection resolved from workspace files')
+  log.info(`No connection resolved from files in: ${dir}`)
   return { status: 'no-config' }
 }
 
@@ -185,13 +201,10 @@ function resolveCdsBinding(binding: Record<string, unknown>, cwd: string): Promi
   })
 }
 
-async function resolveFromCAP(
-  workspaceFolder: vscode.WorkspaceFolder
-): Promise<ResolveResult> {
+async function resolveFromCAP(dir: string): Promise<ResolveResult> {
   try {
-    const packageJsonUri = vscode.Uri.joinPath(workspaceFolder.uri, 'package.json')
-    const packageJsonData = await vscode.workspace.fs.readFile(packageJsonUri)
-    const packageJson = JSON.parse(Buffer.from(packageJsonData).toString('utf-8'))
+    const packageJsonPath = path.join(dir, 'package.json')
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'))
 
     const deps = { ...packageJson.dependencies, ...packageJson.devDependencies }
     if (!deps['@sap/cds'] && !deps['@sap/cds-dk']) {
@@ -200,9 +213,8 @@ async function resolveFromCAP(
     }
 
     log.info('CAP project detected, looking for .cdsrc-private.json')
-    const cdsrcUri = vscode.Uri.joinPath(workspaceFolder.uri, '.cdsrc-private.json')
-    const cdsrcData = await vscode.workspace.fs.readFile(cdsrcUri)
-    const cdsrc = JSON.parse(Buffer.from(cdsrcData).toString('utf-8'))
+    const cdsrcPath = path.join(dir, '.cdsrc-private.json')
+    const cdsrc = JSON.parse(fs.readFileSync(cdsrcPath, 'utf-8'))
 
     const entry = extractCdsBindingOrCredentials(cdsrc)
     if (!entry) {
@@ -218,10 +230,9 @@ async function resolveFromCAP(
       return { status: 'no-config' }
     }
 
-    // Binding — resolve via cds env or cf service-key
+    // Binding — resolve via cds env or cf service-key, using the config dir as cwd
     const instanceName = (entry.value.instance as string) || undefined
-    const cwd = workspaceFolder.uri.fsPath
-    const resolved = await resolveCdsBinding(entry.value, cwd)
+    const resolved = await resolveCdsBinding(entry.value, dir)
     if (resolved) {
       const conn = credsToConnection(resolved, instanceName)
       if (conn) return { status: 'connected', connection: conn }
@@ -237,13 +248,10 @@ async function resolveFromCAP(
   }
 }
 
-async function resolveFromDefaultEnv(
-  workspaceFolder: vscode.WorkspaceFolder
-): Promise<HanaConnection | null> {
+async function resolveFromDefaultEnv(dir: string): Promise<HanaConnection | null> {
   try {
-    const defaultEnvUri = vscode.Uri.joinPath(workspaceFolder.uri, 'default-env.json')
-    const data = await vscode.workspace.fs.readFile(defaultEnvUri)
-    const env = JSON.parse(Buffer.from(data).toString('utf-8'))
+    const defaultEnvPath = path.join(dir, 'default-env.json')
+    const env = JSON.parse(fs.readFileSync(defaultEnvPath, 'utf-8'))
 
     const hanaServices = env?.VCAP_SERVICES?.hana ?? env?.VCAP_SERVICES?.['hana-cloud'] ?? []
     const creds = hanaServices[0]?.credentials

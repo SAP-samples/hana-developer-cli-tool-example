@@ -1,9 +1,11 @@
 import * as vscode from 'vscode'
+import * as path from 'path'
 import { startServer, stopServer, scheduleShutdown, injectConnection } from './server/lifecycle.js'
 import { registerToolsPanel } from './editors/toolsPanel.js'
 import { CalcViewEditorProvider } from './editors/calcViewEditor.js'
 import { ArtifactInspectorProvider } from './editors/artifactInspector.js'
-import { resolveConnection, type HanaConnection, type ResolveResult } from './connection/resolver.js'
+import { resolveConnectionInDir, type HanaConnection, type ResolveResult } from './connection/resolver.js'
+import { discoverConfigDirs } from './connection/discovery.js'
 import { ConnectionManager } from './connection/manager.js'
 import { createConnectionStatusBar, updateStatus } from './connection/statusBar.js'
 
@@ -24,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     const folders = vscode.workspace.workspaceFolders
     if (folders && folders.length > 0) {
-      resolveConnection(folders[0]).then((result) => {
+      autoResolveConnection(folders[0]).then((result) => {
         if (result.status === 'connected') {
           currentConnection = result.connection
           injectConnection(result.connection)
@@ -102,6 +104,67 @@ export function activate(context: vscode.ExtensionContext) {
 
 export async function ensureServer(context: vscode.ExtensionContext): Promise<number> {
   return startServer(context, currentConnection ?? undefined)
+}
+
+/**
+ * Auto-resolve the workspace HANA connection.
+ *
+ * The connection config (`.cdsrc-private.json`, `default-env.json`, or a CAP
+ * `package.json`) may not live at the workspace root — it is common for the
+ * CAP project to sit in a subfolder (e.g. `cap/`). This:
+ *   1. Honors an explicit `hana-cli.projectPath` setting when present.
+ *   2. Otherwise scans the workspace for config-bearing directories.
+ *   3. Prompts via QuickPick when more than one candidate is found.
+ */
+async function autoResolveConnection(
+  workspaceFolder: vscode.WorkspaceFolder
+): Promise<ResolveResult> {
+  const rootPath = workspaceFolder.uri.fsPath
+
+  // 1. Explicit override wins.
+  const override = vscode.workspace
+    .getConfiguration('hana-cli')
+    .get<string>('projectPath')
+  if (override && override.trim()) {
+    const dir = path.isAbsolute(override) ? override : path.join(rootPath, override)
+    outputChannel.appendLine(`Using configured hana-cli.projectPath: ${dir}`)
+    return resolveConnectionInDir(dir)
+  }
+
+  // 2. Discover config-bearing directories (bounded scan).
+  const candidates = discoverConfigDirs(rootPath)
+  if (candidates.length === 0) {
+    // Fall back to resolving the root itself (preserves prior behavior).
+    return resolveConnectionInDir(rootPath)
+  }
+
+  // 3. Single candidate → use it directly.
+  if (candidates.length === 1) {
+    return resolveConnectionInDir(candidates[0].dir)
+  }
+
+  // 4. Multiple candidates → let the user choose.
+  const picked = await vscode.window.showQuickPick(
+    candidates.map((c) => {
+      const rel = path.relative(rootPath, c.dir) || '.'
+      return {
+        label: rel,
+        description: c.kinds.join(', '),
+        detail: c.dir,
+        dir: c.dir
+      }
+    }),
+    {
+      title: 'hana-cli: Select the project to connect',
+      placeHolder: 'Multiple HANA connection configs found — pick one'
+    }
+  )
+
+  if (!picked) {
+    // User dismissed the picker — default to the shallowest candidate.
+    return resolveConnectionInDir(candidates[0].dir)
+  }
+  return resolveConnectionInDir(picked.dir)
 }
 
 export function trackWebviewOpen(): void {
