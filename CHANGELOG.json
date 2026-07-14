@@ -1,5 +1,20 @@
 [
     {
+        "date": "2026-07-14",
+        "version": "4.202607.1",
+        "Fixed": [
+            "VS Code extension: resolve HANA connection when the CAP project (with .cdsrc-private.json / default-env.json) lives in a subfolder rather than the workspace root; scans subfolders and prompts when multiple projects are found (#182)",
+            "VS Code extension: artifact inspectors (hdbtable, hdbview, hdbfunction, hdbprocedure, hdbsynonym, hdbrole, hdbsequence) now pre-fill the object name from the opened file",
+            "VS Code extension: type-ahead suggestions now work in webview inputs (schema/table/etc.) by using the local server base URL instead of relative fetch paths"
+        ],
+        "Added": [
+            "VS Code extension: hana-cli.projectPath setting to explicitly point at the connection-config folder and skip auto-detection (#182)"
+        ],
+        "Changed": [
+            "hana-cli vscode status now compares the installed extension against the packaged .vsix and suggests updating; vscode install upgrades in place via --force (#182)"
+        ]
+    },
+    {
         "date": "2026-07-11",
         "version": "4.202607.0",
         "Added": [

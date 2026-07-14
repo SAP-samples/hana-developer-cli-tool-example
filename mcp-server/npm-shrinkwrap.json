@@ -1,12 +1,12 @@
 {
   "name": "hana-cli-mcp-server",
-  "version": "1.202607.0",
+  "version": "1.202607.1",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "hana-cli-mcp-server",
-      "version": "1.202607.0",
+      "version": "1.202607.1",
       "license": "SEE LICENSE IN ../LICENSE",
       "dependencies": {
         "@modelcontextprotocol/sdk": "^1.29.0"

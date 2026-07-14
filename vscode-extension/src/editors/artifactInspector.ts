@@ -7,16 +7,18 @@ interface ArtifactConfig {
   viewType: string
   route: string
   kind: string
+  /** Query-param key the target Vue view reads the artifact name from. */
+  queryKey: string
 }
 
 const ARTIFACT_CONFIGS: ArtifactConfig[] = [
-  { viewType: 'hana-cli.tableInspector', route: '/inspect-table', kind: 'table' },
-  { viewType: 'hana-cli.viewInspector', route: '/inspect-view', kind: 'view' },
-  { viewType: 'hana-cli.procedureInspector', route: '/call-procedure', kind: 'procedure' },
-  { viewType: 'hana-cli.functionInspector', route: '/inspect-function', kind: 'function' },
-  { viewType: 'hana-cli.synonymInspector', route: '/inspect-table', kind: 'synonym' },
-  { viewType: 'hana-cli.roleInspector', route: '/inspect-table', kind: 'role' },
-  { viewType: 'hana-cli.sequenceInspector', route: '/inspect-table', kind: 'sequence' },
+  { viewType: 'hana-cli.tableInspector', route: '/inspect-table', kind: 'table', queryKey: 'table' },
+  { viewType: 'hana-cli.viewInspector', route: '/inspect-view', kind: 'view', queryKey: 'view' },
+  { viewType: 'hana-cli.procedureInspector', route: '/call-procedure', kind: 'procedure', queryKey: 'procedure' },
+  { viewType: 'hana-cli.functionInspector', route: '/inspect-function', kind: 'function', queryKey: 'function' },
+  { viewType: 'hana-cli.synonymInspector', route: '/inspect-table', kind: 'synonym', queryKey: 'table' },
+  { viewType: 'hana-cli.roleInspector', route: '/inspect-table', kind: 'role', queryKey: 'table' },
+  { viewType: 'hana-cli.sequenceInspector', route: '/inspect-table', kind: 'sequence', queryKey: 'table' },
 ]
 
 /**
@@ -79,8 +81,13 @@ class ArtifactInspectorProvider implements vscode.CustomReadonlyEditorProvider {
 
     const port = await ensureServer(this._context)
 
+    // Pass the artifact name as a route query param the target Vue view reads
+    // directly (e.g. /inspect-table?table=NAME). This mirrors how the browser
+    // UI navigates to these views and pre-populates the input on load.
+    const routeWithName = `${this._config.route}?${this._config.queryKey}=${encodeURIComponent(name)}`
+
     webviewPanel.webview.html = getWebviewContent(webviewPanel.webview, this._context.extensionUri, {
-      route: this._config.route,
+      route: routeWithName,
       port,
       chromeless: true,
     })
@@ -88,16 +95,6 @@ class ArtifactInspectorProvider implements vscode.CustomReadonlyEditorProvider {
     webviewPanel.webview.onDidReceiveMessage(
       async (message: { type: string; level?: string; text?: string; path?: string }) => {
         switch (message.type) {
-          case 'ready': {
-            webviewPanel.webview.postMessage({
-              type: 'openArtifact',
-              kind: this._config.kind,
-              name,
-              schema: '',
-            })
-            break
-          }
-
           case 'showMessage': {
             const text = message.text || ''
             switch (message.level) {
