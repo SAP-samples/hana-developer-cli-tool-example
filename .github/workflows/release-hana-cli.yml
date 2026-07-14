@@ -211,7 +211,7 @@ jobs:
           npm ci --prefix app/vue
           npm ci --prefix vscode-extension
           npm run build:vscode
-          cd vscode-extension && npx vsce package --no-dependencies
+          cd vscode-extension && npx vsce package
 
       - name: Verify package version matches tag
         run: |
