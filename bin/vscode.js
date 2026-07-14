@@ -89,6 +89,50 @@ function findVsix() {
   return vsix ? join(VSIX_DIR, vsix) : null
 }
 
+/**
+ * Compare two semver-ish version strings numerically.
+ * Missing segments are treated as zero (e.g. "1" === "1.0.0").
+ * @param {string} a
+ * @param {string} b
+ * @returns {number} -1 if a<b, 0 if equal, 1 if a>b
+ */
+export function compareVersions(a, b) {
+  const pa = String(a).split('.').map(n => parseInt(n, 10) || 0)
+  const pb = String(b).split('.').map(n => parseInt(n, 10) || 0)
+  const len = Math.max(pa.length, pb.length)
+  for (let i = 0; i < len; i++) {
+    const na = pa[i] || 0
+    const nb = pb[i] || 0
+    if (na > nb) return 1
+    if (na < nb) return -1
+  }
+  return 0
+}
+
+/**
+ * Extract the version from a hana-cli .vsix filename or path.
+ * @param {string} vsixPath - e.g. "hana-cli-0.1.7.vsix"
+ * @returns {string|null} the version string, or null if not found
+ */
+export function parseVsixVersion(vsixPath) {
+  if (!vsixPath) return null
+  const match = /(\d+\.\d+\.\d+)\.vsix$/.exec(String(vsixPath))
+  return match ? match[1] : null
+}
+
+/**
+ * Extract the version from a `code --list-extensions --show-versions` line.
+ * @param {string} line - e.g. "SAP-samples.hana-cli@0.1.6"
+ * @returns {string|null} the version string, or null if not found
+ */
+export function parseInstalledVersion(line) {
+  if (!line) return null
+  const idx = line.indexOf('@')
+  if (idx === -1) return null
+  const version = line.slice(idx + 1).trim()
+  return version || null
+}
+
 export function handler(argv) {
   const action = argv.action || 'status'
   const codeCli = detectCodeCli(argv.insiders)
@@ -129,7 +173,8 @@ function installExtension(codeCli) {
   if (vsixPath) {
     console.log(`Installing extension from: ${vsixPath}`)
     try {
-      const output = runCmd(codeCli, ['--install-extension', vsixPath])
+      // --force upgrades an already-installed extension in place (no uninstall needed)
+      const output = runCmd(codeCli, ['--install-extension', vsixPath, '--force'])
       console.log(output.trim())
       console.log('Extension installed successfully.')
     } catch (err) {
@@ -162,7 +207,8 @@ function uninstallExtension(codeCli) {
 }
 
 /**
- * Check if the extension is installed.
+ * Check if the extension is installed, and whether it is up to date
+ * relative to the packaged .vsix (the version this hana-cli ships with).
  * @param {string} codeCli
  */
 function checkStatus(codeCli) {
@@ -170,11 +216,41 @@ function checkStatus(codeCli) {
     const output = runCmd(codeCli, ['--list-extensions', '--show-versions'])
     const lines = output.split('\n')
     const match = lines.find(line => line.toLowerCase().includes('hana-cli'))
-    if (match) {
-      console.log(`Extension installed: ${match.trim()}`)
-    } else {
+
+    const vsixPath = findVsix()
+    const packagedVersion = parseVsixVersion(vsixPath || '')
+
+    if (!match) {
       console.log('Extension is not installed.')
+      if (packagedVersion) {
+        console.log(`  A packaged version (${packagedVersion}) is available.`)
+      }
       console.log(`  To install: hana-cli vscode install`)
+      return
+    }
+
+    const installedVersion = parseInstalledVersion(match)
+    console.log(`Extension installed: ${match.trim()}`)
+
+    if (!packagedVersion) {
+      // No local .vsix to compare against — installed is all we can report.
+      return
+    }
+
+    if (!installedVersion) {
+      console.log(`  Packaged version available: ${packagedVersion}`)
+      return
+    }
+
+    const cmp = compareVersions(installedVersion, packagedVersion)
+    if (cmp < 0) {
+      console.log('')
+      console.log(`  Update available: ${installedVersion} -> ${packagedVersion}`)
+      console.log(`  To update: hana-cli vscode install`)
+    } else if (cmp > 0) {
+      console.log(`  Installed version is newer than the packaged .vsix (${packagedVersion}).`)
+    } else {
+      console.log(`  Up to date (matches packaged version ${packagedVersion}).`)
     }
   } catch (err) {
     console.error(`Failed to check extension status: ${err.message}`)

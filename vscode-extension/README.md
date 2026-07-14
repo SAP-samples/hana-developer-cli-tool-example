@@ -44,6 +44,20 @@ On activation the extension automatically resolves a HANA connection from your w
 
 The current connection is shown in the status bar.
 
+### Projects in a subfolder
+
+Your connection config often does not live at the workspace root — for example a CAP project kept in a `cap/` subfolder. The extension scans subfolders (skipping `node_modules`, `.git`, and build output) for a `.cdsrc-private.json`, `default-env.json`, or a CAP `package.json`, and resolves from the folder it finds. When more than one candidate exists (e.g. a monorepo), it prompts you to pick which project to connect.
+
+To point the extension at a specific folder and skip auto-detection, set **`hana-cli.projectPath`** in your workspace settings (relative to the workspace root, or an absolute path):
+
+```json
+{
+  "hana-cli.projectPath": "cap"
+}
+```
+
+Leave it empty (the default) to auto-detect.
+
 ## Requirements
 
 - Visual Studio Code `^1.85.0`
