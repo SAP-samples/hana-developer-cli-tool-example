@@ -34,9 +34,16 @@ jobs:
       - run: npm ci
       - run: cd app/vue && npm ci
       - run: cd vscode-extension && npm ci
-      - run: cd app/vue && npm run build:vscode
+      - run: cd app/vue && npm test
       - run: cd vscode-extension && npm run compile
       - run: cd vscode-extension && npm run bundle
+      - name: Assert bundled webview is current
+        shell: bash
+        run: |
+          BUNDLE=vscode-extension/webview-dist/assets/index.js
+          test -f "$BUNDLE" || { echo "::error::$BUNDLE missing — bundle step did not copy the Vue build"; exit 1; }
+          grep -q "Import / Export / Convert" "$BUNDLE" || { echo "::error::Bundled webview is stale: 'Import / Export / Convert' group not found in $BUNDLE"; exit 1; }
+          echo "Bundled webview contains the current navigation."
       - run: cd vscode-extension && npx vsce package --no-dependencies
       - uses: actions/upload-artifact@v7
         if: matrix.os == 'ubuntu-latest' && matrix.node == 22

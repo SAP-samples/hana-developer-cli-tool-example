@@ -12,17 +12,47 @@ const projectRoot = path.resolve(__dirname, '..')
 // and only falls back to ../app/vue/dist-vscode when running from source (F5).
 // Without this copy, an installed .vsix would resolve to VS Code's extensions
 // dir where the sibling app/ tree does not exist → blank webviews.
+/** Newest mtime (ms) of any file under `dir`, recursively. 0 if dir absent. */
+function newestMtime(dir) {
+  let newest = 0
+  if (!fs.existsSync(dir)) return newest
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name)
+    const mtime = entry.isDirectory()
+      ? newestMtime(full)
+      : fs.statSync(full).mtimeMs
+    if (mtime > newest) newest = mtime
+  }
+  return newest
+}
+
 function copyWebviewAssets() {
   const src = path.resolve(projectRoot, 'app', 'vue', 'dist-vscode')
   const dest = path.resolve(__dirname, 'webview-dist')
-  if (!fs.existsSync(path.join(src, 'assets', 'index.js'))) {
-    console.warn(
+  const builtEntry = path.join(src, 'assets', 'index.js')
+
+  if (!fs.existsSync(builtEntry)) {
+    throw new Error(
       `[esbuild] Vue webview assets not found at ${src}.\n` +
-      `          Run "npm run build:vscode" from the project root first, ` +
-      `or the packaged .vsix will have no UI.`
+      `          Run "npm run build:webview" (or "npm run build:vscode" from the ` +
+      `project root) first, or the packaged .vsix would have no UI.`
     )
-    return
   }
+
+  // Freshness guard: fail the bundle if the built webview predates its own
+  // source. This is the exact regression that let the extension ship a menu
+  // missing the Export command (dist built before the feature was merged).
+  const srcMtime = newestMtime(path.resolve(projectRoot, 'app', 'vue', 'src'))
+  const builtMtime = fs.statSync(builtEntry).mtimeMs
+  if (srcMtime > builtMtime) {
+    throw new Error(
+      `[esbuild] Stale Vue webview build: app/vue/src is newer than ` +
+      `${builtEntry}.\n` +
+      `          Rebuild with "npm run build:webview" so the extension ships ` +
+      `the current UI (menu entries, routes, etc.).`
+    )
+  }
+
   fs.rmSync(dest, { recursive: true, force: true })
   fs.cpSync(src, dest, { recursive: true })
   console.log(`[esbuild] Copied Vue webview assets → ${dest}`)

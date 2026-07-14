@@ -53,7 +53,7 @@
     "release:prepare": "node scripts/prepare-release.js",
     "release:notes": "node scripts/extract-release-notes.js",
     "build:vue": "cd app/vue && npm run build",
-    "build:vscode": "cd app/vue && npm run build:vscode && cd ../../vscode-extension && npm run bundle",
+    "build:vscode": "cd vscode-extension && npm run bundle",
     "package:vscode": "npm run build:vscode && cd vscode-extension && node -e \"const fs=require('fs');for(const f of fs.readdirSync('.'))if(f.endsWith('.vsix'))fs.rmSync(f)\" && npx vsce package --no-dependencies",
     "prepack": "npm run build:vue && npm run package:vscode"
   },
