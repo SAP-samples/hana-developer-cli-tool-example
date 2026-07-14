@@ -12,6 +12,10 @@ function baseUrl(): string {
 async function extractErrorMessage(res: Response): Promise<string> {
   try {
     const body = await res.json()
+    // The server error handler (routes -> centralized handler) returns
+    // { error, stack }; some endpoints return { message }. Prefer whichever
+    // carries the real detail so the UI shows it instead of a bare status line.
+    if (body.error) return body.error
     if (body.message) return body.message
   } catch {
     try {

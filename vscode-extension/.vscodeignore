@@ -1,8 +1,12 @@
 src/**
 test/**
 out/**
-node_modules/**
 .gitignore
 tsconfig.json
 esbuild.config.mjs
 package-lock.json
+# node_modules is intentionally NOT blanket-ignored: @sap/cds and @sap/cds-dk are
+# marked external in esbuild.config.mjs (their lazy module.require breaks when
+# inlined — see that file), so they must ship in the .vsix and resolve from the
+# extension's own node_modules at runtime. vsce prunes to production dependencies
+# automatically, so devDependencies (esbuild, mocha, typescript, ...) are excluded.

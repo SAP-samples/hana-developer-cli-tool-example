@@ -2,7 +2,7 @@
   "name": "hana-cli",
   "displayName": "hana-cli Tools for SAP HANA",
   "description": "Visual editors and database tools for SAP HANA powered by hana-cli",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "SAP-samples",
   "engines": {
     "vscode": "^1.85.0"
@@ -173,6 +173,8 @@
     "test": "node ./out/test/runTests.js"
   },
   "dependencies": {
+    "@sap/cds": "10.0.3",
+    "@sap/cds-dk": "10.0.4",
     "express": "^5.2.1"
   },
   "devDependencies": {

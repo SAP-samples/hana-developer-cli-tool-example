@@ -163,6 +163,19 @@ await esbuild.build({
   outfile: './dist/extension.js',
   external: [
     'vscode',
+    // @sap/cds and its compiler use lazy CommonJS sub-module loading via a
+    // `module.require(...)` proxy (see cds.compile.to.* and the openapi getter
+    // in bin/inspectTable.js / bin/inspectView.js). When esbuild INLINES these
+    // packages, the synthetic CJS module object it substitutes has no working
+    // `.require` method, so the proxy throws "TypeError: e.require is not a
+    // function" — surfacing as a 500 on every inspect route. Keeping them
+    // external leaves the real Node CommonJS loader (with a working
+    // module.require) in place. These are SHIPPED inside the .vsix (see
+    // package.json dependencies + .vscodeignore) so `require` resolves at
+    // runtime from the extension's own node_modules.
+    '@sap/cds',
+    '@sap/cds-compiler',
+    '@sap/cds-dk',
     // Optional/dynamic dependencies from the parent project's node_modules
     // that are not needed at runtime in the VS Code extension context
     //
@@ -170,12 +183,16 @@ await esbuild.build({
     // but never installed here; keep it external so esbuild leaves the guarded
     // require in place instead of failing the build.
     'sqlite3',
-    // better-sqlite3 is a native (.node) module. We force @cap-js/sqlite to use
-    // Node's built-in node:sqlite driver (see utils/database/index.js), so the
-    // better-sqlite3 require path is never executed at runtime. Marking it
-    // external keeps its platform-specific binary out of the bundle, making the
-    // .vsix OS-portable (no per-OS rebuild). node:sqlite is a Node builtin and
-    // is external automatically.
+    // better-sqlite3 is NOT a dependency of this project and is NOT bundled,
+    // shipped, or executed. It is an OPTIONAL peer of @cap-js/sqlite that that
+    // package references by name in a driver lookup table
+    // (node_modules/@cap-js/sqlite/lib/SQLiteService.js: drivers['better-sqlite3']).
+    // esbuild statically sees that string as a require target and would fail the
+    // build trying to resolve the (uninstalled) module. Marking it external is a
+    // build-time stub only: at runtime we force driver='node' (see
+    // utils/database/index.js) so CAP 10's built-in node:sqlite is always used
+    // and the better-sqlite3 branch is dead code. Nothing better-sqlite3 ends up
+    // in the .vsix.
     'better-sqlite3',
     // generic-pool is an OPTIONAL peer of @cap-js/db-service (CAP 10). Its
     // require() is guarded behind the legacy `use_new_pool === false` path;
