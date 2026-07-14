@@ -1,4 +1,5 @@
 import { ref, type Ref } from 'vue'
+import { getAdapter } from '../adapters/environment'
 
 interface SuggestionCache {
   key: string
@@ -6,6 +7,21 @@ interface SuggestionCache {
 }
 
 const cache: SuggestionCache[] = []
+
+/**
+ * Resolve the API base URL from the active environment adapter.
+ * In the browser this is window.location.origin; in the VS Code webview it is
+ * the http://localhost:<port> the extension server listens on. Relative URLs
+ * would resolve against the vscode-webview:// origin and never reach the
+ * server, so all fetches must be absolute.
+ */
+function baseUrl(): string {
+  try {
+    return getAdapter().getApiBaseUrl()
+  } catch {
+    return ''
+  }
+}
 
 export function useSuggestions(endpoint: string, nameField: string) {
   const items: Ref<string[]> = ref([])
@@ -21,14 +37,15 @@ export function useSuggestions(endpoint: string, nameField: string) {
     }
 
     try {
+      const api = baseUrl()
       if (Object.keys(params).length > 0) {
-        await fetch('/', {
+        await fetch(`${api}/`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(params)
         })
       }
-      const res = await fetch(`/hana/${endpoint}`)
+      const res = await fetch(`${api}/hana/${endpoint}`)
       if (!res.ok) return
 
       const data = await res.json()
