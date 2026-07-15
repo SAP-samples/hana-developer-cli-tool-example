@@ -80,7 +80,7 @@ function parseSequence(content: string): string | undefined {
   if (trimmed.startsWith('{')) {
     try {
       const obj = JSON.parse(trimmed)
-      if (typeof obj.name === 'string') return normalizeIdentifier(obj.name)
+      if (typeof obj.name === 'string') return normalizeJsonName(obj.name)
       // Fall through to top-level key if no explicit name
       return parseJsonObjectName(trimmed)
     } catch {
@@ -102,28 +102,46 @@ function parseJsonObjectName(content: string): string | undefined {
     const topKey = keys[0]
     const val = obj[topKey]
     if (val && typeof val === 'object' && typeof val.name === 'string') {
-      return normalizeIdentifier(val.name)
+      return normalizeJsonName(val.name)
     }
-    return normalizeIdentifier(topKey)
+    return normalizeJsonName(topKey)
   } catch {
     return undefined
   }
 }
 
 /**
- * Normalize a raw identifier token: strip surrounding double-quotes, take the
- * last dot-qualified segment (object name, not schema), preserve inner case
- * and any `::` namespace separator.
+ * Normalize a name authored in an HDI JSON config (synonym/role/sequence).
+ * These are literal object names, NOT SQL DDL identifiers, so their case is
+ * preserved as authored (HANA does not apply unquoted-identifier folding).
+ * Only the object portion is kept if the value is dot-qualified.
+ */
+function normalizeJsonName(raw: string): string {
+  const id = raw.trim()
+  const segments = id.split('.')
+  const last = segments[segments.length - 1]
+  return last.replace(/^"(.*)"$/, '$1')
+}
+
+/**
+ * Normalize a raw identifier token to the name HANA actually deployed.
+ *
+ * Takes the last dot-qualified segment (object name, not schema) and applies
+ * SQL identifier folding: an UNQUOTED identifier is folded to UPPERCASE (HANA's
+ * default), while a double-QUOTED identifier keeps its authored case. CAP emits
+ * unquoted names, so the common case uppercases (e.g. `star_wars_eyeColors` ->
+ * `STAR_WARS_EYECOLORS`). Verified against a live HDI container.
  */
 function normalizeIdentifier(raw: string): string {
   const id = raw.trim().replace(/;$/, '')
   // Split on dots to drop a schema qualifier; keep the last segment.
   // Handles both `name` and `"schema"."name"` forms.
   const segments = id.split('.')
-  let last = segments[segments.length - 1]
-  // Strip surrounding double quotes.
-  last = last.replace(/^"(.*)"$/, '$1')
-  return last
+  const last = segments[segments.length - 1]
+  // A quoted segment preserves case; an unquoted one folds to uppercase.
+  const quoted = /^".*"$/.test(last)
+  const unquoted = last.replace(/^"(.*)"$/, '$1')
+  return quoted ? unquoted : unquoted.toUpperCase()
 }
 
 /**
@@ -134,9 +152,12 @@ function fallbackName(fsPath: string): string {
   const base = path.basename(fsPath)
   const dot = base.lastIndexOf('.')
   const stem = dot > 0 ? base.substring(0, dot) : base
-  // Replace '.' with '_' per HDI naming, then strip anything outside the safe
-  // grammar so the fallback can never emit an injectable string.
-  const runtime = stripUnsafe(stem.replace(/\./g, '_'))
+  // The design-time filename maps to an UNQUOTED SQL identifier: replace '.'
+  // with '_' per HDI naming, strip anything outside the safe grammar, then
+  // fold to uppercase to match how HANA deploys unquoted names.
+  const runtime = stripUnsafe(stem.replace(/\./g, '_')).toUpperCase()
+  // The namespace prefix is case-sensitive as authored (reverse-DNS style);
+  // only the local object name folds. So prepend it verbatim.
   const ns = readNamespace(path.dirname(fsPath))
   return ns ? `${ns}::${runtime}` : runtime
 }
