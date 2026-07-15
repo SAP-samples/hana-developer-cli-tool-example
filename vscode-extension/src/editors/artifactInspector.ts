@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
-import * as path from 'path'
 import { getWebviewContent, getWebviewOptions } from '../webview/htmlProvider.js'
 import { ensureServer, trackWebviewOpen, trackWebviewClose } from '../extension.js'
+import { resolveRuntimeName } from './runtimeName.js'
 
 interface ArtifactConfig {
   viewType: string
@@ -74,10 +74,11 @@ class ArtifactInspectorProvider implements vscode.CustomReadonlyEditorProvider {
       enableScripts: true,
     }
 
-    // Parse artifact name from the filename (strip extension)
-    const filename = path.basename(document.uri.fsPath)
-    const dotIndex = filename.lastIndexOf('.')
-    const name = dotIndex > 0 ? filename.substring(0, dotIndex) : filename
+    // Resolve the runtime (deployed) object name from the design-time file.
+    // The filename is the design-time name (e.g. cds.outbox.Messages.hdbtable);
+    // HANA knows the runtime name (e.g. cds_outbox_Messages), matched
+    // case-sensitively. resolveRuntimeName reads the file content to get it.
+    const name = resolveRuntimeName(document.uri.fsPath, this._config.kind)
 
     const port = await ensureServer(this._context)
 
