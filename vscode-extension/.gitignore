@@ -3,3 +3,4 @@ dist/
 webview-dist/
 _i18n/
 *.vsix
+.vscode-test/
