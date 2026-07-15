@@ -2,7 +2,7 @@
   "name": "hana-cli",
   "displayName": "hana-cli Tools for SAP HANA",
   "description": "Visual editors and database tools for SAP HANA powered by hana-cli",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "publisher": "SAP-samples",
   "icon": "icon.png",
   "license": "Apache-2.0",
