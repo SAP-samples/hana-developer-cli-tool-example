@@ -55,6 +55,9 @@ export function getWebviewContent(
     </style>` : ''
 
   const route = options.route || '/'
+  // Serialize the route as a JS string literal so any characters in the value
+  // are safely escaped rather than interpolated raw into the inline script.
+  const routeLiteral = JSON.stringify(route)
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -74,10 +77,10 @@ export function getWebviewContent(
   <script nonce="${nonce}">
     window.__VSCODE__ = true;
     window.__HANA_CLI_PORT__ = ${options.port || 0};
-    window.__HANA_CLI_ROUTE__ = '${route}';
+    window.__HANA_CLI_ROUTE__ = ${routeLiteral};
     window.__HANA_CLI_CHROMELESS__ = ${!!options.chromeless};
-    if (window.location.hash !== '#${route}') {
-      window.location.hash = '#${route}';
+    if (window.location.hash !== '#' + window.__HANA_CLI_ROUTE__) {
+      window.location.hash = '#' + window.__HANA_CLI_ROUTE__;
     }
     window.onerror = function(msg, src, line) {
       var el = document.createElement('pre');
