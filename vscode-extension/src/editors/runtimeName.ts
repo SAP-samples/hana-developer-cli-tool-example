@@ -2,6 +2,20 @@ import * as fs from 'fs'
 import * as path from 'path'
 
 /**
+ * HANA runtime object names consist of letters, digits, underscores, dots
+ * (schema qualifier — already stripped by normalization) and the `::`
+ * namespace separator. Anything else (quotes, angle brackets, semicolons,
+ * whitespace) is rejected so a crafted design-time file cannot inject content
+ * into the webview route/inline script that consumes the resolved name.
+ */
+const SAFE_IDENTIFIER = /^[A-Za-z0-9_.:]+$/
+
+/** Remove any character outside the safe identifier grammar. */
+function stripUnsafe(value: string): string {
+  return value.replace(/[^A-Za-z0-9_.:]/g, '')
+}
+
+/**
  * Resolve the runtime (deployed) HANA object name for an HDI design-time file.
  *
  * Reads the file and extracts the name from its DDL/JSON content (case
@@ -22,7 +36,9 @@ export function resolveRuntimeName(fsPath: string, kind: string): string {
   }
 
   const parsed = parseByKind(content, kind)
-  if (parsed && parsed.trim().length > 0) {
+  // Only trust a parsed name if it is a safe HANA identifier. A malicious file
+  // (e.g. `TABLE x';alert(1)//`) would otherwise flow into the webview route.
+  if (parsed && SAFE_IDENTIFIER.test(parsed)) {
     return parsed
   }
   return fallbackName(fsPath)
@@ -118,12 +134,18 @@ function fallbackName(fsPath: string): string {
   const base = path.basename(fsPath)
   const dot = base.lastIndexOf('.')
   const stem = dot > 0 ? base.substring(0, dot) : base
-  const runtime = stem.replace(/\./g, '_')
+  // Replace '.' with '_' per HDI naming, then strip anything outside the safe
+  // grammar so the fallback can never emit an injectable string.
+  const runtime = stripUnsafe(stem.replace(/\./g, '_'))
   const ns = readNamespace(path.dirname(fsPath))
   return ns ? `${ns}::${runtime}` : runtime
 }
 
-/** Walk up from `dir` looking for a .hdinamespace with a non-empty name. */
+/**
+ * Walk up from `dir` looking for a .hdinamespace with a non-empty name.
+ * The returned prefix is validated against the safe identifier grammar; an
+ * unsafe namespace value is ignored (returns undefined) rather than trusted.
+ */
 function readNamespace(dir: string): string | undefined {
   let current = dir
   // Bound the walk to avoid infinite loops at filesystem root.
@@ -133,7 +155,7 @@ function readNamespace(dir: string): string | undefined {
       const raw = fs.readFileSync(candidate, 'utf8')
       const obj = JSON.parse(raw)
       if (typeof obj.name === 'string' && obj.name.length > 0) {
-        return obj.name
+        return SAFE_IDENTIFIER.test(obj.name) ? obj.name : undefined
       }
       return undefined // found the file; empty name means no prefix
     } catch {

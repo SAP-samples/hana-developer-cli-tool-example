@@ -177,4 +177,49 @@ suite('resolveRuntimeName', () => {
     fs.rmSync(nsDir, { recursive: true, force: true })
     assert.strictEqual(name, 'a_b')
   })
+
+  // --- Security: never return a name that could break out of the webview
+  //     inline script string / route (letters, digits, _, ., :: only) ---
+
+  const SAFE_IDENTIFIER = /^[A-Za-z0-9_.:]+$/
+
+  test('security: DDL name with a quote does not pass through verbatim', () => {
+    const name = resolve(
+      'evil.hdbtable',
+      "COLUMN TABLE x';alert(1);// (ID INTEGER)",
+      'table'
+    )
+    // The malicious token must not be returned as-is; result must be a safe id.
+    assert.ok(SAFE_IDENTIFIER.test(name), `unsafe name returned: ${name}`)
+    assert.ok(!name.includes("'"), 'single quote leaked into resolved name')
+  })
+
+  test('security: DDL name with angle brackets falls through to safe name', () => {
+    const name = resolve(
+      'evil2.hdbtable',
+      'COLUMN TABLE <script> (ID INTEGER)',
+      'table'
+    )
+    assert.ok(SAFE_IDENTIFIER.test(name), `unsafe name returned: ${name}`)
+    // Falls back to the filename-derived name.
+    assert.strictEqual(name, 'evil2')
+  })
+
+  test('security: filename containing a quote is sanitized in fallback', () => {
+    // Empty content forces the fallback path; the basename carries the quote.
+    const name = resolve("we'ird.hdbtable", '', 'table')
+    assert.ok(SAFE_IDENTIFIER.test(name), `unsafe name returned: ${name}`)
+    assert.ok(!name.includes("'"), 'single quote leaked into fallback name')
+  })
+
+  test('security: malicious .hdinamespace name is not used as prefix', () => {
+    const nsDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hana-cli-ns3-'))
+    fs.writeFileSync(path.join(nsDir, '.hdinamespace'), '{ "name": "x\';alert(1)//", "subfolder": "ignore" }')
+    const p = path.join(nsDir, 'a.b.hdbtable')
+    fs.writeFileSync(p, '')
+    const name = resolveRuntimeName(p, 'table')
+    fs.rmSync(nsDir, { recursive: true, force: true })
+    assert.ok(SAFE_IDENTIFIER.test(name), `unsafe name returned: ${name}`)
+    assert.strictEqual(name, 'a_b') // malicious prefix dropped
+  })
 })
