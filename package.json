@@ -76,7 +76,7 @@
     "@cap-js/sqlite": "^3.0.2",
     "@cap-js/telemetry": "^2.0.1",
     "@inquirer/prompts": "^8.4.2",
-    "@json2csv/node": "7.0.6",
+    "@json2csv/node": "7.0.7",
     "@sap-cloud-sdk/resilience": "^4.6.0",
     "@sap/cds": "^10.0.3",
     "@sap/cds-common-content": "^3.2.0",
