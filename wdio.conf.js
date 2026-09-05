@@ -79,8 +79,11 @@ export const config = {
   // ========
   // Services
   // ========
+  // WebdriverIO v9 drives Chrome over the standard WebDriver protocol
+  // (with WebDriver BiDi negotiated automatically when the browser
+  // supports it), so the legacy puppeteer-based 'devtools' automation
+  // service is no longer required.
   services: [
-    'devtools',
     [
       'ui5',
       {
