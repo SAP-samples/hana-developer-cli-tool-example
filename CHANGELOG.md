@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [4.202609.0] - 2026-09-05
+
+**Fixed**
+
+- hana-cli-mcp binary failed to start because @modelcontextprotocol/sdk was only declared in the nested mcp-server package (stripped from the published tarball); it is now a root dependency (#231)
+- Patched dependency vulnerabilities via npm audit fix plus qs and brace-expansion overrides (#233)
+
+**Changed**
+
+- Migrated WebdriverIO UI tests off the deprecated devtools automation service to standard WebDriver/BiDi; dropped devtools and @wdio/devtools-service dev dependencies (#234)
+
 ## [4.202607.1] - 2026-07-14
 
 **Fixed**
