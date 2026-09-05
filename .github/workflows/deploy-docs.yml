@@ -84,7 +84,7 @@ jobs:
           cache-dependency-path: 'docs/package-lock.json'
 
       - name: Cache VitePress build
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             docs/.vitepress/.temp
