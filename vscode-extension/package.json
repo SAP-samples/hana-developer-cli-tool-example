@@ -196,18 +196,18 @@
     "test": "node ./out/test/runTests.js"
   },
   "dependencies": {
-    "@sap/cds": "10.0.3",
-    "@sap/cds-dk": "10.0.4",
+    "@sap/cds": "10.0.6",
+    "@sap/cds-dk": "10.0.7",
     "express": "^5.2.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/mocha": "^10.0.0",
-    "@types/node": "^26.1.1",
-    "@types/vscode": "^1.85.0",
-    "@vscode/test-electron": "^3.0.0",
+    "@types/node": "^26.4.1",
+    "@types/vscode": "^1.136.0",
+    "@vscode/test-electron": "^3.1.0",
     "@vscode/vsce": "^3.9.2",
-    "esbuild": "^0.28.1",
+    "esbuild": "^0.28.2",
     "glob": "^13.0.6",
     "mocha": "^11.0.0",
     "typescript": "^7.0.2"
