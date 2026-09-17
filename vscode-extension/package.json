@@ -197,7 +197,7 @@
   },
   "dependencies": {
     "@sap/cds": "10.0.3",
-    "@sap/cds-dk": "10.0.4",
+    "@sap/cds-dk": "10.1.2",
     "express": "^5.2.1"
   },
   "devDependencies": {
